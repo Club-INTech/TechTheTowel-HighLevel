@@ -47,7 +47,7 @@ public class FiltrageLaser implements Service {
 		
 	}
 	
-	public void maj_config()
+	public void updateConfig()
 	{
 	}
 	

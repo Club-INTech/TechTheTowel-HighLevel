@@ -30,7 +30,7 @@ class ThreadLaser extends AbstractThread {
 		this.filtragelaser = filtragelaser;
 		this.laser = laser;
 		this.table = table;
-		maj_config();
+		updateConfig();
 		Thread.currentThread().setPriority(2);
 	}
 
@@ -42,7 +42,7 @@ class ThreadLaser extends AbstractThread {
 		// On attends le démarrage du match et qu'au moins une balise réponde
 		while(laser.verifier_balises_connectes() == 0)
 		{
-			if(stop_threads)
+			if(stopThreads)
 			{
 				log.debug("Stoppage du thread laser", this);
 				return;
@@ -71,7 +71,7 @@ class ThreadLaser extends AbstractThread {
 		// attente du début du match
 		while(!ThreadTimer.match_demarre)
 		{
-			if(stop_threads)
+			if(stopThreads)
 			{
 				log.debug("Arrêt du thread laser", this);
 				return;
@@ -83,7 +83,7 @@ class ThreadLaser extends AbstractThread {
 		while(!ThreadTimer.fin_match)
 		{
 			long start = System.currentTimeMillis();
-			if(stop_threads)
+			if(stopThreads)
 			{
 				log.debug("Stoppage du thread laser", this);
 				return;
@@ -108,7 +108,7 @@ class ThreadLaser extends AbstractThread {
 					// Vérification si l'obstacle est sur la table 
 					if(p_filtre.x > -table_x/2 && p_filtre.y > 0 && p_filtre.x < table_x/2 && p_filtre.y < table_y)
 					{
-						table.deplacer_robot_adverse(balise.id, p_filtre);
+						table.gestionobstacles.deplacer_robot_adverse(balise.id, p_filtre);
 						log.debug("Laser voit ennemi en : " + p_filtre, this);
 					}
 
@@ -131,7 +131,7 @@ class ThreadLaser extends AbstractThread {
 
 	}
 
-	public void maj_config()
+	public void updateConfig()
 	{
 		try {
 			table_x = Integer.parseInt(config.get("table_x"));
