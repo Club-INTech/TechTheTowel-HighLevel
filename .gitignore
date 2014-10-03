@@ -13,3 +13,4 @@ project.properties
 hardware/*/*.b\#*
 hardware/*/*.s\#*
 *.class
+/bin/
