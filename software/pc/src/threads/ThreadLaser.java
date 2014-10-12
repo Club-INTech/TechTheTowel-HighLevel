@@ -2,9 +2,9 @@ package threads;
 
 import java.util.ArrayList;
 
-import robot.cartes.laser.Balise;
-import robot.cartes.laser.FiltrageLaser;
-import robot.cartes.laser.Laser;
+import robot.cards.laser.Beacon;
+import robot.cards.laser.LaserFiltration;
+import robot.cards.laser.Laser;
 import smartMath.Vec2;
 import table.Table;
 import utils.Sleep;
@@ -17,7 +17,7 @@ import utils.Sleep;
 
 class ThreadLaser extends AbstractThread {
 
-	private FiltrageLaser filtragelaser;
+	private LaserFiltration filtragelaser;
 	private Laser laser;
 	private Table table;
 
@@ -25,7 +25,7 @@ class ThreadLaser extends AbstractThread {
 	private int table_y;
 	private float lasers_frequence;
 
-	public ThreadLaser(Laser laser, Table table, FiltrageLaser filtragelaser)
+	public ThreadLaser(Laser laser, Table table, LaserFiltration filtragelaser)
 	{
 		this.filtragelaser = filtragelaser;
 		this.laser = laser;
@@ -57,7 +57,7 @@ class ThreadLaser extends AbstractThread {
 		// Attente de la vitesse stable
 		Sleep.sleep(3000);
 
-		for(Balise balise: laser.balises_ignorees())
+		for(Beacon balise: laser.balises_ignorees())
 		{
 			log.warning("balise n°" + Integer.toString(balise.id) + " ignorée pendant le match, pas de réponses aux ping", this);
 		}
@@ -66,7 +66,7 @@ class ThreadLaser extends AbstractThread {
 		laser.verifier_coherence_balise();
 
 		// Liste des balises prises en compte
-		ArrayList<Balise> balises = laser.balises_actives();
+		ArrayList<Beacon> balises = laser.balises_actives();
 
 		// attente du début du match
 		while(!ThreadTimer.match_demarre)
@@ -89,7 +89,7 @@ class ThreadLaser extends AbstractThread {
 				return;
 			}
 
-			for(Balise balise: balises)
+			for(Beacon balise: balises)
 			{
 				// Récupération de la position brute
 				try {
