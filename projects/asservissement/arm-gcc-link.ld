@@ -1,5 +1,6 @@
 OUTPUT_FORMAT ("elf32-littlearm", "elf32-bigarm", "elf32-littlearm")
 SEARCH_DIR(.)
+SEARCH_DIR(.)
 INCLUDE "memory.ld"
 
 /* Section Definitions */ 

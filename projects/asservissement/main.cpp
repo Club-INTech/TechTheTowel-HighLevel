@@ -12,7 +12,6 @@ int main(void) {
 	MotionControlSystem& motionControlSystem = MotionControlSystem::Instance();
 	motionControlSystem.init();
 
-	typedef Uart<1> serial;
 	serial::init(115200);
 
 	while (1) {

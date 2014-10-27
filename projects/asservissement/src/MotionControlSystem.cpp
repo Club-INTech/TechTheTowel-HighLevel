@@ -125,8 +125,8 @@ void MotionControlSystem::manageStop() {
 				}
 
 				stop(); //Arrêt
-				serial::write_bytes(x);
-				serial::write_bytes(y);
+				serial::print(x);
+				serial::print(y);
 				time = 0;
 			}
 		}
@@ -250,7 +250,7 @@ void MotionControlSystem::manageInstructions() {
 		break;
 	case INS_MCS_ROTATION:
 		float angleRadian;
-		serial::read_bytes(angleRadian, 200);
+		serial::read(angleRadian, 200);
 		orderRotation(angleRadian);
 		break;
 	case INS_MCS_ENABLE_MOTION_CONTROL:
@@ -271,46 +271,46 @@ void MotionControlSystem::manageInstructions() {
 	case INS_MCS_GET_ROTATION_TUNINGS:
 		float kpGRot, kiGRot, kdGRot;
 		getRotationTunings(kpGRot, kiGRot, kdGRot);
-		serial::write_bytes(kpGRot);
-		serial::write_bytes(kiGRot);
-		serial::write_bytes(kdGRot);
+		serial::print(kpGRot);
+		serial::print(kiGRot);
+		serial::print(kdGRot);
 		break;
 	case INS_MCS_SET_ROTATION_TUNINGS:
 		float kpSRot, kiSRot, kdSRot;
-		serial::read_bytes(kpSRot, 200);
-		serial::read_bytes(kiSRot, 200);
-		serial::read_bytes(kdSRot, 200);
+		serial::read(kpSRot, 200);
+		serial::read(kiSRot, 200);
+		serial::read(kdSRot, 200);
 		setRotationTunings(kpSRot, kiSRot, kdSRot);
 		break;
 	case INS_MCS_GET_TRANSLATION_TUNINGS:
 		float kpGTrans, kiGTrans, kdGTrans;
 		getTranslationTunings(kpGTrans, kiGTrans, kdGTrans);
-		serial::write_bytes(kpGTrans);
-		serial::write_bytes(kiGTrans);
-		serial::write_bytes(kdGTrans);
+		serial::print(kpGTrans);
+		serial::print(kiGTrans);
+		serial::print(kdGTrans);
 		break;
 	case INS_MCS_SET_TRANSLATION_TUNINGS:
 		float kpSTrans, kiSTrans, kdSTrans;
-		serial::read_bytes(kpSTrans, 200);
-		serial::read_bytes(kiSTrans, 200);
-		serial::read_bytes(kdSTrans, 200);
+		serial::read(kpSTrans, 200);
+		serial::read(kiSTrans, 200);
+		serial::read(kdSTrans, 200);
 		setTranslationTunings(kpSTrans, kiSTrans, kdSTrans);
 		break;
 	case INS_MCS_SET_ORIGINAL_ANGLE:
 		float angle;
-		serial::read_bytes(angle, 200);
+		serial::read(angle, 200);
 		setOriginalAngle(angle);
 		break;
 	case INS_MCS_GET_ANGLE:
-		serial::write_bytes(getAngleRadian());
+		serial::print(getAngleRadian());
 		break;
 	case INS_MCS_GET_XY:
-		serial::write_bytes(x);
-		serial::write_bytes(y);
+		serial::print(x);
+		serial::print(y);
 		break;
 	case INS_MCS_SET_XY:
-		serial::read_bytes(x, 200);
-		serial::read_bytes(y, 200);
+		serial::read(x, 200);
+		serial::read(y, 200);
 		break;
 	}
 

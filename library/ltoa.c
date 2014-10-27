@@ -16,10 +16,7 @@
 **            is out of range.
 */
 
-#include <stdlib.h>
-#include <string.h>
-
-#define BUFSIZE (sizeof(long) * 8 + 1)
+#include "ltoa.h"
 
 char *ltoa(long N, char *str, int base)
 {
