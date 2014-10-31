@@ -43,6 +43,10 @@ template<uint8_t USART_ID>
 class Uart {
 private:
 
+	static GPIO_InitTypeDef GPIO_InitStruct;
+	static USART_InitTypeDef USART_InitStruct;
+	static NVIC_InitTypeDef NVIC_InitStructure;
+
 	static USART_TypeDef* USARTx;
 
 	/**
@@ -157,9 +161,6 @@ public:
 	 *
 	 */
 	static inline void init(uint32_t baudrate) {
-		GPIO_InitTypeDef GPIO_InitStruct;
-		USART_InitTypeDef USART_InitStruct;
-		NVIC_InitTypeDef NVIC_InitStructure;
 
 		//General settings of pins TX/RX
 		GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF;
@@ -265,6 +266,31 @@ public:
 
 		//Enable UART
 		USART_Cmd(USARTx, ENABLE);
+	}
+
+	static inline void disable_rx() {
+		USART_InitStruct.USART_Mode &= ~USART_Mode_Rx;
+		USART_Init(USARTx, &USART_InitStruct);
+	}
+
+	static inline void enable_rx() {
+		USART_InitStruct.USART_Mode |= USART_Mode_Rx;
+		USART_Init(USARTx, &USART_InitStruct);
+	}
+
+	static inline void disable_tx() {
+		USART_InitStruct.USART_Mode &= ~USART_Mode_Tx;
+		USART_Init(USARTx, &USART_InitStruct);
+	}
+
+	static inline void enable_tx() {
+		USART_InitStruct.USART_Mode |= USART_Mode_Tx;
+		USART_Init(USARTx, &USART_InitStruct);
+	}
+
+	static inline void change_baudrate(uint32_t BAUD_RATE) {
+		USART_InitStruct.USART_BaudRate = BAUD_RATE;
+		USART_Init(USARTx, &USART_InitStruct);
 	}
 
 	/**
@@ -426,6 +452,10 @@ template<> USART_TypeDef* Uart<3>::USARTx = USART3;
 template<> USART_TypeDef* Uart<4>::USARTx = UART4;
 template<> USART_TypeDef* Uart<5>::USARTx = UART5;
 template<> USART_TypeDef* Uart<6>::USARTx = USART6;
+template<uint8_t USART_ID> GPIO_InitTypeDef Uart<USART_ID>::GPIO_InitStruct;
+template<uint8_t USART_ID> NVIC_InitTypeDef Uart<USART_ID>::NVIC_InitStructure;
+template<uint8_t USART_ID> USART_InitTypeDef Uart<USART_ID>::USART_InitStruct;
+
 
 /**
  * Interrupt service routines definitions

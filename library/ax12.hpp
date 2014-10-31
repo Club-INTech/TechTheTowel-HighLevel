@@ -257,9 +257,9 @@ public:
         while (i <= 2)
         {
             goTo(90);
-            _delay_ms(900);
+            Delay(900);
             goTo(100);
-            _delay_ms(900);
+            Delay(900);
             ++i;
         }
     }
