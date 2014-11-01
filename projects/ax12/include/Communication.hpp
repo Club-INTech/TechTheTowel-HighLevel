@@ -14,10 +14,9 @@ private:
 
 public:
 	Communication():
-		ax12(0,1,1023)
+		ax12(0,1,1023, 115200)
 	{
 		serial_pc::init(115200);
-		serial_ax12::init(115200);
 	}
 
 	inline void execute() {
@@ -33,9 +32,8 @@ public:
 			else if(!strcmp("a", order)) {
 				serial_pc::disable_rx();
 			}
+			serial_pc::println(order);
 		}
-		serial_pc::println(order);
-
 	}
 
     static Communication& Instance() {

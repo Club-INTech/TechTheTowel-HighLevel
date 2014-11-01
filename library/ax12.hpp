@@ -183,8 +183,9 @@ private:
 
 public:
 
-    AX(uint8_t id, uint16_t AX_angle_CW, uint16_t AX_angle_CCW) // Constructeur de la classe
+    AX(uint8_t id, uint16_t AX_angle_CW, uint16_t AX_angle_CCW, uint32_t baudrate) // Constructeur de la classe
     {
+    	Serial_AX12::init(baudrate);
         Serial_AX12::disable_rx();
         id_ = id;
         angleMin_ = AX_angle_CW;
@@ -192,8 +193,9 @@ public:
         init(AX_angle_CW, AX_angle_CCW);
     }
 
-    AX(uint8_t id) // Constructeur de la classe pour faire tourner l'AX12 en continu
+    AX(uint8_t id, uint32_t baudrate) // Constructeur de la classe pour faire tourner l'AX12 en continu
     {
+    	Serial_AX12::init(baudrate);
         Serial_AX12::disable_rx();
         id_ = id;
         angleMin_ = 0;
