@@ -31,7 +31,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
-
+#include <stdio.h>
+#include <stdarg.h>
 /**
  *Include this only if ltoa is not implemented in you standard library implementation
  */
