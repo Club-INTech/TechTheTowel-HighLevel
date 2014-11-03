@@ -391,8 +391,29 @@ public:
 
 	static inline void println(float val, int places) {
 		write(val, places);
-		send_ln();
 	}
+
+    static inline void printf(const char *format, ...)
+    {
+        va_list args;
+        va_start(args, format);
+        char buffer[64];
+        vsnprintf(buffer, 64, format, args);
+        write(buffer);
+        va_end(args);
+    }
+
+    __attribute__((format(printf, 1, 0)))
+    static inline void printfln(const char *format, ...)
+    {
+        va_list args;
+        va_start(args, format);
+        char buffer[64];
+        vsnprintf(buffer, 64, format, args);
+        write(buffer);
+		send_ln();
+        va_end(args);
+    }
 
 	template<class T>
 	static inline uint8_t read(T &val, uint16_t timeout = 0) {
