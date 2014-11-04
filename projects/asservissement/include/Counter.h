@@ -1,6 +1,6 @@
 
-#ifndef __COUNTER_h__
-#define __COUNTER_h__
+#ifndef __COUNTER_H__
+#define __COUNTER_H__
 
 #include "stm32f4xx.h"
 #include "stm32f4xx_tim.h"

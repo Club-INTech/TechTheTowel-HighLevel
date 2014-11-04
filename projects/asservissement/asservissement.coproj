@@ -6,8 +6,9 @@
       <Compile>
         <Option name="OptimizationLevel" value="0"/>
         <Option name="UseFPU" value="0"/>
-        <Option name="UserEditCompiler" value=""/>
+        <Option name="UserEditCompiler" value="-lstdc++; "/>
         <Option name="SupportCPlusplus" value="1"/>
+        <Option name="FPU" value="1"/>
         <Includepaths>
           <Includepath path="."/>
           <Includepath path="../../library"/>
@@ -19,6 +20,7 @@
           <Define name="USE_STDPERIPH_DRIVER"/>
           <Define name="__ASSEMBLY__"/>
           <Define name="SUPPORT_CPLUSPLUS"/>
+          <Define name="__FPU_USED"/>
         </DefinedSymbols>
       </Compile>
       <Link useDefault="0">
@@ -29,7 +31,7 @@
         <Option name="LTO" value="0"/>
         <Option name="IsNewStartupCode" value="1"/>
         <Option name="Library" value="Not use C Library"/>
-        <Option name="UserEditLinker" value="-lstdc++; "/>
+        <Option name="UserEditLinker" value="-lstdc++;  -lm;"/>
         <LinkedLibraries/>
         <MemoryAreas debugInFlashNotRAM="1">
           <Memory name="IROM1" type="ReadOnly" size="0x00100000" startValue="0x08000000"/>
@@ -69,6 +71,12 @@
       <Option name="org.coocox.codebugger.gdbjtag.core.verify" value="1"/>
       <Option name="org.coocox.codebugger.gdbjtag.core.downloadFuction" value="Erase Effected"/>
       <Option name="org.coocox.codebugger.gdbjtag.core.defaultAlgorithm" value="STM32F4xx_1024.elf"/>
+      <Option name="org.coocox.codebugger.gdbjtag.coredebugInRamInitCommands" value="cd D:/CooCox/CoIDE/workspace/STM32F4/build/asservissement/Debug/bin
+restore asservissement.elf
+set {unsigned int*}0xE000ED08 = 0x20000000
+set $sp = {unsigned int*}0x20000000
+set $pc = {unsigned int*}0x20000004
+"/>
     </DebugOption>
     <ExcludeFile/>
   </Target>

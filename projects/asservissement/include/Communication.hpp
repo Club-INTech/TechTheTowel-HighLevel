@@ -5,11 +5,13 @@
 class Communication : public Singleton<Communication> {
 private:
 	typedef Uart<1> serial;
-	MotionControlSystem& motionControlSystem = MotionControlSystem::Instance();
 
 public:
+	MotionControlSystem& motionControlSystem = MotionControlSystem::Instance();
+
 	Communication() {
 		serial::init(115200);
+		motionControlSystem.init();
 	}
 
 	void execute() {
@@ -27,8 +29,12 @@ public:
 			}
 			else if(!strcmp("oxy",order))
 			{
-				serial::printfln("%f\r\n%f", motionControlSystem.getPosition()[0], motionControlSystem.getPosition()[1]);
+				serial::printfln("%f\r\n%f", motionControlSystem.getX(), motionControlSystem.getY());
 				serial::printfln("%f", motionControlSystem.getAngleRadian());
+			}
+			else if(!strcmp("t", order))
+			{
+				serial::printfln("%d",TIM_GetCounter(TIM2));
 			}
 		}
 	}

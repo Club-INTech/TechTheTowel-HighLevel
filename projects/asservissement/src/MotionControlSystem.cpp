@@ -213,12 +213,12 @@ void MotionControlSystem::setOriginalAngle(float angle) {
 	originalAngle = angle - (getAngleRadian() - originalAngle);
 }
 
-float* MotionControlSystem::getPosition(){
-	float position[2];
-	position[0] = x;
-	position[1] = y;
+float MotionControlSystem::getX(){
+	return x;
+}
 
-	return position;
+float MotionControlSystem::getY(){
+	return y;
 }
 
 
