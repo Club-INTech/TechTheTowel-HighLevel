@@ -1,12 +1,5 @@
-/**
- * MotionControlSystem.cpp
- *
- * Classe de gestion de l'asservissement polaire en rotation/translation
- *
- * Auteur : Paul BERNIER - bernier.pja@gmail.com
- */
-
 #include "MotionControlSystem.h"
+
 
 MotionControlSystem::MotionControlSystem() :
 		leftMotor(Side::LEFT), rightMotor(Side::RIGHT), translationControlled(
@@ -109,7 +102,7 @@ bool MotionControlSystem::isPhysicallyStopped() {
 			&& (rotationPID.getDerivativeError() == 0);
 }
 
-void MotionControlSystem::manageStop() {
+int MotionControlSystem::manageStop() {
 	static uint32_t time = 0;
 
 	if (isPhysicallyStopped() && moving) {
@@ -119,20 +112,19 @@ void MotionControlSystem::manageStop() {
 		} else {
 			if ((Millis() - time) >= 500) { //Si arrêté plus de 500ms
 				if (translationPID.getError() <= 100	&& rotationPID.getError() <= 100) { //Stopé pour cause de fin de mouvement
-					serial::print("so");
+					return 1;
 				}else if (pwmRotation >= 60 || pwmTranslation >= 60) { //Stoppé pour blocage
-					serial::print("sb");
+					return 2;
 				}
 
 				stop(); //Arrêt
-				serial::print(x);
-				serial::print(y);
 				time = 0;
 			}
 		}
 	} else {
 		time = 0;
 	}
+	return 0;
 }
 
 void MotionControlSystem::updatePosition() {
@@ -221,97 +213,3 @@ void MotionControlSystem::setOriginalAngle(float angle) {
 	originalAngle = angle - (getAngleRadian() - originalAngle);
 }
 
-/**
- * Gère les instructions
- */
-
-void MotionControlSystem::manageInstructions() {
-	uint8_t order;
-	serial::read(order, 200);
-
-	switch (order) {
-	case INS_MCS_RAW_PWM:
-		uint8_t side;
-		int16_t pwm;
-		serial::read(side, 200);
-		serial::read(pwm, 200);
-		if (side == 0)
-			orderRawPwm(Side::LEFT, pwm);
-		else
-			orderRawPwm(Side::RIGHT, pwm);
-		break;
-	case INS_MCS_STOP:
-		stop();
-		break;
-	case INS_MCS_TRANSLATION:
-		int32_t translationMm;
-		serial::read(translationMm, 200);
-		orderTranslation(translationMm);
-		break;
-	case INS_MCS_ROTATION:
-		float angleRadian;
-		serial::read(angleRadian, 200);
-		orderRotation(angleRadian);
-		break;
-	case INS_MCS_ENABLE_MOTION_CONTROL:
-		uint8_t b;
-		serial::read(b, 200);
-		enable(b);
-		break;
-	case INS_MCS_ENABLE_ROTATION:
-		uint8_t enableRotation;
-		serial::read(enableRotation, 200);
-		enableRotationControl(enableRotation);
-		break;
-	case INS_MCS_ENABLE_TRANSLATION:
-		uint8_t enableTranslation;
-		serial::read(enableTranslation, 200);
-		enableTranslationControl(enableTranslation);
-		break;
-	case INS_MCS_GET_ROTATION_TUNINGS:
-		float kpGRot, kiGRot, kdGRot;
-		getRotationTunings(kpGRot, kiGRot, kdGRot);
-		serial::print(kpGRot);
-		serial::print(kiGRot);
-		serial::print(kdGRot);
-		break;
-	case INS_MCS_SET_ROTATION_TUNINGS:
-		float kpSRot, kiSRot, kdSRot;
-		serial::read(kpSRot, 200);
-		serial::read(kiSRot, 200);
-		serial::read(kdSRot, 200);
-		setRotationTunings(kpSRot, kiSRot, kdSRot);
-		break;
-	case INS_MCS_GET_TRANSLATION_TUNINGS:
-		float kpGTrans, kiGTrans, kdGTrans;
-		getTranslationTunings(kpGTrans, kiGTrans, kdGTrans);
-		serial::print(kpGTrans);
-		serial::print(kiGTrans);
-		serial::print(kdGTrans);
-		break;
-	case INS_MCS_SET_TRANSLATION_TUNINGS:
-		float kpSTrans, kiSTrans, kdSTrans;
-		serial::read(kpSTrans, 200);
-		serial::read(kiSTrans, 200);
-		serial::read(kdSTrans, 200);
-		setTranslationTunings(kpSTrans, kiSTrans, kdSTrans);
-		break;
-	case INS_MCS_SET_ORIGINAL_ANGLE:
-		float angle;
-		serial::read(angle, 200);
-		setOriginalAngle(angle);
-		break;
-	case INS_MCS_GET_ANGLE:
-		serial::print(getAngleRadian());
-		break;
-	case INS_MCS_GET_XY:
-		serial::print(x);
-		serial::print(y);
-		break;
-	case INS_MCS_SET_XY:
-		serial::read(x, 200);
-		serial::read(y, 200);
-		break;
-	}
-
-}

@@ -1,22 +1,13 @@
-/**
- * MotionControlSystem.h
- *
- * Auteur : Paul BERNIER - bernier.pja@gmail.com
- */
-
 #ifndef MOTION_CONTROL_H_
 #define MOTION_CONTROL_H_
 
-#include "stm32f4xx.h"
-#include "Counter.h"
+#include "Singleton.hpp"
 #include "Motor.h"
 #include "pid.hpp"
-#include "utils.h"
 #include <math.h>
-#include "Singleton.hpp"
-#include "Uart.hpp"
-#include "instructions.h"
 #include "delay.h"
+#include "misc.h"
+#include "Counter.h"
 
 #define PI 3.14159265
 #define PI_TIC 24809 // pi/TICK_TO_RADIAN
@@ -29,9 +20,7 @@
 #define TICK_TO_MM 0.0324173 // PERIMETER_MM/12000
 #define TICK_TO_RADIAN 0.00012663 // TICK_TO_MM/256 : entre roues de 25.6cm
 
-typedef Uart<1> serial;
-
-class MotionControlSystem{
+class MotionControlSystem : public Singleton<MotionControlSystem> {
 private:
 	//Constructeurs privés
 	MotionControlSystem();
@@ -78,7 +67,7 @@ public:
 
 	void control();
 	void updatePosition();
-	void manageStop();
+	int manageStop();
 
 	void enable(bool);
 	void enableTranslationControl(bool);
@@ -98,7 +87,6 @@ public:
 	float getAngleRadian() const;
 	void setOriginalAngle(float);
 
-	void manageInstructions();
 };
 
 #endif /* MOTION_CONTROL_H_ */

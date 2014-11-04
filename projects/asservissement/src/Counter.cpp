@@ -3,7 +3,6 @@
  *
  * Classe de décodage des codeurs
  *
- * Auteur : Paul BERNIER - bernier.pja@gmail.com
  */
 
 #include "Counter.h"

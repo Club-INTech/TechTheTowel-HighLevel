@@ -1,7 +1,6 @@
 /**
  * Motor.h
  *
- * Auteur : Paul BERNIER - bernier.pja@gmail.com
  */
 
 #ifndef __MOTOR_h__
@@ -10,6 +9,9 @@
 #include "stm32f4xx.h"
 #include "safe_enum.hpp"
 #include "utils.h"
+#include "stm32f4xx_gpio.h"
+#include "stm32f4xx_tim.h"
+#include "stm32f4xx_rcc.h"
 
 struct direction_def {
 	enum type {

@@ -3,15 +3,13 @@
  *
  * Classe de gestion d'un moteur (PWM, direction...)
  *
- * Auteur : Paul BERNIER - bernier.pja@gmail.com
- *
  * Récapitulatif pins utilisées pour contrôler les deux moteurs :
  *
  * Gauche :
- * 	-pins de sens : PD13 et PD15
+ * 	-pins de sens : PD13
  * 	-pin de pwm : PC6
  * Droit :
- * 	-pins de sens : PD12 et PD14
+ * 	-pins de sens : PD12
  * 	-pin de pwm : PC7
  *
  */
@@ -23,8 +21,8 @@ Motor::Motor(Side s) :
 
 	/**
 	 * Configuration des pins pour le sens des moteurs
-	 * Gauche : PD13 (IN2) et PD15 (IN1)
-	 * Droite : PD12 (IN3) et PD14 (IN4)
+	 * Gauche : PD13 (IN2)
+	 * Droite : PD12 (IN3)
 	 */
 
 	GPIO_InitTypeDef GPIO_InitStructure;
@@ -33,12 +31,12 @@ Motor::Motor(Side s) :
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
 
 	if (s == Side::LEFT) {
-		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13 | GPIO_Pin_15;
+		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13;
 		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
 		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
 		GPIO_Init(GPIOD, &GPIO_InitStructure);
 	} else {
-		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12 | GPIO_Pin_14;
+		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12;
 		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
 		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
 		GPIO_Init(GPIOD, &GPIO_InitStructure);
@@ -168,17 +166,13 @@ void Motor::setDirection(Direction dir) {
 	if (side == Side::LEFT) {
 		if (dir == Direction::FORWARD) {
 			GPIO_SetBits(GPIOD, GPIO_Pin_13);
-			GPIO_ResetBits(GPIOD, GPIO_Pin_15);
 		} else {
-			GPIO_SetBits(GPIOD, GPIO_Pin_15);
 			GPIO_ResetBits(GPIOD, GPIO_Pin_13);
 		}
 	} else {
 		if (dir == Direction::FORWARD) {
 			GPIO_SetBits(GPIOD, GPIO_Pin_12);
-			GPIO_ResetBits(GPIOD, GPIO_Pin_14);
 		} else {
-			GPIO_SetBits(GPIOD, GPIO_Pin_14);
 			GPIO_ResetBits(GPIOD, GPIO_Pin_12);
 		}
 	}
