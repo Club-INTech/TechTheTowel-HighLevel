@@ -8,7 +8,7 @@
         <Option name="UseFPU" value="0"/>
         <Option name="UserEditCompiler" value="-lstdc++; "/>
         <Option name="SupportCPlusplus" value="1"/>
-        <Option name="FPU" value="1"/>
+        <Option name="FPU" value="2"/>
         <Includepaths>
           <Includepath path="."/>
           <Includepath path="../../library"/>
@@ -32,7 +32,9 @@
         <Option name="IsNewStartupCode" value="1"/>
         <Option name="Library" value="Not use C Library"/>
         <Option name="UserEditLinker" value="-lstdc++;  -lm;"/>
-        <LinkedLibraries/>
+        <LinkedLibraries>
+          <Libset dir="..\..\..\..\..\gnu tools arm embedded\4.8 2014q3\lib\gcc\arm-none-eabi\4.8.4\armv7e-m\fpu\" libs="gcc"/>
+        </LinkedLibraries>
         <MemoryAreas debugInFlashNotRAM="1">
           <Memory name="IROM1" type="ReadOnly" size="0x00100000" startValue="0x08000000"/>
           <Memory name="IRAM1" type="ReadWrite" size="0x00020000" startValue="0x20000000"/>
