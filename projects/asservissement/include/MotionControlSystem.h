@@ -86,7 +86,7 @@ public:
 
 	float getAngleRadian() const;
 	void setOriginalAngle(float);
-
+	float* getPosition();
 };
 
 #endif /* MOTION_CONTROL_H_ */

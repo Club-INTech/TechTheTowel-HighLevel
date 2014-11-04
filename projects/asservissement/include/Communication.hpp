@@ -25,6 +25,11 @@ public:
 			{
 				serial::printfln("%lf", 3.15402151024021654);
 			}
+			else if(!strcmp("oxy",order))
+			{
+				serial::printfln("%f\r\n%f", motionControlSystem.getPosition()[0], motionControlSystem.getPosition()[1]);
+				serial::printfln("%f", motionControlSystem.getAngleRadian());
+			}
 		}
 	}
 
