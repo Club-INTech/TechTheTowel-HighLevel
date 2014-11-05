@@ -7,9 +7,9 @@ private:
 	typedef Uart<1> serial;
 
 public:
-	MotionControlSystem& motionControlSystem = MotionControlSystem::Instance();
+	MotionControlSystem& motionControlSystem;
 
-	Communication() {
+	Communication(): motionControlSystem(MotionControlSystem::Instance()) {
 		serial::init(115200);
 		motionControlSystem.init();
 	}
@@ -37,6 +37,11 @@ public:
 				serial::printfln("%d",TIM_GetCounter(TIM2));
 			}
 		}
+	}
+
+	void asservirRobot() {
+		motionControlSystem.control();
+		motionControlSystem.updatePosition();
 	}
 
 };
