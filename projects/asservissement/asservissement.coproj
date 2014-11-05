@@ -6,7 +6,7 @@
       <Compile>
         <Option name="OptimizationLevel" value="0"/>
         <Option name="UseFPU" value="0"/>
-        <Option name="UserEditCompiler" value="-lstdc++; "/>
+        <Option name="UserEditCompiler" value="-lstdc++"/>
         <Option name="SupportCPlusplus" value="1"/>
         <Option name="FPU" value="2"/>
         <Includepaths>
@@ -30,8 +30,9 @@
         <Option name="nostartfiles" value="0"/>
         <Option name="LTO" value="0"/>
         <Option name="IsNewStartupCode" value="1"/>
-        <Option name="Library" value="Not use C Library"/>
-        <Option name="UserEditLinker" value="-lstdc++;  -lm;"/>
+        <Option name="Library" value="Use base C Library"/>
+        <Option name="UserEditLinker" value="--entry=main; -lstdc++; "/>
+        <Option name="Printf" value="1"/>
         <LinkedLibraries>
           <Libset dir="..\..\..\..\..\gnu tools arm embedded\4.8 2014q3\lib\gcc\arm-none-eabi\4.8.4\armv7e-m\fpu\" libs="gcc"/>
         </LinkedLibraries>
@@ -73,12 +74,7 @@
       <Option name="org.coocox.codebugger.gdbjtag.core.verify" value="1"/>
       <Option name="org.coocox.codebugger.gdbjtag.core.downloadFuction" value="Erase Effected"/>
       <Option name="org.coocox.codebugger.gdbjtag.core.defaultAlgorithm" value="STM32F4xx_1024.elf"/>
-      <Option name="org.coocox.codebugger.gdbjtag.coredebugInRamInitCommands" value="cd D:/CooCox/CoIDE/workspace/STM32F4/build/asservissement/Debug/bin
-restore asservissement.elf
-set {unsigned int*}0xE000ED08 = 0x20000000
-set $sp = {unsigned int*}0x20000000
-set $pc = {unsigned int*}0x20000004
-"/>
+      <Option name="org.coocox.codebugger.gdbjtag.coredebugInRamInitCommands" value="cd D:/CooCox/CoIDE/workspace/STM32F4/build/asservissement/Debug/bin restore asservissement.elf set {unsigned int*}0xE000ED08 = 0x20000000 set $sp = {unsigned int*}0x20000000 set $pc = {unsigned int*}0x20000004 "/>
     </DebugOption>
     <ExcludeFile/>
   </Target>
@@ -95,41 +91,42 @@ set $pc = {unsigned int*}0x20000004
   </Components>
   <Files>
     <File name="cmsis_lib/source/stm32f4xx_gpio.c" path="cmsis_lib/source/stm32f4xx_gpio.c" type="1"/>
-    <File name="cmsis_boot/startup/startup_stm32f4xx.c" path="cmsis_boot/startup/startup_stm32f4xx.c" type="1"/>
     <File name="cmsis_lib/source/stm32f4xx_usart.c" path="cmsis_lib/source/stm32f4xx_usart.c" type="1"/>
+    <File name="cmsis_boot/startup/startup_stm32f4xx.c" path="cmsis_boot/startup/startup_stm32f4xx.c" type="1"/>
     <File name="cmsis_lib/source/stm32f4xx_rcc.c" path="cmsis_lib/source/stm32f4xx_rcc.c" type="1"/>
     <File name="cmsis/core_cmInstr.h" path="cmsis/core_cmInstr.h" type="1"/>
-    <File name="src/Counter.cpp" path="src/Counter.cpp" type="1"/>
     <File name="include/Counter.h" path="include/Counter.h" type="1"/>
+    <File name="src/Counter.cpp" path="src/Counter.cpp" type="1"/>
     <File name="cmsis_boot" path="" type="2"/>
     <File name="include/MotionControlSystem.h" path="include/MotionControlSystem.h" type="1"/>
     <File name="cmsis_lib/include/stm32f4xx_usart.h" path="cmsis_lib/include/stm32f4xx_usart.h" type="1"/>
     <File name="src" path="" type="2"/>
     <File name="src/Motor.cpp" path="src/Motor.cpp" type="1"/>
     <File name="include/Motor.h" path="include/Motor.h" type="1"/>
+    <File name="cmsis_boot/stm32f4xx.h" path="cmsis_boot/stm32f4xx.h" type="1"/>
     <File name="cmsis/core_cm4_simd.h" path="cmsis/core_cm4_simd.h" type="1"/>
     <File name="cmsis_boot/startup" path="" type="2"/>
-    <File name="cmsis_boot/stm32f4xx.h" path="cmsis_boot/stm32f4xx.h" type="1"/>
+    <File name="src/Uart_IT.cpp" path="../../library/Uart_IT.cpp" type="1"/>
+    <File name="library/utils.h" path="../../library/utils.h" type="1"/>
     <File name="include" path="" type="2"/>
     <File name="cmsis/core_cmFunc.h" path="cmsis/core_cmFunc.h" type="1"/>
-    <File name="library/utils.h" path="../../library/utils.h" type="1"/>
-    <File name="cmsis_boot/system_stm32f4xx.c" path="cmsis_boot/system_stm32f4xx.c" type="1"/>
     <File name="cmsis/core_cm4.h" path="cmsis/core_cm4.h" type="1"/>
+    <File name="cmsis_boot/system_stm32f4xx.c" path="cmsis_boot/system_stm32f4xx.c" type="1"/>
     <File name="include/Communication.hpp" path="include/Communication.hpp" type="1"/>
     <File name="library/safe_enum.hpp" path="../../library/safe_enum.hpp" type="1"/>
     <File name="library/delay.h" path="../../library/delay.h" type="1"/>
-    <File name="cmsis_lib/source/misc.c" path="cmsis_lib/source/misc.c" type="1"/>
     <File name="cmsis" path="" type="2"/>
+    <File name="cmsis_lib/source/misc.c" path="cmsis_lib/source/misc.c" type="1"/>
     <File name="cmsis_lib/include/stm32f4xx_tim.h" path="cmsis_lib/include/stm32f4xx_tim.h" type="1"/>
-    <File name="cmsis_lib" path="" type="2"/>
-    <File name="library" path="" type="2"/>
     <File name="syscalls/syscalls.c" path="syscalls/syscalls.c" type="1"/>
+    <File name="library" path="" type="2"/>
+    <File name="cmsis_lib" path="" type="2"/>
     <File name="cmsis_lib/source" path="" type="2"/>
     <File name="main.cpp" path="main.cpp" type="1"/>
     <File name="cmsis_lib/source/stm32f4xx_tim.c" path="cmsis_lib/source/stm32f4xx_tim.c" type="1"/>
     <File name="cmsis_lib/include/stm32f4xx_gpio.h" path="cmsis_lib/include/stm32f4xx_gpio.h" type="1"/>
-    <File name="syscalls" path="" type="2"/>
     <File name="cmsis_lib/include/stm32f4xx_rtc.h" path="cmsis_lib/include/stm32f4xx_rtc.h" type="1"/>
+    <File name="syscalls" path="" type="2"/>
     <File name="cmsis_lib/include/misc.h" path="cmsis_lib/include/misc.h" type="1"/>
     <File name="cmsis_boot/stm32f4xx_conf.h" path="cmsis_boot/stm32f4xx_conf.h" type="1"/>
     <File name="cmsis_boot/system_stm32f4xx.h" path="cmsis_boot/system_stm32f4xx.h" type="1"/>
