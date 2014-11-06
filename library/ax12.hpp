@@ -183,6 +183,10 @@ private:
 
 public:
 
+    AX() // Ne pas utiliser
+    {
+    }
+
     AX(uint8_t id, uint16_t AX_angle_CW, uint16_t AX_angle_CCW) // Constructeur de la classe
     {
         Serial_AX12::disable_rx();
