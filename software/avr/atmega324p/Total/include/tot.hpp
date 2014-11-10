@@ -15,10 +15,10 @@ class Communication
 	typedef uart0 serial_pc;
 	typedef uart1 serial_ax12;
 	typedef AX<serial_ax12> Ax12;
-	Ax12 pinceGauche; //ax12 de la pince gauche
-	Ax12 orientationGauche;
-	Ax12 positionGauche;
- 	Ax12 retourneurGauche;
+	Ax12 machoireDroite; //ax12 de la pince gauche
+	Ax12 machoireGauche;
+	Ax12 brasDroit;
+ 	Ax12 brasGauche;
  	Ax12 pinceDroite; //ax12 de la pince droite
 	Ax12 orientationDroite;
 	Ax12 positionDroite;
@@ -37,10 +37,10 @@ class Communication
 //constructeur
 
 	Communication():
-		pinceGauche (0,1,1023),
-		orientationGauche (1,1,1023),
-		positionGauche (2,1,1023),
-		retourneurGauche (3,1,1023),
+		machoireDroite (0,1,1023),
+		machoireGauche (1,1,1023),
+		brasDroit (2,1,1023),
+		brasGauche (3,1,1023),
 		pinceDroite (4,1,1023),
 		orientationDroite (5,1,1023),
 		positionDroite (6,1,1023),
@@ -68,6 +68,38 @@ class Communication
 		if ( strcmp ( ordre , "?") == 0 )
 		{
 			serial_pc::printfln ( "3" );
+		}
+
+	//Actions ascenseur
+		else if ( strcmp ( ordre , "obg"))
+		{
+			brasGauche.goTo (290);
+		}
+		else if ( strcmp ( ordre , "fbg"))
+		{
+			brasGauche.goTo (95);
+		}
+		else if ( strcmp ( ordre , "obd"))
+		{
+			brasDroit.goTo (15);
+		}
+		else if ( strcmp ( ordre , "fbd"))
+		{
+			brasDroit.goTo (203);
+		}
+		else if ( strcmp ( ordre , "md"))
+		{
+			int p;
+			serial_pc::printfln ("angle?");
+			serial_pc::read(p);
+			machoireDroite.goTo (p);
+		}
+		else if ( strcmp ( ordre , "mg"))
+		{
+			int p;
+			serial_pc::printfln ("angle?");
+			serial_pc::read(p);
+			machoireGauche.goTo (p);
 		}
 
 	//Actions pince gauche
@@ -104,7 +136,7 @@ class Communication
 			serial_pc::printfln ( "angle?" );
 			uint16_t i;
 			serial_pc::read (i);
-			pinceGauche.goTo (i);
+			machoireDroite.goTo (i);
 		}
 		else if ( strcmp ( ordre , "bg" ) == 0)  // b = position basse
 		{
@@ -310,55 +342,55 @@ class Communication
 
 	void ouvrirGauche ()
 	{
-		pinceGauche.goTo (60);
+		machoireDroite.goTo (60);
 	}
 	void fermerGauche ()
 	{
-//	  uint16_t positionPrecedente = (pinceGauche.getPosition_0_1023());
+//	  uint16_t positionPrecedente = (machoireDroite.getPosition_0_1023());
 //	  uint16_t positionActuelle = positionPrecedente ;
-	  pinceGauche.goTo(153);
+	  machoireDroite.goTo(153);
 /*	  for(int i=0; i<7;i++)
 	      {
 		_delay_ms(100);
-		positionActuelle = (pinceGauche.getPosition_0_1023());
+		positionActuelle = (machoireDroite.getPosition_0_1023());
 		if (positionActuelle == positionPrecedente) // vu qu'on a attendu 0,1 s, si on est toujours à la meme position, c'est que ça bloque
-		  pinceGauche.goTo(positionActuelle);//Dans ce cas on bloque l'ax12 là où il est
+		  machoireDroite.goTo(positionActuelle);//Dans ce cas on bloque l'ax12 là où il est
 	      }*/
 	}
 	void basGauche ()
 	{
-		positionGauche.goTo(210);
-		orientationGauche.goTo(82);
+		brasDroit.goTo(210);
+		machoireGauche.goTo(82);
 	}
 	void milieuGauche ()
 	{
-		positionGauche.goTo(130);
-		orientationGauche.goTo(155);
+		brasDroit.goTo(130);
+		machoireGauche.goTo(155);
 	}
 	void hautGauche ()
 	{
 	  retablirGauche();
-	  	positionGauche.goTo(60);
+	  	brasDroit.goTo(60);
 		_delay_ms(250);
-		orientationGauche.goTo(130); //cet ajout a pour but de mettre la pince verticale, qu'elle prenne moins de place.
+		machoireGauche.goTo(130); //cet ajout a pour but de mettre la pince verticale, qu'elle prenne moins de place.
 	}
   void ouvrirBasGauche ()
   {
-    positionGauche.goTo(210);
-    orientationGauche.goTo(82);
+    brasDroit.goTo(210);
+    machoireGauche.goTo(82);
     _delay_ms(250);
     ouvrirGauche();
   }
   void retournerGauche ()
   {
-    retourneurGauche.goTo (240);
+    brasGauche.goTo (240);
     _delay_ms(300);
-    positionGauche.goTo(170);
-    orientationGauche.goTo(145);
+    brasDroit.goTo(170);
+    machoireGauche.goTo(145);
   }
   void retablirGauche ()
   {
-    retourneurGauche.goTo (60);
+    brasGauche.goTo (60);
   }
 
 void posGauche ()
@@ -366,21 +398,21 @@ void posGauche ()
     	serial_pc::printfln ( "angle?" );
         uint16_t i;
 	serial_pc::read (i);
-	positionGauche.goTo(i);
-	orientationGauche.goTo(290-i);
+	brasDroit.goTo(i);
+	machoireGauche.goTo(290-i);
   }
 
  void tombeGauche ()
   {
-    pinceGauche.goTo(0);
+    machoireDroite.goTo(0);
   }
 
  void torcheGauche ()
 	{
 
-	  pinceGauche.goTo (60);
-	  positionGauche.goTo(100);
-	  orientationGauche.goTo(190);
+	  machoireDroite.goTo (60);
+	  brasDroit.goTo(100);
+	  machoireGauche.goTo(190);
 	}
 
 

@@ -14,3 +14,4 @@ hardware/*/*.b\#*
 hardware/*/*.s\#*
 *.class
 /bin/
+/Debug/
