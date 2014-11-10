@@ -43,7 +43,7 @@ public :											//constructeur
 		{
 					serial_pc::printfln ( "ascenseur" );
 		}
-		else if (strcmp (ordre , "bd"))			// bd pour bouger le bras droit
+		else if (strcmp (ordre , "bd") == 0)			// bd pour bouger le bras droit
 		{
 			serial_pc::printfln ( "angle?" );	// angle au choix
 			int p;
@@ -51,7 +51,7 @@ public :											//constructeur
 			brasDroit.goTo (p);
 
 		}
-		else if (strcmp (ordre , "bg"))			//bg pour bouger le bras gauche
+		else if (strcmp (ordre , "bg") == 0)			//bg pour bouger le bras gauche
 		{
 			serial_pc::printfln ( "angle?" );	// angle au choix
 			int p;
@@ -59,7 +59,7 @@ public :											//constructeur
 			brasGauche.goTo (p);
 
 		}
-		else if (strcmp (ordre , "md"))			//bg pour bouger la machoire droite
+		else if (strcmp (ordre , "md") == 0)			//bg pour bouger la machoire droite
 		{
 			serial_pc::printfln ( "angle?" );	// angle au choix
 			int p;
@@ -67,7 +67,7 @@ public :											//constructeur
 			machoireDroite.goTo (p);
 
 		}
-		else if (strcmp (ordre , "mg"))			//bg pour bouger la machoire gauche
+		else if (strcmp (ordre , "mg") == 0)			//bg pour bouger la machoire gauche
 		{
 			serial_pc::printfln ( "angle?" );	// angle au choix
 			int p;
