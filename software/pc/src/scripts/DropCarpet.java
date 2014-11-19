@@ -30,7 +30,7 @@ public class DropCarpet extends Script
 			numberOfCarpetNotDropped--;
 			monterTapisGauche();
 		}
-		if (!DroppedLeftCarpet)
+		if (!DroppedRightCarpet)
 		{
 			baisserTapisDroit();
 			DroppedRightCarpet=true;
