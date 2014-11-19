@@ -10,11 +10,6 @@ MotionControlSystem::MotionControlSystem() :
 				false) {
 }
 
-MotionControlSystem& MotionControlSystem::Instance() {
-	static MotionControlSystem instance;
-	return instance;
-}
-
 void MotionControlSystem::init() {
 	/**
 	 * Initialisation moteurs et encodeurs
@@ -28,9 +23,9 @@ void MotionControlSystem::init() {
 	 */
 
 	translationPID.setControllerDirection(PidDirection::DIRECT);
-	translationPID.setTunings(0.4, 0., 12.);
-	rotationPID.setControllerDirection(PidDirection::REVERSE);
-	rotationPID.setTunings(1.2, 0., 5.);
+	translationPID.setTunings(0.45, 9.0, 0.);
+	rotationPID.setControllerDirection(PidDirection::DIRECT);
+	rotationPID.setTunings(.8, 15.0, 0.);
 
 	/**
 	 * Initialisation de la boucle d'asservissement (TIMER 4)
@@ -83,7 +78,8 @@ void MotionControlSystem::control() {
 	int32_t rightTicks = Counter::getRightValue();
 
 	if (translationControlled) {
-		currentDistance = (leftTicks + rightTicks) / 2;
+		currentDistance = leftTicks + rightTicks;
+		//currentDistance = (leftTicks + rightTicks) / 2;
 		translationPID.compute();
 	} else
 		pwmTranslation = 0;

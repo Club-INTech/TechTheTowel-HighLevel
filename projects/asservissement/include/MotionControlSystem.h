@@ -8,6 +8,7 @@
 #include "delay.h"
 #include "misc.h"
 #include "Counter.h"
+#include <Uart.hpp>
 
 #define PI 3.14159265
 #define PI_TIC 24809 // pi/TICK_TO_RADIAN
@@ -22,18 +23,6 @@
 
 class MotionControlSystem : public Singleton<MotionControlSystem> {
 private:
-	//Constructeurs privés
-	MotionControlSystem();
-    MotionControlSystem (const MotionControlSystem&): leftMotor(Side::LEFT), rightMotor(Side::RIGHT),translationControlled(
-			true), rotationControlled(true), translationPID(
-			&currentDistance, &pwmTranslation, &translationSetpoint), rotationPID(
-			&currentAngle, &pwmRotation, &rotationSetpoint), originalAngle(0.0),rotationSetpoint(
-			0), translationSetpoint(0), x(
-			0), y(0), moving(false) {
-    }
-
-    static MotionControlSystem instance;
-
 	Motor leftMotor;
 	Motor rightMotor;
 	bool translationControlled;
@@ -48,8 +37,7 @@ private:
 	int32_t translationSetpoint;
 
 	//Angle et distance en tick au dernier refresh
-	int32_t currentDistance;
-	int32_t currentAngle;
+
 
 	int16_t pwmRotation;
 	int16_t pwmTranslation;
@@ -61,8 +49,17 @@ private:
 	bool isPhysicallyStopped();
 
 public:
-	static MotionControlSystem& Instance();
 
+	MotionControlSystem();
+    MotionControlSystem (const MotionControlSystem&): leftMotor(Side::LEFT), rightMotor(Side::RIGHT),translationControlled(
+			true), rotationControlled(true), translationPID(
+			&currentDistance, &pwmTranslation, &translationSetpoint), rotationPID(
+			&currentAngle, &pwmRotation, &rotationSetpoint), originalAngle(0.0),rotationSetpoint(
+			0), translationSetpoint(0), x(
+			0), y(0), moving(false) {
+    }
+	int32_t currentDistance;
+	int32_t currentAngle;
 	void init();
 
 	void control();
