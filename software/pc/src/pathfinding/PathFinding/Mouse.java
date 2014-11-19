@@ -23,12 +23,12 @@ public class Mouse implements MouseListener
     {
         if (e.getButton()==MouseEvent.BUTTON1)
         {
-        	m_table.getRobot().setPosition(new Node((e.getX() - 8) * 2000 / m_fen.getPanel().getWidth(), (e.getY() - 31) * 3000 / m_fen.getPanel().getHeight()));
+        	m_table.getRobot().setPosition(new Node((e.getX()) * 2000 / m_fen.getPanel().getWidth(), (e.getY()) * 3000 / m_fen.getPanel().getHeight()));
         	m_fen.rafraichir();
         }
         if (e.getButton()==MouseEvent.BUTTON3)
         {
-        	m_table.getRobot().setDestination(new Node((e.getX() - 8) * 2000 / m_fen.getPanel().getWidth(), (e.getY() - 31) * 3000 / m_fen.getPanel().getHeight()));
+        	m_table.getRobot().setDestination(new Node((e.getX()) * 2000 / m_fen.getPanel().getWidth(), (e.getY()) * 3000 / m_fen.getPanel().getHeight()));
         	m_fen.rafraichir();
         }
     }

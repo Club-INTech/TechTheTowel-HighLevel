@@ -42,7 +42,7 @@ public abstract class Script implements Service
 	/**
 	 * Exécute vraiment un script
 	 */
-	public void agit(int id_version, GameState<RobotReal> state, boolean retenter_si_blocage) throws ScriptException
+	public void goToThenExec(int id_version, GameState<RobotReal> state, boolean retenter_si_blocage) throws ScriptException
 	{
 	}
 	
