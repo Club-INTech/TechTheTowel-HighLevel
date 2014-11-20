@@ -1,6 +1,7 @@
 package scripts;
 
 import hook.types.HookGenerator;
+import robot.highlevel.LocomotionHiLevel;
 import smartMath.Vec2;
 import strategie.GameState;
 import utils.Config;
@@ -9,8 +10,8 @@ import utils.Log;
 public class DropCarpet extends Script 
 {
 	private boolean DroppedLeftCarpet=false, DroppedRightCarpet=false;
-	int numberOfCarpetNotDropped=2;
-	int distance=0;//distance de déplacement pour placer les tapis
+	private int numberOfCarpetNotDropped=2;
+	private int distance=0;//distance de déplacement pour placer les tapis
 
 	public DropCarpet (HookGenerator hookgenerator, Config config, Log log) 
 	{
@@ -21,8 +22,8 @@ public class DropCarpet extends Script
 	public void execute () 
 	{
 		//premier test de script
-		tourner(Math.PI); //on present ses arriere a l'escalier
-		avancer(-distance); //on se raproche de l'escalier
+		locomotion.tourner(Math.PI); //on presente ses arrieres a l'escalier
+		locomotion.avancer(-distance); //on se rapproche de l'eescalier
 		if (!DroppedLeftCarpet)
 		{
 			baisserTapisGauche();
@@ -37,19 +38,13 @@ public class DropCarpet extends Script
 			numberOfCarpetNotDropped--;
 			monterTapisDroit();
 		}
-		avancer(distance);//on s'eloigne de l'escalier
+		locomotion.avancer(distance);//on s'eloigne de l'escalier
 	}
 	
-	public void goToThenExec () 
-	{
-		int id;
-		goTo(point_entree(id));
-		execute();
-	}
 	@Override
 	public Vec2 point_entree(int id) 
 	{
-		// le point d'entrée (261,1210) pour les verts on change comment de couleur ?
+		// le point d'entrée (261,1210)(notation commune (0,0) au niveau du plateau rouge) pour les verts, on change comment de couleur si on est jaune ?
 		return new Vec2(261,1210);
 	}
 

@@ -3,6 +3,7 @@ package scripts;
 import smartMath.Vec2;
 import strategie.GameState;
 import robot.RobotReal;
+import robot.highlevel.LocomotionHiLevel;
 import utils.Log;
 import utils.Config;
 import container.Service;
@@ -26,6 +27,7 @@ public abstract class Script implements Service
 	protected static HookGenerator hookgenerator;
 	protected static Config config;
 	protected static Log log;
+	protected LocomotionHiLevel locomotion = new LocomotionHiLevel(null, null, null, null); //TODO créer la bonne locomotion avec les bons arguments
 
 	/*
 	 * versions.get(meta_id) donne la liste des versions associées aux meta_id
@@ -40,10 +42,12 @@ public abstract class Script implements Service
 	}
 		
 	/**
-	 * Exécute vraiment un script
+	 * Exécute vraiment un script et fait le deplacement jusqu'au point d'entree
 	 */
 	public void goToThenExec(int id_version, GameState<RobotReal> state, boolean retenter_si_blocage) throws ScriptException
 	{
+		locomotion.suit_chemin(pathFinding(locomotion.getPosition(),point_entree(id_version)));
+		execute();
 	}
 	
 	/**
