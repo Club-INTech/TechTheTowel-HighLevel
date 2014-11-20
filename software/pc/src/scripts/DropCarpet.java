@@ -1,5 +1,8 @@
 package scripts;
 
+import java.util.ArrayList;
+
+import hook.Hook;
 import hook.types.HookGenerator;
 import robot.highlevel.LocomotionHiLevel;
 import smartMath.Vec2;
@@ -19,11 +22,13 @@ public class DropCarpet extends Script
 		//cree la liste des versions donc des id
 	}
 	
+	@Override
 	public void execute () 
 	{
+		ArrayList<Hook> hook = new ArrayList<Hook>();
 		//premier test de script
-		locomotion.tourner(Math.PI); //on presente ses arrieres a l'escalier
-		locomotion.avancer(-distance); //on se rapproche de l'eescalier
+		locomotion.tourner(Math.PI,hook,true); //on presente ses arrieres a l'escalier
+		locomotion.avancer(-distance,hook,true); //on se rapproche de l'escalier
 		if (!DroppedLeftCarpet)
 		{
 			baisserTapisGauche();
@@ -38,7 +43,7 @@ public class DropCarpet extends Script
 			numberOfCarpetNotDropped--;
 			monterTapisDroit();
 		}
-		locomotion.avancer(distance);//on s'eloigne de l'escalier
+		locomotion.avancer(distance,hook,true);//on s'eloigne de l'escalier
 	}
 	
 	@Override

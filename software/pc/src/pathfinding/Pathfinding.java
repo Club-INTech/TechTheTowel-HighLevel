@@ -10,22 +10,24 @@ import smartMath.Vec2;
  */
 public class Pathfinding
 {
+	ArrayList<Vec2> path;
 	/**
 	 * Constructor
 	 */
-	public Pathfinding()
+	public Pathfinding(Vec2 point_depart, Vec2 point_arrivee)
 	{
 		// TODO
 	}
+	
 	
 	public ArrayList<Vec2> computePath(Vec2 start, Vec2 end)
 	{
 		
 		// TODO
-		// voici un pathfinding mathématiquement démontré comme correct
-		// correct au sens d'un chemin partant du départ et allant a l'arrivée
+		// voici un pathfinding mathï¿½matiquement dï¿½montrï¿½ comme correct
+		// correct au sens d'un chemin partant du dï¿½part et allant a l'arrivï¿½e
 		
-		// bon après si vous chipottez pour les obstacles en chemin aussi...
+		// bon aprï¿½s si vous chipottez pour les obstacles en chemin aussi...
 		
 		ArrayList<Vec2> out = new ArrayList<Vec2>();
 		out.add(end);
