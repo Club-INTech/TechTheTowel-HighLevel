@@ -49,7 +49,7 @@ public class DropCarpet extends Script
 	@Override
 	public Vec2 point_entree(int id) 
 	{
-		// le point d'entrée (261,1210)(notation commune (0,0) au niveau du plateau rouge) pour les verts, on change comment de couleur si on est jaune ?
+		// le point d'entrée (261,1210) pour les verts, on change comment de couleur si on est jaune ?
 		return new Vec2(261,1210);
 	}
 
