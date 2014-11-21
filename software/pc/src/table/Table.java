@@ -1,14 +1,26 @@
 package table;
 
+
 import table.obstacles.ObstacleManager;
 import container.Service;
 import utils.*;
+
+/* Positions :
+ * 			_______________________________________________________
+ * 			|-1500,1000         	0,1000		         1500,1000|
+ * 			|           		      							  |
+ * 			|           		     							  |
+ * 			|           	 		  							  |
+ * 			|           	 		  							  |
+ * 			|           	 		  							  |
+ * 			|-1500,0           		 0,0       				1500,0|
+ *          -------------------------------------------------------
+ */
 
 
 
 public class Table implements Service
 {
-
 
 	public ObstacleManager gestionobstacles;
 
@@ -24,8 +36,10 @@ public class Table implements Service
 		initialise();
 	}
 	
-	public void initialise()
+	public void initialise()//initialise la table du debut du jeu (obstacles fixes)
 	{
+		
+		
 	}
 	
 	//La table
