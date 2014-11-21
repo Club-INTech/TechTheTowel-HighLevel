@@ -27,7 +27,7 @@ public class DropCarpet extends Script
 	}
 	
 	@Override
-	public void execute () 
+	public void execute (int id_version) 
 	{
 		ArrayList<Hook> hook = new ArrayList<Hook>(); //liste des hook vide pour le moment mais a modifier
 		//premier test de script

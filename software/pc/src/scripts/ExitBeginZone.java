@@ -29,7 +29,7 @@ public class ExitBeginZone extends Script {
 	}
 	
 	@Override
-	public void execute ()
+	public void execute (int id_version)
 	{
 		int distanceToExit=100;
 		ArrayList<Hook> hook = new ArrayList<Hook>();
