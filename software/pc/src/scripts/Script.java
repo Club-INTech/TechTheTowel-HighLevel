@@ -49,7 +49,7 @@ public abstract class Script implements Service
 	public void goToThenExec(int id_version, GameState<RobotReal> state, boolean retenter_si_blocage) throws ScriptException
 	{
 		locomotion.suit_chemin((new Pathfinding(locomotion.getPosition(),point_entree(id_version))).path,new ArrayList<Hook>()); //ligne a modifier pour correspondre au pathfinding
-		execute();
+		execute(id_version);
 	}
 	
 	/**
