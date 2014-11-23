@@ -22,7 +22,7 @@ public class DropCarpet extends Script
 {
 	private boolean DroppedLeftCarpet=false, DroppedRightCarpet=false;//booleens pour savoir si le tapis gauche (respectivement droit) a ete depose
 	private int undroppedCarpetCount=2;//nombre de tapis pas depose
-	private int distance=0;//distance de déplacement pour placer les tapis
+	private int distance=200;//distance de déplacement pour placer les tapis
 
 	public DropCarpet (HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, LocomotionHiLevel locomotion, ActuatorsManager move) 
 	{

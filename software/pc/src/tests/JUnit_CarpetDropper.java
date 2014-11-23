@@ -37,11 +37,12 @@ public class JUnit_CarpetDropper extends JUnit_Test
 	@Before
 	public void setUp() throws Exception 
 	{
-		super.setUp();
+		super.setUp();                                                                                                                                 
 		actionneurs = (ActuatorsManager)container.getService("Actionneurs");
 		hookgenerator = (HookGenerator)container.getService("HookGenerator");
 		locomotion = (LocomotionHiLevel)container.getService("DeplacementsHautNiveau");
 		script = new DropCarpet(hookgenerator, config, log, pathfinding, locomotion, actionneurs);
+		
 		
 	}
 
