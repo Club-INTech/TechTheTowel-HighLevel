@@ -66,7 +66,7 @@ public class JUnit_Laser extends JUnit_Test {
 	public void test_pour_kayou() throws Exception
 	{
 		container.getService("threadLaser");
-		container.demarreThreads();
+		container.startInstanciedThreads();
 		laser.allumer();
 		while(true)
 		{
