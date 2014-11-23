@@ -1,11 +1,14 @@
 package scripts;
 
 import java.util.ArrayList;
+
+import pathfinding.Pathfinding;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialException;
 import hook.Hook;
 import hook.types.HookGenerator;
 import robot.cards.ActuatorsManager;
+import robot.highlevel.LocomotionHiLevel;
 import robot.serial.Serial;
 import smartMath.Vec2;
 import strategie.GameState;
@@ -24,9 +27,9 @@ public class DropCarpet extends Script
 	
 	private ActuatorsManager move = new ActuatorsManager(config, log, new Serial(log, "coucou"));
 
-	public DropCarpet (HookGenerator hookgenerator, Config config, Log log) 
+	public DropCarpet (HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, LocomotionHiLevel locomotion) 
 	{
-		super(hookgenerator,config,log);
+		super(hookgenerator,config,log,pathfinding,locomotion);
 		//cree la liste des versions donc des id
 	}
 	

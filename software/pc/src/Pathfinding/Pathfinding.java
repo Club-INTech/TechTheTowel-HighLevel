@@ -1,4 +1,4 @@
-package pathfinding;
+package Pathfinding;
 import java.util.ArrayList;
 
 import smartMath.Vec2;
@@ -8,7 +8,7 @@ import smartMath.Vec2;
  * @author Marsya
  *
  */
-public class Pathfinding
+public class Pathfinding implements Service 
 {
 	ArrayList<Vec2> path;
 	/**

@@ -12,7 +12,7 @@ import hook.types.HookGenerator;
 
 import java.util.ArrayList;
 
-import pathfinding.Pathfinding;
+import Pathfinding.Pathfinding;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialException;
 import exceptions.ScriptException;
@@ -29,18 +29,21 @@ public abstract class Script implements Service
 	protected static HookGenerator hookgenerator;
 	protected static Config config;
 	protected static Log log;
-	protected LocomotionHiLevel locomotion = new LocomotionHiLevel(log, config, null, null); //TODO créer la bonne locomotion avec les bons arguments
+	protected static Pathfinding pathfinding;
+	protected static LocomotionHiLevel locomotion;
 
 	/*
 	 * versions.get(meta_id) donne la liste des versions associées aux meta_id
 	 */
 	protected ArrayList<ArrayList<Integer>> versions = new ArrayList<ArrayList<Integer>>();	
 	
-	public Script(HookGenerator hookgenerator, Config config, Log log)
+	public Script(HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, LocomotionHiLevel locomotion)
 	{
 		Script.hookgenerator = hookgenerator;
 		Script.config = config;
 		Script.log = log;
+		Script.pathfinding = pathfinding;
+		Script.locomotion = locomotion;
 	}
 		
 	/**
@@ -48,8 +51,22 @@ public abstract class Script implements Service
 	 */
 	public void goToThenExec(int id_version, GameState<RobotReal> state, boolean retenter_si_blocage) throws ScriptException
 	{
-		locomotion.suit_chemin((new Pathfinding(locomotion.getPosition(),point_entree(id_version))).path,new ArrayList<Hook>()); //ligne a modifier pour correspondre au pathfinding
-		execute(id_version);
+		try 
+		{
+			locomotion.suit_chemin(pathfinding.computePath(locomotion.getPosition(),point_entree(id_version)),new ArrayList<Hook>());
+		} 
+		catch (UnableToMoveException e) 
+		{
+			log.debug("Script : chemin impossible", this);;
+		}
+		try 
+		{
+			execute(id_version);
+		} 
+		catch (UnableToMoveException | SerialException e) 
+		{
+			log.debug("ca marche pas", this);;
+		}
 	}
 	
 	/**
