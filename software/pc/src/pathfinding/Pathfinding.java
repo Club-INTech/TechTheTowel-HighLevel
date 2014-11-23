@@ -16,7 +16,7 @@ public class Pathfinding
 	 */
 	public Pathfinding(Vec2 point_depart, Vec2 point_arrivee)
 	{
-		// TODO
+		//test :)
 	}
 	
 	
