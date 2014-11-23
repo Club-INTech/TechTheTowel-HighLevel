@@ -3,6 +3,7 @@ package scripts;
 import smartMath.Vec2;
 import strategie.GameState;
 import robot.RobotReal;
+import robot.cards.ActuatorsManager;
 import robot.highlevel.LocomotionHiLevel;
 import utils.Log;
 import utils.Config;
@@ -31,19 +32,21 @@ public abstract class Script implements Service
 	protected static Log log;
 	protected static Pathfinding pathfinding;
 	protected static LocomotionHiLevel locomotion;
+	protected static ActuatorsManager move;
 
 	/*
 	 * versions.get(meta_id) donne la liste des versions associées aux meta_id
 	 */
 	protected ArrayList<ArrayList<Integer>> versions = new ArrayList<ArrayList<Integer>>();	
 	
-	public Script(HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, LocomotionHiLevel locomotion)
+	public Script(HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, LocomotionHiLevel locomotion, ActuatorsManager move)
 	{
 		Script.hookgenerator = hookgenerator;
 		Script.config = config;
 		Script.log = log;
 		Script.pathfinding = pathfinding;
 		Script.locomotion = locomotion;
+		Script.move = move;
 	}
 		
 	/**

@@ -8,13 +8,13 @@ import smartMath.Vec2;
  * @author Marsya
  *
  */
-public class Pathfinding implements Service 
+public class Pathfinding 
 {
 	ArrayList<Vec2> path;
 	/**
 	 * Constructor
 	 */
-	public Pathfinding(Vec2 point_depart, Vec2 point_arrivee)
+	public Pathfinding()
 	{
 		//test :)
 	}
@@ -24,13 +24,15 @@ public class Pathfinding implements Service
 	{
 		
 		// TODO
-		// voici un pathfinding math�matiquement d�montr� comme correct
-		// correct au sens d'un chemin partant du d�part et allant a l'arriv�e
+		// voici un pathfinding mathematiquement demontre comme correct
+		// correct au sens d'un chemin partant du d�part et allant a l'arrivee
 		
-		// bon apr�s si vous chipottez pour les obstacles en chemin aussi...
+		// bon apres si vous chipottez pour les obstacles en chemin aussi...
 		
 		ArrayList<Vec2> out = new ArrayList<Vec2>();
 		out.add(end);
 		return out;
 	}
+	
+	
 }
