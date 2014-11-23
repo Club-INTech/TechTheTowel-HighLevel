@@ -238,7 +238,7 @@ public class ActuatorsManager implements Service {
 	}
 	
 	
-	// IT 2014 partie Tapis
+	// IT 2015 partie Tapis
 	
 	public void monterTapisDroit() throws SerialException
 	{
@@ -264,7 +264,7 @@ public class ActuatorsManager implements Service {
 		serie.communiquer("ptg", 0);	
 	}
 	
-	// IT 2014 partie claps
+	// IT 2015 partie claps
 	
 	public void clapDroitHigh() throws SerialException
 	{
@@ -302,7 +302,7 @@ public class ActuatorsManager implements Service {
 		serie.communiquer("cgb", 0);
 	}
 	
-	//IT 2014 partie Guide Plots
+	//IT 2015 partie Guide Plots
 	
 	public void guideDroitOpen() throws SerialException
 	{
@@ -340,7 +340,7 @@ public class ActuatorsManager implements Service {
 		serie.communiquer("ggi", 0);
 	}
 	
-	// IT 2014 ascenseur
+	// IT 2015 ascenseur
 	
 	public void elevatorHigh() throws SerialException
 	{
@@ -366,7 +366,7 @@ public class ActuatorsManager implements Service {
 		serie.communiquer("ae", 0);
 	}
 	
-	// IT2014 machoires monte plots
+	// IT 2015 machoires monte plots
 	
 	public void machoireDroitOpen() throws SerialException
 	{
@@ -392,7 +392,7 @@ public class ActuatorsManager implements Service {
 		serie.communiquer("fmg", 0);
 	}
 	
-	//IT 2014 bras avants gobelets
+	//IT 2015 bras avants gobelets
 	
 	public void brasDroitOpen() throws SerialException
 	{
