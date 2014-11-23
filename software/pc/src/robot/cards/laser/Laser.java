@@ -3,12 +3,12 @@ package robot.cards.laser;
 import java.util.ArrayList;
 
 import robot.RobotReal;
-import robot.serial.Serial;
+import robot.serial.SerialConnexion;
 import smartMath.Vec2;
 import utils.Log;
 import utils.Config;
 import container.Service;
-import exceptions.serial.SerialException;
+import exceptions.serial.SerialConnexionException;
 
 /**
  * Classe qui gère la balise laser
@@ -20,12 +20,12 @@ public class Laser implements Service {
 
 	// Dépendances
 	private Log log;
-	private Serial serie;
+	private SerialConnexion serie;
 	private RobotReal robotvrai;
 
 	private Beacon[] balises;
 
-	public Laser(Config config, Log log, Serial serie, RobotReal robotvrai)
+	public Laser(Config config, Log log, SerialConnexion serie, RobotReal robotvrai)
 	{
 		this.log = log;
 		this.serie = serie;
@@ -71,7 +71,7 @@ public class Laser implements Service {
 		try {
 			serie.communiquer("motor_on", 0);
 			serie.communiquer("laser_on", 0);
-		} catch (SerialException e) {
+		} catch (SerialConnexionException e) {
 			e.printStackTrace();
 		}
 	}
@@ -84,7 +84,7 @@ public class Laser implements Service {
 		try {
 			serie.communiquer("motor_off", 0);
 			serie.communiquer("laser_off", 0);
-		} catch (SerialException e) {
+		} catch (SerialConnexionException e) {
 			e.printStackTrace();
 		}
 	}
@@ -111,7 +111,7 @@ public class Laser implements Service {
 				{
 					//log.warning("balise n°"+b.id+" ne répond pas.", this);
 				}
-			} catch (SerialException e) {
+			} catch (SerialConnexionException e) {
 				e.printStackTrace();
 			}
 		return balises_ok;
@@ -121,9 +121,9 @@ public class Laser implements Service {
 	 * Ping une balise
 	 * @param id
 	 * @return
-	 * @throws SerialException 
+	 * @throws SerialConnexionException 
 	 */
-	private boolean ping_balise(int id) throws SerialException
+	private boolean ping_balise(int id) throws SerialConnexionException
 	{
 		// TODO (de PF) vérifier la méthode, mais on faisait comme ça l'année dernière
 		String[] ping = serie.communiquer("ping_all", balises.length);	    
@@ -153,9 +153,9 @@ public class Laser implements Service {
 	 * Et renvoie la position relative de la balise dans le système de coordonnées du laser.
 	 * @param id
 	 * @return point
-	 * @throws SerialException 
+	 * @throws SerialConnexionException 
 	 */
-	public Vec2 position_balise_relative(int id) throws SerialException
+	public Vec2 position_balise_relative(int id) throws SerialConnexionException
 	{
 		String chaines[] = {"value", Integer.toString(id)};
 		String[] reponse = serie.communiquer(chaines, 3);
@@ -198,9 +198,9 @@ public class Laser implements Service {
 	 * Récupère la valeur (rayon, angle) d'une balise
 	 * @param id
 	 * @return
-	 * @throws SerialException 
+	 * @throws SerialConnexionException 
 	 */
-	public Vec2 position_balise(int id) throws SerialException
+	public Vec2 position_balise(int id) throws SerialConnexionException
 	{
 		String chaines[] = {"value", Integer.toString(id)};
 		String[] reponse = serie.communiquer(chaines, 3);
