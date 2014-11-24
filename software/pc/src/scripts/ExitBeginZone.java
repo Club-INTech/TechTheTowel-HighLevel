@@ -21,7 +21,7 @@ import utils.Log;
  */
 public class ExitBeginZone extends Script {
 
-	int distanceToExit=100;
+	int distanceToExit=450;
 	ArrayList<Hook> emptyHook = new ArrayList<Hook>();
 	
 	public ExitBeginZone(HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, LocomotionHiLevel locomotion, ActuatorsManager move) 
@@ -31,7 +31,7 @@ public class ExitBeginZone extends Script {
 
 	@Override
 	public Vec2 point_entree(int id) {
-		return new Vec2(1350,1000);//point de depart du match a modifier a chaque base roulante
+		return new Vec2(1340,1000);//point de depart du match a modifier a chaque base roulante
 	}
 	
 	@Override

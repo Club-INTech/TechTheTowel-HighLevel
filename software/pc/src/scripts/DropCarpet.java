@@ -24,7 +24,7 @@ public class DropCarpet extends Script
 	// TODO ? bouger ces booléens dans table.
 	private boolean DroppedLeftCarpet=false, DroppedRightCarpet=false;//booleens pour savoir si le tapis gauche (respectivement droit) a ete depose
 	private int distance=200;//distance de déplacement pour placer les tapis
-	private int sleepTime = 800; //temps necessaire pour abaisser les tapis en ms
+	private int sleepTime = 800; //le temps d'attente (en ms) entre la commande de dépose du tapis ( le bras se baisse) et la commande qui remonte le bras
 
 	public DropCarpet (HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, LocomotionHiLevel locomotion, ActuatorsManager move) 
 	{
@@ -35,12 +35,7 @@ public class DropCarpet extends Script
 	@Override
 	public void execute (int id_version) 
 	{
-		// le temps d'attente (en ms) entre la commande de dépose du tapis ( le bras se baisse) et la commande qui remonte le bras
-		int timeToDropCarpet = 800;
-		
-		
 		ArrayList<Hook> emptyHookList = new ArrayList<Hook>(); //liste des hook vide pour le moment mais a modifier
-		//premier test de script
 		try 
 		{
 			try 
@@ -48,15 +43,13 @@ public class DropCarpet extends Script
 				//on presente ses arrieres a l'escalier
 				locomotion.tourner(Math.PI,emptyHookList,true);
 				// on avance vers ces demoiselles (les marches) 
-				locomotion.avancer(-distance,emptyHookList,true); //on se rapproche de l'escalier
+				locomotion.avancer(-distance,emptyHookList,true);
 				
 				if (!DroppedLeftCarpet)
 				{
-<<<<<<< HEAD
 					actionneurs.baisserTapisGauche();
 					Sleep.sleep(sleepTime);
 					DroppedLeftCarpet=true;
-					undroppedCarpetCount--;
 					actionneurs.monterTapisGauche();
 				}
 				if (!DroppedRightCarpet)
@@ -64,21 +57,7 @@ public class DropCarpet extends Script
 					actionneurs.baisserTapisDroit();
 					Sleep.sleep(sleepTime);
 					DroppedRightCarpet=true;
-					undroppedCarpetCount--;
 					actionneurs.monterTapisDroit();
-=======
-					mActuatorMgr.baisserTapisGauche();
-					Sleep.sleep(timeToDropCarpet);
-					DroppedLeftCarpet = true;
-					mActuatorMgr.monterTapisGauche();
-				}
-				if (!DroppedRightCarpet)
-				{
-					mActuatorMgr.baisserTapisDroit();
-					Sleep.sleep(timeToDropCarpet);
-					DroppedRightCarpet = true;
-					mActuatorMgr.monterTapisDroit();
->>>>>>> 8c3d78f82c75d2971e2f7dd1f4a887351f6ec51d
 				}
 				locomotion.avancer(distance,emptyHookList,true);//on s'eloigne de l'escalier
 			} 
@@ -89,7 +68,8 @@ public class DropCarpet extends Script
 		}
 		catch (SerialException e) 
 		{
-			log.debug("ca marche pas !",this);
+			log.debug("mauvaise entree serie !",this);
+			e.printStackTrace();
 			
 		}
 	}
@@ -118,13 +98,8 @@ public class DropCarpet extends Script
 	{
 		try 
 		{
-<<<<<<< HEAD
 			actionneurs.monterTapisGauche();
 			actionneurs.monterTapisDroit();
-=======
-			mActuatorMgr.monterTapisGauche();
-			mActuatorMgr.monterTapisDroit();
->>>>>>> 8c3d78f82c75d2971e2f7dd1f4a887351f6ec51d
 		} 
 		catch (SerialException e) 
 		{

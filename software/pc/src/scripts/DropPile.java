@@ -31,7 +31,6 @@ public class DropPile extends Script {
 	{
 		if (id_version==1)
 		{
-<<<<<<< HEAD
 			locomotion.tourner((Math.PI*0.5), emptyHook, false);
 			locomotion.avancer(100, emptyHook, true);
 			actionneurs.elevatorGround();
@@ -41,17 +40,6 @@ public class DropPile extends Script {
 			actionneurs.guideGaucheClose();
 			actionneurs.guideDroitClose();
 			locomotion.avancer(-80,emptyHook,true);
-=======
-			locomotion.tourner((Math.PI*0.5), hook, false);
-			locomotion.avancer(100, hook, true);
-			mActuatorMgr.elevatorGround();
-			mActuatorMgr.ouvrirLentGuide();
-			locomotion.avancer(-20, hook, true);
-			this.setPlotCounter(0);
-			mActuatorMgr.guideGaucheClose();
-			mActuatorMgr.guideDroitClose();
-			locomotion.avancer(-80,hook,true);
->>>>>>> 8c3d78f82c75d2971e2f7dd1f4a887351f6ec51d
 		}
 		else if (id_version==2)
 		{
