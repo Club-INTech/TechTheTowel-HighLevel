@@ -13,6 +13,7 @@ import smartMath.Vec2;
 import strategie.GameState;
 import utils.Config;
 import utils.Log;
+import utils.Sleep;
 /**
  * 
  * @author paul
@@ -23,6 +24,7 @@ public class DropCarpet extends Script
 	private boolean DroppedLeftCarpet=false, DroppedRightCarpet=false;//booleens pour savoir si le tapis gauche (respectivement droit) a ete depose
 	private int undroppedCarpetCount=2;//nombre de tapis pas depose
 	private int distance=200;//distance de déplacement pour placer les tapis
+	private int sleepTime = 800; //temps necessaire pour abaisser les tapis en ms
 
 	public DropCarpet (HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, LocomotionHiLevel locomotion, ActuatorsManager move) 
 	{
@@ -44,17 +46,19 @@ public class DropCarpet extends Script
 				locomotion.avancer(-distance,hook,true); //on se rapproche de l'escalier
 				if (!DroppedLeftCarpet)
 				{
-					move.baisserTapisGauche();
+					actionneurs.baisserTapisGauche();
+					Sleep.sleep(sleepTime);
 					DroppedLeftCarpet=true;
 					undroppedCarpetCount--;
-					move.monterTapisGauche();
+					actionneurs.monterTapisGauche();
 				}
 				if (!DroppedRightCarpet)
 				{
-					move.baisserTapisDroit();
+					actionneurs.baisserTapisDroit();
+					Sleep.sleep(sleepTime);
 					DroppedRightCarpet=true;
 					undroppedCarpetCount--;
-					move.monterTapisDroit();
+					actionneurs.monterTapisDroit();
 				}
 				locomotion.avancer(distance,hook,true);//on s'eloigne de l'escalier
 			} 
@@ -74,7 +78,7 @@ public class DropCarpet extends Script
 	public Vec2 point_entree(int id) 
 	{
 		// le point d'entrée (261,1210) pour les verts, on change comment de couleur si on est jaune ?
-		return new Vec2(261,1210);
+		return new Vec2(261,1310-distance);
 	}
 
 	@Override
@@ -88,13 +92,30 @@ public class DropCarpet extends Script
 	{
 		try 
 		{
-			move.monterTapisGauche();
-			move.monterTapisDroit();
+			actionneurs.monterTapisGauche();
+			actionneurs.monterTapisDroit();
 		} 
 		catch (SerialException e) 
 		{
 			log.debug("erreur termine DropCarpet script : impossible de ranger", this);;
 		}
+	}
+	
+	public int getSleepTime()
+	{
+		return sleepTime;
+	}
+	public void setSleepTime(int newSleepTime)
+	{
+		this.sleepTime = newSleepTime;
+	}
+	public int getDistance()
+	{
+		return distance;
+	}
+	public void setDistance(int newDistance)
+	{
+		this.distance = newDistance;
 	}
 
 }

@@ -5,7 +5,10 @@ import hook.types.HookGenerator;
 
 import java.util.ArrayList;
 
+import Pathfinding.Pathfinding;
 import exceptions.Locomotion.UnableToMoveException;
+import robot.cards.ActuatorsManager;
+import robot.highlevel.LocomotionHiLevel;
 import smartMath.Vec2;
 import strategie.GameState;
 import utils.Config;
@@ -18,9 +21,12 @@ import utils.Log;
  */
 public class ExitBeginZone extends Script {
 
-	public ExitBeginZone(HookGenerator hookgenerator, Config config, Log log) 
+	int distanceToExit=100;
+	ArrayList<Hook> emptyHook = new ArrayList<Hook>();
+	
+	public ExitBeginZone(HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, LocomotionHiLevel locomotion, ActuatorsManager move) 
 	{
-		super(hookgenerator, config, log);
+		super(hookgenerator, config, log, pathfinding, locomotion, move);
 	}
 
 	@Override
@@ -31,24 +37,22 @@ public class ExitBeginZone extends Script {
 	@Override
 	public void execute (int id_version)
 	{
-		int distanceToExit=100;
-		ArrayList<Hook> hook = new ArrayList<Hook>();
 		try {
-			locomotion.avancer(distanceToExit,hook,true);
+			locomotion.avancer(distanceToExit,emptyHook,true);
 		} catch (UnableToMoveException e) {
 			log.debug("erreur ExitBeginZone script : impossible de sortir de la zone de depart\n", this);
 		}
 	}
 
 	@Override
-	public int score(int id_version, GameState<?> state) {
-		// TODO Auto-generated method stub
+	public int score(int id_version, GameState<?> state) 
+	{		
 		return 0;
 	}
 
 	@Override
-	protected void termine(GameState<?> state) {
-		// TODO Auto-generated method stub
-		
+	protected void termine(GameState<?> state) 
+	{
+		//abwa ?
 	}
 }

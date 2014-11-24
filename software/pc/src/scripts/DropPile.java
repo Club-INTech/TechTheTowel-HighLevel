@@ -16,7 +16,7 @@ import utils.Log;
 
 public class DropPile extends Script {
 	
-	private ArrayList<Hook> hook = new ArrayList<Hook>();
+	private ArrayList<Hook> emptyHook = new ArrayList<Hook>();
 
 	public DropPile(HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, LocomotionHiLevel locomotion, ActuatorsManager move) 
 	{
@@ -31,15 +31,15 @@ public class DropPile extends Script {
 	{
 		if (id_version==1)
 		{
-			locomotion.tourner((Math.PI*0.5), hook, false);
-			locomotion.avancer(100, hook, true);
-			move.elevatorGround();
-			move.ouvrirLentGuide();
-			locomotion.avancer(-20, hook, true);
+			locomotion.tourner((Math.PI*0.5), emptyHook, false);
+			locomotion.avancer(100, emptyHook, true);
+			actionneurs.elevatorGround();
+			actionneurs.ouvrirLentGuide();
+			locomotion.avancer(-20, emptyHook, true);
 			this.setPlotCounter(0);
-			move.guideGaucheClose();
-			move.guideDroitClose();
-			locomotion.avancer(-80,hook,true);
+			actionneurs.guideGaucheClose();
+			actionneurs.guideDroitClose();
+			locomotion.avancer(-80,emptyHook,true);
 		}
 		else if (id_version==2)
 		{
@@ -85,7 +85,7 @@ public class DropPile extends Script {
 	protected void termine(GameState<?> state) 
 	{
 		fermerMachoire();
-		locomotion.avancer(-20, hook, true);
+		locomotion.avancer(-20, emptyHook, true);
 		baisserAscenseur();
 		fermerGuide();
 	}

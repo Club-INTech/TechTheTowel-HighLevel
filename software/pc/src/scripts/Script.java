@@ -32,7 +32,7 @@ public abstract class Script implements Service
 	protected static Log log;
 	protected static Pathfinding pathfinding;
 	protected static LocomotionHiLevel locomotion;
-	protected static ActuatorsManager move;
+	protected static ActuatorsManager actionneurs;
 
 	/*
 	 * versions.get(meta_id) donne la liste des versions associées aux meta_id
@@ -46,7 +46,7 @@ public abstract class Script implements Service
 		Script.log = log;
 		Script.pathfinding = pathfinding;
 		Script.locomotion = locomotion;
-		Script.move = move;
+		Script.actionneurs = move;
 	}
 		
 	/**
