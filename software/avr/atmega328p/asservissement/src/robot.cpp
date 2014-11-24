@@ -17,11 +17,11 @@ Robot::Robot() :
 	timerCompteur::counter::overflow_interrupt::enable();
 	D5::output();
 	D6::output();
-	serial_t_::change_baudrate(57600);
+	serial_t_::change_baudrate(9600);
     serial_t_::activer_acquittement(true);
 	translation.valeur_bridage(120);
 	rotation.valeur_bridage   (100);
-	changer_orientation(PI);
+	changer_orientation(-PI/2);
 }
 
 void Robot::asservir()
