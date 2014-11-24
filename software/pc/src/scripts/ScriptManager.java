@@ -26,6 +26,7 @@ public class ScriptManager implements Service
 	
 	public ScriptManager(Config config, Log log)
 	{
+		//instancesScripts.put("dropCarpet", new DropCarpet(null, config, log, null, null, null));//exemple d'utilisation de Map
 		this.log = log;
 		scripts_robot = new ArrayList<String>();
 	}

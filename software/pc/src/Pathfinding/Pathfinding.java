@@ -1,4 +1,4 @@
-package pathfinding;
+package Pathfinding;
 import java.util.ArrayList;
 
 import smartMath.Vec2;
@@ -8,27 +8,31 @@ import smartMath.Vec2;
  * @author Marsya
  *
  */
-public class Pathfinding
+public class Pathfinding 
 {
+	ArrayList<Vec2> path;
 	/**
 	 * Constructor
 	 */
 	public Pathfinding()
 	{
-		// TODO
+		//test :)
 	}
+	
 	
 	public ArrayList<Vec2> computePath(Vec2 start, Vec2 end)
 	{
 		
 		// TODO
-		// voici un pathfinding mathématiquement démontré comme correct
-		// correct au sens d'un chemin partant du départ et allant a l'arrivée
+		// voici un pathfinding mathematiquement demontre comme correct
+		// correct au sens d'un chemin partant du dï¿½part et allant a l'arrivee
 		
-		// bon après si vous chipottez pour les obstacles en chemin aussi...
+		// bon apres si vous chipottez pour les obstacles en chemin aussi...
 		
 		ArrayList<Vec2> out = new ArrayList<Vec2>();
 		out.add(end);
 		return out;
 	}
+	
+	
 }

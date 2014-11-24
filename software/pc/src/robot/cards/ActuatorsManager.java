@@ -9,7 +9,7 @@ import exceptions.serial.SerialException;
 
 /**
  * Classe des actionneurs. Utilisée par robot pour bouger les actionneurs.
- * @author pf
+ * @author pf+théo
  */
 public class ActuatorsManager implements Service {
 
@@ -21,7 +21,6 @@ public class ActuatorsManager implements Service {
 	{
 		this.log = log;
 		this.serie = serie;
-		
 	}
 
 	public void updateConfig()
@@ -236,5 +235,210 @@ public class ActuatorsManager implements Service {
 		log.debug("Renverser feu droit",this);
 		serie.communiquer("ad", 0);
 		serie.communiquer("300", 0);
+	}
+	
+	
+	// IT 2015 partie Tapis
+	
+	public void monterTapisDroit() throws SerialException
+	{
+		log.debug("Bras tapis droit remonté", this);
+		serie.communiquer("rtd", 0);	
+	}
+	
+	public void monterTapisGauche() throws SerialException
+	{
+		log.debug("Bras tapis gauche remonté", this);
+		serie.communiquer("rtg", 0);	
+	}
+	
+	public void baisserTapisGauche() throws SerialException
+	{
+		log.debug("Bras tapis droit baissé", this);
+		serie.communiquer("ptd", 0);
+	}
+	
+	public void baisserTapisDroit() throws SerialException
+	{
+		log.debug("Bras tapis gauche baissé", this);
+		serie.communiquer("ptg", 0);	
+	}
+	
+	// IT 2015 partie claps
+	
+	public void clapDroitHigh() throws SerialException
+	{
+		log.debug("Clap droit en position haute", this);
+		serie.communiquer("cdh", 0);
+	}
+	
+	public void clapDroitMid() throws SerialException
+	{
+		log.debug("Clap droit en position mediane", this);
+		serie.communiquer("cdm", 0);
+	}
+	
+	public void clapDroitLow() throws SerialException
+	{
+		log.debug("Clap droit en position basse", this);
+		serie.communiquer("cdb", 0);
+	}
+	
+	public void clapGaucheHigh() throws SerialException
+	{
+		log.debug("Clap gauche en position haute", this);
+		serie.communiquer("cgh", 0);
+	}
+	
+	public void clapGaucheMid() throws SerialException
+	{
+		log.debug("Clap gauche en position mediane", this);
+		serie.communiquer("cgm", 0);
+	}
+	
+	public void clapGaucheLow() throws SerialException
+	{
+		log.debug("Clap gauche en position basse", this);
+		serie.communiquer("cgb", 0);
+	}
+	
+	//IT 2015 partie Guide Plots
+	
+	public void guideDroitOpen() throws SerialException
+	{
+		log.debug("Guide droit ouvert", this);
+		serie.communiquer("ogd", 0);
+	}
+	
+	public void guideGaucheOpen() throws SerialException
+	{
+		log.debug("Guide gauche ouvert", this);
+		serie.communiquer("ogg", 0);
+	}
+	
+	public void guideDroitClose() throws SerialException
+	{
+		log.debug("Guide droit fermé", this);
+		serie.communiquer("fgd", 0);
+	}
+	
+	public void guideGaucheClose() throws SerialException
+	{
+		log.debug("Guide gauche fermé", this);
+		serie.communiquer("fgg", 0);
+	}
+	
+	public void guideDroitMid() throws SerialException
+	{
+		log.debug("Guide droit intermediaire", this);
+		serie.communiquer("gdi", 0);
+	}
+	
+	public void guideGaucheMid() throws SerialException
+	{
+		log.debug("Guide gauche intermediaire", this);
+		serie.communiquer("ggi", 0);
+	}
+	
+	// IT 2015 ascenseur
+	
+	public void elevatorHigh() throws SerialException
+	{
+		log.debug("Ascenseur en haut", this);
+		serie.communiquer("ah", 0);
+	}
+	
+	public void elevatorLow() throws SerialException
+	{
+		log.debug("Ascenseur en bas", this);
+		serie.communiquer("ab", 0);
+	}
+	
+	public void elevatorGround() throws SerialException
+	{
+		log.debug("Ascenseur au sol", this);
+		serie.communiquer("as", 0);
+	}
+	
+	public void elevatorEstrade() throws SerialException
+	{
+		log.debug("Ascenseur au niveau de l'estrade", this);
+		serie.communiquer("ae", 0);
+	}
+	
+	// IT 2015 machoires monte plots
+	
+	public void machoireDroitOpen() throws SerialException
+	{
+		log.debug("Machoire droite ouverte", this);
+		serie.communiquer("omd", 0);
+	}
+	
+	public void machoireGaucheOpen() throws SerialException
+	{
+		log.debug("Machoire gauche ouverte", this);
+		serie.communiquer("omg", 0);
+	}
+	
+	public void machoireDroiteClose() throws SerialException
+	{
+		log.debug("Machoire droite fermée", this);
+		serie.communiquer("fmd", 0);
+	}
+	
+	public void machoireGaucheClose() throws SerialException
+	{
+		log.debug("Machoire gauche fermée", this);
+		serie.communiquer("fmg", 0);
+	}
+	
+	//IT 2015 bras avants gobelets
+	
+	public void brasDroitOpen() throws SerialException
+	{
+		log.debug("Bras droit ouvert", this);
+		serie.communiquer("obd", 0);
+	}
+	
+	public void brasGaucheOpen() throws SerialException
+	{
+		log.debug("Bras gauche ouvert", this);
+		serie.communiquer("obg", 0);
+	}
+	
+	public void brasDroitClose() throws SerialException
+	{
+		log.debug("Bras droit fermé", this);
+		serie.communiquer("fbd", 0);
+	}
+	
+	public void brasGaucheClose() throws SerialException
+	{
+		log.debug("Bras gauche fermé", this);
+		serie.communiquer("fbg", 0);
+	}
+	
+	public void brasDroitOpenSlow() throws SerialException
+	{
+		log.debug("Bras droit ouvert lentement", this);
+		serie.communiquer("obdl", 0);
+	}
+	
+	public void brasGaucheOpenSlow() throws SerialException
+	{
+		log.debug("Bras gauche ouvert lentement", this);
+		serie.communiquer("obgl", 0);
+	}
+	
+	public void brasDroitCloseSlow() throws SerialException
+	{
+		log.debug("Bras droit fermé lentement", this);
+		serie.communiquer("fbdl", 0);
+	}
+	
+	public void brasGaucheCloseSlow() throws SerialException
+	{
+		log.debug("Bras gauche fermé lentement", this);
+		serie.communiquer("fbgl", 0);
 	}
 }

@@ -14,7 +14,6 @@ import utils.Config;
  *  Classe abstraite du robot, dont héritent RobotVrai et RobotChrono
  * @author PF, marsu
  */
-
 public abstract class Robot implements Service 
 {
 	

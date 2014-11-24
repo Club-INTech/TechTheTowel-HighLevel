@@ -3,13 +3,17 @@ package scripts;
 import smartMath.Vec2;
 import strategie.GameState;
 import robot.RobotReal;
+import robot.cards.ActuatorsManager;
+import robot.highlevel.LocomotionHiLevel;
 import utils.Log;
 import utils.Config;
 import container.Service;
+import hook.Hook;
 import hook.types.HookGenerator;
 
 import java.util.ArrayList;
 
+import Pathfinding.Pathfinding;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialException;
 import exceptions.ScriptException;
@@ -19,6 +23,7 @@ import exceptions.ScriptException;
  * @author pf, marsu
  */
 
+
 public abstract class Script implements Service 
 {
 
@@ -26,24 +31,46 @@ public abstract class Script implements Service
 	protected static HookGenerator hookgenerator;
 	protected static Config config;
 	protected static Log log;
+	protected static Pathfinding pathfinding;
+	protected static LocomotionHiLevel locomotion;
+	protected static ActuatorsManager actionneurs;
 
 	/*
 	 * versions.get(meta_id) donne la liste des versions associées aux meta_id
 	 */
 	protected ArrayList<ArrayList<Integer>> versions = new ArrayList<ArrayList<Integer>>();	
 	
-	public Script(HookGenerator hookgenerator, Config config, Log log)
+	public Script(HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, LocomotionHiLevel locomotion, ActuatorsManager move)
 	{
 		Script.hookgenerator = hookgenerator;
 		Script.config = config;
 		Script.log = log;
+		Script.pathfinding = pathfinding;
+		Script.locomotion = locomotion;
+		Script.actionneurs = move;
 	}
 		
 	/**
-	 * Exécute vraiment un script
+	 * Exécute vraiment un script et fait le deplacement jusqu'au point d'entree
 	 */
-	public void agit(int id_version, GameState<RobotReal> state, boolean retenter_si_blocage) throws ScriptException
+	public void goToThenExec(int id_version, GameState<RobotReal> state, boolean retenter_si_blocage) throws ScriptException
 	{
+		try 
+		{
+			locomotion.suit_chemin(pathfinding.computePath(locomotion.getPosition(),point_entree(id_version)),new ArrayList<Hook>());
+		} 
+		catch (UnableToMoveException e) 
+		{
+			log.debug("Script : chemin impossible", this);;
+		}
+		try 
+		{
+			execute(id_version);
+		} 
+		catch (UnableToMoveException | SerialException e) 
+		{
+			log.debug("ca marche pas", this);;
+		}
 	}
 	
 	/**
@@ -73,7 +100,7 @@ public abstract class Script implements Service
 	 * Exécute le script, avec RobotVrai ou RobotChrono
 	 * @throws SerialException 
 	 */
-	protected void execute() throws UnableToMoveException, SerialException
+	protected void execute(int id_version) throws UnableToMoveException, SerialException
 	{
 	}
 
