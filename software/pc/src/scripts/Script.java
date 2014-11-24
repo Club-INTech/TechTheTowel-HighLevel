@@ -23,6 +23,7 @@ import exceptions.ScriptException;
  * @author pf, marsu
  */
 
+
 public abstract class Script implements Service 
 {
 
@@ -32,7 +33,11 @@ public abstract class Script implements Service
 	protected static Log log;
 	protected static Pathfinding pathfinding;
 	protected static LocomotionHiLevel locomotion;
+<<<<<<< HEAD
 	protected static ActuatorsManager actionneurs;
+=======
+	protected static ActuatorsManager mActuatorMgr;
+>>>>>>> 8c3d78f82c75d2971e2f7dd1f4a887351f6ec51d
 
 	/*
 	 * versions.get(meta_id) donne la liste des versions associées aux meta_id
@@ -46,7 +51,11 @@ public abstract class Script implements Service
 		Script.log = log;
 		Script.pathfinding = pathfinding;
 		Script.locomotion = locomotion;
+<<<<<<< HEAD
 		Script.actionneurs = move;
+=======
+		Script.mActuatorMgr = move;
+>>>>>>> 8c3d78f82c75d2971e2f7dd1f4a887351f6ec51d
 	}
 		
 	/**
