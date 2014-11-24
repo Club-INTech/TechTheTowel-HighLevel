@@ -1,12 +1,9 @@
 package tests;
 
-import static org.junit.Assert.*;
 import hook.types.HookGenerator;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import Pathfinding.Pathfinding;
@@ -17,44 +14,38 @@ import scripts.DropCarpet;
 public class JUnit_CarpetDropper extends JUnit_Test
 {
 	
-	ActuatorsManager actionneurs;
-	DropCarpet script;
+	ActuatorsManager actionneursMgr;
+	DropCarpet dropCarpetScript;
 	LocomotionHiLevel locomotion;
 	Pathfinding pathfinding = new Pathfinding();
 	HookGenerator hookgenerator;
 	
-
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception 
-	{
-	}
-
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception 
-	{
-	}
-
 	@Before
 	public void setUp() throws Exception 
 	{
 		super.setUp();                                                                                                                                 
-		actionneurs = (ActuatorsManager)container.getService("Actionneurs");
+		actionneursMgr = (ActuatorsManager)container.getService("Actionneurs");
 		hookgenerator = (HookGenerator)container.getService("HookGenerator");
 		locomotion = (LocomotionHiLevel)container.getService("DeplacementsHautNiveau");
-		script = new DropCarpet(hookgenerator, config, log, pathfinding, locomotion, actionneurs);
+		dropCarpetScript = new DropCarpet(hookgenerator, config, log, pathfinding, locomotion, actionneursMgr);
 		
-		
+		// TODO lever les bras avant les tests
 	}
 
 	@After
 	public void tearDown() throws Exception 
 	{
+		
+		// TODO lever les bras
 	}
 
 	@Test
 	public void test() 
 	{
-		script.execute(0);
+		log.debug("debut du depose tapis", this);
+		dropCarpetScript.execute(0);
+
+		log.debug("fin du depose tapis", this);
 	}
 
 }

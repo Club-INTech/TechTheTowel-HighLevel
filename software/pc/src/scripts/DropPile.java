@@ -33,12 +33,12 @@ public class DropPile extends Script {
 		{
 			locomotion.tourner((Math.PI*0.5), hook, false);
 			locomotion.avancer(100, hook, true);
-			move.elevatorGround();
-			move.ouvrirLentGuide();
+			mActuatorMgr.elevatorGround();
+			mActuatorMgr.ouvrirLentGuide();
 			locomotion.avancer(-20, hook, true);
 			this.setPlotCounter(0);
-			move.guideGaucheClose();
-			move.guideDroitClose();
+			mActuatorMgr.guideGaucheClose();
+			mActuatorMgr.guideDroitClose();
 			locomotion.avancer(-80,hook,true);
 		}
 		else if (id_version==2)

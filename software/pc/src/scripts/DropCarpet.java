@@ -13,6 +13,7 @@ import smartMath.Vec2;
 import strategie.GameState;
 import utils.Config;
 import utils.Log;
+import utils.Sleep;
 /**
  * 
  * @author paul
@@ -20,8 +21,8 @@ import utils.Log;
  */
 public class DropCarpet extends Script 
 {
+	// TODO ? bouger ces booléens dans table.
 	private boolean DroppedLeftCarpet=false, DroppedRightCarpet=false;//booleens pour savoir si le tapis gauche (respectivement droit) a ete depose
-	private int undroppedCarpetCount=2;//nombre de tapis pas depose
 	private int distance=200;//distance de déplacement pour placer les tapis
 
 	public DropCarpet (HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, LocomotionHiLevel locomotion, ActuatorsManager move) 
@@ -33,30 +34,36 @@ public class DropCarpet extends Script
 	@Override
 	public void execute (int id_version) 
 	{
-		ArrayList<Hook> hook = new ArrayList<Hook>(); //liste des hook vide pour le moment mais a modifier
+		// le temps d'attente (en ms) entre la commande de dépose du tapis ( le bras se baisse) et la commande qui remonte le bras
+		int timeToDropCarpet = 800;
+		
+		
+		ArrayList<Hook> emptyHookList = new ArrayList<Hook>(); //liste des hook vide pour le moment mais a modifier
 		//premier test de script
 		try 
 		{
 			try 
 			{
-				locomotion.tourner(Math.PI,hook,true);
 				//on presente ses arrieres a l'escalier
-				locomotion.avancer(-distance,hook,true); //on se rapproche de l'escalier
+				locomotion.tourner(Math.PI,emptyHookList,true);
+				// on avance vers ces demoiselles (les marches) 
+				locomotion.avancer(-distance,emptyHookList,true); //on se rapproche de l'escalier
+				
 				if (!DroppedLeftCarpet)
 				{
-					move.baisserTapisGauche();
-					DroppedLeftCarpet=true;
-					undroppedCarpetCount--;
-					move.monterTapisGauche();
+					mActuatorMgr.baisserTapisGauche();
+					Sleep.sleep(timeToDropCarpet);
+					DroppedLeftCarpet = true;
+					mActuatorMgr.monterTapisGauche();
 				}
 				if (!DroppedRightCarpet)
 				{
-					move.baisserTapisDroit();
-					DroppedRightCarpet=true;
-					undroppedCarpetCount--;
-					move.monterTapisDroit();
+					mActuatorMgr.baisserTapisDroit();
+					Sleep.sleep(timeToDropCarpet);
+					DroppedRightCarpet = true;
+					mActuatorMgr.monterTapisDroit();
 				}
-				locomotion.avancer(distance,hook,true);//on s'eloigne de l'escalier
+				locomotion.avancer(distance,emptyHookList,true);//on s'eloigne de l'escalier
 			} 
 			catch (UnableToMoveException e) 
 			{
@@ -80,7 +87,13 @@ public class DropCarpet extends Script
 	@Override
 	public int score(int id_version, GameState<?> state) 
 	{
-		return 12*(undroppedCarpetCount);
+		int score = 24;
+		if(DroppedLeftCarpet)
+			score -= 12;
+		if(DroppedRightCarpet)
+			score -= 12;
+		
+		return score;
 	}
 
 	@Override
@@ -88,8 +101,8 @@ public class DropCarpet extends Script
 	{
 		try 
 		{
-			move.monterTapisGauche();
-			move.monterTapisDroit();
+			mActuatorMgr.monterTapisGauche();
+			mActuatorMgr.monterTapisDroit();
 		} 
 		catch (SerialException e) 
 		{
