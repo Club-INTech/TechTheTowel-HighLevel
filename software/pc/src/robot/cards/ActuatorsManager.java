@@ -27,6 +27,7 @@ public class ActuatorsManager implements Service {
 	{
 	}
 
+	/*Intech 2014 
 	public void ouvrir_pince_gauche() throws SerialException
 	{
 		log.debug("Pince gauche ouverte", this);
@@ -236,7 +237,7 @@ public class ActuatorsManager implements Service {
 		serie.communiquer("ad", 0);
 		serie.communiquer("300", 0);
 	}
-	
+	*/
 	
 	// IT 2015 partie Tapis
 	
