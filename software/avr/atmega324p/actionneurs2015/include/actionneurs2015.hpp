@@ -1,5 +1,5 @@
-#ifndef ASCENSEUR_HPP
-#define ASCENSEUR_HPP
+#ifndef ACTIONNEURS2015_HPP
+#define ACTIONNEURS2015_HPP
 
 #include <libintech/ax12.hpp>
 #include <libintech/uart.hpp>
@@ -7,9 +7,9 @@
 #include <libintech/gpio.hpp>
 
 #define delai_mouvement 7			// temps d'attente par degré pour les mouvements lents (ms)
-#define bgOuvert 290
-#define bgFerme 95
-#define bdOuvert 15
+#define bgOuvert 300
+#define bgFerme 98
+#define bdOuvert 5
 #define bdFerme 203
 #define mgOuvert 240
 #define mgFerme 65
@@ -99,8 +99,9 @@ public :											//constructeur
  			serial_pc::printfln("angle ?");
  			serial_pc::read(angle);
  			if(angle >= 0 && angle <= 300)
- 				clapGauche.goTo(angle);
+ 				brasGauche.goTo(angle);
  		}
+
 		else if (strcmp (ordre , "obd") == 0)			// ouvrir le bras droit
 		{
 			brasDroit.goTo (bdOuvert);
@@ -243,6 +244,7 @@ public :											//constructeur
 		{
 			B3::toggle();
 		}
+
 	}
 };
 
