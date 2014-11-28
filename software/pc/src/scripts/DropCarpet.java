@@ -47,17 +47,17 @@ public class DropCarpet extends Script
 				
 				if (!DroppedLeftCarpet)
 				{
-					actionneurs.baisserTapisGauche();
+					actionneurs.downLeftCarpet();
 					Sleep.sleep(sleepTime);
 					DroppedLeftCarpet=true;
-					actionneurs.monterTapisGauche();
+					actionneurs.upLeftCarpet();
 				}
 				if (!DroppedRightCarpet)
 				{
-					actionneurs.baisserTapisDroit();
+					actionneurs.downRightCarpet();
 					Sleep.sleep(sleepTime);
 					DroppedRightCarpet=true;
-					actionneurs.monterTapisDroit();
+					actionneurs.upRightCarpet();
 				}
 				locomotion.avancer(distance,emptyHookList,true);//on s'eloigne de l'escalier
 			} 
@@ -98,8 +98,8 @@ public class DropCarpet extends Script
 	{
 		try 
 		{
-			actionneurs.monterTapisGauche();
-			actionneurs.monterTapisDroit();
+			actionneurs.upLeftCarpet();
+			actionneurs.upRightCarpet();
 		} 
 		catch (SerialException e) 
 		{

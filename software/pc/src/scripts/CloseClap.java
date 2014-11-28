@@ -64,34 +64,34 @@ public class CloseClap extends Script
 				
 				if (!OpenedLeftClap)
 				{
-					actionneurs.clapGaucheHigh();
+					actionneurs.highLeftClap();
 					Sleep.sleep(sleepTime);
 				}
 				if(!ClosedClap1)//On ferme le clap le plus proche de nous
 				{
 				
 					locomotion.avancer(distance,emptyHookList,true);
-					actionneurs.clapGaucheMid();
+					actionneurs.midLeftClap();
 					Sleep.sleep(sleepTime);
 					locomotion.avancer(distanceClaps,emptyHookList,true);//On baisse le premier clap, le notre
 					ClosedClap1=true;
 				}		
 				if(ClosedClap2)//Si l'ennemi a toujours son clap
 				{
-					actionneurs.clapGaucheHigh();
+					actionneurs.highLeftClap();
 					Sleep.sleep(sleepTime);	
 					locomotion.avancer(distanceClaps,emptyHookList,true);
 					locomotion.avancer(distanceClaps,emptyHookList,true);//On evite le clap adverse
 				}	
 				if(!ClosedClap3)//Clap 3, le plus loin sur notre zone
 				{
-					actionneurs.clapGaucheMid();
+					actionneurs.midLeftClap();
 					Sleep.sleep(sleepTime);	
 					locomotion.avancer(distanceClaps,emptyHookList,true);
 					ClosedClap3=true;//On ferme notre 2eme clap	
 				}
 				
-				actionneurs.clapGaucheLow();
+				actionneurs.lowLeftClap();
 				
 				//Partie deplacements du clap 3 au clap 6, pret à fermer le 5
 				
@@ -107,20 +107,20 @@ public class CloseClap extends Script
 				
 				if (!OpenedRightClap)
 				{
-					actionneurs.clapDroitHigh();
+					actionneurs.highRightClap();
 					Sleep.sleep(sleepTime);
 				}
 				
 				if(ClosedClap6)//Si l'ennemi a toujours son clap
 				{
-					actionneurs.clapDroitHigh();
+					actionneurs.highRightClap();
 					Sleep.sleep(sleepTime);	
 					locomotion.avancer(distanceClaps,emptyHookList,true);//On evite le clap adverse
 				}	
 				
 				if(!ClosedClap5)//Clap 5
 				{
-					actionneurs.clapDroitMid();
+					actionneurs.midRightClap();
 					Sleep.sleep(sleepTime);	
 					locomotion.avancer(distanceClaps,emptyHookList,true);
 					ClosedClap5=true;//On ferme notre clap	
@@ -128,12 +128,12 @@ public class CloseClap extends Script
 				
 				if(ClosedClap4)//Si l'ennemi a toujours son clap
 				{
-					actionneurs.clapDroitHigh();
+					actionneurs.highRightClap();
 					Sleep.sleep(sleepTime);	
 					locomotion.avancer(distanceClaps,emptyHookList,true);//On evite le clap adverse
 				}	
 				
-				actionneurs.clapDroitLow();
+				actionneurs.lowRightClap();
 			}
 			catch (UnableToMoveException e) 
 			{
@@ -160,34 +160,34 @@ public class CloseClap extends Script
 				
 				if (!OpenedLeftClap)
 				{
-					actionneurs.clapGaucheHigh();
+					actionneurs.highLeftClap();
 					Sleep.sleep(sleepTime);
 				}
 				if(!ClosedClap1)//On ferme le clap le plus proche de nous
 				{
 				
 					locomotion.avancer(distance,emptyHookList,true);
-					actionneurs.clapGaucheMid();
+					actionneurs.midLeftClap();
 					Sleep.sleep(sleepTime);
 					locomotion.avancer(distanceClaps,emptyHookList,true);//On baisse le premier clap, le notre
 					ClosedClap1=true;
 				}		
 				if(ClosedClap2)//Si l'ennemi a toujours son clap
 				{
-					actionneurs.clapGaucheHigh();
+					actionneurs.highLeftClap();
 					Sleep.sleep(sleepTime);	
 					locomotion.avancer(distanceClaps,emptyHookList,true);
 					locomotion.avancer(distanceClaps,emptyHookList,true);//On evite le clap adverse
 				}	
 				if(!ClosedClap3)//Clap 3, le plus loin sur notre zone
 				{
-					actionneurs.clapGaucheMid();
+					actionneurs.midLeftClap();
 					Sleep.sleep(sleepTime);	
 					locomotion.avancer(distanceClaps,emptyHookList,true);
 					ClosedClap3=true;//On ferme notre 2eme clap	
 				}
 				
-				actionneurs.clapGaucheLow();
+				actionneurs.lowLeftClap();
 			}
 			catch (UnableToMoveException e) 
 			{
@@ -214,20 +214,20 @@ public class CloseClap extends Script
 				
 				if (!OpenedRightClap)
 				{
-					actionneurs.clapDroitHigh();
+					actionneurs.highRightClap();
 					Sleep.sleep(sleepTime);
 				}
 				
 				if(ClosedClap6)//Si l'ennemi a toujours son clap
 				{
-					actionneurs.clapDroitHigh();
+					actionneurs.highRightClap();
 					Sleep.sleep(sleepTime);	
 					locomotion.avancer(distanceClaps,emptyHookList,true);//On evite le clap adverse
 				}	
 				
 				if(!ClosedClap5)//Clap 5
 				{
-					actionneurs.clapDroitMid();
+					actionneurs.midRightClap();
 					Sleep.sleep(sleepTime);	
 					locomotion.avancer(distanceClaps,emptyHookList,true);
 					ClosedClap5=true;//On ferme notre clap	
@@ -235,12 +235,12 @@ public class CloseClap extends Script
 				
 				if(ClosedClap4)//Si l'ennemi a toujours son clap
 				{
-					actionneurs.clapDroitHigh();
+					actionneurs.highRightClap();
 					Sleep.sleep(sleepTime);	
 					locomotion.avancer(distanceClaps,emptyHookList,true);//On evite le clap adverse
 				}	
 				
-				actionneurs.clapDroitLow();
+				actionneurs.lowRightClap();
 				
 			}
 			catch (UnableToMoveException e) 
@@ -281,8 +281,8 @@ public class CloseClap extends Script
 		
 		try 
 		{
-			actionneurs.clapGaucheLow();
-			actionneurs.clapDroitLow();
+			actionneurs.lowRightClap();
+			actionneurs.lowLeftClap(); //On ferme le robot à la fin, attention à ne rien cogner (rembarde ,
 		} 
 		catch (SerialException e) 
 		{
