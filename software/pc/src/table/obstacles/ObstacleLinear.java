@@ -3,8 +3,8 @@ package table.obstacles;
 import smartMath.Point;
 
 /**
- * classe non complètement rattachée au projet. Eventuellement à refaire...
- * @author Étienne
+ * classe non complÃ¨tement rattachÃ©e au projet. Eventuellement Ã  refaire...
+ * @author Ã‰tienne
  *
  */
 public class ObstacleLinear
