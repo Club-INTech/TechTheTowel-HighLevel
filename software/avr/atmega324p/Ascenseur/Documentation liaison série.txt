@@ -1,0 +1,72 @@
+ _______________________________________
+|Liste des commandes de la liaison série|
+|_______________________________________|
+
+Remarque : la droite et la gauche sont à considérer du point de vue du robot, c'est à dire en regardant dans la même direction que l'avant du robot.
+
+
+Commandes des bras avant
+Un bras est dit fermé si il est en position pour maintenir un gobelet à l'intérieur du robot.
+On entend par "lentement" une vitesse permettant de ramasser un plot (ouverture) ou un gobelet (fermeture), les deux vitesses pouvant être différentes.
+
+obd		ouvrir le bras droit
+fbd		fermer le bras droit
+
+obg		ouvrir le bras gauche
+fbg		fermer le bras gauche
+
+obdl	ouvrir le bras droit lentement
+fbdl	fermer le bras droit lentement
+
+obgl	ouvrir le bras gauche lentement
+fbgl	fermer le bras gauche lentement
+
+
+Commandes de la machoire du monte-plot
+
+omd		ouvrir la machoire droite
+fmd		fermer la machoire droite
+
+omg		ouvrir la machoire gauche
+fmg		fermer la machoire gauche
+
+
+Commandes de l'ascenseur du monte-plot
+
+ah		niveau haut
+ab		niveau bas (ou poser sur l'estrade)
+as		poser sur le sol
+ae		niveau de l'estrade (permet de passer par dessus)
+
+
+Commandes du guide à plots
+
+ogd		ouvrir le guide de droite
+fgd		fermer le guide de droite
+
+ogg		ouvrir le guide de gauche
+fgg		fermer le guide de gauche
+ggi		mettre le guide de gauche en position intermédiaire (désactive l'anti-retour en continuant de maintenir la pile)
+
+
+Commandes des pose-tapis
+
+ptd		poser le tapis droit
+rtd		remonter le pose-tapis droit
+
+ptg		poser le tapis gauche
+rtg		remonter le pose-tapis gauche
+
+
+Commandes des bras à claps
+Position haute : le bars passe au dessus des claps
+Position médiane : la bras abaisse le clap
+Position basse : le bras est rangé contre le robot
+
+cdh		clap droit en position haute		
+cdm		clap droit en position médiane
+cdb		clap droit en position basse
+
+cgh		clap gauche en position haute
+cgm		clap gauche en position médiane
+cgb		clap gauche en position basse

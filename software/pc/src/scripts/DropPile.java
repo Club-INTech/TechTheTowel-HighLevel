@@ -2,10 +2,13 @@ package scripts;
 
 import java.util.ArrayList;
 
+import Pathfinding.Pathfinding;
 import exceptions.ScriptException;
 import hook.Hook;
 import hook.types.HookGenerator;
 import robot.RobotReal;
+import robot.cards.ActuatorsManager;
+import robot.highlevel.LocomotionHiLevel;
 import smartMath.Vec2;
 import strategie.GameState;
 import utils.Config;
@@ -13,11 +16,11 @@ import utils.Log;
 
 public class DropPile extends Script {
 	
-	private ArrayList<Hook> hook = new ArrayList<Hook>();
+	private ArrayList<Hook> emptyHook = new ArrayList<Hook>();
 
-	public DropPile(HookGenerator hookgenerator, Config config, Log log) 
+	public DropPile(HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, LocomotionHiLevel locomotion, ActuatorsManager move) 
 	{
-		super(hookgenerator, config, log);
+		super(hookgenerator, config, log,pathfinding, locomotion,move);
 		ArrayList<Integer> id = new ArrayList<Integer>();
 		id.add(1);
 		id.add(2);
@@ -28,14 +31,15 @@ public class DropPile extends Script {
 	{
 		if (id_version==1)
 		{
-			locomotion.tourner((Math.PI*0.5), hook, false);
-			locomotion.avancer(100, hook, true);
-			baisserAscenseur();
-			ouvrirLentGuide();
-			locomotion.avancer(-20, hook, true);
+			locomotion.tourner((Math.PI*0.5), emptyHook, false);
+			locomotion.avancer(100, emptyHook, true);
+			actionneurs.elevatorGround();
+			actionneurs.ouvrirLentGuide();
+			locomotion.avancer(-20, emptyHook, true);
 			this.setPlotCounter(0);
-			fermerGuide();
-			locomotion.avancer(-80,hook,true);
+			actionneurs.guideGaucheClose();
+			actionneurs.guideDroitClose();
+			locomotion.avancer(-80,emptyHook,true);
 		}
 		else if (id_version==2)
 		{
@@ -81,9 +85,10 @@ public class DropPile extends Script {
 	protected void termine(GameState<?> state) 
 	{
 		fermerMachoire();
-		locomotion.avancer(-20, hook, true);
+		locomotion.avancer(-20, emptyHook, true);
 		baisserAscenseur();
 		fermerGuide();
 	}
 
 }
+

@@ -39,7 +39,6 @@ public class Table implements Service
 	public void initialise()//initialise la table du debut du jeu (obstacles fixes)
 	{
 		
-		
 	}
 	
 	//La table
