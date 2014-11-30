@@ -9,8 +9,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import pathfinding.Pathfinding;
 import exceptions.Locomotion.UnableToMoveException;
-import Pathfinding.Pathfinding;
 import robot.cards.ActuatorsManager;
 import robot.highlevel.LocomotionHiLevel;
 import scripts.DropCarpet;

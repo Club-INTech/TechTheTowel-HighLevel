@@ -13,7 +13,7 @@ import hook.types.HookGenerator;
 
 import java.util.ArrayList;
 
-import Pathfinding.Pathfinding;
+import pathfinding.Pathfinding;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialException;
 import exceptions.ScriptException;

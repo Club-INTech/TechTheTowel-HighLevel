@@ -1,9 +1,8 @@
 package tests;
 
-import org.junit.Before;
 import org.junit.*;
 
-import Pathfinding.Pathfinding;
+import pathfinding.Pathfinding;
 import container.Container;
 import table.Table;
 import smartMath.Point;
