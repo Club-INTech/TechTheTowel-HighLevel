@@ -57,13 +57,22 @@ public class PathFinding
 		return new Point(segment1A.x - k * (segment1B.x - segment1A.x), segment1A.y - k * (segment1B.y - segment1A.y));
 	}
 	
+	public Path computePath(Point start, Point end)
+	{
+		Path path = new Path();
+		path.add(start);
+		path = dodgeStatic(start, end);
+		path.add(end);
+		return path;
+	}
+	
 	/**
 	 * 
 	 * @param start point de départ
 	 * @param end point d'arrivée
 	 * @return un chemin entre le point de départ et d'arrivée (vide si ligne droite)
 	 */
-	public Path computePath(Point start, Point end)
+	private Path dodgeStatic(Point start, Point end)
 	{
 		Path path = new Path();
 		
@@ -93,24 +102,24 @@ public class PathFinding
 			//s'il n'y a qu'un seul point de passage sur l'obstacle
 			if( m_table.getLines().get(indiceDistMin).getNbPassagePoint() == 1 )
 			{
-				path.addAll(computePath(start, m_table.getLines().get(indiceDistMin).getPassagePoint1()));
+				path.addAll(dodgeStatic(start, m_table.getLines().get(indiceDistMin).getPassagePoint1()));
 				path.add(m_table.getLines().get(indiceDistMin).getPassagePoint1());
-				path.addAll(computePath(m_table.getLines().get(indiceDistMin).getPassagePoint1(), end));
+				path.addAll(dodgeStatic(m_table.getLines().get(indiceDistMin).getPassagePoint1(), end));
 			}
 			//s'il y a deux points de passage sur l'obstacle, prend le point de passage le plus proche du point d'arrivée.
 			else
 			{
 				if(Math.pow(m_table.getLines().get(indiceDistMin).getPassagePoint1().x - end.x, 2) + Math.pow(m_table.getLines().get(indiceDistMin).getPassagePoint1().y - end.y, 2) <= Math.pow(m_table.getLines().get(indiceDistMin).getPassagePoint2().x - end.x, 2) + Math.pow(m_table.getLines().get(indiceDistMin).getPassagePoint2().y - end.y, 2))
 				{
-					path.addAll(computePath(start, m_table.getLines().get(indiceDistMin).getPassagePoint1()));
+					path.addAll(dodgeStatic(start, m_table.getLines().get(indiceDistMin).getPassagePoint1()));
 					path.add(m_table.getLines().get(indiceDistMin).getPassagePoint1());
-					path.addAll(computePath(m_table.getLines().get(indiceDistMin).getPassagePoint1(), end));
+					path.addAll(dodgeStatic(m_table.getLines().get(indiceDistMin).getPassagePoint1(), end));
 				}
 				else
 				{
-					path.addAll(computePath(start, m_table.getLines().get(indiceDistMin).getPassagePoint2()));
+					path.addAll(dodgeStatic(start, m_table.getLines().get(indiceDistMin).getPassagePoint2()));
 					path.add(m_table.getLines().get(indiceDistMin).getPassagePoint2());
-					path.addAll(computePath(m_table.getLines().get(indiceDistMin).getPassagePoint2(), end));
+					path.addAll(dodgeStatic(m_table.getLines().get(indiceDistMin).getPassagePoint2(), end));
 				}
 			}
 		}
