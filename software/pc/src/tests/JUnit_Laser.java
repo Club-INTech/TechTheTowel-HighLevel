@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.Assert;
 
+import enums.ServiceNames;
 import robot.cards.laser.LaserFiltration;
 import robot.cards.laser.Laser;
 import robot.RobotReal;
@@ -23,10 +24,10 @@ public class JUnit_Laser extends JUnit_Test {
 	public void setUp() throws Exception {
 		super.setUp();
 		log.debug("JUnit_Laser_Test.setUp()", this);
-		filtragelaser = (LaserFiltration) container.getService("FiltrageLaser");
-		laser = (Laser) container.getService("Laser");
-		robotvrai = (RobotReal) container.getService("RobotVrai");
-		table = (Table) container.getService("Table");
+		filtragelaser = (LaserFiltration) container.getService(ServiceNames.LASER_FILTRATION);
+		laser = (Laser) container.getService(ServiceNames.LASER);
+		robotvrai = (RobotReal) container.getService(ServiceNames.ROBOT_REAL);
+		table = (Table) container.getService(ServiceNames.TABLE);
 	}
 
 	@Test
@@ -65,7 +66,7 @@ public class JUnit_Laser extends JUnit_Test {
 	@Test
 	public void test_pour_kayou() throws Exception
 	{
-		container.getService("threadLaser");
+		container.getService(ServiceNames.THREAD_LASER);
 		container.startInstanciedThreads();
 		laser.allumer();
 		while(true)
