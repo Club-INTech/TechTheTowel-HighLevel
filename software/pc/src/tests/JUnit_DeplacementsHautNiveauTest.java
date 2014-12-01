@@ -47,7 +47,7 @@ public class JUnit_DeplacementsHautNiveauTest extends JUnit_Test
     public void test_va_au_point_courbe() throws Exception
     {
 //        robot.va_au_point_courbe((float) Math.PI, 500, false);
-        robot.moveForwardInDirection((float) (Math.PI/4), 500, true);
+        robot.moveInDirection((float) (Math.PI/4), 500, true);
     }
 
     @Test
@@ -65,14 +65,14 @@ public class JUnit_DeplacementsHautNiveauTest extends JUnit_Test
     @Test
     public void test_va_au_point_correction() throws Exception
     {
-        robot.va_au_point_hook_correction_detection(null, false, false);
+        robot.moveInDirectionEventWatcher(null, false, false);
     }
 
     @Test
     public void test_va_au_point_detection() throws Exception
     {
         container.startAllThreads();
-        robot.moveForwardInDirectionExeptionHandler(null, true, false, false);
+        robot.moveInDirectionExeptionHandler(null, true, false, false);
     }
 
     @Test
