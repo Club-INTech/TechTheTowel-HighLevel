@@ -528,7 +528,6 @@ hardware/*/*.s\#*
 /.recommenders/index/http___download_eclipse_org_recommenders_models_luna_/_c.tii
 /.recommenders/index/http___download_eclipse_org_recommenders_models_luna_/_c.tis
 /.recommenders/index/http___download_eclipse_org_recommenders_models_luna_/segments_d
-<<<<<<< HEAD
 /software/.metadata/.plugins/org.eclipse.ltk.core.refactoring/.refactorings/.workspace/2014/11/47/refactorings.index
 /divers/codeBN
 /divers/CodeHN.odt
@@ -587,6 +586,3 @@ hardware/*/*.s\#*
 /software/pc/.metadata/.plugins/org.eclipse.ui.workbench/workbench.xml
 /software/pc/.metadata/.plugins/org.eclipse.ui.workbench/workingsets.xml
 /software/pc/.metadata/version.ini
-=======
->>>>>>> 37c136aabec7ee7749a1784a7840a3ce78485184
->>>>>>> 95567fe0b7a7a6e82f5b1ce9d99d25c570e5b11b
