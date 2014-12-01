@@ -1,4 +1,4 @@
-package pathFinding;
+package pathfinding;
 
 import smartMath.Point;
 import table.Table;
@@ -9,11 +9,11 @@ import smartMath.Path;
  * @author Marsya et Étienne
  *
  */
-public class PathFinding
+public class Pathfinding
 {
 	private Table m_table;
 	
-	public PathFinding(Table table)
+	public Pathfinding(Table table)
 	{
 		m_table = table;
 	}
@@ -57,6 +57,12 @@ public class PathFinding
 		return new Point(segment1A.x - k * (segment1B.x - segment1A.x), segment1A.y - k * (segment1B.y - segment1A.y));
 	}
 	
+	/**
+	 * 
+	 * @param start point de départ
+	 * @param end point d'arrivée
+	 * @return un chemin entre le point de départ et d'arrivée
+	 */
 	public Path computePath(Point start, Point end)
 	{
 		Path path = new Path();
@@ -70,7 +76,7 @@ public class PathFinding
 	 * 
 	 * @param start point de départ
 	 * @param end point d'arrivée
-	 * @return un chemin entre le point de départ et d'arrivée (vide si ligne droite)
+	 * @return un chemin entre le point de départ et d'arrivée en evitant uniquement les obstacles fixes
 	 */
 	private Path dodgeStatic(Point start, Point end)
 	{
