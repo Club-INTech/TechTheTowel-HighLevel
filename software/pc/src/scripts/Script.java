@@ -57,7 +57,7 @@ public abstract class Script implements Service
 	{
 		try 
 		{
-			locomotion.suit_chemin(pathfinding.computePath(locomotion.getPosition(),point_entree(id_version)),new ArrayList<Hook>());
+			locomotion.suit_chemin(pathfinding.dodgeStatic(locomotion.getPosition(),point_entree(id_version)),new ArrayList<Hook>());
 		} 
 		catch (UnableToMoveException e) 
 		{
