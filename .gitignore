@@ -329,6 +329,13 @@ hardware/*/*.s\#*
 /.recommenders/repository/http___download_eclipse_org_recommenders_models_luna_/jre/jre/1.0.0-SNAPSHOT/_remote.repositories
 /.recommenders/repository/http___download_eclipse_org_recommenders_models_luna_/jre/jre/1.0.0-SNAPSHOT/resolver-status.properties
 /.metadata/.plugins/org.eclipse.core.resources/.history/51/20a066975d7100141149868d586ae63d
+<<<<<<< HEAD
+/software/avr/atmega328p/Exercice1/main.cpp
+/software/avr/atmega328p/Exercice2/main.cpp
+/software/avr/atmega328p/Exercice3/#main.cpp#
+/software/avr/atmega328p/Exercice3/main.cpp
+/software/avr/atmega328p/Exercice4/main.cpp
+=======
 /.metadata/.plugins/org.eclipse.core.resources/14.snap
 /.metadata/.plugins/org.eclipse.core.resources/.history/23/516a1d9c3273001417b3c91ad1c8c945
 /.metadata/.plugins/org.eclipse.core.resources/.history/26/536a1d9c3273001417b3c91ad1c8c945
@@ -521,6 +528,7 @@ hardware/*/*.s\#*
 /.recommenders/index/http___download_eclipse_org_recommenders_models_luna_/_c.tii
 /.recommenders/index/http___download_eclipse_org_recommenders_models_luna_/_c.tis
 /.recommenders/index/http___download_eclipse_org_recommenders_models_luna_/segments_d
+<<<<<<< HEAD
 /software/.metadata/.plugins/org.eclipse.ltk.core.refactoring/.refactorings/.workspace/2014/11/47/refactorings.index
 /divers/codeBN
 /divers/CodeHN.odt
@@ -579,3 +587,6 @@ hardware/*/*.s\#*
 /software/pc/.metadata/.plugins/org.eclipse.ui.workbench/workbench.xml
 /software/pc/.metadata/.plugins/org.eclipse.ui.workbench/workingsets.xml
 /software/pc/.metadata/version.ini
+=======
+>>>>>>> 37c136aabec7ee7749a1784a7840a3ce78485184
+>>>>>>> 95567fe0b7a7a6e82f5b1ce9d99d25c570e5b11b

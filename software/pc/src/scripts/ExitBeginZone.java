@@ -5,7 +5,7 @@ import hook.types.HookGenerator;
 
 import java.util.ArrayList;
 
-import Pathfinding.Pathfinding;
+import pathfinding.Pathfinding;
 import exceptions.Locomotion.UnableToMoveException;
 import robot.cards.ActuatorsManager;
 import robot.highlevel.LocomotionHiLevel;

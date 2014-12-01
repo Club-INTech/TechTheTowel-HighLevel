@@ -5,14 +5,13 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import hook.Hook;
-
 import hook.types.HookGenerator;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import Pathfinding.Pathfinding;
+import pathfinding.Pathfinding;
 import robot.cards.ActuatorsManager;
 import robot.highlevel.LocomotionHiLevel;
 import scripts.DropCarpet;
