@@ -175,37 +175,42 @@ public class CloseClap extends Script
 			try 
 			{
 				//On met le coté gauche du robot devant les claps 
-				locomotion.tourner(Math.PI/2,emptyHookList,true);//TODO verifier
-				locomotion.avancer(distanceA,emptyHookList,true);//TODO DISTANCE INITIALE
+				locomotion.tourner(-Math.PI/2,emptyHookList,true);//TODO verifier
+				locomotion.avancer(distanceInit,emptyHookList,true);//TODO DISTANCE INITIALE
 				
-				if (!OpenedLeftClap)
+				if (!OpenedLeftClap)//On ouvre le bras si ce n'est deja fait
 				{
 					actionneurs.highLeftClap();
 					Sleep.sleep(sleepTime);
 				}
-				if(!ClosedClap1)//On ferme le clap le plus proche de nous
-				{
 				
-					locomotion.avancer(distance,emptyHookList,true);
-					actionneurs.midLeftClap();
+				if(!ClosedClap1)//On ferme le clap le plus proche de nous,
+				{				
+					actionneurs.midLeftClap();//On ouvre puis on avance
 					Sleep.sleep(sleepTime);
-					locomotion.avancer(distanceClaps,emptyHookList,true);//On baisse le premier clap, le notre
 					ClosedClap1=true;
 				}		
+				
+				locomotion.avancer(lenghtClap,emptyHookList,true);//On baisse le premier clap, le notre
+				
 				if(ClosedClap2)//Si l'ennemi a toujours son clap
 				{
 					actionneurs.highLeftClap();
 					Sleep.sleep(sleepTime);	
-					locomotion.avancer(distanceClaps,emptyHookList,true);
-					locomotion.avancer(distanceClaps,emptyHookList,true);//On evite le clap adverse
-				}	
+				}
+				
+					locomotion.avancer(distanceBetweenClaps,emptyHookList,true);//On avance entre le 1 et le 3
+					locomotion.avancer(lenghtClap,emptyHookList,true);
+					locomotion.avancer(distanceBetweenClaps,emptyHookList,true);
+					
 				if(!ClosedClap3)//Clap 3, le plus loin sur notre zone
 				{
 					actionneurs.midLeftClap();
 					Sleep.sleep(sleepTime);	
-					locomotion.avancer(distanceClaps,emptyHookList,true);
 					ClosedClap3=true;//On ferme notre 2eme clap	
 				}
+
+				locomotion.avancer(lenghtClap,emptyHookList,true); // On avance jusqu'au bout du 3
 				
 				actionneurs.lowLeftClap();
 			}
@@ -228,9 +233,8 @@ public class CloseClap extends Script
 		{
 			try 
 			{
-				// met le coté droit du robot devant les claps 
-				locomotion.tourner(Math.PI*-1/2,emptyHookList,true);//TODO verifier
-				locomotion.avancer(distanceA,emptyHookList,true);//TODO DISTANCE INITIALE
+				// A ce stade, on est devant le 5, pret à avancer
+			
 				
 				if (!OpenedRightClap)
 				{
@@ -238,30 +242,34 @@ public class CloseClap extends Script
 					Sleep.sleep(sleepTime);
 				}
 				
-				if(ClosedClap6)//Si l'ennemi a toujours son clap
+				if(ClosedClap6)//Si l'ennemi a toujours son clap //Pas sur que ca soit utile
 				{
 					actionneurs.highRightClap();
 					Sleep.sleep(sleepTime);	
-					locomotion.avancer(distanceClaps,emptyHookList,true);//On evite le clap adverse
-				}	
+				}
 				
 				if(!ClosedClap5)//Clap 5
 				{
 					actionneurs.midRightClap();
 					Sleep.sleep(sleepTime);	
-					locomotion.avancer(distanceClaps,emptyHookList,true);
 					ClosedClap5=true;//On ferme notre clap	
 				}
+				
+				locomotion.avancer(lenghtClap,emptyHookList,true);
+
 				
 				if(ClosedClap4)//Si l'ennemi a toujours son clap
 				{
 					actionneurs.highRightClap();
 					Sleep.sleep(sleepTime);	
-					locomotion.avancer(distanceClaps,emptyHookList,true);//On evite le clap adverse
 				}	
 				
-				actionneurs.lowRightClap();
+				locomotion.avancer(distanceBetweenClaps,emptyHookList,true);//On s'eloigne de 4
+				locomotion.avancer(lenghtClap,emptyHookList,true);
+				locomotion.avancer(distanceBetweenClaps,emptyHookList,true);
+
 				
+				actionneurs.lowRightClap();
 			}
 			catch (UnableToMoveException e) 
 			{
@@ -309,22 +317,21 @@ public class CloseClap extends Script
 			log.debug("Erreur termine : ne peux pas replier claps", this);;
 		}
 	}
-	
-	public int getSleepTime()
-	{
+
+	public int getDistanceInit() {
+		return distanceInit;
+	}
+
+	public void setDistanceInit(int distanceInit) {
+		this.distanceInit = distanceInit;
+	}
+
+	public int getSleepTime() {
 		return sleepTime;
 	}
-	public void setSleepTime(int newSleepTime)
-	{
-		this.sleepTime = newSleepTime;
-	}
-	public int getDistance()
-	{
-		return distance;
-	}
-	public void setDistance(int newDistance)
-	{
-		this.distance = newDistance;
+
+	public void setSleepTime(int sleepTime) {
+		this.sleepTime = sleepTime;
 	}
 	
 }
