@@ -26,243 +26,29 @@ public class ActuatorsManager implements Service {
 	public void updateConfig()
 	{
 	}
-
-	/*Intech 2014 
-	public void ouvrir_pince_gauche() throws SerialException
+	
+	public void lowLeftCarpet() throws SerialException
 	{
-		log.debug("Pince gauche ouverte", this);
-		serie.communiquer("og", 0);
-	}
-
-	public void ouvrir_pince_droite() throws SerialException
-	{
-		log.debug("Pince droite ouverte", this);
-		serie.communiquer("od", 0);
-	}
-
-	public void fermer_pince_gauche() throws SerialException
-	{
-		log.debug("Pince gauche fermée", this);
-		serie.communiquer("fg", 0);
-	}
-
-	public void fermer_pince_droite() throws SerialException
-	{
-		log.debug("Pince droite fermée", this);
-		serie.communiquer("fd", 0);
-	}
-	public void ouvrir_bas_pince_gauche() throws SerialException
-	{
-		log.debug("Pince gauche ouvert en bas", this);
-		serie.communiquer("obg", 0);
-	}
-	public void ouvrir_bas_pince_droite() throws SerialException
-	{
-		log.debug("Pince droite ouvert en bas", this);
-		serie.communiquer("obd", 0);
-	}
-	public void presque_fermer_pince_gauche() throws SerialException
-	{
-		log.debug("Pince gauche presque fermée", this);
-		serie.communiquer("pfg", 0);
-	}
-	public void presque_fermer_pince_droite() throws SerialException
-	{
-		log.debug("Pince droite presque fermée", this);
-		serie.communiquer("pfd", 0);
-	}
-
-	public void milieu_pince_gauche() throws SerialException
-	{
-		log.debug("Pince gauche milieu", this);
-		serie.communiquer("mg", 0);
-	}
-
-	public void milieu_pince_droite() throws SerialException
-	{
-		log.debug("Pince droite milieu", this);
-		serie.communiquer("md", 0);
-	}
-
-	public void lever_pince_gauche() throws SerialException
-	{
-		log.debug("Pince gauche levée", this);
-		serie.communiquer("hg", 0);
-	}
-
-	public void lever_pince_droite() throws SerialException
-	{
-		log.debug("Pince droite levée", this);
-		serie.communiquer("hd", 0);
+		log.debug("tapis gauche bas", this);
+		serie.communiquer("ptg", 0);
 	}
 	
-	public void baisser_pince_gauche() throws SerialException
+	public void lowRightCarpet() throws SerialException
 	{
-		log.debug("Pince gauche baissée", this);
-		serie.communiquer("bg", 0);
-	}
-
-	public void baisser_pince_droite() throws SerialException
-	{
-		log.debug("Pince droite baissée", this);
-		serie.communiquer("bd", 0);
-	}
-	public void tourner_pince_gauche() throws SerialException
-	{
-		log.debug("Pince gauche rotation 180°", this);
-		serie.communiquer("tg",0);
-	}
-	public void tourner_pince_droite() throws SerialException
-	{
-		log.debug("Pince droite rotation 180°", this);
-		serie.communiquer("td",0);
-	}
-	public void prendre_torche_gauche() throws SerialException
-	{
-		log.debug("Prendre la torche gauche", this);
-		serie.communiquer("torcheg",0);
-	}
-	public void prendre_torche_droite() throws SerialException
-	{
-		log.debug("Prendre la torche gauche", this);
-		serie.communiquer("torched",0);
-	}
-
-	public void bac_bas() throws SerialException
-	{
-		log.debug("Bac baissé", this);
-		serie.communiquer("bb", 0);
-	}
-
-    public void bac_tres_bas() throws SerialException
-    {
-        log.debug("Bac vraiment baissé", this);
-        serie.communiquer("btb", 0);
-    }
-
-	public void bac_haut() throws SerialException
-	{
-		log.debug("Bac levé", this);
-		serie.communiquer("bh", 0);
-	}
-
-	public void rateau_ranger_gauche() throws SerialException
-	{
-		log.debug("Rateau gauche rangé", this);
-		serie.communiquer("rrg", 0);
-	}
-	
-	public void rateau_ranger_droit() throws SerialException
-	{
-		log.debug("Rateau droit rangé", this);
-		serie.communiquer("rrd", 0);
-	}
-	
-	public void rateau_bas_droit() throws SerialException
-	{
-		log.debug("Rateau droit baissé", this);
-		serie.communiquer("rbd", 0);
-	}
-	
-	public void rateau_bas_gauche() throws SerialException
-	{
-		log.debug("Rateau gauche baissé", this);
-		serie.communiquer("rbg", 0);
-	}
-	
-	public void rateau_haut_droit() throws SerialException
-	{
-		log.debug("Rateau droit monté", this);
-		serie.communiquer("rhd", 0);
-	}
-	
-	public void rateau_haut_gauche() throws SerialException
-	{
-		log.debug("Rateau gauche monté", this);
-		serie.communiquer("rhg", 0);
-	}
-
-	public void rateau_super_bas_gauche() throws SerialException
-	{
-		log.debug("Rateau gauche vraiment baissé", this);
-		serie.communiquer("rbbg", 0);
-	}
-
-	public void rateau_super_bas_droit() throws SerialException
-	{
-		log.debug("Rateau droit vraiment baissé", this);
-		serie.communiquer("rbbd", 0);
-	}
-
-	public void allume_ventilo() throws SerialException
-	{
-        log.debug("Ventilo allumé", this);
-        serie.communiquer("von", 0);     	    
-	}
-
-    public void eteint_ventilo() throws SerialException
-    {
-        log.debug("Ventilo éteint", this);
-        serie.communiquer("voff", 0);            
-    }
-
-	public void tirerBalle() throws SerialException
-	{
-		log.debug("Balle tirée", this);
-		
-		// si pas premier coup, on tourne le barillet
-	    serie.communiquer("to", 0);
-	}
-	
-    public void recharger() throws SerialException
-    {
-        log.debug("Barillet rechargé", this);
-        serie.communiquer("re", 0);     
-    }
-    
-	public void lancerFilet() throws SerialException
-	{
-		log.debug("Filet lancé", this);
-		serie.communiquer("tf", 0);
-	}
-	public void renverserFeuGauche() throws SerialException
-	{
-		log.debug("Renverser feu gauche", this);
-		serie.communiquer("ag", 0);
-		serie.communiquer("0", 0);
-	}
-	public void renverserFeuDoite() throws SerialException
-	{
-		log.debug("Renverser feu droit",this);
-		serie.communiquer("ad", 0);
-		serie.communiquer("300", 0);
-	}
-	*/
-	
-	// IT 2015 partie Tapis
-	
-	public void upRightCarpet() throws SerialException
-	{
-		log.debug("Bras tapis droit remonté", this);
-		serie.communiquer("rtd", 0);	
-	}
-	
-	public void upLeftCarpet() throws SerialException
-	{
-		log.debug("Bras tapis gauche remonté", this);
-		serie.communiquer("rtg", 0);	
-	}
-	
-	public void downRightCarpet() throws SerialException
-	{
-		log.debug("Bras tapis droit baissé", this);
+		log.debug("tapis droit bas", this);
 		serie.communiquer("ptd", 0);
 	}
 	
-	public void downLeftCarpet() throws SerialException
+	public void highLeftCarpet() throws SerialException
 	{
-		log.debug("Bras tapis gauche baissé", this);
-		serie.communiquer("ptg", 0);	
+		log.debug("tapis gauche haut", this);
+		serie.communiquer("rtg", 0);
+	}
+	
+	public void highRightCarpet() throws SerialException
+	{
+		log.debug("tapis droit haut", this);
+		serie.communiquer("rtd", 0);
 	}
 	
 	// IT 2015 partie claps

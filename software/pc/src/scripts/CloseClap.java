@@ -1,8 +1,7 @@
 package scripts;
 
 import java.util.ArrayList;
-
-import pathfinding.Pathfinding;
+import pathFinding.PathFinding;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialException;
 import hook.Hook;
@@ -44,7 +43,7 @@ public class CloseClap extends Script
 	private int sleepTime = 800; //TODO le temps d'attente (en ms) entre la commande de dépose du tapis ( le bras se baisse) et la commande qui remonte le bras
 
 	
-	public CloseClap (HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, LocomotionHiLevel locomotion, ActuatorsManager move) 
+	public CloseClap (HookGenerator hookgenerator, Config config, Log log, PathFinding pathfinding, LocomotionHiLevel locomotion, ActuatorsManager move) 
 	{
 		super(hookgenerator,config,log,pathfinding,locomotion,move);
 	}
