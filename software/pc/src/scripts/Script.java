@@ -13,7 +13,7 @@ import hook.types.HookGenerator;
 
 import java.util.ArrayList;
 
-import Pathfinding.Pathfinding;
+import pathfinding.Pathfinding;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialException;
 import exceptions.ScriptException;
@@ -57,7 +57,7 @@ public abstract class Script implements Service
 	{
 		try 
 		{
-			locomotion.suit_chemin(pathfinding.computePath(locomotion.getPosition(),point_entree(id_version)),new ArrayList<Hook>());
+			locomotion.suit_chemin(pathfinding.dodgeStatic(locomotion.getPosition(),point_entree(id_version)),new ArrayList<Hook>());
 		} 
 		catch (UnableToMoveException e) 
 		{
