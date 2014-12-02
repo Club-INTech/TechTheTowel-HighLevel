@@ -115,7 +115,7 @@ public class JUnit_Laser extends JUnit_Test {
 		log.debug("JUnit_Laser_Test.test_vitesse()", this);
 		laser.allumer();
 		Sleep.sleep(1000);
-		Assert.assertTrue(filtragelaser.vitesse().SquaredLength() < 10);
+		Assert.assertTrue(filtragelaser.vitesse().squaredLength() < 10);
 		Sleep.sleep(1000);
 		laser.eteindre();
 	}
