@@ -11,14 +11,7 @@ import exceptions.ContainerException;
  * @author pf
  */
 public class JUnit_Container extends JUnit_Test {
-	
-	@Test(expected=ContainerException.class)
-	public void test_erreur() throws Exception
-	{
-		log.debug("JUnit_ContainerTest.test_erreur()", this);
-		container.getService(ServiceNames.CARTE_TEST);
-	}
-	
+
 	@Test
 	public void test_log() throws Exception
 	{
