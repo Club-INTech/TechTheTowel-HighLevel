@@ -1,10 +1,12 @@
 package robot.cards;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 import robot.serial.Serial;
 import utils.*;
 import container.Service;
+import smartMath.Vec2;
 import exceptions.Locomotion.BlockedException;
 import exceptions.serial.SerialException;
 
@@ -156,6 +158,60 @@ public class Locomotion implements Service
 	{
 		String chaines[] = {"t", Double.toString(angle)};
 		serie.communiquer(chaines, 0);		
+	}
+	
+	/**
+	 * 
+	 * @param path la liste des points par lesquels le robot doit passer, contient le point de depart (position actuelle du robot) et le point d'arrivee
+	 */
+	public void followPath (ArrayList<Vec2> path)
+	{
+		for (int i=0; i<path.size()-1; i++)
+		{
+			goToPoint(path.get(i),path.get(i+1));
+		}
+	}
+	
+	/**
+	 * deplace du point de depart au point d'arrivee
+	 * TODO refaire en mettant les deplacements de haut niveau
+	 * 
+	 * @param from le point de depart
+	 * @param to le point d'arrivee
+	 */
+	public void goToPoint (Vec2 from, Vec2 to)
+	{
+		double distX = to.x-from.x;
+		double distY = to.y-from.y;
+		try 
+		{
+			if (distX>=0 && distY>=0) //en haut a droite du cercle trigo
+			{
+				tourner(Math.atan(distY/distX));
+			}
+			else if (distX<0 && distY>=0) //en haut a gauche du cercle trigo
+			{
+				tourner(Math.atan(distY/distX)+Math.PI*0.5);
+			}
+			else if (distX<0 && distY<0) //en bas a gauche du cercle trigo
+			{
+				tourner(Math.atan(distY/distX)+Math.PI);
+			}
+			else if (distX>=0 && distY<0) //en bas a droite du cercle trigo
+			{
+				tourner(Math.atan(distY/distX));
+			}
+			else
+			{
+				
+			}
+			avancer(Math.sqrt(distX*distX+distY*distY));
+		} 
+		catch (SerialException e) 
+		{
+			log.debug("erreur dans Locomotion,goToPoint : mauvaise entree serie", this);
+			e.printStackTrace();
+		}
 	}
 	
 	/**
