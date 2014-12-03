@@ -66,8 +66,8 @@ public class SerialManager
 		this.serieCapteursActionneurs = new SerialConnexion(log, this.carteCapteursActionneurs.name);
 //		this.serieLaser = new Serial(log, this.carteLaser.name);
 
-		this.series[this.carteAsservissement.name.ordinal()] = this.serieAsservissement;
-		this.series[this.carteCapteursActionneurs.name.ordinal()] = this.serieCapteursActionneurs;
+		this.series[this.carteAsservissement.name.getNbSerie()] = this.serieAsservissement;
+		this.series[this.carteCapteursActionneurs.name.getNbSerie()] = this.serieCapteursActionneurs;
 //		this.series.put(this.carteLaser.name, this.serieLaser);
 
 		checkSerial();
@@ -210,9 +210,9 @@ public class SerialManager
 	 */
 	public SerialConnexion getSerial(ServiceNames name)	throws SerialManagerException
 	{
-		if (this.series[name.ordinal()] != null)
+		if (this.series[name.getNbSerie()] != null)
 		{
-			return this.series[name.ordinal()];
+			return this.series[name.getNbSerie()];
 		}
 		else
 		{
