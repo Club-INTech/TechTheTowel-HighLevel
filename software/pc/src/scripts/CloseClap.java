@@ -33,7 +33,6 @@ import utils.Sleep;
 
 public class CloseClap extends Script 
 {
-	
 	private boolean OpenedLeftClap=false,OpenedRightClap=false,ClosedClap1=false,ClosedClap2=false,ClosedClap3=false,ClosedClap4=false,ClosedClap5=false,ClosedClap6=false;//clap fermé au debut
 	private int distanceBetweenClaps=300;//distance entre 2 claps (bout identique de claque clap, ex : charnieres)
 	private int lenghtClap=160; //LOngueur clap

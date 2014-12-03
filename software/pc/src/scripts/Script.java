@@ -13,7 +13,7 @@ import hook.types.HookGenerator;
 
 import java.util.ArrayList;
 
-import pathFinding.PathFinding;
+import pathfinding.Pathfinding;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialException;
 import exceptions.ScriptException;
@@ -31,7 +31,7 @@ public abstract class Script implements Service
 	protected static HookGenerator hookgenerator;
 	protected static Config config;
 	protected static Log log;
-	protected static PathFinding pathfinding;
+	protected static Pathfinding pathfinding;
 	protected static LocomotionHiLevel locomotion;
 	protected static ActuatorsManager actionneurs;
 
@@ -40,7 +40,7 @@ public abstract class Script implements Service
 	 */
 	protected ArrayList<ArrayList<Integer>> versions = new ArrayList<ArrayList<Integer>>();	
 	
-	public Script(HookGenerator hookgenerator, Config config, Log log, PathFinding pathfinding, LocomotionHiLevel locomotion, ActuatorsManager move)
+	public Script(HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, LocomotionHiLevel locomotion, ActuatorsManager move)
 	{
 		Script.hookgenerator = hookgenerator;
 		Script.config = config;
