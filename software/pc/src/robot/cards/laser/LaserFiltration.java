@@ -97,16 +97,16 @@ public class LaserFiltration implements Service {
 		Vec2 pointm1 = historique.pop();
 		Vec2 pointm2 = historique.pop();
 //		Vec2 pointm3 = historique.pop();
-		Vec2 vitesse_actuelle = pointm0.MinusNewVector(pointm1);
-		Vec2 vitesse_m1 = pointm1.MinusNewVector(pointm2);
+		Vec2 vitesse_actuelle = pointm0.minusNewVector(pointm1);
+		Vec2 vitesse_m1 = pointm1.minusNewVector(pointm2);
 //		Vec2 vitesse_m2 = pointm2.MinusNewVector(pointm3);
-		Vec2 acceleration_actuelle = vitesse_actuelle.MinusNewVector(vitesse_m1);
+		Vec2 acceleration_actuelle = vitesse_actuelle.minusNewVector(vitesse_m1);
 //		Vec2 acceleration_precedente = vitesse_m1.MinusNewVector(vitesse_m2);
 		//Vec2 jerk = acceleration_actuelle.MinusNewVector(acceleration_precedente);
 		//float produit = acceleration_actuelle.dot(vitesse_m1);
 		//jerk et produit étaient utilisés dans du code inutilisé en Python
 		//donc voilà, au cas où il y en a besoin...
-		if(acceleration_actuelle.SquaredLength()/Math.pow(dt,2) >50000 & this.valeurs_rejetees < 3 )
+		if(acceleration_actuelle.squaredLength()/Math.pow(dt,2) >50000 & this.valeurs_rejetees < 3 )
 		{
 			valeurs_rejetees +=1;
 			return false;

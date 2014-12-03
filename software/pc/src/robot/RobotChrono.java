@@ -48,7 +48,7 @@ public class RobotChrono extends Robot
 		Vec2 ecart;
         ecart = new Vec2((int)(distance*Math.cos(orientation)), (int)(distance*Math.sin(orientation)));
 
-		position.Plus(ecart);
+		position.plus(ecart);
 	}
 	
 	@Override
@@ -66,13 +66,6 @@ public class RobotChrono extends Robot
 	public int get_compteur()
 	{
 		return duree;
-	}
-
-	public RobotChrono clone()
-	{
-		RobotChrono cloned_robotchrono = new RobotChrono(config, log);
-		copy(cloned_robotchrono);
-		return cloned_robotchrono;
 	}
 
 	@Override
@@ -154,14 +147,6 @@ public class RobotChrono extends Robot
     public double getOrientation()
     {
         return orientation;
-    }
-    
-    @Override
-    public void copy(RobotChrono rc)
-    {
-        super.copy(rc);
-        position.copy(rc.position);
-        rc.orientation = orientation;
     }
 
     public void desactiver_asservissement_rotation()

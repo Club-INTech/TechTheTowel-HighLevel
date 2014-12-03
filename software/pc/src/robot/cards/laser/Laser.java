@@ -237,7 +237,7 @@ public class Laser implements Service {
         Vec2 point = robotvrai.getPosition();
         double orientation = robotvrai.getOrientation();
         
-        point.Plus(new Vec2((int)(distance * Math.cos(angle + orientation)), (int)(distance * Math.sin(angle + orientation))));
+        point.plus(new Vec2((int)(distance * Math.cos(angle + orientation)), (int)(distance * Math.sin(angle + orientation))));
         return point;
 	}
 

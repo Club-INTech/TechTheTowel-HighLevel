@@ -21,9 +21,14 @@ public class SerialConnexion implements SerialPortEventListener, Service
 {
 	SerialPort serialPort;
 	Log log;
-	ServiceNames name;
+	String name;
 
 	SerialConnexion (Log log, ServiceNames name)
+	{
+		this(log, name.toString());
+	}
+	
+	SerialConnexion (Log log, String name)
 	{
 		super();
 		this.log = log;
@@ -225,7 +230,11 @@ public class SerialConnexion implements SerialPortEventListener, Service
 			}
 			catch (Exception e)
 			{
+				
+				//TODO: n'afficher que les infos intéressantes.
+				// TODO: fair ca sur tout les printStackTrace du  projet
 				e.printStackTrace();
+				log.critical(e.getMessage(),this);
 			}
 			return ping;
 		}

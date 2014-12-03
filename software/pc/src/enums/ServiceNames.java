@@ -20,10 +20,9 @@ public enum ServiceNames {
 	 LASER_FILTRATION,
 	 GAME_STATE,
 	 SCRIPT_MANAGER,
-	 SERIE_ASSERVISSEMENT(TypeService.SERIE),
-	 SERIE_CAPTEURS_ACTIONNEURS(TypeService.SERIE),
-	 SERIE_LASER(TypeService.SERIE),
-	 CARTE_TEST(TypeService.SERIE), // utilisée pour la recherche de la série uniquement
+	 SERIE_ASSERVISSEMENT(TypeService.SERIE, 0),
+	 SERIE_CAPTEURS_ACTIONNEURS(TypeService.SERIE, 1),
+	 SERIE_LASER(TypeService.SERIE, 2),
 	 THREAD_SENSOR,
 	 THREAD_LASER,
 	 THREAD_TIMER,
@@ -31,11 +30,19 @@ public enum ServiceNames {
 	
 	 private TypeService type = TypeService.RIEN;
 
+	 private int nbSerie = 0;
+
 	 private ServiceNames()
 	 {}
 	 
-	 private ServiceNames(TypeService type)
+	 public int getNbSerie()
 	 {
+		 return nbSerie;
+	 }
+	 
+	 private ServiceNames(TypeService type, int nbSerie)
+	 {
+		 this.nbSerie = nbSerie;
 		 this.type = type;
 	 }
 	 
