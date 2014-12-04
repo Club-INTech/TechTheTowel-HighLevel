@@ -185,25 +185,50 @@ public class Locomotion implements Service
 		double distY = to.y-from.y;
 		try 
 		{
-			if (distX>=0 && distY>=0) //en haut a droite du cercle trigo
+			if (distX!=0) //si on ne se deplace pas a la verticale
 			{
-				tourner(Math.atan(distY/distX));
-			}
-			else if (distX<0 && distY>=0) //en haut a gauche du cercle trigo
-			{
-				tourner(Math.atan(distY/distX)+Math.PI*0.5);
-			}
-			else if (distX<0 && distY<0) //en bas a gauche du cercle trigo
-			{
-				tourner(Math.atan(distY/distX)+Math.PI);
-			}
-			else if (distX>=0 && distY<0) //en bas a droite du cercle trigo
-			{
-				tourner(Math.atan(distY/distX));
-			}
-			else
-			{
+				if (distY!=0) //si on ne se deplace pas a l'horizontale
+				{
+					if (distX>=0 && distY>=0) //en haut a droite du cercle trigo
+					{
+						tourner(Math.atan(distY/distX));
+					}
+					else if (distX<0 && distY>=0) //en haut a gauche du cercle trigo
+					{
+						tourner(Math.atan(distY/distX)+Math.PI);
+					}
+					else if (distX<0 && distY<0) //en bas a gauche du cercle trigo
+					{
+						tourner(Math.atan(distY/distX)+Math.PI);
+					}
+					else if (distX>=0 && distY<0) //en bas a droite du cercle trigo
+					{
+						tourner(Math.atan(distY/distX));
+					}
+					else
+					{
 				
+					}
+				}
+				else // si on se deplace a l'horizontale
+				{
+					if (distX<0) //vers la gauche
+					{
+						tourner(Math.PI);
+					}
+					else //vers la droite
+					{
+						tourner(0);
+					}
+				}
+			}
+			else if (distY<0) //si on se deplace vers le bas
+			{
+				tourner(-Math.PI*0.5);
+			}
+			else //si on se deplace vers le haut
+			{
+				tourner(Math.PI*0.5);
 			}
 			avancer(Math.sqrt(distX*distX+distY*distY));
 		} 
