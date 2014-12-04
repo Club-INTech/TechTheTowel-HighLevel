@@ -21,7 +21,7 @@ public class Locomotion implements Service
 
 	// Dépendances
 	private Log log;
-	private Serial serie;
+	public Serial serie;
 
 	private Hashtable<String, Integer> infos_stoppage_enMouvement;
 		
@@ -163,12 +163,14 @@ public class Locomotion implements Service
 	/**
 	 * 
 	 * @param path la liste des points par lesquels le robot doit passer, contient le point de depart (position actuelle du robot) et le point d'arrivee
+	 * @throws SerialException 
 	 */
-	public void followPath (ArrayList<Vec2> path)
+	public void followPath (ArrayList<Vec2> path) throws SerialException
 	{
-		for (int i=0; i<path.size()-1; i++)
+		for (int i=1; i<path.size(); i++)
 		{
-			goToPoint(path.get(i),path.get(i+1));
+			goToPoint(path.get(i));
+			log.debug("position actuelle ("+get_infos_x_y_orientation()[0]+", "+get_infos_x_y_orientation()[1]+")",this);
 		}
 	}
 	
@@ -176,61 +178,21 @@ public class Locomotion implements Service
 	 * deplace du point de depart au point d'arrivee
 	 * TODO refaire en mettant les deplacements de haut niveau
 	 * 
-	 * @param from le point de depart
 	 * @param to le point d'arrivee
+	 * @throws SerialException 
 	 */
-	public void goToPoint (Vec2 from, Vec2 to)
+	public void goToPoint (Vec2 to) throws SerialException
 	{
-		double distX = to.x-from.x;
-		double distY = to.y-from.y;
-		try 
+		double distX = to.x-get_infos_x_y_orientation()[0];
+		double distY = to.y-get_infos_x_y_orientation()[1];
+		try
 		{
-			if (distX!=0) //si on ne se deplace pas a la verticale
-			{
-				if (distY!=0) //si on ne se deplace pas a l'horizontale
-				{
-					if (distX>=0 && distY>=0) //en haut a droite du cercle trigo
-					{
-						tourner(Math.atan(distY/distX));
-					}
-					else if (distX<0 && distY>=0) //en haut a gauche du cercle trigo
-					{
-						tourner(Math.atan(distY/distX)+Math.PI);
-					}
-					else if (distX<0 && distY<0) //en bas a gauche du cercle trigo
-					{
-						tourner(Math.atan(distY/distX)+Math.PI);
-					}
-					else if (distX>=0 && distY<0) //en bas a droite du cercle trigo
-					{
-						tourner(Math.atan(distY/distX));
-					}
-					else
-					{
-				
-					}
-				}
-				else // si on se deplace a l'horizontale
-				{
-					if (distX<0) //vers la gauche
-					{
-						tourner(Math.PI);
-					}
-					else //vers la droite
-					{
-						tourner(0);
-					}
-				}
-			}
-			else if (distY<0) //si on se deplace vers le bas
-			{
-				tourner(-Math.PI*0.5);
-			}
-			else //si on se deplace vers le haut
-			{
-				tourner(Math.PI*0.5);
-			}
-			avancer(Math.sqrt(distX*distX+distY*distY));
+			tourner(Math.atan2(distY, distX));
+			log.debug("j'ai tourne "+Math.atan2(distY, distX),this);
+			Sleep.sleep(1000);
+			avancer(Math.sqrt(distX*distX + distY*distY));
+			log.debug("j'ai avance "+Math.sqrt(distX*distX+distY*distY), this);
+			Sleep.sleep(7000);
 		} 
 		catch (SerialException e) 
 		{

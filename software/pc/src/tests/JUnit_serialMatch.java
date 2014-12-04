@@ -1,7 +1,9 @@
 package tests;
 
 import java.util.ArrayList;
+
 import smartMath.Vec2;
+import table.Table;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -10,22 +12,27 @@ import exceptions.serial.SerialException;
 import robot.cards.ActuatorsManager;
 import robot.cards.Locomotion;
 import utils.Sleep;
+import pathdinding.Pathfinding;
 
 public class JUnit_serialMatch extends JUnit_Test {
 
 	Locomotion locomotion;
 	ActuatorsManager actionneurs;
 	ArrayList<Vec2> path = new ArrayList<Vec2>();
+	Table table;
+	Pathfinding pathfinding = new Pathfinding (table);
 	
 	
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
 		locomotion = (Locomotion)container.getService("Deplacements");
+		locomotion.set_x(1200);
+		locomotion.set_y(200);
 		actionneurs = (ActuatorsManager)container.getService("Actionneurs");
-		path.add(new Vec2 (1000,1000));
-		path.add(new Vec2 (1475,25));
-		path.add(new Vec2 (500,25));
+		table = (Table)container.getService("Table");
+		pathfinding = new Pathfinding (table);
+		
 	}
 
 	@Test
@@ -33,20 +40,8 @@ public class JUnit_serialMatch extends JUnit_Test {
 	{
 		try 
 		{
-			locomotion.avancer((1340-255));
-			Sleep.sleep(2000);
-			locomotion.tourner(0);
-			Sleep.sleep(1500);
-			locomotion.avancer(-340);
-			Sleep.sleep(1000);
-			actionneurs.lowLeftCarpet();
-			Sleep.sleep(800);
-			actionneurs.highLeftCarpet();
-			actionneurs.lowRightCarpet();
-			Sleep.sleep(800);
-			actionneurs.highRightCarpet();
-			Sleep.sleep(800);
-			actionneurs.midLeftClap();
+			path = pathfinding.computePath(new Vec2((int)locomotion.get_infos_x_y_orientation()[0],(int)locomotion.get_infos_x_y_orientation()[1]), new Vec2(-1200,200));
+			log.debug(path.toString(), this);
 			locomotion.followPath(path);
 		} 
 		catch (SerialException e) 
@@ -54,6 +49,7 @@ public class JUnit_serialMatch extends JUnit_Test {
 			log.debug("erreur dans le texte serie",this);
 			e.printStackTrace();
 		}
+		
 	}
 
 }
