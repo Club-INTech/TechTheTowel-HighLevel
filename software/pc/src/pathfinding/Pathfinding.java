@@ -70,7 +70,7 @@ public class Pathfinding
 		Point DoubleStart = new Point(start.x, start.y), DoubleEnd = new Point(end.x, end.y);
 		Path path = new Path();
 		path.add(DoubleStart);
-		path = dodgeStatic(DoubleStart, DoubleEnd);
+		path.addAll(dodgeStatic(DoubleStart, DoubleEnd));
 		path.add(DoubleEnd);
 		simplify(path);
 		return path.toVec2Array();
@@ -134,6 +134,11 @@ public class Pathfinding
 			}
 		}
 		return path;
+	}
+	
+	private Path dodgeDynamic(Point start, Point end)
+	{
+		return new Path();
 	}
 	
 	/**

@@ -8,6 +8,7 @@ import table.Table;
 import smartMath.Point;
 import smartMath.Vec2;
 import smartMath.Path;
+import java.util.ArrayList;
 
 public class JUnit_Pathfinding extends JUnit_Test
 {
@@ -29,8 +30,12 @@ public class JUnit_Pathfinding extends JUnit_Test
     @Test
     public void testPF1() throws Exception
     {
-    	Container cont = new Container();
+    	Container cont = new Container();;
     	Pathfinding pf = new Pathfinding((Table)cont.getService("Table"));
-    	pf.computePath(new Vec2(-1200, 200), new Vec2(1200, 200));
+    	ArrayList<Vec2> path = pf.computePath(new Vec2(-1200, 200), new Vec2(1200, 200));
+    	for(int i = 0; i < path.size(); i++)
+    	{
+    		System.out.println("-----------------------------" + path.get(i).toString());
+    	}
     }
 }
