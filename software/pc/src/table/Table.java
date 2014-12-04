@@ -33,6 +33,7 @@ public class Table implements Service
 	private Config config;
 	private ArrayList<ObstacleLinear> m_lines;
 	private ArrayList<ObstacleCircular> m_circles;
+	private ArrayList<ObstacleRectangular> m_rects;
 	
 	public Table(Log log, Config config)
 	{
@@ -46,6 +47,7 @@ public class Table implements Service
 	{
 		m_lines = new ArrayList<ObstacleLinear>();
 		m_circles = new ArrayList<ObstacleCircular>();
+		m_rects = new ArrayList<ObstacleRectangular>();
 		
 		double radius = 190;
 		int rayonPlot = 30;
@@ -76,6 +78,7 @@ public class Table implements Service
 		m_lines.add(new ObstacleLinear(new Point(1500 - radius, 0 + radius), new Point(1500 - radius, 1930 - radius), 0, new Point(0, 0), new Point(0, 0)));
 		m_lines.add(new ObstacleLinear(new Point(1500 - radius, 1930 - radius), new Point(-1500 + radius, 1930 - radius), 0, new Point(0, 0), new Point(0, 0)));
 		m_lines.add(new ObstacleLinear(new Point(-1500 + radius, 1930 - radius), new Point(-1500 + radius, 0 + radius), 0, new Point(0, 0), new Point(0, 0)));
+		
 		
 		
 		//obstacle plots verts 

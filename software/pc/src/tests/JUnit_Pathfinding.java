@@ -2,13 +2,14 @@ package tests;
 
 import org.junit.*;
 
-import pathfinding.Pathfinding;
+import pathdinding.Pathfinding;
 import container.Container;
 import table.Table;
 import smartMath.Point;
 import smartMath.Vec2;
 import smartMath.Path;
 import java.util.ArrayList;
+import exceptions.Locomotion.BlockedException;
 
 public class JUnit_Pathfinding extends JUnit_Test
 {
@@ -30,9 +31,17 @@ public class JUnit_Pathfinding extends JUnit_Test
     @Test
     public void testPF1() throws Exception
     {
-    	Container cont = new Container();;
+    	Container cont = new Container();
     	Pathfinding pf = new Pathfinding((Table)cont.getService("Table"));
-    	ArrayList<Vec2> path = pf.computePath(new Vec2(-1200, 200), new Vec2(1200, 200));
+    	ArrayList<Vec2> path = new ArrayList<Vec2>();
+    	try
+    	{
+    		path = pf.computePath(new Vec2(-1200, 200), new Vec2(0, 500));
+    	}
+    	catch(BlockedException e)
+    	{
+    		System.out.println("--------------not on table------------------");
+    	}
     	for(int i = 0; i < path.size(); i++)
     	{
     		System.out.println("-----------------------------" + path.get(i).toString());
