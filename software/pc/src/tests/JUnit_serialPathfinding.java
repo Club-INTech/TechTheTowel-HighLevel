@@ -16,7 +16,7 @@ import robot.cards.Locomotion;
 import utils.Sleep;
 import pathdinding.Pathfinding;
 
-public class JUnit_serialMatch extends JUnit_Test {
+public class JUnit_serialPathfinding extends JUnit_Test {
 
 	Locomotion locomotion;
 	ActuatorsManager actionneurs;

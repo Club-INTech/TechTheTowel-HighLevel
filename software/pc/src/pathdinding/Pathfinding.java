@@ -72,6 +72,7 @@ public class Pathfinding
 	 */
 	public ArrayList<Vec2> computePath(Vec2 start, Vec2 end) throws BlockedException
 	{
+		compteur = 0;
 		Point DoubleStart = new Point(start.x, start.y), DoubleEnd = new Point(end.x, end.y);
 		Path path = new Path();
 		path.add(DoubleStart);
@@ -89,7 +90,7 @@ public class Pathfinding
 	 */
 	private Path dodgeStatic(Point start, Point end) throws BlockedException
 	{
-		if(compteur >= 20)
+		if(compteur >= 1000)
 			throw new BlockedException();
 		
 		Path path = new Path();
