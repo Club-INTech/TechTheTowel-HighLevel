@@ -4,6 +4,7 @@ import smartMath.Point;
 import table.Table;
 import smartMath.Path;
 import smartMath.Vec2;
+import java.util.ArrayList;
 
 /**
  * Classe encapsulant les calculs de pathfinding (ou pas :p)
@@ -64,14 +65,15 @@ public class Pathfinding
 	 * @param end point d'arrivée
 	 * @return un chemin entre le point de départ et d'arrivée
 	 */
-	public Path computePath(Vec2 start, Vec2 end)
+	public ArrayList<Vec2> computePath(Vec2 start, Vec2 end)
 	{
 		Point DoubleStart = new Point(start.x, start.y), DoubleEnd = new Point(end.x, end.y);
 		Path path = new Path();
 		path.add(DoubleStart);
 		path = dodgeStatic(DoubleStart, DoubleEnd);
 		path.add(DoubleEnd);
-		return path;
+		simplify(path);
+		return path.toVec2Array();
 	}
 	
 	/**

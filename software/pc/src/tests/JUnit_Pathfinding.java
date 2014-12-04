@@ -31,13 +31,6 @@ public class JUnit_Pathfinding extends JUnit_Test
     {
     	Container cont = new Container();
     	Pathfinding pf = new Pathfinding((Table)cont.getService("Table"));
-    	long start = System.nanoTime();
-    	Path path = pf.computePath(new Vec2(-1200, 200), new Vec2(1200, 200));
-    	pf.simplify(path);
-    	long end = System.nanoTime();
-    	System.out.println("elapsed : " + (end - start) + " ns");
-    	for(int i = 0; i < path.size(); i++)
-    		System.out.println("point : " + path.getPosition(i).x + " / " + path.getPosition(i).y);
+    	pf.computePath(new Vec2(-1200, 200), new Vec2(1200, 200));
     }
-    
 }
