@@ -6,6 +6,7 @@ import pathfinding.Pathfinding;
 import container.Container;
 import table.Table;
 import smartMath.Point;
+import smartMath.Vec2;
 import smartMath.Path;
 
 public class JUnit_Pathfinding extends JUnit_Test
@@ -31,7 +32,7 @@ public class JUnit_Pathfinding extends JUnit_Test
     	Container cont = new Container();
     	Pathfinding pf = new Pathfinding((Table)cont.getService("Table"));
     	long start = System.nanoTime();
-    	Path path = pf.dodgeStatic(new Point(-1200, 200), new Point(1200, 200));
+    	Path path = pf.computePath(new Vec2(-1200, 200), new Vec2(1200, 200));
     	pf.simplify(path);
     	long end = System.nanoTime();
     	System.out.println("elapsed : " + (end - start) + " ns");

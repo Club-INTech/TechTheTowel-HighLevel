@@ -3,6 +3,7 @@ package pathfinding;
 import smartMath.Point;
 import table.Table;
 import smartMath.Path;
+import smartMath.Vec2;
 
 /**
  * Classe encapsulant les calculs de pathfinding (ou pas :p)
@@ -63,12 +64,13 @@ public class Pathfinding
 	 * @param end point d'arrivée
 	 * @return un chemin entre le point de départ et d'arrivée
 	 */
-	public Path computePath(Point start, Point end)
+	public Path computePath(Vec2 start, Vec2 end)
 	{
+		Point DoubleStart = new Point(start.x, start.y), DoubleEnd = new Point(end.x, end.y);
 		Path path = new Path();
-		path.add(start);
-		path = dodgeStatic(start, end);
-		path.add(end);
+		path.add(DoubleStart);
+		path = dodgeStatic(DoubleStart, DoubleEnd);
+		path.add(DoubleEnd);
 		return path;
 	}
 	
