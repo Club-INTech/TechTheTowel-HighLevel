@@ -6,46 +6,46 @@ import smartMath.Point;
 
 public class Path
 {
-	private ArrayList<Point> PointArray;
+	private ArrayList<Point> pointArray;
 	
 	public Path(ArrayList<Point> array)
 	{
-		PointArray = array;
+		pointArray = array;
 	}
 	
 	public Path()
 	{
-		PointArray = new ArrayList<Point>();
+		pointArray = new ArrayList<Point>();
 	}
 	
 	public void add(Point point)
 	{
-		PointArray.add(point);
+		pointArray.add(point);
 	}
 	
 	public void addAll(Path path)
 	{
-		PointArray.addAll(path.PointArray);
+		pointArray.addAll(path.pointArray);
 	}
 	
 	public void insert(int index, Path path)
 	{
-		PointArray.addAll(index, path.PointArray);
+		pointArray.addAll(index, path.pointArray);
 	}
 	
 	public void remove(int index)
 	{
-		PointArray.remove(index);
+		pointArray.remove(index);
 	}
 	
 	public double size()
 	{
-		return PointArray.size();
+		return pointArray.size();
 	}
 	
 	public Point getPosition(int index)
 	{
-		return PointArray.get(index);
+		return pointArray.get(index);
 	}
 	
 	/**
@@ -55,9 +55,9 @@ public class Path
 	public double getLenght()
 	{
 		double lenght = 0;
-		for(int i = 0; i < PointArray.size() - 1; i++)
+		for(int i = 0; i < pointArray.size() - 1; i++)
 		{
-			lenght += Math.sqrt(Math.pow(PointArray.get(i).x - PointArray.get(i + 1).x, 2) + Math.pow(PointArray.get(i).y - PointArray.get(i + 1).y, 2));
+			lenght += Math.sqrt(Math.pow(pointArray.get(i).x - pointArray.get(i + 1).x, 2) + Math.pow(pointArray.get(i).y - pointArray.get(i + 1).y, 2));
 		}
 		return lenght;
 	}
@@ -77,11 +77,19 @@ public class Path
 	 */
 	public void invert()
 	{
-		for(int i = 0; i < PointArray.size() / 2; i++)
+		for(int i = 0; i < pointArray.size() / 2; i++)
 		{
-			Point aux = PointArray.get(i);
-			PointArray.set(i, PointArray.get(PointArray.size() - 1 - i));
-			PointArray.set(PointArray.size() - 1 - i, aux);
+			Point aux = pointArray.get(i);
+			pointArray.set(i, pointArray.get(pointArray.size() - 1 - i));
+			pointArray.set(pointArray.size() - 1 - i, aux);
 		}
+	}
+	
+	public ArrayList<Vec2> toVec2Array()
+	{
+		ArrayList<Vec2> Vec2Array = new ArrayList<Vec2>();
+		for(int i = 0; i < pointArray.size(); i++)
+			Vec2Array.add(pointArray.get(i).toVec2());
+		return Vec2Array;
 	}
 }
