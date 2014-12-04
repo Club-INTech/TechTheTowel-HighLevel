@@ -1,7 +1,11 @@
 package tests;
 
+import java.util.ArrayList;
+import smartMath.Vec2;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import exceptions.serial.SerialException;
 import robot.cards.ActuatorsManager;
 import robot.cards.Locomotion;
@@ -11,12 +15,17 @@ public class JUnit_serialMatch extends JUnit_Test {
 
 	Locomotion locomotion;
 	ActuatorsManager actionneurs;
+	ArrayList<Vec2> path = new ArrayList<Vec2>();
+	
 	
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
 		locomotion = (Locomotion)container.getService("Deplacements");
 		actionneurs = (ActuatorsManager)container.getService("Actionneurs");
+		path.add(new Vec2 (1000,1000));
+		path.add(new Vec2 (1475,25));
+		path.add(new Vec2 (500,25));
 	}
 
 	@Test
@@ -36,6 +45,9 @@ public class JUnit_serialMatch extends JUnit_Test {
 			actionneurs.lowRightCarpet();
 			Sleep.sleep(800);
 			actionneurs.highRightCarpet();
+			Sleep.sleep(800);
+			actionneurs.midLeftClap();
+			locomotion.followPath(path);
 		} 
 		catch (SerialException e) 
 		{
