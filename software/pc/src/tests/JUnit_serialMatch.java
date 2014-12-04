@@ -3,6 +3,7 @@ package tests;
 import java.util.ArrayList;
 
 import smartMath.Vec2;
+import table.Table;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -11,27 +12,27 @@ import exceptions.serial.SerialException;
 import robot.cards.ActuatorsManager;
 import robot.cards.Locomotion;
 import utils.Sleep;
+import pathdinding.Pathfinding;
 
 public class JUnit_serialMatch extends JUnit_Test {
 
 	Locomotion locomotion;
 	ActuatorsManager actionneurs;
 	ArrayList<Vec2> path = new ArrayList<Vec2>();
+	Table table;
+	Pathfinding pathfinding = new Pathfinding (table);
 	
 	
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
 		locomotion = (Locomotion)container.getService("Deplacements");
+		locomotion.set_x(1200);
+		locomotion.set_y(200);
 		actionneurs = (ActuatorsManager)container.getService("Actionneurs");
-		locomotion.set_x(1484);
-		locomotion.set_y(1000);
-		path.add(new Vec2 (1084,1000));
-		path.add(new Vec2 (500,1000));
-		path.add(new Vec2 (100,700));
-		path.add(new Vec2 (500,500));
-		path.add(new Vec2 (1420,250));
-		path.add(new Vec2 (700,250));
+		table = (Table)container.getService("Table");
+		pathfinding = new Pathfinding (table);
+		
 	}
 
 	@Test
@@ -39,6 +40,8 @@ public class JUnit_serialMatch extends JUnit_Test {
 	{
 		try 
 		{
+			path = pathfinding.computePath(new Vec2((int)locomotion.get_infos_x_y_orientation()[0],(int)locomotion.get_infos_x_y_orientation()[1]), new Vec2(-1200,200));
+			log.debug(path.toString(), this);
 			locomotion.followPath(path);
 		} 
 		catch (SerialException e) 

@@ -162,12 +162,12 @@ public class Locomotion implements Service
 	
 	/**
 	 * 
-	 * @param path la liste des points par lesquels le robot doit passer, ne contient pas le point de depart (position actuelle du robot) et le point d'arrivee
+	 * @param path la liste des points par lesquels le robot doit passer, contient le point de depart (position actuelle du robot) et le point d'arrivee
 	 * @throws SerialException 
 	 */
 	public void followPath (ArrayList<Vec2> path) throws SerialException
 	{
-		for (int i=0; i<path.size(); i++)
+		for (int i=1; i<path.size(); i++)
 		{
 			goToPoint(path.get(i));
 			log.debug("position actuelle ("+get_infos_x_y_orientation()[0]+", "+get_infos_x_y_orientation()[1]+")",this);
