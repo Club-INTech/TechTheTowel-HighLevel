@@ -98,6 +98,10 @@ public class Vec2
 	{
 		return "("+x+","+y+")";
 	}
+	public Point toPoint()
+	{
+		return new Point((double)x,(double)y);
+	}
 	
 	public boolean equals(Vec2 other)
 	{
