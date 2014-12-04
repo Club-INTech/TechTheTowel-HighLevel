@@ -1,7 +1,8 @@
 package scripts;
 
 import java.util.ArrayList;
-import pathFinding.PathFinding;
+
+import pathfinding.Pathfinding;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialException;
 import hook.Hook;
@@ -51,11 +52,11 @@ public class CloseClap extends Script
 	private int lenghtClap=160; //LOngueur clap
 	private int lenghtStair=200; // L'estradee fait 100, on met 200
 	private int distanceInit;//distance intiale au script
-	private int distanceRightLeft=1600; // distance entre les deux triplettes de claps : entre le 3 et le 5
+	private int distanceRightLeft=1700; // distance entre les deux triplettes de claps : entre le 3 et le 5
 	private int sleepTime = 800; // le temps d'attente (en ms) entre la commande de dépose du tapis ( le bras se baisse) et la commande qui remonte le bras
 
 	
-	public CloseClap (HookGenerator hookgenerator, Config config, Log log, PathFinding pathfinding, LocomotionHiLevel locomotion, ActuatorsManager move) 
+	public CloseClap (HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, LocomotionHiLevel locomotion, ActuatorsManager move) 
 	{
 		super(hookgenerator,config,log,pathfinding,locomotion,move);
 	}
@@ -68,6 +69,8 @@ public class CloseClap extends Script
 			try 
 			{
 				//Partie debut à partir du coin de la table (après une marche arrière)
+				actionneurs.lowLeftClap();//Init
+				actionneurs.lowRightClap();
 				
 				if (!OpenedLeftClap)//On ouvre le bras si ce n'est deja fait
 				{
@@ -76,7 +79,7 @@ public class CloseClap extends Script
 				}
 				
 				if(!ClosedClap1)//On ferme le clap le plus proche de nous,
-				{				
+				{	
 					actionneurs.midLeftClap();//On ouvre puis on avance
 					Sleep.sleep(sleepTime);
 					ClosedClap1=true;
@@ -91,7 +94,7 @@ public class CloseClap extends Script
 					Sleep.sleep(sleepTime);	
 				}
 				
-				locomotion.avancer(2*distanceBetweenClaps-lenghtClap,emptyHookList,true);//On avance entre le 1 et le 3
+				locomotion.avancer(2*distanceBetweenClaps-lenghtClap-20,emptyHookList,true);//On avance entre le 1 et le 3
 				Sleep.sleep(sleepTime);	
 					
 				if(!ClosedClap3)//Clap 3, le plus loin sur notre zone
@@ -150,7 +153,7 @@ public class CloseClap extends Script
 				locomotion.avancer(lenghtClap,emptyHookList,true);
 				Sleep.sleep(sleepTime);	
 
-				locomotion.tourner(-Math.PI/2,emptyHookList,true);
+				locomotion.tourner(Math.PI/2,emptyHookList,true);
 				Sleep.sleep(sleepTime);	
 
 				locomotion.avancer(lenghtStair,emptyHookList,true);
@@ -202,7 +205,7 @@ public class CloseClap extends Script
 					Sleep.sleep(sleepTime);	
 				}
 				
-				locomotion.avancer(2*distanceBetweenClaps-lenghtClap,emptyHookList,true);//On avance entre le 1 et le 3
+				locomotion.avancer(2*distanceBetweenClaps-lenghtClap-20,emptyHookList,true);//On avance entre le 1 et le 3
 				Sleep.sleep(sleepTime);	
 					
 				if(!ClosedClap3)//Clap 3, le plus loin sur notre zone
@@ -254,7 +257,7 @@ public class CloseClap extends Script
 				locomotion.avancer(lenghtClap,emptyHookList,true);
 				Sleep.sleep(sleepTime);	
 
-				locomotion.tourner(-Math.PI/2,emptyHookList,true);
+				locomotion.tourner(Math.PI/2,emptyHookList,true);
 				Sleep.sleep(sleepTime);	
 
 				locomotion.avancer(lenghtStair,emptyHookList,true);
