@@ -45,8 +45,10 @@ public class Table implements Service
 	public void initialise()//initialise la table du debut du jeu (obstacles fixes)
 	{
 		m_lines = new ArrayList<ObstacleLinear>();
+		m_circles = new ArrayList<ObstacleCircular>();
 		
 		double radius = 190;
+		int rayonPlot = 30;
 		
 		//1 + 2 + 3 + nodes
 		m_lines.add(new ObstacleLinear(new Point(-1500 + radius, 778 - radius), new Point(-1100 + radius, 778 - radius), 1, new Point(-1095 + radius, 778 - radius), new Point(0, 0)));
@@ -75,6 +77,26 @@ public class Table implements Service
 		m_lines.add(new ObstacleLinear(new Point(1500 - radius, 1930 - radius), new Point(-1500 + radius, 1930 - radius), 0, new Point(0, 0), new Point(0, 0)));
 		m_lines.add(new ObstacleLinear(new Point(-1500 + radius, 1930 - radius), new Point(-1500 + radius, 0 + radius), 0, new Point(0, 0), new Point(0, 0)));
 		
+		
+		//obstacle plots verts 
+		m_circles.add(new ObstacleCircular(new Vec2(-1410, 800), rayonPlot));
+		m_circles.add(new ObstacleCircular(new Vec2(-650, 900), rayonPlot));
+		m_circles.add(new ObstacleCircular(new Vec2(-650, 800), rayonPlot));
+		m_circles.add(new ObstacleCircular(new Vec2(-630, -355), rayonPlot));
+		m_circles.add(new ObstacleCircular(new Vec2(-200, -400), rayonPlot));
+		m_circles.add(new ObstacleCircular(new Vec2(-400, -750), rayonPlot));
+		m_circles.add(new ObstacleCircular(new Vec2(-1410, -750), rayonPlot));
+		m_circles.add(new ObstacleCircular(new Vec2(-1410, -850), rayonPlot));
+		
+		// obstacle plots jaunes
+		m_circles.add(new ObstacleCircular(new Vec2(-1410, 800), rayonPlot));
+		m_circles.add(new ObstacleCircular(new Vec2(-650, 900), rayonPlot));
+		m_circles.add(new ObstacleCircular(new Vec2(-650, 800), rayonPlot));
+		m_circles.add(new ObstacleCircular(new Vec2(-630, -355), rayonPlot));
+		m_circles.add(new ObstacleCircular(new Vec2(-200, -400), rayonPlot));
+		m_circles.add(new ObstacleCircular(new Vec2(-400, -750), rayonPlot));
+		m_circles.add(new ObstacleCircular(new Vec2(-1410, -750), rayonPlot));
+		m_circles.add(new ObstacleCircular(new Vec2(-1410, -850), rayonPlot));
 	}
 	
 	//La table
