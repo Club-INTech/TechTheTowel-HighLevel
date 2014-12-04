@@ -89,14 +89,14 @@ public class Table implements Service
 		m_circles.add(new ObstacleCircular(new Vec2(-1410, -850), rayonPlot));
 		
 		// obstacle plots jaunes
-		m_circles.add(new ObstacleCircular(new Vec2(-1410, 800), rayonPlot));
-		m_circles.add(new ObstacleCircular(new Vec2(-650, 900), rayonPlot));
-		m_circles.add(new ObstacleCircular(new Vec2(-650, 800), rayonPlot));
-		m_circles.add(new ObstacleCircular(new Vec2(-630, -355), rayonPlot));
-		m_circles.add(new ObstacleCircular(new Vec2(-200, -400), rayonPlot));
-		m_circles.add(new ObstacleCircular(new Vec2(-400, -750), rayonPlot));
-		m_circles.add(new ObstacleCircular(new Vec2(-1410, -750), rayonPlot));
-		m_circles.add(new ObstacleCircular(new Vec2(-1410, -850), rayonPlot));
+		m_circles.add(new ObstacleCircular(new Vec2(1410, 800), rayonPlot));
+		m_circles.add(new ObstacleCircular(new Vec2(650, 900), rayonPlot));
+		m_circles.add(new ObstacleCircular(new Vec2(650, 800), rayonPlot));
+		m_circles.add(new ObstacleCircular(new Vec2(630, -355), rayonPlot));
+		m_circles.add(new ObstacleCircular(new Vec2(200, -400), rayonPlot));
+		m_circles.add(new ObstacleCircular(new Vec2(400, -750), rayonPlot));
+		m_circles.add(new ObstacleCircular(new Vec2(1410, -750), rayonPlot));
+		m_circles.add(new ObstacleCircular(new Vec2(1410, -850), rayonPlot));
 	}
 	
 	//La table
