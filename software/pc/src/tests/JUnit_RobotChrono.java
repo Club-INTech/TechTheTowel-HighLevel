@@ -30,7 +30,7 @@ public class JUnit_RobotChrono extends JUnit_Test {
 	public void test_avancer() throws Exception
 	{
 		log.debug("JUnit_RobotChronoTest.test_avancer()", this);
-		robotchrono.avancer(10);
+		robotchrono.moveLengthwise(10);
 		System.out.println("Avant: "+robotchrono.getPosition());
 		Assert.assertTrue(robotchrono.getPosition().equals(new Vec2(10,1500)));
         System.out.println("Après: "+robotchrono.getPosition());
@@ -68,7 +68,7 @@ public class JUnit_RobotChrono extends JUnit_Test {
 	public void test_tourner() throws Exception
 	{
 		log.debug("JUnit_RobotChronoTest.test_tourner()", this);
-		robotchrono.tourner((float)1.2);
+		robotchrono.turn((float)1.2);
 		Assert.assertTrue(robotchrono.getOrientation()==(float)1.2);
 	}
 
@@ -79,7 +79,7 @@ public class JUnit_RobotChrono extends JUnit_Test {
 		ArrayList<Vec2> chemin = new ArrayList<Vec2>();
 		chemin.add(new Vec2(20, 1400));
 		chemin.add(new Vec2(40, 1500));
-		robotchrono.suit_chemin(chemin, null);
+		robotchrono.followPath(chemin, null);
 		Assert.assertTrue(robotchrono.getPosition().distance(new Vec2(40,1500)) < 2);
 		
 	}

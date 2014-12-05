@@ -44,7 +44,7 @@ public class JUnit_Locomotion extends JUnit_Test
 	public void test_avancer() throws Exception
 	{
 		log.debug("JUnit_DeplacementsTest.test_avancer()", this);
-		deplacements.moveForward(100);
+		deplacements.moveLengthwise(100);
 		Thread.sleep(1000);
 		double[] infos_float = deplacements.getCurrentPositionAndOrientation();
 		Assert.assertEquals(100, infos_float[0], 5);
@@ -107,7 +107,7 @@ public class JUnit_Locomotion extends JUnit_Test
 	{
 	    deplacements.setTranslationnalSpeed(170);
 	    deplacements.disableRotationnalFeedbackLoop();
-	    deplacements.moveForward(500);
+	    deplacements.moveLengthwise(500);
         deplacements.enableRotationnalFeedbackLoop();
 	    Sleep.sleep(1000);
 	}

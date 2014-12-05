@@ -6,6 +6,7 @@ import utils.*;
 
 
 
+@SuppressWarnings("unused")
 public class Table implements Service
 {
 
@@ -13,6 +14,7 @@ public class Table implements Service
 	public ObstacleManager gestionobstacles;
 
 	// Dépendances
+	
 	private Log log;
 	private Config config;
 	

@@ -41,10 +41,10 @@ public class RobotChrono extends Robot
 	// La plupart de ces méthodes resteront vides
 
 	@Override
-    public void avancer(int distance, ArrayList<Hook> hooks, boolean mur)
+    public void moveLengthwise(int distance, ArrayList<Hook> hooks, boolean mur)
             throws UnableToMoveException
 	{
-		duree += Math.abs(distance)*vitesse.invertedTranslationnalSpeed;
+		duree += Math.abs(distance)*speed.invertedTranslationnalSpeed;
 		Vec2 ecart;
         ecart = new Vec2((int)(distance*Math.cos(orientation)), (int)(distance*Math.sin(orientation)));
 
@@ -54,7 +54,7 @@ public class RobotChrono extends Robot
 	@Override
 	public void set_vitesse(Speed vitesse)
 	{
-	    this.vitesse = vitesse;
+	    this.speed = vitesse;
 	}
 
 	// Méthodes propres à RobotChrono
@@ -69,10 +69,10 @@ public class RobotChrono extends Robot
 	}
 
 	@Override
-    public void tourner(double angle, ArrayList<Hook> hooks, boolean mur)
+    public void turn(double angle, ArrayList<Hook> hooks, boolean mur)
             throws UnableToMoveException
 	{
-        if(symetrie)
+        if(symmetry)
             angle = Math.PI-angle;
 	    
 		double delta = angle-orientation;
@@ -91,11 +91,11 @@ public class RobotChrono extends Robot
 				e.printStackTrace();
 			}
 		}*/
-		duree += delta*vitesse.invertedRotationnalSpeed;
+		duree += delta*speed.invertedRotationnalSpeed;
 	}
 
 	@Override
-    public void suit_chemin(ArrayList<Vec2> chemin, ArrayList<Hook> hooks)
+    public void followPath(ArrayList<Vec2> chemin, ArrayList<Hook> hooks)
             throws UnableToMoveException
 	{
 		for(Vec2 point: chemin)
@@ -104,14 +104,14 @@ public class RobotChrono extends Robot
 	
 	public void va_au_point(Vec2 point)
 	{
-		if(symetrie)
+		if(symmetry)
 			point.x *= -1;
 /*		try {
 			dureePositive((long)(position.distance(point)/vitesse_mmpms));
 		} catch (RobotChronoException e) {
 			e.printStackTrace();
 		}*/
-		duree += position.distance(point)*vitesse.invertedTranslationnalSpeed;
+		duree += position.distance(point)*speed.invertedTranslationnalSpeed;
 		position = point.clone();
 	}
 
@@ -133,7 +133,7 @@ public class RobotChrono extends Robot
 		this.duree += duree;
 	}
 	    @Override
-    public void stopper()
+    public void immobilise()
     {
     }
 
@@ -165,12 +165,6 @@ public class RobotChrono extends Robot
 	public double getOrientationFast() {
 		// TODO Auto-generated method stub
 		return 0;
-	}
-
-	@Override
-	public void setInsiste(boolean insiste) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

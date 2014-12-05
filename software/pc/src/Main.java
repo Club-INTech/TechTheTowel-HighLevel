@@ -114,7 +114,7 @@ public class Main
 		System.out.println("deplacement haut niveau");
 		try 
 		{
-			deplacements.moveForward(100, null, true);
+			deplacements.moveLengthwise(100, null, true);
 		} 
 		catch (UnableToMoveException e)
 		{

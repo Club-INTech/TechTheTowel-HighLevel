@@ -3,7 +3,6 @@ package tests;
 import org.junit.Test;
 
 import enums.ServiceNames;
-import exceptions.ContainerException;
 
 /**
  * Tests unitaires pour le container

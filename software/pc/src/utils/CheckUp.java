@@ -28,7 +28,7 @@ public class CheckUp implements Service
 		log.debug("Lancement d'un check-up", this);
 		try
 		{
-		robotvrai.avancer(100);
+		robotvrai.moveLengthwise(100);
 		}
 		catch(Exception e)
 		{

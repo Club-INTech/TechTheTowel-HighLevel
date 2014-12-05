@@ -49,14 +49,10 @@ public class LocomotionCardWrapper implements Service
 	}	
 	
 	/**
-	 * lève BlockedException si le robot bloque (c'est-à-dire que les moteurs forcent mais que le robot ne bouge pas). Blocage automatique au bout de 500ms
-	 * @param PWMmoteurGauche
-	 * @param PWMmoteurDroit
-	 * @param derivee_erreur_rotation
-	 * @param derivee_erreur_translation
-	 * @throws BlockedException 
+	 * lève BlockedException si le robot bloque (c'est-à-dire que les moteurs forcent mais que le robot ne bouge pas).
+	 * @throws BlockedException si le robot est mécaniquement bloqué contre un obstacle qui l'empèche d'avancer plus
 	 */
-	public void raiseExeptionIfBlocked() throws BlockedException, SerialConnexionException
+	public void raiseExeptionIfBlocked() throws BlockedException
 	{
 		// nombre de miliseconde de tolérance entre la détection d'un patinage et la levée de l'exeption.
 		//  trop basse il y a des faux positifs, trop haute on va forcer dans les murs pendant longtemps
@@ -72,6 +68,7 @@ public class LocomotionCardWrapper implements Service
 		boolean areMotorsActive = Math.abs(pwmLeftMotor) > 40 || Math.abs(pwmRightMotor) > 40;
 		
 		// on décrète que le robot est immobile si l'écart entre la position demandée et la position actuelle est (casi) constant
+		//TODO: pourquoi ne pas utiliser isRobotMoving() ?
 		boolean isRobotImmobile = Math.abs(derivatedRotationnalError) <= 10 && Math.abs(derivatedTranslationnalError) <= 10;
 
 		// si on patine
@@ -86,7 +83,15 @@ public class LocomotionCardWrapper implements Service
 				if((System.currentTimeMillis() - blockageStartTimestamp) > blockedTolerancy)
 				{
 					log.warning("raiseExeptionIfBlocked : le robot a dû s'arrêter suite à un patinage. (levage de BlockedException)", this);
-					immobilise();
+					try
+					{
+						immobilise();
+					} 
+					catch (SerialConnexionException e)
+					{
+						log.critical("raiseExeptionIfBlocked : Impossible d'immobiliser le robot: la carte d'asser ne répond plus.", this);
+						e.printStackTrace();
+					}
 					
 					throw new BlockedException("l'écart a la consigne ne bouge pas alors que les moteurs sont en marche");
 				}
@@ -110,37 +115,32 @@ public class LocomotionCardWrapper implements Service
 
 	/** 
 	 * Regarde si le robot bouge effectivement.
-	 * @param erreur_rotation
-	 * @param erreur_translation
-	 * @param derivee_erreur_rotation
-	 * @param derivee_erreur_translation
-	 * @return
+	 * @return vrai si le robot bouge, faux si le robot est immobile
 	 */
 	public boolean isRobotMoving()
 	{
 		// obtient les infos de l'asservissement
-		int erreur_rotation = feedbackLoopStatistics.get("erreur_rotation");
-		int erreur_translation = feedbackLoopStatistics.get("erreur_translation");
-		int derivee_erreur_rotation = feedbackLoopStatistics.get("derivee_erreur_rotation");
-		int derivee_erreur_translation = feedbackLoopStatistics.get("derivee_erreur_translation");
+		int rotationnalError = feedbackLoopStatistics.get("erreur_rotation");
+		int translationnalError = feedbackLoopStatistics.get("erreur_translation");
+		int derivedRotationnalError = feedbackLoopStatistics.get("derivee_erreur_rotation");
+		int derivedTranslationnalError = feedbackLoopStatistics.get("derivee_erreur_translation");
 		
-		// ces 2 booléens checkent la précision de l'asser. Ce n'est pas le rôle de cette fonction, 
-		// et peut causer des bugs (erreurs d'aquitement) de java si l'asser est mla fait		
-		//donc, on vire !
+		// TODO:VALEURS A REVOIR
+		// Décide si on considère le robot immobile ou non.
+		boolean rotationStopped = Math.abs(rotationnalError) <= 60;
+		boolean translationStopped = Math.abs(translationnalError) <= 60;
+		boolean isImmobile = Math.abs(derivedRotationnalError) <= 20 && Math.abs(derivedTranslationnalError) <= 20;
 		
 		
-		// VALEURS A REVOIR
-		boolean rotation_stoppe = Math.abs(erreur_rotation) <= 60;
-		boolean translation_stoppe = Math.abs(erreur_translation) <= 60;
-		boolean bouge_pas = Math.abs(derivee_erreur_rotation) <= 20 && Math.abs(derivee_erreur_translation) <= 20;
-		return !(rotation_stoppe && translation_stoppe && bouge_pas);
+		
+		return !(rotationStopped && translationStopped && isImmobile);
 	}
 	
 	/** 
 	 * Fait avancer le robot. Méthode non bloquante
 	 * @param distance
 	 */
-	public void moveForward(double distance) throws SerialConnexionException
+	public void moveLengthwise(double distance) throws SerialConnexionException
 	{
 		String chaines[] = {"d", Double.toString(distance)};
 		serie.communiquer(chaines, 0);

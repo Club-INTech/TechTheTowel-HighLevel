@@ -33,7 +33,7 @@ public class RobotReal extends Robot
 		this.deplacements = deplacements;
 		this.table = table;
 		updateConfig();
-		vitesse = Speed.BETWEEN_SCRIPTS;		
+		speed = Speed.BETWEEN_SCRIPTS;		
 	}
 	
 	/*
@@ -77,9 +77,9 @@ public class RobotReal extends Robot
 	 * @throws UnableToMoveException 
 	 */
 	@Override
-    public void avancer(int distance, ArrayList<Hook> hooks, boolean mur) throws UnableToMoveException
+    public void moveLengthwise(int distance, ArrayList<Hook> hooks, boolean mur) throws UnableToMoveException
 	{
-		deplacements.moveForward(distance, hooks, mur);
+		deplacements.moveLengthwise(distance, hooks, mur);
 	}	
 
 	/**
@@ -136,19 +136,19 @@ public class RobotReal extends Robot
 	}
 
     @Override
-    public void stopper()
+    public void immobilise()
     {
         deplacements.immobilise();
     }
 
     @Override
-    public void tourner(double angle, ArrayList<Hook> hooks, boolean mur) throws UnableToMoveException
+    public void turn(double angle, ArrayList<Hook> hooks, boolean mur) throws UnableToMoveException
     {
         deplacements.turn(angle, hooks, mur);
     }
     
     @Override
-    public void suit_chemin(ArrayList<Vec2> chemin, ArrayList<Hook> hooks) throws UnableToMoveException
+    public void followPath(ArrayList<Vec2> chemin, ArrayList<Hook> hooks) throws UnableToMoveException
     {
         deplacements.followPath(chemin, hooks);
     }
@@ -174,10 +174,5 @@ public class RobotReal extends Robot
 		return 0;
 	}
 
-	@Override
-	public void setInsiste(boolean insiste) {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

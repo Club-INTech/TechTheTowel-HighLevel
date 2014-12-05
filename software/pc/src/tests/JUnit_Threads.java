@@ -93,7 +93,7 @@ public class JUnit_Threads extends JUnit_Test {
 		robotvrai.setOrientation((float)Math.PI);
 		container.startAllThreads();
 		Thread.sleep(200);
-		robotvrai.avancer(1000);
+		robotvrai.moveLengthwise(1000);
 	}
 
 	@Test

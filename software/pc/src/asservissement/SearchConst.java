@@ -55,7 +55,7 @@ public class SearchConst
 
                     deplacements.changeTranslationnalFeedbackParameters(kp, kd, pwm_max);
                     System.out.println(distance);
-                    deplacements.moveForward(distance);
+                    deplacements.moveLengthwise(distance);
 
                 }
                 else if (asserv == 'r')

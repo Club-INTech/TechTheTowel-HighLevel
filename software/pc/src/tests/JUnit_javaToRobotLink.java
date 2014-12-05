@@ -39,8 +39,8 @@ public class JUnit_javaToRobotLink  extends JUnit_Test
 	@Test
 	public void test_bidon() throws Exception
 	{
-		robotvrai.avancer(100);
-		robotvrai.avancer(-100);
+		robotvrai.moveLengthwise(100);
+		robotvrai.moveLengthwise(-100);
 	}
 
 }
