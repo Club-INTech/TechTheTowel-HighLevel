@@ -11,7 +11,12 @@ import exceptions.ServiceTypeException;
 import exceptions.serial.SerialManagerException;
 
 /**
- * Instancie toutes les sï¿½ries, si on lui demande gentillement!
+ * Instancie toutes les séries, il faut bien faire attention à définir les cartes
+ * qui seront utilisées dans le robot, avec le ping et le baudrate de fonctionnement.
+ * 
+ * Cette classe va au préalable charger les paramètres des cartes (dans le constructeur),
+ * puis regarder toutes les liaisons séries qui sont susceptibles d'être connectées
+ * (dans /dev/ttyUSB* ou /dev/ACM*, mais pas besoin de savoir ça, il se débrouille comme un grand).
  * @author pierre
  * @author pf
  *
@@ -42,11 +47,13 @@ public class SerialManager
 	private ArrayList<String> connectedSerial = new ArrayList<String>();
 
 	//Liste pour stocker les baudrates des differentes serie
-
 	private ArrayList<Integer> baudrate = new ArrayList<Integer>();
 
 	/**
-	 * Recuperation de toutes les cartes dans cards et des baudrates dans baudrate
+	 * Recuperation des paramètres des cartes dans cards et des baudrates dans baudrate
+	 * (ceux définis plus haut), puis fait appel à checkSerial() et createSerial().
+	 * A la fin de ce constructeur, les séries sont détectées et instanciées. 
+	 * @param log : la sortie de log Ã  utiliser
 	 */
 	public SerialManager(Log log) throws SerialManagerException
 	{
@@ -93,7 +100,7 @@ public class SerialManager
 	}
 
 	/**
-	 * Regarde toutes les series qui sont branchees dans /dev/ttyUSB*
+	 * Regarde toutes les series qui sont branchees (sur /dev/ttyUSB* et /dev/ttyACM*)
 	 */
 	public  void checkSerial()
 	{
@@ -105,7 +112,13 @@ public class SerialManager
 		}
 	}
 	/**
-	 * CrÃ©ation des series (il faut au prealable faire un checkSerial())
+	 * CrÃ©ation des series (il faut au prealable faire un checkSerial()).
+	 * 
+	 * Cette méthode crée une série de test pour chaque port /dev/ttyUSB* et /dev/ttyACM* détecté
+	 * dans le but de ping ces ports et déterminer si il nous interesse (en vérifiant le ping reçu,
+	 * si il en reçoit un). Si un /dev/ttyUSB (ou ACM) n'est pas une liaison série,
+	 * il se peut que l'on ait un message d'erreur lié au fait que l'on ping un /dev/ttyUSB (ou ACM)
+	 * qui ne nous répond pas.
 	 */
 	public void createSerial() throws SerialManagerException
 	{
@@ -186,9 +199,11 @@ public class SerialManager
 	}
 	
 	/**
-	 * 
-	 * @param baudrate
-	 * @param id
+	 * Cette méthode vérifie si id est bien associé à baudrate
+	 * (en comparant avec les paramètres des SpecificationCard qu'on lui a donné au début de cette classe).
+	 * Utilisé dans createSerial.
+	 * @param baudrate a tester
+	 * @param id a tester
 	 * @return
 	 */
 	private boolean goodBaudrate(int baudrate, int id)
@@ -204,8 +219,8 @@ public class SerialManager
 	}
 
 	/**
-	 * Permet de savoir si une carte a dÃ©jÃ  Ã©tÃ© pingÃ©e, utilisÃ© que par SerialManager
-	 * @param id
+	 * Permet de savoir si id est connu (info qu'il trouve dans SpecificationCard.
+	 * @param id : id a vérifier
 	 * @return
 	 */
 	private boolean isKnownPing(int id)
@@ -220,11 +235,9 @@ public class SerialManager
 	}
 
 	/**
-	 * Permet d'obtenir une sÃ©rie
-	 * @param name
-	 * 				Nom de la sÃ©rie
-	 * @return
-	 * 				L'instance de la sÃ©rie
+	 * Permet d'obtenir une sÃ©rie au préalable instancié dans le constructeur.
+	 * @param name : Nom de la sÃ©rie
+	 * @return L'instance de la sÃ©rie
 	 */
 	public SerialConnexion getSerial(ServiceNames name)	throws SerialManagerException
 	{

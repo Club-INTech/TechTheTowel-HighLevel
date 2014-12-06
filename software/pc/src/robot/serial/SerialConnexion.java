@@ -19,7 +19,9 @@ import container.Service;
 
 /**
  * Classe implÃ©mentant le concept d'une connexion sÃ©rie.
- * UtilisÃ©e pour parler aux cartes Ã©lectroniques
+ * UtilisÃ©e pour parler aux cartes Ã©lectroniques.
+ * Chaque port a un nom (asserv par exemple), un id (0 par exemple), un port (/dev/ttyUSB0 par exemple)
+ * et un baudrate (57600 par exemple, c'est la vitesse de communication).
  * @author karton, dede, kayou, pf
  *
  */
@@ -36,12 +38,27 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	Log log;
 	
 	/**
-	 * nom de la connexion sÃ©rie
+	 * Nom de la connexion sÃ©rie
 	 */
 	String name;
+	
+	/**
+	 * Flux d'entée du port
+	 */
+	private BufferedReader input;
+	
+	/** 
+	 * Flux de sortie du port
+	 */
+	private OutputStream output;
+	
+	/**
+	 * TIME_OUT d'attente de réception d'un message
+	 */
+	private static final int TIME_OUT = 2000;
 
 	/**
-	 * Construit une connexion sÃ©rie 
+	 * Construit une connexion série
 	 * @param log Sortie de log a utiliser
 	 * @param name nom de la connexion sÃ©rie
 	 */
@@ -51,7 +68,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	}
 
 	/**
-	 * Construit une connexion sÃ©rie 
+	 * Construit une connexion série
 	 * @param log Sortie de log a utiliser
 	 * @param name nom de la connexion sÃ©rie
 	 */
@@ -63,24 +80,9 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	}
 
 	/**
-	 * A BufferedReader which will be fed by a InputStreamReader 
-	 * converting the bytes into characters 
-	 * making the displayed results codepage independent
-	 */
-	private BufferedReader input;
-	
-	/** The output stream to the port */
-	private OutputStream output;
-	
-	/** Milliseconds to block while waiting for port open */
-	private static final int TIME_OUT = 2000;
-
-	/**
-	 * AppelÃ© par le SerialManager, il donne Ã  la sÃ©rie tout ce qu'il faut pour fonctionner
-	 * @param port_name
-	 * 					Le port oÃ¹ est connectÃ© la carte
-	 * @param baudrate
-	 * 					Le baudrate que la carte utilise
+	 * Appelé par le SerialManager, il donne à  la série tout ce qu'il faut pour fonctionner
+	 * @param port_name : Le port où est connecté la carte (/dev/ttyUSB ou /dev/ttyACM)
+	 * @param baudrate : Le baudrate que la carte utilise
 	 */
 	void initialize(String port_name, int baudrate)
 	{
@@ -94,7 +96,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 			e2.printStackTrace();
 		}
 
-		// open serial port, and use class name for the appName.
+		// Ouverture du port série
 		try
 		{
 			serialPort = (SerialPort) portId.open(this.getClass().getName(), TIME_OUT);
@@ -105,13 +107,13 @@ public class SerialConnexion implements SerialPortEventListener, Service
 		}
 		try
 		{
-			// set port parameters
+			// règle certains paramètres lié à la série
 			serialPort.setSerialPortParams(baudrate,
 					SerialPort.DATABITS_8,
 					SerialPort.STOPBITS_1,
 					SerialPort.PARITY_NONE);
 
-			// open the streams
+			// ouverture des flux Input/Output
 			input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
 			output = serialPort.getOutputStream();
 
@@ -121,9 +123,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 			System.err.println(e.toString());
 		}
 		
-		/*
-		 * A tester, permet d'avoir un readLine non bloquant! (valeur Ã  rentrÃ©e en ms)
-		 */
+		// permet d'avoir un readLine non bloquant
 		try
 		{
 			serialPort.enableReceiveTimeout(1000);
@@ -135,9 +135,11 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	}
 
 	/**
-	 * MÃ©thode pour parler Ã  l'avr
+	 * Méthode pour communiquer à la liaison série. Il ne faut absolument pas se tromper sur le nombre de lignes attendu en retour.
+	 * (une ligne est délimité par un "\r\n" sur une communication série. elle peut être envoyé par le bas niveau dans un:
+	 * printf("\r\n") ou un printfln("...") où ici le ln veut dire retour à la ligne donc se charge de mettre "\r\n" à la fin du message pour l'utilisateur).
 	 * @param message Message Ã  envoyer
-	 * @param nb_lignes_reponse Nombre de lignes que l'avr va rÃ©pondre (sans compter les acquittements)
+	 * @param nb_lignes_reponse Nombre de lignes que le bas niveau va rÃ©pondre (sans compter les acquittements)
 	 * @return Un tableau contenant le message
 	 * @throws SerialConnexionException 
 	 */
@@ -148,7 +150,9 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	}
 	
 	/**
-	 * MÃ©thode pour parler Ã  l'avr
+	 * Méthode pour communiquer à la liaison série. Il ne faut absolument pas se tromper sur le nombre de lignes attendu en retour.
+	 * (une ligne est délimité par un "\r\n" sur une communication série. elle peut être envoyé par le bas niveau dans un:
+	 * printf("\r\n") ou un printfln("...") où ici le ln veut dire retour à la ligne donc se charge de mettre "\r\n" à la fin du message pour l'utilisateur).
 	 * @param messages Messages Ã  envoyer
 	 * @param nb_lignes_reponse Nombre de lignes que l'avr va rÃ©pondre (sans compter les acquittements)
 	 * @return Un tableau contenant le message
@@ -223,6 +227,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 
 	/**
 	 * Handle an event on the serial port.
+	 * NE PAS SUPPRIMER!!!!!! Cette méthode est essentielle au fonctionnement de la communication série, même si elle est vide.
 	 */
 	public synchronized void serialEvent(SerialPortEvent oEvent)
 	{
@@ -230,6 +235,11 @@ public class SerialConnexion implements SerialPortEventListener, Service
 
 	/**
 	 * Ping de la carte.
+	 * Peut envoyer un message d'erreur lors de l'exécution de createSerial() dans SerialManager.
+	 * 
+	 * (Avec la carte de test dans createSerial(), on ne sait pas encore si celle-ci va répondre ou non, c'est à dire,
+	 * si il s'agit bien d'une liaison série, ou alors d'un autre périphérique. Si il s'agit d'un autre périphérique,
+	 * alors cette méthode va catch une exception)
 	 * UtilisÃ© que par createSerial de SerialManager
 	 * @return l'id de la carte
 	 */
