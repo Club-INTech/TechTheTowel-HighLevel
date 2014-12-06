@@ -142,7 +142,6 @@ public class Container
 															 (GameState<RobotReal>)getService(ServiceNames.GAME_STATE));
 		else if(serviceRequested == ServiceNames.ROBOT_REAL)
 			instanciedServices[serviceRequested.ordinal()] = (Service)new RobotReal((Locomotion)getService(ServiceNames.LOCOMOTION),
-															 (Table)getService(ServiceNames.TABLE),
 															 (Config)getService(ServiceNames.CONFIG),
 															 (Log)getService(ServiceNames.LOG));		
         else if(serviceRequested == ServiceNames.LOCOMOTION)
@@ -155,7 +154,6 @@ public class Container
                                                              (Log)getService(ServiceNames.LOG),
                                                              (Table)getService(ServiceNames.TABLE),
                                                              (RobotReal)getService(ServiceNames.ROBOT_REAL));
- 
 		else if(serviceRequested == ServiceNames.SCRIPT_MANAGER)
 			instanciedServices[serviceRequested.ordinal()] = (Service)new ScriptManager(	(Config)getService(ServiceNames.CONFIG),
 																					(Log)getService(ServiceNames.LOG));

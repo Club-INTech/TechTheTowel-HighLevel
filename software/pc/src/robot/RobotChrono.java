@@ -149,10 +149,10 @@ public class RobotChrono extends Robot
         return orientation;
     }
 
-    public void desactiver_asservissement_rotation()
+    public void enableRotationnalFeedbackLoop()
     {}
 
-    public void activer_asservissement_rotation()
+    public void disableTranslationnalFeedbackLoop()
     {}
 
 	@Override

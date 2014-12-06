@@ -22,7 +22,6 @@ public class JUnit_ActuatorManager extends JUnit_Test {
 	@Test
 	public boolean exempleTest() throws Exception
 	{
-
 		Assert.assertTrue( 42 != 1337 );
 		return true;
 	}

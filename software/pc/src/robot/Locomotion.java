@@ -126,6 +126,9 @@ public class Locomotion implements Service
 	{
 		try
 		{
+	        setTranslationnalSpeed(Speed.READJUSTMENT.PWMTranslation);
+	        setRotationnalSpeed(Speed.READJUSTMENT.PWMRotation);
+	        
 			// Retrouve l'abscisse du robot en foncant dans un mur d'abscisse connue
 			log.debug("recale X",this);
 
@@ -271,7 +274,7 @@ public class Locomotion implements Service
 	}
 
 	/**
-	 * Fait avancer le robot de la distance spécifiée. Le robot garde son orientation actuelle et va simplement avancer)
+	 * Fait avancer le robot de la distance spécifiée. Le robot garde son orientation actuelle et va simplement avancer
 	 * C'est la méthode que les utilisateurs (externes au développement du système de locomotion) vont utiliser
 	 * Cette méthode est bloquante: son exécution ne se termine que lorsque le robot a atteint le point d'arrivée
 	 * @param distance en mm que le robot doit franchir

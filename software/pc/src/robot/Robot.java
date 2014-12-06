@@ -12,24 +12,67 @@ import utils.Config;
 
 /**
  *  Classe abstraite du robot, dont héritent RobotVrai et RobotChrono
- *  Quand une action peut être faite soit pour en connaitre le temps d'exéction, soit pour la faire en vrai, c'est elle qu'il faut utiliser
+ *  Quand une action peut être faite soit pour en connaitre le temps d'exécution, soit pour la faire en vrai, c'est elle qu'il faut utiliser
  * @author PF, marsu
  */
 
 public abstract class Robot implements Service 
 {
+
+	// système de log sur lequel écrire
+	protected Log log;
 	
-	/* ==============================================
-	 *            DÉPLACEMENT HAUT NIVEAU
-	 * ==============================================
+	//endroit ou lire la configuration du robot
+	protected Config config;
+
+	// la table est symétrisée si on est équipe jaune
+	protected boolean symmetry;
+	
+	// vitesse du robot sur la table
+	protected Speed speed;
+
+	/**
+	 * Instancie le robot.
+	 * Appell� par le container
+	 * @param log : la sortie de log à utiliser
+	 * @param config : sur quel objet lire la configuration du match
 	 */
+	public Robot(Config config, Log log)
+	{
+		this.config = config;
+		this.log = log;
+		updateConfig();
+	}
+	
+	/**
+	 * Met a jour la configuration de la classe via le fichier de configuration fourni par le sysème de container
+	 */
+	public void updateConfig()
+	{
+		symmetry = config.get("couleur").equals("jaune");
+	}
+	
+    /**
+     * Fais attendre le robot.
+     * C'est a utiliser au lieu d'attendre via Sleep.sleep, car dans robotChrono, au lieu d'attendre, on incrémente le chronomètre de la valeur coresspondante.
+     * @param delay temps que le robot doit passer a attendre
+     */
+    public abstract void sleep(long delay);
+    
+	/**
+	 * Donne la vitesse courrante a laquelle le robot avance et tourne sur lui même sur la table
+	 * @return la vitesse courrante
+	 */
+	public Speed getSpeed()
+	{
+		return speed;
+	}
 	
 	/**
 	 * Immobilise le robot.
 	 * Après l'appel de cette fonction, le robot sera immobile sur la table
 	 */
 	public abstract void immobilise();
-	
 
 	/**
 	 * Fait tourner le robot (méthode bloquante)
@@ -41,7 +84,7 @@ public abstract class Robot implements Service
     public abstract void turn(double angle, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException;
     
 	/**
-	 * Fait avancer le robot de la distance spécifiée. Le robot garde son orientation actuelle et va simplement avancer)
+	 * Fait avancer le robot de la distance spécifiée. Le robot garde son orientation actuelle et va simplement avancer.
 	 * C'est la méthode que les utilisateurs (externes au développement du système de locomotion) vont utiliser
 	 * Cette méthode est bloquante: son exécution ne se termine que lorsque le robot a atteint le point d'arrivée
 	 * @param distance en mm que le robot doit franchir
@@ -60,7 +103,6 @@ public abstract class Robot implements Service
 	 */
     public abstract void followPath(ArrayList<Vec2> path, ArrayList<Hook> hooksToConsider) throws UnableToMoveException;
     
-
 	/**
 	 * Change la vitesse a laquelle le robot avance et tourne sur lui-même.
 	 * @param speed la vitesse désirée
@@ -113,55 +155,6 @@ public abstract class Robot implements Service
 	 */
     public abstract double getOrientationFast();
     
-    /**
-     * Fais attendre le robot.
-     * C'est a utiliser au lieu d'attendre via Sleep.sleep, car dans robotChrono, au lieu d'attendre, on incrémente le chronomètre de la valeur coresspondante.
-     * @param delay temps que le robot doit passer a attendre
-     */
-    public abstract void sleep(long delay);
-    
-	// système de log sur lequel écrire
-	protected Log log;
-	
-	//endroit ou lire la configuration du robot
-	protected Config config;
-
-	// la table est symétrisée si on est équipe jaune
-	protected boolean symmetry;
-	
-	// vitesse du robot sur la table
-	protected Speed speed;
-
-	/**
-	 * Instancie le robot.
-	 * Appell� par le container
-	 * @param log : la sortie de log à utiliser
-	 * @param config : sur quel objet lire la configuration du match
-	 */
-	public Robot(Config config, Log log)
-	{
-		this.config = config;
-		this.log = log;
-		updateConfig();
-	}
-	
-	/**
-	 * Met a jour la configuration de la classe via le fichier de configuration fourni par le sysème de container
-	 */
-	public void updateConfig()
-	{
-		symmetry = config.get("couleur").equals("jaune");
-	}
-	
-	/**
-	 * Donne la vitesse courrante a laquelle le robot avance et tourne sur lui même sur la table
-	 * @return la vitesse courrante
-	 */
-	public Speed getSpeed()
-	{
-		return speed;
-	}
-	
 	/**
 	 * Fait tourner le robot (méthode bloquante)
 	 * Attention: le pivot sera fait en supposant qu'il n'y a pas de hook a vérifier, et qu'on ne s'attends pas a percuter un obstacle
@@ -193,39 +186,45 @@ public abstract class Robot implements Service
 	 */
     public void turnNoSymmetry(double angle) throws UnableToMoveException
     {
+    	
+    	// Fais la symétrie deux fois (symétrie de symétrie, c'est l'identité)
         if(symmetry)
             turn(Math.PI-angle, null, false);
         else
             turn(angle, null, false);
     }
 
-    
-    
-    
-    
-    
-    
-    
-    
-   
-    
-tododvfuysdbkflms!g:ksfjqgd wk,dùgbf h,sq;dkbmnojf :hdvnckmbhig!lf< jgeubqkjdvcpnglbcm;n,fbnvg+5n+6gh54,h45,6b4n6,4bn,bn
-
-
-
-
-
-
+	/**
+	 * Fait avancer le robot de la distance spécifiée. Le robot garde son orientation actuelle et va simplement avancer.
+	 * Attention, cette méthode suppose qu'il n'y a pas de hooks a considérer, et que l'on est pas sensé percuter un mur.
+	 * Cette méthode est bloquante: son exécution ne se termine que lorsque le robot a atteint le point d'arrivée
+	 * @param distance en mm que le robot doit franchir
+	 * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
+	 */
     public void moveLengthwise(int distance) throws UnableToMoveException
     {
         moveLengthwise(distance, null, false);
     }
 
-    public void moveLengthwise(int distance, ArrayList<Hook> hooks) throws UnableToMoveException
+	/**
+	 * Fait avancer le robot de la distance spécifiée. Le robot garde son orientation actuelle et va simplement avancer.
+	 * Attention, cette méthode suppose que l'on est pas sensé percuter un mur.
+	 * Cette méthode est bloquante: son exécution ne se termine que lorsque le robot a atteint le point d'arrivée
+	 * @param distance en mm que le robot doit franchir
+	 * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
+	 */
+    public void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider) throws UnableToMoveException
     {
-        moveLengthwise(distance, hooks, false);
+        moveLengthwise(distance, hooksToConsider, false);
     }
 
+	/**
+	 * Fait avancer le robot de la distance spécifiée. Le robot garde son orientation actuelle et va simplement avancer.
+	 * Attention, cette méthode suppose qu'il n'y a pas de hooks a considérer, et que l'on est sensé percuter un mur. La vitesse du robor est alors réduite a Speed.INTO_WALL.
+	 * Cette méthode est bloquante: son exécution ne se termine que lorsque le robot a atteint le point d'arrivée
+	 * @param distance en mm que le robot doit franchir
+	 * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
+	 */
     public void moveLengthwiseTowardWall(int distance) throws UnableToMoveException
     {
         Speed sauv_vitesse = speed; 
@@ -235,19 +234,27 @@ tododvfuysdbkflms!g:ksfjqgd wk,dùgbf h,sq;dkbmnojf :hdvnckmbhig!lf< jgeubqkjdvc
     }
     
     /**
-     * Va au point "arrivée" en utilisant le pathfinding.
-     * @param arrivee
-     * @throws PathfindingException
-     * @throws UnableToMoveException
-     */
-    public boolean va_au_point_pathfinding(Vec2 arrivee) throws UnableToMoveException
+     * Déplace le robot vers un point en suivant un chemin qui évite les obstacles. (appel du pathfinding)
+	 * Cette méthode est bloquante: son exécution ne se termine que lorsque le robot a atteint le point d'arrivée
+     * @param aim le point de destination du mouvement
+     * @throws PathfindingException s'il n'existe pas de chemin vers le point spécifié
+	 * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
+	 */
+    //TODO: faire une PathfindingException
+    public boolean moveToLocation(Vec2 aim) throws UnableToMoveException
     {
-    	// TODO
+    	// TODO : faire le pathfinding et y mettre un accès ici
     	
     	return 666 == 42;
     }
 
-    public abstract void desactiver_asservissement_rotation();
-    public abstract void activer_asservissement_rotation();
+	/**
+	 * Active l'asservissement en rotation du robot
+	 */
+    public abstract void enableRotationnalFeedbackLoop();
     
+	/**
+	 * Active l'asservissement en translation du robot
+	 */
+    public abstract void disableTranslationnalFeedbackLoop();
 }
