@@ -17,17 +17,44 @@ import java.io.OutputStream;
 import utils.Log;
 import container.Service;
 
+/**
+ * Classe implémentant le concept d'une connexion série.
+ * Utilisée pour parler aux cartes électroniques
+ * @author karton, dede, kayou, pf
+ *
+ */
 public class SerialConnexion implements SerialPortEventListener, Service
 {
+	/**
+	 * Port de la connexion
+	 */
 	SerialPort serialPort;
+	
+	/**
+	 * Sortie de log a utiliser
+	 */
 	Log log;
+	
+	/**
+	 * nom de la connexion série
+	 */
 	String name;
 
+	/**
+	 * Construit une connexion série 
+	 * @param log Sortie de log a utiliser
+	 * @param name nom de la connexion série
+	 */
 	SerialConnexion (Log log, ServiceNames name)
 	{
 		this(log, name.toString());
 	}
-	
+
+	/**
+	 * Construit une connexion série 
+	 * @param log Sortie de log a utiliser
+	 * @param name nom de la connexion série
+	 */
 	SerialConnexion (Log log, String name)
 	{
 		super();
@@ -41,8 +68,10 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	 * making the displayed results codepage independent
 	 */
 	private BufferedReader input;
+	
 	/** The output stream to the port */
 	private OutputStream output;
+	
 	/** Milliseconds to block while waiting for port open */
 	private static final int TIME_OUT = 2000;
 
@@ -66,9 +95,9 @@ public class SerialConnexion implements SerialPortEventListener, Service
 		}
 
 		// open serial port, and use class name for the appName.
-		try {
-			serialPort = (SerialPort) portId.open(this.getClass().getName(),
-					TIME_OUT);
+		try
+		{
+			serialPort = (SerialPort) portId.open(this.getClass().getName(), TIME_OUT);
 		} 
 		catch (PortInUseException e1)
 		{
@@ -95,21 +124,21 @@ public class SerialConnexion implements SerialPortEventListener, Service
 		/*
 		 * A tester, permet d'avoir un readLine non bloquant! (valeur à rentrée en ms)
 		 */
-		try {
+		try
+		{
 			serialPort.enableReceiveTimeout(1000);
-		} catch (UnsupportedCommOperationException e) {
+		} 
+		catch (UnsupportedCommOperationException e)
+		{
 			e.printStackTrace();
 		}
 	}
 
 	/**
 	 * Méthode pour parler à l'avr
-	 * @param message
-	 * 					Message à envoyer
-	 * @param nb_lignes_reponse
-	 * 					Nombre de lignes que l'avr va répondre (sans compter les acquittements)
-	 * @return
-	 * 					Un tableau contenant le message
+	 * @param message Message à envoyer
+	 * @param nb_lignes_reponse Nombre de lignes que l'avr va répondre (sans compter les acquittements)
+	 * @return Un tableau contenant le message
 	 * @throws SerialConnexionException 
 	 */
 	public String[] communiquer(String message, int nb_lignes_reponse) throws SerialConnexionException
@@ -120,12 +149,9 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	
 	/**
 	 * Méthode pour parler à l'avr
-	 * @param messages
-	 * 					Messages à envoyer
-	 * @param nb_lignes_reponse
-	 * 					Nombre de lignes que l'avr va répondre (sans compter les acquittements)
-	 * @return
-	 * 					Un tableau contenant le message
+	 * @param messages Messages à envoyer
+	 * @param nb_lignes_reponse Nombre de lignes que l'avr va répondre (sans compter les acquittements)
+	 * @return Un tableau contenant le message
 	 * @throws SerialConnexionException 
 	 */
 	public String[] communiquer(String[] messages, int nb_lignes_reponse) throws SerialConnexionException

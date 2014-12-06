@@ -25,7 +25,7 @@ public class Config implements Service
     Enumeration<?> e = local.propertyNames();
 
 	
-	public Config(String path) throws Exception
+	public Config(String path) throws IOException
 	{
 		this.path = path;
 	//	log.debug("Loading config from current directory : " +  System.getProperty("user.dir"), this)
@@ -36,7 +36,7 @@ public class Config implements Service
 		catch  (IOException e)
 		{
 			e.printStackTrace();
-			throw new Exception("Erreur ouverture de config.ini");
+			throw new IOException("Erreur ouverture de config.ini");
 		}
 		
 		try
@@ -53,9 +53,9 @@ public class Config implements Service
 			catch (IOException e2)
 			{
 				e2.printStackTrace();
-				throw new Exception("Erreur création de local.ini");
+				throw new IOException("Erreur création de local.ini");
 			}	
-			throw new Exception("Erreur ouverture de local.ini");
+			throw new IOException("Erreur ouverture de local.ini");
 		}	
 		affiche_tout();
 	}

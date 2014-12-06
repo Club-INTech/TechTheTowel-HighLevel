@@ -81,7 +81,7 @@ public class SearchConst
 	
 	/**
 	 *  demande à l'utilisateur de nouvelles valeurs de constantes
-	 * @throws IOException
+	 * @throws IOException en cas d'erreur de saisie de l'utilisateur au clavier
 	 */
     public static void set_kp_kd_pwm() throws IOException
     {

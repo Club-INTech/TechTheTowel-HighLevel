@@ -1,21 +1,6 @@
-//import hook.sortes.HookGenerator;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
-//import org.junit.runner.JUnitCore;
-
-
-
-
-
-
-
-
-
-
-
 
 import robot.Locomotion;
 import robot.RobotReal;
@@ -24,14 +9,10 @@ import robot.cardsWrappers.SensorsCardWrapper;
 import scripts.ScriptManager;
 import strategie.GameState;
 import threads.ThreadTimer;
-//import tests.JUnit_StrategieThreadTest;
-//import sun.rmi.runtime.Log;
-//import threads.ThreadTimer;
 import utils.Config;
 import container.Container;
 import enums.ServiceNames;
 import exceptions.ContainerException;
-import exceptions.ThreadException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialManagerException;
 
@@ -42,7 +23,7 @@ import exceptions.serial.SerialManagerException;
  *
  */
 
-		
+// TODO: refactor
 public class Main
 {
 	static Container container;
@@ -55,7 +36,7 @@ public class Main
 	static boolean doitFaireDepartRapide;
 	
 	
-// dans la config de debut de match, toujours demandé une entrée clavier assez longue (ex "oui" au lieu de "o", pour éviter les fautes de frappes. Une erreur a ce stade coûte cher.
+// dans la config de debut de match, toujours demander une entrée clavier assez longue (ex "oui" au lieu de "o", pour éviter les fautes de frappes. Une erreur a ce stade coûte cher.
 	
 	/**
 	 * Point d'entrée du programme. C'est ici que le code commence par être exécuté 
@@ -98,10 +79,10 @@ public class Main
 		} catch (ContainerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (ThreadException e) {
+		}  catch (SerialManagerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (SerialManagerException e) {
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

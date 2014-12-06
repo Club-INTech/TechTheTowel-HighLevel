@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
 
+import exceptions.ServiceTypeException;
 import exceptions.serial.SerialManagerException;
 
 /**
@@ -15,6 +16,7 @@ import exceptions.serial.SerialManagerException;
  * @author pf
  *
  */
+
 public class SerialManager 
 {
 	// Dépendances
@@ -66,8 +68,24 @@ public class SerialManager
 		this.serieCapteursActionneurs = new SerialConnexion(log, this.carteCapteursActionneurs.name);
 //		this.serieLaser = new Serial(log, this.carteLaser.name);
 
-		this.series[this.carteAsservissement.name.getNbSerie()] = this.serieAsservissement;
-		this.series[this.carteCapteursActionneurs.name.getNbSerie()] = this.serieCapteursActionneurs;
+		try
+		{
+			this.series[this.carteAsservissement.name.getNbSerie()] = this.serieAsservissement;
+		} 
+		catch (ServiceTypeException e1)
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try
+		{
+			this.series[this.carteCapteursActionneurs.name.getNbSerie()] = this.serieCapteursActionneurs;
+		}
+		catch (ServiceTypeException e1)
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 //		this.series.put(this.carteLaser.name, this.serieLaser);
 
 		checkSerial();
@@ -210,16 +228,25 @@ public class SerialManager
 	 */
 	public SerialConnexion getSerial(ServiceNames name)	throws SerialManagerException
 	{
-		if (this.series[name.getNbSerie()] != null)
+		try
 		{
-			return this.series[name.getNbSerie()];
+			if (this.series[name.getNbSerie()] != null)
+			{
+				return this.series[name.getNbSerie()];
+			}
+			else
+			{
+				log.critical("Aucune série du nom : " + name.toString() + " n'existe", this);
+				log.critical("Vérifiez les branchements ou l'interface+simulateur (redémarrez si besoin).", this);
+				log.critical("Vérifiez aussi que tous les processus Java exécutant ce code sont éteints.", this);
+				throw new SerialManagerException("serie non trouvée");
+			}
 		}
-		else
+		catch (ServiceTypeException e)
 		{
-			log.critical("Aucune série du nom : " + name.toString() + " n'existe", this);
-			log.critical("Vérifiez les branchements ou l'interface+simulateur (redémarrez si besoin).", this);
-			log.critical("Vérifiez aussi que tous les processus Java exécutant ce code sont éteints.", this);
-			throw new SerialManagerException("serie non trouvée");
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		return serieAsservissement;
 	}
 }
