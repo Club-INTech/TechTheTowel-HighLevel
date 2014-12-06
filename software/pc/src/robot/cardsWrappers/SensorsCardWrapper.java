@@ -13,77 +13,92 @@ import exceptions.serial.SerialConnexionException;
 
 public class SensorsCardWrapper implements Service
 {
-
-	// Dépendances
+	/**
+	 * service de log a utiliser en cas de soucis
+	 */
 	private Log log;
-	private SerialConnexion serie;
+	
+	/**
+	 *  connexion série avec la carte capteurs
+	 */
+	private SerialConnexion sensorsCardSerial;
+	
+	/**
+	 * fichier de configuration du robot a lire
+	 */
 	private Config config;
 
-	private boolean capteurs_on = true;
+	/**
+	 * Vrai si les capteurs sont allumés, faux si les capteurs sont ignorés
+	 */
+	private boolean areSensorsActive = true;
 
 	public SensorsCardWrapper(Config config, Log log, SerialConnexion serie)
 	{
 		this.log = log;
 		this.config = config;
-		this.serie = serie;
+		this.sensorsCardSerial = serie;
 		updateConfig();
 	}
 	
 	public void updateConfig()
 	{
-		capteurs_on = Boolean.parseBoolean(config.get("capteurs_on"));
+		areSensorsActive = Boolean.parseBoolean(config.get("capteurs_on"));
 	}
 
 	/**
-	-	 * Retourne la valeur la plus optimiste des capteurs de type capteur dans 
-	-	 * la direction voulue
-	-	 * Par rapport à la fonction suivante, c'est mieux de renvoyer séparément 
-	-	 * les données des capteurs qund c'est pas du même type.
-	-	 * @param capteur (soit "ir", soit "us")
-	-	 * @return la valeur la plus optimiste des capteurs
-	-	 */
-	public int mesurer()
+	 * demande aux capteurs de fournir la distance entre le robot et le prochain obstacle
+	 * @return la distance en mm estimée par les capteurs avant un obstacle. Une valeur de 3000 est considérée infinie
+	 */
+	public int getSensedDistance()
 	{
-		if(!capteurs_on)
+		if(!areSensorsActive)
     		return 3000;
 		
-		String[] distances_string;
-		int[] distances;
 		
-		try{
-
-			distances = new int[1];
-			distances_string = serie.communiquer("us", 1);
-
-			distances[0] = Integer.parseInt(distances_string[0]);
+		String infoBuffer;
+		
+		// demande au capteur la distance qu'il détecte
+		try
+		{
+			infoBuffer = sensorsCardSerial.communiquer("us", 1)[0];
     		
-		    return distances[0];
-    		
-/*		    	Arrays.sort(distances); // le dernier élément d'un tableau trié par ordre croissant est le plus grand
-		    	int distance = distances[distances.length-1];
-		    	
-		    	if(distance < 0)
-		    		return 3000;
-		    	return distance;*/
 		}
 		catch(SerialConnexionException e)
 		{
-			log.critical(e.toString(), this);
+			log.critical("La carte capteurs ne répond pas !", this);
+			e.printStackTrace();
 			return 3000; // valeur considérée comme infinie
 		}
+
+		// parse la distance que les capteurs nous ont donné et renvois cette valeur a l'utilisateur
+		int distance = Integer.parseInt(infoBuffer);
+		return distance;
 	}
 	
-    public boolean demarrage_match()
+	/**
+	 * Demande a la carte capteurs de nous indiquer si le jumper de début de match est présent ou non
+	 * @return vrai si le jumper est absent, faux sinon
+	 */
+    public boolean isJumperAbsent()
     {
-//    	log.debug(serie.communiquer("j", 1)[0], this);
-    	try {
-    		return Integer.parseInt(serie.communiquer("j", 1)[0]) != 0;
-    	}
-    	catch(Exception e)
-    	{
-    		log.critical("Aucune réponse du jumper", this);
-    		return false;
-    	}
+		try 
+		{
+			// demande a la carte si le jumper est présent, parse sa réponse, et si on lit 0 c'est que le jumper n'est pas/plus la
+			return Integer.parseInt(sensorsCardSerial.communiquer("j", 1)[0]) != 0;
+		} 
+		catch (NumberFormatException e)
+		{
+			log.critical("réponse corrompue du jumper !", this);
+			e.printStackTrace();
+			return false;
+		}
+		catch (SerialConnexionException e)
+		{
+			log.critical(" Problème de communication avec la carte capteurs en essayent de patler au jumper.", this);
+			e.printStackTrace();
+			return false;
+		}
     }
      
 }

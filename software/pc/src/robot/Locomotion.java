@@ -440,6 +440,12 @@ public class Locomotion implements Service
 				// Réagit spécifiquement à la présence d'un obstacle
 				tryAgain = unexpectedObstacleOnPathExceptionReaction(e);
 			}
+			catch (SerialConnexionException e)
+			{
+				// TODO: faire une réaction propre si la carte d'asser déconne
+				log.critical("La carte d'asservissement a cessé de répondre !", this);
+				e.printStackTrace();
+			}
 		} // while
 
 		// si on arrive ici, c'est que l'on est au point d'arrivée
@@ -534,8 +540,9 @@ public class Locomotion implements Service
 	 * @param isBackward true si le déplacement doit se faire en marche arrière, false si le robot doit avancer en marche avant.
 	 * @throws BlockedException en cas de blocage mécanique du robot: un obstacle non détecté par les capteurs a distance immobilise le robot
 	 * @throws UnexpectedObstacleOnPathException en cas de détection par les capteurs a distance d'un obstacle sur la route que le robot s'apprête a suivre
+	 * @throws SerialConnexionException si la carte d'asservissement cesse de répondre
 	 */
-	private void moveInDirectionEventWatcher(ArrayList<Hook> hooksToConsider, boolean allowCurvedPath, boolean isBackward) throws BlockedException, UnexpectedObstacleOnPathException
+	private void moveInDirectionEventWatcher(ArrayList<Hook> hooksToConsider, boolean allowCurvedPath, boolean isBackward) throws BlockedException, UnexpectedObstacleOnPathException, SerialConnexionException
 	{	
 		// On donnera l'odre de se déplacer au robot
 		boolean haveToGiveOrderToMove = true;
@@ -758,9 +765,10 @@ public class Locomotion implements Service
 	 *  	exeption : si patinage
 	 * @return true si le robot ne bouge plus parce que les moteurs ne tournent plus, false si le robot est encore en mouvement
 	 * @throws BlockedException si blocage mécanique du robot survient durant le mouvement (a un moment, les moteurs tournaient mais pas les codeuses)
+	 * @throws SerialConnexionException si la carte d'asservissement cesse de répondre
 	 */
 	//TODO: cette fonction est redondante avec le if... else if.... else.... de la fonction isMovementFinished qui est elle aussi appellée dans moveInDirectionEventWatcher. 
-	private boolean checkRobotNotBlocked() throws BlockedException
+	private boolean checkRobotNotBlocked() throws BlockedException, SerialConnexionException
 	{
 		// récupérations des informations d'acquittement
 		// met a jour: 	l'écart entre la position actuelle et la position sur laquelle on est asservi
@@ -781,7 +789,6 @@ public class Locomotion implements Service
 
 		// renvois true si le robot est immobile, false si encore en mouvement
 		return !mLocomotionCardWrapper.isRobotMoving();
-
 	}
 
 	/**

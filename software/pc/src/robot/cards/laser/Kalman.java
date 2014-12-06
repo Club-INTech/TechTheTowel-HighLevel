@@ -9,8 +9,10 @@ import smartMath.Matrn;
  * @auteur clément
  */
 //Les erreurs sont dues à la mauvaise gestion des excptions, PF? Au secours !!!
-
-class Kalman {
+// TODO: URGENT: DOC !!!
+// Il faut des commentaires, ici un novice ne bite rien ! 
+class Kalman
+{
 	//les attributs qui ont été mises en public sont utilisées dans FiltrageLaser.java
 	public Matrn x;
 	private Matrn p;
@@ -19,6 +21,8 @@ class Kalman {
 	private Matrn r;
 	private Matrn q;
 	private Matrn ident;
+	
+	
 	public Kalman(Matrn x, Matrn p, Matrn f, Matrn h, Matrn r, Matrn q) 
 		{
 			

@@ -53,7 +53,7 @@ class ThreadSensor extends AbstractThread
 			}
 
 			// affiche la distance mesurée par l'ultrason
-			int distance = capteur.mesurer();
+			int distance = capteur.getSensedDistance();
 			log.debug("Distance selon ultrason: "+distance, this);
 			if (distance > 0 && distance < 70)
 				log.debug("Câlin !", this);

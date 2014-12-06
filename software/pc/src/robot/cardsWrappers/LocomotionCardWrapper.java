@@ -17,23 +17,53 @@ import exceptions.serial.SerialConnexionException;
 public class LocomotionCardWrapper implements Service
 {
 
-	// Dépendances
+	/**
+	 *  pour écrire dans le log en cas de problème
+	 */
 	private Log log;
-	private SerialConnexion serie;
 
+	/**
+	 * connexion série avec la carte d'asservissement
+	 */
+	private SerialConnexion locomotionCardSerial;
+
+	/**
+	 * Stockage des informations courrantes de l'asservissement. 
+	 * Dès la fin du constructeur, les clefs sont: 
+	 *  - PWMmoteurGauche
+	 *  - PWMmoteurDroit
+	 *  - erreur_rotation
+	 *  - erreur_translation
+	 *  - derivee_erreur_rotation
+	 *  - derivee_erreur_translation
+	 */
 	private Hashtable<String, Integer> feedbackLoopStatistics;
 		
+	/**
+	 *  en cas de bloquage, date a laquelle le blocage a commencé
+	 */
 	private long blockageStartTimestamp;
 	
-    private boolean wasBlockedAtPreviousCall = false;
-
-    /**
-	 * Constructeur
+	/**
+	 *  utilisé par raiseExeptionIfBlocked, pour savoir si lors du dernier appel de raiseExeptionIfBlocked, la robot était déja bloqué (auquel cas il ne faut plus considérer que c'est le début du bloquage)
 	 */
-	public LocomotionCardWrapper(Log log, SerialConnexion serie)
+    private boolean wasBlockedAtPreviousCall = false;
+    
+
+	/**
+	 *  nombre de miliseconde de tolérance entre la détection d'un patinage et la levée de l'exeption. Trop basse il y aura des faux positifs, trop haute on va forcer dans les murs pendant longtemps
+	 */
+	int blockedTolerancy = 200;//TODO: mettre dans le fichier de config
+
+	/**
+	 * Construit la surchouche de la carte d'asservissement
+	 * @param log le système de log ou écrire  
+	 * @param serial la connexion série avec la carte d'asservissement
+	 */
+	public LocomotionCardWrapper(Log log, SerialConnexion serial)
 	{
 		this.log = log;
-		this.serie = serie;
+		this.locomotionCardSerial = serial;
 		
 		feedbackLoopStatistics = new Hashtable<String, Integer>();
 		feedbackLoopStatistics.put("PWMmoteurGauche", 0);
@@ -50,13 +80,10 @@ public class LocomotionCardWrapper implements Service
 	
 	/**
 	 * lève BlockedException si le robot bloque (c'est-à-dire que les moteurs forcent mais que le robot ne bouge pas).
-	 * @throws BlockedException si le robot est mécaniquement bloqué contre un obstacle qui l'empèche d'avancer plus
+	 * @throws BlockedException si le robot est mécaniquement bloqué contre un obstacle qui l'empèche d'avancer plus loin
 	 */
 	public void raiseExeptionIfBlocked() throws BlockedException
 	{
-		// nombre de miliseconde de tolérance entre la détection d'un patinage et la levée de l'exeption.
-		//  trop basse il y a des faux positifs, trop haute on va forcer dans les murs pendant longtemps
-		int blockedTolerancy = 200;//TODO: mettre dans le fichier de config
 		
 		// demande des information sur l'asservissement du robot
 		int pwmLeftMotor = feedbackLoopStatistics.get("PWMmoteurGauche");
@@ -115,11 +142,15 @@ public class LocomotionCardWrapper implements Service
 
 	/** 
 	 * Regarde si le robot bouge effectivement.
+	 * Provoque un appel série pour avoir des information a jour. Cette méthode est demande donc un peu de temps. 
 	 * @return vrai si le robot bouge, faux si le robot est immobile
+	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
 	 */
-	public boolean isRobotMoving()
+	public boolean isRobotMoving() throws SerialConnexionException
 	{
-		// obtient les infos de l'asservissement
+		refreshFeedbackLoopStatistics();
+		
+		// petits alias sur les infos de l'asservissement
 		int rotationnalError = feedbackLoopStatistics.get("erreur_rotation");
 		int translationnalError = feedbackLoopStatistics.get("erreur_translation");
 		int derivedRotationnalError = feedbackLoopStatistics.get("derivee_erreur_rotation");
@@ -138,131 +169,146 @@ public class LocomotionCardWrapper implements Service
 	
 	/** 
 	 * Fait avancer le robot. Méthode non bloquante
-	 * @param distance
+	 * @param distance distance a parcourir par le robot. Une valeur négative fera reculer le robot, une valeur positive le fera avancer.
+	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
 	 */
 	public void moveLengthwise(double distance) throws SerialConnexionException
 	{
 		String chaines[] = {"d", Double.toString(distance)};
-		serie.communiquer(chaines, 0);
+		locomotionCardSerial.communiquer(chaines, 0);
 	}
 
 	/** 
 	 * Fait tourner le robot. Méthode non bloquante
 	 * @param angle
+	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
 	 */
 	public void turn(double angle) throws SerialConnexionException
 	{
 		String chaines[] = {"t", Double.toString(angle)};
-		serie.communiquer(chaines, 0);		
+		locomotionCardSerial.communiquer(chaines, 0);		
 	}
 	
 	/**
 	 * Arrête le robot
+	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
 	 */
 	public void immobilise() throws SerialConnexionException
 	{
+		// Je bourrine, tu bourrines, il bourrine, ...
         disableTranslationnalFeedbackLoop();
         disableRotationnalFeedbackLoop();
-		serie.communiquer("stop", 0);
+		locomotionCardSerial.communiquer("stop", 0);
         enableTranslationnalFeedbackLoop();
         enableRotationnalFeedbackLoop();
 	}
 	
 	/**
 	 * Ecrase la position x du robot au niveau de la carte
-	 * @param x
+	 * @param x la nouvelle abscisse que le robot doit considérer avoir sur la table
+	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
 	 */
 	public void setX(int x) throws SerialConnexionException
 	{
 		String chaines[] = {"cx", Integer.toString(x)};
-		serie.communiquer(chaines, 0);
+		locomotionCardSerial.communiquer(chaines, 0);
 	}
 
 	/**
 	 * Ecrase la position y du robot au niveau de la carte
-	 * @param y
+	 * @param x la nouvelle ordonnée que le robot doit considérer avoir sur la table
+	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
 	 */
 	public void setY(int y) throws SerialConnexionException
 	{
 		String chaines[] = {"cy", Integer.toString(y)};
-		serie.communiquer(chaines, 0);	
+		locomotionCardSerial.communiquer(chaines, 0);	
 	}
 	
 	/**
 	 * Ecrase l'orientation du robot au niveau de la carte
-	 * @param orientation
+	 * @param x la nouvelle orientation que le robot doit considérer avoir sur la table
+	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
 	 */
 	public void setOrientation(double orientation) throws SerialConnexionException
 	{
 		String chaines[] = {"co", Double.toString(orientation)};
-		serie.communiquer(chaines, 0);
+		locomotionCardSerial.communiquer(chaines, 0);
 	}
 	
 	/**
 	 * Active l'asservissement en translation du robot
+	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
 	 */
 	public void enableTranslationnalFeedbackLoop() throws SerialConnexionException
 	{
-		serie.communiquer("ct1", 0);
+		locomotionCardSerial.communiquer("ct1", 0);
 	}
 
 	/**
 	 * Active l'asservissement en rotation du robot
+	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
 	 */
 	public void enableRotationnalFeedbackLoop() throws SerialConnexionException
 	{
-		serie.communiquer("cr1", 0);
+		locomotionCardSerial.communiquer("cr1", 0);
 	}
 
 	/**
 	 * Désactive l'asservissement en translation du robot
+	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
 	 */
 	public void disableTranslationnalFeedbackLoop() throws SerialConnexionException
 	{
-		serie.communiquer("ct0", 0);
+		locomotionCardSerial.communiquer("ct0", 0);
 	}
 
 	/**
 	 * Désactive l'asservissement en rotation du robot
+	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
 	 */
 	public void disableRotationnalFeedbackLoop() throws SerialConnexionException
 	{
-		serie.communiquer("cr0", 0);
+		locomotionCardSerial.communiquer("cr0", 0);
 	}
 
 	/**
-	 * Modifie la vitesse en translation
-	 * @param pwm_max
+	 * Modifie la vitesse en translation du robot sur la table
+	 * @param pwmMax la nouvelle valeur maximum que peut prenvent prendre les pwm des moteurs lors d'une translation
+	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
 	 */
-	public void setTranslationnalSpeed(int pwm_max) throws SerialConnexionException
+	public void setTranslationnalSpeed(int pwmMax) throws SerialConnexionException
 	{
-		double kp, kd;
-		if(pwm_max >= 195)
+		double 	kp,	// valeur du correcteur proportionnel
+				kd; // valeur du correcteur dérivé
+		
+		// échelonne les valeurs des correcteurs en fonction de la nouvelle valeur maximum que peut prenvent prendre les pwm des moteurs
+		if(pwmMax >= 195)
 		{
 			kp = 0.55;
 			kd = 27.0;
 		}
-		else if(pwm_max >= 165)
+		else if(pwmMax >= 165)
 		{
 			kp = 0.52;
 			kd = 17.0;
 		}
-		else if(pwm_max >= 145)
+		else if(pwmMax >= 145)
 		{
 			kp = 0.52;
 			kd = 17.0;
 		}
-		else if(pwm_max >= 115)
+		else if(pwmMax >= 115)
 		{
 			kp = 0.45;
 			kd = 12.0;
 		}
-		else if(pwm_max >= 85)
+		else if(pwmMax >= 85)
 		{
 			kp = 0.45;
 			kd = 12.5;
 		}
-		else if(pwm_max >= 55)
+		else if(pwmMax >= 55)
 		{
 			kp = 0.5;
 			kd = 4.0;
@@ -273,17 +319,22 @@ public class LocomotionCardWrapper implements Service
 			kd = 3.0;
 		}
 		
-		String chaines[] = {"ctv", Double.toString(kp), Double.toString(kd), Integer.toString(pwm_max)};
-		serie.communiquer(chaines, 0);			
+		// envois a la carte d'asservissement les nouvelles valeurs des correcteurs et le nouveau maximum des pwm
+		String chaines[] = {"ctv", Double.toString(kp), Double.toString(kd), Integer.toString(pwmMax)};
+		locomotionCardSerial.communiquer(chaines, 0);			
 	}
 
 	/**
-	 * Modifie la vitesse en rotation
-	 * @param pwm_max
+	 * Modifie la vitesse en rotation du robot sur la table
+	 * @param pwmMax la nouvelle valeur maximum que peut prenvent prendre les pwm des moteurs lors d'une rotation
+	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
 	 */
 	public void setRotationnalSpeed(int pwm_max) throws SerialConnexionException
 	{
-		double kp, kd;
+		double 	kp, // valeur du correcteur proportionnel
+				kd; // valeur du correcteur dérivé
+	
+		// échelonne les valeurs des correcteurs en fonction de la nouvelle valeur maximum que peut prenvent prendre les pwm des moteurs
 		if(pwm_max > 155)
 		{
 			kp = 2.0;
@@ -304,80 +355,98 @@ public class LocomotionCardWrapper implements Service
 			kp = 2.0;
 			kd = 14.0;
 		}
-		
+
+		// envois a la carte d'asservissement les nouvelles valeurs des correcteurs et le nouveau maximum des pwm
 		String chaines[] = {"crv", Double.toString(kp), Double.toString(kd), Integer.toString(pwm_max)};
-		serie.communiquer(chaines, 0);
+		locomotionCardSerial.communiquer(chaines, 0);
 	}
 	
+	/**
+	 * envois a la carte d'asservissement de nouvelles valeurs pour les correcteurs et un nouveau maximum pour les pwm lors d'une translation
+	 * @param kp nouvelle valeur du correcteur proportionnel
+	 * @param kd nouvelle valeur du correcteur dérivé 
+	 * @param pwm_max a nouvelle valeur maximum que peut prenvent prendre les pwm des moteurs lors d'une translation
+	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
+	 */
 	public void changeTranslationnalFeedbackParameters(double kp, double kd, int pwm_max) throws SerialConnexionException
 	{
 		String chaines[] = {"ctv", Double.toString(kp), Double.toString(kd), Integer.toString(pwm_max)};
-		serie.communiquer(chaines, 0);
+		locomotionCardSerial.communiquer(chaines, 0);
 	}
-	
+
+	/**
+	 * envois a la carte d'asservissement de nouvelles valeurs pour les correcteurs et un nouveau maximum pour les pwm lors d'une rotation
+	 * @param kp nouvelle valeur du correcteur proportionnel
+	 * @param kd nouvelle valeur du correcteur dérivé 
+	 * @param pwm_max a nouvelle valeur maximum que peut prenvent prendre les pwm des moteurs lors d'une rotation
+	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
+	 */
 	public void changeRotationnalFeedbackParameters(double kp, double kd, int pwm_max) throws SerialConnexionException
 	{
 		String chaines[] = {"crv", Double.toString(kp), Double.toString(kd), Integer.toString(pwm_max)};
-		serie.communiquer(chaines, 0);
+		locomotionCardSerial.communiquer(chaines, 0);
 	}
 
 	/**
 	 * Met à jour PWMmoteurGauche, PWMmoteurDroit, erreur_rotation, erreur_translation, derivee_erreur_rotation, derivee_erreur_translation
-	 * les nouvelles valeurs sont stokées dans la map
+	 * les nouvelles valeurs sont stokées dans feedbackLoopStatistics (feedbackLoopStatistics est une map privée de la classe)
+	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
 	 */
 	public void refreshFeedbackLoopStatistics() throws SerialConnexionException
 	{
-		// on envois "?infos" et on lis les 4 int (dans l'ordre : PWM droit, PWM gauche, erreurRotation, erreurTranslation)
-		String[] infos_string = serie.communiquer("?infos", 4);
-		int[] infos_int = new int[4];
+		// on demande a la carte des information a jour
+		// on envois "?infos" et on lis 4 int (dans l'ordre : PWM droit, PWM gauche, erreurRotation, erreurTranslation)
+		String[] infosBuffer = locomotionCardSerial.communiquer("?infos", 4);
+		int[] parsedInfos = new int[4];
 		for(int i = 0; i < 4; i++)
-			infos_int[i] = Integer.parseInt(infos_string[i]);
+			parsedInfos[i] = Integer.parseInt(infosBuffer[i]);
 		
 		// calcul des dérivées des erreurs en translation et en rotation :
 		// on fait la différence entre la valeur actuelle de l'erreur et le valeur précédemment mesurée.
 		// on divise par un dt unitaire (non mentionné dans l'expression)
-		int deriv_erreur_rot = infos_int[2] - feedbackLoopStatistics.get("erreur_rotation");
-		int deriv_erreur_tra = infos_int[3] - feedbackLoopStatistics.get("erreur_translation");
+		int derivedRotationnalError = parsedInfos[2] - feedbackLoopStatistics.get("erreur_rotation");
+		int derivedTranslationnalError = parsedInfos[3] - feedbackLoopStatistics.get("erreur_translation");
 		
-		
-		// infos_stoppage_enMouvement est une map dont les clés sont des strings et les valeurs des int
 		
 		// on stocke la puissance consommée par les moteurs
-        feedbackLoopStatistics.put("PWMmoteurGauche", infos_int[0]);
-        feedbackLoopStatistics.put("PWMmoteurDroit", infos_int[1]);
+        feedbackLoopStatistics.put("PWMmoteurGauche", parsedInfos[0]);
+        feedbackLoopStatistics.put("PWMmoteurDroit", parsedInfos[1]);
         
         // l'erreur de translation mesurée par les codeuses
-        feedbackLoopStatistics.put("erreur_rotation", infos_int[2]);
-        feedbackLoopStatistics.put("erreur_translation", infos_int[3]);
+        feedbackLoopStatistics.put("erreur_rotation", parsedInfos[2]);
+        feedbackLoopStatistics.put("erreur_translation", parsedInfos[3]);
         
         // stocke les dérivées des erreurs, calculés 10 lignes plus haut
-        feedbackLoopStatistics.put("derivee_erreur_rotation", deriv_erreur_rot);
-        feedbackLoopStatistics.put("derivee_erreur_translation", deriv_erreur_tra);
+        feedbackLoopStatistics.put("derivee_erreur_rotation", derivedRotationnalError);
+        feedbackLoopStatistics.put("derivee_erreur_translation", derivedTranslationnalError);
 
         
 	}
 
 	/**
+	 * Demande a la carte d'asservissement la position et l'orientation courrante du robot sur la table.
 	 * Renvoie x, y et orientation du robot
 	 * @return un tableau de 3 cases: [x, y, orientation]
+	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
 	 */
 	public double[] getCurrentPositionAndOrientation() throws SerialConnexionException
 	{
-		String[] infos_string = serie.communiquer("?xyo", 3);
-		double[] infos_double = new double[3];
-		
+		// on demande a la carte des information a jour
+		// on envois "?infos" et on lis double (dans l'ordre : abscisse, ordonnée, orientation)
+		String[] infosBuffer = locomotionCardSerial.communiquer("?xyo", 3);
+		double[] parsedInfos = new double[3];
 		for(int i = 0; i < 3; i++)
-		    infos_double[i] = Double.parseDouble(infos_string[i]);
+		    parsedInfos[i] = Double.parseDouble(infosBuffer[i]);
 
-		return infos_double;
+		return parsedInfos;
 	}
 
 	/**
-	 * Arrêt de la série
+	 * Ferme la connexion série avec la carte d'asservissements
 	 */
 	public void closeLocomotion()
 	{
-		serie.close();
+		locomotionCardSerial.close();
 	}
 	
 }

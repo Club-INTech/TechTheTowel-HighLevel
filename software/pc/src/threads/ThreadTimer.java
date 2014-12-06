@@ -48,7 +48,7 @@ public class ThreadTimer extends AbstractThread
 		capteur.updateConfig();	
 		
 		// Attente du démarrage du match
-		while(!capteur.demarrage_match() && !match_demarre)
+		while(!capteur.isJumperAbsent() && !match_demarre)
 		{
 			if(stopThreads)
 			{

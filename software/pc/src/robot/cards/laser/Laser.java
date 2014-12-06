@@ -16,7 +16,8 @@ import exceptions.serial.SerialConnexionException;
  *
  */
 
-public class Laser implements Service {
+public class Laser implements Service
+{
 
 	// Dépendances
 	private Log log;
