@@ -30,7 +30,7 @@ public class JUnit_javaToRobotLink  extends JUnit_Test
 		robotvrai.setPosition(new Vec2(1251, 1695));	// TODO : cette position doit être la position de départ du robot 
 		//On démarre avec la cale !!!!
 		robotvrai.setOrientation((float)(-Math.PI/2));
-		robotvrai.set_vitesse(Speed.BETWEEN_SCRIPTS);
+		robotvrai.setLocomotionSpeed(Speed.BETWEEN_SCRIPTS);
 		container.startInstanciedThreads();
 		
 	}

@@ -17,52 +17,30 @@ import exceptions.serial.SerialConnexionException;
  * @author pf, marsu
  *
  */
-
 public class RobotReal extends Robot
 {
-	private Locomotion deplacements;
+	private Locomotion mLocomotion;
 
 	// Constructeur
 	public RobotReal( Locomotion deplacements, Config config, Log log)
  	{
 		super(config, log);
-		this.deplacements = deplacements;
+		this.mLocomotion = deplacements;
 		updateConfig();
 		speed = Speed.BETWEEN_SCRIPTS;		
 	}
 	
-	/*
-	 * MÉTHODES PUBLIQUES
-	 */
-	
-	public void updateConfig()
+    public void copy(RobotChrono rc)
+    {
+    	// TODO: vérifier que la copie est faite sur tout ce qu'il y a besoin
+        getPositionFast().copy(rc.position);
+        rc.orientation = getOrientationFast();
+    }
+    
+	@Override	
+	public void sleep(long duree)
 	{
-		super.updateConfig();
-	}
-	
-	
-	public void enableRotationnalFeedbackLoop()
-	{
-		try
-		{
-			deplacements.getLocomotionCardWrapper().disableRotationnalFeedbackLoop();
-		}
-		catch (SerialConnexionException e)
-		{
-			e.printStackTrace();
-		}
-	}
-
-	public void disableTranslationnalFeedbackLoop()
-	{
-		try
-		{
-			deplacements.getLocomotionCardWrapper().enableRotationnalFeedbackLoop();
-		}
-		catch (SerialConnexionException e)
-		{
-			e.printStackTrace();
-		}
+		Sleep.sleep(duree);
 	}
 	
 	/**
@@ -71,7 +49,7 @@ public class RobotReal extends Robot
 	 */
 	public void recaler()
 	{
-	    deplacements.readjust();
+	    mLocomotion.readjust();
 	}
 	
 	/**
@@ -85,41 +63,53 @@ public class RobotReal extends Robot
 	@Override
     public void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
 	{
-		deplacements.moveLengthwise(distance, hooksToConsider, expectsWallImpact);
+		mLocomotion.moveLengthwise(distance, hooksToConsider, expectsWallImpact);
 	}	
-
-
-	@Override	
-	public void sleep(long duree)
-	{
-		Sleep.sleep(duree);
-	}
-
-    @Override
-    public void immobilise()
-    {
-        deplacements.immobilise();
-    }
 
     @Override
     public void turn(double angle, ArrayList<Hook> hooks, boolean mur) throws UnableToMoveException
     {
-        deplacements.turn(angle, hooks, mur);
+        mLocomotion.turn(angle, hooks, mur);
     }
     
     @Override
     public void followPath(ArrayList<Vec2> chemin, ArrayList<Hook> hooks) throws UnableToMoveException
     {
-        deplacements.followPath(chemin, hooks);
+        mLocomotion.followPath(chemin, hooks);
     }
 
-    public void copy(RobotChrono rc)
+    @Override
+    public void immobilise()
     {
-    	// TODO
-        getPositionFast().copy(rc.position);
-        rc.orientation = getOrientationFast();
+        mLocomotion.immobilise();
     }
     
+	@Override
+	public void enableRotationnalFeedbackLoop()
+	{
+		try
+		{
+			mLocomotion.getLocomotionCardWrapper().disableRotationnalFeedbackLoop();
+		}
+		catch (SerialConnexionException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void disableTranslationnalFeedbackLoop()
+	{
+		try
+		{
+			mLocomotion.getLocomotionCardWrapper().enableRotationnalFeedbackLoop();
+		}
+		catch (SerialConnexionException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
 	/*
 	 * ACTIONNEURS
 	 */
@@ -134,49 +124,43 @@ public class RobotReal extends Robot
 	@Override
 	public void setPosition(Vec2 position)
 	{
-	    deplacements.setPosition(position);
+	    mLocomotion.setPosition(position);
 	}
 	
     @Override
 	public Vec2 getPosition()
 	{
-	    return deplacements.getPosition();
-	}
-
-	@Override
-	public void setOrientation(double orientation)
-	{
-	    deplacements.setOrientation(orientation);
-	}
-
-    @Override
-    public double getOrientation()
-    {
-        return deplacements.getOrientation();
-    }
-
-	/**
-	 * Modifie la vitesse de translation
-	 * @param Speed : l'une des vitesses indexées dans enums.
-	 * 
-	 */
-	@Override
-	public void set_vitesse(Speed vitesse)
-	{
-        deplacements.setTranslationnalSpeed(vitesse.PWMTranslation);
-        deplacements.setRotationnalSpeed(vitesse.PWMRotation);
-		log.debug("Modification de la vitesse: "+vitesse, this);
+	    return mLocomotion.getPosition();
 	}
     
 	@Override
 	public Vec2 getPositionFast()
 	{
-		return deplacements.getPositionFast();
+		return mLocomotion.getPositionFast();
 	}
+	
+	@Override
+	public void setOrientation(double orientation)
+	{
+	    mLocomotion.setOrientation(orientation);
+	}
+
+    @Override
+    public double getOrientation()
+    {
+        return mLocomotion.getOrientation();
+    }
 
 	@Override
 	public double getOrientationFast()
 	{
-		return deplacements.getOrientationFast();
+		return mLocomotion.getOrientationFast();
+	}
+
+	@Override
+	public void setLocomotionSpeed(Speed vitesse)
+	{
+        mLocomotion.setTranslationnalSpeed(vitesse.PWMTranslation);
+        mLocomotion.setRotationnalSpeed(vitesse.PWMRotation);
 	}
 }

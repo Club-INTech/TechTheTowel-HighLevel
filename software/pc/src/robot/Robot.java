@@ -107,7 +107,7 @@ public abstract class Robot implements Service
 	 * Change la vitesse a laquelle le robot avance et tourne sur lui-même.
 	 * @param speed la vitesse désirée
 	 */
-	public abstract void set_vitesse(Speed speed);
+	public abstract void setLocomotionSpeed(Speed speed);
 	
 	/**
 	 * Change dans l'asservissement la position du robot sur la table .
@@ -228,9 +228,9 @@ public abstract class Robot implements Service
     public void moveLengthwiseTowardWall(int distance) throws UnableToMoveException
     {
         Speed sauv_vitesse = speed; 
-        set_vitesse(Speed.INTO_WALL);
+        setLocomotionSpeed(Speed.INTO_WALL);
         moveLengthwise(distance, null, true);
-        set_vitesse(sauv_vitesse);
+        setLocomotionSpeed(sauv_vitesse);
     }
     
     /**
@@ -241,11 +241,9 @@ public abstract class Robot implements Service
 	 * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
 	 */
     //TODO: faire une PathfindingException
-    public boolean moveToLocation(Vec2 aim) throws UnableToMoveException
+    public void moveToLocation(Vec2 aim) throws UnableToMoveException
     {
     	// TODO : faire le pathfinding et y mettre un accès ici
-    	
-    	return 666 == 42;
     }
 
 	/**

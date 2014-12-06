@@ -45,14 +45,14 @@ public class JUnit_RobotChrono extends JUnit_Test {
 		robotchrono = new RobotChrono(config, log);
 		robotchrono.setPosition(new Vec2(0, 1500));
 		robotchrono.setOrientation(0);
-		robotchrono.va_au_point(new Vec2(10, 1400));
+		robotchrono.moveToLocation(new Vec2(10, 1400));
 		Assert.assertTrue(robotchrono.getPosition().distance(new Vec2(10,1400)) < 2);
 
 		config.set("couleur", "rouge");
 		robotchrono = new RobotChrono(config, log);
 		robotchrono.setPosition(new Vec2(0, 1500));
 		robotchrono.setOrientation(0);
-		robotchrono.va_au_point(new Vec2(10, 1400));
+		robotchrono.moveToLocation(new Vec2(10, 1400));
 		Assert.assertTrue(robotchrono.getPosition().distance(new Vec2(-10,1400)) < 2);
 	}
 	
@@ -60,7 +60,7 @@ public class JUnit_RobotChrono extends JUnit_Test {
 	public void test_va_au_point() throws Exception
 	{
 		log.debug("JUnit_RobotChronoTest.test_va_au_point()", this);
-		robotchrono.va_au_point(new Vec2(10, 1400));
+		robotchrono.moveToLocation(new Vec2(10, 1400));
 		Assert.assertTrue(robotchrono.getPosition().distance(new Vec2(10,1400)) < 2);
 	}
 

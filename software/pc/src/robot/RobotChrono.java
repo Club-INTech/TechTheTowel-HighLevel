@@ -10,161 +10,226 @@ import enums.Speed;
 import exceptions.Locomotion.UnableToMoveException;
 
 /**
- * Robot particulier qui fait pas bouger le robot réel, mais détermine la durée des actions
+ * Robot virtuel ne faisant pas bouger le robot réel, mais détermine la durée des actions.
+ * Utile pour l'IA pour savoir combien de temps prendrait une action
  * @author pf et marsu !
  */
 
 public class RobotChrono extends Robot
 {
 
+	// position du robot virtuel sur la table. Utile pour calculer le temps nécéssaire pour atteindre un autre point de la table
 	protected Vec2 position = new Vec2();
+	
+
+	// orientation du robot virtuel sur la table. Utile pour calculer le temps nécéssaire pour atteindre un autre point de la table
 	protected double orientation;
 	
-	// Durée en millisecondes
-	private int duree = 0;
+	// Chronomètre du robot en millisecondes
+	private int chrono = 0;
 	
+	// valeur approchée du temps (en milisecondes) nécéssaire pour qu'une information que l'on envois a la série soit aquité
+	private int approximateSerialLatency = 50;
+
+	// Constructeur
 	public RobotChrono(Config config, Log log)
 	{
 		super(config, log);
 	}
-	
-	@Override
-	public void setPosition(Vec2 position) {
-		this.position = position;
-	}
-	
-	@Override
-	public void setOrientation(double orientation) {
-		this.orientation = orientation;
-	}
-
-	// La plupart de ces méthodes resteront vides
-
-	@Override
-    public void moveLengthwise(int distance, ArrayList<Hook> hooks, boolean mur)
-            throws UnableToMoveException
-	{
-		duree += Math.abs(distance)*speed.invertedTranslationnalSpeed;
-		Vec2 ecart;
-        ecart = new Vec2((int)(distance*Math.cos(orientation)), (int)(distance*Math.sin(orientation)));
-
-		position.plus(ecart);
-	}
-	
-	@Override
-	public void set_vitesse(Speed vitesse)
-	{
-	    this.speed = vitesse;
-	}
-
-	// Méthodes propres à RobotChrono
-	public void initChrono()
-	{
-			duree = 0;
-	}
-	
-	public int get_compteur()
-	{
-		return duree;
-	}
-
-	@Override
-    public void turn(double angle, ArrayList<Hook> hooks, boolean mur)
-            throws UnableToMoveException
-	{
-        if(symmetry)
-            angle = Math.PI-angle;
-	    
-		double delta = angle-orientation;
-		if(delta < 0)
-			delta *= -1;
-		while(delta > 2*Math.PI)
-			delta -= 2*Math.PI;
-		if(delta > Math.PI)
-			delta = 2*(float)Math.PI - delta;
-		orientation = angle;
-/*		if(delta != 0) 
-		{
-			try {
-				dureePositive((long)(delta/vitesse_rpms));
-			} catch (RobotChronoException e) {
-				e.printStackTrace();
-			}
-		}*/
-		duree += delta*speed.invertedRotationnalSpeed;
-	}
-
-	@Override
-    public void followPath(ArrayList<Vec2> chemin, ArrayList<Hook> hooks)
-            throws UnableToMoveException
-	{
-		for(Vec2 point: chemin)
-			va_au_point(point);
-	}
-	
-	public void va_au_point(Vec2 point)
-	{
-		if(symmetry)
-			point.x *= -1;
-/*		try {
-			dureePositive((long)(position.distance(point)/vitesse_mmpms));
-		} catch (RobotChronoException e) {
-			e.printStackTrace();
-		}*/
-		duree += position.distance(point)*speed.invertedTranslationnalSpeed;
-		position = point.clone();
-	}
 
 	/**
 	 * Utilisé par les tests
-	 * @param other
-	 * @return
+	 * @param other l'autre robot chrono avec lequel comparer celui-ci
+	 * @return vrai si les robotChronos sont égaux, faux sinon
 	 */
 	// TODO à compléter au fur et à mesure
 	public boolean equals(RobotChrono other)
 	{
-		return 	position.equals(other.position)
-				&& orientation == other.orientation;
+		return 	position.equals(other.position) && 
+				orientation == other.orientation;
 	}
+
+	@Override
+    public void turn(double angle, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
+	{
+		// symétrise la table si l'on est équipe jaune
+        if(symmetry)
+            angle = Math.PI-angle;
+
+		// met a jour l'orientation du robot
+		orientation = angle;
+		
+	    
+        // angle duqel le robot doit tourner pour avoir l'orientation désirée
+		double turnAmount = angle-orientation;
+		
+		// Met l'angle a parcourir dans ]-PI; PI]
+		if(turnAmount < 0)
+			turnAmount *= -1;
+		while(turnAmount > 2*Math.PI)
+			turnAmount -= 2*Math.PI;
+		if(turnAmount > Math.PI)
+			turnAmount = 2*(float)Math.PI - turnAmount;
+		
+		
+		// incrémente le chronomètre du temps de trajet
+		chrono += turnAmount*speed.invertedRotationnalSpeed;
+		
+
+    	// prsise en considération de la latence de la liaison série
+		this.chrono += approximateSerialLatency;
+	}
+
+	@Override
+    public void moveLengthwise(int distance, ArrayList<Hook> hooks, boolean mur) throws UnableToMoveException
+	{
+
+    	// prsise en considération de la latence de la liaison série
+		this.chrono += approximateSerialLatency;
+		
+		// rajoute au compteur le temps de trajet
+		chrono += Math.abs(distance)*speed.invertedTranslationnalSpeed;
+
+		// déplace le robot virtuel
+		position.plus( new Vec2( 	(int)(distance*Math.cos(orientation)),
+									(int)(distance*Math.sin(orientation))  ) 
+					 );
+	}
+	
+	@Override
+    public void followPath(ArrayList<Vec2> path, ArrayList<Hook> hooksToConsider) throws UnableToMoveException
+	{
+		// va sucessivement a tout les points
+		for(Vec2 point: path)
+			moveToLocation(point);
+	}
+	
+	@Override
+	public void moveToLocation(Vec2 point)
+	{
+		// symétrise la table si l'on est équipe jaune
+		if(symmetry)
+			point.x *= -1;
+
+		// incrémente le chronomètre du temps de trajet
+		//chrono += position.distance(point)*speed.invertedTranslationnalSpeed;
+		// TODO: faire un appel au pathfinding ici, le compteur doit être incrémenté du temps de trajet en suivent le chemin dicté par le pathfinding
+		// un appel a followPath serait avisé
+		
+
+    	// prsise en considération de la latence de la liaison série
+		this.chrono += approximateSerialLatency;
+		
+		position = point.clone();
+	}
+
+	@Override
+	public void setLocomotionSpeed(Speed vitesse)
+	{
+    	// prsise en considération de la latence de la liaison série
+		this.chrono += approximateSerialLatency;
+		
+	    this.speed = vitesse;
+	}
+
+    @Override
+    public void enableRotationnalFeedbackLoop()
+    {
+    	// prsise en considération de la latence de la liaison série
+		this.chrono += approximateSerialLatency;
+    }
+
+    @Override
+    public void disableTranslationnalFeedbackLoop()
+    {
+    	// prsise en considération de la latence de la liaison série
+		this.chrono += approximateSerialLatency;
+    }
 
 	@Override
 	public void sleep(long duree) 
 	{
-		this.duree += duree;
+		this.chrono += duree;
 	}
-	    @Override
+	
+	@Override
     public void immobilise()
     {
+    	// prsise en considération de la latence de la liaison série
+		this.chrono += approximateSerialLatency;
     }
 
+
+	/*
+	 * 			SEETERS & Getters
+	 */
+
+	/**
+	 * Remet le chronomètre a zéro
+	 */
+	public void resetChrono()
+	{
+			chrono = 0;
+	}
+	
+	/**
+	 * Donne la veleur courante du chronomètre
+	 * @return valeur du chronomètre en milisecondes
+	 */
+	public int getCurrentChrono()
+	{
+		return chrono;
+	}
+	
+	@Override
+	public void setPosition(Vec2 position)
+	{
+
+    	// prsise en considération de la latence de la liaison série
+		this.chrono += approximateSerialLatency;
+		
+		this.position = position;
+	}
+	
+	@Override
+	public void setOrientation(double orientation)
+	{
+
+    	// prsise en considération de la latence de la liaison série
+		this.chrono += approximateSerialLatency;
+		
+		this.orientation = orientation;
+	}
+
+	    
     @Override
     public Vec2 getPosition()
     {
+    	// prsise en considération de la latence de la liaison série
+		this.chrono += approximateSerialLatency;
+		
         return position.clone();
     }
 
     @Override
     public double getOrientation()
     {
+    	// prsise en considération de la latence de la liaison série
+		this.chrono += approximateSerialLatency;
+		
         return orientation;
     }
 
-    public void enableRotationnalFeedbackLoop()
-    {}
-
-    public void disableTranslationnalFeedbackLoop()
-    {}
-
 	@Override
-	public Vec2 getPositionFast() {
-		// TODO Auto-generated method stub
-		return null;
+	public Vec2 getPositionFast()
+	{
+        return position.clone();
 	}
 
 	@Override
-	public double getOrientationFast() {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getOrientationFast()
+	{
+        return orientation;
 	}
 
 }

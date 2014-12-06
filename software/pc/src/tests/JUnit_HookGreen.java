@@ -31,7 +31,7 @@ public class JUnit_HookGreen extends JUnit_Test {
 		robotvrai = (RobotReal) container.getService(ServiceNames.ROBOT_REAL);
 		robotvrai.setPosition(new Vec2(0, 1500));
 		robotvrai.setOrientation(0);
-        robotvrai.set_vitesse(Speed.BETWEEN_SCRIPTS);
+        robotvrai.setLocomotionSpeed(Speed.BETWEEN_SCRIPTS);
 	}
 	
 	// TODO �crire un test par type de hook
