@@ -28,7 +28,7 @@ class Kalman {
 			this.h = h;
 			this.r = r;
 			this.q = q;
-			this.ident = Matrn.identiter(this.x.taille[0]);
+			this.ident = Matrn.identiter(this.x.size[0]);
 			
 		}
 	
@@ -36,7 +36,7 @@ class Kalman {
 		{
 			if (u == null)
 			{
-				u = new Matrn(this.x.taille[0], this.x.taille[1], 0);
+				u = new Matrn(this.x.size[0], this.x.size[1], 0);
 			}
 			try {
 				this.x = this.f.multiplier(this.x).additionner(u);

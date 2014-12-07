@@ -63,8 +63,8 @@ public class LaserFiltration implements Service
 	public void update_dt(float new_dt)
 	{
 		this.dt = new_dt;
-		this.kalmanFilter.f.matrice[0][2] = new_dt; //encore visibilité !
-		this.kalmanFilter.f.matrice[1][3] = new_dt; //et toujours !!
+		this.kalmanFilter.f.data[0][2] = new_dt; //encore visibilité !
+		this.kalmanFilter.f.data[1][3] = new_dt; //et toujours !!
 	}
 
 	
@@ -77,7 +77,7 @@ public class LaserFiltration implements Service
 	public Vec2 speed()
 	{
 		Matrn state = kalmanFilter.x;
-		return new Vec2((int)state.matrice[2][0], (int)state.matrice[3][0]) ;
+		return new Vec2((int)state.data[2][0], (int)state.data[3][0]) ;
 	}
 
 	
