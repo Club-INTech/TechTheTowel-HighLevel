@@ -5,20 +5,30 @@ import robot.cardsWrappers.SensorsCardWrapper;
 import table.Table;
 import utils.Sleep;
 
+// TODO: Auto-generated Javadoc
 /**
- * Thread qui ajoute en continu les obstacles détectés par les capteurs
- * @author pf, Krissprolls
+ * Thread qui ajoute en continu les obstacles détectés par les capteurs.
  *
+ * @author pf, Krissprolls
  */
 
 class ThreadSensor extends AbstractThread
 {
 
+	/** The capteur. */
 	private SensorsCardWrapper capteur;
 	
 	// Valeurs par défaut s'il y a un problème de config
+	/** The capteurs_frequence. */
 	private int capteurs_frequence = 5;
 	
+	/**
+	 * Instantiates a new thread sensor.
+	 *
+	 * @param robotvrai the robotvrai
+	 * @param table the table
+	 * @param capteur the capteur
+	 */
 	ThreadSensor(RobotReal robotvrai, Table table, SensorsCardWrapper capteur)
 	{
 		super(config, log);
@@ -26,6 +36,9 @@ class ThreadSensor extends AbstractThread
 		Thread.currentThread().setPriority(2);
 	}
 	
+	/* (non-Javadoc)
+	 * @see threads.AbstractThread#run()
+	 */
 	@Override
 	public void run()
 	{
@@ -67,6 +80,9 @@ class ThreadSensor extends AbstractThread
 		
 	}
 	
+	/* (non-Javadoc)
+	 * @see threads.AbstractThread#updateConfig()
+	 */
 	public void updateConfig()
 	{
 			capteurs_frequence = Integer.parseInt(config.get("capteurs_frequence"));

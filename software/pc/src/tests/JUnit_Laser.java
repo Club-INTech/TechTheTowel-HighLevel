@@ -13,13 +13,27 @@ import table.Table;
 import utils.Sleep;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class JUnit_Laser.
+ */
 public class JUnit_Laser extends JUnit_Test {
 
+	/** The laser. */
 	Laser laser;
+	
+	/** The filtragelaser. */
 	LaserFiltration filtragelaser;
+	
+	/** The robotvrai. */
 	RobotReal robotvrai;
+	
+	/** The table. */
 	Table table;
 
+	/* (non-Javadoc)
+	 * @see tests.JUnit_Test#setUp()
+	 */
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
@@ -30,6 +44,11 @@ public class JUnit_Laser extends JUnit_Test {
 		table = (Table) container.getService(ServiceNames.TABLE);
 	}
 
+	/**
+	 * Test_avant_verification.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_avant_verification() throws Exception
 	{
@@ -40,6 +59,11 @@ public class JUnit_Laser extends JUnit_Test {
 		Assert.assertTrue(laser.balises_ignorees().size() == 2);		
 	}
 
+	/**
+	 * Test_apres_verification.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_apres_verification() throws Exception
 	{
@@ -54,6 +78,11 @@ public class JUnit_Laser extends JUnit_Test {
 
 	}
 
+	/**
+	 * Test_coherence.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_coherence() throws Exception
 	{
@@ -63,6 +92,11 @@ public class JUnit_Laser extends JUnit_Test {
 		laser.verifier_coherence_balise();
 	}
 
+	/**
+	 * Test_pour_kayou.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_pour_kayou() throws Exception
 	{
@@ -76,6 +110,11 @@ public class JUnit_Laser extends JUnit_Test {
 
 	}
 
+	/**
+	 * Test_on_off.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_on_off() throws Exception
 	{
@@ -86,6 +125,11 @@ public class JUnit_Laser extends JUnit_Test {
 		laser.eteindre();
 	}
 
+	/**
+	 * Test_position_balise.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_position_balise() throws Exception
 	{
@@ -108,6 +152,11 @@ public class JUnit_Laser extends JUnit_Test {
 		//Assert.assertTrue(laser.position_balise(1).distance(new Vec2(600,)) < 500);
 	}
 
+	/**
+	 * Test_vitesse.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_vitesse() throws Exception
 	{
@@ -119,6 +168,12 @@ public class JUnit_Laser extends JUnit_Test {
 		Sleep.sleep(1000);
 		laser.eteindre();
 	}
+	
+	/**
+	 * Test_position_balise_relative.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_position_balise_relative() throws Exception
 	{

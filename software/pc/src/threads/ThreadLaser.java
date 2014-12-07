@@ -9,22 +9,40 @@ import smartMath.Vec2;
 import table.Table;
 import utils.Sleep;
 
+// TODO: Auto-generated Javadoc
 /**
- * Thread de gestion de la balise laser
- * @author pf
+ * Thread de gestion de la balise laser.
  *
+ * @author pf
  */
 
 class ThreadLaser extends AbstractThread {
 
+	/** The filtragelaser. */
 	private LaserFiltration filtragelaser;
+	
+	/** The laser. */
 	private Laser laser;
+	
+	/** The table. */
 	private Table table;
 
+	/** The table_x. */
 	private int table_x;
+	
+	/** The table_y. */
 	private int table_y;
+	
+	/** The lasers_frequence. */
 	private float lasers_frequence;
 
+	/**
+	 * Instantiates a new thread laser.
+	 *
+	 * @param laser the laser
+	 * @param table the table
+	 * @param filtragelaser the filtragelaser
+	 */
 	public ThreadLaser(Laser laser, Table table, LaserFiltration filtragelaser)
 	{
 		this.filtragelaser = filtragelaser;
@@ -34,6 +52,9 @@ class ThreadLaser extends AbstractThread {
 		Thread.currentThread().setPriority(2);
 	}
 
+	/* (non-Javadoc)
+	 * @see threads.AbstractThread#run()
+	 */
 	@Override
 	public void run()
 	{
@@ -131,6 +152,9 @@ class ThreadLaser extends AbstractThread {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see threads.AbstractThread#updateConfig()
+	 */
 	public void updateConfig()
 	{
 		try {

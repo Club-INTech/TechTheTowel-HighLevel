@@ -7,17 +7,22 @@ import org.junit.Assert;
 import enums.ServiceNames;
 import robot.cardsWrappers.SensorsCardWrapper;
 
+// TODO: Auto-generated Javadoc
 /**
  * Test des capteurs : les obstacles doivent être détectés
- * TODO : comprendre l'utilité du test desactivation_capteur et faux_test
- * @author marsu
+ * TODO : comprendre l'utilité du test desactivation_capteur et faux_test.
  *
+ * @author marsu
  */
 public class JUnit_Sensors extends JUnit_Test
 {
 
+	/** The capteurs. */
 	SensorsCardWrapper capteurs;
 	
+	/* (non-Javadoc)
+	 * @see tests.JUnit_Test#setUp()
+	 */
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
@@ -27,6 +32,11 @@ public class JUnit_Sensors extends JUnit_Test
 		capteurs.updateConfig();
 	}
 
+	/**
+	 * Desactivation_capteur.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void desactivation_capteur() throws Exception
 	{

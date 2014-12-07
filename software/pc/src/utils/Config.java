@@ -9,22 +9,40 @@ import java.util.Enumeration;
 import java.util.Properties;
 
 
+// TODO: Auto-generated Javadoc
 /**
- * 
- * @author pf, marsu
+ * The Class Config.
  *
+ * @author pf, marsu
  */
 public class Config implements Service
 {
+	
+	/** The name_local_file. */
 	private String name_local_file = "local.ini";
+	
+	/** The name_config_file. */
 	private String name_config_file = "config.ini";
+	
+	/** The path. */
 	private String path;
+	
+	/** The config. */
 	private Properties config = new Properties();
+	
+	/** The local. */
 	private Properties local = new Properties();
 	
+    /** The e. */
     Enumeration<?> e = local.propertyNames();
 
 	
+	/**
+	 * Instantiates a new config.
+	 *
+	 * @param path the path
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public Config(String path) throws IOException
 	{
 		this.path = path;
@@ -61,10 +79,10 @@ public class Config implements Service
 	}
 	
 	/**
-	 * Méthode de récupération des paramètres de configuration
-	 * @param nom
-	 * @return
-	 * @throws ConfigException
+	 * Méthode de récupération des paramètres de configuration.
+	 *
+	 * @param nom the nom
+	 * @return the string
 	 */
 	public String get(String nom)
 	{
@@ -78,9 +96,10 @@ public class Config implements Service
 	}
 
 	/**
-	 * Méthode utilisée seulement par les tests
-	 * @param nom
-	 * @return
+	 * Méthode utilisée seulement par les tests.
+	 *
+	 * @param nom the nom
+	 * @param value the value
 	 */
 	private void set(String nom, String value)
 	{
@@ -89,9 +108,10 @@ public class Config implements Service
 	}
 	
 	/**
-	 * Set en version user-friendly
-	 * @param nom
-	 * @param value
+	 * Set en version user-friendly.
+	 *
+	 * @param nom the nom
+	 * @param value the value
 	 */
 	public void set(String nom, Object value)
 	{
@@ -100,6 +120,9 @@ public class Config implements Service
 	}
 
 	// TODO private
+	/**
+	 * Affiche_tout.
+	 */
 	private void affiche_tout()
 	{
 		if(Boolean.parseBoolean(config.getProperty("affiche_debug")))
@@ -110,6 +133,9 @@ public class Config implements Service
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see container.Service#updateConfig()
+	 */
 	public void updateConfig()
 	{
 	}

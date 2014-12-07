@@ -6,6 +6,7 @@ import table.Table;
 import utils.Log;
 import utils.Config;
 
+// TODO: Auto-generated Javadoc
 /**
  * Le game state contient toutes les informations à connaître pour la stratégie. Il contient:
  * - Robot (real ou chrono), qui apporte des informations sur le robot (position, orientation, ...)
@@ -22,13 +23,27 @@ public class GameState<R extends Robot> implements Service
      * Les attributs public sont en "final". Cela signifie que les objets
      * peuvent être modifiés mais pas ces références.
      */
+    /** The table. */
     public final Table table;
+    
+    /** The robot. */
     public final R robot;
 
     // time contient le temps écoulé depuis le début du match en ms
+    /** The time_depuis_debut. */
     public long time_depuis_debut;
+    
+    /** The points obtenus. */
     public int pointsObtenus;	// points marqués depus le debut du match
 
+    /**
+     * Instantiates a new game state.
+     *
+     * @param config the config
+     * @param log the log
+     * @param table the table
+     * @param robot the robot
+     */
     public GameState(Config config, Log log, Table table, R robot)
     {
         this.table = table;
@@ -36,6 +51,9 @@ public class GameState<R extends Robot> implements Service
         pointsObtenus = 0;
     }
 
+    /* (non-Javadoc)
+     * @see container.Service#updateConfig()
+     */
     @Override
     public void updateConfig()
     {

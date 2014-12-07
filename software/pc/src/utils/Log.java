@@ -7,29 +7,40 @@ import java.util.GregorianCalendar;
 
 import container.Service;
 
+// TODO: Auto-generated Javadoc
 /**
- * Service de log, affiche à l'écran des informations avec différents niveaux de couleurs
- * @author pf
+ * Service de log, affiche à l'écran des informations avec différents niveaux de couleurs.
  *
+ * @author pf
  */
 
 public class Log implements Service
 {
 	// Dépendances
+	/** The config. */
 	private Config config;
 
+	/** The writer. */
 	FileWriter writer = null;
 
+	/** The couleur critical. */
 	private String 	couleurDebug 	= "\u001B[32m",
 					couleurWarning 	= "\u001B[33m",
 					couleurCritical = "\u001B[31m";
 
 	// Ne pas afficher les messages de bug permet d'économiser du temps CPU
+	/** The affiche_debug. */
 	private boolean affiche_debug = true;
 	
 	// Sauvegarder les logs dans un fichier
+	/** The sauvegarde_fichier. */
 	private boolean sauvegarde_fichier = false;
 	
+	/**
+	 * Instantiates a new log.
+	 *
+	 * @param config the config
+	 */
 	public Log(Config config)
 	{
 		this.config = config;
@@ -52,7 +63,8 @@ public class Log implements Service
 	
 	/**
 	 * Méthode à appeler uniquement depuis une méthode statique. User-friendly
-	 * @param message
+	 *
+	 * @param message the message
 	 */
 	public void appel_static(Object message)
 	{
@@ -60,8 +72,9 @@ public class Log implements Service
 	}
 		
 	/**
-	 * Méthode à appeler uniquement depuis une méthode statique
-	 * @param message
+	 * Méthode à appeler uniquement depuis une méthode statique.
+	 *
+	 * @param message the message
 	 */
 	public void appel_static(String message)
 	{
@@ -71,8 +84,9 @@ public class Log implements Service
 	
 	/**
 	 * Affichage de debug, en vert. User-friendly
-	 * @param message
-	 * @param objet
+	 *
+	 * @param message the message
+	 * @param objet the objet
 	 */
 	public void debug(Object message, Object objet)
 	{
@@ -80,9 +94,10 @@ public class Log implements Service
 	}
 	
 	/**
-	 * Affichage de debug, en vert
-	 * @param message
-	 * @param objet
+	 * Affichage de debug, en vert.
+	 *
+	 * @param message the message
+	 * @param objet the objet
 	 */
 	public void debug(String message, Object objet)
 	{
@@ -92,8 +107,9 @@ public class Log implements Service
 
 	/**
 	 * Affichage de warnings, en orange. User-friendly
-	 * @param message
-	 * @param objet
+	 *
+	 * @param message the message
+	 * @param objet the objet
 	 */
 	public void warning(Object message, Object objet)
 	{
@@ -101,9 +117,10 @@ public class Log implements Service
 	}
 
 	/**
-	 * Affichage de warnings, en orange
-	 * @param message
-	 * @param objet
+	 * Affichage de warnings, en orange.
+	 *
+	 * @param message the message
+	 * @param objet the objet
 	 */
 	public void warning(String message, Object objet)
 	{
@@ -112,8 +129,9 @@ public class Log implements Service
 
 	/**
 	 * Affichage d'erreurs critiques, en rouge. User-friendly
-	 * @param message
-	 * @param objet
+	 *
+	 * @param message the message
+	 * @param objet the objet
 	 */
 	public void critical(Object message, Object objet)
 	{
@@ -121,15 +139,23 @@ public class Log implements Service
 	}
 	
 	/**
-	 * Affichage d'erreurs critiques, en rouge
-	 * @param message
-	 * @param objet
+	 * Affichage d'erreurs critiques, en rouge.
+	 *
+	 * @param message the message
+	 * @param objet the objet
 	 */
 	public void critical(String message, Object objet)
 	{
 		ecrire(objet.getClass().getName()+": "+message, couleurCritical, System.err);
 	}
 
+	/**
+	 * Ecrire.
+	 *
+	 * @param message the message
+	 * @param couleur the couleur
+	 * @param ou the ou
+	 */
 	private void ecrire(String message, String couleur, PrintStream ou)
 	{
 		java.util.GregorianCalendar calendar = new GregorianCalendar();
@@ -140,6 +166,11 @@ public class Log implements Service
 			ecrireFichier(couleur+heure+" "+message+"\u001B[0m");
 	}
 	
+	/**
+	 * Ecrire fichier.
+	 *
+	 * @param message the message
+	 */
 	private void ecrireFichier(String message)
 	{
 		message += "\n";
@@ -172,6 +203,9 @@ public class Log implements Service
 			}
 	}
 	
+	/* (non-Javadoc)
+	 * @see container.Service#updateConfig()
+	 */
 	@Override
 	public void updateConfig()
 	{

@@ -7,6 +7,7 @@ import smartMath.Vec2;
 import table.Table;
 import utils.Sleep;
 
+// TODO: Auto-generated Javadoc
 /**
  * Thread qui s'occupe de la gestion du temps: début du match, péremption des obstacles
  * C'est lui qui active les capteurs en début de match.
@@ -18,16 +19,37 @@ public class ThreadTimer extends AbstractThread
 {
 
 	// Dépendance
+	/** The table. */
 	private Table table;
+	
+	/** The capteur. */
 	private SensorsCardWrapper capteur;
+	
+	/** The deplacements. */
 	private LocomotionCardWrapper deplacements;
 	
+	/** The match_demarre. */
 	public static boolean match_demarre = false;
+	
+	/** The fin_match. */
 	public static boolean fin_match = false;
+	
+	/** The date_debut. */
 	public static long date_debut;
+	
+	/** The duree_match. */
 	public static long duree_match = 90000;
+	
+	/** The obstacle refresh interval. */
 	public static int obstacleRefreshInterval = 500; // temps en ms entre deux appels par le thread timer du rafraichissement des obstacles de la table
 		
+	/**
+	 * Instantiates a new thread timer.
+	 *
+	 * @param table the table
+	 * @param capteur the capteur
+	 * @param deplacements the deplacements
+	 */
 	ThreadTimer(Table table, SensorsCardWrapper capteur, LocomotionCardWrapper deplacements)
 	{
 		this.table = table;
@@ -38,6 +60,9 @@ public class ThreadTimer extends AbstractThread
 		Thread.currentThread().setPriority(1);
 	}
 
+	/* (non-Javadoc)
+	 * @see threads.AbstractThread#run()
+	 */
 	@Override
 	public void run()
 	{
@@ -92,6 +117,9 @@ public class ThreadTimer extends AbstractThread
 		
 	}
 	
+	/**
+	 * On match ended.
+	 */
 	private void onMatchEnded()
 	{
 
@@ -140,11 +168,19 @@ public class ThreadTimer extends AbstractThread
 	}
 	
 	
+	/**
+	 * Temps_restant.
+	 *
+	 * @return the long
+	 */
 	public long temps_restant()
 	{
 		return date_debut + duree_match - System.currentTimeMillis();
 	}
 	
+	/* (non-Javadoc)
+	 * @see threads.AbstractThread#updateConfig()
+	 */
 	public void updateConfig()
 	{
 		// facteur 1000 car temps_match est en secondes et duree_match en ms

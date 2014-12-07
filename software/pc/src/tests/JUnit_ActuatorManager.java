@@ -7,10 +7,18 @@ import org.junit.Test;
 import enums.ServiceNames;
 import robot.cardsWrappers.ActuatorCardWrapper;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class JUnit_ActuatorManager.
+ */
 public class JUnit_ActuatorManager extends JUnit_Test {
 
+	/** The actionneurs. */
 	ActuatorCardWrapper actionneurs;
 	
+	/* (non-Javadoc)
+	 * @see tests.JUnit_Test#setUp()
+	 */
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
@@ -19,6 +27,12 @@ public class JUnit_ActuatorManager extends JUnit_Test {
 	}
 	
 	// TODO : un test par actionneur
+	/**
+	 * Exemple test.
+	 *
+	 * @return true, if successful
+	 * @throws Exception the exception
+	 */
 	@Test
 	public boolean exempleTest() throws Exception
 	{

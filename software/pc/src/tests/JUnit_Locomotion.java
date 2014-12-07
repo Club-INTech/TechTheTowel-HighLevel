@@ -8,16 +8,21 @@ import enums.ServiceNames;
 import robot.cardsWrappers.*;
 import utils.Sleep;
 
+// TODO: Auto-generated Javadoc
 /**
- * Tests unitaires pour Deplacements
- * @author pf
+ * Tests unitaires pour Deplacements.
  *
+ * @author pf
  */
 public class JUnit_Locomotion extends JUnit_Test
 {
 
+	/** The deplacements. */
 	private LocomotionCardWrapper deplacements;
 	
+	/* (non-Javadoc)
+	 * @see tests.JUnit_Test#setUp()
+	 */
 	@Before
 	public void setUp() throws Exception
 	{
@@ -30,6 +35,11 @@ public class JUnit_Locomotion extends JUnit_Test
 		deplacements.setTranslationnalSpeed(80);
 	}
 	
+	/**
+	 * Test_infos_xyo.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_infos_xyo() throws Exception
 	{
@@ -40,6 +50,11 @@ public class JUnit_Locomotion extends JUnit_Test
 		Assert.assertTrue(infos_float[2] == 0);
 	}
 
+	/**
+	 * Test_avancer.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_avancer() throws Exception
 	{
@@ -53,6 +68,11 @@ public class JUnit_Locomotion extends JUnit_Test
 
 	}
 
+	/**
+	 * Test_tourner.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_tourner() throws Exception
 	{
@@ -69,6 +89,11 @@ public class JUnit_Locomotion extends JUnit_Test
 		Assert.assertEquals(1200, infos_float[2], 50);
 	}
 	
+	/**
+	 * Test_set_x.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_set_x() throws Exception
 	{
@@ -80,6 +105,11 @@ public class JUnit_Locomotion extends JUnit_Test
 		Assert.assertTrue(infos_float[2] == 0);
 	}
 
+	/**
+	 * Test_set_y.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_set_y() throws Exception
 	{
@@ -91,6 +121,11 @@ public class JUnit_Locomotion extends JUnit_Test
 		Assert.assertTrue(infos_float[2] == 0);
 	}
 	
+	/**
+	 * Test_set_orientation.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_set_orientation() throws Exception
 	{
@@ -102,6 +137,11 @@ public class JUnit_Locomotion extends JUnit_Test
 		Assert.assertTrue(infos_float[2] > 1233 && infos_float[2] < 1235);
 	}
 
+	/**
+	 * Test_equilibrage.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_equilibrage() throws Exception
 	{

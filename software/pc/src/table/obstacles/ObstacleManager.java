@@ -6,6 +6,7 @@ import smartMath.Vec2;
 import utils.Log;
 import utils.Config;
 
+// TODO: Auto-generated Javadoc
 /**
  * Traite tout ce qui concerne la gestion des obstacles.
  * @author pf, marsu
@@ -14,13 +15,24 @@ import utils.Config;
 
 public class ObstacleManager
 {
+    
+    /** The log. */
     @SuppressWarnings("unused")
     private Log log;
+    
+    /** The config. */
     @SuppressWarnings("unused")
 	private Config config;
 
+    /** The list obstacles. */
     private ArrayList<ObstacleCircular> listObstacles = new ArrayList<ObstacleCircular>();
   
+    /**
+     * Instantiates a new obstacle manager.
+     *
+     * @param log the log
+     * @param config the config
+     */
     public ObstacleManager(Log log, Config config)
     {
         this.log = log;
@@ -29,11 +41,19 @@ public class ObstacleManager
         maj_config();
     }
     
+    /**
+     * Maj_config.
+     */
     public void maj_config()
     {
     }
     
 
+    /**
+     * Copy.
+     *
+     * @param other the other
+     */
     public void copy(ObstacleManager other)
     {
     }
@@ -42,7 +62,8 @@ public class ObstacleManager
 
     /**
      * Utilis� par le pathfinding. Retourne uniquement les obstacles temporaires.
-     * @return
+     *
+     * @return the list obstacles
      */
     public ArrayList<ObstacleCircular> getListObstacles()
     {
@@ -51,7 +72,9 @@ public class ObstacleManager
     
     /**
      * Utilis� par le pathfinding. Retourne uniquement les obstacles fixes.
-     * @return
+     *
+     * @param codeTorches the code torches
+     * @return the list obstacles fixes
      */
     public ArrayList<Obstacle> getListObstaclesFixes(int codeTorches)
     {
@@ -61,14 +84,20 @@ public class ObstacleManager
     
     
 
+    /**
+     * Creer_obstacle.
+     *
+     * @param position the position
+     */
     public synchronized void creer_obstacle(final Vec2 position)
     {
     	// TODO
     }
 
     /**
-     * Appel fait lors de l'anticipation, supprime les obstacles p�rim�s � une date future
-     * @param date
+     * Appel fait lors de l'anticipation, supprime les obstacles p�rim�s � une date future.
+     *
+     * @param date the date
      */
     public synchronized void supprimerObstaclesPerimes(long date)
     {
@@ -78,10 +107,11 @@ public class ObstacleManager
     
 
     /**
-     * Renvoie true si un obstacle est � une distance inf�rieur � "distance" du point "centre_detection"
-     * @param centre_detection
-     * @param distance
-     * @return
+     * Renvoie true si un obstacle est � une distance inf�rieur � "distance" du point "centre_detection".
+     *
+     * @param centre_detection the centre_detection
+     * @param distance the distance
+     * @return true, if successful
      */
     public boolean obstaclePresent(final Vec2 centre_detection, int distance)
     {
@@ -90,7 +120,8 @@ public class ObstacleManager
     }   
 
     /**
-     * Change le position d'un robot adverse
+     * Change le position d'un robot adverse.
+     *
      * @param i num�ro du robot
      * @param position nouvelle position du robot
      */
@@ -100,8 +131,9 @@ public class ObstacleManager
     }
     
     /**
-     * Utilis� par le thread de strat�gie
-     * @return
+     * Utilis� par le thread de strat�gie.
+     *
+     * @return the _positions_ennemis
      */
     public Vec2[] get_positions_ennemis()
     {
@@ -111,7 +143,8 @@ public class ObstacleManager
     
     
     /**
-     * Utilis� pour les tests
+     * Utilis� pour les tests.
+     *
      * @return le nombre ed'obstacles mobiles d�tect�s
      */
     public int nb_obstacles()
@@ -120,6 +153,13 @@ public class ObstacleManager
     }
     
     
+    /**
+     * Dans_obstacle.
+     *
+     * @param pos the pos
+     * @param obstacle the obstacle
+     * @return true, if successful
+     */
     public boolean dans_obstacle(Vec2 pos, Obstacle obstacle)
     {
 
@@ -132,7 +172,9 @@ public class ObstacleManager
     
     /**
      * Indique si un obstacle fixe de centre proche de la position indiquée existe.
-     * @param position
+     *
+     * @param position the position
+     * @return true, if successful
      */
     public synchronized boolean obstacle_existe(Vec2 position)
     {
@@ -143,8 +185,10 @@ public class ObstacleManager
     }
     
     /**
-     *  Cette instance est elle dans le même état que other ?
-     *  @param other
+     *  Cette instance est elle dans le même état que other ?.
+     *
+     * @param other the other
+     * @return true, if successful
      */
     public boolean equals(ObstacleManager other)
     {

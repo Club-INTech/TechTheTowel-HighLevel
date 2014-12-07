@@ -8,6 +8,7 @@ import strategie.GameState;
 import utils.Log;
 import utils.Config;
 
+// TODO: Auto-generated Javadoc
 /**
  * Service fabriquant des hooks à la demande.
  * @author pf, marsu
@@ -16,16 +17,16 @@ import utils.Config;
 public class HookFactory implements Service
 {
 	
-	/** endroit ou lire la configuration du robot */
+	/**  endroit ou lire la configuration du robot. */
 	private Config config;
 
-	/** système de log a utiliser */
+	/**  système de log a utiliser. */
 	private Log log;
 	
-	/** robot a surveiller pour le déclenchement des hooks */
+	/**  robot a surveiller pour le déclenchement des hooks. */
 	private GameState<RobotReal> realState;
 	
-	/** la valeur de 20 est en mm, elle est remplcée par la valeur spécifié dans le fichier de config s'il y en a une */
+	/**  la valeur de 20 est en mm, elle est remplcée par la valeur spécifié dans le fichier de config s'il y en a une. */
 	private int positionTolerancy = 20;
 	
 	/** spécifie de quelle couleur est le robot (vert ou jaune). Uniquement donné par le fichier de config. */ // TODO: en faire une enum
@@ -69,7 +70,8 @@ public class HookFactory implements Service
 	
 	/**
 	 * demande l'instanciation d'un hook se déclenchant si le robot atteint une certaine position sur la table
-	 * la tolérance sur cette position est ici explicitement demandée et supplante celle du fichier de config
+	 * la tolérance sur cette position est ici explicitement demandée et supplante celle du fichier de config.
+	 *
 	 * @param position de déclenchement du hook
 	 * @param tolerancy le hook sera déclenché si la distance entre le point de déclenchement et la position du robot est inférieure a cette valeur
 	 * @return le hook créé
@@ -81,7 +83,8 @@ public class HookFactory implements Service
 
 	/**
 	 * demande l'instanciation d'un hook se déclenchant si le robot atteint une certaine position sur la table
-	 * la tolérance sur cette position est ici celle du fichier de config
+	 * la tolérance sur cette position est ici celle du fichier de config.
+	 *
 	 * @param position de déclenchement du hook
 	 * @return le hook créé
 	 */
@@ -98,7 +101,8 @@ public class HookFactory implements Service
 
 	/**
 	 * demande l'instanciation d'un hook se déclenchant si le robot atteint une certaine abscisse sur la table
-	 * la tolérance sur cette absisse est ici explicitement demandée et supplante celle du fichier de config
+	 * la tolérance sur cette absisse est ici explicitement demandée et supplante celle du fichier de config.
+	 *
 	 * @param xValue de déclenchement du hook
 	 * @param tolerancy le hook sera déclenché si l'écart entre l'abscisse de déclenchement et la position du robot est inférieur a cette valeur
 	 * @return le hook créé
@@ -111,7 +115,8 @@ public class HookFactory implements Service
 
 	/**
 	 * demande l'instanciation d'un hook se déclenchant si le robot atteint une certaine abscisse sur la table
-	 * la tolérance sur cette absisse est ici celle du fichier de config
+	 * la tolérance sur cette absisse est ici celle du fichier de config.
+	 *
 	 * @param xValue de déclenchement du hook
 	 * @return le hook créé
 	 */
@@ -162,7 +167,8 @@ public class HookFactory implements Service
     
 	/**
 	 * demande l'instanciation d'un hook se déclenchant si le robot atteint une certaine ordonnée sur la table
-	 * la tolérance sur cette ordonnée est ici explicitement demandée et supplante celle du fichier de config
+	 * la tolérance sur cette ordonnée est ici explicitement demandée et supplante celle du fichier de config.
+	 *
 	 * @param yValue de déclenchement du hook
 	 * @param tolerancy le hook sera déclenché si l'écart entre l'ordonnée de déclenchement et la position du robot est inférieur a cette valeur
 	 * @return le hook créé
@@ -175,9 +181,9 @@ public class HookFactory implements Service
 
 	/**
 	 * demande l'instanciation d'un hook se déclenchant si le robot atteint une certaine ordonnée sur la table
-	 * la tolérance sur cette ordonnée est ici celle du fichier de config
+	 * la tolérance sur cette ordonnée est ici celle du fichier de config.
+	 *
 	 * @param yValue de déclenchement du hook
-	 * @param tolerancy le hook sera déclenché si l'écart entre l'ordonnée de déclenchement et la position du robot est inférieur a cette valeur
 	 * @return le hook créé
 	 */
     public Hook newHookY(float yValue)
@@ -186,7 +192,8 @@ public class HookFactory implements Service
     }
 
 	/**
-	 * demande l'instanciation d'un hook se déclenchant si le robot a une ordonnée sur la table supérieure à une certaine valeur
+	 * demande l'instanciation d'un hook se déclenchant si le robot a une ordonnée sur la table supérieure à une certaine valeur.
+	 *
 	 * @param yValue de déclenchement du hook
 	 * @return le hook créé
 	 */

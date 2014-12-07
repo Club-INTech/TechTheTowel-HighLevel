@@ -3,8 +3,10 @@ package utils;
 import robot.RobotReal;
 import container.Service;
 
+// TODO: Auto-generated Javadoc
 /**
- * Service qui permettra de faire un checkup du robot avant le match
+ * Service qui permettra de faire un checkup du robot avant le match.
+ *
  * @author pf
  * (marsu) : Cette année on l'utilisera, promi !
  */
@@ -12,9 +14,18 @@ import container.Service;
 public class CheckUp implements Service 
 {
 
+	/** The log. */
 	private Log log;
+	
+	/** The robotvrai. */
 	private RobotReal robotvrai;
 	
+	/**
+	 * Instantiates a new check up.
+	 *
+	 * @param log the log
+	 * @param robotvrai the robotvrai
+	 */
 	public CheckUp(Log log, RobotReal robotvrai)
 	{
 		this.robotvrai = robotvrai;
@@ -22,6 +33,9 @@ public class CheckUp implements Service
 	}
 	
 	// TODO check-up du robot
+	/**
+	 * Lancer.
+	 */
 	public void lancer()
 	{
 		// Par exemple
@@ -36,6 +50,9 @@ public class CheckUp implements Service
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see container.Service#updateConfig()
+	 */
 	public void updateConfig()
 	{
 	}

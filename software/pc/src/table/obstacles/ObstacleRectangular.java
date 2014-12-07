@@ -2,8 +2,10 @@ package table.obstacles;
 
 import smartMath.Vec2;
 
+// TODO: Auto-generated Javadoc
 /**
- * Obstacle rectangulaire sont les bords sont alignés avec les axes X et Y (pas de possibilité de faire un rectangle en biais)
+ * Obstacle rectangulaire sont les bords sont alignés avec les axes X et Y (pas de possibilité de faire un rectangle en biais).
+ *
  * @author pf, marsu
  */
 public class ObstacleRectangular extends Obstacle
@@ -12,11 +14,20 @@ public class ObstacleRectangular extends Obstacle
 	// Convention: la "position" d'un ObstacleRectangulaire est celle de son centre (intersection des 2 diagonales)
 	
 	// taille selon l'axe X
+	/** The size x. */
 	protected int sizeX;
 	
 	// taille selon l'axe Y
+	/** The size y. */
 	protected int sizeY;
 	
+	/**
+	 * Instantiates a new obstacle rectangular.
+	 *
+	 * @param position the position
+	 * @param sizeX the size x
+	 * @param sizeY the size y
+	 */
 	public ObstacleRectangular(Vec2 position, int sizeX, int sizeY)
 	{
 		super(position);
@@ -24,18 +35,26 @@ public class ObstacleRectangular extends Obstacle
 		this.sizeX = sizeX;
 	}
 
+	/* (non-Javadoc)
+	 * @see table.obstacles.Obstacle#clone()
+	 */
 	public ObstacleRectangular clone()
 	{
 		return new ObstacleRectangular(position.clone(), sizeX, sizeY);
 	}
+	
+	/* (non-Javadoc)
+	 * @see table.obstacles.Obstacle#toString()
+	 */
 	public String toString()
 	{
 		return "ObstacleRectangulaire";
 	}
 	
 	/**
-	 * Taille selon l'axe Y
-	 * @return
+	 * Taille selon l'axe Y.
+	 *
+	 * @return the size y
 	 */
 	public int getSizeY()
 	{
@@ -43,22 +62,30 @@ public class ObstacleRectangular extends Obstacle
 	}
 	
 	/**
-	 * Taille selon l'axe X
-	 * @return
+	 * Taille selon l'axe X.
+	 *
+	 * @return the size x
 	 */
 	public int getSizeX()
 	{
 		return this.sizeX;
 	}
 	
+	/**
+	 * Distance.
+	 *
+	 * @param point the point
+	 * @return the float
+	 */
 	public float distance(Vec2 point)
 	{
 		return (float) Math.sqrt(SquaredDistance(point));
 	}
 	
 	/**
-	 * Fourni la plus petite distance au carré entre le point fourni et l'obstacle
-	 * @param in
+	 * Fourni la plus petite distance au carré entre le point fourni et l'obstacle.
+	 *
+	 * @param in the in
 	 * @return la plus petite distance au carré entre le point fourni et l'obstacle
 	 */
 	public float SquaredDistance(Vec2 in)

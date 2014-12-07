@@ -15,19 +15,28 @@ import exceptions.ContainerException;
 import exceptions.ThreadException;
 import exceptions.serial.SerialManagerException;
 
+// TODO: Auto-generated Javadoc
 /**
- * Service qui instancie les threads
- * @author pf
+ * Service qui instancie les threads.
  *
+ * @author pf
  */
 
 public class ThreadManager
 {
 	
+	/** The log. */
 	private Log log;
 	
+	/** The threads. */
 	private Hashtable<String, AbstractThread> threads;
 	
+	/**
+	 * Instantiates a new thread manager.
+	 *
+	 * @param config the config
+	 * @param log the log
+	 */
 	public ThreadManager(Config config, Log log)
 	{
 		this.log = log;
@@ -41,12 +50,12 @@ public class ThreadManager
 
 	/**
 	 * Donne un thread à partir de son nom. Utilisé par container uniquement.
-	 * @param nom
-	 * @return
-	 * @throws ThreadException
-	 * @throws ContainerException
-	 * @throws ConfigException
-	 * @throws SerialManagerException
+	 *
+	 * @param table the table
+	 * @param capteur the capteur
+	 * @param deplacements the deplacements
+	 * @param actionneurs the actionneurs
+	 * @return the thread timer
 	 */
 	public AbstractThread getThreadTimer(Table table, SensorsCardWrapper capteur, LocomotionCardWrapper deplacements, ActuatorCardWrapper actionneurs)
 	{
@@ -56,6 +65,14 @@ public class ThreadManager
 		return threads.get("threadTimer");
 	}
 
+	/**
+	 * Gets the thread capteurs.
+	 *
+	 * @param robotvrai the robotvrai
+	 * @param table the table
+	 * @param capteurs the capteurs
+	 * @return the thread capteurs
+	 */
 	public AbstractThread getThreadCapteurs(RobotReal robotvrai, Table table, SensorsCardWrapper capteurs)
 	{
 		AbstractThread thread = threads.get("threadCapteurs");
@@ -64,6 +81,14 @@ public class ThreadManager
 		return threads.get("threadCapteurs");
 	}
 
+	/**
+	 * Gets the thread laser.
+	 *
+	 * @param laser the laser
+	 * @param table the table
+	 * @param filtragelaser the filtragelaser
+	 * @return the thread laser
+	 */
 	public AbstractThread getThreadLaser(Laser laser, Table table, LaserFiltration filtragelaser)
 	{
 		AbstractThread thread = threads.get("threadLaser");
@@ -72,6 +97,9 @@ public class ThreadManager
 		return threads.get("threadLaser");
 	}
 
+	/**
+	 * Start instancied threads.
+	 */
 	public void startInstanciedThreads()
 	{
 		log.debug("Démarrage des threads enregistrés", this);
@@ -84,6 +112,9 @@ public class ThreadManager
 		}
 	}
 	
+	/**
+	 * Stop all threads.
+	 */
 	public void stopAllThreads()
 	{
 		AbstractThread.stopThreads = true;

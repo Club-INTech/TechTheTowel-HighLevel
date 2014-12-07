@@ -9,17 +9,24 @@ import robot.*;
 import smartMath.Vec2;
 import table.Table;
 
+// TODO: Auto-generated Javadoc
 /**
- * Tests unitaires pour la détection d'ennemi
- * @author pf
+ * Tests unitaires pour la détection d'ennemi.
  *
+ * @author pf
  */
 public class JUnit_EnnemyCollisionAvoidance extends JUnit_Test
 {
 
+	/** The robotvrai. */
 	private RobotReal robotvrai;
+	
+	/** The table. */
 	private Table table;
 	
+	/* (non-Javadoc)
+	 * @see tests.JUnit_Test#setUp()
+	 */
 	@Before
 	public void setUp() throws Exception
 	{
@@ -31,6 +38,11 @@ public class JUnit_EnnemyCollisionAvoidance extends JUnit_Test
 		container.getService(ServiceNames.THREAD_SENSOR);
 	}
 
+	/**
+	 * Test_ajout obstacle.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_ajoutObstacle() throws Exception
 	{

@@ -9,6 +9,7 @@ import enums.Speed;
 import robot.RobotReal;
 import smartMath.Vec2;
 
+// TODO: Auto-generated Javadoc
 /**
  * Vérifie que le robot est bien branché.
  * @author pf, marsu
@@ -18,8 +19,12 @@ import smartMath.Vec2;
 public class JUnit_javaToRobotLink  extends JUnit_Test 
 {
 
+	/** The robotvrai. */
 	private RobotReal robotvrai;
 	
+	/* (non-Javadoc)
+	 * @see tests.JUnit_Test#setUp()
+	 */
 	@Before
 	public void setUp() throws Exception 
 	{
@@ -36,6 +41,11 @@ public class JUnit_javaToRobotLink  extends JUnit_Test
 	}
 	
 	
+	/**
+	 * Test_bidon.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_bidon() throws Exception
 	{

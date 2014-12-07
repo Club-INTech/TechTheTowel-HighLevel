@@ -11,18 +11,25 @@ import enums.Speed;
 import robot.RobotReal;
 import smartMath.Vec2;
 
+// TODO: Auto-generated Javadoc
 /**
- * Tests unitaires des hooks (en rouge: avec symétrie)
- * @author pf
+ * Tests unitaires des hooks (en rouge: avec symétrie).
  *
+ * @author pf
  */
 
 public class JUnit_HookGreen extends JUnit_Test {
 
+	/** The robotvrai. */
 	private RobotReal robotvrai;
+	
+	/** The hookgenerator. */
 	@SuppressWarnings("unused")
 	private HookFactory hookgenerator;
 	
+	/* (non-Javadoc)
+	 * @see tests.JUnit_Test#setUp()
+	 */
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
@@ -35,6 +42,11 @@ public class JUnit_HookGreen extends JUnit_Test {
 	}
 	
 	// TODO �crire un test par type de hook
+	/**
+	 * Test_hook abscisse_avancer.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_hookAbscisse_avancer() throws Exception
 	{

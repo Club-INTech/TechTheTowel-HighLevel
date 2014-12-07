@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+// TODO: Auto-generated Javadoc
 /**
  * Classe statique qui gere les sauvegardes et chargements.
  * @author Stud
@@ -13,10 +14,20 @@ import java.io.ObjectOutputStream;
 
 public class DataSaver {
 
+    /**
+     * Instantiates a new data saver.
+     */
     private DataSaver()
     {
     }
         
+    /**
+     * Sauvegarder.
+     *
+     * @param <T> the generic type
+     * @param obj the obj
+     * @param filename the filename
+     */
     public static <T> void sauvegarder(T obj, String filename)
     {
     	System.out.println("Sauvegarde de "+filename);
@@ -39,6 +50,12 @@ public class DataSaver {
 		}
     }
     
+    /**
+     * Charger.
+     *
+     * @param filename the filename
+     * @return the object
+     */
     public static Object charger(String filename)
     {
     	System.out.println("Chargement de "+filename);

@@ -8,13 +8,27 @@ import utils.Config;
 import container.Container;
 import enums.ServiceNames;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class JUnit_Test.
+ */
 public abstract class JUnit_Test
 {
 
+	/** The container. */
 	protected Container container;
+	
+	/** The config. */
 	protected Config config;
+	
+	/** The log. */
 	protected Log log;
 	
+	/**
+	 * Sets the up.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Before
 	public void setUp() throws Exception
 	{
@@ -23,6 +37,11 @@ public abstract class JUnit_Test
 		log = (Log) container.getService(ServiceNames.LOG);
 	}
 
+	/**
+	 * Tear down.
+	 *
+	 * @throws Exception the exception
+	 */
 	@After
 	public void tearDown() throws Exception {
 		container.destructor();

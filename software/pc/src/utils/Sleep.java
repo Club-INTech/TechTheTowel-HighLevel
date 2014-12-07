@@ -1,15 +1,19 @@
 package utils;
 
+// TODO: Auto-generated Javadoc
 /**
- * Classe qui fournie juste un sleep sans try/catch
- * @author pf, marsu
+ * Classe qui fournie juste un sleep sans try/catch.
  *
+ * @author pf, marsu
  */
 
 public class Sleep 
 {
 
 	// Constructeur privé car cette classe n'a qu'une méthode statique
+	/**
+	 * Instantiates a new sleep.
+	 */
 	private Sleep()
 	{
 	}

@@ -10,14 +10,20 @@ import smartMath.Vec2;
 import table.Table;
 import threads.ThreadTimer;
 
+// TODO: Auto-generated Javadoc
 /**
- * Tests unitaires des threads
- * @author pf
+ * Tests unitaires des threads.
  *
+ * @author pf
  */
 
 public class JUnit_Threads extends JUnit_Test {
 
+	/**
+	 * Test_arret.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_arret() throws Exception
 	{
@@ -38,6 +44,11 @@ public class JUnit_Threads extends JUnit_Test {
 		Assert.assertTrue(robotvrai.getPosition().equals(new Vec2(0,1500)));
 	}
 
+	/**
+	 * Test_detection_obstacle.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_detection_obstacle() throws Exception
 	{
@@ -55,6 +66,11 @@ public class JUnit_Threads extends JUnit_Test {
 
 	}
 	
+	/**
+	 * Test_fin_match.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_fin_match() throws Exception
 	{
@@ -71,6 +87,11 @@ public class JUnit_Threads extends JUnit_Test {
 		Assert.assertTrue(System.currentTimeMillis()-t1 < 4000);
 	}
 	
+	/**
+	 * Test_demarrage_match.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_demarrage_match() throws Exception
 	{
@@ -85,6 +106,11 @@ public class JUnit_Threads extends JUnit_Test {
 		Assert.assertTrue(ThreadTimer.match_demarre);
 	}
 
+	/**
+	 * Test_serie.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_serie() throws Exception
 	{
@@ -96,6 +122,11 @@ public class JUnit_Threads extends JUnit_Test {
 		robotvrai.moveLengthwise(1000);
 	}
 
+	/**
+	 * Test_fin_thread_avant_match.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_fin_thread_avant_match() throws Exception
 	{

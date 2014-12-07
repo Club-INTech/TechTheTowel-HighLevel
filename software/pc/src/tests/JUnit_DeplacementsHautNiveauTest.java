@@ -14,23 +14,32 @@ import smartMath.Vec2;
 import strategie.GameState;
 import utils.Sleep;
 
+// TODO: Auto-generated Javadoc
 /**
- * Teste les fonctions de déplacement de haut niveau
- * @author pf
+ * Teste les fonctions de déplacement de haut niveau.
  *
+ * @author pf
  */
 
 // TODO : comprendre ce système
 
 public class JUnit_DeplacementsHautNiveauTest extends JUnit_Test
 {
+    
+    /** The robot. */
     private Locomotion robot;
     
     // TODO: pourquoi ce n'est pas utilisé ?
+    /** The hookgenerator. */
     @SuppressWarnings("unused")
 	private HookFactory hookgenerator;
+    
+    /** The real_state. */
     private GameState<RobotReal> real_state;
     
+    /* (non-Javadoc)
+     * @see tests.JUnit_Test#setUp()
+     */
     @SuppressWarnings("unchecked")
     @Before
     public void setUp() throws Exception {
@@ -44,6 +53,11 @@ public class JUnit_DeplacementsHautNiveauTest extends JUnit_Test
         robot.setAim(consigne);
     }
     
+    /**
+     * Test_va_au_point_courbe.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void test_va_au_point_courbe() throws Exception
     {
@@ -51,6 +65,11 @@ public class JUnit_DeplacementsHautNiveauTest extends JUnit_Test
         robot.moveInDirection((float) (Math.PI/4), 500, true);
     }
 
+    /**
+     * Test_va_au_point_symetrie.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void test_va_au_point_symetrie() throws Exception
     {
@@ -59,6 +78,11 @@ public class JUnit_DeplacementsHautNiveauTest extends JUnit_Test
         //robot.moveInDirectionPlanner(false, true, false);
     }
     
+    /**
+     * Test_va_au_point_hook.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void test_va_au_point_hook() throws Exception
     {
@@ -67,6 +91,11 @@ public class JUnit_DeplacementsHautNiveauTest extends JUnit_Test
         //
     }
 
+    /**
+     * Test_va_au_point_correction.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void test_va_au_point_correction() throws Exception
     {
@@ -75,6 +104,11 @@ public class JUnit_DeplacementsHautNiveauTest extends JUnit_Test
         //robot.moveInDirectionEventWatcher(null, false, false);
     }
 
+    /**
+     * Test_va_au_point_detection.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void test_va_au_point_detection() throws Exception
     {
@@ -84,6 +118,11 @@ public class JUnit_DeplacementsHautNiveauTest extends JUnit_Test
         //robot.moveInDirectionExeptionHandler(null, true, false, false);
     }
 
+    /**
+     * Test_va_au_point_relancer.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void test_va_au_point_relancer() throws Exception
     {
@@ -98,12 +137,22 @@ public class JUnit_DeplacementsHautNiveauTest extends JUnit_Test
         */
     }
 
+    /**
+     * Test_recaler.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void test_recaler() throws Exception
     {
         robot.readjust();
     }
     
+    /**
+     * Test_suit_chemin.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void test_suit_chemin() throws Exception
     {
@@ -119,6 +168,11 @@ public class JUnit_DeplacementsHautNiveauTest extends JUnit_Test
         }
     }
 
+    /**
+     * Test_avancer.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void test_avancer() throws Exception
     {
@@ -127,6 +181,11 @@ public class JUnit_DeplacementsHautNiveauTest extends JUnit_Test
         robot.moveLengthwise(-50, null, false);
     }
 
+    /**
+     * Test_avancer_mur.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void test_avancer_mur() throws Exception
     {
@@ -135,6 +194,11 @@ public class JUnit_DeplacementsHautNiveauTest extends JUnit_Test
         real_state.robot.moveLengthwiseTowardWall(1500);
     }
 
+    /**
+     * Test_vitesse_avancer.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void test_vitesse_avancer() throws Exception
     {

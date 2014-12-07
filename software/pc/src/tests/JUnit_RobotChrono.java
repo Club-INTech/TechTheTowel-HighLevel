@@ -8,15 +8,21 @@ import org.junit.Test;
 
 import robot.*;
 import smartMath.Vec2;
+// TODO: Auto-generated Javadoc
+
 /**
- * Tests unitaires pour RobotChrono
- * @author pf
+ * Tests unitaires pour RobotChrono.
  *
+ * @author pf
  */
 public class JUnit_RobotChrono extends JUnit_Test {
 
+	/** The robotchrono. */
 	private RobotChrono robotchrono;
 	
+	/* (non-Javadoc)
+	 * @see tests.JUnit_Test#setUp()
+	 */
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
@@ -26,6 +32,11 @@ public class JUnit_RobotChrono extends JUnit_Test {
 		robotchrono.setOrientation(0);
 	}
 
+	/**
+	 * Test_avancer.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_avancer() throws Exception
 	{
@@ -36,6 +47,11 @@ public class JUnit_RobotChrono extends JUnit_Test {
         System.out.println("Après: "+robotchrono.getPosition());
 	}
 
+	/**
+	 * Test_va_au_point_symetrie.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_va_au_point_symetrie() throws Exception
 	{
@@ -56,6 +72,11 @@ public class JUnit_RobotChrono extends JUnit_Test {
 		Assert.assertTrue(robotchrono.getPosition().distance(new Vec2(-10,1400)) < 2);
 	}
 	
+	/**
+	 * Test_va_au_point.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_va_au_point() throws Exception
 	{
@@ -64,6 +85,11 @@ public class JUnit_RobotChrono extends JUnit_Test {
 		Assert.assertTrue(robotchrono.getPosition().distance(new Vec2(10,1400)) < 2);
 	}
 
+	/**
+	 * Test_tourner.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_tourner() throws Exception
 	{
@@ -72,6 +98,11 @@ public class JUnit_RobotChrono extends JUnit_Test {
 		Assert.assertTrue(robotchrono.getOrientation()==(float)1.2);
 	}
 
+	/**
+	 * Test_suit_chemin.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_suit_chemin() throws Exception
 	{
@@ -84,6 +115,11 @@ public class JUnit_RobotChrono extends JUnit_Test {
 		
 	}
 	
+	/**
+	 * Test_actionneurs.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_actionneurs() throws Exception
 	{
