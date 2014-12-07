@@ -54,7 +54,7 @@ public class Laser implements Service {
 	 * Indique les balises considérées comme non opérationnelle pour le match
 	 * @return
 	 */
-	public ArrayList<Beacon> balises_ignorees()
+	public ArrayList<Beacon> ignoredBeacons()//balises_ignorees()
 	{
 		ArrayList<Beacon> out = new ArrayList<Beacon>();
 		for(Beacon b: beacons)
@@ -66,7 +66,7 @@ public class Laser implements Service {
 	/**
 	 * Allumer le moteur et les lasers
 	 */
-	public void allumer()
+	public void turnOn()//allumer()
 	{
 		try {
 			serie.communiquer("motor_on", 0);
@@ -93,19 +93,19 @@ public class Laser implements Service {
 	 * Ping chaque balise et vérifie celles qui sont connectées
 	 * @return
 	 */
-	public int verifier_balises_connectes()
+	public int checkConnectedBeacons()//verifier_balises_connectes()
 	{
-		int balises_ok = 0;
+		int beacons_ok = 0;//balises_ok
 		for(Beacon b: beacons)
 			try {
-				if(ping_balise(b.id))
+				if(ping_beacon(b.id))
 				{
 					if(!b.active)
 					{
 						b.active = true;
 						log.debug("balise n°" + Integer.toString(b.id) + " répondant au ping", this);
 					}
-					balises_ok++;
+					beacons_ok++;
 				}
 				else
 				{
@@ -114,7 +114,7 @@ public class Laser implements Service {
 			} catch (SerialConnexionException e) {
 				e.printStackTrace();
 			}
-		return balises_ok;
+		return beacons_ok;
 	}
 
 	/**
@@ -123,7 +123,7 @@ public class Laser implements Service {
 	 * @return
 	 * @throws SerialException 
 	 */
-	private boolean ping_balise(int id) throws SerialConnexionException
+	private boolean ping_beacon(int id) throws SerialConnexionException
 	{
 		// TODO (de PF) vérifier la méthode, mais on faisait comme ça l'année dernière
 		String[] ping = serie.communiquer("ping_all", beacons.length);	    
@@ -134,7 +134,7 @@ public class Laser implements Service {
 	 * Récupère la fréquence actuelle du moteur
 	 * @return
 	 */
-	private float frequence_moteur()
+	private float motorFrequency()//frequence_moteur()
 	{
 		try {
 			String[] reponse = serie.communiquer("freq", 1);
@@ -158,24 +158,24 @@ public class Laser implements Service {
 	public Vec2 position_balise_relative(int id) throws SerialConnexionException
 	{
 		String chaines[] = {"value", Integer.toString(id)};
-		String[] reponse = serie.communiquer(chaines, 3);
+		String[] response = serie.communiquer(chaines, 3);
 
-		if(reponse[0].equals("NO_RESPONSE") || reponse[1].equals("NO_RESPONSE")
-				|| reponse[0].equals("OLD_VALUE") || reponse[1].equals("OLD_VALUE")
-				|| reponse[0].equals("UNVISIBLE") || reponse[1].equals("UNVISIBLE"))
+		if(response[0].equals("NO_RESPONSE") || response[1].equals("NO_RESPONSE")
+				|| response[0].equals("OLD_VALUE") || response[1].equals("OLD_VALUE")
+				|| response[0].equals("UNVISIBLE") || response[1].equals("UNVISIBLE"))
 			return null;
 
 		// Fréquence actuelle du moteur
-		float freq = frequence_moteur();
+		float freq = motorFrequency();
 
 		// Valeur de la distance, sur l'échelle du timer 8 bit
-		float timer = Float.parseFloat(reponse[0]);
+		float timer = Float.parseFloat(response[0]);
 
 		// Délai du passage des deux lasers, en seconde
 		float delai = 128 * timer / 20000000;
 
 		// Calcul de la distance (en mm)
-		float ecart_laser = 35;
+		float gap_laser = 35;
 		float theta = (float) (delai * freq * 2 * Math.PI);
 
 		if(theta == 0)
@@ -184,10 +184,10 @@ public class Laser implements Service {
 			return null;
 		}
 
-		int distance = (int) (ecart_laser / Math.sin(theta / 2));
+		int distance = (int) (gap_laser / Math.sin(theta / 2));
 
 		// Angle
-		float angle = Float.parseFloat(reponse[1]);
+		float angle = Float.parseFloat(response[1]);
 
 		// Changement dans le repère de la table
 		Vec2 point = new Vec2((int)(distance * Math.cos(angle)), (int)(distance * Math.sin(angle)));
@@ -203,24 +203,24 @@ public class Laser implements Service {
 	public Vec2 position_balise(int id) throws SerialConnexionException
 	{
 		String chaines[] = {"value", Integer.toString(id)};
-		String[] reponse = serie.communiquer(chaines, 3);
+		String[] response = serie.communiquer(chaines, 3);
 
-		if(reponse[0].equals("NO_RESPONSE") || reponse[1].equals("NO_RESPONSE")
-				|| reponse[0].equals("OLD_VALUE") || reponse[1].equals("OLD_VALUE")
-				|| reponse[0].equals("UNVISIBLE") || reponse[1].equals("UNVISIBLE"))
+		if(response[0].equals("NO_RESPONSE") || response[1].equals("NO_RESPONSE")
+				|| response[0].equals("OLD_VALUE") || response[1].equals("OLD_VALUE")
+				|| response[0].equals("UNVISIBLE") || response[1].equals("UNVISIBLE"))
 			return null;
 
 		// Fréquence actuelle du moteur
-		float freq = frequence_moteur();
+		float freq = motorFrequency();
 
 		// Valeur de la distance, sur l'échelle du timer 8 bit
-		float timer = Float.parseFloat(reponse[0]);
+		float timer = Float.parseFloat(response[0]);
 
         // Délai du passage des deux lasers, en seconde
         float delai = 128 * timer / 20000000;
         
         // Calcul de la distance (en mm)
-        float ecart_laser = 35;
+        float gap_laser = 35;
         float theta = (float) (delai * freq * 2 * Math.PI);
 
         if(theta == 0)
@@ -229,9 +229,9 @@ public class Laser implements Service {
             return null;
         }
 
-        int distance = (int) (ecart_laser / Math.sin(theta / 2));
+        int distance = (int) (gap_laser / Math.sin(theta / 2));
         // Angle
-        float angle = Float.parseFloat(reponse[1]);
+        float angle = Float.parseFloat(response[1]);
 
         // Changement dans le repère de la table
         Vec2 point = robotvrai.getPosition();
@@ -300,32 +300,32 @@ public class Laser implements Service {
 	/**
 	 * Vérifie si les données des balises actives sont cohérentes en début de match
 	 */
-	public void verifier_coherence_balise()
+	public void checkBeaconConsistency()//verifier_coherence_balise()
 	{
 		// Nombre d'essais pour les calculs
-		int essais = 10;
+		int trials = 10;
 
-		ArrayList<Beacon> balises_actives = activeBeacons();
-		for(Beacon b : balises_actives)
+		ArrayList<Beacon> beacons_active = activeBeacons();
+		for(Beacon b : beacons_active)
 		{
-			float moyenne = 0;
+			float mean = 0;
 			ArrayList<Float> valeurs = new ArrayList<Float>();
-			float ecart_type = 0;
+			float standard_deviation = 0;
 			int n = 0;
 
-			for(int i = 0; i < essais; i++)
+			for(int i = 0; i < trials; i++)
 			{
 				try {
-					String chaines[] = {"value", Integer.toString(b.id)};
-					String[] reponse = serie.communiquer(chaines, 3);
+					String strings[] = {"value", Integer.toString(b.id)};
+					String[] response = serie.communiquer(strings, 3);
 					//System.out.println(reponse[0]/* + " " + reponse[1] + " " + reponse[2]*/);
-					if(!(reponse[0].equals("NO_RESPONSE") || reponse[1].equals("NO_RESPONSE")
-							|| reponse[0].equals("OLD_VALUE") || reponse[1].equals("OLD_VALUE")
-							|| reponse[0].equals("UNVISIBLE") || reponse[1].equals("UNVISIBLE")))
+					if(!(response[0].equals("NO_RESPONSE") || response[1].equals("NO_RESPONSE")
+							|| response[0].equals("OLD_VALUE") || response[1].equals("OLD_VALUE")
+							|| response[0].equals("UNVISIBLE") || response[1].equals("UNVISIBLE")))
 					{
-						float angle = Float.parseFloat(reponse[1]);
+						float angle = Float.parseFloat(response[1]);
 						n++;
-						moyenne += angle;
+						mean += angle;
 						valeurs.add(angle);
 					}
 				}
@@ -338,23 +338,23 @@ public class Laser implements Service {
 			// Calcul de la moyenne
 			if(n > 0)
 			{
-				moyenne /= (float) n;
+				mean /= (float) n;
 
 				// Calcul de l'écart type
 				for(Float v: valeurs)
-					ecart_type += (v - moyenne) * (v - moyenne);
-				ecart_type /= (float) n;
+					standard_deviation += (v - mean) * (v - mean);
+				standard_deviation /= (float) n;
 
 			}
 
 			// Vérification de la cohérence
-			if(n < essais / 2 || ecart_type > 1)
+			if(n < trials / 2 || standard_deviation > 1)
 			{
-				log.critical("balise n°"+Integer.toString(b.id)+" ignorée pendant le match, valeurs renvoyées incohérentes (valeurs reçues = "+Integer.toString(n)+" / "+Integer.toString(essais)+", angle moyen = "+Float.toString(moyenne)+", écart-type = "+Float.toString(ecart_type)+")", this);
+				log.critical("balise n°"+Integer.toString(b.id)+" ignorée pendant le match, valeurs renvoyées incohérentes (valeurs reçues = "+Integer.toString(n)+" / "+Integer.toString(trials)+", angle moyen = "+Float.toString(mean)+", écart-type = "+Float.toString(standard_deviation)+")", this);
 				b.active = false;
 			}
 			else
-				log.debug("balise n°"+Integer.toString(b.id)+" renvoie des valeurs cohérentes (valeurs reçues = "+Integer.toString(n)+" / "+Integer.toString(essais)+", angle moyen = "+Float.toString(moyenne)+", écart-type = "+Float.toString(ecart_type)+")", this);				
+				log.debug("balise n°"+Integer.toString(b.id)+" renvoie des valeurs cohérentes (valeurs reçues = "+Integer.toString(n)+" / "+Integer.toString(trials)+", angle moyen = "+Float.toString(mean)+", écart-type = "+Float.toString(standard_deviation)+")", this);				
 		}
 
 
