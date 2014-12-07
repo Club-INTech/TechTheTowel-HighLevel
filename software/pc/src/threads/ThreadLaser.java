@@ -129,7 +129,7 @@ class ThreadLaser extends AbstractThread {
 					// Vérification si l'obstacle est sur la table 
 					if(p_filtre.x > -table_x/2 && p_filtre.y > 0 && p_filtre.x < table_x/2 && p_filtre.y < table_y)
 					{
-						table.gestionobstacles.deplacer_robot_adverse(balise.id, p_filtre);
+						table.mObstacleManager.setEnnemyNewLocation(balise.id, p_filtre);
 						log.debug("Laser voit ennemi en : " + p_filtre, this);
 					}
 

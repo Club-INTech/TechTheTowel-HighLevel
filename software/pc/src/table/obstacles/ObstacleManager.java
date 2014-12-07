@@ -6,196 +6,180 @@ import smartMath.Vec2;
 import utils.Log;
 import utils.Config;
 
-// TODO: Auto-generated Javadoc
 /**
- * Traite tout ce qui concerne la gestion des obstacles.
+ * Traite tout ce qui concerne la gestion des obstacles sur la table.
+ * Les obstacles peuvent être fixes (bordures de la table par exemple) ou bien mobile (et alors considérés temporaires).
+ * Un robot ennemi est une obstacle mobile par exemple. 
+ * 
  * @author pf, marsu
- *
  */
 
 public class ObstacleManager
 {
-    
-    /** The log. */
+	/** système de log sur lequel écrire. */
     @SuppressWarnings("unused")
     private Log log;
-    
-    /** The config. */
+
+	/** endroit ou lire la configuration du robot */
     @SuppressWarnings("unused")
 	private Config config;
 
-    /** The list obstacles. */
-    private ArrayList<ObstacleCircular> listObstacles = new ArrayList<ObstacleCircular>();
+    /** Ensemble des obstacles mobiles/temporaires se trouvant sur la table */
+    private ArrayList<Obstacle> mobileObstacles = new ArrayList<Obstacle>();
   
     /**
-     * Instantiates a new obstacle manager.
+     * Instancie un nouveau gestionnaire d'obstacle.
      *
-     * @param log the log
-     * @param config the config
+     * @param log le système de log sur lequel écrire.
+     * @param config l'endroit ou lire la configuration du robot
      */
     public ObstacleManager(Log log, Config config)
     {
         this.log = log;
         this.config = config;
         
-        maj_config();
-    }
-    
-    /**
-     * Maj_config.
-     */
-    public void maj_config()
-    {
-    }
-    
+    }    
 
     /**
-     * Copy.
+     * Rends le grestionnaire d'obstacle fourni en argument explicite égal a ce gestionnaire.
      *
-     * @param other the other
+     * @param other les gestionnaire a modifier
      */
     public void copy(ObstacleManager other)
     {
+    	//TODO: méthode de copie de ObstacleManager 
     }
-    
-    
 
     /**
-     * Utilis� par le pathfinding. Retourne uniquement les obstacles temporaires.
+     *  Cette instance est elle dans le même état que celle fournie en arguement explicite ?
      *
-     * @return the list obstacles
+     * @param other l'autre instance a comparer
+     * @return true, si les deux instance sont dans le meme etat
      */
-    public ArrayList<ObstacleCircular> getListObstacles()
+    public boolean equals(ObstacleManager other)
     {
-        return listObstacles;
+    	//TODO : a garder a jour
+    	boolean IDontKnow = false;
+        return IDontKnow;
     }
     
     /**
-     * Utilis� par le pathfinding. Retourne uniquement les obstacles fixes.
+     * Utilis� par le pathfinding.
+     * Retourne tout les les obstacles temporaires/mobiles. (détectés par la balise laser, les capteurs de distance, etc.)
      *
-     * @param codeTorches the code torches
-     * @return the list obstacles fixes
+     * @return la liste des obstacles temporaires/mobiles de la table
      */
-    public ArrayList<Obstacle> getListObstaclesFixes(int codeTorches)
+    public ArrayList<Obstacle> getMobileObstacles()
     {
-    	// TODO
+        return mobileObstacles;
+    }
+    
+    /**
+     * Utilis� par le pathfinding.
+     * Retourne tout les les obstacles fixes de la table.
+     *
+     * @return la liste des obstacles fixes de la table
+     */
+    public ArrayList<Obstacle> getFixedObstacles()
+    {
+    	// TODO renvoyer la liste des obstacles fixes
         return new ArrayList<Obstacle>();
     }
     
-    
-
     /**
-     * Creer_obstacle.
+     * Ajoute un obstacle sur la table a la position spécifiée
      *
-     * @param position the position
+     * @param position position ou ajouter l'obstacle
      */
-    public synchronized void creer_obstacle(final Vec2 position)
+    public synchronized void addObstacle(final Vec2 position)
     {
-    	// TODO
+    	// TODO jouter un obstacle quand demandé
     }
 
     /**
-     * Appel fait lors de l'anticipation, supprime les obstacles p�rim�s � une date future.
+	 * Supprime du gestionnaire tout les obstacles dont la date de péremption est antérieure a la date fournie
      *
-     * @param date the date
+     * @param date La date de péremption a partir de laquelle on garde les obstacles.
      */
-    public synchronized void supprimerObstaclesPerimes(long date)
+    public synchronized void removeOutdatedObstacles(long date)
     {
     	// Et pouf !
-    	// TODO
+    	// TODO supprimer les obstacles qui sont périmés
     }
-    
 
     /**
-     * Renvoie true si un obstacle est � une distance inf�rieur � "distance" du point "centre_detection".
+     * Renvoie true si un obstacle chevauche un disque.
      *
-     * @param centre_detection the centre_detection
-     * @param distance the distance
-     * @return true, if successful
+     * @param discCenter le centre du disque a vérifier
+     * @param radius le rayon du disque
+     * @return true, si au moins un obstacle chevauche le disque
      */
-    public boolean obstaclePresent(final Vec2 centre_detection, int distance)
+    public boolean isDiscObstructed(final Vec2 discCenter, int radius)
     {
-    	//TODO
+    	//TODO vérifier si le disque est obstrué
     	return false;
     }   
 
     /**
      * Change le position d'un robot adverse.
      *
-     * @param i num�ro du robot
+     * @param ennemyID num�ro du robot
      * @param position nouvelle position du robot
      */
-    public synchronized void deplacer_robot_adverse(int i, final Vec2 position)
+    public synchronized void setEnnemyNewLocation(int ennemyID, final Vec2 position)
     {
-    	//TODO
+    	//TODO changer la position de l'ennemi demandé
     }
     
     /**
-     * Utilis� par le thread de strat�gie.
+     * Utilis� par le thread de stratégie.
+     * renvois la position du robot ennemi voulu sur la table.
      *
-     * @return the _positions_ennemis
+     * @return la position de l'ennemi spécifié
      */
-    public Vec2[] get_positions_ennemis()
+    public Vec2 getEnnemyLocation(int ennemyID)
     {
-    	// TODO
-        return  new Vec2[1];
+    	//TODO donner la position de l'ennemi demandé
+        return  new Vec2();
     }
     
     
     /**
      * Utilis� pour les tests.
+     * Renvois le nombre d'obstacles mobiles actuellement en mémoire
      *
-     * @return le nombre ed'obstacles mobiles d�tect�s
+     * @return le nombre d'obstacles mobiles actuellement en mémoire
      */
-    public int nb_obstacles()
+    public int getMobileObstaclesCount()
     {
-        return listObstacles.size();
+        return mobileObstacles.size();
     }
     
-    
     /**
-     * Dans_obstacle.
+     * Vérifie si le position spécifié est dans l'obstacle spécifié ou non
      *
-     * @param pos the pos
-     * @param obstacle the obstacle
-     * @return true, if successful
+     * @param pos la position a vérifier
+     * @param obstacle l'obstacle a considérer
+     * @return true, si la position est dans l'obstacle
      */
-    public boolean dans_obstacle(Vec2 pos, Obstacle obstacle)
+    public synchronized boolean isPositionInObstacle(Vec2 pos, Obstacle obstacle)
     {
-
-    	//TODO !
+    	//TODO: vérifier si la position actuelle est ou non dans l'obstacle
     	return true;
 
     }
     
-    
-    
     /**
-     * Indique si un obstacle fixe de centre proche de la position indiquée existe.
+	 * Vérifie si la position donnée est dégagée ou si elle est dans l'un des obstacles sur la table
      *
-     * @param position the position
-     * @return true, if successful
+     * @param position la position a vérifier
+     * @return true, si la position est dans un obstacle
      */
-    public synchronized boolean obstacle_existe(Vec2 position)
+    public synchronized boolean isObstructed(Vec2 position)
     {
-    	//TODO
+    	//TODO : vérifier si la position est dans un obstacle ou non
     	boolean IDontKnow = false;
         return IDontKnow;
     	
     }
-    
-    /**
-     *  Cette instance est elle dans le même état que other ?.
-     *
-     * @param other the other
-     * @return true, if successful
-     */
-    public boolean equals(ObstacleManager other)
-    {
-    	//TODO
-    	boolean IDontKnow = false;
-        return IDontKnow;
-    }
-    
-
 }

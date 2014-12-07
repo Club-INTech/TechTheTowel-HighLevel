@@ -1133,7 +1133,7 @@
   </association>  
   <association id="165">    
     <end type="SOURCE" refId="32" navigable="false">      
-      <attribute id="166" name="listObstacles">        
+      <attribute id="166" name="mobileObstacles">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
       <multiplicity id="167" minimum="0" maximum="2147483647">        
@@ -2709,7 +2709,7 @@
   </association>  
   <association id="481">    
     <end type="SOURCE" refId="71" navigable="false">      
-      <attribute id="482" name="gestionobstacles">        
+      <attribute id="482" name="mObstacleManager">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
       <multiplicity id="483" minimum="0" maximum="1">        

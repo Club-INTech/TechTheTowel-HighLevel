@@ -52,11 +52,11 @@ public class JUnit_EnnemyCollisionAvoidance extends JUnit_Test
 		Thread.sleep(1000);
 		container.startInstanciedThreads();
 		Thread.sleep(1000);
-		Assert.assertEquals(table.gestionobstacles.nb_obstacles(), 0);
+		Assert.assertEquals(table.mObstacleManager.getMobileObstaclesCount(), 0);
 		log.warning("!!!!!!!!!!!!!!!!!!!!!!!!!!!!", this);
 		log.warning("Vous avez 5 secondes pour placer un obstacle devant le robot", this);
 		Thread.sleep(6000);
-		Assert.assertTrue(table.gestionobstacles.nb_obstacles() >= 1);
+		Assert.assertTrue(table.mObstacleManager.getMobileObstaclesCount() >= 1);
 	}
 
 	//TODO: écrire un test pour chaque élément de la table, et vérifier s'il est détecté ou non (selon ce qui devrait se passer).

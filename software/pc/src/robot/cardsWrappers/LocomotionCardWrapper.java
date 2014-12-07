@@ -1,6 +1,7 @@
 package robot.cardsWrappers;
 
 import java.util.Hashtable;
+import java.util.Random;
 
 import robot.serial.SerialConnexion;
 import utils.*;
@@ -72,6 +73,8 @@ public class LocomotionCardWrapper implements Service
 		feedbackLoopStatistics.put("erreur_translation", 0);
 		feedbackLoopStatistics.put("derivee_erreur_rotation", 0);
 		feedbackLoopStatistics.put("derivee_erreur_translation", 0);
+		feedbackLoopStatistics.put("inverse_erreur_translation_integrale", 100);
+		
 	}
 	
 	public void updateConfig()
@@ -359,6 +362,31 @@ public class LocomotionCardWrapper implements Service
 		// envois a la carte d'asservissement les nouvelles valeurs des correcteurs et le nouveau maximum des pwm
 		String chaines[] = {"crv", Double.toString(kp), Double.toString(kd), Integer.toString(pwm_max)};
 		locomotionCardSerial.communiquer(chaines, 0);
+	}
+	
+	/**
+	 * Retourne la valeur mise a jour du facteur de Deboc en fonction des informations de l'asser' 
+	 * Ce facteur permet de rajouter une correction intégrale via java a l'asservissement en translation.
+	 * Le principe est d'approcher l'intégrale par un rectangle sous la courbe. Ce rectangle étant de largeur la latence de la liaison série.
+	 * 
+	 * @return la nouvelle valeur du facteur de Deboc pour la translation
+	 */
+	public float getTranslationnalDebocFactor()
+	{
+		
+		// inverse de l'erreur courante a annuler par la correction intégrale. Cette valeur est fournie périodiquement par la carte d'asser.
+		float invertedTranslationnalError = feedbackLoopStatistics.get("inverse_erreur_translation_integrale");
+		
+		// prise en compte de latence variable de la liaison série: on approxime par une loi uniforme (100ms de latence en moyenne avec la surcouche java).
+		// latence exprimée ici en milisecondes, entre -50ms et 150ms
+		// Attention, en fonction de la jvm (Openjdk ou Oracle), ces valeurs peuvent changer
+		float latency = (new Random()).nextFloat() * 200 + 150;
+
+		// intégrale: dt / (1/valeur), c'est a dire valeur * dt
+		float DebocFactor = latency / invertedTranslationnalError;
+		
+		// revois le facteur de deboc à l'utilisateur
+		return DebocFactor;
 	}
 	
 	/**

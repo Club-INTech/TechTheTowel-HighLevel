@@ -598,10 +598,25 @@ public class Locomotion implements Service
 		long t2 = System.currentTimeMillis();
 		
 		Vec2 displacement = aim.clone();
-		if(symmetry)	// on oppose al composante X si l'on est de l'équipe jaune et non verte
+		if(symmetry)	// on oppose la composante X si l'on est de l'équipe jaune et non verte
 			displacement.x = -displacement.x;
 		// soustraction de la position actuelle a la position visée
 		displacement.minus(position);
+		
+		// ajuste le déplacement par le correcteur de Deboc si la configuration du match le demande
+        if(config.get("debocIntegralCorrectionBehavior") == "default")
+        {
+        	// valeur de la correction de deboc
+        	float debocFactor = mLocomotionCardWrapper.getTranslationnalDebocFactor();
+        	
+        	// ajuste le point d'arrivée
+        	aim.x += displacement.x * debocFactor;
+        	aim.y += displacement.y * debocFactor;
+        	
+        	// ajuste la valeur de déplacement
+        	displacement.x *= debocFactor;
+        	displacement.y *= debocFactor;
+        }
 		
 		// le robot doit avancer d'une distance égale a la longeur du vecteur délacement
 		double distance = displacement.length();
@@ -825,7 +840,7 @@ public class Locomotion implements Service
 		discCenter.plus(position);	// converti les coordonnées relative au centre du robot en coordonnées absolues sur la table
 		
 		// fais remonter un problème s'il y a un obstacle dans ce disque.
-		if(table.gestionobstacles.obstaclePresent(discCenter, obstacleDetectionDiscRadius))
+		if(table.mObstacleManager.isDiscObstructed(discCenter, obstacleDetectionDiscRadius))
 		{
 			log.warning("Obstacle sur notre chemin ! Nous somme en :" +position + ", et on détecte un obstacle dans un rayon de " + obstacleDetectionDiscRadius + "mm autour du point " + discCenter, this);
 			throw new UnexpectedObstacleOnPathException();

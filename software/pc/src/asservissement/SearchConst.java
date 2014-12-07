@@ -28,7 +28,7 @@ public class SearchConst
      * @param args
      */
     public static void main(String[] args)
-    {
+    {    		
         Container container;
         LocomotionCardWrapper deplacements = null;
         int signe = 1;
@@ -36,7 +36,6 @@ public class SearchConst
         {
             container = new Container();
             deplacements = (LocomotionCardWrapper) container.getService(ServiceNames.LOCOMOTION_CARD_WRAPPER);
-
             System.out.println("r ou t?");
             char asserv = (char) System.in.read();
             float distance = -1000;

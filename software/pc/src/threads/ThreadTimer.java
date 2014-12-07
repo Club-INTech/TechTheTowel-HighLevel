@@ -99,7 +99,7 @@ public class ThreadTimer extends AbstractThread
 				log.debug("Arrêt du thread timer demandé durant le match", this);
 				return;
 			}
-			table.gestionobstacles.supprimerObstaclesPerimes(System.currentTimeMillis());
+			table.mObstacleManager.removeOutdatedObstacles(System.currentTimeMillis());
 			
 			try
 			{

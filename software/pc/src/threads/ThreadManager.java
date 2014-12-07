@@ -11,10 +11,6 @@ import table.Table;
 import robot.RobotReal;
 import utils.Log;
 import utils.Config;
-import exceptions.ContainerException;
-import exceptions.ThreadException;
-import exceptions.serial.SerialManagerException;
-
 // TODO: Auto-generated Javadoc
 /**
  * Service qui instancie les threads.

@@ -57,12 +57,12 @@ public class JUnit_Threads extends JUnit_Test {
 		robotvrai.setOrientation(0);
 		
 		Table table = (Table) container.getService(ServiceNames.TABLE);
-		Assert.assertTrue(table.gestionobstacles.nb_obstacles() == 0);
+		Assert.assertTrue(table.mObstacleManager.getMobileObstaclesCount() == 0);
 		
 		container.getService(ServiceNames.THREAD_SENSOR);
 		container.startInstanciedThreads();
 		Thread.sleep(300);
-		Assert.assertTrue(table.gestionobstacles.nb_obstacles() >= 1);
+		Assert.assertTrue(table.mObstacleManager.getMobileObstaclesCount() >= 1);
 
 	}
 	
