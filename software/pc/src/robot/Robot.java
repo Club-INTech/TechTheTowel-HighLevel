@@ -19,16 +19,16 @@ import utils.Config;
 public abstract class Robot implements Service 
 {
 
-	// système de log sur lequel écrire
+	/** système de log sur lequel écrire */
 	protected Log log;
 	
-	//endroit ou lire la configuration du robot
+	/** endroit ou lire la configuration du robot */
 	protected Config config;
 
-	// la table est symétrisée si on est équipe jaune
+	/** la table est symétrisée si on est équipe jaune */
 	protected boolean symmetry;
 	
-	// vitesse du robot sur la table
+	/** vitesse du robot sur la table */
 	protected Speed speed;
 
 	/**

@@ -20,7 +20,7 @@ public class ScriptManager implements Service
 	private Log log;
 
 	// pour retrouver un script a partir de son nom
-	private Map<String,Script> instancesScripts = new Hashtable<String,Script>(); // ce commentaire est inutile
+	private Map<String,AbstractScript> instancesScripts = new Hashtable<String,AbstractScript>(); // ce commentaire est inutile
 
 	// TODO : effacer ?
 	@SuppressWarnings("unused")
@@ -32,9 +32,9 @@ public class ScriptManager implements Service
 		scripts_robot = new ArrayList<String>();
 	}
 	
-	public Script getScript(String nom) throws UnknownScriptException
+	public AbstractScript getScript(String nom) throws UnknownScriptException
 	{
-		Script script = instancesScripts.get(nom);
+		AbstractScript script = instancesScripts.get(nom);
 		if(script == null)
 		{
 			log.warning("Script inconnu: "+nom, this);

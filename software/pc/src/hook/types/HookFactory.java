@@ -16,29 +16,29 @@ import utils.Config;
 public class HookFactory implements Service
 {
 	
-	//endroit ou lire la configuration du robot
+	/** endroit ou lire la configuration du robot */
 	private Config config;
 
-	//gestion des log
+	/** système de log a utiliser */
 	private Log log;
 	
-	// robot a surveiller pour le déclenchement des hooks
+	/** robot a surveiller pour le déclenchement des hooks */
 	private GameState<RobotReal> realState;
 	
-	// la valeur de 20 est en mm, elle est remplcée par la valeur spécifié dans le fichier de config s'il y en a une
+	/** la valeur de 20 est en mm, elle est remplcée par la valeur spécifié dans le fichier de config s'il y en a une */
 	private int positionTolerancy = 20;
 	
-	// spécifie de quelle couleur est le robot (vert ou jaune). Uniquement donné par le fichier de config. // TODO: en faire une enum
+	/** spécifie de quelle couleur est le robot (vert ou jaune). Uniquement donné par le fichier de config. */ // TODO: en faire une enum
 	String color;
 	
 	
 	
 	/**
 	 *  appellé uniquement par Container.
-	 *  Initialise la factory
+	 *  Initialise la factory de hooks.
 	 * 
 	 * @param config fichier de config du match
-	 * @param log système de d log
+	 * @param log système de log
 	 * @param realState état du jeu
 	 */
 	public HookFactory(Config config, Log log, GameState<RobotReal> realState)
