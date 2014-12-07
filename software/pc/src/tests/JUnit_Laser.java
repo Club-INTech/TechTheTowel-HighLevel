@@ -55,8 +55,8 @@ public class JUnit_Laser extends JUnit_Test {
 		//Ok
 		//Aucune balise n'est allumée
 		log.debug("JUnit_Laser_Test.test_avant_verification()", this);
-		Assert.assertTrue(laser.balises_actives().size() == 0);
-		Assert.assertTrue(laser.balises_ignorees().size() == 2);		
+		Assert.assertTrue(laser.activeBeacons().size() == 0);
+		Assert.assertTrue(laser.ignoredBeacons().size() == 2);		
 	}
 
 	/**
@@ -69,11 +69,11 @@ public class JUnit_Laser extends JUnit_Test {
 	{
 		//Les balises sont censées être toutes les deux allumées
 		log.debug("JUnit_Laser_Test.test_apres_verification()", this);
-		laser.allumer();
+		laser.turnOn();
 		Sleep.sleep(3000);
-		laser.verifier_balises_connectes();
-		Assert.assertTrue(laser.balises_actives().size() == 2);
-		Assert.assertTrue(laser.balises_ignorees().size() == 0);
+		laser.checkConnectedBeacons();
+		Assert.assertTrue(laser.activeBeacons().size() == 2);
+		Assert.assertTrue(laser.ignoredBeacons().size() == 0);
 		laser.eteindre();
 
 	}
@@ -89,7 +89,7 @@ public class JUnit_Laser extends JUnit_Test {
 		log.debug("JUnit_Laser_Test.test_coherence()", this);
 		//Assert.assertTrue(laser.verifier_balises_connectes() == 1);
 		log.debug("Ca raconte quoi sur la cohérence des mesures?", this);
-		laser.verifier_coherence_balise();
+		laser.checkBeaconConsistency();
 	}
 
 	/**
@@ -102,7 +102,7 @@ public class JUnit_Laser extends JUnit_Test {
 	{
 		container.getService(ServiceNames.THREAD_LASER);
 		container.startInstanciedThreads();
-		laser.allumer();
+		laser.turnOn();
 		while(true)
 		{
 			Sleep.sleep(100);
@@ -120,7 +120,7 @@ public class JUnit_Laser extends JUnit_Test {
 	{
 		//Ok
 		log.debug("JUnit_Laser_Test.test_on_off()", this);
-		laser.allumer();
+		laser.turnOn();
 		Sleep.sleep(2000);
 		laser.eteindre();
 	}
@@ -138,7 +138,7 @@ public class JUnit_Laser extends JUnit_Test {
 		robotvrai.setPosition(new Vec2(30,100));
 		Vec2 pos_balise0 = new Vec2(0,300);
 		Vec2 pos_balise1; //position de la baslise enregistrée
-		laser.allumer();
+		laser.turnOn();
 		Sleep.sleep(3000);
 		pos_balise1 = laser.position_balise(0);
 		//Position incohérente, il faut déjà connaître le sens du laser pour le caler avec le sens du robot
@@ -162,9 +162,9 @@ public class JUnit_Laser extends JUnit_Test {
 	{
 		//Ok
 		log.debug("JUnit_Laser_Test.test_vitesse()", this);
-		laser.allumer();
+		laser.turnOn();
 		Sleep.sleep(1000);
-		Assert.assertTrue(filtragelaser.vitesse().squaredLength() < 10);
+		Assert.assertTrue(filtragelaser.speed().squaredLength() < 10);
 		Sleep.sleep(1000);
 		laser.eteindre();
 	}
@@ -182,7 +182,7 @@ public class JUnit_Laser extends JUnit_Test {
 		robotvrai.setPosition(new Vec2(0,300));
 		Vec2 pos_balise0 = new Vec2(0,300);
 		Vec2 pos_balise1;
-		laser.allumer();
+		laser.turnOn();
 		Sleep.sleep(3000);
 		pos_balise1 = laser.position_balise_relative(0);
 		//Position incohérente, il faut déjà connaître le sens du laser pour le caler avec le sens du robot

@@ -61,7 +61,7 @@ class ThreadLaser extends AbstractThread {
 		log.debug("Lancement du thread de laser", this);
 
 		// On attends le démarrage du match et qu'au moins une balise réponde
-		while(laser.verifier_balises_connectes() == 0)
+		while(laser.checkConnectedBeacons() == 0)
 		{
 			if(stopThreads)
 			{
@@ -73,21 +73,21 @@ class ThreadLaser extends AbstractThread {
 
 		// Allumage des lasers
 		log.debug("Allumage des lasers", this);
-		laser.allumer();
+		laser.turnOn();
 
 		// Attente de la vitesse stable
 		Sleep.sleep(3000);
 
-		for(Beacon balise: laser.balises_ignorees())
+		for(Beacon balise: laser.ignoredBeacons())
 		{
 			log.warning("balise n°" + Integer.toString(balise.id) + " ignorée pendant le match, pas de réponses aux ping", this);
 		}
 
 		// Vérification de la cohérence des données des balises
-		laser.verifier_coherence_balise();
+		laser.checkBeaconConsistency();
 
 		// Liste des balises prises en compte
-		ArrayList<Beacon> balises = laser.balises_actives();
+		ArrayList<Beacon> balises = laser.activeBeacons();
 
 		// attente du début du match
 		while(!ThreadTimer.match_demarre)
