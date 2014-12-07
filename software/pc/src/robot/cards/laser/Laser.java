@@ -41,10 +41,10 @@ public class Laser implements Service {
 	 * Indique les balises considérées comme opérationnelle pour le match
 	 * @return
 	 */
-	public ArrayList<Beacon> activeBeacons() /balises_actives
+	public ArrayList<Beacon> activeBeacons() //balises_actives
 	{
 		ArrayList<Beacon> out = new ArrayList<Beacon>();
-		for(Beacon b: balises)
+		for(Beacon b: beacons)
 			if(b.active)
 				out.add(b);
 		return out;
@@ -57,7 +57,7 @@ public class Laser implements Service {
 	public ArrayList<Beacon> balises_ignorees()
 	{
 		ArrayList<Beacon> out = new ArrayList<Beacon>();
-		for(Beacon b: balises)
+		for(Beacon b: beacons)
 			if(!b.active)
 				out.add(b);
 		return out;
@@ -96,7 +96,7 @@ public class Laser implements Service {
 	public int verifier_balises_connectes()
 	{
 		int balises_ok = 0;
-		for(Beacon b: balises)
+		for(Beacon b: beacons)
 			try {
 				if(ping_balise(b.id))
 				{
@@ -126,7 +126,7 @@ public class Laser implements Service {
 	private boolean ping_balise(int id) throws SerialException
 	{
 		// TODO (de PF) vérifier la méthode, mais on faisait comme ça l'année dernière
-		String[] ping = serie.communiquer("ping_all", balises.length);	    
+		String[] ping = serie.communiquer("ping_all", beacons.length);	    
 		return !ping[id].equals("aucune réponse");
 	}
 
@@ -237,7 +237,7 @@ public class Laser implements Service {
         Vec2 point = robotvrai.getPosition();
         double orientation = robotvrai.getOrientation();
         
-        point.Plus(new Vec2((int)(distance * Math.cos(angle + orientation)), (int)(distance * Math.sin(angle + orientation))));
+        point.plus(new Vec2((int)(distance * Math.cos(angle + orientation)), (int)(distance * Math.sin(angle + orientation))));
         return point;
 	}
 	/**
@@ -300,7 +300,7 @@ public class Laser implements Service {
 		// Nombre d'essais pour les calculs
 		int essais = 10;
 
-		ArrayList<Beacon> balises_actives = balises_actives();
+		ArrayList<Beacon> balises_actives = activeBeacons();
 		for(Beacon b : balises_actives)
 		{
 			float moyenne = 0;

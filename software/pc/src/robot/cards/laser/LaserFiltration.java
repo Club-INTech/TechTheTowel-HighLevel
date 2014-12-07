@@ -53,7 +53,7 @@ public class LaserFiltration implements Service {
 	{
 	}
 	
-	public Matrn adverseRobotState//etat_robot_adverse()
+	public Matrn adverseRobotState()//etat_robot_adverse()
 	{
 		return this.kalmanFilter.x;//filtre_kalman.x;
 	}
@@ -98,16 +98,16 @@ public class LaserFiltration implements Service {
 		Vec2 pointm1 = history.pop();
 		Vec2 pointm2 = history.pop();
 //		Vec2 pointm3 = historique.pop();
-		Vec2 currentVelocity = pointm0.MinusNewVector(pointm1);//vitesse_actuelle
-		Vec2 velocity_m1 = pointm1.MinusNewVector(pointm2);//vitesse_m1
+		Vec2 currentVelocity = pointm0.minusNewVector(pointm1);//vitesse_actuelle
+		Vec2 velocity_m1 = pointm1.minusNewVector(pointm2);//vitesse_m1
 //		Vec2 vitesse_m2 = pointm2.MinusNewVector(pointm3);
-		Vec2 currentAcceleration = currentVelocity.MinusNewVector(velocity_m1);//acceleration_actuelle
+		Vec2 currentAcceleration = currentVelocity.minusNewVector(velocity_m1);//acceleration_actuelle
 //		Vec2 acceleration_precedente = vitesse_m1.MinusNewVector(vitesse_m2);
 		//Vec2 jerk = acceleration_actuelle.MinusNewVector(acceleration_precedente);
 		//float produit = acceleration_actuelle.dot(vitesse_m1);
 		//jerk et produit étaient utilisés dans du code inutilisé en Python
 		//donc voilà, au cas où il y en a besoin...
-		if(currentAcceleration.SquaredLength()/Math.pow(dt,2) >50000 & this.rejectedValues < 3 )
+		if(currentAcceleration.squaredLength()/Math.pow(dt,2) >50000 & this.rejectedValues < 3 )
 		{
 			rejectedValues +=1;
 			return false;
