@@ -43,7 +43,7 @@ import utils.Sleep;
 public class Locomotion implements Service
 {
 
-	// système de log sur lequel écrire
+	/** système de log sur lequel écrire*/
 	private Log log;
 	
 	//endroit ou lire la configuration du robot

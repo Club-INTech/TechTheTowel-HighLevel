@@ -14,7 +14,8 @@ import utils.Log;
 import utils.Config;
 import container.Service;
 import smartMath.Matrn;
-public class LaserFiltration implements Service {
+public class LaserFiltration implements Service
+{
 
 
 	private double dt;

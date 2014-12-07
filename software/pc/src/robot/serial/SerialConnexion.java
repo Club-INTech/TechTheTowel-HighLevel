@@ -43,7 +43,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	String name;
 	
 	/**
-	 * Flux d'entée du port
+	 * Flux d'entï¿½e du port
 	 */
 	private BufferedReader input;
 	
@@ -53,12 +53,12 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	private OutputStream output;
 	
 	/**
-	 * TIME_OUT d'attente de réception d'un message
+	 * TIME_OUT d'attente de rï¿½ception d'un message
 	 */
 	private static final int TIME_OUT = 2000;
 
 	/**
-	 * Construit une connexion série
+	 * Construit une connexion sï¿½rie
 	 * @param log Sortie de log a utiliser
 	 * @param name nom de la connexion sÃ©rie
 	 */
@@ -68,7 +68,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	}
 
 	/**
-	 * Construit une connexion série
+	 * Construit une connexion sï¿½rie
 	 * @param log Sortie de log a utiliser
 	 * @param name nom de la connexion sÃ©rie
 	 */
@@ -80,8 +80,8 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	}
 
 	/**
-	 * Appelé par le SerialManager, il donne à  la série tout ce qu'il faut pour fonctionner
-	 * @param port_name : Le port où est connecté la carte (/dev/ttyUSB ou /dev/ttyACM)
+	 * Appelï¿½ par le SerialManager, il donne ï¿½ la sï¿½rie tout ce qu'il faut pour fonctionner
+	 * @param port_name : Le port oï¿½ est connectï¿½ la carte (/dev/ttyUSB ou /dev/ttyACM)
 	 * @param baudrate : Le baudrate que la carte utilise
 	 */
 	void initialize(String port_name, int baudrate)
@@ -96,7 +96,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 			e2.printStackTrace();
 		}
 
-		// Ouverture du port série
+		// Ouverture du port sï¿½rie
 		try
 		{
 			serialPort = (SerialPort) portId.open(this.getClass().getName(), TIME_OUT);
@@ -107,7 +107,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 		}
 		try
 		{
-			// règle certains paramètres lié à la série
+			// rï¿½gle certains paramï¿½tres liï¿½ ï¿½ la sï¿½rie
 			serialPort.setSerialPortParams(baudrate,
 					SerialPort.DATABITS_8,
 					SerialPort.STOPBITS_1,
@@ -135,9 +135,9 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	}
 
 	/**
-	 * Méthode pour communiquer à la liaison série. Il ne faut absolument pas se tromper sur le nombre de lignes attendu en retour.
-	 * (une ligne est délimité par un "\r\n" sur une communication série. elle peut être envoyé par le bas niveau dans un:
-	 * printf("\r\n") ou un printfln("...") où ici le ln veut dire retour à la ligne donc se charge de mettre "\r\n" à la fin du message pour l'utilisateur).
+	 * Mï¿½thode pour communiquer ï¿½ la liaison sï¿½rie. Il ne faut absolument pas se tromper sur le nombre de lignes attendu en retour.
+	 * (une ligne est dï¿½limitï¿½ par un "\r\n" sur une communication sï¿½rie. elle peut ï¿½tre envoyï¿½ par le bas niveau dans un:
+	 * printf("\r\n") ou un printfln("...") oï¿½ ici le ln veut dire retour ï¿½ la ligne donc se charge de mettre "\r\n" ï¿½ la fin du message pour l'utilisateur).
 	 * @param message Message Ã  envoyer
 	 * @param nb_lignes_reponse Nombre de lignes que le bas niveau va rÃ©pondre (sans compter les acquittements)
 	 * @return Un tableau contenant le message
@@ -150,9 +150,9 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	}
 	
 	/**
-	 * Méthode pour communiquer à la liaison série. Il ne faut absolument pas se tromper sur le nombre de lignes attendu en retour.
-	 * (une ligne est délimité par un "\r\n" sur une communication série. elle peut être envoyé par le bas niveau dans un:
-	 * printf("\r\n") ou un printfln("...") où ici le ln veut dire retour à la ligne donc se charge de mettre "\r\n" à la fin du message pour l'utilisateur).
+	 * Mï¿½thode pour communiquer ï¿½ la liaison sï¿½rie. Il ne faut absolument pas se tromper sur le nombre de lignes attendu en retour.
+	 * (une ligne est dï¿½limitï¿½ par un "\r\n" sur une communication sï¿½rie. elle peut ï¿½tre envoyï¿½ par le bas niveau dans un:
+	 * printf("\r\n") ou un printfln("...") oï¿½ ici le ln veut dire retour ï¿½ la ligne donc se charge de mettre "\r\n" ï¿½ la fin du message pour l'utilisateur).
 	 * @param messages Messages Ã  envoyer
 	 * @param nb_lignes_reponse Nombre de lignes que l'avr va rÃ©pondre (sans compter les acquittements)
 	 * @return Un tableau contenant le message
@@ -208,7 +208,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 				throw new SerialConnexionException();
 			}
 			
-		return inputLines;
+			return inputLines;
 		
 		}
 	}
@@ -227,7 +227,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 
 	/**
 	 * Handle an event on the serial port.
-	 * NE PAS SUPPRIMER!!!!!! Cette méthode est essentielle au fonctionnement de la communication série, même si elle est vide.
+	 * NE PAS SUPPRIMER!!!!!! Cette mï¿½thode est essentielle au fonctionnement de la communication sï¿½rie, mï¿½me si elle est vide.
 	 */
 	public synchronized void serialEvent(SerialPortEvent oEvent)
 	{
@@ -235,11 +235,11 @@ public class SerialConnexion implements SerialPortEventListener, Service
 
 	/**
 	 * Ping de la carte.
-	 * Peut envoyer un message d'erreur lors de l'exécution de createSerial() dans SerialManager.
+	 * Peut envoyer un message d'erreur lors de l'exï¿½cution de createSerial() dans SerialManager.
 	 * 
-	 * (Avec la carte de test dans createSerial(), on ne sait pas encore si celle-ci va répondre ou non, c'est à dire,
-	 * si il s'agit bien d'une liaison série, ou alors d'un autre périphérique. Si il s'agit d'un autre périphérique,
-	 * alors cette méthode va catch une exception)
+	 * (Avec la carte de test dans createSerial(), on ne sait pas encore si celle-ci va rï¿½pondre ou non, c'est ï¿½ dire,
+	 * si il s'agit bien d'une liaison sï¿½rie, ou alors d'un autre pï¿½riphï¿½rique. Si il s'agit d'un autre pï¿½riphï¿½rique,
+	 * alors cette mï¿½thode va catch une exception)
 	 * UtilisÃ© que par createSerial de SerialManager
 	 * @return l'id de la carte
 	 */
