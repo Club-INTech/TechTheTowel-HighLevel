@@ -13,12 +13,12 @@ import java.util.ArrayList;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.UnknownScriptException;
+
 /**
  * Classe abstraite dont héritent les différents scripts.
  * S'occupe le robotvrai et robotchrono de manière à ce que ce soit transparent pour les différents scripts
  * @author pf, marsu
  */
-
 public abstract class Script implements Service 
 {
 
@@ -41,20 +41,19 @@ public abstract class Script implements Service
 		
 	/**
 	 * Exécute vraiment un script
+	 * @param id_version
+	 * @param state
+	 * @param retenter_si_blocage
+	 * @throws UnknownScriptException
 	 */
-	public void agit(int id_version, GameState<RobotReal> state, boolean retenter_si_blocage) throws UnknownScriptException
-	{
-	}
+	public abstract void agit(int id_version, GameState<RobotReal> state, boolean retenter_si_blocage) throws UnknownScriptException;
 	
 	/**
 	 * Calcule le temps d'exécution de ce script (grâce à robotChrono)
 	 * @return le temps d'exécution
 	 * @throws PathfindingException 
 	 */
-	public long calcule()
-	{
-		return 42;
-	}	
+	public abstract long calcule();
 
 	/**
 	 * Retourne la position d'entrée associée à la version id
@@ -65,6 +64,8 @@ public abstract class Script implements Service
    
 	/**
 	 * Renvoie le score que peut fournir une version d'un script
+	 * @param id_version
+	 * @param state
 	 * @return le score
 	 */
 	public abstract int score(int id_version, final GameState<?> state);
@@ -73,17 +74,15 @@ public abstract class Script implements Service
 	 * Exécute le script, avec RobotVrai ou RobotChrono
 	 * @throws SerialConnexionException 
 	 */
-	protected void execute() throws UnableToMoveException, SerialConnexionException
-	{
-	}
+	protected abstract void execute() throws UnableToMoveException, SerialConnexionException;
 
 	/**
 	 * Méthode toujours appelée à la fin du script (via un finally). Repli des actionneurs.
+	 * @param state
 	 */
 	abstract protected void termine(GameState<?> state);
 	
 	public void updateConfig()
 	{
 	}
-
 }
