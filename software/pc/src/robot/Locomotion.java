@@ -46,7 +46,7 @@ public class Locomotion implements Service
 	/** système de log sur lequel écrire*/
 	private Log log;
 	
-	//endroit ou lire la configuration du robot
+	/** endroit ou lire la configuration du robot */
 	private Config config;
 	
 	// La table sur laquelle le robot se déplace
