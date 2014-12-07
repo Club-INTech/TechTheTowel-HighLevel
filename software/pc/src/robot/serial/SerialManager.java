@@ -11,48 +11,58 @@ import exceptions.ServiceTypeException;
 import exceptions.serial.SerialManagerException;
 
 /**
- * Instancie toutes les séries, il faut bien faire attention à définir les cartes
- * qui seront utilisées dans le robot, avec le ping et le baudrate de fonctionnement.
+ * Instancie toutes les sï¿½ries, il faut bien faire attention ï¿½ dï¿½finir les cartes
+ * qui seront utilisï¿½es dans le robot, avec le ping et le baudrate de fonctionnement.
  * 
- * Cette classe va au préalable charger les paramètres des cartes (dans le constructeur),
- * puis regarder toutes les liaisons séries qui sont susceptibles d'être connectées
- * (dans /dev/ttyUSB* ou /dev/ACM*, mais pas besoin de savoir ça, il se débrouille comme un grand).
+ * Cette classe va au prï¿½alable charger les paramï¿½tres des cartes (dans le constructeur),
+ * puis regarder toutes les liaisons sï¿½ries qui sont susceptibles d'ï¿½tre connectï¿½es
+ * (dans /dev/ttyUSB* ou /dev/ACM*, mais pas besoin de savoir ï¿½a, il se dï¿½brouille comme un grand).
  * @author pierre
  * @author pf
- *
  */
-
 public class SerialManager 
 {
-	// DÃ©pendances
+	/**
+	 * Sortie de log a utiliser pour informer l'utilisateur
+	 */
 	private Log log;
 
-	//Series a instancier
+	/** Series a instancier : celle pour la carte d'asser */
 	public SerialConnexion serieAsservissement = null;
+
+	/** Series a instancier : celle pour la carte capteur/actonneurs */
 	public SerialConnexion serieCapteursActionneurs = null;
+	
+	/** Series a instancier : celle pour la carte laser */
 	public SerialConnexion serieLaser = null;
 
-	//On stock les series dans une liste
+	/** Liste contenant les connexion sÃ©ries avec les cartes */
 	private SerialConnexion[] series = new SerialConnexion[3];
 
 	//Pour chaque carte, on connait a l'avance son nom, son ping et son baudrate
-	private SpecificationCard carteAsservissement = new SpecificationCard(ServiceNames.SERIE_ASSERVISSEMENT, 0, 9600);
-	private SpecificationCard carteCapteursActionneurs = new SpecificationCard(ServiceNames.SERIE_CAPTEURS_ACTIONNEURS, 3, 9600);
-//	private SpecificationCard carteLaser = new SpecificationCard("serieLaser", 4, 57600);
+	/** Carte d'assservissement, paramÃ©trÃ© a l'avance par son nom, son id et son baudrate */
+	private CardSpecification carteAsservissement = new CardSpecification(ServiceNames.SERIE_ASSERVISSEMENT, 0, 9600);
 
-	//On stock les cartes dans une liste
-	private ArrayList <SpecificationCard> cards = new ArrayList <SpecificationCard>();
+	/** Carte capteurs/actionneurs, paramÃ©trÃ© a l'avance par son nom, son id et son baudrate */
+	private CardSpecification carteCapteursActionneurs = new CardSpecification(ServiceNames.SERIE_CAPTEURS_ACTIONNEURS, 3, 9600);
+	
+	/** Carte Laser, paramÃ©trÃ© a l'avance par son nom, son id et son baudrate */
+	@SuppressWarnings("unused")
+	private CardSpecification carteLaser = new CardSpecification(ServiceNames.SERIE_LASER, 4, 57600);
 
-	//Liste pour stocker les series qui sont connectees au pc 
+	/** On stock les cartes dans une liste */
+	private ArrayList <CardSpecification> cards = new ArrayList <CardSpecification>();
+
+	/** Liste pour stocker les series qui sont connectees au pc */ 
 	private ArrayList<String> connectedSerial = new ArrayList<String>();
 
-	//Liste pour stocker les baudrates des differentes serie
+	/** Liste pour stocker les baudrates des differentes serie */
 	private ArrayList<Integer> baudrate = new ArrayList<Integer>();
 
 	/**
-	 * Recuperation des paramètres des cartes dans cards et des baudrates dans baudrate
-	 * (ceux définis plus haut), puis fait appel à checkSerial() et createSerial().
-	 * A la fin de ce constructeur, les séries sont détectées et instanciées. 
+	 * Recuperation des paramï¿½tres des cartes dans cards et des baudrates dans baudrate
+	 * (ceux dï¿½finis plus haut), puis fait appel ï¿½ checkSerial() et createSerial().
+	 * A la fin de ce constructeur, les sï¿½ries sont dï¿½tectï¿½es et instanciï¿½es. 
 	 * @param log : la sortie de log Ã  utiliser
 	 */
 	public SerialManager(Log log) throws SerialManagerException
@@ -63,7 +73,7 @@ public class SerialManager
 		cards.add(this.carteCapteursActionneurs);
 //		cards.add(this.carteLaser);
 
-		Iterator<SpecificationCard> e = cards.iterator();
+		Iterator<CardSpecification> e = cards.iterator();
 		while (e.hasNext())
 		{
 			int baud = e.next().baudrate;
@@ -114,11 +124,11 @@ public class SerialManager
 	/**
 	 * CrÃ©ation des series (il faut au prealable faire un checkSerial()).
 	 * 
-	 * Cette méthode crée une série de test pour chaque port /dev/ttyUSB* et /dev/ttyACM* détecté
-	 * dans le but de ping ces ports et déterminer si il nous interesse (en vérifiant le ping reçu,
-	 * si il en reçoit un). Si un /dev/ttyUSB (ou ACM) n'est pas une liaison série,
-	 * il se peut que l'on ait un message d'erreur lié au fait que l'on ping un /dev/ttyUSB (ou ACM)
-	 * qui ne nous répond pas.
+	 * Cette mï¿½thode crï¿½e une sï¿½rie de test pour chaque port /dev/ttyUSB* et /dev/ttyACM* dï¿½tectï¿½
+	 * dans le but de ping ces ports et dï¿½terminer si il nous interesse (en vï¿½rifiant le ping reï¿½u,
+	 * si il en reï¿½oit un). Si un /dev/ttyUSB (ou ACM) n'est pas une liaison sï¿½rie,
+	 * il se peut que l'on ait un message d'erreur liï¿½ au fait que l'on ping un /dev/ttyUSB (ou ACM)
+	 * qui ne nous rï¿½pond pas.
 	 */
 	public void createSerial() throws SerialManagerException
 	{
@@ -173,10 +183,10 @@ public class SerialManager
 		}
 
 		//Association de chaque serie a son port
-		Iterator<SpecificationCard> e = cards.iterator();
+		Iterator<CardSpecification> e = cards.iterator();
 		while (e.hasNext())
 		{
-			SpecificationCard serial = e.next();
+			CardSpecification serial = e.next();
 			if(serial.id == 0 && pings[serial.id] != null)
 			{
 				this.serieAsservissement.initialize(pings[serial.id], serial.baudrate);
@@ -199,19 +209,19 @@ public class SerialManager
 	}
 	
 	/**
-	 * Cette méthode vérifie si id est bien associé à baudrate
-	 * (en comparant avec les paramètres des SpecificationCard qu'on lui a donné au début de cette classe).
-	 * Utilisé dans createSerial.
+	 * Cette mï¿½thode vï¿½rifie si id est bien associï¿½ ï¿½ baudrate
+	 * (en comparant avec les paramï¿½tres des SpecificationCard qu'on lui a donnï¿½ au dï¿½but de cette classe).
+	 * Utilisï¿½ dans createSerial.
 	 * @param baudrate a tester
 	 * @param id a tester
 	 * @return
 	 */
 	private boolean goodBaudrate(int baudrate, int id)
 	{
-		Iterator<SpecificationCard> e = cards.iterator();
+		Iterator<CardSpecification> e = cards.iterator();
 		while(e.hasNext())
 		{
-			SpecificationCard serial = e.next();
+			CardSpecification serial = e.next();
 			if((id == serial.id) && (baudrate == serial.baudrate))
 				return true;
 		}
@@ -220,12 +230,12 @@ public class SerialManager
 
 	/**
 	 * Permet de savoir si id est connu (info qu'il trouve dans SpecificationCard.
-	 * @param id : id a vérifier
+	 * @param id : id a vï¿½rifier
 	 * @return
 	 */
 	private boolean isKnownPing(int id)
 	{
-		Iterator<SpecificationCard> e = cards.iterator();
+		Iterator<CardSpecification> e = cards.iterator();
 		while(e.hasNext())
 		{
 			if(id == e.next().id)
@@ -235,7 +245,7 @@ public class SerialManager
 	}
 
 	/**
-	 * Permet d'obtenir une sÃ©rie au préalable instancié dans le constructeur.
+	 * Permet d'obtenir une sÃ©rie au prï¿½alable instanciï¿½ dans le constructeur.
 	 * @param name : Nom de la sÃ©rie
 	 * @return L'instance de la sÃ©rie
 	 */
