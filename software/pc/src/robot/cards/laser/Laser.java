@@ -3,12 +3,12 @@ package robot.cards.laser;
 import java.util.ArrayList;
 
 import robot.RobotReal;
-import robot.serial.SerialConnexion;
+import robot.serial.Serial;
 import smartMath.Vec2;
 import utils.Log;
 import utils.Config;
 import container.Service;
-import exceptions.serial.SerialConnexionException;
+import exceptions.serial.SerialException;
 
 /**
  * Classe qui gère la balise laser
@@ -16,25 +16,24 @@ import exceptions.serial.SerialConnexionException;
  *
  */
 
-public class Laser implements Service
-{
+public class Laser implements Service {
 
 	// Dépendances
 	private Log log;
-	private SerialConnexion serie;
+	private Serial serie;
 	private RobotReal robotvrai;
 
-	private Beacon[] balises;
+	private Beacon[] beacons;
 
-	public Laser(Config config, Log log, SerialConnexion serie, RobotReal robotvrai)
+	public Laser(Config config, Log log, Serial serie, RobotReal robotvrai)
 	{
 		this.log = log;
 		this.serie = serie;
 		this.robotvrai = robotvrai;
 
-		balises = new Beacon[2];
-		balises[0] = new Beacon(0, false);
-		balises[1] = new Beacon(1, false);
+		beacons = new Beacon[2]; //balises
+		beacons[0] = new Beacon(0, false);
+		beacons[1] = new Beacon(1, false);
 
 	}
 
@@ -42,7 +41,7 @@ public class Laser implements Service
 	 * Indique les balises considérées comme opérationnelle pour le match
 	 * @return
 	 */
-	public ArrayList<Beacon> balises_actives()
+	public ArrayList<Beacon> activeBeacons() /balises_actives
 	{
 		ArrayList<Beacon> out = new ArrayList<Beacon>();
 		for(Beacon b: balises)
@@ -72,7 +71,7 @@ public class Laser implements Service
 		try {
 			serie.communiquer("motor_on", 0);
 			serie.communiquer("laser_on", 0);
-		} catch (SerialConnexionException e) {
+		} catch (SerialException e) {
 			e.printStackTrace();
 		}
 	}
@@ -85,7 +84,7 @@ public class Laser implements Service
 		try {
 			serie.communiquer("motor_off", 0);
 			serie.communiquer("laser_off", 0);
-		} catch (SerialConnexionException e) {
+		} catch (SerialException e) {
 			e.printStackTrace();
 		}
 	}
@@ -112,7 +111,7 @@ public class Laser implements Service
 				{
 					//log.warning("balise n°"+b.id+" ne répond pas.", this);
 				}
-			} catch (SerialConnexionException e) {
+			} catch (SerialException e) {
 				e.printStackTrace();
 			}
 		return balises_ok;
@@ -122,9 +121,9 @@ public class Laser implements Service
 	 * Ping une balise
 	 * @param id
 	 * @return
-	 * @throws SerialConnexionException 
+	 * @throws SerialException 
 	 */
-	private boolean ping_balise(int id) throws SerialConnexionException
+	private boolean ping_balise(int id) throws SerialException
 	{
 		// TODO (de PF) vérifier la méthode, mais on faisait comme ça l'année dernière
 		String[] ping = serie.communiquer("ping_all", balises.length);	    
@@ -154,9 +153,9 @@ public class Laser implements Service
 	 * Et renvoie la position relative de la balise dans le système de coordonnées du laser.
 	 * @param id
 	 * @return point
-	 * @throws SerialConnexionException 
+	 * @throws SerialException 
 	 */
-	public Vec2 position_balise_relative(int id) throws SerialConnexionException
+	public Vec2 position_balise_relative(int id) throws SerialException
 	{
 		String chaines[] = {"value", Integer.toString(id)};
 		String[] reponse = serie.communiquer(chaines, 3);
@@ -199,9 +198,9 @@ public class Laser implements Service
 	 * Récupère la valeur (rayon, angle) d'une balise
 	 * @param id
 	 * @return
-	 * @throws SerialConnexionException 
+	 * @throws SerialException 
 	 */
-	public Vec2 position_balise(int id) throws SerialConnexionException
+	public Vec2 position_balise(int id) throws SerialException
 	{
 		String chaines[] = {"value", Integer.toString(id)};
 		String[] reponse = serie.communiquer(chaines, 3);
@@ -238,8 +237,59 @@ public class Laser implements Service
         Vec2 point = robotvrai.getPosition();
         double orientation = robotvrai.getOrientation();
         
-        point.plus(new Vec2((int)(distance * Math.cos(angle + orientation)), (int)(distance * Math.sin(angle + orientation))));
+        point.Plus(new Vec2((int)(distance * Math.cos(angle + orientation)), (int)(distance * Math.sin(angle + orientation))));
         return point;
+	}
+	/**
+	 * 
+	 * @param id
+	 * @return distance entre le laser et la balise
+	 * @throws SerialException
+	 */
+	public float recupereRayon(int id) throws SerialException
+	{
+		String chaines[] = {"value", Integer.toString(id)};
+		String[] reponse = serie.communiquer(chaines, 3);
+
+		if(reponse[0].equals("NO_RESPONSE") || reponse[1].equals("NO_RESPONSE")
+				|| reponse[0].equals("OLD_VALUE") || reponse[1].equals("OLD_VALUE")
+				|| reponse[0].equals("UNVISIBLE") || reponse[1].equals("UNVISIBLE"))
+			return null;
+
+		// Fréquence actuelle du moteur
+		float freq = frequence_moteur();
+
+		// Valeur de la distance, sur l'échelle du timer 8 bit
+		float timer = Float.parseFloat(reponse[0]);
+
+        // Délai du passage des deux lasers, en seconde
+        float delai = 128 * timer / 20000000;
+        
+        // Calcul de la distance (en mm)
+        float ecart_laser = 35;
+        float theta = (float) (delai * freq * 2 * Math.PI);
+
+        if(theta == 0)
+        {
+            log.warning("Division par zéro dans le calcul d'angle : freq = "+Float.toString(freq)+", delai = "+Float.toString(delai), this);
+            return null;
+        }
+
+        int distance = (int) (ecart_laser / Math.sin(theta / 2));
+        
+        return distance;
+	}
+	/**
+	 * 
+	 * @param id
+	 * @return angle 
+	 */
+	public float retournerAngleAbsolue(int id)
+	{
+		String chaines[] = {"value", Integer.toString(id)};
+		String[] reponse = serie.communiquer(chaines, 3);
+		float angle = Float.parseFloat(reponse[1]);
+		return angle;
 	}
 
 	/**

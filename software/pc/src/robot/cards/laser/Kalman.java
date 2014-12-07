@@ -6,13 +6,11 @@ import smartMath.Matrn;
 /**
  * Filtrage mathématique. Classe en visibilité "friendly"
  * @author pf
- * @auteur clément
+ * @author clément
  */
-//Les erreurs sont dues à la mauvaise gestion des excptions, PF? Au secours !!!
-// TODO: URGENT: DOC !!!
-// Il faut des commentaires, ici un novice ne bite rien ! 
-class Kalman
-{
+
+
+class Kalman {
 	//les attributs qui ont été mises en public sont utilisées dans FiltrageLaser.java
 	public Matrn x;
 	private Matrn p;
@@ -21,8 +19,6 @@ class Kalman
 	private Matrn r;
 	private Matrn q;
 	private Matrn ident;
-	
-	
 	public Kalman(Matrn x, Matrn p, Matrn f, Matrn h, Matrn r, Matrn q) 
 		{
 			
@@ -72,7 +68,7 @@ class Kalman
 				e.printStackTrace();
 			}
 		}
-		void filtrer(Matrn z,Matrn u)
+		void filter(Matrn z,Matrn u)
 		{
 			prediction(u);
 			measurement(z);			
