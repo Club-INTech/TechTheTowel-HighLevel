@@ -5,15 +5,13 @@ package robot.cards.laser;
  * @author pf
  *
  */
-// TODO: doc
-public class Beacon
-{
+
+public class Beacon {
 
 	public int id;
 	public boolean active;
 	
-	public Beacon(int id, boolean active)
-	{
+	public Beacon(int id, boolean active) {
 		this.id = id;
 		this.active = active;
 	}
