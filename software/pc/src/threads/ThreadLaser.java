@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import robot.cards.laser.Beacon;
 import robot.cards.laser.LaserFiltration;
-import robot.cards.laser.Laser;
+import robot.cards.laser.LaserCardWrapper;
 import smartMath.Vec2;
 import table.Table;
 import utils.Sleep;
@@ -16,34 +16,36 @@ import utils.Sleep;
  * @author pf
  */
 
-class ThreadLaser extends AbstractThread {
+class ThreadLaser extends AbstractThread
+{
 
-	/** The filtragelaser. */
+	/** Le système de filtrage de valeurs a utiliser */
 	private LaserFiltration filtragelaser;
 	
-	/** The laser. */
-	private Laser laser;
+	/** La carte électronique Laser a utiliser */
+	private LaserCardWrapper laser;
 	
-	/** The table. */
+	/** La table sur laquelle le thread doit croire évoluer */
 	private Table table;
 
-	/** The table_x. */
-	private int table_x;
+	// TODO: le threadLaser ne doit pas mémoriser par lui même la taille de la table. Il doit la demander au ficheir de config, ou a la table.
+	/** Taille de la table selon l'axe X */
+	private int sizeTableX;
+
+	/** Taille de la table selon l'axe Y */
+	private int sizeTableY;
 	
-	/** The table_y. */
-	private int table_y;
-	
-	/** The lasers_frequence. */
-	private float lasers_frequence;
+	/** La fréquances des lasers */
+	private float lasersFrequanecy;
 
 	/**
-	 * Instantiates a new thread laser.
+	 * Crée un jouveau thread Laser
 	 *
-	 * @param laser the laser
-	 * @param table the table
-	 * @param filtragelaser the filtragelaser
+	 * @param laser La carte électronique Laser a utiliser
+	 * @param table La table sur laquelle le thread doit croire évoluer
+	 * @param filtragelaser Le système de filtrage de valeurs a utiliser
 	 */
-	public ThreadLaser(Laser laser, Table table, LaserFiltration filtragelaser)
+	public ThreadLaser(LaserCardWrapper laser, Table table, LaserFiltration filtragelaser)
 	{
 		this.filtragelaser = filtragelaser;
 		this.laser = laser;
@@ -90,7 +92,7 @@ class ThreadLaser extends AbstractThread {
 		ArrayList<Beacon> balises = laser.activeBeacons();
 
 		// attente du début du match
-		while(!ThreadTimer.match_demarre)
+		while(!ThreadTimer.matchStarted)
 		{
 			if(stopThreads)
 			{
@@ -101,7 +103,7 @@ class ThreadLaser extends AbstractThread {
 		}
 		
 		
-		while(!ThreadTimer.fin_match)
+		while(!ThreadTimer.matchEnded)
 		{
 			long start = System.currentTimeMillis();
 			if(stopThreads)
@@ -127,13 +129,13 @@ class ThreadLaser extends AbstractThread {
 					
 
 					// Vérification si l'obstacle est sur la table 
-					if(p_filtre.x > -table_x/2 && p_filtre.y > 0 && p_filtre.x < table_x/2 && p_filtre.y < table_y)
+					if(p_filtre.x > -sizeTableX/2 && p_filtre.y > 0 && p_filtre.x < sizeTableX/2 && p_filtre.y < sizeTableY)
 					{
 						table.mObstacleManager.setEnnemyNewLocation(balise.id, p_filtre);
 						log.debug("Laser voit ennemi en : " + p_filtre, this);
 					}
 
-					sleep((long)(1./lasers_frequence));
+					sleep((long)(1./lasersFrequanecy));
 					long end = System.currentTimeMillis();
 					filtragelaser.update_dt((int)(end-start));
 				}
@@ -152,27 +154,29 @@ class ThreadLaser extends AbstractThread {
 
 	}
 
+	
+	// TODO: gestion propre de ces exceptions
 	/* (non-Javadoc)
 	 * @see threads.AbstractThread#updateConfig()
 	 */
 	public void updateConfig()
 	{
 		try {
-			table_x = Integer.parseInt(config.get("table_x"));
+			sizeTableX = Integer.parseInt(config.get("table_x"));
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
 		try {
-			table_y = Integer.parseInt(config.get("table_y"));
+			sizeTableY = Integer.parseInt(config.get("table_y"));
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
 		try {
-			lasers_frequence = Float.parseFloat(config.get("lasers_frequence"));
+			lasersFrequanecy = Float.parseFloat(config.get("lasers_frequence"));
 		}
 		catch(Exception e)
 		{

@@ -4,38 +4,40 @@ import utils.Log;
 import utils.Config;
 import container.Service;
 
-// TODO: Auto-generated Javadoc
 /**
  * Classe abstraite des threads.
+ * Elle héreite des threads java
  *
  * @author pf,marsu
  */
 
-public abstract class AbstractThread extends Thread implements Service {
+public abstract class AbstractThread extends Thread implements Service
+{
 
-	/** The config. */
+	/** Fichier ou lire la configuration du match. Ce sera le même pour tout les threads, et est directement rempli par le ThreadManager */
 	protected static Config config;
 	
-	/** The log. */
+	/** Le système de log a utiliser pour écrire. Ce sera le même pour tout les threads, et est directement rempli par le ThreadManager */
 	protected static Log log;
 
-	/** The stop threads. */
+	/** Commande d'arrêt des Threads: si ce boolée passe a true, les threads autres que main vont terminer leur exécution */
 	protected static boolean stopThreads = false;
 	
 	/**
-	 * Instantiates a new abstract thread.
+	 * Crée un nouveau Thread abstrait.
 	 *
-	 * @param config the config
-	 * @param log the log
+	 * @param config Fichier ou lire la configuration du match.
+	 * @param log Le système de log a utiliser pour écrire.
 	 */
-	public AbstractThread(Service config, Service log)
+	public AbstractThread(Config config, Log log)
 	{
-		AbstractThread.config = (Config) config;
-		AbstractThread.log = (Log) log;
+		AbstractThread.config = config;
+		AbstractThread.log = log;
 	}
 
 	/**
-	 * Instantiates a new abstract thread.
+	 * Crée un nouveau Thread abstrait.
+	 * C'est ce constructeur qui sera appellé par les classes héritant de AbstractThread 
 	 */
 	protected AbstractThread()
 	{		

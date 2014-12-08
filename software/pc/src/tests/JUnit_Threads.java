@@ -78,7 +78,7 @@ public class JUnit_Threads extends JUnit_Test {
 		container.getService(ServiceNames.THREAD_TIMER);
 		long t1 = System.currentTimeMillis();
 		container.startAllThreads();
-		while(!ThreadTimer.fin_match)
+		while(!ThreadTimer.matchEnded)
 		{
 			Thread.sleep(500);
 			if(System.currentTimeMillis()-t1 >= 4000)
@@ -100,10 +100,10 @@ public class JUnit_Threads extends JUnit_Test {
 		Thread.sleep(2000);
 		container.startInstanciedThreads();
 		Thread.sleep(200);
-		Assert.assertTrue(!ThreadTimer.match_demarre);
+		Assert.assertTrue(!ThreadTimer.matchStarted);
 		System.out.println("Veuillez retirer le jumper");
 		Thread.sleep(2000);
-		Assert.assertTrue(ThreadTimer.match_demarre);
+		Assert.assertTrue(ThreadTimer.matchStarted);
 	}
 
 	/**

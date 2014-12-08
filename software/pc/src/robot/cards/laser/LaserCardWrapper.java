@@ -16,7 +16,7 @@ import exceptions.serial.SerialConnexionException;
  *
  */
 
-public class Laser implements Service {
+public class LaserCardWrapper implements Service {
 
 	// Dépendances
 	private Log log;
@@ -25,7 +25,7 @@ public class Laser implements Service {
 
 	private Beacon[] beacons;
 
-	public Laser(Config config, Log log, SerialConnexion serie, RobotReal robotvrai)
+	public LaserCardWrapper(Config config, Log log, SerialConnexion serie, RobotReal robotvrai)
 	{
 		this.log = log;
 		this.serie = serie;

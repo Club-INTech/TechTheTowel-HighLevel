@@ -1,38 +1,35 @@
 package threads;
 
-import robot.RobotReal;
 import robot.cardsWrappers.SensorsCardWrapper;
 import table.Table;
 import utils.Sleep;
 
-// TODO: Auto-generated Javadoc
 /**
  * Thread qui ajoute en continu les obstacles détectés par les capteurs.
  *
- * @author pf, Krissprolls
+ * @author pf, Krissprolls, marsu
  */
 
 class ThreadSensor extends AbstractThread
 {
 
-	/** The capteur. */
-	private SensorsCardWrapper capteur;
+	/** La carte capteurs avec laquelle on doit communiquer */
+	private SensorsCardWrapper mSensorsCardWrapper;
 	
 	// Valeurs par défaut s'il y a un problème de config
-	/** The capteurs_frequence. */
-	private int capteurs_frequence = 5;
+	/** fréquence de mise a jour des valeurs renvoyés par les capteurs. Valeurs par défaut de 5 fois par seconde s'il y a un problème de config */
+	private int sensorFrequency = 5;
 	
 	/**
-	 * Instantiates a new thread sensor.
+	 * Crée un nouveau thread de capteurs
 	 *
-	 * @param robotvrai the robotvrai
-	 * @param table the table
-	 * @param capteur the capteur
+	 * @param table La table a l'intérieure de laquelle le thread doit croire évoluer
+	 * @param sensorsCardWrapper La carte capteurs avec laquelle le thread va parler
 	 */
-	ThreadSensor(RobotReal robotvrai, Table table, SensorsCardWrapper capteur)
+	ThreadSensor (Table table, SensorsCardWrapper sensorsCardWrapper)
 	{
 		super(config, log);
-		this.capteur = capteur;
+		this.mSensorsCardWrapper = sensorsCardWrapper;
 		Thread.currentThread().setPriority(2);
 	}
 	
@@ -43,10 +40,11 @@ class ThreadSensor extends AbstractThread
 	public void run()
 	{
 		log.debug("Lancement du thread de capteurs", this);
-//		boolean marche_arriere = false;
 		updateConfig();
 		
-		while(!ThreadTimer.match_demarre)
+		
+		// boucle d'attente de début de match
+		while(!ThreadTimer.matchStarted)
 		{
 			if(stopThreads)
 			{
@@ -56,9 +54,12 @@ class ThreadSensor extends AbstractThread
 			Sleep.sleep(50);
 		}
 		
+		
+		// boucle principale, celle qui dure tout le match
 		log.debug("Activation des capteurs", this);
-		while(!ThreadTimer.fin_match)
+		while(!ThreadTimer.matchEnded)
 		{
+			// ons 'arrète si le ThreadManager le demande
 			if(stopThreads)
 			{
 				log.debug("Stoppage du thread capteurs", this);
@@ -66,14 +67,14 @@ class ThreadSensor extends AbstractThread
 			}
 
 			// affiche la distance mesurée par l'ultrason
-			int distance = capteur.getSensedDistance();
+			int distance = mSensorsCardWrapper.getSensedDistance();
 			log.debug("Distance selon ultrason: "+distance, this);
 			if (distance > 0 && distance < 70)
 				log.debug("Câlin !", this);
 			
 			
 			
-			Sleep.sleep((long)(1000./capteurs_frequence));
+			Sleep.sleep((long)(1000./sensorFrequency));
 			
 		}
         log.debug("Fin du thread de capteurs", this);
@@ -85,7 +86,7 @@ class ThreadSensor extends AbstractThread
 	 */
 	public void updateConfig()
 	{
-			capteurs_frequence = Integer.parseInt(config.get("capteurs_frequence"));
+			sensorFrequency = Integer.parseInt(config.get("capteurs_frequence"));
 	}
 	
 }

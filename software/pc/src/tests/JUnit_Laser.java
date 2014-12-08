@@ -6,7 +6,7 @@ import org.junit.Assert;
 
 import enums.ServiceNames;
 import robot.cards.laser.LaserFiltration;
-import robot.cards.laser.Laser;
+import robot.cards.laser.LaserCardWrapper;
 import robot.RobotReal;
 import smartMath.Vec2;
 import table.Table;
@@ -20,7 +20,7 @@ import utils.Sleep;
 public class JUnit_Laser extends JUnit_Test {
 
 	/** The laser. */
-	Laser laser;
+	LaserCardWrapper laser;
 	
 	/** The filtragelaser. */
 	LaserFiltration filtragelaser;
@@ -39,7 +39,7 @@ public class JUnit_Laser extends JUnit_Test {
 		super.setUp();
 		log.debug("JUnit_Laser_Test.setUp()", this);
 		filtragelaser = (LaserFiltration) container.getService(ServiceNames.LASER_FILTRATION);
-		laser = (Laser) container.getService(ServiceNames.LASER);
+		laser = (LaserCardWrapper) container.getService(ServiceNames.LASER);
 		robotvrai = (RobotReal) container.getService(ServiceNames.ROBOT_REAL);
 		table = (Table) container.getService(ServiceNames.TABLE);
 	}

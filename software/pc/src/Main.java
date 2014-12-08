@@ -183,7 +183,7 @@ public class Main
 		System.out.println("Robot pret pour le match, attente du retrait du jumper");
 		
 		// hack si le jumper est inopérant
-		ThreadTimer.match_demarre = true;
+		ThreadTimer.matchStarted = true;
 
 		// while(!capteurs.demarrage_match())
 		//	 	Sleep.sleep(100);
