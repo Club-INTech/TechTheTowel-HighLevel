@@ -1,11 +1,9 @@
 package scripts;
 
-import java.util.Hashtable;
-import java.util.Map;
-
 import utils.Log;
 import utils.Config;
 import container.Service;
+import enums.ScriptNames;
 import exceptions.UnknownScriptException;
 
 /**
@@ -26,7 +24,7 @@ public class ScriptManager implements Service
 
 	// TODO: faire une enum des scripts plutot que de demander le nom en tant que string
 	/** Map contenant l'ensemble des scripts instanciés. Permet de retrouver un script via son nom */
-	private Map<String,AbstractScript> instanciedScripts = new Hashtable<String,AbstractScript>();
+	private AbstractScript[] instanciedScripts = new AbstractScript[ScriptNames.values().length];
 	
 	/**
 	 * Instancie le scriptManager
@@ -40,6 +38,8 @@ public class ScriptManager implements Service
 		this.config = config;
 		
 		//TODO: instancier ici tout les scripts
+		// exemple:
+//		AbstractScript[ScriptNames.SCRIPT_PLOT.ordinal()] = new ScriptPlot();
 	}
 	
 	/**
@@ -49,9 +49,9 @@ public class ScriptManager implements Service
 	 * @return le script voulu
 	 * @throws UnknownScriptException si le script est inconnu.
 	 */
-	public AbstractScript getScript(String nom) throws UnknownScriptException
+	public AbstractScript getScript(ScriptNames nom) throws UnknownScriptException
 	{
-		AbstractScript script = instanciedScripts.get(nom);
+		AbstractScript script = instanciedScripts[nom.ordinal()];
 		if(script == null)
 		{
 			log.warning("Script inconnu: "+nom, this);
