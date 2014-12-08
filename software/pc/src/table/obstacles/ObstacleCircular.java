@@ -2,30 +2,29 @@ package table.obstacles;
 
 import smartMath.Vec2;
 
-// TODO: Auto-generated Javadoc
 /**
- * Obstacle circulaire.
+ * Obstacle de forme circulaire.
  *
- * @author pf
+ * @author pf, marsu
  */
 public class ObstacleCircular extends Obstacle
 {
-	// le Vec2 "position" indique le centre de l'obstacle
+	/** position du centre du disque constituant cet obstacle */
+	protected Vec2 position;
 	
-	// rayon de cet obstacle
-	/** The radius. */
+	/** rayon en mm de cet obstacle */
 	protected int radius;
 	
 	/**
-	 * Instantiates a new obstacle circular.
+	 * crée un nouvel obstacle de forme circulaire a la position et a la taille spécifiée.
 	 *
-	 * @param position the position
-	 * @param rad the rad
+	 * @param position position du centre de l'obstacle a créer
+	 * @param radius rayon de l'obstacle a créer 
 	 */
-	public ObstacleCircular(Vec2 position, int rad)
+	public ObstacleCircular(Vec2 position, int radius)
 	{
 		super(position);
-		this.radius = rad;
+		this.radius = radius;
 	}
 	
 	/* (non-Javadoc)
@@ -36,22 +35,21 @@ public class ObstacleCircular extends Obstacle
 		return new ObstacleCircular(position.clone(), radius);
 	}
 
-	// Copie this dans oc, sans modifier this
 	/**
-	 * Clone.
+	 * Copie this dans other, sans modifier this
 	 *
-	 * @param oc the oc
+	 * @param other l'obstacle circulaire a modifier
 	 */
-	public void clone(ObstacleCircular oc)
+	public void clone(ObstacleCircular other)
 	{
-		oc.position = position;
-		oc.radius = radius;
+		other.position = position;
+		other.radius = radius;
 	}
 
 	/**
-	 * Gets the radius.
+	 * Donne le rayon de cet obstacle circulaire.
 	 *
-	 * @return the radius
+	 * @return le rayon de cet obstacle circulaire.
 	 */
 	public int getRadius()
 	{
@@ -63,6 +61,6 @@ public class ObstacleCircular extends Obstacle
 	 */
 	public String toString()
 	{
-		return super.toString()+", rayon: "+radius;
+		return "Obstacle circulaire de centre " + position + " et de rayon: "+radius;
 	}
 }

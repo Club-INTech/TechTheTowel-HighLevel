@@ -2,31 +2,28 @@ package table.obstacles;
 
 import smartMath.Vec2;
 
-// TODO: Auto-generated Javadoc
 /**
  * Obstacle rectangulaire sont les bords sont alignés avec les axes X et Y (pas de possibilité de faire un rectangle en biais).
- *
+ * 
  * @author pf, marsu
  */
 public class ObstacleRectangular extends Obstacle
 {
-
-	// Convention: la "position" d'un ObstacleRectangulaire est celle de son centre (intersection des 2 diagonales)
+	/** Positon du centre du rectangle représentant l'obstacle (intersection des 2 diagonales)*/
+	protected Vec2 positon;
 	
-	// taille selon l'axe X
-	/** The size x. */
+	/** taille du rectangle en mm selon l'axe X */
 	protected int sizeX;
 	
-	// taille selon l'axe Y
-	/** The size y. */
+	/** taille du rectangle en mm selon l'axe Y */
 	protected int sizeY;
 	
 	/**
-	 * Instantiates a new obstacle rectangular.
+	 *	crée un nouvel obstacle rectangulaire sur la table a la position désirée.
 	 *
-	 * @param position the position
-	 * @param sizeX the size x
-	 * @param sizeY the size y
+	 * @param position Positon désirée du centre du rectangle représentant l'obstacle (intersection des 2 diagonales)
+	 * @param sizeX taille voulue du rectangle représentant l'obstacle en mm selon l'axe X
+	 * @param sizeY taille voulue du rectangle représentant l'obstacle en mm selon l'axe Y
 	 */
 	public ObstacleRectangular(Vec2 position, int sizeX, int sizeY)
 	{
@@ -52,7 +49,7 @@ public class ObstacleRectangular extends Obstacle
 	}
 	
 	/**
-	 * Taille selon l'axe Y.
+	 * Renvoit la taille du rectangle en mm selon l'axe Y
 	 *
 	 * @return the size y
 	 */
@@ -62,7 +59,7 @@ public class ObstacleRectangular extends Obstacle
 	}
 	
 	/**
-	 * Taille selon l'axe X.
+	 *  Renvoit la taille du rectangle en mm selon l'axe X
 	 *
 	 * @return the size x
 	 */
@@ -72,10 +69,10 @@ public class ObstacleRectangular extends Obstacle
 	}
 	
 	/**
-	 * Distance.
+	 * Fourni la plus petite distance entre le point fourni et l'obstacle.
 	 *
-	 * @param point the point
-	 * @return the float
+	 * @param point point a considérer
+	 * @return la plus petite distance entre le point fourni et l'obstacle.
 	 */
 	public float distance(Vec2 point)
 	{
@@ -85,14 +82,14 @@ public class ObstacleRectangular extends Obstacle
 	/**
 	 * Fourni la plus petite distance au carré entre le point fourni et l'obstacle.
 	 *
-	 * @param in the in
+	 * @param in  point a considérer
 	 * @return la plus petite distance au carré entre le point fourni et l'obstacle
 	 */
 	public float SquaredDistance(Vec2 in)
 	{
 		
 		/*		
-		 *  Shéma de la situation :
+		 *  Schéma de la situation :
 		 *
 		 * 		 												  y
 		 * 			4	|		3		|		2					    ^
@@ -101,7 +98,7 @@ public class ObstacleRectangular extends Obstacle
 		 * 				|				|								-----> x
 		 * 				|				|
 		 * 			5	|	obstacle	|		1
-		 * 		
+		 * 				|				|
 		 * 		____________________________________
 		 * 		
 		 * 			6	|		7		|		8
@@ -114,7 +111,7 @@ public class ObstacleRectangular extends Obstacle
 		Vec2 coinBasDroite = position.plusNewVector((new Vec2(sizeX,-sizeY)));
 		Vec2 coinHautDroite = position.plusNewVector((new Vec2(sizeX,0)));
 		
-		// si le point fourni est dans lesquarts-de-plans n°2,4,6 ou 8
+		// si le point fourni est dans les quarts-de-plans n°2,4,6 ou 8
 		if(in.x < coinBasGauche.x && in.y < coinBasGauche.y)
 			return in.squaredDistance(coinBasGauche);
 		

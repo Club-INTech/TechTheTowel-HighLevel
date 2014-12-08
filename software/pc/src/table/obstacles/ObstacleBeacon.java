@@ -1,24 +1,24 @@
 package table.obstacles;
 import smartMath.Vec2;
 
-// TODO: Auto-generated Javadoc
 /**
- * Obstacles détectés par balise. On connaît leur vitesse.
- * @author pf
+ * Obstacles mobiles détectés par la balise laser.
+ * La vitesse de déplacment de cet obstacle sur la table est, congtrairement aux autres types d'obstacle, renseingée par la balise elle-meme
+ * @author pf, marsu
  *
  */
 public class ObstacleBeacon extends ObstacleCircular 
 {
 
-	/** The speed. */
+	/** Vitesse de l'obstacle sur la table. */
 	private Vec2 speed;
 	
 	/**
-	 * Instantiates a new obstacle beacon.
+	 * Crée un nouvel obstacle détecté par la balise laser.
 	 *
-	 * @param position the position
-	 * @param rad the rad
-	 * @param speed the speed
+	 * @param position endroit de la table ou faire cet obstacle
+	 * @param rad orientation de l'obstacle, même si cet obstacle est supposé de forme circulaire, son orientation est mémorisé pour en déduire son vecteur vitesse
+	 * @param speed vitesse d'évolution de cet obstacle sur la table
 	 */
 	public ObstacleBeacon (Vec2 position, int rad, Vec2 speed)
 	{
@@ -27,13 +27,13 @@ public class ObstacleBeacon extends ObstacleCircular
 	}
 
 	/**
-	 * Clone.
+	 * Rends l'obstacle fourni explicitement en argument égal a celui-ci 
 	 *
-	 * @param ob the ob
+	 * @param other l'obstacle de balise laser a modifier
 	 */
-	public void clone(ObstacleBeacon ob)
+	public void clone(ObstacleBeacon other)
 	{
-		super.clone(ob);
-		ob.speed = speed;
+		super.clone(other);
+		other.speed = speed;
 	}
 }

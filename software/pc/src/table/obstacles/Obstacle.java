@@ -1,22 +1,22 @@
 package table.obstacles;
 import smartMath.Vec2;
 
-// TODO: Auto-generated Javadoc
 /**
- * Superclasse abstraite des obstacles.
+ * classe abstraite pour les obstacles sur la table.
+ * Les obstacles peuvent avoir différentes formes, et être soit fixes d'un match a l'autre, soit mobiles (un robot adverse est par exemple un obstacle mobile)
  * @author pf, marsu
  *
  */
 public abstract class Obstacle
 {
 
-	/** The position. */
+	/** Position de l'obstacle sur la table. En fonction de la forme de l'obstacle, il peut s'étendre plus ou moins loin de cette position dans diverses directions */
 	protected Vec2 position;
 	
 	/**
-	 * Instantiates a new obstacle.
+	 * construit un nouvel obstacle a position donnée
 	 *
-	 * @param position the position
+	 * @param position position de l'obstacle a construire
 	 */
 	public Obstacle (Vec2 position)
 	{
@@ -29,7 +29,7 @@ public abstract class Obstacle
 	public abstract Obstacle clone();
 
 	/**
-	 * Gets the position.
+	 * Renvois la position de cet obstacle.
 	 *
 	 * @return the position
 	 */

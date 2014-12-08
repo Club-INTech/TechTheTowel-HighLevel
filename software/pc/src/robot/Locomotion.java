@@ -79,8 +79,8 @@ public class Locomotion implements Service
 	// la table est symétrisée si on est équipe jaune
 	private boolean symmetry;
 	
-	// Temps d'attente entre deux vérification de l'état du déplacement quand le robot bouge. (arrivée, blocage, etc.)
-	private int minimumDelayBetweenMovementStatusCheck = 10;
+	// Temps d'attente e miliseconde entre deux vérification de l'état du déplacement quand le robot bouge. (arrivée, blocage, etc.)
+	private int minimumDelayBetweenMovementStatusCheck = 50;
 	
 	// nombre maximum d'excpetions levés d'un certain type lors d'un déplacement
 	private int maxAllowedExceptionCount = 5;
@@ -579,6 +579,9 @@ public class Locomotion implements Service
 					// restaure le aim de ce déplacement (au lieu ce celui d'un hook)
 					aim = oldAim;
 				}
+			
+			// on attends un peu pour ne pas saturer la série
+			Sleep.sleep(minimumDelayBetweenMovementStatusCheck);
 		}
 	}
 
@@ -610,8 +613,8 @@ public class Locomotion implements Service
         	float debocFactor = mLocomotionCardWrapper.getTranslationnalDebocFactor();
         	
         	// ajuste le point d'arrivée
-        	aim.x += displacement.x * debocFactor;
-        	aim.y += displacement.y * debocFactor;
+        	aim.x += displacement.x * (debocFactor - 1);
+        	aim.y += displacement.y * (debocFactor - 1);
         	
         	// ajuste la valeur de déplacement
         	displacement.x *= debocFactor;
@@ -732,15 +735,29 @@ public class Locomotion implements Service
 	//TODO: le if... else if.... else.... est redondant avec la fonction checkRobotNotBlocked qui est elle aussi appellée dans moveInDirectionEventWatcher. 
 	private boolean isMovementFinished() throws BlockedException
 	{
+		// si on vérifie si l'ona fini de bouger pour la première fois depuis l'initialisation de tout le, il faut remplir oldInfos
+		if(oldInfos == null)
+		{
+			try
+			{
+				oldInfos = mLocomotionCardWrapper.getCurrentPositionAndOrientation();
+			}
+			catch (SerialConnexionException e)
+			{
+				e.printStackTrace();
+			}
+			return false;
+		}
+		
 		boolean out = false;
 		
 		//distance parcourue par le robot entre deux rafraichissement de la position a partir de laquelle on considère que le robot est en mouvement
 		// TODO : faire une détection paramétrable différamment en translation et en rotation, plus un calcul premant en compte le temps de rafraichissement de la position du robot
 		// car on veut un seuil de vitesse (donc dépendant du temps dt de rafraichissement de l'asser) et non un seuil sur V*dt
-		int motionThreshold = 10;
+		int motionThreshold = 0;
 		
 		// tolérance sur la position d'arrivée. L'exécution sera rendue a l'utilisateur de la classe Locomotion quand le robot sera plus proche de l'arrivée que cette distance
-		int aimThreshold = 10;
+		int aimThreshold = 400;
 		
 		// demande ou l'on est et comment on est orienté a la carte d'asser
 		double[] newInfos = null;

@@ -176,9 +176,16 @@ public class JUnit_DeplacementsHautNiveauTest extends JUnit_Test
     @Test
     public void test_avancer() throws Exception
     {
+    	/*
         robot.moveLengthwise(50, null, false);
         Sleep.sleep(1000);
         robot.moveLengthwise(-50, null, false);
+        */
+    	while(true)
+    	{
+            robot.moveLengthwise(100, null, false);
+            Sleep.sleep(500);
+    	}
     }
 
     /**

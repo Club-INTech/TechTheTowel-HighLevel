@@ -380,7 +380,7 @@ public class LocomotionCardWrapper implements Service
 		// prise en compte de latence variable de la liaison série: on approxime par une loi uniforme (100ms de latence en moyenne avec la surcouche java).
 		// latence exprimée ici en milisecondes, entre -50ms et 150ms
 		// Attention, en fonction de la jvm (Openjdk ou Oracle), ces valeurs peuvent changer
-		float latency = (new Random()).nextFloat() * 200 + 150;
+		float latency = ((new Random()).nextFloat() * 200) - 50;
 
 		// intégrale: dt / (1/valeur), c'est a dire valeur * dt
 		float DebocFactor = latency / invertedTranslationnalError;

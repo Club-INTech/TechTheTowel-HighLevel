@@ -2,20 +2,19 @@ package table;
 
 import smartMath.Vec2;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class GameElement.
+ * Element de jeu
  */
 abstract class GameElement
 {
 	
-	/** The position. */
+	/** La position de l'élément sur la table */
 	protected Vec2 position;
 	
 	/**
-	 * Instantiates a new game element.
+	 * Crée un nouvel élément a l'endroit de la table spécifié
 	 *
-	 * @param position the position
+	 * @param position position a laquelle instancier l'élément de jeu
 	 */
 	public GameElement(Vec2 position)
 	{
@@ -23,9 +22,9 @@ abstract class GameElement
 	}
 	
 	/**
-	 * Gets the position.
+	 * Renvois la position courrante de l'élément de jeu
 	 *
-	 * @return the position
+	 * @return la position courrante de l'élément de jeu
 	 */
 	public Vec2 getPosition()
 	{
