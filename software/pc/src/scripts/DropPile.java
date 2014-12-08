@@ -2,7 +2,7 @@ package scripts;
 
 import java.util.ArrayList;
 
-import pathfinding.Pathfinding;
+import pathdinding.Pathfinding;
 import exceptions.ScriptException;
 import hook.Hook;
 import hook.types.HookGenerator;

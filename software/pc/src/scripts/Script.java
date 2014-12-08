@@ -13,7 +13,8 @@ import hook.types.HookGenerator;
 
 import java.util.ArrayList;
 
-import pathfinding.Pathfinding;
+import pathdinding.Pathfinding;
+import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialException;
 import exceptions.ScriptException;
@@ -52,12 +53,13 @@ public abstract class Script implements Service
 		
 	/**
 	 * Exécute vraiment un script et fait le deplacement jusqu'au point d'entree
+	 * @throws BlockedException 
 	 */
-	public void goToThenExec(int id_version, GameState<RobotReal> state, boolean retenter_si_blocage) throws ScriptException
+	public void goToThenExec(int id_version, GameState<RobotReal> state, boolean retenter_si_blocage) throws ScriptException, BlockedException
 	{
 		try 
 		{
-			locomotion.suit_chemin(pathfinding.computePath(locomotion.getPosition().toPoint(),point_entree(id_version).toPoint()),new ArrayList<Hook>());
+			locomotion.suit_chemin(pathfinding.computePath(locomotion.getPosition(),point_entree(id_version)),new ArrayList<Hook>());
 		} 
 		catch (UnableToMoveException e) 
 		{

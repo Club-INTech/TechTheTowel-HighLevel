@@ -155,6 +155,18 @@ public class ActuatorsManager implements Service {
 	
 	// IT 2015 machoires monte plots
 	
+	public void openJaw() throws SerialException
+	{
+		log.debug("machoire ouverte", this);
+		serie.communiquer("om", 0);
+	}
+	
+	public void closeJaw() throws SerialException
+	{
+		log.debug("machoire fermee", this);
+		serie.communiquer("fm", 0);
+	}
+	
 	public void openRightJaw() throws SerialException
 	{
 		log.debug("Machoire droite ouverte", this);

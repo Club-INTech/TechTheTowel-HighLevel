@@ -192,7 +192,7 @@ public class Locomotion implements Service
 			Sleep.sleep(1000);
 			avancer(Math.sqrt(distX*distX + distY*distY));
 			log.debug("j'ai avance "+Math.sqrt(distX*distX+distY*distY), this);
-			Sleep.sleep(7000);
+			Sleep.sleep(5000);
 		} 
 		catch (SerialException e) 
 		{

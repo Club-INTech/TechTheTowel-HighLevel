@@ -2,7 +2,7 @@ package scripts;
 
 import java.util.ArrayList;
 
-import pathfinding.Pathfinding;
+import pathdinding.Pathfinding;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialException;
 import hook.Hook;
@@ -47,17 +47,17 @@ public class DropCarpet extends Script
 				
 				if (!DroppedLeftCarpet)
 				{
-					actionneurs.downLeftCarpet();
+					actionneurs.lowLeftCarpet();
 					Sleep.sleep(sleepTime);
 					DroppedLeftCarpet=true;
-					actionneurs.upLeftCarpet();
+					actionneurs.highLeftCarpet();
 				}
 				if (!DroppedRightCarpet)
 				{
-					actionneurs.downRightCarpet();
+					actionneurs.lowRightCarpet();
 					Sleep.sleep(sleepTime);
 					DroppedRightCarpet=true;
-					actionneurs.upRightCarpet();
+					actionneurs.highRightCarpet();
 				}
 				locomotion.avancer(distance,emptyHookList,true);//on s'eloigne de l'escalier
 			} 
@@ -98,8 +98,8 @@ public class DropCarpet extends Script
 	{
 		try 
 		{
-			actionneurs.upLeftCarpet();
-			actionneurs.upRightCarpet();
+			actionneurs.highLeftCarpet();
+			actionneurs.highRightCarpet();
 		} 
 		catch (SerialException e) 
 		{

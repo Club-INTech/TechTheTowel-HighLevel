@@ -5,7 +5,7 @@ import hook.types.HookGenerator;
 
 import java.util.ArrayList;
 
-import pathFinding.PathFinding;
+import pathdinding.Pathfinding;
 import exceptions.Locomotion.UnableToMoveException;
 import robot.cards.ActuatorsManager;
 import robot.highlevel.LocomotionHiLevel;
@@ -24,7 +24,7 @@ public class ExitBeginZone extends Script {
 	int distanceToExit=450;
 	ArrayList<Hook> emptyHook = new ArrayList<Hook>();
 	
-	public ExitBeginZone(HookGenerator hookgenerator, Config config, Log log, PathFinding pathfinding, LocomotionHiLevel locomotion, ActuatorsManager move) 
+	public ExitBeginZone(HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, LocomotionHiLevel locomotion, ActuatorsManager move) 
 	{
 		super(hookgenerator, config, log, pathfinding, locomotion, move);
 	}

@@ -16,7 +16,12 @@ import robot.cards.Locomotion;
 import utils.Sleep;
 import pathdinding.Pathfinding;
 
-public class JUnit_serialMatch extends JUnit_Test {
+/**
+ * classe des matchs scriptes.
+ * sert de bases pour nimporte quel test
+ */
+public class JUnit_serialMatch extends JUnit_Test 
+{
 
 	Locomotion locomotion;
 	ActuatorsManager actionneurs;
@@ -28,7 +33,8 @@ public class JUnit_serialMatch extends JUnit_Test {
 		
 	
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() throws Exception 
+	{
 		super.setUp();
 		locomotion = (Locomotion)container.getService("Deplacements");
 		locomotion.set_x(1484);
@@ -43,15 +49,23 @@ public class JUnit_serialMatch extends JUnit_Test {
 	@Test
 	public void test()
 	{
-		try {
-			locomotion.avancer(1000);
-			Sleep.sleep(5000);
+		try 
+		{
+				for (int i=0 ; i<10 ; i++)
+				{
+					locomotion.avancer(1000);
+					Sleep.sleep(5000);
+					locomotion.avancer(-1000);
+					Sleep.sleep(5000);
+				}
 			log.debug("en position ("+locomotion.get_infos_x_y_orientation()[0]+", "+(int)locomotion.get_infos_x_y_orientation()[1]+")", this);
-		} catch (SerialException e1) {
+		} 
+		catch (SerialException e1) 
+		{
 			log.debug("mauvaise entree serie, test init", this);
 			e1.printStackTrace();
 		}
-		while (true)
+		/*while (true)
 		{
 			try 
 			{
@@ -77,6 +91,7 @@ public class JUnit_serialMatch extends JUnit_Test {
 				e.printStackTrace();
 			}
 		}
+		*/
 		
 	}
 
