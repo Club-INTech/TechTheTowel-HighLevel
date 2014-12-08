@@ -66,7 +66,7 @@ public class ThreadTimer extends AbstractThread
 		log.debug("Lancement du thread timer", this);
 
 		// allume les capteurs
-		config.set("capteurs_on", false);
+		config.set("capteurs_on", "false");
 		mSensorsCardWrapper.updateConfig();	
 		
 		// Attente du démarrage du match
@@ -84,7 +84,7 @@ public class ThreadTimer extends AbstractThread
 		matchStartTimestamp = System.currentTimeMillis();
 		matchStarted = true;
 
-		config.set("capteurs_on", true);
+		config.set("capteurs_on", "true");
 		mSensorsCardWrapper.updateConfig();
 
 		log.debug("LE MATCH COMMENCE !", this);
@@ -171,7 +171,7 @@ public class ThreadTimer extends AbstractThread
 	{
 		// facteur 1000 car temps_match est en secondes et duree_match en ms
 		try {
-			matchDuration = 1000*Long.parseLong(config.get("temps_match"));
+			matchDuration = 1000*Long.parseLong(config.getProperty("temps_match"));
 		}
 		catch(Exception e)
 		{

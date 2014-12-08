@@ -28,7 +28,7 @@ public class JUnit_Sensors extends JUnit_Test
 		super.setUp();
 		log.debug("JUnit_ActionneursTest.setUp()", this);
 		capteurs = (SensorsCardWrapper)container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
-		config.set("capteurs_on", true);
+		config.set("capteurs_on", "true");
 		capteurs.updateConfig();
 	}
 
@@ -48,14 +48,14 @@ public class JUnit_Sensors extends JUnit_Test
 		Assert.assertTrue(capteurs.getSensedDistance() != 3000);
 
 		// Sans capteurs
-		config.set("capteurs_on", false);
+		config.set("capteurs_on", "false");
 		capteurs.updateConfig();
 		log.debug(capteurs.getSensedDistance(), this);
 	//	Assert.assertTrue(capteurs.mesurer_infrarouge() == 3000);
 		Assert.assertTrue(capteurs.getSensedDistance() == 3000);
 
 		// Et re avec
-		config.set("capteurs_on", true);
+		config.set("capteurs_on", "true");
 		capteurs.updateConfig();
 		log.debug(capteurs.getSensedDistance(), this);
 	//	Assert.assertTrue(capteurs.mesurer_infrarouge() != 3000);

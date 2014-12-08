@@ -43,7 +43,7 @@ public class SensorsCardWrapper implements Service
 	
 	public void updateConfig()
 	{
-		areSensorsActive = Boolean.parseBoolean(config.get("capteurs_on"));
+		areSensorsActive = Boolean.parseBoolean(config.getProperty("capteurs_on"));
 	}
 
 	/**

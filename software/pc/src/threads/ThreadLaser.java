@@ -162,21 +162,21 @@ class ThreadLaser extends AbstractThread
 	public void updateConfig()
 	{
 		try {
-			sizeTableX = Integer.parseInt(config.get("table_x"));
+			sizeTableX = Integer.parseInt(config.getProperty("table_x"));
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
 		try {
-			sizeTableY = Integer.parseInt(config.get("table_y"));
+			sizeTableY = Integer.parseInt(config.getProperty("table_y"));
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
 		try {
-			lasersFrequanecy = Float.parseFloat(config.get("lasers_frequence"));
+			lasersFrequanecy = Float.parseFloat(config.getProperty("lasers_frequence"));
 		}
 		catch(Exception e)
 		{

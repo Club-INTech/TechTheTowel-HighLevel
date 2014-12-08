@@ -3,46 +3,45 @@ package utils;
 import robot.RobotReal;
 import container.Service;
 
-// TODO: Auto-generated Javadoc
 /**
- * Service qui permettra de faire un checkup du robot avant le match.
+ * Service qui permet de tester tout les actionneurs.
+ * Ce système est prévu pour être aussi utilisé durant les 3 minutes de préparations avant le début du match
  *
- * @author pf
- * (marsu) : Cette année on l'utilisera, promi !
+ * @author pf, marsu
  */
 
 public class CheckUp implements Service 
 {
 
-	/** The log. */
+	/** Le système de log a utiliser pour écrire */
 	private Log log;
 	
-	/** The robotvrai. */
-	private RobotReal robotvrai;
+	/** Le RobotReal a tester */
+	private RobotReal robotReal;
 	
 	/**
-	 * Instantiates a new check up.
+	 * Le système de log a utiliser pour écrire 
 	 *
-	 * @param log the log
-	 * @param robotvrai the robotvrai
+	 * @param log Le système de log a utiliser pour écrires
+	 * @param robotReal Le RobotReal a tester
 	 */
-	public CheckUp(Log log, RobotReal robotvrai)
+	public CheckUp(Log log, RobotReal robotReal)
 	{
-		this.robotvrai = robotvrai;
+		this.robotReal = robotReal;
 		this.log = log;
 	}
 	
 	// TODO check-up du robot
 	/**
-	 * Lancer.
+	 * Effectue un check-up du robot
 	 */
-	public void lancer()
+	public void doCheckUp()
 	{
 		// Par exemple
 		log.debug("Lancement d'un check-up", this);
 		try
 		{
-		robotvrai.moveLengthwise(100);
+		robotReal.moveLengthwise(100);
 		}
 		catch(Exception e)
 		{

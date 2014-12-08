@@ -5,68 +5,65 @@ import container.Service;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Enumeration;
 import java.util.Properties;
 
-
-// TODO: Auto-generated Javadoc
 /**
- * The Class Config.
+ * Service de configuration du robot.
+ * Cette classe lit le fichier  /pc/config/config.ini pour en extraire les informations de configuration et les redistribuer a qui les demandera
  *
  * @author pf, marsu
  */
 public class Config implements Service
 {
+	// TODO: trouver a quoi sert ce fichier
+	/** Nom du fichier local. */
+	private String localFileName = "local.ini";
 	
-	/** The name_local_file. */
-	private String name_local_file = "local.ini";
+	/** Nom du fichier de configuration a charger. */
+	private String configFileName = "config.ini";
 	
-	/** The name_config_file. */
-	private String name_config_file = "config.ini";
-	
-	/** The path. */
+	/** chemin relatif au chemin d'exécution d'ou charger le fichier de config */
 	private String path;
 	
-	/** The config. */
-	private Properties config = new Properties();
+	/** Le fichier de configuration, une fois parsé par le classe builltin de java. */
+	private Properties configProperties = new Properties();
+
+	/** Le fichier local, une fois parsé par le classe builltin de java. */
+	private Properties localProperties = new Properties();
 	
-	/** The local. */
-	private Properties local = new Properties();
-	
-    /** The e. */
-    Enumeration<?> e = local.propertyNames();
 
 	
 	/**
-	 * Instantiates a new config.
+	 * fait un nouveau gestionnaire de configuration
 	 *
-	 * @param path the path
+	 * @param path endroit ou trouver le fichier de configuration
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public Config(String path) throws IOException
 	{
 		this.path = path;
-	//	log.debug("Loading config from current directory : " +  System.getProperty("user.dir"), this)
+		System.out.println("Loading config from current directory : " +  System.getProperty("user.dir") + path);
 		try
 		{
-			this.config.load(new FileInputStream(this.path+this.name_config_file));
+			this.configProperties.load(new FileInputStream(this.path+this.configFileName));
 		}
 		catch  (IOException e)
 		{
 			e.printStackTrace();
-			throw new IOException("Erreur ouverture de config.ini");
+			throw new IOException("Erreur ouverture de config.ini Le chemin d'exécution du programme est-il bien dans /pc ?");
 		}
 		
+	
 		try
 		{
-			this.config.load(new FileInputStream(this.path+this.name_local_file));
+			this.configProperties.load(new FileInputStream(this.path+this.localFileName));
 		}
 		catch  (IOException e)
 		{
 			try
 			{
-				FileOutputStream fileOut = new FileOutputStream(this.path+this.name_local_file);
-				this.local.store(fileOut, "Ce fichier est un fichier généré par le programme.\nVous pouvez redéfinir les variables de config.ini dans ce fichier dans un mode de votre choix.\nPS : SopalINT RULEZ !!!\n");
+				FileOutputStream fileOut = new FileOutputStream(this.path+this.localFileName);
+				this.localProperties.store(fileOut, "Ce fichier est un fichier généré par le programme.\nVous pouvez redéfinir les variables de config.ini dans ce fichier dans un mode de votre choix.\nPS : SopalINT RULEZ !!!\n");
 			}
 			catch (IOException e2)
 			{
@@ -75,65 +72,59 @@ public class Config implements Service
 			}	
 			throw new IOException("Erreur ouverture de local.ini");
 		}	
-		affiche_tout();
+		printConfigFile();
 	}
 	
+	// TODO: configPropertyNotFoundException pour prévenir l'utilisateur quand il essaye d'obtenir une propriété du fichier de config qui n'existe pas
+	// TODO: encore mieux, faire une enummération de tout ce qui peut être appelleé comme property, et changer le type du paramètre de getProperty en cette enum
 	/**
-	 * Méthode de récupération des paramètres de configuration.
+	 * Méthode que tout le monde utilise de récupération des paramètres de configuration.
 	 *
-	 * @param nom the nom
-	 * @return the string
+	 * @param nom nom de la propriété a récupérer
+	 * @return Leparamètre coresspondant a ce nom
 	 */
-	public String get(String nom)
+	public String getProperty(String nom)
 	{
 		// Pour la correction de Deboc
 		if(nom == "debocIntegralCorrectionBehavior")
 				return System.getProperty("user.name").startsWith("kar") ? "disabled" : "default";
 		
 		String out = null;
-		out = config.getProperty(nom);
+		out = configProperties.getProperty(nom);
 		if(out == null)
 		{
-			System.out.println("Erreur config: "+nom+" introuvable.");
+			System.out.println("Erreur config, la propriété nommée '"+nom+"' est introuvable.");
 		}
 		return out;
 	}
 
 	/**
+	 * Change la valeur d'un parmaètre de configuration.
+	 * Le changement sera perdu si le programme redémarre.
 	 * Méthode utilisée seulement par les tests.
 	 *
-	 * @param nom the nom
-	 * @param value the value
+	 * @param nom nom de la propriété a modifier
+	 * @param value la nouvelle valeur a lui donner
 	 */
-	private void set(String nom, String value)
+	public void set(String nom, String value)
 	{
-		System.out.println(nom+" = "+value+" (ancienne valeur: "+config.getProperty(nom)+")");
-		config.setProperty(nom, value);
-	}
-	
-	/**
-	 * Set en version user-friendly.
-	 *
-	 * @param nom the nom
-	 * @param value the value
-	 */
-	public void set(String nom, Object value)
-	{
-		System.out.println(nom+" = "+value.toString()+" (ancienne valeur: "+config.getProperty(nom)+")");
-		set(nom, value.toString());
+		System.out.println("Changement de config: " +nom+" = "+value+" (ancienne valeur: "+configProperties.getProperty(nom)+")");
+		configProperties.setProperty(nom, value);
 	}
 
-	// TODO private
 	/**
-	 * Affiche_tout.
+	 * Affiche tout le fichier de config.
+	 * Si la valeur de config affiche_debug est a false, le fichier de config ne sera pas affiché, même si cette méthode est appellée
 	 */
-	private void affiche_tout()
+	private void printConfigFile()
 	{
-		if(Boolean.parseBoolean(config.getProperty("affiche_debug")))
+		if(Boolean.parseBoolean(configProperties.getProperty("affiche_debug")))
 		{
 			System.out.println("Configuration initiale");
-			for(Object o: config.keySet())
-				System.out.println(o+": "+config.get(o));
+			
+			// imprime chaque propriété
+			for(Object o: configProperties.keySet())
+				System.out.println(o+": "+configProperties.get(o));
 		}
 	}
 	

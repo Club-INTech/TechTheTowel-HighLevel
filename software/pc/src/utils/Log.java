@@ -7,39 +7,39 @@ import java.util.GregorianCalendar;
 
 import container.Service;
 
-// TODO: Auto-generated Javadoc
 /**
- * Service de log, affiche à l'écran des informations avec différents niveaux de couleurs.
+ * Service de log, affiche à l'écran et enregistre dans des fichiers de logs des informations avec différents niveaux de couleurs.
  *
- * @author pf
+ * @author pf, marsu
  */
 
 public class Log implements Service
 {
-	// Dépendances
-	/** The config. */
+	/** fichier de configuration pour le match. */
 	private Config config;
 
-	/** The writer. */
+	/** Redirecteur de chaine de caractères vers le fichier de log. */
 	FileWriter writer = null;
 
-	/** The couleur critical. */
-	private String 	couleurDebug 	= "\u001B[32m",
-					couleurWarning 	= "\u001B[33m",
-					couleurCritical = "\u001B[31m";
+	/** Préfixe donnant la couleur en console des messages de debug */
+	private String 	debugPrefix 	= "Dbg - \u001B[32m";
 
-	// Ne pas afficher les messages de bug permet d'économiser du temps CPU
-	/** The affiche_debug. */
-	private boolean affiche_debug = true;
+	/** Préfixe donnant la couleur en console des messages de warning */
+	private String 	warningPrefix 	= "Warn - \u001B[33m";
+
+	/** Préfixe donnant la couleur en console des messages critiques */
+	private String 	criticalPrefix = "Critical - \u001B[31m";
+
+	/** Vrai s'il faut afficher les messages sur la sortie standard (prend du temps CPU), faux sinon. */
+	private boolean printLogs = true;
 	
-	// Sauvegarder les logs dans un fichier
-	/** The sauvegarde_fichier. */
-	private boolean sauvegarde_fichier = false;
+	/** Vrai s'il faut sauvegarder les logs dans un fichier. */
+	private boolean saveLogs = false;
 	
 	/**
-	 * Instantiates a new log.
+	 * Instancie un nouvveau service de log
 	 *
-	 * @param config the config
+	 * @param config fichier de configuration pour le match.
 	 */
 	public Log(Config config)
 	{
@@ -47,8 +47,10 @@ public class Log implements Service
 		
 		updateConfig();
 		
-		if(sauvegarde_fichier)
-			try {
+		// crée le fichier de log si on spécifie d'écrire dans un fichcier les logs du robot
+		if(saveLogs)
+			try 
+			{
 				java.util.GregorianCalendar calendar = new GregorianCalendar();
 				String heure = calendar.get(Calendar.HOUR)+":"+calendar.get(Calendar.MINUTE)+":"+calendar.get(Calendar.SECOND);
 				writer = new FileWriter("logs/LOG-"+heure+".txt", true); 
@@ -57,18 +59,8 @@ public class Log implements Service
 			{
 				critical(e, this);
 			}
-		warning("Service de log démarré", this);
+		debug("Service de log démarré", this);
 	
-	}
-	
-	/**
-	 * Méthode à appeler uniquement depuis une méthode statique. User-friendly
-	 *
-	 * @param message the message
-	 */
-	public void appel_static(Object message)
-	{
-		appel_static(message.toString());
 	}
 		
 	/**
@@ -78,15 +70,15 @@ public class Log implements Service
 	 */
 	public void appel_static(String message)
 	{
-		ecrire("Lanceur: "+message, couleurDebug, System.out);
+		writeToLog("AppelStatic: "+message, debugPrefix, System.out);
 	}
 	
 	
 	/**
 	 * Affichage de debug, en vert. User-friendly
 	 *
-	 * @param message the message
-	 * @param objet the objet
+	 * @param message message a logguer
+	 * @param objet l'objet demandant le log
 	 */
 	public void debug(Object message, Object objet)
 	{
@@ -96,20 +88,20 @@ public class Log implements Service
 	/**
 	 * Affichage de debug, en vert.
 	 *
-	 * @param message the message
-	 * @param objet the objet
+	 * @param message message a logguer
+	 * @param objet l'objet demandant le log
 	 */
 	public void debug(String message, Object objet)
 	{
-		if(affiche_debug)
-			ecrire(objet.getClass().getName()+": "+message, couleurDebug, System.out);
+		if(printLogs)
+			writeToLog(objet.getClass().getName()+": "+message, debugPrefix, System.out);
 	}
 
 	/**
 	 * Affichage de warnings, en orange. User-friendly
-	 *
-	 * @param message the message
-	 * @param objet the objet
+	 * 
+	 * @param message message a logguer
+	 * @param objet l'objet demandant le log
 	 */
 	public void warning(Object message, Object objet)
 	{
@@ -118,20 +110,20 @@ public class Log implements Service
 
 	/**
 	 * Affichage de warnings, en orange.
-	 *
-	 * @param message the message
-	 * @param objet the objet
+	 * 
+	 * @param message message a logguer
+	 * @param objet l'objet demandant le log
 	 */
 	public void warning(String message, Object objet)
 	{
-		ecrire(objet.getClass().getName()+": "+message, couleurWarning, System.out);
+		writeToLog(objet.getClass().getName()+": "+message, warningPrefix, System.out);
 	}
 
 	/**
 	 * Affichage d'erreurs critiques, en rouge. User-friendly
 	 *
-	 * @param message the message
-	 * @param objet the objet
+	 * @param message message a logguer
+	 * @param objet l'objet demandant le log
 	 */
 	public void critical(Object message, Object objet)
 	{
@@ -141,40 +133,47 @@ public class Log implements Service
 	/**
 	 * Affichage d'erreurs critiques, en rouge.
 	 *
-	 * @param message the message
-	 * @param objet the objet
+	 * @param message message a logguer
+	 * @param objet l'objet demandant le log
 	 */
 	public void critical(String message, Object objet)
 	{
-		ecrire(objet.getClass().getName()+": "+message, couleurCritical, System.err);
+		writeToLog(objet.getClass().getName()+": "+message, criticalPrefix, System.err);
 	}
 
 	/**
-	 * Ecrire.
+	 * loggue pour de vrai le massage.
+	 * APrès appele de cette méthode, le message été loggué en fonction de la configuration.
 	 *
-	 * @param message the message
-	 * @param couleur the couleur
-	 * @param ou the ou
+	 * @param message message a logguer
+	 * @param prefix le préfixe qa rajouter, avant que l'heure ne soit mise
+	 * @param logPrinter ou afficher sur l'écran le log
 	 */
-	private void ecrire(String message, String couleur, PrintStream ou)
+	private void writeToLog(String message, String prefix, PrintStream logPrinter)
 	{
+		// trouve l'heure pour la rajouter dans le message de log
 		java.util.GregorianCalendar calendar = new GregorianCalendar();
 		String heure = calendar.get(Calendar.HOUR)+":"+calendar.get(Calendar.MINUTE)+":"+calendar.get(Calendar.SECOND)+","+calendar.get(Calendar.MILLISECOND);
-		if(couleur != couleurDebug || affiche_debug)
-			ou.println(couleur+heure+" "+message+"\u001B[0m");
-		if(sauvegarde_fichier)
-			ecrireFichier(couleur+heure+" "+message+"\u001B[0m");
+		
+		
+		if(prefix != debugPrefix || printLogs)
+			logPrinter.println(prefix+heure+" "+message+"\u001B[0m"); // suffixe en \u001B[0m pour que la prochiane ligne soit blanche si on ne spécifie rien
+		if(saveLogs)
+			writeToFile(prefix+heure+" "+message+"\u001B[0m"); // suffixe en \u001B[0m pour que la prochiane ligne soit blanche si on ne spécifie rien
 	}
 	
 	/**
-	 * Ecrire fichier.
+	 * Ecrit le message spécifié dans le fichier de log
 	 *
-	 * @param message the message
+	 * @param message le message a logguer
 	 */
-	private void ecrireFichier(String message)
+	private void writeToFile(String message)
 	{
+		// chaque message sur sa propre ligne
 		message += "\n";
-		try{
+		
+		try
+		{
 		     writer.write(message,0,message.length());
 		}
 		catch(Exception e)
@@ -191,7 +190,7 @@ public class Log implements Service
 	{
 		warning("Fin du log",this);
 		
-		if(sauvegarde_fichier)
+		if(saveLogs)
 			try {
 				debug("Sauvegarde du fichier de logs", this);
 				if(writer != null)
@@ -209,15 +208,20 @@ public class Log implements Service
 	@Override
 	public void updateConfig()
 	{
-		try {
-			affiche_debug = Boolean.parseBoolean(this.config.get("affiche_debug"));
+		try
+		{
+			// vérifie s'il faut afficher les logs a l'écran
+			printLogs = Boolean.parseBoolean(this.config.getProperty("affiche_debug"));
 		}
 		catch(Exception e)
 		{
 			critical(e, this);
 		}
-		try {
-			sauvegarde_fichier = Boolean.parseBoolean(this.config.get("sauvegarde_fichier"));
+		try
+		{
+			// vérifie s'il faut écrire les logs dans un fichier
+			saveLogs = Boolean.parseBoolean(this.config.getProperty("sauvegarde_fichier"));
+			// TODO: mettre ici ouverture/fermeture de fichier si la valeur de sauvegarde_fichier change
 		}
 		catch(Exception e)
 		{

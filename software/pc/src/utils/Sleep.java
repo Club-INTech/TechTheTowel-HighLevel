@@ -1,6 +1,5 @@
 package utils;
 
-// TODO: Auto-generated Javadoc
 /**
  * Classe qui fournie juste un sleep sans try/catch.
  *
@@ -30,6 +29,7 @@ public class Sleep
 	{
 		try
 		{
+			// fais attendre le thread appelant cette méthode
 			Thread.sleep(delay);
 		}
 		catch (InterruptedException e)

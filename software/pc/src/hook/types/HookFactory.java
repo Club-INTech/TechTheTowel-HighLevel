@@ -57,10 +57,10 @@ public class HookFactory implements Service
 	public void updateConfig()
 	{
 		// demande la couleur du robot pour ce match
-		color = config.get("couleur");
+		color = config.getProperty("couleur");
 		
 		// demande avec quelle tolérance sur la précision on déclenche les hooks
-		positionTolerancy = Integer.parseInt(this.config.get("hooks_tolerance_mm"));		
+		positionTolerancy = Integer.parseInt(this.config.getProperty("hooks_tolerance_mm"));		
 	}
 	
 	/* ======================================================================

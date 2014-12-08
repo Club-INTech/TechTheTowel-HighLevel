@@ -33,7 +33,7 @@ public class JUnit_Threads extends JUnit_Test {
 		deplacements.setOrientation(0);
 		deplacements.setTranslationnalSpeed(80);
 		RobotReal robotvrai = (RobotReal) container.getService(ServiceNames.ROBOT_REAL);
-// TODO démarrer thread position
+		// TODO démarrer thread position
 		container.startInstanciedThreads();
 		Thread.sleep(100);
 		Assert.assertTrue(robotvrai.getPosition().equals(new Vec2(0,1500)));
@@ -74,7 +74,7 @@ public class JUnit_Threads extends JUnit_Test {
 	@Test
 	public void test_fin_match() throws Exception
 	{
-		config.set("temps_match", 3);
+		config.set("temps_match", "3");
 		container.getService(ServiceNames.THREAD_TIMER);
 		long t1 = System.currentTimeMillis();
 		container.startAllThreads();

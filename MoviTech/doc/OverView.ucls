@@ -1118,7 +1118,7 @@
   </generalization>  
   <association id="159">    
     <end type="SOURCE" refId="58" navigable="false">      
-      <attribute id="160" name="robotvrai">        
+      <attribute id="160" name="robotReal">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
       <multiplicity id="161" minimum="0" maximum="1">        

@@ -86,7 +86,7 @@ class ThreadSensor extends AbstractThread
 	 */
 	public void updateConfig()
 	{
-			sensorFrequency = Integer.parseInt(config.get("capteurs_frequence"));
+			sensorFrequency = Integer.parseInt(config.getProperty("capteurs_frequence"));
 	}
 	
 }

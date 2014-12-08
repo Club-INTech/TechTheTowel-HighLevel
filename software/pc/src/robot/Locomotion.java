@@ -607,7 +607,7 @@ public class Locomotion implements Service
 		displacement.minus(position);
 		
 		// ajuste le déplacement par le correcteur de Deboc si la configuration du match le demande
-        if(config.get("debocIntegralCorrectionBehavior") == "default")
+        if(config.getProperty("debocIntegralCorrectionBehavior") == "default")
         {
         	// valeur de la correction de deboc
         	float debocFactor = mLocomotionCardWrapper.getTranslationnalDebocFactor();
@@ -895,14 +895,14 @@ public class Locomotion implements Service
 	@Override
 	public void updateConfig()
 	{
-		maxAllowedExceptionCount = Integer.parseInt(config.get("nb_tentatives"));
-		obstacleDetectionDiscRadius = Integer.parseInt(config.get("distance_detection"));
-		blockedExceptionRetraceDistance = Integer.parseInt(config.get("distance_degagement_robot"));
-		minimumDelayBetweenMovementStatusCheck = Integer.parseInt(config.get("sleep_boucle_acquittement"));
-		pullOutAngleInCaseOfBlockageWhileTurning = Double.parseDouble(config.get("angle_degagement_robot"));
+		maxAllowedExceptionCount = Integer.parseInt(config.getProperty("nb_tentatives"));
+		obstacleDetectionDiscRadius = Integer.parseInt(config.getProperty("distance_detection"));
+		blockedExceptionRetraceDistance = Integer.parseInt(config.getProperty("distance_degagement_robot"));
+		minimumDelayBetweenMovementStatusCheck = Integer.parseInt(config.getProperty("sleep_boucle_acquittement"));
+		pullOutAngleInCaseOfBlockageWhileTurning = Double.parseDouble(config.getProperty("angle_degagement_robot"));
 		//anticipation_trajectoire_courbe = Integer.parseInt(config.get("anticipation_trajectoire_courbe"));
-		allowCurvedPath = Boolean.parseBoolean(config.get("trajectoire_courbe"));
-		symmetry = config.get("couleur").equals("rouge");
+		allowCurvedPath = Boolean.parseBoolean(config.getProperty("trajectoire_courbe"));
+		symmetry = config.getProperty("couleur").equals("rouge");
 	}
 
 	/**

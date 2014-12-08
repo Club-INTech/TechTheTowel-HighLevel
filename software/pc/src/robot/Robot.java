@@ -52,7 +52,7 @@ public abstract class Robot implements Service
 	 */
 	public void updateConfig()
 	{
-		symmetry = config.get("couleur").equals("jaune");
+		symmetry = config.getProperty("couleur").equals("jaune");
 	}
 	
     /**
