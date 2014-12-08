@@ -19,6 +19,7 @@ import exceptions.serial.SerialConnexionException;
  */
 public class RobotReal extends Robot
 {
+	/** Système de locomotion a utiliser pour déplacer le robot */
 	private Locomotion mLocomotion;
 
 	// Constructeur

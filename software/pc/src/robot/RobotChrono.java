@@ -18,20 +18,24 @@ import exceptions.Locomotion.UnableToMoveException;
 public class RobotChrono extends Robot
 {
 
-	// position du robot virtuel sur la table. Utile pour calculer le temps nécéssaire pour atteindre un autre point de la table
+	/** position du robot virtuel sur la table. Utile pour calculer le temps nécéssaire pour atteindre un autre point de la table */
 	protected Vec2 position = new Vec2();
 	
 
-	// orientation du robot virtuel sur la table. Utile pour calculer le temps nécéssaire pour atteindre un autre point de la table
+	/** orientation du robot virtuel sur la table. Utile pour calculer le temps nécéssaire pour atteindre un autre point de la table */
 	protected double orientation;
 	
-	// Chronomètre du robot en millisecondes
+	/** Chronomètre du robot en millisecondes */
 	private int chrono = 0;
 	
-	// valeur approchée du temps (en milisecondes) nécéssaire pour qu'une information que l'on envois a la série soit aquité
+	/** valeur approchée du temps (en milisecondes) nécéssaire pour qu'une information que l'on envois a la série soit aquité */
 	private int approximateSerialLatency = 50;
 
-	// Constructeur
+	/**
+	 *  Fais un nouveau Robot Chrono
+	 * @param config fichier de configuration ou lire la config du match
+	 * @param log système de log a utiliser pour écrire
+	 */
 	public RobotChrono(Config config, Log log)
 	{
 		super(config, log);

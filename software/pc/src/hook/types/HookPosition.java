@@ -16,10 +16,10 @@ import utils.Config;
 
 class HookPosition extends Hook
 {
-	// position sur la table de déclenchement du hook: le hook est déclenché si le robot est a une distance de ce point de moins de tolerancy
+	/** position sur la table de déclenchement du hook: le hook est déclenché si le robot est a une distance de ce point de moins de tolerancy */
 	private Vec2 position;
 	
-	// tolérance sur la position de déclenchement du hook. On mémorise le carré pour ne pas avoir a calculer des racines a chaque vérifications
+	/** tolérance sur la position de déclenchement du hook. On mémorise le carré pour ne pas avoir a calculer des racines a chaque vérifications */
 	private int squaredTolerancy;
 	
 	

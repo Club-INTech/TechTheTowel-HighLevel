@@ -20,6 +20,12 @@ public class Pathfinding
 		// TODO écrire le pathfinding
 	}
 	
+	/**
+	 *  Calcule un trajet
+	 * @param start le point de départ du trajet
+	 * @param end le point d'arrivée du trajet
+	 * @return le chemin
+	 */
 	public ArrayList<Vec2> computePath(Vec2 start, Vec2 end)
 	{
 		

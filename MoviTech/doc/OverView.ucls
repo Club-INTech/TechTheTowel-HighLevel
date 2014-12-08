@@ -1392,7 +1392,7 @@
   </association>  
   <association id="205">    
     <end type="SOURCE" refId="63" navigable="false">      
-      <attribute id="206" name="robot">        
+      <attribute id="206" name="mLocomotion">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
       <multiplicity id="207" minimum="0" maximum="1">        
@@ -1663,7 +1663,7 @@
     <bendpoint x="4931" y="4571"/>    
     <bendpoint x="4931" y="5138"/>    
     <end type="SOURCE" refId="63" navigable="false">      
-      <attribute id="260" name="newConsigne">        
+      <attribute id="260" name="newOrder">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
       <multiplicity id="261" minimum="0" maximum="1">        

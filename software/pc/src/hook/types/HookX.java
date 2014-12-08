@@ -13,11 +13,11 @@ import utils.Config;
 
 class HookX extends Hook
 {
-	// l'endroit ou est déclenché le hook
+	/** l'endroit ou est déclenché le hook */
 	protected float xValue;
 	
-	// imprécision sur la position de déclenchement du hook. (en milimètres aussi)
-    // Le hook sera déclenché si la coordonnée x du robot est dans [xValue - tolerance, xValue + tolerance]
+	/** imprécision sur la position de déclenchement du hook. (en milimètres aussi)
+     *  Le hook sera déclenché si la coordonnée x du robot est dans [xValue - tolerance, xValue + tolerance] */
     private float tolerancy;
 
     /**

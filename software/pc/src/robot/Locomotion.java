@@ -49,54 +49,52 @@ public class Locomotion implements Service
 	/** endroit ou lire la configuration du robot */
 	private Config config;
 	
-	// La table sur laquelle le robot se déplace
+	/** La table sur laquelle le robot se déplace */
 	private Table table;
 	
-	// la longueur du robot (ie la distance qui sépare son devant de son arrière)
-	// Cette valeur est utilisée pour placer le disque devant le robot ou l'on va vérifier qu'il n'y a pas d'obstacle
-	//TODO: cette variable n'a pas sa place ici. Elle n'est même pas initialisée ici
-	private int robotLengh;
+	/** la longueur du robot (ie la distance qui sépare son devant de son arrière)
+	 * Cette valeur est utilisée pour placer le disque devant le robot ou l'on va vérifier qu'il n'y a pas d'obstacle */
+	private int robotLengh; //TODO: cette variable n'a pas sa place ici. Elle n'est même pas initialisée ici
 	
-	// Rayon du disque que l'on place devant le robot et ou l'on vérifie auprès de la table qu'il n'y a pas d'obstacle si on doit avancer dans ce disque. 
+	/** Rayon du disque que l'on place devant le robot et ou l'on vérifie auprès de la table qu'il n'y a pas d'obstacle si on doit avancer dans ce disque.  */
 	private int obstacleDetectionDiscRadius;
 	
-	// Position courante du robot sur la table. La coordonnée X est multipliée par -1 si on est équipe jaune
+	/** Position courante du robot sur la table. La coordonnée X est multipliée par -1 si on est équipe jaune */
 	private Vec2 position = new Vec2(); //TODO: spécifier dans la doc a un endroit logique ou est défini le système d'axe (plus le système d'orientation)
 	
-	 // Position de la table que le robot cherche a ateindre. Elle peut être modifiée au sein d'un même mouvement.
+	/** Position de la table que le robot cherche a ateindre. Elle peut être modifiée au sein d'un même mouvement. */
 	private Vec2 aim = new Vec2();
 	
-	// Le système de trajectoire courbe ou de "tourner en avançant" fait rêver des génération d'INTechiens,
-	// mais ça a toujours fais perdre du temps pour un truc qui ne marche pas
+	/** Le système de trajectoire courbe ou de "tourner en avançant" fait rêver des génération d'INTechiens,
+	 * mais ça a toujours fais perdre du temps pour un truc qui ne marche pas */
 	private boolean allowCurvedPath = false;
 
-	// orientation actuelle du robot. L'orientation est multipliée par -1 si on est équipe jaune
+	/** orientation actuelle du robot. L'orientation est multipliée par -1 si on est équipe jaune */
 	private double orientation;
 	
-	// interface de communication avec la carte d'asservissement
+	/** interface de communication avec la carte d'asservissement */
 	private LocomotionCardWrapper mLocomotionCardWrapper;
 	
-	// la table est symétrisée si on est équipe jaune
+	/** la table est symétrisée si on est équipe jaune */
 	private boolean symmetry;
 	
-	// Temps d'attente e miliseconde entre deux vérification de l'état du déplacement quand le robot bouge. (arrivée, blocage, etc.)
+	/** Temps d'attente e miliseconde entre deux vérification de l'état du déplacement quand le robot bouge. (arrivée, blocage, etc.) */
 	private int minimumDelayBetweenMovementStatusCheck = 50;
 	
-	// nombre maximum d'excpetions levés d'un certain type lors d'un déplacement
+	/** nombre maximum d'excpetions levés d'un certain type lors d'un déplacement */
 	private int maxAllowedExceptionCount = 5;
 	
-	// distance en mm sur laquelle on revient sur nos pas avant de réessayer d'atteindre le point d'arrivée lorsque le robot faire face a un obstacle qui immobilise mécaniquement le robot
+	/** distance en mm sur laquelle on revient sur nos pas avant de réessayer d'atteindre le point d'arrivée lorsque le robot faire face a un obstacle qui immobilise mécaniquement le robot */
 	private int blockedExceptionRetraceDistance = 50;
 	
-	// temps en ms que l'on attends après avoir vu un ennemi avant de réessayer d'atteindre le point d'arrivée lorsque le robot détecte que sa route est obstruée
+	/** temps en ms que l'on attends après avoir vu un ennemi avant de réessayer d'atteindre le point d'arrivée lorsque le robot détecte que sa route est obstruée */
 	private int unexpectedObstacleOnPathRetryDelay = 200; 
 	
-	// angle en radiant de dégagement du robot utilisé lorsque l'utilisateur demande une rotation (via la méthode turn), et que le robot rencontre un obstacle: le robot tourne alors de cet angle
-	// dans l'autre sens que celui demandé pour se dégager de l'obstacle rencontré 
-	// TODO: passer la réaction du robot en cas de blocage mécanique en cours de rotation dans BlockedExceptionReaction
-	private double pullOutAngleInCaseOfBlockageWhileTurning;
+	/** angle en radiant de dégagement du robot utilisé lorsque l'utilisateur demande une rotation (via la méthode turn), et que le robot rencontre un obstacle: le robot tourne alors de cet angle
+	 * dans l'autre sens que celui demandé pour se dégager de l'obstacle rencontré  */
+	private double pullOutAngleInCaseOfBlockageWhileTurning; // TODO: passer la réaction du robot en cas de blocage mécanique en cours de rotation dans BlockedExceptionReaction
 	
-	// ancienne valeur de l'assevissement, dans l'ordre: X, Y, orientation.
+	/** ancienne valeur de l'assevissement, dans l'ordre: X, Y, orientation. */
 	private double[] oldInfos;
 
 	/**

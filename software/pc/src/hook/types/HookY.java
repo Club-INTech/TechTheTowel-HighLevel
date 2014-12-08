@@ -14,11 +14,11 @@ import utils.Config;
 
 class HookY extends Hook
 {
-	// l'endroit ou est déclenché le hook
+	/** l'endroit ou est déclenché le hook */
     protected float yValue;
     
-    // imprécision sur la position de déclenchement du hook. (en milimètres aussi)
-    // Le hook sera déclenché si la coordonnée y du robot est dans [yValue - tolerance, yValue + tolerance]
+    /** imprécision sur la position de déclenchement du hook. (en milimètres aussi)
+     * Le hook sera déclenché si la coordonnée y du robot est dans [yValue - tolerance, yValue + tolerance] */
     private float tolerancy;
     
     /**

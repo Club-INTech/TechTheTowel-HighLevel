@@ -16,16 +16,12 @@ import exceptions.serial.SerialConnexionException;
 public class ActuatorCardWrapper implements Service
 {
 
-	
-	/**
-	 * service de log a utiliser en cas de soucis
-	 */
+
 	@SuppressWarnings("unused")
+	/** service de log a utiliser en cas de soucis */
 	private Log log;
 	
-	/**
-	 *  connexion série avec la carte actionneurs
-	 */
+	/** connexion série avec la carte actionneurs */
 	private SerialConnexion actuatorCardSerial;
 
 	/**
