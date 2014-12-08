@@ -49,7 +49,7 @@ class HookPosition extends Hook
      */
 	public boolean evaluate()
 	{
-		Vec2 positionRobot = real_state.robot.getPosition();
+		Vec2 positionRobot = mState.robot.getPosition();
 		if(position.squaredDistance(positionRobot) <= squaredTolerancy)
 			return trigger();
 		return false;

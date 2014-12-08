@@ -87,7 +87,7 @@ public class SerialManager
 
 		try
 		{
-			this.series[this.carteAsservissement.name.getNbSerie()] = this.serieAsservissement;
+			this.series[this.carteAsservissement.name.getSerialIndex()] = this.serieAsservissement;
 		} 
 		catch (ServiceTypeException e1)
 		{
@@ -96,7 +96,7 @@ public class SerialManager
 		}
 		try
 		{
-			this.series[this.carteCapteursActionneurs.name.getNbSerie()] = this.serieCapteursActionneurs;
+			this.series[this.carteCapteursActionneurs.name.getSerialIndex()] = this.serieCapteursActionneurs;
 		}
 		catch (ServiceTypeException e1)
 		{
@@ -253,9 +253,9 @@ public class SerialManager
 	{
 		try
 		{
-			if (this.series[name.getNbSerie()] != null)
+			if (this.series[name.getSerialIndex()] != null)
 			{
-				return this.series[name.getNbSerie()];
+				return this.series[name.getSerialIndex()];
 			}
 			else
 			{

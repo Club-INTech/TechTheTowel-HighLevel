@@ -8,13 +8,13 @@ package hook;
 public class Callback
 {
 
-	// L'évènement a-t-il été réalisé ?
+	/** L'évènement a-t-il été réalisé ? */
 	private boolean isDone = false;
 	
-	// L'évènement ne doit-t-il survenir qu'une unique fois ?
+	/** L'évènement ne doit-t-il survenir qu'une unique fois ? */
 	private boolean isUnique;
 	
-	// le code à éxecuter lors de l'évènement
+	/** le code à éxecuter lors de l'évènement */
 	public Executable method;
 	
 	/**

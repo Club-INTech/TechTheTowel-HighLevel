@@ -42,7 +42,7 @@ class HookY extends Hook
      */
     public boolean evaluate()
     {
-        if(Math.abs(real_state.robot.getPosition().y-yValue) < tolerancy)
+        if(Math.abs(mState.robot.getPosition().y-yValue) < tolerancy)
             return trigger();
 
         return false;

@@ -36,7 +36,7 @@ class HookYisGreater extends HookY
     @Override
     public boolean evaluate()
     {
-    	if(real_state.robot.getPosition().y >= yValue)
+    	if(mState.robot.getPosition().y >= yValue)
             return trigger();
 
         return false;

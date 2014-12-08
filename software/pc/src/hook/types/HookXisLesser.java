@@ -36,7 +36,7 @@ class HookXisLesser extends HookX
     @Override
     public boolean evaluate()
     {
-        if(real_state.robot.getPosition().x < xValue)
+        if(mState.robot.getPosition().x < xValue)
             return trigger();
 
         return false;

@@ -7,12 +7,12 @@ package enums;
  */
 public enum Side
 {
-	// coté gauche
+	/** coté gauche */
 	LEFT,
 	
-	// coté droit
+	/** coté droit */
 	RIGHT,
 	
-	// le milieu
+	/** le milieu */
 	MIDDLE;
 }

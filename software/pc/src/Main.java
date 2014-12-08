@@ -49,7 +49,6 @@ public class Main
 		
 
 		System.out.println("=== Robot INTech 2015 : initialisation ===");
-		System.out.println("LANCEUR DE TEST: version de refactoring et de documentation");
 		
         // si on veut exécuter un test unitaire sur la rapbe, recopier test.nomDeLaClasseDeTest
 		//JUnitCore.main(		"tests.JUnit_DeplacementsTest");  

@@ -60,7 +60,7 @@ public enum ServiceNames
 	  * @return
 	  * @throws ServiceTypeException
 	  */
-	 public int getNbSerie() throws ServiceTypeException
+	 public int getSerialIndex() throws ServiceTypeException
 	 {
 		 if(type != ServiceType.SERIAL)
 			 throw new ServiceTypeException();

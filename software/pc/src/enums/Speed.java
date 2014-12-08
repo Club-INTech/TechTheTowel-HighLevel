@@ -8,25 +8,25 @@ package enums;
 
 public enum Speed
 {
-	// vitesse en temps normal
+	/** vitesse en temps normal */
     BETWEEN_SCRIPTS(170, 160),
     
-    // On avance moins vite si l'on veut percuter un mur.
-    // OUAIS, PARFOIS ON VEUT PERCUTER UN MUR, ET ALORS? AU MOINS C'EST PRÉVU.
+    /** vitesse a avoirs i l'on veut parcuter un mur. Celle ci est plsu faible pour prendre soin de la méca du robot */
     INTO_WALL(90, 160),
     
-    // Le recalage nous fais percuter dans les murs, donc on avance pas trop vite
+    /** Vitesse a avoir en cours de recalage du robot sur la table. Le recalage nous fais percuter dans les murs, donc on avance pas trop vite */
     READJUSTMENT(90, 90);
     
-    
-    // valeurs qui seront envoyées à la carte d'asserv
+    /** PWM des moteurs lors d'une translation, ce sont ces valeurs qui seront envoyées à la carte d'asserv */
     public int PWMTranslation;
+
+    /** PWM des moteurs lors d'une rotation, ce sont ces valeurs qui seront envoyées à la carte d'asserv */
     public int PWMRotation;
     
-    // en millisecondes par millimètre. Utilisé par RobotChrono
+    /** temps nécéssaire en milisecondes au robot pour partourir un miliètre. Utilisé par RobotChrono*/
     public int invertedTranslationnalSpeed;
-    
-    // en millisecondes par radians. Utilisé par RobotChrono
+
+    /** temps nécéssaire en milisecondes au robot pour tourner d'un radian. Utilisé par RobotChrono */
     public int invertedRotationnalSpeed;
         
     /**
