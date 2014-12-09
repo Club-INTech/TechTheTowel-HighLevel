@@ -7,8 +7,8 @@ import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialException;
 import hook.Hook;
 import hook.types.HookGenerator;
+import robot.Robot;
 import robot.cards.ActuatorsManager;
-import robot.highlevel.LocomotionHiLevel;
 import smartMath.Vec2;
 import strategie.GameState;
 import utils.Config;
@@ -26,9 +26,9 @@ public class DropCarpet extends Script
 	private int distance=200;//distance de déplacement pour placer les tapis
 	private int sleepTime = 800; //le temps d'attente (en ms) entre la commande de dépose du tapis ( le bras se baisse) et la commande qui remonte le bras
 
-	public DropCarpet (HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, LocomotionHiLevel locomotion, ActuatorsManager move) 
+	public DropCarpet (HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, Robot robot, ActuatorsManager move) 
 	{
-		super(hookgenerator,config,log,pathfinding,locomotion,move);
+		super(hookgenerator,config,log,pathfinding,robot,move);
 		//cree la liste des versions donc des id
 	}
 	
@@ -41,9 +41,9 @@ public class DropCarpet extends Script
 			try 
 			{
 				//on presente ses arrieres a l'escalier
-				locomotion.tourner(Math.PI,emptyHookList,true);
+				robot.tourner(Math.PI,emptyHookList,true);
 				// on avance vers ces demoiselles (les marches) 
-				locomotion.avancer(-distance,emptyHookList,true);
+				robot.avancer(-distance,emptyHookList,true);
 				
 				if (!DroppedLeftCarpet)
 				{
@@ -59,7 +59,7 @@ public class DropCarpet extends Script
 					DroppedRightCarpet=true;
 					actionneurs.highRightCarpet();
 				}
-				locomotion.avancer(distance,emptyHookList,true);//on s'eloigne de l'escalier
+				robot.avancer(distance,emptyHookList,true);//on s'eloigne de l'escalier
 			} 
 			catch (UnableToMoveException e) 
 			{

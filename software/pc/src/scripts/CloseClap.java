@@ -7,10 +7,12 @@ import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialException;
 import hook.Hook;
 import hook.types.HookGenerator;
+import robot.Robot;
 import robot.cards.ActuatorsManager;
 import robot.highlevel.LocomotionHiLevel;
 import smartMath.Vec2;
 import strategie.GameState;
+import table.Table;
 import utils.Config;
 import utils.Log;
 import utils.Sleep;
@@ -47,7 +49,7 @@ import utils.Sleep;
 
 public class CloseClap extends Script 
 {
-	private boolean OpenedLeftClap=false,OpenedRightClap=false,ClosedClap1=false,ClosedClap2=false,ClosedClap3=false,ClosedClap4=false,ClosedClap5=false,ClosedClap6=false;//clap fermé au debut
+	private Table table;
 	private int distanceBetweenClaps=300;//distance entre 2 claps (bout identique de claque clap, ex : charnieres)
 	private int lenghtClap=160; //LOngueur clap
 	private int lenghtStair=200; // L'estradee fait 100, on met 200
@@ -56,9 +58,10 @@ public class CloseClap extends Script
 	private int sleepTime = 800; // le temps d'attente (en ms) entre la commande de dépose du tapis ( le bras se baisse) et la commande qui remonte le bras
 
 	
-	public CloseClap (HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, LocomotionHiLevel locomotion, ActuatorsManager move) 
+	public CloseClap (HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, Robot robot, ActuatorsManager move, Table table) 
 	{
-		super(hookgenerator,config,log,pathfinding,locomotion,move);
+		super(hookgenerator,config,log,pathfinding,robot,move);
+		this.table=table;
 	}
 	
 	public void executeAllClapFromStart (int id_version)  //Ferme tous les Claps, depuis le  debut
@@ -68,68 +71,47 @@ public class CloseClap extends Script
 		{
 			try 
 			{
-				//Partie debut à partir du coin de la table (après une marche arrière)
-				actionneurs.lowLeftClap();//Init
-				actionneurs.lowRightClap();
-				
-				if (!OpenedLeftClap)//On ouvre le bras si ce n'est deja fait
-				{
-					actionneurs.highLeftClap();
-					Sleep.sleep(sleepTime);
-				}
-				
-				if(!ClosedClap1)//On ferme le clap le plus proche de nous,
-				{	
-					actionneurs.midLeftClap();//On ouvre puis on avance
-					Sleep.sleep(sleepTime);
-					ClosedClap1=true;
-				}		
-				
-				locomotion.avancer(lenghtClap,emptyHookList,true);//On baisse le premier clap, le notre
+				actionneurs.midLeftClap();//On ouvre puis on avance
 				Sleep.sleep(sleepTime);
+				table.setIsClap1Closed()=true;	
 				
-				if(ClosedClap2)//Si l'ennemi a toujours son clap
-				{
-					actionneurs.highLeftClap();
-					Sleep.sleep(sleepTime);	
-				}
-				
-				locomotion.avancer(2*distanceBetweenClaps-lenghtClap-20,emptyHookList,true);//On avance entre le 1 et le 3
-				Sleep.sleep(sleepTime);	
-					
-				if(!ClosedClap3)//Clap 3, le plus loin sur notre zone
+				robot.avancer(lenghtClap,emptyHookList,true);//On baisse le premier clap, le notre
+				robot.sleep(sleepTime);
+				actionneurs.highLeftClap(); //on evite le clap adverse
+				robot.sleep(sleepTime);	
+				robot.avancer(2*distanceBetweenClaps-lenghtClap-20,emptyHookList,true);//On avance entre le 1 et le 3
+				robot.sleep(sleepTime);				
+				if(!table.getIsClap2Closed())//Clap 2, le plus loin sur notre zone
 				{
 					actionneurs.midLeftClap();
-					Sleep.sleep(sleepTime);	
-					ClosedClap3=true;//On ferme notre 2eme clap	
+					robot.sleep(sleepTime);	
+					table.setIsClap2Closed()=true;//On ferme notre 2eme clap	
 				}
-
-				locomotion.tourner(Math.PI/2,emptyHookList,true);//On tourne en fermant le notre
-
-				Sleep.sleep(sleepTime);	
-				actionneurs.lowLeftClap();
+				robot.tourner(Math.PI/2,emptyHookList,true);//On tourne en fermant le clap
+				robot.sleep(sleepTime);	
+				actionneurs.lowLeftClap(); //on referme le clap pour eviter de le perdre
 				
 				//Partie deplacements du clap 3 au clap 6, pret à fermer le 5
 				// On se tourne, on avance pour eviter l'estrade
 				
 				
-				locomotion.avancer(lenghtStair,emptyHookList,true); 
+				robot.avancer(lenghtStair,emptyHookList,true); 
 				Sleep.sleep(sleepTime);	
 
 				//On se tourne, on avance vers le clap interessant
-				locomotion.tourner(Math.PI,emptyHookList,true);
+				robot.tourner(Math.PI,emptyHookList,true);
 				Sleep.sleep(sleepTime);	
-				locomotion.avancer(distanceRightLeft,emptyHookList,true); 
+				robot.avancer(distanceRightLeft,emptyHookList,true); 
 				Sleep.sleep(sleepTime);	
 				
 				//On se tourne pour s'avancer des claps
-				locomotion.tourner(-Math.PI/2,emptyHookList,true);
+				robot.tourner(-Math.PI/2,emptyHookList,true);
 				Sleep.sleep(sleepTime);	
-				locomotion.avancer(lenghtStair,emptyHookList,true);
+				robot.avancer(lenghtStair,emptyHookList,true);
 				Sleep.sleep(sleepTime);	
 				
 				//On se tourne dans le bon sens
-				locomotion.tourner(0,emptyHookList,true);
+				robot.tourner(0,emptyHookList,true);
 				Sleep.sleep(sleepTime);	
 
 				
@@ -150,13 +132,13 @@ public class CloseClap extends Script
 					ClosedClap5=true;//On ferme notre clap	
 				}
 				
-				locomotion.avancer(lenghtClap,emptyHookList,true);
+				robot.avancer(lenghtClap,emptyHookList,true);
 				Sleep.sleep(sleepTime);	
 
-				locomotion.tourner(Math.PI/2,emptyHookList,true);
+				robot.tourner(Math.PI/2,emptyHookList,true);
 				Sleep.sleep(sleepTime);	
 
-				locomotion.avancer(lenghtStair,emptyHookList,true);
+				robot.avancer(lenghtStair,emptyHookList,true);
 				Sleep.sleep(sleepTime);	
 				
 				actionneurs.lowRightClap();
@@ -196,7 +178,7 @@ public class CloseClap extends Script
 					ClosedClap1=true;
 				}		
 				
-				locomotion.avancer(lenghtClap,emptyHookList,true);//On baisse le premier clap, le notre
+				robot.avancer(lenghtClap,emptyHookList,true);//On baisse le premier clap, le notre
 				Sleep.sleep(sleepTime);
 				
 				if(ClosedClap2)//Si l'ennemi a toujours son clap
@@ -205,7 +187,7 @@ public class CloseClap extends Script
 					Sleep.sleep(sleepTime);	
 				}
 				
-				locomotion.avancer(2*distanceBetweenClaps-lenghtClap-20,emptyHookList,true);//On avance entre le 1 et le 3
+				robot.avancer(2*distanceBetweenClaps-lenghtClap-20,emptyHookList,true);//On avance entre le 1 et le 3
 				Sleep.sleep(sleepTime);	
 					
 				if(!ClosedClap3)//Clap 3, le plus loin sur notre zone
@@ -215,7 +197,7 @@ public class CloseClap extends Script
 					ClosedClap3=true;//On ferme notre 2eme clap	
 				}
 
-				locomotion.tourner(Math.PI/2,emptyHookList,true);//On tourne en fermant le notre
+				robot.tourner(Math.PI/2,emptyHookList,true);//On tourne en fermant le notre
 
 				Sleep.sleep(sleepTime);	
 				actionneurs.lowLeftClap();
@@ -254,13 +236,13 @@ public class CloseClap extends Script
 					ClosedClap5=true;//On ferme notre clap	
 				}
 				
-				locomotion.avancer(lenghtClap,emptyHookList,true);
+				robot.avancer(lenghtClap,emptyHookList,true);
 				Sleep.sleep(sleepTime);	
 
-				locomotion.tourner(Math.PI/2,emptyHookList,true);
+				robot.tourner(Math.PI/2,emptyHookList,true);
 				Sleep.sleep(sleepTime);	
 
-				locomotion.avancer(lenghtStair,emptyHookList,true);
+				robot.avancer(lenghtStair,emptyHookList,true);
 				Sleep.sleep(sleepTime);	
 				
 				actionneurs.lowRightClap();

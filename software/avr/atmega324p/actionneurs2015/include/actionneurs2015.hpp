@@ -13,7 +13,7 @@
 #define bdFerme 203
 #define mgOuvert 240
 #define mgFerme 65
-#define mdOuvert 0
+#define mdOuvert 0 //a mettre a jour
 #define mdFerme 145
 #define tdPose 211
 #define tdRange 150

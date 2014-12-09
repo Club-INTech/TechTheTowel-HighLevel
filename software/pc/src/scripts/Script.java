@@ -2,9 +2,9 @@ package scripts;
 
 import smartMath.Vec2;
 import strategie.GameState;
+import robot.Robot;
 import robot.RobotReal;
 import robot.cards.ActuatorsManager;
-import robot.highlevel.LocomotionHiLevel;
 import utils.Log;
 import utils.Config;
 import container.Service;
@@ -33,7 +33,7 @@ public abstract class Script implements Service
 	protected static Config config;
 	protected static Log log;
 	protected static Pathfinding pathfinding;
-	protected static LocomotionHiLevel locomotion;
+	protected static Robot robot;
 	protected static ActuatorsManager actionneurs;
 
 	/*
@@ -41,13 +41,13 @@ public abstract class Script implements Service
 	 */
 	protected ArrayList<ArrayList<Integer>> versions = new ArrayList<ArrayList<Integer>>();	
 	
-	public Script(HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, LocomotionHiLevel locomotion, ActuatorsManager move)
+	public Script(HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, Robot robot, ActuatorsManager move)
 	{
 		Script.hookgenerator = hookgenerator;
 		Script.config = config;
 		Script.log = log;
 		Script.pathfinding = pathfinding;
-		Script.locomotion = locomotion;
+		Script.robot = robot;
 		Script.actionneurs = move;
 	}
 		
@@ -59,7 +59,7 @@ public abstract class Script implements Service
 	{
 		try 
 		{
-			locomotion.suit_chemin(pathfinding.computePath(locomotion.getPosition(),point_entree(id_version)),new ArrayList<Hook>());
+			robot.suit_chemin(pathfinding.computePath(robot.getPosition(),point_entree(id_version)),new ArrayList<Hook>());
 		} 
 		catch (UnableToMoveException e) 
 		{

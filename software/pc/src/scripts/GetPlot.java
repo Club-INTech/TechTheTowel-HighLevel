@@ -3,6 +3,7 @@ package scripts;
 import exceptions.serial.SerialException;
 import hook.types.HookGenerator;
 import pathdinding.Pathfinding;
+import robot.Robot;
 import robot.cards.ActuatorsManager;
 import robot.highlevel.LocomotionHiLevel;
 import smartMath.Vec2;
@@ -12,9 +13,9 @@ import utils.Log;
 
 public class GetPlot extends Script {
 
-	public GetPlot(HookGenerator hookgenerator, Config config, Log log,	Pathfinding pathfinding, LocomotionHiLevel locomotion, ActuatorsManager move) 
+	public GetPlot(HookGenerator hookgenerator, Config config, Log log,	Pathfinding pathfinding, Robot robot, ActuatorsManager move) 
 	{
-		super(hookgenerator, config, log, pathfinding, locomotion, move);
+		super(hookgenerator, config, log, pathfinding, robot, move);
 		// TODO le tableau des versions
 	}
 	

@@ -2,8 +2,8 @@ package scripts;
 
 import hook.types.HookGenerator;
 import pathdinding.Pathfinding;
+import robot.Robot;
 import robot.cards.ActuatorsManager;
-import robot.highlevel.LocomotionHiLevel;
 import smartMath.Vec2;
 import strategie.GameState;
 import utils.Config;
@@ -12,9 +12,9 @@ import utils.Log;
 public class GetGlass extends Script 
 {
 
-	public GetGlass(HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, LocomotionHiLevel locomotion, ActuatorsManager move) 
+	public GetGlass(HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, Robot robot, ActuatorsManager move) 
 	{
-		super(hookgenerator, config, log, pathfinding, locomotion, move);
+		super(hookgenerator, config, log, pathfinding, robot, move);
 		// TODO le tableau des versions
 	}
 	
