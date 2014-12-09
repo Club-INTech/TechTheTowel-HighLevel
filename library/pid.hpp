@@ -32,7 +32,7 @@ public:
 		this->input = input;
 		this->setPoint = setPoint;
 
-		setOutputLimits(-210, 210);
+		setOutputLimits(-170, 170);
 		setTunings(0, 0, 0);
 	}
 
@@ -97,6 +97,10 @@ public:
 		controllerDirection = dir;
 	}
 
+	void resetErrors() {
+		pre_error = 0;
+		integral = 0;
+	}
 	float getKp() const {
 		return kp;
 	}

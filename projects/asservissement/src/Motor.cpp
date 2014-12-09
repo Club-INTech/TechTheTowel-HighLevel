@@ -17,7 +17,7 @@
 #include "Motor.h"
 
 Motor::Motor(Side s) :
-		side(s), maxPWM(210) {
+		side(s), maxPWM(170) {
 
 	/**
 	 * Configuration des pins pour le sens des moteurs

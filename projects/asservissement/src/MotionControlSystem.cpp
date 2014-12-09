@@ -5,9 +5,10 @@ MotionControlSystem::MotionControlSystem() :
 		leftMotor(Side::LEFT), rightMotor(Side::RIGHT), translationControlled(
 				true), rotationControlled(true), translationPID(
 				&currentDistance, &pwmTranslation, &translationSetpoint), rotationPID(
-				&currentAngle, &pwmRotation, &rotationSetpoint), originalAngle(
-				0.0), rotationSetpoint(0), translationSetpoint(0), x(0.0), y(0.0), moving(
-				false) {
+				&currentAngle, &pwmRotation, &rotationSetpoint),  leftEncoderFake(0), rightEncoderFake(0),
+				originalAngle(0.0), rotationSetpoint(0), translationSetpoint(0), x(0.0), y(0.0), moving(
+				false), movingForPositioningServo(false) {
+
 }
 
 void MotionControlSystem::init() {
@@ -23,9 +24,9 @@ void MotionControlSystem::init() {
 	 */
 
 	translationPID.setControllerDirection(PidDirection::DIRECT);
-	translationPID.setTunings(0.45, 9.0, 0.);
+	translationPID.setTunings(0.45, 0, 0.);
 	rotationPID.setControllerDirection(PidDirection::DIRECT);
-	rotationPID.setTunings(.8, 15.0, 0.);
+	rotationPID.setTunings(.8, 0, 0.);
 
 	/**
 	 * Initialisation de la boucle d'asservissement (TIMER 4)
@@ -56,6 +57,30 @@ void MotionControlSystem::init() {
 	enable(true);
 }
 
+int MotionControlSystem::getPWMTranslation() {
+	return pwmTranslation;
+}
+
+int MotionControlSystem::getPWMRotation() {
+	return pwmRotation;
+}
+
+int MotionControlSystem::getTranslationGoal() {
+	return translationSetpoint;
+}
+
+int MotionControlSystem::getRotationGoal() {
+	return rotationSetpoint;
+}
+void MotionControlSystem::moveLeftEncoder(int32_t value)
+{
+	leftEncoderFake += value;
+}
+void MotionControlSystem::moveRightEncoder(int32_t value)
+{
+	rightEncoderFake += value;
+}
+
 void MotionControlSystem::enable(bool enable) {
 	if (enable) {
 		TIM_Cmd(TIM4, ENABLE); //Active la boucle d'asservissement
@@ -74,18 +99,21 @@ void MotionControlSystem::enableRotationControl(bool enabled) {
 
 void MotionControlSystem::control() {
 
-	int32_t leftTicks = Counter::getLeftValue();
-	int32_t rightTicks = Counter::getRightValue();
+//	int32_t leftTicks = Counter::getLeftValue();
+//	int32_t rightTicks = Counter::getRightValue();
+	int32_t leftTicks = leftEncoderFake;
+	int32_t rightTicks = rightEncoderFake;
+
+	// currentDistance = leftTicks + rightTicks; // Il manque bel et bien un /2
+	currentDistance = (leftTicks + rightTicks) / 2;
+	currentAngle = leftTicks - rightTicks;
 
 	if (translationControlled) {
-		currentDistance = leftTicks + rightTicks;
-		//currentDistance = (leftTicks + rightTicks) / 2;
 		translationPID.compute();
 	} else
 		pwmTranslation = 0;
 
 	if (rotationControlled) {
-		currentAngle = leftTicks - rightTicks;
 		rotationPID.compute();
 	} else
 		pwmRotation = 0;
@@ -101,15 +129,24 @@ bool MotionControlSystem::isPhysicallyStopped() {
 int MotionControlSystem::manageStop() {
 	static uint32_t time = 0;
 
-	if (isPhysicallyStopped() && moving) {
+	if (isPhysicallyStopped() && (moving || movingForPositioningServo)) {
 
 		if (time == 0) { //Début du timer
 			time = Millis();
 		} else {
 			if ((Millis() - time) >= 500) { //Si arrêté plus de 500ms
-				if (translationPID.getError() <= 100	&& rotationPID.getError() <= 100) { //Stopé pour cause de fin de mouvement
-					return 1;
+				if (ABS(translationPID.getError()) <= 50	&& ABS(rotationPID.getError()) <= 50) { //Stoppé pour cause de fin de mouvement, donc ça normalement c'est pas trop mal
+					time = 0;
+					if(moving) {
+						stop();
+						return 1;
+					} else {
+						stop();
+						return rotationPID.getError()*10;
+					}
 				}else if (pwmRotation >= 60 || pwmTranslation >= 60) { //Stoppé pour blocage
+					stop();
+					time = 0;
 					return 2;
 				}
 
@@ -144,6 +181,7 @@ int32_t MotionControlSystem::optimumAngle(int32_t fromAngle, int32_t toAngle) {
 void MotionControlSystem::applyControl() {
 	leftMotor.run(pwmTranslation - pwmRotation);
 	rightMotor.run(pwmTranslation + pwmRotation);
+	movingForPositioningServo = true;
 }
 
 /**
@@ -173,9 +211,12 @@ void MotionControlSystem::stop() {
 	translationSetpoint = currentDistance;
 	rotationSetpoint = currentAngle;
 
+	pwmRotation = 0;
+	pwmTranslation = 0;
 	leftMotor.run(0);
 	rightMotor.run(0);
 	moving = false;
+	movingForPositioningServo = false;
 }
 
 /**

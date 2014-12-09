@@ -30,6 +30,8 @@ private:
 	PID translationPID;
 	PID rotationPID;
 
+	int32_t leftEncoderFake;
+	int32_t rightEncoderFake;
 	float originalAngle;
 
 	//Consignes à atteindre en tick
@@ -44,7 +46,7 @@ private:
 	float x;
 	float y;
 	bool moving;
-
+	bool movingForPositioningServo;
 	void applyControl();
 	bool isPhysicallyStopped();
 
@@ -69,6 +71,14 @@ public:
 	void enable(bool);
 	void enableTranslationControl(bool);
 	void enableRotationControl(bool);
+
+	int getPWMTranslation();
+	int getPWMRotation();
+	int getTranslationGoal();
+	int getRotationGoal();
+
+	void moveLeftEncoder(int32_t);
+	void moveRightEncoder(int32_t);
 
 	void orderTranslation(int32_t);
 	void orderRotation(float);
