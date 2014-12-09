@@ -76,7 +76,8 @@ public:
 	int getPWMRotation();
 	int getTranslationGoal();
 	int getRotationGoal();
-
+	int getLeftEncoder();
+	int getRightEncoder();
 	void moveLeftEncoder(int32_t);
 	void moveRightEncoder(int32_t);
 

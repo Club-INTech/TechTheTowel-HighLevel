@@ -25,7 +25,7 @@ class PID {
 public:
 
 	PID(int32_t* input, int16_t* output, int32_t* setPoint) :
-			controllerDirection(PidDirection::DIRECT), epsilon(40), pre_error(
+			controllerDirection(PidDirection::DIRECT), epsilon(20), pre_error(
 					0), integral(0) {
 
 		this->output = output;
