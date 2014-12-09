@@ -34,9 +34,13 @@ public class Table implements Service
 	private ArrayList<ObstacleLinear> m_lines;
 	private ArrayList<ObstacleCircular> m_circles;
 	private ArrayList<ObstacleRectangular> m_rects;
+
 	private boolean isClap1Closed;
 	private boolean isClap2Closed;
 	private boolean isClap3Closed;
+
+	private boolean isLeftCarpetDropped;
+	private boolean isRightCarpetDropped;
 	
 	public Table(Log log, Config config)
 	{
@@ -110,6 +114,9 @@ public class Table implements Service
 		isClap2Closed=false;
 		isClap3Closed=false;
 
+		//les tapis
+		isLeftCarpetDropped = false;
+		isRightCarpetDropped = false;
 	}
 	
 	public boolean getIsClap1Closed() {
@@ -187,5 +194,22 @@ public class Table implements Service
 	{
 		return m_circles;
 	}
+	
+    public boolean getIsLeftCarpetDropped() 
+	{
+		return isLeftCarpetDropped;
+	}
+    public void setIsLeftCarpetDropped(boolean newValue)
+    {
+    	isLeftCarpetDropped=newValue;
+    }
+    public boolean getIsRightCarpetDropped() 
+  	{
+  		return isRightCarpetDropped;
+  	}
+      public void setIsRightCarpetDropped(boolean newValue)
+      {
+      	isRightCarpetDropped=newValue;
+      }
 }
 

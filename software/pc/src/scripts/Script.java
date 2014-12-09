@@ -2,6 +2,7 @@ package scripts;
 
 import smartMath.Vec2;
 import strategie.GameState;
+import table.Table;
 import robot.Robot;
 import robot.RobotReal;
 import robot.cards.ActuatorsManager;
@@ -35,13 +36,14 @@ public abstract class Script implements Service
 	protected static Pathfinding pathfinding;
 	protected static Robot robot;
 	protected static ActuatorsManager actionneurs;
+	protected static Table table;
 
 	/*
 	 * versions.get(meta_id) donne la liste des versions associées aux meta_id
 	 */
 	protected ArrayList<ArrayList<Integer>> versions = new ArrayList<ArrayList<Integer>>();	
 	
-	public Script(HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, Robot robot, ActuatorsManager move)
+	public Script(HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, Robot robot, ActuatorsManager move, Table table)
 	{
 		Script.hookgenerator = hookgenerator;
 		Script.config = config;
@@ -49,13 +51,14 @@ public abstract class Script implements Service
 		Script.pathfinding = pathfinding;
 		Script.robot = robot;
 		Script.actionneurs = move;
+		Script.table = table;
 	}
 		
 	/**
 	 * Exécute vraiment un script et fait le deplacement jusqu'au point d'entree
 	 * @throws BlockedException 
 	 */
-	public void goToThenExec(int id_version, GameState<RobotReal> state, boolean retenter_si_blocage) throws ScriptException, BlockedException
+	public void goToThenExec(int id_version, Robot robot, boolean retenter_si_blocage) throws ScriptException, BlockedException
 	{
 		try 
 		{
@@ -71,7 +74,7 @@ public abstract class Script implements Service
 		} 
 		catch (UnableToMoveException | SerialException e) 
 		{
-			log.debug("ca marche pas", this);;
+			log.debug("script : impossible d'executer le script", this);;
 		}
 	}
 	
