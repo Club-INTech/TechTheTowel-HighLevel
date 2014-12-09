@@ -91,6 +91,18 @@ public class ActuatorsManager implements Service {
 	
 	//IT 2015 partie Guide Plots
 	
+	public void openGuide() throws SerialException
+	{
+		log.debug("guide ouvert", this);
+		serie.communiquer("og", 0);
+	}
+	public void closeGuide() throws SerialException
+	{
+		log.debug("fg", this);
+		serie.communiquer("fg", 0);
+	}
+	
+	
 	public void openRightGuide() throws SerialException
 	{
 		log.debug("Guide droit ouvert", this);

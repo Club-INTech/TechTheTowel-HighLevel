@@ -3,13 +3,12 @@ package scripts;
 import java.util.ArrayList;
 
 import pathdinding.Pathfinding;
-import exceptions.ScriptException;
+import exceptions.Locomotion.UnableToMoveException;
+import exceptions.serial.SerialException;
 import hook.Hook;
 import hook.types.HookGenerator;
 import robot.Robot;
-import robot.RobotReal;
 import robot.cards.ActuatorsManager;
-import robot.highlevel.LocomotionHiLevel;
 import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
@@ -20,6 +19,10 @@ public class DropPile extends Script {
 	
 	private ArrayList<Hook> emptyHook = new ArrayList<Hook>();
 
+	/*
+	 *TODO il faut refaire cette classe 
+	 *
+	 */
 	public DropPile(HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, Robot robot, ActuatorsManager move, Table table) 
 	{
 		super(hookgenerator, config, log,pathfinding, robot,move,table);
@@ -33,15 +36,26 @@ public class DropPile extends Script {
 	{
 		if (id_version==1)
 		{
-			robot.tourner((Math.PI*0.5), emptyHook, false);
-			robot.avancer(100, emptyHook, true);
-			actionneurs.elevatorGround();
-			actionneurs.ouvrirLentGuide();
-			robot.avancer(-20, emptyHook, true);
-			robot.setPlotCounter(0);
-			actionneurs.guideGaucheClose();
-			actionneurs.guideDroitClose();
-			robot.avancer(-80,emptyHook,true);
+			try 
+			{
+				robot.tourner((Math.PI*0.5), emptyHook, false);
+				robot.avancer(100, emptyHook, true);
+				actionneurs.groundElevator();
+				actionneurs.openGuide();
+				robot.avancer(-20, emptyHook, true);
+				robot.setPlotCounter(0);
+				actionneurs.closeGuide();
+				robot.avancer(-80,emptyHook,true);
+			}
+			catch (UnableToMoveException e) 
+			{
+				log.debug("mouvement impossible", this);
+				e.printStackTrace();
+			} catch (SerialException e) 
+			{
+				log.debug("mauvaise entree serie", this);
+				e.printStackTrace();
+			}
 		}
 		else if (id_version==2)
 		{
@@ -81,10 +95,21 @@ public class DropPile extends Script {
 	@Override
 	protected void termine(GameState<?> state) 
 	{
-		fermerMachoire();
-		robot.avancer(-20, emptyHook, true);
-		baisserAscenseur();
-		fermerGuide();
+		try 
+		{
+			actionneurs.closeJaw();
+			robot.avancer(-20, emptyHook, true);
+			actionneurs.groundElevator();
+			actionneurs.closeGuide();
+		} 
+		catch (SerialException e) 
+		{
+			log.debug("mauvaise entree serie", this);
+			e.printStackTrace();
+		} catch (UnableToMoveException e) {
+			log.debug("impossible de bouger", this);
+			e.printStackTrace();
+		}
 	}
 
 }
