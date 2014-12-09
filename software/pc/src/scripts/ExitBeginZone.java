@@ -5,12 +5,13 @@ import hook.types.HookGenerator;
 
 import java.util.ArrayList;
 
-import pathfinding.Pathfinding;
+import pathdinding.Pathfinding;
 import exceptions.Locomotion.UnableToMoveException;
+import robot.Robot;
 import robot.cards.ActuatorsManager;
-import robot.highlevel.LocomotionHiLevel;
 import smartMath.Vec2;
 import strategie.GameState;
+import table.Table;
 import utils.Config;
 import utils.Log;
 
@@ -24,9 +25,9 @@ public class ExitBeginZone extends Script {
 	int distanceToExit=450;
 	ArrayList<Hook> emptyHook = new ArrayList<Hook>();
 	
-	public ExitBeginZone(HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, LocomotionHiLevel locomotion, ActuatorsManager move) 
+	public ExitBeginZone(HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, Robot robot, ActuatorsManager move, Table table) 
 	{
-		super(hookgenerator, config, log, pathfinding, locomotion, move);
+		super(hookgenerator, config, log, pathfinding, robot, move,table);
 	}
 
 	@Override
@@ -38,7 +39,7 @@ public class ExitBeginZone extends Script {
 	public void execute (int id_version)
 	{
 		try {
-			locomotion.avancer(distanceToExit,emptyHook,true);
+			robot.avancer(distanceToExit,emptyHook,true);
 		} catch (UnableToMoveException e) {
 			log.debug("erreur ExitBeginZone script : impossible de sortir de la zone de depart\n", this);
 		}

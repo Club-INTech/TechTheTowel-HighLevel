@@ -2,9 +2,10 @@ package scripts;
 
 import smartMath.Vec2;
 import strategie.GameState;
+import table.Table;
+import robot.Robot;
 import robot.RobotReal;
 import robot.cards.ActuatorsManager;
-import robot.highlevel.LocomotionHiLevel;
 import utils.Log;
 import utils.Config;
 import container.Service;
@@ -13,7 +14,8 @@ import hook.types.HookGenerator;
 
 import java.util.ArrayList;
 
-import pathfinding.Pathfinding;
+import pathdinding.Pathfinding;
+import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialException;
 import exceptions.ScriptException;
@@ -32,32 +34,35 @@ public abstract class Script implements Service
 	protected static Config config;
 	protected static Log log;
 	protected static Pathfinding pathfinding;
-	protected static LocomotionHiLevel locomotion;
+	protected static Robot robot;
 	protected static ActuatorsManager actionneurs;
+	protected static Table table;
 
 	/*
 	 * versions.get(meta_id) donne la liste des versions associées aux meta_id
 	 */
 	protected ArrayList<ArrayList<Integer>> versions = new ArrayList<ArrayList<Integer>>();	
 	
-	public Script(HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, LocomotionHiLevel locomotion, ActuatorsManager move)
+	public Script(HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, Robot robot, ActuatorsManager move, Table table)
 	{
 		Script.hookgenerator = hookgenerator;
 		Script.config = config;
 		Script.log = log;
 		Script.pathfinding = pathfinding;
-		Script.locomotion = locomotion;
+		Script.robot = robot;
 		Script.actionneurs = move;
+		Script.table = table;
 	}
 		
 	/**
 	 * Exécute vraiment un script et fait le deplacement jusqu'au point d'entree
+	 * @throws BlockedException 
 	 */
-	public void goToThenExec(int id_version, GameState<RobotReal> state, boolean retenter_si_blocage) throws ScriptException
+	public void goToThenExec(int id_version, Robot robot, boolean retenter_si_blocage) throws ScriptException, BlockedException
 	{
 		try 
 		{
-			locomotion.suit_chemin(pathfinding.dodgeStatic(locomotion.getPosition(),point_entree(id_version)),new ArrayList<Hook>());
+			robot.suit_chemin(pathfinding.computePath(robot.getPosition(),point_entree(id_version)),new ArrayList<Hook>());
 		} 
 		catch (UnableToMoveException e) 
 		{
@@ -69,7 +74,7 @@ public abstract class Script implements Service
 		} 
 		catch (UnableToMoveException | SerialException e) 
 		{
-			log.debug("ca marche pas", this);;
+			log.debug("script : impossible d'executer le script", this);;
 		}
 	}
 	

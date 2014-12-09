@@ -5,8 +5,8 @@ import java.util.Hashtable;
 import robot.cards.ActuatorsManager;
 import robot.cards.Sensors;
 import robot.cards.Locomotion;
-import robot.cards.laser.LaserFiltration;
-import robot.cards.laser.Laser;
+//import robot.cards.laser.LaserFiltration;
+//import robot.cards.laser.Laser;
 import table.Table;
 import robot.RobotReal;
 import utils.Log;
@@ -63,13 +63,13 @@ public class ThreadManager {
 		return threads.get("threadCapteurs");
 	}
 
-	public AbstractThread getThreadLaser(Laser laser, Table table, LaserFiltration filtragelaser)
+/*	public AbstractThread getThreadLaser(Laser laser, Table table, LaserFiltration filtragelaser)
 	{
 		AbstractThread thread = threads.get("threadLaser");
 		if(thread == null)
 			threads.put("threadLaser", new ThreadLaser(laser, table, filtragelaser));
 		return threads.get("threadLaser");
-	}
+	}*/
 
 	public void demarreThreads()
 	{

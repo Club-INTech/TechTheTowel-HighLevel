@@ -16,8 +16,8 @@ import robot.RobotReal;
 import robot.cards.ActuatorsManager;
 import robot.cards.Sensors;
 import robot.cards.Locomotion;
-import robot.cards.laser.LaserFiltration;
-import robot.cards.laser.Laser;
+//import robot.cards.laser.LaserFiltration;
+//import robot.cards.laser.Laser;
 import robot.highlevel.LocomotionHiLevel;
 import robot.serial.SerialManager;
 import robot.serial.Serial;
@@ -157,6 +157,7 @@ public class Container
 			services.put(nom, (Service)threadmanager.getThreadCapteurs(	(RobotReal)getService("RobotVrai"),
 																		(Table)getService("Table"),
 																		(Sensors)getService("Capteur")));
+/*
 		else if(nom == "threadLaser")
 			services.put(nom, (Service)threadmanager.getThreadLaser(	(Laser)getService("Laser"),
 																		(Table)getService("Table"),
@@ -169,6 +170,7 @@ public class Container
 		else if(nom == "FiltrageLaser")
 			services.put(nom, (Service)new LaserFiltration(	(Config)getService("Read_Ini"),
 															(Log)getService("Log")));
+*/
 
 		else if(nom == "CheckUp")
 			services.put(nom, (Service)new CheckUp(	(Log)getService("Log"),

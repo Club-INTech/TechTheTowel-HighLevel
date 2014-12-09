@@ -1,10 +1,12 @@
 package robot.cards;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 import robot.serial.Serial;
 import utils.*;
 import container.Service;
+import smartMath.Vec2;
 import exceptions.Locomotion.BlockedException;
 import exceptions.serial.SerialException;
 
@@ -19,7 +21,7 @@ public class Locomotion implements Service
 
 	// Dépendances
 	private Log log;
-	private Serial serie;
+	public Serial serie;
 
 	private Hashtable<String, Integer> infos_stoppage_enMouvement;
 		
@@ -156,6 +158,47 @@ public class Locomotion implements Service
 	{
 		String chaines[] = {"t", Double.toString(angle)};
 		serie.communiquer(chaines, 0);		
+	}
+	
+	/**
+	 * 
+	 * @param path la liste des points par lesquels le robot doit passer, contient le point de depart (position actuelle du robot) et le point d'arrivee
+	 * @throws SerialException 
+	 */
+	public void followPath (ArrayList<Vec2> path) throws SerialException
+	{
+		for (int i=1; i<path.size(); i++)
+		{
+			goToPoint(path.get(i));
+			log.debug("position actuelle ("+get_infos_x_y_orientation()[0]+", "+get_infos_x_y_orientation()[1]+")",this);
+		}
+	}
+	
+	/**
+	 * deplace du point de depart au point d'arrivee
+	 * TODO refaire en mettant les deplacements de haut niveau
+	 * 
+	 * @param to le point d'arrivee
+	 * @throws SerialException 
+	 */
+	public void goToPoint (Vec2 to) throws SerialException
+	{
+		double distX = to.x-get_infos_x_y_orientation()[0];
+		double distY = to.y-get_infos_x_y_orientation()[1];
+		try
+		{
+			tourner(Math.atan2(distY, distX));
+			log.debug("j'ai tourne "+Math.atan2(distY, distX),this);
+			Sleep.sleep(1000);
+			avancer(Math.sqrt(distX*distX + distY*distY));
+			log.debug("j'ai avance "+Math.sqrt(distX*distX+distY*distY), this);
+			Sleep.sleep(5000);
+		} 
+		catch (SerialException e) 
+		{
+			log.debug("erreur dans Locomotion,goToPoint : mauvaise entree serie", this);
+			e.printStackTrace();
+		}
 	}
 	
 	/**
