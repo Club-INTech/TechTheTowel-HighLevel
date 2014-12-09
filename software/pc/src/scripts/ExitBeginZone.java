@@ -11,6 +11,7 @@ import robot.Robot;
 import robot.cards.ActuatorsManager;
 import smartMath.Vec2;
 import strategie.GameState;
+import table.Table;
 import utils.Config;
 import utils.Log;
 
@@ -24,9 +25,9 @@ public class ExitBeginZone extends Script {
 	int distanceToExit=450;
 	ArrayList<Hook> emptyHook = new ArrayList<Hook>();
 	
-	public ExitBeginZone(HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, Robot robot, ActuatorsManager move) 
+	public ExitBeginZone(HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, Robot robot, ActuatorsManager move, Table table) 
 	{
-		super(hookgenerator, config, log, pathfinding, robot, move);
+		super(hookgenerator, config, log, pathfinding, robot, move,table);
 	}
 
 	@Override

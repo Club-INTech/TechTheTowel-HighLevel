@@ -34,6 +34,8 @@ public class Table implements Service
 	private ArrayList<ObstacleLinear> m_lines;
 	private ArrayList<ObstacleCircular> m_circles;
 	private ArrayList<ObstacleRectangular> m_rects;
+	private boolean isLeftCarpetDropped;
+	private boolean isRightCarpetDropped;
 	
 	public Table(Log log, Config config)
 	{
@@ -100,6 +102,10 @@ public class Table implements Service
 		m_circles.add(new ObstacleCircular(new Vec2(400, -750), rayonPlot));
 		m_circles.add(new ObstacleCircular(new Vec2(1410, -750), rayonPlot));
 		m_circles.add(new ObstacleCircular(new Vec2(1410, -850), rayonPlot));
+		
+		//les tapis
+		isLeftCarpetDropped = false;
+		isRightCarpetDropped = false;
 	}
 	
 	//La table
@@ -153,5 +159,22 @@ public class Table implements Service
 	{
 		return m_circles;
 	}
+	
+    public boolean getIsLeftCarpetDropped() 
+	{
+		return isLeftCarpetDropped;
+	}
+    public void setIsLeftCarpetDropped(boolean newValue)
+    {
+    	isLeftCarpetDropped=newValue;
+    }
+    public boolean getIsRightCarpetDropped() 
+  	{
+  		return isRightCarpetDropped;
+  	}
+      public void setIsRightCarpetDropped(boolean newValue)
+      {
+      	isRightCarpetDropped=newValue;
+      }
 }
 
