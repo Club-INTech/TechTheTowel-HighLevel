@@ -8,14 +8,15 @@ import robot.cards.ActuatorsManager;
 import robot.highlevel.LocomotionHiLevel;
 import smartMath.Vec2;
 import strategie.GameState;
+import table.Table;
 import utils.Config;
 import utils.Log;
 
 public class GetPlot extends Script {
 
-	public GetPlot(HookGenerator hookgenerator, Config config, Log log,	Pathfinding pathfinding, Robot robot, ActuatorsManager move) 
+	public GetPlot(HookGenerator hookgenerator, Config config, Log log,	Pathfinding pathfinding, Robot robot, ActuatorsManager move,Table table) 
 	{
-		super(hookgenerator, config, log, pathfinding, robot, move);
+		super(hookgenerator, config, log, pathfinding, robot, move, table);
 		// TODO le tableau des versions
 	}
 	
