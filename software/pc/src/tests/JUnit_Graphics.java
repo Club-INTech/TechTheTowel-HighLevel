@@ -23,8 +23,8 @@ public class JUnit_Graphics extends JUnit_Test
     public void testPanel()
     {
     	ArrayList<Vec2> path = new ArrayList<Vec2>();
-    	path.add(new Vec2(100, 100));
-    	path.add(new Vec2(200, 200));
+    	path.add(new Vec2(0, 0));
+    	path.add(new Vec2(-1400, 1900));
     	win.getPanel().drawArrayList(path);
     	//Assert.fail();
     }
