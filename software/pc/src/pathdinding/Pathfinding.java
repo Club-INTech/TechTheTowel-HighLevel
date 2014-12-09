@@ -1,21 +1,28 @@
-package pathFinding;
+package pathdinding;
 
 import smartMath.Point;
 import table.Table;
 import smartMath.Path;
+import smartMath.Vec2;
+
+import java.util.ArrayList;
+
+import exceptions.Locomotion.BlockedException;
 
 /**
  * Classe encapsulant les calculs de pathfinding (ou pas :p)
- * @author Marsya et Étienne
+ * @author Marsya et etienne
  *
  */
-public class PathFinding
+public class Pathfinding
 {
 	private Table m_table;
+	int compteur;
 	
-	public PathFinding(Table table)
+	public Pathfinding(Table table)
 	{
 		m_table = table;
+		compteur = 0;
 	}
 	
 	/**
@@ -40,7 +47,7 @@ public class PathFinding
 	 * @param segment1B point B du segment 1
 	 * @param segment2A point A du segment 2
 	 * @param segment2B point B du segment 2
-	 * @return le point d'intersection des droites portées par les segments 1 et 2
+	 * @return le point d'intersection des droites portï¿½es par les segments 1 et 2
 	 */
 	public static Point intersection(Point segment1A, Point segment1B, Point segment2A, Point segment2B)
 	{
@@ -59,15 +66,36 @@ public class PathFinding
 	
 	/**
 	 * 
-	 * @param start point de départ
-	 * @param end point d'arrivée
-	 * @return un chemin entre le point de départ et d'arrivée (vide si ligne droite)
+	 * @param start point de dï¿½part
+	 * @param end point d'arrivï¿½e
+	 * @return un chemin entre le point de dï¿½part et d'arrivï¿½e
 	 */
-	public Path computePath(Point start, Point end)
+	public ArrayList<Vec2> computePath(Vec2 start, Vec2 end) throws BlockedException
 	{
+		compteur = 0;
+		Point DoubleStart = new Point(start.x, start.y), DoubleEnd = new Point(end.x, end.y);
+		Path path = new Path();
+		path.add(DoubleStart);
+		path.addAll(dodgeStatic(DoubleStart, DoubleEnd));
+		path.add(DoubleEnd);
+		simplify(path);
+		return path.toVec2Array();
+	}
+	
+	/**
+	 * 
+	 * @param start point de dï¿½part
+	 * @param end point d'arrivï¿½e
+	 * @return un chemin entre le point de dï¿½part et d'arrivï¿½e en evitant uniquement les obstacles fixes
+	 */
+	private Path dodgeStatic(Point start, Point end) throws BlockedException
+	{
+		if(compteur >= 1000)
+			throw new BlockedException();
+		
 		Path path = new Path();
 		
-		// cherche le point d'intersection avec les obstacles le plus proche de point de départ
+		// cherche le point d'intersection avec les obstacles le plus proche de point de dï¿½part
 		double min = 13000000;
 		int indiceDistMin = 0;
 		Point node = new Point();
@@ -86,31 +114,34 @@ public class PathFinding
 		    	}
 		    }
     	}
-		//si il y a un point d'intersection, ajoute ce point au chemin, et recommence la recherche de chemin sur les chemins début -> point de passage du point d'intersection
+		//si il y a un point d'intersection, ajoute ce point au chemin, et recommence la recherche de chemin sur les chemins dï¿½but -> point de passage du point d'intersection
 		//                                                                                                                   point de passage du point d'intersection -> fin
 		if(intersects)
 		{
 			//s'il n'y a qu'un seul point de passage sur l'obstacle
 			if( m_table.getLines().get(indiceDistMin).getNbPassagePoint() == 1 )
 			{
-				path.addAll(computePath(start, m_table.getLines().get(indiceDistMin).getPassagePoint1()));
+				compteur++;
+				path.addAll(dodgeStatic(start, m_table.getLines().get(indiceDistMin).getPassagePoint1()));
 				path.add(m_table.getLines().get(indiceDistMin).getPassagePoint1());
-				path.addAll(computePath(m_table.getLines().get(indiceDistMin).getPassagePoint1(), end));
+				path.addAll(dodgeStatic(m_table.getLines().get(indiceDistMin).getPassagePoint1(), end));
 			}
-			//s'il y a deux points de passage sur l'obstacle, prend le point de passage le plus proche du point d'arrivée.
+			//s'il y a deux points de passage sur l'obstacle, prend le point de passage le plus proche du point d'arrivï¿½e.
 			else
 			{
 				if(Math.pow(m_table.getLines().get(indiceDistMin).getPassagePoint1().x - end.x, 2) + Math.pow(m_table.getLines().get(indiceDistMin).getPassagePoint1().y - end.y, 2) <= Math.pow(m_table.getLines().get(indiceDistMin).getPassagePoint2().x - end.x, 2) + Math.pow(m_table.getLines().get(indiceDistMin).getPassagePoint2().y - end.y, 2))
 				{
-					path.addAll(computePath(start, m_table.getLines().get(indiceDistMin).getPassagePoint1()));
+					compteur++;
+					path.addAll(dodgeStatic(start, m_table.getLines().get(indiceDistMin).getPassagePoint1()));
 					path.add(m_table.getLines().get(indiceDistMin).getPassagePoint1());
-					path.addAll(computePath(m_table.getLines().get(indiceDistMin).getPassagePoint1(), end));
+					path.addAll(dodgeStatic(m_table.getLines().get(indiceDistMin).getPassagePoint1(), end));
 				}
 				else
 				{
-					path.addAll(computePath(start, m_table.getLines().get(indiceDistMin).getPassagePoint2()));
+					compteur++;
+					path.addAll(dodgeStatic(start, m_table.getLines().get(indiceDistMin).getPassagePoint2()));
 					path.add(m_table.getLines().get(indiceDistMin).getPassagePoint2());
-					path.addAll(computePath(m_table.getLines().get(indiceDistMin).getPassagePoint2(), end));
+					path.addAll(dodgeStatic(m_table.getLines().get(indiceDistMin).getPassagePoint2(), end));
 				}
 			}
 		}
@@ -119,8 +150,8 @@ public class PathFinding
 	
 	/**
 	 * 
-	 * @param path chemin à simplifier
-	 * @return un chemin simplifié
+	 * @param path chemin ï¿½ simplifier
+	 * @return un chemin simplifiï¿½
 	 */
 	public Path simplify(Path path)
 	{

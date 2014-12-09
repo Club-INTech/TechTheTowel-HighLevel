@@ -1,19 +1,18 @@
 package scripts;
 
 import java.util.ArrayList;
-
-import pathfinding.Pathfinding;
+import pathdinding.Pathfinding;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialException;
 import hook.Hook;
 import hook.types.HookGenerator;
+import robot.Robot;
 import robot.cards.ActuatorsManager;
-import robot.highlevel.LocomotionHiLevel;
 import smartMath.Vec2;
 import strategie.GameState;
+import table.Table;
 import utils.Config;
 import utils.Log;
-import utils.Sleep;
 
 /**
  * 
@@ -30,129 +29,239 @@ import utils.Sleep;
  *   |					|
  *   |		N° claps	|
  *    6_5_4________3_2_1
+ *    
+ *    
+ *    
+ *    Angles :
+ *    
+ *    ___________________
+ *   |		PI/2		|
+ * 	 |					|
+ *   |PI			   0|  Debut du robot ici
+ *   |					|
+ *   |					|
+ *   |______-PI/2_______|
+ *   
  */
 
 public class CloseClap extends Script 
 {
-	private boolean OpenedLeftClap=false,OpenedRightClap=false,ClosedClap1=false,ClosedClap2=false,ClosedClap3=false,ClosedClap4=false,ClosedClap5=false,ClosedClap6=false;//clap fermé au debut
 	private int distanceBetweenClaps=300;//distance entre 2 claps (bout identique de claque clap, ex : charnieres)
 	private int lenghtClap=160; //LOngueur clap
 	private int lenghtStair=200; // L'estradee fait 100, on met 200
 	private int distanceInit;//distance intiale au script
-	private int distanceRightLeft=1600; // distance entre les deux triplettes de claps : entre le 3 et le 5
-	private int sleepTime = 800; //TODO le temps d'attente (en ms) entre la commande de dépose du tapis ( le bras se baisse) et la commande qui remonte le bras
+	private int distanceRightLeft=1700; // distance entre les deux triplettes de claps : entre le 3 et le 5
+	private int sleepTime = 800; // le temps d'attente (en ms) entre la commande de dépose du tapis ( le bras se baisse) et la commande qui remonte le bras
 
 	
-	public CloseClap (HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, LocomotionHiLevel locomotion, ActuatorsManager move) 
+	public CloseClap (HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, Robot robot, ActuatorsManager move, Table table) 
 	{
-		super(hookgenerator,config,log,pathfinding,locomotion,move);
+		super(hookgenerator,config,log,pathfinding,robot,move,table);
 	}
 	
-	public void executeAllClapFromStart (int id_version)  //Ferme tous les Claps, depuis le  debut
+	@Override
+	public void execute(int id)
+	{
+		if (id == 123)
+			_123();
+		else if (id == 1)
+			_1();
+		else if (id == 2)
+			_2();
+		else if (id == 3)
+			_3();
+		else if (id == 12)
+			_12();
+		else
+			log.debug("Souci de version", this);
+	}
+	
+	public void _1 ()  
 	{
 		ArrayList<Hook> emptyHookList = new ArrayList<Hook>(); //Liste Hook vide
 		try
 		{
 			try 
 			{
+				actionneurs.midLeftClap();//On ouvre puis on avance
+				robot.sleep(sleepTime);
 				
-				//Partie debut
-				
-				
-				//On met le coté gauche du robot devant les claps 
-				locomotion.tourner(-Math.PI/2,emptyHookList,true);//TODO verifier
-				locomotion.avancer(distanceInit,emptyHookList,true);//TODO DISTANCE INITIALE
-				
-				if (!OpenedLeftClap)//On ouvre le bras si ce n'est deja fait
-				{
-					actionneurs.highLeftClap();
-					Sleep.sleep(sleepTime);
-				}
-				
-				if(!ClosedClap1)//On ferme le clap le plus proche de nous,
-				{				
-					actionneurs.midLeftClap();//On ouvre puis on avance
-					Sleep.sleep(sleepTime);
-					ClosedClap1=true;
-				}		
-				
-				locomotion.avancer(lenghtClap,emptyHookList,true);//On baisse le premier clap, le notre
-				
-				if(ClosedClap2)//Si l'ennemi a toujours son clap
-				{
-					actionneurs.highLeftClap();
-					Sleep.sleep(sleepTime);	
-				}
-				
-					locomotion.avancer(distanceBetweenClaps,emptyHookList,true);//On avance entre le 1 et le 3
-					locomotion.avancer(lenghtClap,emptyHookList,true);
-					locomotion.avancer(distanceBetweenClaps,emptyHookList,true);
-					
-				if(!ClosedClap3)//Clap 3, le plus loin sur notre zone
-				{
-					actionneurs.midLeftClap();
-					Sleep.sleep(sleepTime);	
-					ClosedClap3=true;//On ferme notre 2eme clap	
-				}
+				robot.avancer(lenghtClap,emptyHookList,true);//On baisse le premier clap, le notre
+				table.setIsClap1Closed(true);	
+		
+				actionneurs.lowLeftClap();
+				robot.sleep(sleepTime);	
+			}
+			catch (UnableToMoveException e) 
+			{
+			log.debug("Probleme avec le deplacement pendant le clap 1", this);
+			} 
+		}
+		catch (SerialException e) 
+		{
+			log.debug("Mauvaise entrée serie !",this);
+			e.printStackTrace();	
+		}	
+	}
 
-				locomotion.avancer(lenghtClap,emptyHookList,true); // On avance jusqu'au bout du 3
+	public void _2 ()  
+	{
+		ArrayList<Hook> emptyHookList = new ArrayList<Hook>(); //Liste Hook vide
+		try
+		{
+			try 
+			{
+				actionneurs.midLeftClap();//On ouvre puis on avance
+				robot.sleep(sleepTime);
+				
+				robot.avancer(lenghtClap,emptyHookList,true);//On baisse le premier clap, le notre
+				table.setIsClap2Closed(true);	
 				
 				actionneurs.lowLeftClap();
+				robot.sleep(sleepTime);	
+			}
+			catch (UnableToMoveException e) 
+			{
+			log.debug("Probleme avec le deplacement pendant le clap 2", this);
+			} 
+		}
+		catch (SerialException e) 
+		{
+			log.debug("Mauvaise entrée serie !",this);
+			e.printStackTrace();	
+		}	
+	}
+	
+	public void _3 ()  //Ferme le claps de fin
+	{
+		ArrayList<Hook> emptyHookList = new ArrayList<Hook>(); //Liste Hook vide
+		try
+		{
+			try 
+			{
+				actionneurs.midRightClap();
+				robot.sleep(sleepTime);	
 				
-				//Partie deplacements du clap 3 au clap 6, pret à fermer le 5
-				// On se tourne, on avance pour eviter l'estrade
-				locomotion.tourner(Math.PI/2,emptyHookList,true);//TODO
-				locomotion.avancer(lenghtStair,emptyHookList,true); 
-				//On se tourne, on avance vers le clap interessant
-				locomotion.tourner(Math.PI,emptyHookList,true);//TODO
-				locomotion.avancer(distanceRightLeft,emptyHookList,true); 
-				//On se tourne pour s'avancer des claps
-				locomotion.tourner(-Math.PI/2,emptyHookList,true);//TODO
-				locomotion.avancer(lenghtStair,emptyHookList,true);
-				//On se tourne dans le bon sens
-				locomotion.tourner(0,emptyHookList,true);//TODO
-				
+				robot.avancer(lenghtClap,emptyHookList,true);
+				table.setIsClap3Closed(true);//On ferme notre clap	
 
+				//Partie fuite 
 				
-				//Partie clap de fin
-				// A ce stade, on est devant le 5
-			
-				
-				if (!OpenedRightClap)
-				{
-					actionneurs.highRightClap();
-					Sleep.sleep(sleepTime);
-				}
-				
-				if(ClosedClap6)//Si l'ennemi a toujours son clap //Pas sur que ca soit utile
-				{
-					actionneurs.highRightClap();
-					Sleep.sleep(sleepTime);	
-				}
-				
-				if(!ClosedClap5)//Clap 5
-				{
-					actionneurs.midRightClap();
-					Sleep.sleep(sleepTime);	
-					ClosedClap5=true;//On ferme notre clap	
-				}
-				
-				locomotion.avancer(lenghtClap,emptyHookList,true);
-
-				
-				if(ClosedClap4)//Si l'ennemi a toujours son clap
-				{
-					actionneurs.highRightClap();
-					Sleep.sleep(sleepTime);	
-				}	
-				
-				locomotion.avancer(distanceBetweenClaps,emptyHookList,true);//On s'eloigne de 4
-				locomotion.avancer(lenghtClap,emptyHookList,true);
-				locomotion.avancer(distanceBetweenClaps,emptyHookList,true);
-
+				robot.tourner(Math.PI/2,emptyHookList,true);
+				robot.avancer(lenghtStair,emptyHookList,true);
 				
 				actionneurs.lowRightClap();
+				robot.sleep(sleepTime);	
+			}
+			catch (UnableToMoveException e) 
+			{
+			log.debug("Probleme avec le deplacement pendant le clap 3", this);
+			} 
+		}
+		catch (SerialException e) 
+		{
+			log.debug("Mauvaise entrée serie !",this);
+			e.printStackTrace();	
+		}	
+	}
+	
+	public void _12 ()  //Ferme les 2 claps du debut
+	{
+		ArrayList<Hook> emptyHookList = new ArrayList<Hook>(); //Liste Hook vide
+		try
+		{
+			try 
+			{
+				actionneurs.midLeftClap();//On ouvre puis on avance
+				robot.sleep(sleepTime);
 				
+				robot.avancer(lenghtClap,emptyHookList,true);//On baisse le premier clap, le notre
+				table.setIsClap1Closed(true);	
+				
+				actionneurs.highLeftClap(); //on evite le clap adverse
+				
+				robot.sleep(sleepTime);	
+				robot.avancer(2*distanceBetweenClaps-lenghtClap-20,emptyHookList,true);//On avance entre le 1 et le 2
+				
+				actionneurs.midLeftClap();
+				robot.sleep(sleepTime);	
+				
+				robot.tourner(Math.PI/2,emptyHookList,true);//On tourne en fermant le clap
+				table.setIsClap2Closed(true);//On ferme notre 2eme clap	
+				
+				actionneurs.lowLeftClap(); //on referme le clap pour eviter de le perdre
+				robot.sleep(sleepTime);	
+			}
+			catch (UnableToMoveException e) 
+			{
+			log.debug("Probleme avec le deplacement pendant les claps près, 1 et 2", this);
+			} 
+		}
+		catch (SerialException e) 
+		{
+			log.debug("Mauvaise entrée serie !",this);
+			e.printStackTrace();	
+		}	
+	}
+	
+	public void _123()  //Ferme tous les Claps, depuis le  debut
+	{
+		ArrayList<Hook> emptyHookList = new ArrayList<Hook>(); //Liste Hook vide
+		try
+		{
+			try 
+			{
+				actionneurs.midLeftClap();//On ouvre puis on avance
+				robot.sleep(sleepTime);
+				
+				robot.avancer(lenghtClap,emptyHookList,true);//On baisse le premier clap, le notre
+				table.setIsClap1Closed(true);	
+				
+				actionneurs.highLeftClap(); //on evite le clap adverse
+				
+				robot.sleep(sleepTime);	
+				robot.avancer(2*distanceBetweenClaps-lenghtClap-20,emptyHookList,true);//On avance entre le 1 et le 2
+				
+				actionneurs.midLeftClap();
+				robot.sleep(sleepTime);	
+				
+				robot.tourner(Math.PI/2,emptyHookList,true);//On tourne en fermant le clap
+				table.setIsClap2Closed(true);//On ferme notre 2eme clap	
+				
+				actionneurs.lowLeftClap(); //on referme le clap pour eviter de le perdre
+				robot.sleep(sleepTime);	
+
+				
+				// On se tourne, on avance pour eviter l'estrade
+				robot.avancer(lenghtStair,emptyHookList,true); 
+
+				//On se tourne, on avance vers le clap interessant
+				robot.tourner(Math.PI,emptyHookList,true);
+				robot.avancer(distanceRightLeft,emptyHookList,true); 
+				
+				//On se tourne pour s'avancer des claps
+				robot.tourner(-Math.PI/2,emptyHookList,true);
+				robot.avancer(lenghtStair,emptyHookList,true);
+				
+				//On se tourne dans le bon sens
+				robot.tourner(0,emptyHookList,true);
+				
+				//Partie clap de fin
+				// A ce stade, on est devant le 3
+				
+				actionneurs.midRightClap();
+				robot.sleep(sleepTime);	
+				
+				robot.avancer(lenghtClap,emptyHookList,true);
+				table.setIsClap3Closed(true);//On ferme notre clap	
+
+				//Partie fuite 
+				
+				robot.tourner(Math.PI/2,emptyHookList,true);
+				robot.avancer(lenghtStair,emptyHookList,true);
+				
+				actionneurs.lowRightClap();
+				robot.sleep(sleepTime);					
 			}
 			catch (UnableToMoveException e) 
 			{
@@ -166,142 +275,23 @@ public class CloseClap extends Script
 		}	
 	}
 	
-	public void executeSltDebut (int id_version)  //Ferme les 2 claps du debut
-	{
-		ArrayList<Hook> emptyHookList = new ArrayList<Hook>(); //Liste Hook vide
-		try
-		{
-			try 
-			{
-				//On met le coté gauche du robot devant les claps 
-				locomotion.tourner(-Math.PI/2,emptyHookList,true);//TODO verifier
-				locomotion.avancer(distanceInit,emptyHookList,true);//TODO DISTANCE INITIALE
-				
-				if (!OpenedLeftClap)//On ouvre le bras si ce n'est deja fait
-				{
-					actionneurs.highLeftClap();
-					Sleep.sleep(sleepTime);
-				}
-				
-				if(!ClosedClap1)//On ferme le clap le plus proche de nous,
-				{				
-					actionneurs.midLeftClap();//On ouvre puis on avance
-					Sleep.sleep(sleepTime);
-					ClosedClap1=true;
-				}		
-				
-				locomotion.avancer(lenghtClap,emptyHookList,true);//On baisse le premier clap, le notre
-				
-				if(ClosedClap2)//Si l'ennemi a toujours son clap
-				{
-					actionneurs.highLeftClap();
-					Sleep.sleep(sleepTime);	
-				}
-				
-					locomotion.avancer(distanceBetweenClaps,emptyHookList,true);//On avance entre le 1 et le 3
-					locomotion.avancer(lenghtClap,emptyHookList,true);
-					locomotion.avancer(distanceBetweenClaps,emptyHookList,true);
-					
-				if(!ClosedClap3)//Clap 3, le plus loin sur notre zone
-				{
-					actionneurs.midLeftClap();
-					Sleep.sleep(sleepTime);	
-					ClosedClap3=true;//On ferme notre 2eme clap	
-				}
-
-				locomotion.avancer(lenghtClap,emptyHookList,true); // On avance jusqu'au bout du 3
-				
-				actionneurs.lowLeftClap();
-			}
-			catch (UnableToMoveException e) 
-			{
-			log.debug("Probleme avec le deplacement pendant les claps près", this);
-			} 
-		}
-		catch (SerialException e) 
-		{
-			log.debug("Mauvaise entrée serie !",this);
-			e.printStackTrace();	
-		}	
-	}
-
-	public void executeSltFin (int id_version)  //Ferme le claps de fin
-	{
-		ArrayList<Hook> emptyHookList = new ArrayList<Hook>(); //Liste Hook vide
-		try
-		{
-			try 
-			{
-				// A ce stade, on est devant le 5, pret à avancer
-			
-				
-				if (!OpenedRightClap)
-				{
-					actionneurs.highRightClap();
-					Sleep.sleep(sleepTime);
-				}
-				
-				if(ClosedClap6)//Si l'ennemi a toujours son clap //Pas sur que ca soit utile
-				{
-					actionneurs.highRightClap();
-					Sleep.sleep(sleepTime);	
-				}
-				
-				if(!ClosedClap5)//Clap 5
-				{
-					actionneurs.midRightClap();
-					Sleep.sleep(sleepTime);	
-					ClosedClap5=true;//On ferme notre clap	
-				}
-				
-				locomotion.avancer(lenghtClap,emptyHookList,true);
-
-				
-				if(ClosedClap4)//Si l'ennemi a toujours son clap
-				{
-					actionneurs.highRightClap();
-					Sleep.sleep(sleepTime);	
-				}	
-				
-				locomotion.avancer(distanceBetweenClaps,emptyHookList,true);//On s'eloigne de 4
-				locomotion.avancer(lenghtClap,emptyHookList,true);
-				locomotion.avancer(distanceBetweenClaps,emptyHookList,true);
-
-				
-				actionneurs.lowRightClap();
-			}
-			catch (UnableToMoveException e) 
-			{
-			log.debug("Probleme avec le deplacement pendant les claps loins", this);
-			} 
-		}
-		catch (SerialException e) 
-		{
-			log.debug("Mauvaise entrée serie !",this);
-			e.printStackTrace();	
-		}	
-	}
-	
-	
 	@Override
 	public Vec2 point_entree(int id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-
 	@Override
 	public int score(int id_version, GameState<?> state) {
 		int score = 15;
-		if(ClosedClap1)
+		if(table.getIsClap1Closed())
 			score -= 5;
-		if(ClosedClap3)
+		if(table.getIsClap2Closed())
 			score -= 5;
-		if(ClosedClap5)
+		if(table.getIsClap3Closed())
 			score -= 5;
 		return score;
 	}
-
 
 	@Override
 	protected void termine(GameState<?> state) {

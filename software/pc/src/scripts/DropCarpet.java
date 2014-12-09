@@ -2,18 +2,18 @@ package scripts;
 
 import java.util.ArrayList;
 
-import pathfinding.Pathfinding;
+import pathdinding.Pathfinding;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialException;
 import hook.Hook;
 import hook.types.HookGenerator;
+import robot.Robot;
 import robot.cards.ActuatorsManager;
-import robot.highlevel.LocomotionHiLevel;
 import smartMath.Vec2;
 import strategie.GameState;
+import table.Table;
 import utils.Config;
 import utils.Log;
-import utils.Sleep;
 /**
  * 
  * @author paul
@@ -21,14 +21,12 @@ import utils.Sleep;
  */
 public class DropCarpet extends Script 
 {
-	// TODO ? bouger ces booléens dans table.
-	private boolean DroppedLeftCarpet=false, DroppedRightCarpet=false;//booleens pour savoir si le tapis gauche (respectivement droit) a ete depose
 	private int distance=200;//distance de déplacement pour placer les tapis
 	private int sleepTime = 800; //le temps d'attente (en ms) entre la commande de dépose du tapis ( le bras se baisse) et la commande qui remonte le bras
 
-	public DropCarpet (HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, LocomotionHiLevel locomotion, ActuatorsManager move) 
+	public DropCarpet (HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, Robot robot, ActuatorsManager move, Table table) 
 	{
-		super(hookgenerator,config,log,pathfinding,locomotion,move);
+		super(hookgenerator,config,log,pathfinding,robot,move,table);
 		//cree la liste des versions donc des id
 	}
 	
@@ -41,25 +39,25 @@ public class DropCarpet extends Script
 			try 
 			{
 				//on presente ses arrieres a l'escalier
-				locomotion.tourner(Math.PI,emptyHookList,true);
+				robot.tourner(Math.PI,emptyHookList,true);
 				// on avance vers ces demoiselles (les marches) 
-				locomotion.avancer(-distance,emptyHookList,true);
+				robot.avancer(-distance,emptyHookList,true);
 				
-				if (!DroppedLeftCarpet)
+				if (!table.getIsLeftCarpetDropped())
 				{
-					actionneurs.downLeftCarpet();
-					Sleep.sleep(sleepTime);
-					DroppedLeftCarpet=true;
-					actionneurs.upLeftCarpet();
+					actionneurs.lowLeftCarpet();
+					robot.sleep(sleepTime);
+					table.setIsLeftCarpetDropped(true);
+					actionneurs.highLeftCarpet();
 				}
-				if (!DroppedRightCarpet)
+				if (!table.getIsRightCarpetDropped())
 				{
-					actionneurs.downRightCarpet();
-					Sleep.sleep(sleepTime);
-					DroppedRightCarpet=true;
-					actionneurs.upRightCarpet();
+					actionneurs.lowRightCarpet();
+					robot.sleep(sleepTime);
+					table.setIsRightCarpetDropped(true);
+					actionneurs.highRightCarpet();
 				}
-				locomotion.avancer(distance,emptyHookList,true);//on s'eloigne de l'escalier
+				robot.avancer(distance,emptyHookList,true);//on s'eloigne de l'escalier
 			} 
 			catch (UnableToMoveException e) 
 			{
@@ -85,9 +83,9 @@ public class DropCarpet extends Script
 	public int score(int id_version, GameState<?> state) 
 	{
 		int score = 24;
-		if(DroppedLeftCarpet)
+		if(table.getIsLeftCarpetDropped())
 			score -= 12;
-		if(DroppedRightCarpet)
+		if(table.getIsRightCarpetDropped())
 			score -= 12;
 		
 		return score;
@@ -98,8 +96,8 @@ public class DropCarpet extends Script
 	{
 		try 
 		{
-			actionneurs.upLeftCarpet();
-			actionneurs.upRightCarpet();
+			actionneurs.highLeftCarpet();
+			actionneurs.highRightCarpet();
 		} 
 		catch (SerialException e) 
 		{

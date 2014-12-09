@@ -33,6 +33,14 @@ public class Table implements Service
 	private Config config;
 	private ArrayList<ObstacleLinear> m_lines;
 	private ArrayList<ObstacleCircular> m_circles;
+	private ArrayList<ObstacleRectangular> m_rects;
+
+	private boolean isClap1Closed;
+	private boolean isClap2Closed;
+	private boolean isClap3Closed;
+
+	private boolean isLeftCarpetDropped;
+	private boolean isRightCarpetDropped;
 	
 	public Table(Log log, Config config)
 	{
@@ -45,8 +53,11 @@ public class Table implements Service
 	public void initialise()//initialise la table du debut du jeu (obstacles fixes)
 	{
 		m_lines = new ArrayList<ObstacleLinear>();
+		m_circles = new ArrayList<ObstacleCircular>();
+		m_rects = new ArrayList<ObstacleRectangular>();
 		
 		double radius = 190;
+		int rayonPlot = 30;
 		
 		//1 + 2 + 3 + nodes
 		m_lines.add(new ObstacleLinear(new Point(-1500 + radius, 778 - radius), new Point(-1100 + radius, 778 - radius), 1, new Point(-1095 + radius, 778 - radius), new Point(0, 0)));
@@ -75,8 +86,63 @@ public class Table implements Service
 		m_lines.add(new ObstacleLinear(new Point(1500 - radius, 1930 - radius), new Point(-1500 + radius, 1930 - radius), 0, new Point(0, 0), new Point(0, 0)));
 		m_lines.add(new ObstacleLinear(new Point(-1500 + radius, 1930 - radius), new Point(-1500 + radius, 0 + radius), 0, new Point(0, 0), new Point(0, 0)));
 		
+		
+		
+		//obstacle plots verts 
+		m_circles.add(new ObstacleCircular(new Vec2(-1410, 800), rayonPlot));
+		m_circles.add(new ObstacleCircular(new Vec2(-650, 900), rayonPlot));
+		m_circles.add(new ObstacleCircular(new Vec2(-650, 800), rayonPlot));
+		m_circles.add(new ObstacleCircular(new Vec2(-630, -355), rayonPlot));
+		m_circles.add(new ObstacleCircular(new Vec2(-200, -400), rayonPlot));
+		m_circles.add(new ObstacleCircular(new Vec2(-400, -750), rayonPlot));
+		m_circles.add(new ObstacleCircular(new Vec2(-1410, -750), rayonPlot));
+		m_circles.add(new ObstacleCircular(new Vec2(-1410, -850), rayonPlot));
+		
+		// obstacle plots jaunes
+		m_circles.add(new ObstacleCircular(new Vec2(1410, 800), rayonPlot));
+		m_circles.add(new ObstacleCircular(new Vec2(650, 900), rayonPlot));
+		m_circles.add(new ObstacleCircular(new Vec2(650, 800), rayonPlot));
+		m_circles.add(new ObstacleCircular(new Vec2(630, -355), rayonPlot));
+		m_circles.add(new ObstacleCircular(new Vec2(200, -400), rayonPlot));
+		m_circles.add(new ObstacleCircular(new Vec2(400, -750), rayonPlot));
+		m_circles.add(new ObstacleCircular(new Vec2(1410, -750), rayonPlot));
+		m_circles.add(new ObstacleCircular(new Vec2(1410, -850), rayonPlot));
+		
+		// Claps
+		
+		isClap1Closed=false;
+		isClap2Closed=false;
+		isClap3Closed=false;
+
+		//les tapis
+		isLeftCarpetDropped = false;
+		isRightCarpetDropped = false;
 	}
 	
+	public boolean getIsClap1Closed() {
+		return isClap1Closed;
+	}
+
+	public void setIsClap1Closed(boolean isClap1Closed) {
+		this.isClap1Closed = isClap1Closed;
+	}
+
+	public boolean getIsClap2Closed() {
+		return isClap2Closed;
+	}
+
+	public void setIsClap2Closed(boolean isClap2Closed) {
+		this.isClap2Closed = isClap2Closed;
+	}
+
+	public boolean getIsClap3Closed() {
+		return isClap3Closed;
+	}
+
+	public void setIsClap3Closed(boolean isClap3Closed) {
+		this.isClap3Closed = isClap3Closed;
+	}
+
 	//La table
 	/**
 	 * La table en argument deviendra la copie de this (this reste inchangé)
@@ -128,5 +194,22 @@ public class Table implements Service
 	{
 		return m_circles;
 	}
+	
+    public boolean getIsLeftCarpetDropped() 
+	{
+		return isLeftCarpetDropped;
+	}
+    public void setIsLeftCarpetDropped(boolean newValue)
+    {
+    	isLeftCarpetDropped=newValue;
+    }
+    public boolean getIsRightCarpetDropped() 
+  	{
+  		return isRightCarpetDropped;
+  	}
+      public void setIsRightCarpetDropped(boolean newValue)
+      {
+      	isRightCarpetDropped=newValue;
+      }
 }
 

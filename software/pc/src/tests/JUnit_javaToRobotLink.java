@@ -26,8 +26,8 @@ public class JUnit_javaToRobotLink  extends JUnit_Test
 		config.set("couleur", "jaune");
 		
 		robotvrai = (RobotReal)container.getService("RobotVrai");
-		robotvrai.setPosition(new Vec2(1251, 1695));	// TODO : cette position doit être la position de départ du robot 
-		//On démarre avec la cale !!!!
+		robotvrai.setPosition(new Vec2(1484, 1000));	// TODO : cette position doit être la position de départ du robot 
+		//On démarre avec les cales !!!!
 		robotvrai.setOrientation((float)(-Math.PI/2));
 		robotvrai.set_vitesse(Speed.BETWEEN_SCRIPTS);
 		container.demarreThreads();

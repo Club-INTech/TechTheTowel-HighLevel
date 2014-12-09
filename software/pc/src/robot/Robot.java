@@ -123,5 +123,14 @@ public abstract class Robot implements Service
 
     public abstract void desactiver_asservissement_rotation();
     public abstract void activer_asservissement_rotation();
+	
+    public boolean getIsLeftCarpetDropped() 
+	{
+		return isLeftCarpetDropped;
+	}
+    public void setIsLeftCarpetDropped(boolean newValue)
+    {
+    	isLeftCarpetDropped=newValue;
+    }
     
 }

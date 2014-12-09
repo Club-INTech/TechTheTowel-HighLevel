@@ -212,7 +212,7 @@ public class Serial implements SerialPortEventListener, Service
 				output.write("dfsfdsgdfgfd\r".getBytes());
 				//Evacuation de l'acquittement
 				input.readLine();
-			
+
 				//ping
 				output.write("?\r".getBytes());
 				//evacuation de l'acquittement
@@ -224,7 +224,7 @@ public class Serial implements SerialPortEventListener, Service
 			}
 			catch (Exception e)
 			{
-				e.printStackTrace();
+				log.critical(e.getMessage(), this);
 			}
 			return ping;
 		}
