@@ -34,6 +34,9 @@ public class Table implements Service
 	private ArrayList<ObstacleLinear> m_lines;
 	private ArrayList<ObstacleCircular> m_circles;
 	private ArrayList<ObstacleRectangular> m_rects;
+	private boolean isClap1Closed;
+	private boolean isClap2Closed;
+	private boolean isClap3Closed;
 	
 	public Table(Log log, Config config)
 	{
@@ -100,8 +103,39 @@ public class Table implements Service
 		m_circles.add(new ObstacleCircular(new Vec2(400, -750), rayonPlot));
 		m_circles.add(new ObstacleCircular(new Vec2(1410, -750), rayonPlot));
 		m_circles.add(new ObstacleCircular(new Vec2(1410, -850), rayonPlot));
+		
+		// Claps
+		
+		isClap1Closed=false;
+		isClap2Closed=false;
+		isClap3Closed=false;
+
 	}
 	
+	public boolean getIsClap1Closed() {
+		return isClap1Closed;
+	}
+
+	public void setIsClap1Closed(boolean isClap1Closed) {
+		this.isClap1Closed = isClap1Closed;
+	}
+
+	public boolean getIsClap2Closed() {
+		return isClap2Closed;
+	}
+
+	public void setIsClap2Closed(boolean isClap2Closed) {
+		this.isClap2Closed = isClap2Closed;
+	}
+
+	public boolean getIsClap3Closed() {
+		return isClap3Closed;
+	}
+
+	public void setIsClap3Closed(boolean isClap3Closed) {
+		this.isClap3Closed = isClap3Closed;
+	}
+
 	//La table
 	/**
 	 * La table en argument deviendra la copie de this (this reste inchangé)

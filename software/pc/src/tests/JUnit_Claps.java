@@ -1,27 +1,47 @@
 package tests;
 
-//Autho Théo + architecture Paul
+//@author Théo + architecture Paul
+
+import hook.types.HookGenerator;
 
 import org.junit.Before;
 import org.junit.Test;
+import pathdinding.Pathfinding;
 import exceptions.serial.SerialException;
+import robot.Robot;
 import robot.cards.ActuatorsManager;
 import robot.cards.Locomotion;
-import utils.Sleep;
+import scripts.CloseClap;
+import table.Table;
+
 
 
 public class JUnit_Claps extends JUnit_Test {
 	
 	Locomotion locomotion;
 	ActuatorsManager actionneurs;
+	Robot robot;
+	Table  table;
+	CloseClap scriptCloseClap;
+	Pathfinding pathfinding = new Pathfinding(table);
+	HookGenerator hookgenerator;
 	
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
 		locomotion = (Locomotion)container.getService("Deplacements");
 		actionneurs = (ActuatorsManager)container.getService("Actionneurs");
+		scriptCloseClap = new CloseClap (hookgenerator,config,log,pathfinding,robot, actionneurs, table);
 	}
 	
+	
+	public void test()
+	{
+		scriptCloseClap.execute(1);
+	}
+	
+	
+	{/* Premier jet du test, fonctionne 
 	@Test
 	public void test()
 	{
@@ -35,11 +55,11 @@ public class JUnit_Claps extends JUnit_Test {
 
 			
 			//A partir de la zone de depart
-			/*
-			 *		________
-			 * 		|		|
-			 * 		V
-			 */
+			///
+			 //		________
+			 // 		|		|
+			 // 		V
+			 //
 			actionneurs.lowLeftClap();
 			actionneurs.lowRightClap();
 			
@@ -116,6 +136,6 @@ public class JUnit_Claps extends JUnit_Test {
 			log.debug("erreur dans le texte serie",this);
 			e.printStackTrace();
 		}
-	}
+	}*/}
 
 }
