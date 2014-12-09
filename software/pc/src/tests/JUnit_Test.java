@@ -31,6 +31,4 @@ public abstract class JUnit_Test
 			e.printStackTrace();
 		}
 	}
-
-	
 }
