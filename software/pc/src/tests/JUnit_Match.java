@@ -9,12 +9,14 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import pathfinding.Pathfinding;
+import pathdinding.Pathfinding;
 import exceptions.Locomotion.UnableToMoveException;
+import robot.RobotReal;
 import robot.cards.ActuatorsManager;
 import robot.highlevel.LocomotionHiLevel;
 import scripts.DropCarpet;
 import scripts.ExitBeginZone;
+import table.Table;
 import utils.Sleep;
 
 
@@ -24,7 +26,9 @@ ActuatorsManager actionneurs;
 DropCarpet scriptCarpet;
 ExitBeginZone scriptOut;
 LocomotionHiLevel locomotion;
-Pathfinding pathfinding = new Pathfinding();
+Table table;
+Pathfinding pathfinding;
+RobotReal robot;
 HookGenerator hookgenerator;
 ArrayList<Hook> emptyHook = new ArrayList<Hook>();
 
@@ -36,19 +40,21 @@ public void setUp() throws Exception
 	actionneurs = (ActuatorsManager)container.getService("Actionneurs");
 	hookgenerator = (HookGenerator)container.getService("HookGenerator");
 	locomotion = (LocomotionHiLevel)container.getService("DeplacementsHautNiveau");
-	scriptCarpet = new DropCarpet(hookgenerator, config, log, pathfinding, locomotion, actionneurs);
-	scriptOut = new ExitBeginZone(hookgenerator, config, log, pathfinding, locomotion, actionneurs);
+	robot = (RobotReal)container.getService("RobotVrai");
+	table = (Table)container.getService("Table");
+	scriptCarpet = new DropCarpet(hookgenerator, config, log, pathfinding, robot, actionneurs, table);
+	scriptOut = new ExitBeginZone(hookgenerator, config, log, pathfinding, robot, actionneurs, table);
 	
 	//positionnement du robot
-	actionneurs.monterTapisDroit();
-	actionneurs.monterTapisGauche();
+	actionneurs.highRightCarpet();
+	actionneurs.highLeftCarpet();
 }
 
 @After
 public void tearDown() throws Exception 
 {
-	actionneurs.monterTapisDroit();
-	actionneurs.monterTapisGauche();
+	actionneurs.highRightCarpet();
+	actionneurs.highLeftCarpet();
 	
 }
 
