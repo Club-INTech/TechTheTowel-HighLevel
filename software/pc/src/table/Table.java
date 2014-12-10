@@ -24,27 +24,25 @@ import smartMath.*;
 /**
  * Stocke toute les informations liées a la table (muables et immuables) au cours d'un match.
  */
-@SuppressWarnings("unused")
 public class Table implements Service
 {
 	/** Le gestionnaire d'obstacle. */
 	public ObstacleManager mObstacleManager;
-
-<<<<<<< HEAD
-	public ObstacleManager gestionobstacles;
-
-	// Dépendances
-=======
+	
 	/** système de log sur lequel écrire. */
->>>>>>> refs/remotes/origin/refactor
 	private Log log;
 
 	/** endroit ou lire la configuration du robot */
 	private Config config;
+	
+	
 	private ArrayList<ObstacleLinear> m_lines;
 	private ArrayList<ObstacleCircular> m_circles;
 	private ArrayList<ObstacleRectangular> m_rects;
 
+	
+	// TODO: doc
+	
 	private boolean isClap1Closed;
 	private boolean isClap2Closed;
 	private boolean isClap3Closed;
@@ -62,8 +60,7 @@ public class Table implements Service
 	{
 		this.log = log;
 		this.config = config;
-<<<<<<< HEAD
-		this.gestionobstacles = new ObstacleManager(log, config);
+		this.mObstacleManager = new ObstacleManager(log, config);
 		initialise();
 	}
 	
@@ -172,8 +169,8 @@ public class Table implements Service
         	// TODO: faire grande optimisation de ceci a grand coup de hashs
         	
         	
-			if(!gestionobstacles.equals(ct.gestionobstacles))
-			    gestionobstacles.copy(ct.gestionobstacles);
+			if(!mObstacleManager.equals(ct.mObstacleManager))
+				mObstacleManager.copy(ct.mObstacleManager);
 		}
 	}
 	
@@ -183,27 +180,7 @@ public class Table implements Service
 		copy(cloned_table);
 		return cloned_table;
 	}
-
-	/**
-	 * Utilisé pour les tests
-	 * @param other
-	 * @return
-	 */
-	public boolean equals(Table other)
-	{
-		return 	false; //TODO
- 	}
-
-	@Override
-	public void updateConfig() {
-		// TODO Auto-generated method stub
-=======
-		this.mObstacleManager = new ObstacleManager(log, config);
->>>>>>> refs/remotes/origin/refactor
-		
-	}
 	
-<<<<<<< HEAD
 	//accesseurs
 	
 	public ArrayList<ObstacleLinear> getLines()
@@ -232,7 +209,6 @@ public class Table implements Service
       {
       	isRightCarpetDropped=newValue;
       }
-=======
 	/**
 	 * Compare deux tables et indique si elles sont égales.
 	 * Utilisé pour les tests.
@@ -254,6 +230,5 @@ public class Table implements Service
 		// TODO Auto-generated method stub
 		
 	}
->>>>>>> refs/remotes/origin/refactor
 }
 

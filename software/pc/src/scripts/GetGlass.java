@@ -1,25 +1,25 @@
 package scripts;
 
-import hook.types.HookGenerator;
-import pathDingDing.PathDingDing;
+import exceptions.Locomotion.UnableToMoveException;
+import exceptions.serial.SerialConnexionException;
+import hook.types.HookFactory;
 import robot.Robot;
-import robot.cards.ActuatorsManager;
 import smartMath.Vec2;
 import strategie.GameState;
-import table.Table;
 import utils.Config;
 import utils.Log;
 
 public class GetGlass extends AbstractScript 
 {
 
-	public GetGlass(HookGenerator hookgenerator, Config config, Log log, PathDingDing pathfinding, Robot robot, ActuatorsManager move, Table table) 
+	public GetGlass(HookFactory hookFactory, Config config, Log log) 
 	{
-		super(hookgenerator, config, log, pathfinding, robot, move, table);
-		// TODO le tableau des versions
+		super(hookFactory, config, log);
+		
+		//TODO: tableau des versions
 	}
 	
-	public void execute (int id_version) 
+	public void execute (int id_version, GameState<Robot> stateToConsider, boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException
 	{
 		//TODO le script en lui meme
 		//on se tourne vers le goblet
@@ -35,7 +35,7 @@ public class GetGlass extends AbstractScript
 	}
 
 	@Override
-	public Vec2 point_entree(int id) 
+	public Vec2 entryPosition(int id)
 	{
 		//TODO les cinq ? versions
 		// TODO un cercle autour du goblet
@@ -43,7 +43,7 @@ public class GetGlass extends AbstractScript
 	}
 
 	@Override
-	public int score(int id_version, GameState<?> state) 
+	public int remainingScoreOfVersion(int id_version, GameState<?> state) 
 	{
 		//TODO si le robot est pein a droite et a gauche (on attends les capteurs de sylvain)
 		//if (robot.fullRight) 
@@ -57,7 +57,7 @@ public class GetGlass extends AbstractScript
 	}
 
 	@Override
-	protected void termine(GameState<?> state) 
+	protected void finalise(GameState<?> state) 
 	{
 		// TODO fermer (ouvrir ?) le bras gauche et droit 
 	}

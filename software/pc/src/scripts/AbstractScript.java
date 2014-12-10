@@ -92,13 +92,17 @@ public abstract class AbstractScript implements Service
 	 * @return la position du point d'entrée
 	 */
 	public abstract Vec2 entryPosition(int version);
+	
 	/**
 	 * Méthode toujours appelée à la fin du script via un finally. On des donc certain  que son exécution aura lieu.
 	 * Le repli des actionneurs lors de la fin du script a sa place ici et pas ailleurs: si un bras reste déployé en cours de match, il risque de se faire arracher !  
+	 * Ainsi, les exceptions lancés par cette méthodes sont les plus critiques que l'on peut imaginer: elles préviennent qu'on peut casser la méca si on ne réagit pas bien !
 	 *
 	 * @param state Etat du jeu au sein duquel il faut finaliser le script
+	 * @throws UnableToMoveException losrque le robot veut se déplacer et que quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
+	 * @throws SerialConnexionException s'il y a un problème de communication avec une des cartes électroniques
 	 */
-	abstract protected void finalise(GameState<?> state);
+	abstract protected void finalise(GameState<?> state) throws UnableToMoveException, SerialConnexionException;
 	
 	/* (non-Javadoc)
 	 * @see container.Service#updateConfig()

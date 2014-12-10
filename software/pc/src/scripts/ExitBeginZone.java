@@ -1,58 +1,61 @@
 package scripts;
 
 import hook.Hook;
-import hook.types.HookGenerator;
+import hook.types.HookFactory;
 
 import java.util.ArrayList;
 
-import pathDingDing.PathDingDing;
 import exceptions.Locomotion.UnableToMoveException;
+import exceptions.serial.SerialConnexionException;
 import robot.Robot;
-import robot.cards.ActuatorsManager;
 import smartMath.Vec2;
 import strategie.GameState;
-import table.Table;
 import utils.Config;
 import utils.Log;
 
 /**
- * 
+ * script pour sortir de la zone de depart. a executer imperativement et uniquement au depart
  * @author paul
- *script pour sortir de la zone de depart. a executer imperativement et uniquement au depart
  */
-public class ExitBeginZone extends AbstractScript {
+public class ExitBeginZone extends AbstractScript
+{
 
 	int distanceToExit=450;
 	ArrayList<Hook> emptyHook = new ArrayList<Hook>();
 	
-	public ExitBeginZone(HookGenerator hookgenerator, Config config, Log log, PathDingDing pathfinding, Robot robot, ActuatorsManager move, Table table) 
+	public ExitBeginZone(HookFactory hookFactory, Config config, Log log) 
 	{
-		super(hookgenerator, config, log, pathfinding, robot, move,table);
+		super(hookFactory, config, log);
 	}
 
 	@Override
-	public Vec2 point_entree(int id) {
-		return new Vec2(1340,1000);//point de depart du match a modifier a chaque base roulante
+	public Vec2 entryPosition(int id)
+	{
+		// point de depart du match a modifier a chaque base roulante
+		return new Vec2(1340,1000);
 	}
 	
 	@Override
-	public void execute (int id_version)
+	public void execute (int id_version, GameState<Robot> stateToConsider, boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException
 	{
-		try {
-			robot.avancer(distanceToExit,emptyHook,true);
-		} catch (UnableToMoveException e) {
+		try
+		{
+			stateToConsider.robot.moveLengthwise(distanceToExit);
+		}
+		catch (UnableToMoveException e)
+		{
 			log.debug("erreur ExitBeginZone script : impossible de sortir de la zone de depart\n", this);
 		}
 	}
 
 	@Override
-	public int score(int id_version, GameState<?> state) 
+	public int remainingScoreOfVersion(int id_version, GameState<?> state) 
 	{		
 		return 0;
 	}
 
 	@Override
-	protected void termine(GameState<?> state) 
+	protected void finalise(GameState<?> state) 
 	{
 		//abwa ?
 	}

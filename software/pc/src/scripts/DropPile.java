@@ -2,26 +2,18 @@ package scripts;
 
 import java.util.ArrayList;
 
-import pathDingDing.PathDingDing;
 import enums.ActuatorOrder;
-import exceptions.ScriptException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
-import hook.Hook;
 import hook.types.HookFactory;
-import hook.types.HookGenerator;
 import robot.Robot;
-import robot.RobotReal;
-import robot.cards.ActuatorsManager;
-import robot.highlevel.LocomotionHiLevel;
 import smartMath.Vec2;
 import strategie.GameState;
-import table.Table;
 import utils.Config;
 import utils.Log;
 
 
-//TODO: Doc
+//TODO: Doc ( notamment, expliquer ce que sont les différentes versions
 /**
  * 
  * @author ???
@@ -43,9 +35,9 @@ public class DropPile extends AbstractScript
 	}
 
 	@Override
-	protected void execute(int id_version, GameState<Robot> stateToConsider, boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException
+	protected void execute(int version, GameState<Robot> stateToConsider, boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException
 	{
-		if (id_version==1)
+		if (version==1)
 		{
 			stateToConsider.robot.turn(Math.PI/2.0);
 			stateToConsider.robot.moveLengthwise(100);
@@ -58,13 +50,13 @@ public class DropPile extends AbstractScript
 			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);	
 			stateToConsider.robot.moveLengthwise(-80);
 		}
-		else if (id_version==2)
+		else if (version==2)
 		{
-			
+			// TODO: version 2
 		}
 		else
 		{
-			
+			// TODO: version ?
 		}
 	}
 	
@@ -88,18 +80,19 @@ public class DropPile extends AbstractScript
 	}
 
 	@Override
-	public int remainingScoreOfVersion(int id_version, GameState<?> stateToConsider)
+	public int remainingScoreOfVersion(int version, GameState<?> stateToConsider)
 	{
-		return 5*stateToConsider.robot.getPlotCounter();
+		return 5*(8 -stateToConsider.robot.getStoredPlotCount());
 	}
 
 	@Override
-	protected void finalise(GameState<?> state) 
+	protected void finalise(GameState<?> stateToConsider) throws SerialConnexionException, UnableToMoveException
 	{
-		fermerMachoire();
-		robot.avancer(-20, emptyHook, true);
-		baisserAscenseur();
-		fermerGuide();
+
+		stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, false);
+		stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);	
+		stateToConsider.robot.moveLengthwise(-20);
+		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
 	}
 
 }

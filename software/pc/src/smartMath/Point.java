@@ -7,6 +7,9 @@ package smartMath;
  */
 public class Point
 {
+	//TODO: doc
+	
+	
 	public double x;
 	public double y;
 	

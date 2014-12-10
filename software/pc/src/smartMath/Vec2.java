@@ -9,7 +9,6 @@
 
 package smartMath;
 
-// TODO: Auto-generated Javadoc
 /**
  * Classe de calcul de vecteurs de dimension 2.
  *

@@ -176,6 +176,7 @@ public class Container
                                                              	);
 		else if(serviceRequested == ServiceNames.SCRIPT_MANAGER)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new ScriptManager(
+																	(HookFactory)getService(ServiceNames.HOOK_FACTORY),
 																	(Config)getService(ServiceNames.CONFIG),
 																	(Log)getService(ServiceNames.LOG)
 																);

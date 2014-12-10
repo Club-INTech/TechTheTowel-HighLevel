@@ -2,19 +2,12 @@ package threads;
 
 import java.util.Hashtable;
 
-<<<<<<< HEAD
-import robot.cards.ActuatorsManager;
-import robot.cards.Sensors;
-import robot.cards.Locomotion;
-//import robot.cards.laser.LaserFiltration;
-//import robot.cards.laser.Laser;
-=======
+
 import robot.cards.laser.LaserFiltration;
 import robot.cards.laser.LaserCardWrapper;
 import robot.cardsWrappers.ActuatorCardWrapper;
 import robot.cardsWrappers.LocomotionCardWrapper;
 import robot.cardsWrappers.SensorsCardWrapper;
->>>>>>> refs/remotes/origin/refactor
 import table.Table;
 import utils.Log;
 import utils.Config;
@@ -61,7 +54,7 @@ public class ThreadManager
 	 * @param table La table a l'intérieure de laquelle le thread doit croire évoluer
 	 * @param sensorsCardWrapper La carte capteurs avec laquelle le thread va parler
 	 * @param locomotionCardWrapper La carte d'asservissements avec laquelle le thread va parler
-	 * @param sensorsCardWrapper La carte capteurs avec laquelle le thread va parler
+	 * @param actuatorCardWrapper La carte actionneurs avec laquelle le thread va parler
 	 * @return le thread timer
 	 */
 	public AbstractThread getThreadTimer(Table table, SensorsCardWrapper sensorsCardWrapper, LocomotionCardWrapper locomotionCardWrapper, ActuatorCardWrapper actuatorCardWrapper)
@@ -88,9 +81,6 @@ public class ThreadManager
 		return instanciedThreads.get("threadCapteurs");
 	}
 
-<<<<<<< HEAD
-/*	public AbstractThread getThreadLaser(Laser laser, Table table, LaserFiltration filtragelaser)
-=======
 	/**
 	 * Renvois le thread laser.
 	 * L'instancie si c'est la première fois qu'on le demande.
@@ -101,19 +91,12 @@ public class ThreadManager
 	 * @return le thread laser
 	 */
 	public AbstractThread getThreadLaser(LaserCardWrapper laserCardWrapper, Table table, LaserFiltration laserFiltration)
->>>>>>> refs/remotes/origin/refactor
 	{
 		AbstractThread thread = instanciedThreads.get("threadLaser");
 		if(thread == null)
-<<<<<<< HEAD
-			threads.put("threadLaser", new ThreadLaser(laser, table, filtragelaser));
-		return threads.get("threadLaser");
-	}*/
-=======
 			instanciedThreads.put("threadLaser", new ThreadLaser(laserCardWrapper, table, laserFiltration));
 		return instanciedThreads.get("threadLaser");
 	}
->>>>>>> refs/remotes/origin/refactor
 
 	/**
 	 * Démarre tout les threads instanciés auparavant.

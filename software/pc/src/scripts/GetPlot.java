@@ -1,26 +1,26 @@
 package scripts;
 
-import exceptions.serial.SerialException;
-import hook.types.HookGenerator;
-import pathDingDing.PathDingDing;
+import enums.ActuatorOrder;
+import exceptions.Locomotion.UnableToMoveException;
+import exceptions.serial.SerialConnexionException;
+import hook.types.HookFactory;
 import robot.Robot;
-import robot.cards.ActuatorsManager;
-import robot.highlevel.LocomotionHiLevel;
 import smartMath.Vec2;
 import strategie.GameState;
-import table.Table;
 import utils.Config;
 import utils.Log;
 
-public class GetPlot extends AbstractScript {
+public class GetPlot extends AbstractScript
+{
 
-	public GetPlot(HookGenerator hookgenerator, Config config, Log log,	PathDingDing pathfinding, Robot robot, ActuatorsManager move,Table table) 
+	public GetPlot(HookFactory hookFactory, Config config, Log log) 
 	{
-		super(hookgenerator, config, log, pathfinding, robot, move, table);
-		// TODO le tableau des versions
+		super(hookFactory, config, log);
+		
+		//TODO: tableau des versions
 	}
 	
-	public void execute (int id_version) 
+	public void execute (int id_version, GameState<Robot> stateToConsider, boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException
 	{
 		//TODO le script en lui meme
 		
@@ -56,7 +56,7 @@ public class GetPlot extends AbstractScript {
 	}
 
 	@Override
-	public Vec2 point_entree(int id) 
+	public Vec2 entryPosition(int id)
 	{
 		//le cercle autour des plots
 		//calcul des poins d'entree sur les deux versions non-circulaires
@@ -64,7 +64,7 @@ public class GetPlot extends AbstractScript {
 	}
 
 	@Override
-	public int score(int id_version, GameState<?> state) 
+	public int remainingScoreOfVersion(int id_version, GameState<?> state) 
 	{
 		//version circulaire
 		//si la pile est pas de 4 plots
@@ -77,36 +77,38 @@ public class GetPlot extends AbstractScript {
 	}
 
 	@Override
-	protected void termine(GameState<?> state) 
+	protected void finalise(GameState<?> state) 
 	{
 		//ouvrir les deux bras
 		//fermer les machoires
 		//baisser l'elevateur ?
 	}
+	
 	/**
 	 * mangeage de plots, essaie a nouveau si il est impossible de manger 
 	 * ne se deplace pas
 	 * 
 	 * @param isSecondTry vrai si l'essai de mangeage de plot est le deuxieme
 	 * @param isArmChosenLeft vrai si on mange avec le bras droit
-	 * @param locomotion le deplacement haut niveau
-	 * @param move les actionneurs
+	 * 
 	 * @throws SerialException
 	 */
-	private void EatPlot (boolean isSecondTry, boolean isArmChosenLeft, LocomotionHiLevel locomotion, ActuatorsManager move) throws SerialException
+	private void EatPlot (boolean isSecondTry, boolean isArmChosenLeft, GameState<Robot> stateToConsider) throws SerialConnexionException
 	{
-		move.openJaw();
+		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
 		if (isArmChosenLeft) 
 		{
-			move.closeLowLeftArm();
-			move.openLeftArm();
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);
 		}
 		else
 		{
-			move.closeLowRightArm();
-			move.openRightArm();
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);
 		}
-		move.closeJaw();
+		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, false);
 		//si on a attrape qqc on termine sinon on essaie avec l'autre bras (si isSecondTry == false)
 		//si deuxieme essai ecrire dans le log qu'on a essaye de manger un plot et on jette une exeption impossible de manger
 	}
