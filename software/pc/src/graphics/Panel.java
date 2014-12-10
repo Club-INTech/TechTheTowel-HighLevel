@@ -11,7 +11,7 @@ import table.Table;
 import smartMath.Vec2;
 
 /**
- * affichage
+ * panneau sur lequel est dessine la table
  * @author Etienne
  *
  */
@@ -35,6 +35,11 @@ public class Panel extends JPanel
 	    for(int i = 0; i+1 < m_path.size(); i++)
 	    {
 	    	g.drawLine((m_path.get(i).x + 1500) * this.getWidth() / 3000, -m_path.get(i).y * this.getHeight() / 2000 + this.getHeight(), (m_path.get(i+1).x + 1500) * this.getWidth() / 3000, -m_path.get(i+1).y * this.getHeight() / 2000 + this.getHeight());
+	    }
+	    g.setColor(Color.red);
+	    for(int i = 0; i < m_path.size(); i++)
+	    {
+	    	g.drawString(m_path.get(i).x + ", " + m_path.get(i).y, (m_path.get(i).x + 1500) * this.getWidth() / 3000, -m_path.get(i).y * this.getHeight() / 2000 + this.getHeight());
 	    }
 	}
 	

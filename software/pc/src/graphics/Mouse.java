@@ -24,15 +24,15 @@ public class Mouse implements MouseListener
     {
         if (e.getButton()==MouseEvent.BUTTON1)
         {
-        	m_fen.refresh();
+        	m_fen.getPanel().repaint();
         }
         if (e.getButton()==MouseEvent.BUTTON2)
         {
-        	m_fen.refresh();
+        	m_fen.getPanel().repaint();
         }
         if (e.getButton()==MouseEvent.BUTTON3)
         {
-        	m_fen.refresh();
+        	m_fen.getPanel().repaint();
         }
     }
 

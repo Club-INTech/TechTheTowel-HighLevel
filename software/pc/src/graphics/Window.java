@@ -6,7 +6,7 @@ import table.Table;
 import smartMath.Vec2;
 
 /**
- * affichage
+ * interface graphique de debugage
  * @author Etienne
  *
  */
@@ -27,11 +27,10 @@ public class Window extends JFrame
 	    addMouseListener(new Mouse(this));
 	}
 	
-	public void refresh()
-	{
-		m_panel.repaint();
-	}
-	
+	/**
+	 * 
+	 * @return le panneau
+	 */
 	public Panel getPanel()
 	{
 		return m_panel;
