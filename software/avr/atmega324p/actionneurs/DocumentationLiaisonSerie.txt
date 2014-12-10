@@ -70,3 +70,13 @@ cdb		clap droit en position basse
 cgh		clap gauche en position haute
 cgm		clap gauche en position médiane
 cgb		clap gauche en position basse
+
+
+Obtention de l'état des capteurs
+La carte répont via la série, à la requête du haut niveau.
+
+requête	description			réponse
+j		état du jumper		O = jumper en place (robot arrêté, si vous n'êtes pas des singes)
+							1 = pas de jumper (là il faut que le robot démarre !)
+
+

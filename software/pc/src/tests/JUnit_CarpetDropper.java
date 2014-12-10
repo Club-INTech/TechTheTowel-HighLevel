@@ -11,10 +11,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import pathfinding.Pathfinding;
+import pathdinding.Pathfinding;
+import robot.RobotReal;
 import robot.cards.ActuatorsManager;
 import robot.highlevel.LocomotionHiLevel;
 import scripts.DropCarpet;
+import table.Table;
 /**
  * test pour le script du depose tapis 
  * on suppose que le robot est place en (261,1410)
@@ -27,8 +29,14 @@ public class JUnit_CarpetDropper extends JUnit_Test
 	ActuatorsManager actionneurs;
 	DropCarpet scriptCarpet;
 	LocomotionHiLevel locomotion;
+<<<<<<< HEAD
 	PathDingDing pathfinding = new PathDingDing();
+=======
+	Table table;
+	Pathfinding pathfinding;
+>>>>>>> branch 'master' of gitosis@git.club-intech.fr:intech-2015.git
 	HookGenerator hookgenerator;
+	RobotReal robot;
 
 	@Before
 	public void setUp() throws Exception 
@@ -38,13 +46,16 @@ public class JUnit_CarpetDropper extends JUnit_Test
 		actionneurs = (ActuatorsManager)container.getService("Actionneurs");
 		hookgenerator = (HookGenerator)container.getService("HookGenerator");
 		locomotion = (LocomotionHiLevel)container.getService("DeplacementsHautNiveau");
-		scriptCarpet = new DropCarpet(hookgenerator, config, log, pathfinding, locomotion, actionneurs);
+		table = (Table)container.getService("Table");
+		robot = (RobotReal)container.getService("RobotVrai");
+		pathfinding = new Pathfinding(table);
+		scriptCarpet = new DropCarpet(hookgenerator, config, log, pathfinding, robot , actionneurs, table);
 		ArrayList<Hook>emptyHook = new ArrayList<Hook>();
 		
 		//positionnement du robot
-		actionneurs.monterTapisDroit();
-		actionneurs.monterTapisGauche();
-		locomotion.avancer(scriptCarpet.getDistance(), emptyHook, false);
+		actionneurs.highRightCarpet();
+		actionneurs.highLeftCarpet();
+		robot.avancer(scriptCarpet.getDistance(), emptyHook, false);
 		Random rand = new Random();
 		locomotion.tourner(rand.nextDouble(), emptyHook, false);
 	}
@@ -52,8 +63,8 @@ public class JUnit_CarpetDropper extends JUnit_Test
 	@After
 	public void tearDown() throws Exception 
 	{
-		actionneurs.monterTapisDroit();
-		actionneurs.monterTapisGauche();
+		actionneurs.highRightCarpet();
+		actionneurs.highLeftCarpet();
 		//le robot reste sur place donc il est bien positionné pour le prochain test
 	}
 

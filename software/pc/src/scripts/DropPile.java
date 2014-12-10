@@ -88,7 +88,6 @@ public class DropPile extends AbstractScript
 	@Override
 	protected void finalise(GameState<?> stateToConsider) throws SerialConnexionException, UnableToMoveException
 	{
-
 		stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, false);
 		stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);	
 		stateToConsider.robot.moveLengthwise(-20);

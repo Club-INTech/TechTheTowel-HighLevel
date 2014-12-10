@@ -13,7 +13,7 @@
 #define bdFerme 203
 #define mgOuvert 240
 #define mgFerme 65
-#define mdOuvert 0 //a mettre a jour
+#define mdOuvert 0 //a mettre à jour
 #define mdFerme 145
 #define tdPose 211
 #define tdRange 150
@@ -89,7 +89,7 @@ public :											//constructeur
 
  	void execute (char ordre[])
 	{
- 		if (strcmp (ordre , "?") == 0)					// L'ID du code est ascenseur
+ 		if (strcmp (ordre , "?") == 0)					// L'ID de la carte est 3
 		{
 			serial_pc::printfln ("3");
 		}
@@ -243,6 +243,12 @@ public :											//constructeur
 		else if (strcmp (ordre , "mb") == 0)			// basculer sens treuil
 		{
 			B3::toggle();
+		}
+
+ 		/// REPONSE AUX REQUETES DU HAUT NIVEAU
+		else if (strcmp (ordre , "j") == 0)				// état du jumper
+		{
+			serial_pc::print(D7::read());
 		}
 
 	}
