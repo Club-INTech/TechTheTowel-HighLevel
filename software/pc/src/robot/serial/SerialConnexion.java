@@ -167,6 +167,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 			{
 				for (String m : messages)
 				{
+					System.out.println(m);
 					m += "\r";
 					output.write(m.getBytes());
 					int nb_tests = 0;

@@ -116,11 +116,11 @@ public class RobotChrono extends Robot
 	{
 		// va sucessivement a tout les points
 		for(Vec2 point: path)
-			moveToLocation(point);
+			moveToLocation(point, hooksToConsider);
 	}
 	
 	@Override
-	public void moveToLocation(Vec2 point)
+	public void moveToLocation(Vec2 point, ArrayList<Hook> hooksToConsider)
 	{
 		// symétrise la table si l'on est équipe jaune
 		if(symmetry)

@@ -315,7 +315,6 @@ public class Locomotion implements Service
         boolean marche_arriere = delta.dot(orientationVec) > 0;
 		*/
 		
-		
 		// fais le déplacement
 		moveInDirectionExeptionHandler(hooksToConsider, false, distance < 0, expectsWallImpact);
 
@@ -605,7 +604,9 @@ public class Locomotion implements Service
 		displacement.minus(position);
 		
 		// ajuste le déplacement par le correcteur de Deboc si la configuration du match le demande
-        if(config.getProperty("debocIntegralCorrectionBehavior") == "default")
+		
+//on retire le facteur de deboc
+/*      if(config.getProperty("debocIntegralCorrectionBehavior") == "default")
         {
         	// valeur de la correction de deboc
         	float debocFactor = mLocomotionCardWrapper.getTranslationnalDebocFactor();
@@ -618,7 +619,7 @@ public class Locomotion implements Service
         	displacement.x *= debocFactor;
         	displacement.y *= debocFactor;
         }
-		
+*/		
 		// le robot doit avancer d'une distance égale a la longeur du vecteur délacement
 		double distance = displacement.length();
 		

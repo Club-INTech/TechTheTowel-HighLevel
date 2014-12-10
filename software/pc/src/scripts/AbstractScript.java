@@ -1,12 +1,16 @@
 package scripts;
 
+import java.util.ArrayList;
+
 import smartMath.Vec2;
 import strategie.GameState;
 import robot.Robot;
 import utils.Log;
 import utils.Config;
 import container.Service;
+import hook.Hook;
 import hook.types.HookFactory;
+import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 
@@ -53,11 +57,12 @@ public abstract class AbstractScript implements Service
 	 * @param shouldRetryIfBlocked vrai si le robot doit renter le script s'il bloque mécaniquement
 	 * @throws UnableToMoveException losrque le robot veut se déplacer et que quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
 	 * @throws SerialConnexionException s'il y a un problème de communication avec une des cartes électroniques
+	 * @throws BlockedException si le pathfinding ne trouve pas de chemin
 	 */
-	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
+	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, boolean shouldRetryIfBlocked, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, BlockedException
 	{
 		// va jusqu'au point d'entrée de la version demandée
-		actualState.robot.moveToLocation(entryPosition(versionToExecute));
+		actualState.robot.moveToLocation(entryPosition(versionToExecute), hooksToConsider);
 		
 		// exécute la version demandée
 		execute(versionToExecute, actualState, shouldRetryIfBlocked);

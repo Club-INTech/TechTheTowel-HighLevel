@@ -5,17 +5,23 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import hook.Hook;
-import hook.types.HookGenerator;
+import hook.types.HookFactory;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import pathdinding.Pathfinding;
+import enums.ActuatorOrder;
+import enums.ServiceNames;
+import exceptions.Locomotion.BlockedException;
+import exceptions.Locomotion.UnableToMoveException;
+import exceptions.serial.SerialConnexionException;
+import pathDingDing.PathDingDing;
+import robot.Robot;
 import robot.RobotReal;
-import robot.cards.ActuatorsManager;
-import robot.highlevel.LocomotionHiLevel;
 import scripts.DropCarpet;
+import smartMath.Vec2;
+import strategie.GameState;
 import table.Table;
 /**
  * test pour le script du depose tapis 
@@ -25,46 +31,44 @@ import table.Table;
  */
 public class JUnit_CarpetDropper extends JUnit_Test
 {
-	
-	ActuatorsManager actionneurs;
 	DropCarpet scriptCarpet;
-	LocomotionHiLevel locomotion;
-<<<<<<< HEAD
-	PathDingDing pathfinding = new PathDingDing();
-=======
-	Table table;
-	Pathfinding pathfinding;
->>>>>>> branch 'master' of gitosis@git.club-intech.fr:intech-2015.git
-	HookGenerator hookgenerator;
 	RobotReal robot;
+	Table table;
+	PathDingDing pathfinding;
+	HookFactory hookFactory;
+	GameState<Robot> game;
+	ArrayList<Hook> emptyHook = new ArrayList<Hook>();
 
+	@SuppressWarnings("unchecked")
 	@Before
 	public void setUp() throws Exception 
 	{
 		//creation des objets pour le test
 		super.setUp();                                                                                                                                 
-		actionneurs = (ActuatorsManager)container.getService("Actionneurs");
-		hookgenerator = (HookGenerator)container.getService("HookGenerator");
-		locomotion = (LocomotionHiLevel)container.getService("DeplacementsHautNiveau");
-		table = (Table)container.getService("Table");
-		robot = (RobotReal)container.getService("RobotVrai");
-		pathfinding = new Pathfinding(table);
-		scriptCarpet = new DropCarpet(hookgenerator, config, log, pathfinding, robot , actionneurs, table);
-		ArrayList<Hook>emptyHook = new ArrayList<Hook>();
+		table = (Table)container.getService(ServiceNames.TABLE);
+		robot = (RobotReal)container.getService(ServiceNames.ROBOT_REAL);
+		hookFactory = (HookFactory)container.getService(ServiceNames.HOOK_FACTORY);
+		pathfinding = new PathDingDing(table);
+		scriptCarpet = new DropCarpet(hookFactory, config, log);
+		game = (GameState<Robot>)container.getService(ServiceNames.GAME_STATE);
+		
+		//position initiale du robot
+		robot.setPosition(new Vec2(1500-71-48,1000));
 		
 		//positionnement du robot
-		actionneurs.highRightCarpet();
-		actionneurs.highLeftCarpet();
-		robot.avancer(scriptCarpet.getDistance(), emptyHook, false);
+		robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP,false);
+		robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP,true);
+		robot.moveLengthwise(1000);
 		Random rand = new Random();
-		locomotion.tourner(rand.nextDouble(), emptyHook, false);
+		robot.turn(rand.nextDouble());
+		
 	}
 
 	@After
 	public void tearDown() throws Exception 
 	{
-		actionneurs.highRightCarpet();
-		actionneurs.highLeftCarpet();
+		robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP,false);
+		robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP,true);
 		//le robot reste sur place donc il est bien positionné pour le prochain test
 	}
 
@@ -72,7 +76,14 @@ public class JUnit_CarpetDropper extends JUnit_Test
 	public void test() 
 	{
 		log.debug("debut du depose tapis", this);
-		scriptCarpet.execute(0);
+		try 
+		{
+			scriptCarpet.goToThenExec(1, game, false, emptyHook);
+		} 
+			catch (UnableToMoveException | BlockedException | SerialConnexionException e) 
+		{
+			e.printStackTrace();
+		}
 
 		log.debug("fin du depose tapis", this);
 	}
