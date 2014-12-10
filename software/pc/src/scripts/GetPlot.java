@@ -12,8 +12,7 @@ import utils.Log;
 
 public class GetPlot extends AbstractScript
 {
-	//TODO: doc
-	
+	//TODO: doc	
 	private int timeLowClose=1000; //TODO calculer les valeurs
 	private int timeCloseJaw=1000;
 	private int TimeOpenArm=800;
