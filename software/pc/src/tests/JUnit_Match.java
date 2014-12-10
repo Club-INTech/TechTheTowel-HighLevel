@@ -24,7 +24,7 @@ ActuatorsManager actionneurs;
 DropCarpet scriptCarpet;
 ExitBeginZone scriptOut;
 LocomotionHiLevel locomotion;
-Pathfinding pathfinding = new Pathfinding();
+PathDingDing pathfinding = new PathDingDing();
 HookGenerator hookgenerator;
 ArrayList<Hook> emptyHook = new ArrayList<Hook>();
 

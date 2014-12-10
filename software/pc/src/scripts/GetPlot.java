@@ -2,7 +2,7 @@ package scripts;
 
 import exceptions.serial.SerialException;
 import hook.types.HookGenerator;
-import pathdinding.Pathfinding;
+import pathDingDing.PathDingDing;
 import robot.Robot;
 import robot.cards.ActuatorsManager;
 import robot.highlevel.LocomotionHiLevel;
@@ -12,9 +12,9 @@ import table.Table;
 import utils.Config;
 import utils.Log;
 
-public class GetPlot extends Script {
+public class GetPlot extends AbstractScript {
 
-	public GetPlot(HookGenerator hookgenerator, Config config, Log log,	Pathfinding pathfinding, Robot robot, ActuatorsManager move,Table table) 
+	public GetPlot(HookGenerator hookgenerator, Config config, Log log,	PathDingDing pathfinding, Robot robot, ActuatorsManager move,Table table) 
 	{
 		super(hookgenerator, config, log, pathfinding, robot, move, table);
 		// TODO le tableau des versions

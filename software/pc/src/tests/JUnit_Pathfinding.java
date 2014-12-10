@@ -2,13 +2,15 @@ package tests;
 
 import org.junit.*;
 
-import pathdinding.Pathfinding;
+import pathDingDing.PathDingDing;
 import container.Container;
 import table.Table;
 import smartMath.Point;
 import smartMath.Vec2;
 import smartMath.Path;
+
 import java.util.ArrayList;
+
 import exceptions.Locomotion.BlockedException;
 
 public class JUnit_Pathfinding extends JUnit_Test
@@ -23,7 +25,7 @@ public class JUnit_Pathfinding extends JUnit_Test
     @Test
     public void testIntersection() throws Exception
     {
-    	if( !Pathfinding.intersects(new Point(0, 0), new Point(1, 1), new Point(0, 1), new Point(1, 0)) )
+    	if( !PathDingDing.intersects(new Point(0, 0), new Point(1, 1), new Point(0, 1), new Point(1, 0)) )
     		Assert.fail();
     }
     
@@ -32,7 +34,7 @@ public class JUnit_Pathfinding extends JUnit_Test
     public void testPF1() throws Exception
     {
     	Container cont = new Container();
-    	Pathfinding pf = new Pathfinding((Table)cont.getService("Table"));
+    	PathDingDing pf = new PathDingDing((Table)cont.getService("Table"));
     	ArrayList<Vec2> path = new ArrayList<Vec2>();
     	try
     	{

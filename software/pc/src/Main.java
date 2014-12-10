@@ -1,26 +1,21 @@
-//import hook.sortes.HookGenerator;
-
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 
-//import org.junit.runner.JUnitCore;
-
-
-
-
-
+import robot.Locomotion;
 import robot.RobotReal;
-import robot.cards.Sensors;
-import robot.cards.Locomotion;
-import robot.highlevel.LocomotionHiLevel;
+import robot.cardsWrappers.LocomotionCardWrapper;
+import robot.cardsWrappers.SensorsCardWrapper;
 import scripts.ScriptManager;
 import strategie.GameState;
 import threads.ThreadTimer;
-//import tests.JUnit_StrategieThreadTest;
-//import sun.rmi.runtime.Log;
-//import threads.ThreadTimer;
 import utils.Config;
 import container.Container;
+import enums.ActuatorOrder;
+import enums.ServiceNames;
+import exceptions.ContainerException;
+import exceptions.Locomotion.UnableToMoveException;
+import exceptions.serial.SerialManagerException;
 
 
 /**
@@ -28,79 +23,82 @@ import container.Container;
  * @author marsu
  *
  */
-
+// TODO: refactor
 public class Main
 {
 	static Container container;
 	static Config config;
 	static GameState<RobotReal> real_state;
 	static ScriptManager scriptmanager;
-	static LocomotionHiLevel deplacements;
-	static Locomotion dep;
-	static Sensors capteurs;
+	static Locomotion deplacements;
+	static LocomotionCardWrapper dep;
+	static SensorsCardWrapper capteurs;
 	static boolean doitFaireDepartRapide;
 	
 	
-// dans la config de debut de match, toujours demandé une entrée clavier assez longue (ex "oui" au lieu de "o", pour éviter les fautes de frappes. Une erreur a ce stade coûte cher.
+// dans la config de debut de match, toujours demander une entrée clavier assez longue (ex "oui" au lieu de "o", pour éviter les fautes de frappes. Une erreur a ce stade coûte cher.
 	
 	/**
-	 * TODO doc
-	 * @param args
-	 * @throws Exception
+	 * Point d'entrée du programme. C'est ici que le code commence par être exécuté 
+	 * @param args chaine de caractère des arguments de la ligne de commande
+	 * @throws Exception TODO : quels sont les exeptions lancés ?
 	 */
 	@SuppressWarnings("unchecked")
-	public static void main(String[] args) throws Exception
+	public static void main(String[] args)
 	{
 		
 
 		System.out.println("=== Robot INTech 2015 : initialisation ===");
-		System.out.println("LANCEUR DE TEST: version de nettoyage du code 2014");
-		
         // si on veut exécuter un test unitaire sur la rapbe, recopier test.nomDeLaClasseDeTest
 		//JUnitCore.main(		"tests.JUnit_DeplacementsTest");  
 		
 		
 		// Système d'injection de dépendances
-		container = new Container();
-		container.getService("Log");
-		config = (Config) container.getService("Read_Ini");
-	
+		try {
+
+			container = new Container();
+			container.getService(ServiceNames.LOG);
+			config = (Config) container.getService(ServiceNames.CONFIG);
+			                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+			
+			//Début des paramétrages
+			//configCouleur();
 		
-		                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+			
+			// initialise les singletons
+		    dep = (LocomotionCardWrapper)container.getService(ServiceNames.LOCOMOTION_CARD_WRAPPER);
+			real_state = (GameState<RobotReal>) container.getService(ServiceNames.GAME_STATE);
+		    scriptmanager = (ScriptManager) container.getService(ServiceNames.SCRIPT_MANAGER);
+		    deplacements = (Locomotion)container.getService(ServiceNames.LOCOMOTION);
+		    capteurs = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
+		    
+
 		
-		//Début des paramétrages
-		//configCouleur();
-	
-		
-		// initialise les singletons
-	    dep = (Locomotion)container.getService("Deplacements");
-		real_state = (GameState<RobotReal>) container.getService("RealGameState");
-	    scriptmanager = (ScriptManager) container.getService("ScriptManager");
-	    deplacements = (LocomotionHiLevel)container.getService("DeplacementsHautNiveau");
-	    capteurs = (Sensors) container.getService("Capteur");
-	    
-		real_state.robot.initialiser_actionneurs_deplacements();
-		
+		} catch (ContainerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}  catch (SerialManagerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		// Threads
 		//
 	//	container.demarreTousThreads();
 
 		
-		// mettre le checkup du robot.
-		// ici juste des tests de déplcement
-		System.out.println("deplacement bas niveau");
-		dep.avancer(300);
-		Thread.sleep(1000);
-		dep.avancer(-300);
-		Thread.sleep(1000);
-		dep.tourner(1.0);
-		Thread.sleep(1000);
-		dep.tourner(1.57);
-		Thread.sleep(1000);
-		System.out.println("fini !");
 		System.out.println("deplacement haut niveau");
-		deplacements.avancer(100, null, true);
+		try 
+		{
+			deplacements.moveLengthwise(100, null, true);
+		} 
+		catch (UnableToMoveException e)
+		{
+			e.printStackTrace();
+		}
 		System.out.println("fini !");
 
 
@@ -108,7 +106,14 @@ public class Main
 		
 		
 		// attends que le jumper soit retiré
-		attendreDebutMatch();
+		try 
+		{
+			attendreDebutMatch();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 		
 		
 		System.out.println("Le robot commence le match");
@@ -116,7 +121,7 @@ public class Main
 		
 		
 		//Le match s'arrête
-		container.destructeur();
+		container.destructor();
 	}
 	
 	
@@ -126,7 +131,7 @@ public class Main
 	 * Demande si la couleur est rouge au jaune
 	 * @throws Exception
 	 */
-	static void configCouleur()  throws Exception
+	static void configCouleur()
 	{
 
 		String couleur = "";
@@ -135,7 +140,12 @@ public class Main
 			System.out.println("Rentrez \"jaune\" ou \"rouge\" : ");
 			BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in)); 
 			 
-			couleur = keyboard.readLine(); 
+			try {
+				couleur = keyboard.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
 			if(couleur.contains("rouge"))
 				config.set("couleur","rouge");
 			else if(couleur.contains("jaune"))
@@ -151,7 +161,7 @@ public class Main
 	 * Recale le robot
 	 * @throws Exception
 	 */
-	static void recalerRobot()  throws Exception
+	static void recalerRobot()
 	{
 
 		// System.out.println("Pret au recalage, appuyez sur entrée pour continuer");
@@ -165,13 +175,13 @@ public class Main
 	 * Attends que le match soit lancé
 	 * @throws Exception
 	 */
-	static void attendreDebutMatch()  throws Exception
+	static void attendreDebutMatch()
 	{
 
 		System.out.println("Robot pret pour le match, attente du retrait du jumper");
 		
 		// hack si le jumper est inopérant
-		ThreadTimer.match_demarre = true;
+		ThreadTimer.matchStarted = true;
 
 		// while(!capteurs.demarrage_match())
 		//	 	Sleep.sleep(100);

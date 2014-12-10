@@ -7,17 +7,26 @@ import exceptions.MatrixException;
 import smartMath.Matrn;
 import smartMath.Vec2;
 
+// TODO: Auto-generated Javadoc
 /**
- * Tests unitaires pour le package smartMath
- * @author pf
+ * Tests unitaires pour le package smartMath.
  *
+ * @author pf
  */
 
 public class JUnit_Math extends JUnit_Test {
 
+	/** The y. */
 	Matrn y;
+	
+	/** The z. */
 	Matrn z;
 	
+	/**
+	 * Test_ vec2.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_Vec2() throws Exception
 	{
@@ -26,23 +35,28 @@ public class JUnit_Math extends JUnit_Test {
 		Vec2 b = new Vec2(20, -20);
 		Vec2 c = new Vec2();
 		Assert.assertTrue(a.equals(a));
-		Assert.assertTrue(a.PlusNewVector(b).equals(new Vec2(30, 480)));
-		Assert.assertTrue(a.MinusNewVector(b).equals(new Vec2(-10, 520)));		
-		a.Plus(b);
+		Assert.assertTrue(a.plusNewVector(b).equals(new Vec2(30, 480)));
+		Assert.assertTrue(a.minusNewVector(b).equals(new Vec2(-10, 520)));		
+		a.plus(b);
 		Assert.assertTrue(a.equals(new Vec2(30, 480)));
-		c.Minus(b);
+		c.minus(b);
 		Assert.assertTrue(c.equals(new Vec2(-20, 20)));
-		Assert.assertTrue(c.SquaredDistance(new Vec2()) == 800);
-		Assert.assertTrue(c.SquaredLength() == 800);
+		Assert.assertTrue(c.squaredDistance(new Vec2()) == 800);
+		Assert.assertTrue(c.squaredLength() == 800);
 		Assert.assertTrue(c.dot(a) == (-20*30+20*480));
 		c.x = 4;
 		c.y = 5;
 		Assert.assertTrue(c.distance(new Vec2(1,1)) == 5);
 		c.x = 3;
 		c.y = 4;
-		Assert.assertTrue(c.Length() == 5);
+		Assert.assertTrue(c.length() == 5);
 	}
 
+	/**
+	 * Test_matrn_constructor.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test public void test_matrn_constructor() throws Exception
 	{
 		log.debug("JUnit_MathTest.test_matrn_constructor()", this);
@@ -60,6 +74,11 @@ public class JUnit_Math extends JUnit_Test {
 		Assert.assertTrue(y.getNbLignes() == 1);
 	}
 
+	/**
+	 * Test_add.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_add() throws Exception
 	{
@@ -83,6 +102,11 @@ public class JUnit_Math extends JUnit_Test {
 		Assert.assertTrue(y.getCoeff(1, 1) == 16);
 	}
 
+	/**
+	 * Test_add_2.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_add_2() throws Exception
 	{
@@ -106,6 +130,11 @@ public class JUnit_Math extends JUnit_Test {
 		Assert.assertTrue(a.getCoeff(1, 1) == 16);
 	}
 
+	/**
+	 * Test_mul.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_mul() throws Exception
 	{
@@ -129,6 +158,11 @@ public class JUnit_Math extends JUnit_Test {
 		Assert.assertTrue(y.getCoeff(1, 1) == 72);
 	}
 
+	/**
+	 * Test_mul_2.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_mul_2() throws Exception
 	{
@@ -152,6 +186,11 @@ public class JUnit_Math extends JUnit_Test {
 		Assert.assertTrue(a.getCoeff(1, 1) == 72);
 	}
 
+	/**
+	 * Test_transpose.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_transpose() throws Exception
 	{
@@ -179,6 +218,11 @@ public class JUnit_Math extends JUnit_Test {
 		Assert.assertTrue(y.getCoeff(2, 2) == 0);
 	}
 
+	/**
+	 * Test_transpose_2.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_transpose_2() throws Exception
 	{
@@ -206,6 +250,11 @@ public class JUnit_Math extends JUnit_Test {
 		Assert.assertTrue(a.getCoeff(2, 2) == 0);
 	}
 
+	/**
+	 * Test_exception_add.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test(expected=MatrixException.class)
 	public void test_exception_add() throws Exception
 	{
@@ -222,6 +271,11 @@ public class JUnit_Math extends JUnit_Test {
 		y.additionner_egal(z);
 	}
 
+	/**
+	 * Test_exception_mul.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test(expected=MatrixException.class)
 	public void test_exception_mul() throws Exception
 	{
@@ -236,6 +290,11 @@ public class JUnit_Math extends JUnit_Test {
 		y.multiplier_egal(z);
 	}
 
+	/**
+	 * Test_exception_transpose.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test(expected=MatrixException.class)
 	public void test_exception_transpose() throws Exception
 	{

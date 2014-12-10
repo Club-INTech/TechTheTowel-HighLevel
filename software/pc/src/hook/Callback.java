@@ -8,13 +8,13 @@ package hook;
 public class Callback
 {
 
-	// L'évènement a-t-il été réalisé ?
+	/** L'évènement a-t-il été réalisé ? */
 	private boolean isDone = false;
 	
-	// L'évènement ne doit-t-il survenir qu'une unique fois ?
+	/** L'évènement ne doit-t-il survenir qu'une unique fois ? */
 	private boolean isUnique;
 	
-	// le code à éxecuter lors de l'évènement
+	/** le code à éxecuter lors de l'évènement */
 	public Executable method;
 	
 	/**
@@ -40,7 +40,7 @@ public class Callback
 	
 	/**
 	 * Le callback appelle la méthode, si elle n'est pas unique ou si elle n'est pas déjà faite
-	 * @return
+	 * @return vrai si le robot a été déplacé/ tourné, faux sinon
 	 */
 	public boolean call()
 	{
@@ -52,6 +52,10 @@ public class Callback
 		return false;
 	}
 	
+	/**
+	 * Explique si le Callback devrait être détruit
+	 * @return true si le Callback devrait être détruit
+	 */
 	public boolean shouldBeDeleted()
 	{
 	    return isUnique && isDone;

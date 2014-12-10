@@ -2,9 +2,13 @@ package scripts;
 
 import java.util.ArrayList;
 
-import pathdinding.Pathfinding;
+import pathDingDing.PathDingDing;
+import enums.ActuatorOrder;
 import exceptions.ScriptException;
+import exceptions.Locomotion.UnableToMoveException;
+import exceptions.serial.SerialConnexionException;
 import hook.Hook;
+import hook.types.HookFactory;
 import hook.types.HookGenerator;
 import robot.Robot;
 import robot.RobotReal;
@@ -16,32 +20,43 @@ import table.Table;
 import utils.Config;
 import utils.Log;
 
-public class DropPile extends Script {
-	
-	private ArrayList<Hook> emptyHook = new ArrayList<Hook>();
 
-	public DropPile(HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, Robot robot, ActuatorsManager move, Table table) 
+//TODO: Doc
+/**
+ * 
+ * @author ???
+ *
+ */
+public class DropPile extends AbstractScript
+{
+	
+
+	public DropPile(HookFactory hookFactory, Config config, Log log) 
 	{
-		super(hookgenerator, config, log,pathfinding, robot,move,table);
+		super(hookFactory, config, log);
+		
+		
+		// TODO: id n'est pas une variable temporaire du constructeur. C'est versions qui est un membre et qu'il faut initialiser ici
 		ArrayList<Integer> id = new ArrayList<Integer>();
 		id.add(1);
 		id.add(2);
 	}
 
 	@Override
-	protected void execute(int id_version)
+	protected void execute(int id_version, GameState<Robot> stateToConsider, boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException
 	{
 		if (id_version==1)
 		{
-			robot.tourner((Math.PI*0.5), emptyHook, false);
-			robot.avancer(100, emptyHook, true);
-			actionneurs.elevatorGround();
-			actionneurs.ouvrirLentGuide();
-			robot.avancer(-20, emptyHook, true);
-			robot.setPlotCounter(0);
-			actionneurs.guideGaucheClose();
-			actionneurs.guideDroitClose();
-			robot.avancer(-80,emptyHook,true);
+			stateToConsider.robot.turn(Math.PI/2.0);
+			stateToConsider.robot.moveLengthwise(100);
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, true);		
+			stateToConsider.robot.moveLengthwise(-20);
+			stateToConsider.robot.setStoredPlotCount(0);
+			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);	
+			stateToConsider.robot.moveLengthwise(-80);
 		}
 		else if (id_version==2)
 		{
@@ -55,7 +70,7 @@ public class DropPile extends Script {
 	
 	
 	@Override
-	public Vec2 point_entree(int id) 
+	public Vec2 entryPosition(int id) 
 	{
 		if (id==1)
 		{
@@ -73,13 +88,13 @@ public class DropPile extends Script {
 	}
 
 	@Override
-	public int score(int id_version, GameState<?> state)
+	public int remainingScoreOfVersion(int id_version, GameState<?> stateToConsider)
 	{
-		return 5*robot.getPlotCounter();
+		return 5*stateToConsider.robot.getPlotCounter();
 	}
 
 	@Override
-	protected void termine(GameState<?> state) 
+	protected void finalise(GameState<?> state) 
 	{
 		fermerMachoire();
 		robot.avancer(-20, emptyHook, true);

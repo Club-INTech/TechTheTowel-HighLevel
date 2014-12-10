@@ -14,7 +14,7 @@ import exceptions.serial.SerialException;
 import robot.cards.ActuatorsManager;
 import robot.cards.Locomotion;
 import utils.Sleep;
-import pathdinding.Pathfinding;
+import pathDingDing.PathDingDing;
 
 /**
  * classe des matchs scriptes.
@@ -27,7 +27,7 @@ public class JUnit_serialMatch extends JUnit_Test
 	ActuatorsManager actionneurs;
 	ArrayList<Vec2> path = new ArrayList<Vec2>();
 	Table table;
-	Pathfinding pathfinding = new Pathfinding (table);
+	PathDingDing pathfinding = new PathDingDing (table);
 	Random rand = new Random();
 	
 		
@@ -41,7 +41,7 @@ public class JUnit_serialMatch extends JUnit_Test
 		locomotion.set_y(1000);
 		actionneurs = (ActuatorsManager)container.getService("Actionneurs");
 		table = (Table)container.getService("Table");
-		pathfinding = new Pathfinding (table);
+		pathfinding = new PathDingDing (table);
 		
 		
 	}

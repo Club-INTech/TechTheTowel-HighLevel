@@ -21,15 +21,25 @@ import smartMath.*;
  *          TODO : migrer la liste d'obstacles vers l'obstacle manager
  */
 
-
-
+/**
+ * Stocke toute les informations liées a la table (muables et immuables) au cours d'un match.
+ */
+@SuppressWarnings("unused")
 public class Table implements Service
 {
+	/** Le gestionnaire d'obstacle. */
+	public ObstacleManager mObstacleManager;
 
+<<<<<<< HEAD
 	public ObstacleManager gestionobstacles;
 
 	// Dépendances
+=======
+	/** système de log sur lequel écrire. */
+>>>>>>> refs/remotes/origin/refactor
 	private Log log;
+
+	/** endroit ou lire la configuration du robot */
 	private Config config;
 	private ArrayList<ObstacleLinear> m_lines;
 	private ArrayList<ObstacleCircular> m_circles;
@@ -42,10 +52,17 @@ public class Table implements Service
 	private boolean isLeftCarpetDropped;
 	private boolean isRightCarpetDropped;
 	
+	/**
+	 * Instancie une nouvelle table
+	 *
+	 * @param log le système de log sur lequel écrire.
+	 * @param config l'endroit ou lire la configuration du robot
+	 */
 	public Table(Log log, Config config)
 	{
 		this.log = log;
 		this.config = config;
+<<<<<<< HEAD
 		this.gestionobstacles = new ObstacleManager(log, config);
 		initialise();
 	}
@@ -180,9 +197,13 @@ public class Table implements Service
 	@Override
 	public void updateConfig() {
 		// TODO Auto-generated method stub
+=======
+		this.mObstacleManager = new ObstacleManager(log, config);
+>>>>>>> refs/remotes/origin/refactor
 		
 	}
 	
+<<<<<<< HEAD
 	//accesseurs
 	
 	public ArrayList<ObstacleLinear> getLines()
@@ -211,5 +232,28 @@ public class Table implements Service
       {
       	isRightCarpetDropped=newValue;
       }
+=======
+	/**
+	 * Compare deux tables et indique si elles sont égales.
+	 * Utilisé pour les tests.
+	 *
+	 * @param other l'autre table a comparer
+	 * @return true, si les deux tables sont identiques
+	 */
+	public boolean equals(Table other)
+	{
+		return false; //TODO écrire puis compléter au fur et a mesure cette fonction pour qu'elle reste a jour.
+ 	}
+
+	/* (non-Javadoc)
+	 * @see container.Service#updateConfig()
+	 */
+	@Override
+	public void updateConfig()
+	{
+		// TODO Auto-generated method stub
+		
+	}
+>>>>>>> refs/remotes/origin/refactor
 }
 

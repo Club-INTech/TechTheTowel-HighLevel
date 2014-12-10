@@ -2,88 +2,145 @@ package threads;
 
 import java.util.Hashtable;
 
+<<<<<<< HEAD
 import robot.cards.ActuatorsManager;
 import robot.cards.Sensors;
 import robot.cards.Locomotion;
 //import robot.cards.laser.LaserFiltration;
 //import robot.cards.laser.Laser;
+=======
+import robot.cards.laser.LaserFiltration;
+import robot.cards.laser.LaserCardWrapper;
+import robot.cardsWrappers.ActuatorCardWrapper;
+import robot.cardsWrappers.LocomotionCardWrapper;
+import robot.cardsWrappers.SensorsCardWrapper;
+>>>>>>> refs/remotes/origin/refactor
 import table.Table;
-import robot.RobotReal;
 import utils.Log;
 import utils.Config;
-import exceptions.ContainerException;
-import exceptions.ThreadException;
-import exceptions.serial.SerialManagerException;
 
 /**
- * Service qui instancie les threads
- * @author pf
+ * Service qui instancie les threads et le démarre a la demande.
  *
+ * @author pf, marsu
  */
 
-public class ThreadManager {
+public class ThreadManager
+{
 	
+	/** Le système de log a utiliser par le threamManager pour écrire */
 	private Log log;
 	
-	private Hashtable<String, AbstractThread> threads;
+	/** Ensemble des threads instanciés jusqu'ici */
+	private Hashtable<String, AbstractThread> instanciedThreads;
 	
+	/**
+	 * Instancie un nouveau thread manager.
+	 *
+	 * @param config Fichier de configureation a utiliser par le threadmanager ainsi que tout les threads autres que main pour configure le match 
+	 * @param log Le système de log a utiliser par le threamManager ainsique tout les threads autes que main pour écrire 
+	 */
 	public ThreadManager(Config config, Log log)
 	{
+		// renseigne le système de log que le ThreadManager va lui meme utiliser
 		this.log = log;
 		
-		threads = new Hashtable<String, AbstractThread>();
+		// initialise la liste des threads instanciés a une miste vide
+		instanciedThreads = new Hashtable<String, AbstractThread>();
 
+		// renseigne le système de log que l'ensmeble des threads vont utiliser 
 		AbstractThread.log = log;
 		AbstractThread.config = config;
 		AbstractThread.stopThreads = false;
 	}
 
 	/**
-	 * Donne un thread à partir de son nom. Utilisé par container uniquement.
-	 * @param nom
-	 * @return
-	 * @throws ThreadException
-	 * @throws ContainerException
-	 * @throws ConfigException
-	 * @throws SerialManagerException
+	 * Renvois le thread Timer
+	 * L'instancie si c'est la première fois qu'on le demande.
+	 *
+	 * @param table La table a l'intérieure de laquelle le thread doit croire évoluer
+	 * @param sensorsCardWrapper La carte capteurs avec laquelle le thread va parler
+	 * @param locomotionCardWrapper La carte d'asservissements avec laquelle le thread va parler
+	 * @param sensorsCardWrapper La carte capteurs avec laquelle le thread va parler
+	 * @return le thread timer
 	 */
-	public AbstractThread getThreadTimer(Table table, Sensors capteur, Locomotion deplacements, ActuatorsManager actionneurs)
+	public AbstractThread getThreadTimer(Table table, SensorsCardWrapper sensorsCardWrapper, LocomotionCardWrapper locomotionCardWrapper, ActuatorCardWrapper actuatorCardWrapper)
 	{
-		AbstractThread thread = threads.get("threadTimer");
+		AbstractThread thread = instanciedThreads.get("threadTimer");
 		if(thread == null)
-			threads.put("threadTimer", new ThreadTimer(table, capteur, deplacements, actionneurs));
-		return threads.get("threadTimer");
+			instanciedThreads.put("threadTimer", new ThreadTimer(table, sensorsCardWrapper, locomotionCardWrapper));
+		return instanciedThreads.get("threadTimer");
 	}
 
-	public AbstractThread getThreadCapteurs(RobotReal robotvrai, Table table, Sensors capteurs)
+	/**
+	 * Renvois le thread capteurs.
+	 * L'instancie si c'est la première fois qu'on le demande.
+	 * 
+	 * @param table La table a l'intérieure de laquelle le thread doit croire évoluer
+	 * @param sensorsCardWrapper La carte capteurs avec laquelle le thread va parler
+	 * @return le thread capteurs
+	 */
+	public AbstractThread getThreadSensors( Table table, SensorsCardWrapper sensorsCardWrapper)
 	{
-		AbstractThread thread = threads.get("threadCapteurs");
+		AbstractThread thread = instanciedThreads.get("threadCapteurs");
 		if(thread == null)
-			threads.put("threadCapteurs", new ThreadSensor(robotvrai, table, capteurs));
-		return threads.get("threadCapteurs");
+			instanciedThreads.put("threadCapteurs", new ThreadSensor( table, sensorsCardWrapper));
+		return instanciedThreads.get("threadCapteurs");
 	}
 
+<<<<<<< HEAD
 /*	public AbstractThread getThreadLaser(Laser laser, Table table, LaserFiltration filtragelaser)
+=======
+	/**
+	 * Renvois le thread laser.
+	 * L'instancie si c'est la première fois qu'on le demande.
+	 * 
+	 * @param laserCardWrapper la carte laser avec laquelle le thread va parler
+	 * @param table La table a l'intérieure de laquelle le thread doit croire évoluer
+	 * @param laserFiltration la méthode de filtrage de valeurs que le thread laser va utiliser
+	 * @return le thread laser
+	 */
+	public AbstractThread getThreadLaser(LaserCardWrapper laserCardWrapper, Table table, LaserFiltration laserFiltration)
+>>>>>>> refs/remotes/origin/refactor
 	{
-		AbstractThread thread = threads.get("threadLaser");
+		AbstractThread thread = instanciedThreads.get("threadLaser");
 		if(thread == null)
+<<<<<<< HEAD
 			threads.put("threadLaser", new ThreadLaser(laser, table, filtragelaser));
 		return threads.get("threadLaser");
 	}*/
+=======
+			instanciedThreads.put("threadLaser", new ThreadLaser(laserCardWrapper, table, laserFiltration));
+		return instanciedThreads.get("threadLaser");
+	}
+>>>>>>> refs/remotes/origin/refactor
 
-	public void demarreThreads()
+	/**
+	 * Démarre tout les threads instanciés auparavant.
+	 * On instancie un thread en utilisant  ThreadManager.getThreadLaser, ThreadManager.getThreadSensors ou ThreadManager.getThreadTimer
+	 */
+	public void startInstanciedThreads()
 	{
+		// démarre tout les threads déja instanciées
 		log.debug("Démarrage des threads enregistrés", this);
-		for(String nom: threads.keySet())
-			threads.get(nom).start();
-		try {
+		for(String nom: instanciedThreads.keySet())
+			instanciedThreads.get(nom).start();
+		
+		// attends un dixième de seconde pour voir si un thread ne plante pas tout de suite.
+		try
+		{
 			Thread.sleep(100);
-		} catch (InterruptedException e) {
+		} 
+		catch (InterruptedException e)
+		{
 			e.printStackTrace();
 		}
 	}
 	
-	public void arreteThreads()
+	/**
+	 * Demande a tout les threads lancés de s'interrompre
+	 */
+	public void stopAllThreads()
 	{
 		AbstractThread.stopThreads = true;
 	}

@@ -1,53 +1,76 @@
 package threads;
 
-import exceptions.serial.SerialException;
-import robot.cards.ActuatorsManager;
-import robot.cards.Sensors;
-import robot.cards.Locomotion;
-import smartMath.Vec2;
+import exceptions.serial.SerialConnexionException;
+import robot.cardsWrappers.LocomotionCardWrapper;
+import robot.cardsWrappers.SensorsCardWrapper;
 import table.Table;
 import utils.Sleep;
 
 /**
- * Thread qui s'occupe de la gestion du temps: début du match, péremption des obstacles
+ * Thread qui s'occupe de la gestion du temps: début du match et immobilisation du robot en fin de match
+ * demande aussi périodiquement a la table qu'on lui fournit de retirer les obstacles périmés
  * C'est lui qui active les capteurs en début de match.
- * @author pf
+ * @author pf, marsu
  *
  */
 
-public class ThreadTimer extends AbstractThread {
-
-	// Dépendance
+public class ThreadTimer extends AbstractThread
+{
+	/** La table sur laquelle le thread doit croire évoluer */
 	private Table table;
-	private Sensors capteur;
-	private Locomotion deplacements;
-	private ActuatorsManager actionneurs;
+
+	/** La carte capteurs avec laquelle on doit communiquer */
+	private SensorsCardWrapper mSensorsCardWrapper;
+
+	/** La carte d'asservissement avec laquelle on doit communiquer */
+	private LocomotionCardWrapper mLocomotionCardWrapper;
 	
-	public static boolean match_demarre = false;
-	public static boolean fin_match = false;
-	public static long date_debut;
-	public static long duree_match = 90000;
-	public static long temps_reserve_funny_action = 1000;
+	/** vrai si le match a effectivment démarré, faux sinon */
+	public static boolean matchStarted = false;
+
+	/** vrai si le match a effectivment pris fin, faux sinon */
+	public static boolean matchEnded = false;
+	
+	/** Date de début du match. */
+	public static long matchStartTimestamp;
+	
+	/** Durée en miliseconde d'un match. */
+	public static long matchDuration = 90000;
+	
+	/** Temps en ms qui s'écoule entre deux mise a jour de la liste des obstacle périmables. Lors de chaque mise a jour, les obstacles périmés sont détruits. */
+	public static int obstacleRefreshInterval = 500;
 		
-	ThreadTimer(Table table, Sensors capteur, Locomotion deplacements, ActuatorsManager actionneurs)
+	/**
+	 * Crée le thread timer.
+	 *
+	 * @param table La table sur laquelle le thread doit croire évoluer
+	 * @param sensorsCardWrapper La carte capteurs avec laquelle on doit communiquer
+	 * @param locomotionCardWrapper La carte d'asservissement avec laquelle on doit communiquer
+	 */
+	ThreadTimer(Table table, SensorsCardWrapper sensorsCardWrapper, LocomotionCardWrapper locomotionCardWrapper)
 	{
 		this.table = table;
-		this.capteur = capteur;
-		this.deplacements = deplacements;
-		this.actionneurs = actionneurs;
+		this.mSensorsCardWrapper = sensorsCardWrapper;
+		this.mLocomotionCardWrapper = locomotionCardWrapper;
 		
 		updateConfig();
 		Thread.currentThread().setPriority(1);
 	}
 
+	/* (non-Javadoc)
+	 * @see threads.AbstractThread#run()
+	 */
 	@Override
 	public void run()
 	{
-		config.set("capteurs_on", false);
-		capteur.updateConfig();
 		log.debug("Lancement du thread timer", this);
+
+		// allume les capteurs
+		config.set("capteurs_on", "false");
+		mSensorsCardWrapper.updateConfig();	
+		
 		// Attente du démarrage du match
-		while(!capteur.demarrage_match() && !match_demarre)
+		while(!mSensorsCardWrapper.isJumperAbsent() && !matchStarted)
 		{
 			if(stopThreads)
 			{
@@ -56,108 +79,104 @@ public class ThreadTimer extends AbstractThread {
 			}
 			Sleep.sleep(50);
 		}
-		date_debut = System.currentTimeMillis();
-		match_demarre = true;
+		
+		// Le match démarre ! On chage l'état du thread pour refléter ce changement
+		matchStartTimestamp = System.currentTimeMillis();
+		matchStarted = true;
 
-		config.set("capteurs_on", true);
-		capteur.updateConfig();
+		config.set("capteurs_on", "true");
+		mSensorsCardWrapper.updateConfig();
 
 		log.debug("LE MATCH COMMENCE !", this);
 
 
-		// Le match à démarré. Tous les 500ms, on retire les obstacles périmés
-		while(System.currentTimeMillis() - date_debut < duree_match - temps_reserve_funny_action)
+		// boucle principale, celle qui dure tout le match
+		while(System.currentTimeMillis() - matchStartTimestamp < matchDuration)
 		{
 			if(stopThreads)
 			{
-				log.debug("Arrêt du thread timer avant la fin du match", this);
+				// ons 'arrète si le ThreadManager le demande
+				log.debug("Arrêt du thread timer demandé durant le match", this);
 				return;
 			}
-			table.gestionobstacles.supprimerObstaclesPerimes(System.currentTimeMillis());
 			
-			try {
-				Thread.sleep(500);
+
+			// On retire périodiquement les obstacles périmés
+			table.mObstacleManager.removeOutdatedObstacles(System.currentTimeMillis());
+			
+			try
+			{
+				Thread.sleep(obstacleRefreshInterval);
 			}
 			catch(Exception e)
 			{
 				log.warning(e.toString(), this);
 			}
 		}
-		
-		// Le match est fini, désasservissement
-		fin_match = true;
 
-		try {
-			deplacements.stopper();
-		} catch (SerialException e) {
-			e.printStackTrace();
-		}
-		
-		try
-        {
-			// on s'oriente pour tirer le fillet
-            double[] infos = deplacements.get_infos_x_y_orientation();
-            Vec2 position = new Vec2((int)infos[0], (int)infos[1]);
-            Vec2 positionMammouth1 = new Vec2(-750, 2000);
-            Vec2 positionMammouth2 = new Vec2(750, 2000);            
-            double angle;
-            if(position.SquaredDistance(positionMammouth1) < position.SquaredDistance(positionMammouth2))
-                angle = Math.atan2(positionMammouth1.y - position.y, positionMammouth1.x - position.x);
-            else
-                angle = Math.atan2(positionMammouth2.y - position.y, positionMammouth2.x - position.x);
-            deplacements.stopper();
-            deplacements.tourner(angle-Math.PI/2); // le filet est sur le coté gauche
-            
-            // fin du match : désasser final
-            try 
-            {
-                deplacements.desactiver_asservissement_rotation();
-                deplacements.desactiver_asservissement_translation();
-            } catch (SerialException e) {
-                e.printStackTrace();
-            }
-            deplacements.arret_final();
-            
-            // tir de filet!
-            Sleep.sleep(1500+temps_reserve_funny_action);
-            actionneurs.lancerFilet();
-            
-        } catch (SerialException e1)
-        {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-		
-		Sleep.sleep(500);
-		
-		
+		// actions de fin de match
+		onMatchEnded();
 		
 		log.debug("Fin du thread timer", this);
 		
 	}
 	
-	public long temps_restant()
+	/**
+	 * On match ended.
+	 */
+	private void onMatchEnded()
 	{
-		return date_debut + duree_match - System.currentTimeMillis();
+
+		log.debug("Fin du Match !", this);
+
+		// Le match est fini, immobilisation du robot
+		matchEnded = true;
+
+		try {
+			mLocomotionCardWrapper.immobilise();
+		} catch (SerialConnexionException e) {
+			e.printStackTrace();
+		}
+
+		// fin du match : désasser
+		try 
+		{
+			mLocomotionCardWrapper.disableRotationnalFeedbackLoop();
+			mLocomotionCardWrapper.disableTranslationnalFeedbackLoop();
+		}
+		catch (SerialConnexionException e)
+		{
+			e.printStackTrace();
+		}
+		
+		// et on coupe la connexion avec la carte d'asser comme ca on est sur qu'aucune partie du code ne peut faire quoi que ce soit pour faire bouger le robot
+		mLocomotionCardWrapper.closeLocomotion();
 	}
 	
+	
+	/**
+	 * Temps_restant.
+	 *
+	 * @return the long
+	 */
+	public long temps_restant()
+	{
+		return matchStartTimestamp + matchDuration - System.currentTimeMillis();
+	}
+	
+	/* (non-Javadoc)
+	 * @see threads.AbstractThread#updateConfig()
+	 */
 	public void updateConfig()
 	{
 		// facteur 1000 car temps_match est en secondes et duree_match en ms
 		try {
-			duree_match = 1000*Long.parseLong(config.get("temps_match"));
+			matchDuration = 1000*Long.parseLong(config.getProperty("temps_match"));
 		}
 		catch(Exception e)
 		{
 			log.warning(e, this);
 		}
-        try {
-            temps_reserve_funny_action = 1000*Long.parseLong(config.get("temps_reserve_funny_action"));
-        }
-        catch(Exception e)
-        {
-            log.warning(e, this);
-        }
 	}
 	
 }

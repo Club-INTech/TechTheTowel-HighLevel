@@ -27,7 +27,7 @@ public class JUnit_CarpetDropper extends JUnit_Test
 	ActuatorsManager actionneurs;
 	DropCarpet scriptCarpet;
 	LocomotionHiLevel locomotion;
-	Pathfinding pathfinding = new Pathfinding();
+	PathDingDing pathfinding = new PathDingDing();
 	HookGenerator hookgenerator;
 
 	@Before

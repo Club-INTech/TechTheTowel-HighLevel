@@ -5,7 +5,7 @@ import hook.types.HookGenerator;
 
 import java.util.ArrayList;
 
-import pathdinding.Pathfinding;
+import pathDingDing.PathDingDing;
 import exceptions.Locomotion.UnableToMoveException;
 import robot.Robot;
 import robot.cards.ActuatorsManager;
@@ -20,12 +20,12 @@ import utils.Log;
  * @author paul
  *script pour sortir de la zone de depart. a executer imperativement et uniquement au depart
  */
-public class ExitBeginZone extends Script {
+public class ExitBeginZone extends AbstractScript {
 
 	int distanceToExit=450;
 	ArrayList<Hook> emptyHook = new ArrayList<Hook>();
 	
-	public ExitBeginZone(HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, Robot robot, ActuatorsManager move, Table table) 
+	public ExitBeginZone(HookGenerator hookgenerator, Config config, Log log, PathDingDing pathfinding, Robot robot, ActuatorsManager move, Table table) 
 	{
 		super(hookgenerator, config, log, pathfinding, robot, move,table);
 	}

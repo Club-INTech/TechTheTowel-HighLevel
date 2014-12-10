@@ -1,0 +1,2795 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.7" icons="true" automaticImage="JPEG" always-add-relationships="false" 
+  generalizations="true" realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
+  <class id="1" language="java" name="Main" project="MoviTech" file="/MoviTech/src/Main.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="8045" y="109"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <package id="2" language="java" name="asservissement" project="MoviTech" file="/MoviTech/src/asservissement" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="273" width="321" x="3683" y="37"/>    
+    <display autosize="false" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <class id="3" language="java" name="asservissement.SearchConst" project="MoviTech" 
+    file="/MoviTech/src/asservissement/SearchConst.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="185" width="165" x="729" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <package id="4" language="java" name="threads" project="MoviTech" file="/MoviTech/src/threads" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="46" width="101" x="6350" y="37"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <class id="5" language="java" name="robot.cards.laser.LaserFiltration" project="MoviTech" 
+    file="/MoviTech/src/robot/cards/laser/LaserFiltration.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="239" width="196" x="7055" y="1790"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <package id="6" language="java" name="robot" project="MoviTech" file="/MoviTech/src/robot" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="46" width="101" x="2645" y="37"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <class id="7" language="java" name="utils.Sleep" project="MoviTech" file="/MoviTech/src/utils/Sleep.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="95" width="103" x="586" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="tests.JUnit_HookGreen" project="MoviTech" 
+    file="/MoviTech/src/tests/JUnit_HookGreen.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="113" width="196" x="6739" y="845"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="robot.cards.laser.Beacon" project="MoviTech" 
+    file="/MoviTech/src/robot/cards/laser/Beacon.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="113" width="123" x="7669" y="2339"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="10" language="java" name="robot.RobotReal" project="MoviTech" file="/MoviTech/src/robot/RobotReal.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="365" width="276" x="6225" y="2339"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="11" language="java" name="hook.Executable" project="MoviTech" file="/MoviTech/src/hook/Executable.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="77" width="114" x="4962" y="2834"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="12" language="java" name="robot.cardsWrappers.LocomotionCardWrapper" project="MoviTech" 
+    file="/MoviTech/src/robot/cardsWrappers/LocomotionCardWrapper.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="509" width="343" x="8088" y="3671"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="13" language="java" name="scripts.AbstractScript" project="MoviTech" 
+    file="/MoviTech/src/scripts/AbstractScript.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="221" width="271" x="8492" y="845"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="14" language="java" name="hook.types.HookFactory" project="MoviTech" 
+    file="/MoviTech/src/hook/types/HookFactory.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="293" width="264" x="6692" y="1178"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="15" language="java" name="hook.types.HookXisGreater" project="MoviTech" 
+    file="/MoviTech/src/hook/types/HookXisGreater.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="95" width="368" x="5575" y="1790"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="16" language="java" name="threads.ThreadLaser" project="MoviTech" 
+    file="/MoviTech/src/threads/ThreadLaser.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="167" width="222" x="7354" y="1511"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <enumeration id="17" language="java" name="enums.ServiceNames.ServiceType" project="MoviTech" 
+    file="/MoviTech/src/enums/ServiceNames.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="113" width="135" x="9135" y="5138"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </enumeration>  
+  <package id="18" language="java" name="enums" project="MoviTech" file="/MoviTech/src/enums" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="46" width="101" x="3183" y="37"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <class id="19" language="java" name="tests.JUnit_RobotReal" project="MoviTech" 
+    file="/MoviTech/src/tests/JUnit_RobotReal.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="113" width="118" x="6172" y="350"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <enumeration id="20" language="java" name="enums.ActuatorOrder" project="MoviTech" 
+    file="/MoviTech/src/enums/ActuatorOrder.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="149" width="182" x="2423" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </enumeration>  
+  <class id="21" language="java" name="tests.JUnit_Laser" project="MoviTech" file="/MoviTech/src/tests/JUnit_Laser.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="239" width="193" x="7034" y="1511"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="22" language="java" name="container.Service" project="MoviTech" 
+    file="/MoviTech/src/container/Service.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="77" width="121" x="7747" y="5453"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="23" language="java" name="table.obstacles.ObstacleCircular" project="MoviTech" 
+    file="/MoviTech/src/table/obstacles/ObstacleCircular.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="167" width="163" x="6187" y="4571"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="24" language="java" name="utils.Log" project="MoviTech" file="/MoviTech/src/utils/Log.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="401" width="202" x="7524" y="4571"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="25" language="java" name="threads.ThreadSensor" project="MoviTech" 
+    file="/MoviTech/src/threads/ThreadSensor.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="131" width="289" x="8142" y="1511"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <package id="26" language="java" name="table" project="MoviTech" file="/MoviTech/src/table" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="46" width="101" x="5347" y="37"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <class id="27" language="java" name="hook.Hook" project="MoviTech" file="/MoviTech/src/hook/Hook.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="149" width="227" x="5924" y="1178"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="28" language="java" name="robot.serial.CardSpecification" project="MoviTech" 
+    file="/MoviTech/src/robot/serial/CardSpecification.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="113" width="217" x="8784" y="4220"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="29" language="java" name="smartMath.Vec2" project="MoviTech" file="/MoviTech/src/smartMath/Vec2.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="473" width="170" x="5937" y="5453"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <package id="30" language="java" name="robot.cardsWrappers" project="MoviTech" 
+    file="/MoviTech/src/robot/cardsWrappers" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="46" width="147" x="4044" y="37"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <class id="31" language="java" name="hook.types.HookXisLesser" project="MoviTech" 
+    file="/MoviTech/src/hook/types/HookXisLesser.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="95" width="365" x="5170" y="1790"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="32" language="java" name="table.obstacles.ObstacleManager" project="MoviTech" 
+    file="/MoviTech/src/table/obstacles/ObstacleManager.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="311" width="255" x="6697" y="4220"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="33" language="java" name="strategie.GameState" project="MoviTech" 
+    file="/MoviTech/src/strategie/GameState.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="131" width="177" x="6317" y="1511"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <package id="34" language="java" name="utils" project="MoviTech" file="/MoviTech/src/utils" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="46" width="101" x="1618" y="37"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <class id="35" language="java" name="exceptions.Locomotion.BlockedException" project="MoviTech" 
+    file="/MoviTech/src/exceptions/Locomotion/BlockedException.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="113" width="147" x="240" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="36" language="java" name="table.obstacles.ObstacleBeacon" project="MoviTech" 
+    file="/MoviTech/src/table/obstacles/ObstacleBeacon.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="95" width="181" x="6040" y="5138"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="37" language="java" name="tests.JUnit_Locomotion" project="MoviTech" 
+    file="/MoviTech/src/tests/JUnit_Locomotion.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="221" width="152" x="7593" y="350"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="38" language="java" name="tests.JUnit_Config" project="MoviTech" 
+    file="/MoviTech/src/tests/JUnit_Config.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="131" width="102" x="6574" y="350"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="39" language="java" name="pathfinding.Pathfinding" project="MoviTech" 
+    file="/MoviTech/src/pathfinding/Pathfinding.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="95" width="234" x="5773" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="40" language="java" name="tests.JUnit_DeplacementsHautNiveauTest" project="MoviTech" 
+    file="/MoviTech/src/tests/JUnit_DeplacementsHautNiveauTest.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="293" width="230" x="6233" y="845"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="41" language="java" name="exceptions.serial.SerialManagerException" project="MoviTech" 
+    file="/MoviTech/src/exceptions/serial/SerialManagerException.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="113" width="178" x="3324" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="42" language="java" name="robot.cardsWrappers.SensorsCardWrapper" project="MoviTech" 
+    file="/MoviTech/src/robot/cardsWrappers/SensorsCardWrapper.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="149" width="273" x="8471" y="3671"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="43" language="java" name="exceptions.Locomotion.UnexpectedObstacleOnPathException" project="MoviTech" 
+    file="/MoviTech/src/exceptions/Locomotion/UnexpectedObstacleOnPathException.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="113" width="245" x="5488" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="44" language="java" name="hook.Callback" project="MoviTech" file="/MoviTech/src/hook/Callback.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="167" width="168" x="5089" y="1511"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="45" language="java" name="hook.types.HookYisGreater" project="MoviTech" 
+    file="/MoviTech/src/hook/types/HookYisGreater.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="95" width="304" x="4826" y="1790"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <enumeration id="46" language="java" name="enums.Side" project="MoviTech" file="/MoviTech/src/enums/Side.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="131" width="119" x="427" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </enumeration>  
+  <class id="47" language="java" name="tests.JUnit_EnnemyCollisionAvoidance" project="MoviTech" 
+    file="/MoviTech/src/tests/JUnit_EnnemyCollisionAvoidance.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="113" width="212" x="6719" y="1790"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="48" language="java" name="tests.JUnit_javaToRobotLink" project="MoviTech" 
+    file="/MoviTech/src/tests/JUnit_javaToRobotLink.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="113" width="153" x="6330" y="350"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="49" language="java" name="exceptions.MatrixException" project="MoviTech" 
+    file="/MoviTech/src/exceptions/MatrixException.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="113" width="138" x="2786" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="50" language="java" name="robot.serial.SerialManager" project="MoviTech" 
+    file="/MoviTech/src/robot/serial/SerialManager.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="203" width="227" x="8784" y="3671"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="51" language="java" name="threads.ThreadManager" project="MoviTech" 
+    file="/MoviTech/src/threads/ThreadManager.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="167" width="553" x="7878" y="845"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <package id="52" language="java" name="container" project="MoviTech" file="/MoviTech/src/container" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="46" width="101" x="5206" y="37"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <class id="53" language="java" name="tests.JUnit_Test" project="MoviTech" file="/MoviTech/src/tests/JUnit_Test.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="113" width="105" x="6956" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="54" language="java" name="tests.JUnit_RobotChrono" project="MoviTech" 
+    file="/MoviTech/src/tests/JUnit_RobotChrono.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="203" width="187" x="5049" y="350"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <enumeration id="55" language="java" name="enums.Speed" project="MoviTech" file="/MoviTech/src/enums/Speed.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="203" width="180" x="6604" y="2339"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </enumeration>  
+  <class id="56" language="java" name="exceptions.Locomotion.UnableToMoveException" project="MoviTech" 
+    file="/MoviTech/src/exceptions/Locomotion/UnableToMoveException.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="113" width="179" x="2964" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <package id="57" language="java" name="pathfinding" project="MoviTech" file="/MoviTech/src/pathfinding" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="46" width="101" x="4567" y="37"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <class id="58" language="java" name="utils.CheckUp" project="MoviTech" file="/MoviTech/src/utils/CheckUp.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="113" width="147" x="6025" y="1790"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="59" language="java" name="tests.JUnit_ActuatorManager" project="MoviTech" 
+    file="/MoviTech/src/tests/JUnit_ActuatorManager.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="113" width="159" x="7373" y="350"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="60" language="java" name="threads.ThreadTimer" project="MoviTech" 
+    file="/MoviTech/src/threads/ThreadTimer.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="239" width="350" x="8042" y="2834"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="61" language="java" name="hook.types.HookX" project="MoviTech" file="/MoviTech/src/hook/types/HookX.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="131" width="323" x="5620" y="1511"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <package id="62" language="java" name="hook" project="MoviTech" file="/MoviTech/src/hook" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="46" width="101" x="1986" y="37"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <class id="63" language="java" name="hook.methods.ChangeConsigne" project="MoviTech" 
+    file="/MoviTech/src/hook/methods/ChangeConsigne.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="95" width="199" x="4721" y="2339"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="64" language="java" name="table.obstacles.ObstacleProximity" project="MoviTech" 
+    file="/MoviTech/src/table/obstacles/ObstacleProximity.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="95" width="159" x="6282" y="5138"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="65" language="java" name="hook.types.HookY" project="MoviTech" file="/MoviTech/src/hook/types/HookY.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="131" width="283" x="5297" y="1511"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <package id="66" language="java" name="hook.methods" project="MoviTech" file="/MoviTech/src/hook/methods" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="46" width="105" x="2278" y="37"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <class id="67" language="java" name="exceptions.ServiceTypeException" project="MoviTech" 
+    file="/MoviTech/src/exceptions/ServiceTypeException.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="167" width="306" x="934" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="68" language="java" name="scripts.ScriptManager" project="MoviTech" 
+    file="/MoviTech/src/scripts/ScriptManager.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="131" width="180" x="8667" y="350"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="69" language="java" name="robot.serial.SerialConnexion" project="MoviTech" 
+    file="/MoviTech/src/robot/serial/SerialConnexion.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="311" width="203" x="8088" y="4220"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="70" language="java" name="table.Table" project="MoviTech" file="/MoviTech/src/table/Table.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="131" width="132" x="6868" y="3671"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="71" language="java" name="table.GameElement" project="MoviTech" file="/MoviTech/src/table/GameElement.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="95" width="124" x="4536" y="5138"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="72" language="java" name="utils.Config" project="MoviTech" file="/MoviTech/src/utils/Config.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="275" width="142" x="6831" y="5138"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <package id="73" language="java" name="scripts" project="MoviTech" file="/MoviTech/src/scripts" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="46" width="101" x="6209" y="37"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <class id="74" language="java" name="exceptions.UnknownScriptException" project="MoviTech" 
+    file="/MoviTech/src/exceptions/UnknownScriptException.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="113" width="183" x="17" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <package id="75" language="java" name="table.obstacles" project="MoviTech" file="/MoviTech/src/table/obstacles" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="46" width="111" x="2127" y="37"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="76" language="java" name="smartMath" project="MoviTech" file="/MoviTech/src/smartMath" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="46" width="101" x="4426" y="37"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <class id="77" language="java" name="exceptions.ThreadException" project="MoviTech" 
+    file="/MoviTech/src/exceptions/ThreadException.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="113" width="143" x="6632" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="78" language="java" name="robot.cards.laser.Kalman" project="MoviTech" 
+    file="/MoviTech/src/robot/cards/laser/Kalman.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="149" width="246" x="7118" y="2339"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="79" language="java" name="robot.Locomotion" project="MoviTech" file="/MoviTech/src/robot/Locomotion.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="797" width="482" x="6019" y="2834"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="80" language="java" name="exceptions.ContainerException" project="MoviTech" 
+    file="/MoviTech/src/exceptions/ContainerException.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="113" width="155" x="4231" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <package id="81" language="java" name="strategie" project="MoviTech" file="/MoviTech/src/strategie" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="46" width="101" x="4903" y="37"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <class id="82" language="java" name="table.obstacles.ObstacleRectangular" project="MoviTech" 
+    file="/MoviTech/src/table/obstacles/ObstacleRectangular.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="221" width="188" x="5728" y="4571"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="83" language="java" name="robot.cardsWrappers.ActuatorCardWrapper" project="MoviTech" 
+    file="/MoviTech/src/robot/cardsWrappers/ActuatorCardWrapper.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="113" width="274" x="7753" y="3671"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="84" language="java" name="robot.Robot" project="MoviTech" file="/MoviTech/src/robot/Robot.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="509" width="278" x="6317" y="1790"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="85" language="java" name="hook.types.HookPosition" project="MoviTech" 
+    file="/MoviTech/src/hook/types/HookPosition.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="113" width="347" x="4681" y="1511"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <package id="86" language="java" name="hook.types" project="MoviTech" file="/MoviTech/src/hook/types" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="46" width="101" x="6491" y="37"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <class id="87" language="java" name="container.Container" project="MoviTech" 
+    file="/MoviTech/src/container/Container.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="167" width="196" x="7989" y="350"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <package id="88" language="java" name="exceptions" project="MoviTech" file="/MoviTech/src/exceptions" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="46" width="101" x="3542" y="37"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <class id="89" language="java" name="tests.JUnit_HookYellow" project="MoviTech" 
+    file="/MoviTech/src/tests/JUnit_HookYellow.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="113" width="196" x="6503" y="845"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="90" language="java" name="threads.AbstractThread" project="MoviTech" 
+    file="/MoviTech/src/threads/AbstractThread.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="149" width="187" x="7920" y="1178"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="91" language="java" name="robot.RobotChrono" project="MoviTech" file="/MoviTech/src/robot/RobotChrono.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="455" width="276" x="5846" y="2339"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <enumeration id="92" language="java" name="enums.ServiceNames" project="MoviTech" 
+    file="/MoviTech/src/enums/ServiceNames.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="527" width="268" x="9135" y="4571"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </enumeration>  
+  <class id="93" language="java" name="tests.JUnit_Sensors" project="MoviTech" 
+    file="/MoviTech/src/tests/JUnit_Sensors.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="113" width="164" x="7785" y="350"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="94" language="java" name="table.obstacles.Obstacle" project="MoviTech" 
+    file="/MoviTech/src/table/obstacles/Obstacle.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="131" width="114" x="5728" y="4220"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <package id="95" language="java" name="exceptions.Locomotion" project="MoviTech" 
+    file="/MoviTech/src/exceptions/Locomotion" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="46" width="157" x="1280" y="37"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <class id="96" language="java" name="tests.JUnit_Container" project="MoviTech" 
+    file="/MoviTech/src/tests/JUnit_Container.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="455" width="208" x="4412" y="350"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="97" language="java" name="tests.JUnit_Threads" project="MoviTech" 
+    file="/MoviTech/src/tests/JUnit_Threads.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="185" width="198" x="6737" y="350"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <package id="98" language="java" name="robot.serial" project="MoviTech" file="/MoviTech/src/robot/serial" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="46" width="101" x="1477" y="37"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="99" language="java" name="tests" project="MoviTech" file="/MoviTech/src/tests" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="46" width="101" x="6815" y="37"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <class id="100" language="java" name="exceptions.serial.SerialConnexionException" project="MoviTech" 
+    file="/MoviTech/src/exceptions/serial/SerialConnexionException.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="113" width="187" x="1759" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <package id="101" language="java" name="robot.cards.laser" project="MoviTech" file="/MoviTech/src/robot/cards/laser" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="46" width="122" x="5044" y="37"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="102" language="java" name="exceptions.serial" project="MoviTech" file="/MoviTech/src/exceptions/serial" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="46" width="122" x="6047" y="37"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <class id="103" language="java" name="smartMath.Matrn" project="MoviTech" file="/MoviTech/src/smartMath/Matrn.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="455" width="174" x="7139" y="2834"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="104" language="java" name="tests.JUnit_Math" project="MoviTech" file="/MoviTech/src/tests/JUnit_Math.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="275" width="183" x="7404" y="2339"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <generalization id="105">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="84"/>  
+  </generalization>  
+  <association id="106">    
+    <end type="SOURCE" refId="78" navigable="false">      
+      <attribute id="107" name="x">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="108" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="103" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="109">    
+    <end type="SOURCE" refId="50" navigable="false">      
+      <attribute id="110" name="carteLaser">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="111" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="28" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="112">    
+    <bendpoint x="4774" y="1790"/>    
+    <bendpoint x="4971" y="2339"/>    
+    <end type="SOURCE" refId="44" navigable="false">      
+      <attribute id="113" name="method">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="114" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="115">    
+    <bendpoint x="7342" y="350"/>    
+    <bendpoint x="7321" y="845"/>    
+    <bendpoint x="7007" y="1178"/>    
+    <bendpoint x="6827" y="1511"/>    
+    <bendpoint x="6646" y="1790"/>    
+    <bendpoint x="6552" y="2339"/>    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="116" name="deplacements">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="117" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="79" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="118">    
+    <bendpoint x="6898" y="2339"/>    
+    <bendpoint x="6877" y="2834"/>    
+    <end type="SOURCE" refId="47" navigable="false">      
+      <attribute id="119" name="table">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="120" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="70" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="121">    
+    <end type="SOURCE" refId="68" navigable="false">      
+      <attribute id="122" name="instanciedScripts">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="123" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="13" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="124">    
+    <bendpoint x="7952" y="1511"/>    
+    <bendpoint x="7948" y="1790"/>    
+    <bendpoint x="7948" y="2339"/>    
+    <bendpoint x="7814" y="2834"/>    
+    <bendpoint x="7680" y="3671"/>    
+    <bendpoint x="7680" y="4220"/>    
+    <end type="SOURCE" refId="90" navigable="false">      
+      <attribute id="125" name="log">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="126" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="24" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="127">    
+    <end type="SOURCE" refId="69" navigable="false">      
+      <attribute id="128" name="log">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="129" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="24" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="130">    
+    <bendpoint x="6244" y="1511"/>    
+    <bendpoint x="6625" y="1790"/>    
+    <bendpoint x="6814" y="2339"/>    
+    <bendpoint x="6856" y="2834"/>    
+    <bendpoint x="7030" y="3671"/>    
+    <bendpoint x="7129" y="4220"/>    
+    <end type="SOURCE" refId="27" navigable="false">      
+      <attribute id="131" name="log">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="132" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="24" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="133">    
+    <end type="SOURCE" refId="78" navigable="false">      
+      <attribute id="134" name="h">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="135" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="103" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="136">    
+    <bendpoint x="4650" y="350"/>    
+    <bendpoint x="4650" y="845"/>    
+    <bendpoint x="4650" y="1178"/>    
+    <bendpoint x="4650" y="1511"/>    
+    <bendpoint x="4753" y="1790"/>    
+    <bendpoint x="4950" y="2339"/>    
+    <bendpoint x="5459" y="2834"/>    
+    <bendpoint x="5967" y="3671"/>    
+    <bendpoint x="6254" y="4220"/>    
+    <bendpoint x="6540" y="4571"/>    
+    <end type="SOURCE" refId="53" navigable="false">      
+      <attribute id="137" name="config">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="138" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="72" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="139">    
+    <bendpoint x="7658" y="845"/>    
+    <bendpoint x="7524" y="1178"/>    
+    <bendpoint x="7323" y="1511"/>    
+    <bendpoint x="7323" y="1790"/>    
+    <bendpoint x="7087" y="2339"/>    
+    <bendpoint x="7108" y="2834"/>    
+    <bendpoint x="7108" y="3671"/>    
+    <bendpoint x="7108" y="4220"/>    
+    <bendpoint x="7108" y="4571"/>    
+    <end type="SOURCE" refId="87" navigable="false">      
+      <attribute id="140" name="config">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="141" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="72" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="142">    
+    <end type="SOURCE" refId="78" navigable="false">      
+      <attribute id="143" name="ident">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="144" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="103" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="145">    
+    <bendpoint x="7024" y="2339"/>    
+    <bendpoint x="7087" y="2834"/>    
+    <bendpoint x="7129" y="3671"/>    
+    <bendpoint x="7150" y="4220"/>    
+    <bendpoint x="7207" y="4571"/>    
+    <bendpoint x="7207" y="5138"/>    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="22"/>  
+  </realization>  
+  <association id="146">    
+    <end type="SOURCE" refId="50" navigable="false">      
+      <attribute id="147" name="carteAsservissement">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="148" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="28" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="149">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="150" name="scriptmanager">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="151" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="68" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="152">    
+    <bendpoint x="6961" y="1511"/>    
+    <bendpoint x="6986" y="1178"/>    
+    <bendpoint x="6986" y="845"/>    
+    <bendpoint x="6986" y="350"/>    
+    <end type="SOURCE" refId="47"/>    
+    <end type="TARGET" refId="53"/>  
+  </generalization>  
+  <association id="153">    
+    <end type="SOURCE" refId="50" navigable="false">      
+      <attribute id="154" name="carteCapteursActionneurs">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="155" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="28" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="156">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="157" name="kalmanFilter">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="158" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="78" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="159">    
+    <bendpoint x="7826" y="845"/>    
+    <bendpoint x="7879" y="1178"/>    
+    <bendpoint x="7931" y="1511"/>    
+    <bendpoint x="7990" y="1790"/>    
+    <bendpoint x="8011" y="2339"/>    
+    <bendpoint x="8011" y="2834"/>    
+    <end type="SOURCE" refId="37" navigable="false">      
+      <attribute id="160" name="deplacements">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="161" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="12" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="162">    
+    <bendpoint x="7344" y="1790"/>    
+    <bendpoint x="7302" y="1511"/>    
+    <bendpoint x="7301" y="1178"/>    
+    <bendpoint x="7300" y="845"/>    
+    <bendpoint x="7300" y="350"/>    
+    <end type="SOURCE" refId="104"/>    
+    <end type="TARGET" refId="53"/>  
+  </generalization>  
+  <association id="163">    
+    <end type="SOURCE" refId="27" navigable="false">      
+      <attribute id="164" name="mState">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="165" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="33" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="166">    
+    <bendpoint x="8814" y="1178"/>    
+    <bendpoint x="8814" y="1511"/>    
+    <bendpoint x="8856" y="1790"/>    
+    <bendpoint x="8924" y="2339"/>    
+    <bendpoint x="8993" y="2834"/>    
+    <bendpoint x="9062" y="3671"/>    
+    <bendpoint x="9063" y="4220"/>    
+    <bendpoint x="9063" y="4571"/>    
+    <bendpoint x="9062" y="5138"/>    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="22"/>  
+  </realization>  
+  <association id="167">    
+    <bendpoint x="6181" y="845"/>    
+    <bendpoint x="6181" y="1178"/>    
+    <bendpoint x="6181" y="1511"/>    
+    <bendpoint x="6202" y="1790"/>    
+    <end type="SOURCE" refId="19" navigable="false">      
+      <attribute id="168" name="robotvrai">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="169" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="170">    
+    <bendpoint x="6531" y="2339"/>    
+    <bendpoint x="6531" y="2834"/>    
+    <bendpoint x="6525" y="3671"/>    
+    <bendpoint x="6519" y="4220"/>    
+    <bendpoint x="6519" y="4571"/>    
+    <bendpoint x="6519" y="5138"/>    
+    <end type="SOURCE" refId="84"/>    
+    <end type="TARGET" refId="22"/>  
+  </realization>  
+  <association id="171">    
+    <bendpoint x="8877" y="350"/>    
+    <bendpoint x="8877" y="845"/>    
+    <bendpoint x="8877" y="1178"/>    
+    <bendpoint x="8835" y="1511"/>    
+    <bendpoint x="8709" y="1790"/>    
+    <bendpoint x="8584" y="2339"/>    
+    <bendpoint x="8459" y="2834"/>    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="172" name="dep">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="173" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="12" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="174">    
+    <bendpoint x="7024" y="1790"/>    
+    <bendpoint x="6982" y="2339"/>    
+    <bendpoint x="6982" y="2834"/>    
+    <end type="SOURCE" refId="21" navigable="false">      
+      <attribute id="175" name="table">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="176" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="70" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="177">    
+    <bendpoint x="6961" y="2339"/>    
+    <bendpoint x="6898" y="2834"/>    
+    <bendpoint x="6816" y="3671"/>    
+    <bendpoint x="6645" y="4220"/>    
+    <bendpoint x="6645" y="4571"/>    
+    <bendpoint x="6645" y="5138"/>    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="178" name="lastPoint">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="179" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="29" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="180">    
+    <bendpoint x="7003" y="4220"/>    
+    <bendpoint x="7003" y="4571"/>    
+    <bendpoint x="7003" y="5138"/>    
+    <end type="SOURCE" refId="70"/>    
+    <end type="TARGET" refId="22"/>  
+  </realization>  
+  <association id="181">    
+    <bendpoint x="4690" y="1790"/>    
+    <bendpoint x="4690" y="2339"/>    
+    <bendpoint x="4690" y="2834"/>    
+    <bendpoint x="4690" y="3671"/>    
+    <bendpoint x="4690" y="4220"/>    
+    <bendpoint x="4690" y="4571"/>    
+    <bendpoint x="4690" y="5138"/>    
+    <end type="SOURCE" refId="85" navigable="false">      
+      <attribute id="182" name="position">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="183" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="29" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="184">    
+    <bendpoint x="7910" y="1511"/>    
+    <bendpoint x="7877" y="1790"/>    
+    <bendpoint x="7843" y="2339"/>    
+    <bendpoint x="7596" y="2834"/>    
+    <bendpoint x="7394" y="3671"/>    
+    <bendpoint x="7192" y="4220"/>    
+    <bendpoint x="7186" y="4571"/>    
+    <end type="SOURCE" refId="90" navigable="false">      
+      <attribute id="185" name="config">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="186" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="72" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="187">    
+    <bendpoint x="6706" y="350"/>    
+    <end type="SOURCE" refId="89"/>    
+    <end type="TARGET" refId="53"/>  
+  </generalization>  
+  <association id="188">    
+    <bendpoint x="5973" y="1511"/>    
+    <bendpoint x="5973" y="1790"/>    
+    <bendpoint x="5794" y="2339"/>    
+    <bendpoint x="5967" y="2834"/>    
+    <bendpoint x="6254" y="3671"/>    
+    <bendpoint x="6540" y="4220"/>    
+    <bendpoint x="6603" y="4571"/>    
+    <end type="SOURCE" refId="27" navigable="false">      
+      <attribute id="189" name="config">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="190" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="72" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="191">    
+    <end type="SOURCE" refId="104" navigable="false">      
+      <attribute id="192" name="z">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="193" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="103" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="194">    
+    <end type="SOURCE" refId="23"/>    
+    <end type="TARGET" refId="94"/>  
+  </generalization>  
+  <generalization id="195">    
+    <bendpoint x="6543" y="350"/>    
+    <end type="SOURCE" refId="40"/>    
+    <end type="TARGET" refId="53"/>  
+  </generalization>  
+  <association id="196">    
+    <bendpoint x="7562" y="350"/>    
+    <bendpoint x="7468" y="845"/>    
+    <bendpoint x="7374" y="1178"/>    
+    <bendpoint x="7281" y="1511"/>    
+    <bendpoint x="7281" y="1790"/>    
+    <bendpoint x="7045" y="2339"/>    
+    <bendpoint x="7045" y="2834"/>    
+    <bendpoint x="7051" y="3671"/>    
+    <bendpoint x="7045" y="4220"/>    
+    <bendpoint x="7045" y="4571"/>    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="197" name="config">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="198" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="72" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="199">    
+    <end type="SOURCE" refId="16" navigable="false">      
+      <attribute id="200" name="filtragelaser">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="201" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="202">    
+    <bendpoint x="7889" y="1178"/>    
+    <bendpoint x="7889" y="1511"/>    
+    <bendpoint x="7898" y="1790"/>    
+    <bendpoint x="7906" y="2339"/>    
+    <bendpoint x="7783" y="2834"/>    
+    <bendpoint x="7659" y="3671"/>    
+    <bendpoint x="7638" y="4220"/>    
+    <end type="SOURCE" refId="51" navigable="false">      
+      <attribute id="203" name="log">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="204" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="24" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="205">    
+    <end type="SOURCE" refId="63" navigable="false">      
+      <attribute id="206" name="mLocomotion">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="207" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="79" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="208">    
+    <bendpoint x="6982" y="1511"/>    
+    <bendpoint x="6982" y="1790"/>    
+    <bendpoint x="6877" y="2339"/>    
+    <bendpoint x="6823" y="2834"/>    
+    <bendpoint x="6795" y="3671"/>    
+    <bendpoint x="6666" y="4220"/>    
+    <bendpoint x="6687" y="4571"/>    
+    <end type="SOURCE" refId="14" navigable="false">      
+      <attribute id="209" name="config">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="210" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="72" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="211">    
+    <end type="SOURCE" refId="104" navigable="false">      
+      <attribute id="212" name="y">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="213" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="103" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="214">    
+    <bendpoint x="6940" y="2339"/>    
+    <bendpoint x="6844" y="2834"/>    
+    <bendpoint x="6723" y="3671"/>    
+    <bendpoint x="6603" y="4220"/>    
+    <bendpoint x="6582" y="4571"/>    
+    <bendpoint x="6582" y="5138"/>    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="215" name="history">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="216" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="29" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="217">    
+    <end type="SOURCE" refId="78" navigable="false">      
+      <attribute id="218" name="q">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="219" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="103" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="220">    
+    <bendpoint x="5815" y="2339"/>    
+    <bendpoint x="5866" y="2834"/>    
+    <bendpoint x="5917" y="3671"/>    
+    <bendpoint x="5967" y="4220"/>    
+    <bendpoint x="5992" y="4571"/>    
+    <bendpoint x="6009" y="5138"/>    
+    <end type="SOURCE" refId="58"/>    
+    <end type="TARGET" refId="22"/>  
+  </realization>  
+  <association id="221">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="222" name="container">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="223" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="87" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="224">    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="61"/>  
+  </generalization>  
+  <association id="225">    
+    <bendpoint x="8137" y="1178"/>    
+    <bendpoint x="8037" y="1511"/>    
+    <bendpoint x="7969" y="1790"/>    
+    <bendpoint x="7927" y="2339"/>    
+    <bendpoint x="7762" y="2834"/>    
+    <bendpoint x="7596" y="3671"/>    
+    <bendpoint x="7554" y="4220"/>    
+    <bendpoint x="7493" y="4571"/>    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="226" name="config">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="227" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="72" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="228">    
+    <bendpoint x="6856" y="2339"/>    
+    <bendpoint x="6961" y="2834"/>    
+    <bendpoint x="7072" y="3671"/>    
+    <bendpoint x="7171" y="4220"/>    
+    <end type="SOURCE" refId="84" navigable="false">      
+      <attribute id="229" name="log">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="230" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="24" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="231">    
+    <end type="SOURCE" refId="59"/>    
+    <end type="TARGET" refId="53"/>  
+  </generalization>  
+  <generalization id="232">    
+    <end type="SOURCE" refId="38"/>    
+    <end type="TARGET" refId="53"/>  
+  </generalization>  
+  <generalization id="233">    
+    <end type="SOURCE" refId="64"/>    
+    <end type="TARGET" refId="23"/>  
+  </generalization>  
+  <association id="234">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="235" name="mLocomotion">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="236" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="79" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="237">    
+    <bendpoint x="8814" y="845"/>    
+    <bendpoint x="8856" y="1178"/>    
+    <bendpoint x="8885" y="1511"/>    
+    <bendpoint x="8933" y="1790"/>    
+    <bendpoint x="8982" y="2339"/>    
+    <bendpoint x="9032" y="2834"/>    
+    <bendpoint x="9083" y="3671"/>    
+    <bendpoint x="9083" y="4220"/>    
+    <bendpoint x="9083" y="4571"/>    
+    <bendpoint x="9083" y="5138"/>    
+    <end type="SOURCE" refId="87" navigable="false">      
+      <attribute id="238" name="instanciedServices">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="239" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="22" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="240">    
+    <bendpoint x="7847" y="845"/>    
+    <bendpoint x="7847" y="1178"/>    
+    <bendpoint x="7847" y="1511"/>    
+    <bendpoint x="7856" y="1790"/>    
+    <bendpoint x="7864" y="2339"/>    
+    <bendpoint x="7741" y="2834"/>    
+    <bendpoint x="7617" y="3671"/>    
+    <bendpoint x="7617" y="4220"/>    
+    <end type="SOURCE" refId="87" navigable="false">      
+      <attribute id="241" name="log">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="242" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="24" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="243">    
+    <end type="SOURCE" refId="82"/>    
+    <end type="TARGET" refId="94"/>  
+  </generalization>  
+  <generalization id="244">    
+    <end type="SOURCE" refId="54"/>    
+    <end type="TARGET" refId="53"/>  
+  </generalization>  
+  <nesting id="245">    
+    <end type="SOURCE" refId="92"/>    
+    <end type="TARGET" refId="17"/>  
+  </nesting>  
+  <generalization id="246">    
+    <end type="SOURCE" refId="93"/>    
+    <end type="TARGET" refId="53"/>  
+  </generalization>  
+  <association id="247">    
+    <bendpoint x="7743" y="4220"/>    
+    <end type="SOURCE" refId="83" navigable="false">      
+      <attribute id="248" name="log">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="249" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="24" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="250">    
+    <end type="SOURCE" refId="60" navigable="false">      
+      <attribute id="251" name="table">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="252" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="70" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="253">    
+    <end type="SOURCE" refId="42" navigable="false">      
+      <attribute id="254" name="sensorsCardSerial">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="255" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="69" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="256">    
+    <end type="SOURCE" refId="28" navigable="false">      
+      <attribute id="257" name="name">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="258" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="92" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="259">    
+    <bendpoint x="4931" y="2834"/>    
+    <bendpoint x="4931" y="3671"/>    
+    <bendpoint x="4931" y="4220"/>    
+    <bendpoint x="4931" y="4571"/>    
+    <bendpoint x="4931" y="5138"/>    
+    <end type="SOURCE" refId="63" navigable="false">      
+      <attribute id="260" name="newOrder">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="261" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="29" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="262">    
+    <end type="SOURCE" refId="79" navigable="false">      
+      <attribute id="263" name="table">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="264" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="70" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="265">    
+    <bendpoint x="6688" y="1511"/>    
+    <bendpoint x="6688" y="1790"/>    
+    <bendpoint x="6835" y="2339"/>    
+    <bendpoint x="6611" y="2834"/>    
+    <bendpoint x="6603" y="3671"/>    
+    <bendpoint x="6561" y="4220"/>    
+    <bendpoint x="6561" y="4571"/>    
+    <bendpoint x="6603" y="5138"/>    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="22"/>  
+  </realization>  
+  <association id="266">    
+    <bendpoint x="7899" y="4220"/>    
+    <end type="SOURCE" refId="42" navigable="false">      
+      <attribute id="267" name="log">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="268" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="24" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="269">    
+    <bendpoint x="5697" y="4571"/>    
+    <bendpoint x="5697" y="5138"/>    
+    <end type="SOURCE" refId="94" navigable="false">      
+      <attribute id="270" name="position">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="271" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="29" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="272">    
+    <bendpoint x="6307" y="1178"/>    
+    <bendpoint x="6286" y="1511"/>    
+    <bendpoint x="6265" y="1790"/>    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="273" name="robotvrai">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="274" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="275">    
+    <end type="SOURCE" refId="72"/>    
+    <end type="TARGET" refId="22"/>  
+  </realization>  
+  <generalization id="276">    
+    <end type="SOURCE" refId="61"/>    
+    <end type="TARGET" refId="27"/>  
+  </generalization>  
+  <association id="277">    
+    <end type="SOURCE" refId="79" navigable="false">      
+      <attribute id="278" name="mLocomotionCardWrapper">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="279" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="12" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="280">    
+    <end type="SOURCE" refId="89" navigable="false">      
+      <attribute id="281" name="hookgenerator">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="282" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="283">    
+    <end type="SOURCE" refId="33" navigable="false">      
+      <attribute id="284" name="robot">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="285" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="84" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="286">    
+    <end type="SOURCE" refId="83" navigable="false">      
+      <attribute id="287" name="actuatorCardSerial">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="288" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="69" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="289">    
+    <end type="SOURCE" refId="36"/>    
+    <end type="TARGET" refId="23"/>  
+  </generalization>  
+  <association id="290">    
+    <end type="SOURCE" refId="78" navigable="false">      
+      <attribute id="291" name="f">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="292" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="103" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="293">    
+    <end type="SOURCE" refId="58" navigable="false">      
+      <attribute id="294" name="robotReal">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="295" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="296">    
+    <bendpoint x="6286" y="1790"/>    
+    <bendpoint x="6173" y="2339"/>    
+    <bendpoint x="5988" y="2834"/>    
+    <bendpoint x="5988" y="3671"/>    
+    <bendpoint x="6009" y="4220"/>    
+    <bendpoint x="6130" y="4571"/>    
+    <bendpoint x="6251" y="5138"/>    
+    <end type="SOURCE" refId="33"/>    
+    <end type="TARGET" refId="22"/>  
+  </realization>  
+  <association id="297">    
+    <end type="SOURCE" refId="32" navigable="false">      
+      <attribute id="298" name="log">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="299" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="24" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="300">    
+    <bendpoint x="6194" y="2339"/>    
+    <bendpoint x="6632" y="2834"/>    
+    <bendpoint x="6837" y="3671"/>    
+    <bendpoint x="7066" y="4220"/>    
+    <end type="SOURCE" refId="58" navigable="false">      
+      <attribute id="301" name="log">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="302" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="24" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="303">    
+    <end type="SOURCE" refId="65"/>    
+    <end type="TARGET" refId="27"/>  
+  </generalization>  
+  <association id="304">    
+    <end type="SOURCE" refId="53" navigable="false">      
+      <attribute id="305" name="container">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="306" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="87" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="307">    
+    <bendpoint x="6961" y="1790"/>    
+    <bendpoint x="6919" y="2339"/>    
+    <bendpoint x="6919" y="2834"/>    
+    <end type="SOURCE" refId="33" navigable="false">      
+      <attribute id="308" name="table">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="309" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="70" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="310">    
+    <bendpoint x="6965" y="350"/>    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="53"/>  
+  </generalization>  
+  <association id="311">    
+    <bendpoint x="6667" y="1790"/>    
+    <end type="SOURCE" refId="21" navigable="false">      
+      <attribute id="312" name="robotvrai">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="313" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="314">    
+    <bendpoint x="6582" y="3671"/>    
+    <bendpoint x="6582" y="4220"/>    
+    <bendpoint x="6624" y="4571"/>    
+    <end type="SOURCE" refId="79" navigable="false">      
+      <attribute id="315" name="config">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="316" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="72" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="317">    
+    <end type="SOURCE" refId="48"/>    
+    <end type="TARGET" refId="53"/>  
+  </generalization>  
+  <association id="318">    
+    <bendpoint x="8482" y="1178"/>    
+    <bendpoint x="8482" y="1511"/>    
+    <bendpoint x="8236" y="1790"/>    
+    <bendpoint x="7990" y="2339"/>    
+    <bendpoint x="7919" y="2834"/>    
+    <bendpoint x="7701" y="3671"/>    
+    <bendpoint x="7701" y="4220"/>    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="319" name="log">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="320" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="24" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="321">    
+    <end type="SOURCE" refId="37"/>    
+    <end type="TARGET" refId="53"/>  
+  </generalization>  
+  <association id="322">    
+    <bendpoint x="7962" y="4220"/>    
+    <bendpoint x="7777" y="4571"/>    
+    <end type="SOURCE" refId="42" navigable="false">      
+      <attribute id="323" name="config">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="324" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="72" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="325">    
+    <end type="SOURCE" refId="60" navigable="false">      
+      <attribute id="326" name="mLocomotionCardWrapper">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="327" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="12" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="328">    
+    <bendpoint x="7878" y="4220"/>    
+    <bendpoint x="7798" y="4571"/>    
+    <bendpoint x="7798" y="5138"/>    
+    <end type="SOURCE" refId="83"/>    
+    <end type="TARGET" refId="22"/>  
+  </realization>  
+  <association id="329">    
+    <end type="SOURCE" refId="71" navigable="false">      
+      <attribute id="330" name="position">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="331" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="29" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="332">    
+    <bendpoint x="8793" y="845"/>    
+    <bendpoint x="8793" y="1178"/>    
+    <bendpoint x="8793" y="1511"/>    
+    <bendpoint x="8793" y="1790"/>    
+    <bendpoint x="8793" y="2339"/>    
+    <bendpoint x="8793" y="2834"/>    
+    <end type="SOURCE" refId="87" navigable="false">      
+      <attribute id="333" name="serialmanager">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="334" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="50" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="335">    
+    <bendpoint x="8461" y="845"/>    
+    <bendpoint x="8461" y="1178"/>    
+    <bendpoint x="8503" y="1511"/>    
+    <bendpoint x="8503" y="1790"/>    
+    <bendpoint x="8503" y="2339"/>    
+    <bendpoint x="8503" y="2834"/>    
+    <end type="SOURCE" refId="93" navigable="false">      
+      <attribute id="336" name="capteurs">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="337" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="42" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="338">    
+    <bendpoint x="7645" y="5138"/>    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="22"/>  
+  </realization>  
+  <association id="339">    
+    <end type="SOURCE" refId="47" navigable="false">      
+      <attribute id="340" name="robotvrai">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="341" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="342">    
+    <end type="SOURCE" refId="60" navigable="false">      
+      <attribute id="343" name="mSensorsCardWrapper">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="344" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="42" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="345">    
+    <end type="SOURCE" refId="50" navigable="false">      
+      <attribute id="346" name="serieAsservissement">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="347" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="69" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="348">    
+    <bendpoint x="7637" y="845"/>    
+    <bendpoint x="7752" y="1178"/>    
+    <bendpoint x="7868" y="1511"/>    
+    <bendpoint x="7919" y="1790"/>    
+    <bendpoint x="7969" y="2339"/>    
+    <bendpoint x="7969" y="2834"/>    
+    <end type="SOURCE" refId="59" navigable="false">      
+      <attribute id="349" name="actionneurs">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="350" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="83" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="351">    
+    <bendpoint x="6982" y="4220"/>    
+    <bendpoint x="6982" y="4571"/>    
+    <end type="SOURCE" refId="70" navigable="false">      
+      <attribute id="352" name="config">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="353" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="72" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="354">    
+    <end type="SOURCE" refId="45"/>    
+    <end type="TARGET" refId="65"/>  
+  </generalization>  
+  <realization id="355">    
+    <bendpoint x="8321" y="4220"/>    
+    <bendpoint x="8321" y="4571"/>    
+    <bendpoint x="8321" y="5138"/>    
+    <end type="SOURCE" refId="42"/>    
+    <end type="TARGET" refId="22"/>  
+  </realization>  
+  <association id="356">    
+    <bendpoint x="5946" y="2834"/>    
+    <bendpoint x="5946" y="3671"/>    
+    <bendpoint x="5946" y="4220"/>    
+    <bendpoint x="5946" y="4571"/>    
+    <bendpoint x="5946" y="5138"/>    
+    <end type="SOURCE" refId="91" navigable="false">      
+      <attribute id="357" name="position">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="358" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="29" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="359">    
+    <bendpoint x="8919" y="350"/>    
+    <bendpoint x="8919" y="845"/>    
+    <bendpoint x="8919" y="1178"/>    
+    <bendpoint x="8906" y="1511"/>    
+    <bendpoint x="8877" y="1790"/>    
+    <bendpoint x="8824" y="2339"/>    
+    <bendpoint x="8772" y="2834"/>    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="360" name="capteurs">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="361" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="42" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="362">    
+    <bendpoint x="7103" y="350"/>    
+    <bendpoint x="6965" y="845"/>    
+    <bendpoint x="6661" y="1178"/>    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="363" name="real_state">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="364" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="33" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="365">    
+    <end type="SOURCE" refId="85"/>    
+    <end type="TARGET" refId="27"/>  
+  </generalization>  
+  <association id="366">    
+    <bendpoint x="6286" y="1178"/>    
+    <end type="SOURCE" refId="40" navigable="false">      
+      <attribute id="367" name="real_state">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="368" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="33" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="369">    
+    <end type="SOURCE" refId="70" navigable="false">      
+      <attribute id="370" name="mObstacleManager">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="371" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="32" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="372">    
+    <bendpoint x="6265" y="1178"/>    
+    <bendpoint x="6265" y="1511"/>    
+    <bendpoint x="6244" y="1790"/>    
+    <end type="SOURCE" refId="89" navigable="false">      
+      <attribute id="373" name="robotvrai">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="374" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="375">    
+    <bendpoint x="6223" y="1178"/>    
+    <bendpoint x="6202" y="1511"/>    
+    <bendpoint x="5994" y="1790"/>    
+    <bendpoint x="6152" y="2339"/>    
+    <end type="SOURCE" refId="40" navigable="false">      
+      <attribute id="376" name="robot">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="377" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="79" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="378">    
+    <bendpoint x="8835" y="845"/>    
+    <bendpoint x="8835" y="1178"/>    
+    <bendpoint x="8648" y="1511"/>    
+    <bendpoint x="8461" y="1790"/>    
+    <bendpoint x="8226" y="2339"/>    
+    <bendpoint x="7990" y="2834"/>    
+    <bendpoint x="7722" y="3671"/>    
+    <bendpoint x="7722" y="4220"/>    
+    <end type="SOURCE" refId="68" navigable="false">      
+      <attribute id="379" name="log">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="380" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="24" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="381">    
+    <bendpoint x="6030" y="3671"/>    
+    <bendpoint x="6030" y="4220"/>    
+    <bendpoint x="6013" y="4571"/>    
+    <bendpoint x="5988" y="5138"/>    
+    <end type="SOURCE" refId="79" navigable="false">      
+      <attribute id="382" name="position">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="383" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="29" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="384">    
+    <bendpoint x="7087" y="4220"/>    
+    <end type="SOURCE" refId="70" navigable="false">      
+      <attribute id="385" name="log">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="386" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="24" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="387">    
+    <bendpoint x="6009" y="3671"/>    
+    <bendpoint x="5988" y="4220"/>    
+    <bendpoint x="5971" y="4571"/>    
+    <bendpoint x="5967" y="5138"/>    
+    <end type="SOURCE" refId="79" navigable="false">      
+      <attribute id="388" name="aim">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="389" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="29" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="390">    
+    <bendpoint x="8440" y="1790"/>    
+    <bendpoint x="8460" y="2339"/>    
+    <bendpoint x="8480" y="2834"/>    
+    <end type="SOURCE" refId="25" navigable="false">      
+      <attribute id="391" name="mSensorsCardWrapper">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="392" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="42" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="393">    
+    <end type="SOURCE" refId="78" navigable="false">      
+      <attribute id="394" name="r">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="395" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="103" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="396">    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="53"/>  
+  </generalization>  
+  <association id="397">    
+    <end type="SOURCE" refId="92" navigable="false">      
+      <attribute id="398" name="type">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="399" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="17" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="400">    
+    <bendpoint x="7302" y="1790"/>    
+    <bendpoint x="7066" y="2339"/>    
+    <bendpoint x="7024" y="2834"/>    
+    <end type="SOURCE" refId="16" navigable="false">      
+      <attribute id="401" name="table">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="402" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="70" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="403">    
+    <bendpoint x="8856" y="845"/>    
+    <bendpoint x="8898" y="1178"/>    
+    <bendpoint x="8938" y="1511"/>    
+    <bendpoint x="8978" y="1790"/>    
+    <bendpoint x="9019" y="2339"/>    
+    <bendpoint x="9061" y="2834"/>    
+    <bendpoint x="9104" y="3671"/>    
+    <bendpoint x="9104" y="4220"/>    
+    <bendpoint x="9104" y="4571"/>    
+    <bendpoint x="9104" y="5138"/>    
+    <end type="SOURCE" refId="68"/>    
+    <end type="TARGET" refId="22"/>  
+  </realization>  
+  <generalization id="404">    
+    <end type="SOURCE" refId="31"/>    
+    <end type="TARGET" refId="61"/>  
+  </generalization>  
+  <association id="405">    
+    <end type="SOURCE" refId="14" navigable="false">      
+      <attribute id="406" name="realState">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="407" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="33" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="408">    
+    <end type="SOURCE" refId="27" navigable="false">      
+      <attribute id="409" name="callbacks">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="410" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="44" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="411">    
+    <end type="SOURCE" refId="87" navigable="false">      
+      <attribute id="412" name="threadmanager">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="413" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="51" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="414">    
+    <bendpoint x="6498" y="3671"/>    
+    <bendpoint x="6498" y="4220"/>    
+    <bendpoint x="6498" y="4571"/>    
+    <bendpoint x="6498" y="5138"/>    
+    <end type="SOURCE" refId="79"/>    
+    <end type="TARGET" refId="22"/>  
+  </realization>  
+  <association id="415">    
+    <bendpoint x="6573" y="2339"/>    
+    <bendpoint x="6590" y="2834"/>    
+    <bendpoint x="6624" y="3671"/>    
+    <bendpoint x="6624" y="4220"/>    
+    <bendpoint x="6666" y="4571"/>    
+    <end type="SOURCE" refId="84" navigable="false">      
+      <attribute id="416" name="config">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="417" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="72" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="418">    
+    <end type="SOURCE" refId="16"/>    
+    <end type="TARGET" refId="90"/>  
+  </generalization>  
+  <association id="419">    
+    <end type="SOURCE" refId="50" navigable="false">      
+      <attribute id="420" name="serieCapteursActionneurs">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="421" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="69" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="422">    
+    <bendpoint x="6773" y="4571"/>    
+    <end type="SOURCE" refId="32" navigable="false">      
+      <attribute id="423" name="config">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="424" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="72" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="425">    
+    <end type="SOURCE" refId="51" navigable="false">      
+      <attribute id="426" name="instanciedThreads">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="427" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="90" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="428">    
+    <end type="SOURCE" refId="78" navigable="false">      
+      <attribute id="429" name="p">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="430" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="103" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="431">    
+    <bendpoint x="7815" y="4220"/>    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="432" name="log">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="433" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="24" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="434">    
+    <end type="SOURCE" refId="63"/>    
+    <end type="TARGET" refId="11"/>  
+  </realization>  
+  <generalization id="435">    
+    <end type="SOURCE" refId="91"/>    
+    <end type="TARGET" refId="84"/>  
+  </generalization>  
+  <generalization id="436">    
+    <end type="SOURCE" refId="97"/>    
+    <end type="TARGET" refId="53"/>  
+  </generalization>  
+  <association id="437">    
+    <end type="SOURCE" refId="50" navigable="false">      
+      <attribute id="438" name="series">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="439" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="69" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="440">    
+    <end type="SOURCE" refId="21" navigable="false">      
+      <attribute id="441" name="filtragelaser">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="442" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="443">    
+    <end type="SOURCE" refId="84" navigable="false">      
+      <attribute id="444" name="speed">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="445" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="55" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="446">    
+    <bendpoint x="7920" y="4220"/>    
+    <bendpoint x="7920" y="4571"/>    
+    <bendpoint x="7920" y="5138"/>    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="22"/>  
+  </realization>  
+  <generalization id="447">    
+    <bendpoint x="8058" y="2339"/>    
+    <bendpoint x="8058" y="1790"/>    
+    <bendpoint x="8058" y="1511"/>    
+    <end type="SOURCE" refId="60"/>    
+    <end type="TARGET" refId="90"/>  
+  </generalization>  
+  <association id="448">    
+    <end type="SOURCE" refId="50" navigable="false">      
+      <attribute id="449" name="serieLaser">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="450" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="69" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="451">    
+    <end type="SOURCE" refId="25"/>    
+    <end type="TARGET" refId="90"/>  
+  </generalization>  
+  <generalization id="452">    
+    <bendpoint x="7028" y="1178"/>    
+    <bendpoint x="7082" y="845"/>    
+    <bendpoint x="7082" y="350"/>    
+    <end type="SOURCE" refId="21"/>    
+    <end type="TARGET" refId="53"/>  
+  </generalization>  
+  <association id="453">    
+    <bendpoint x="7941" y="4220"/>    
+    <end type="SOURCE" refId="50" navigable="false">      
+      <attribute id="454" name="log">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="455" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="24" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="456">    
+    <bendpoint x="5058" y="845"/>    
+    <bendpoint x="5058" y="1178"/>    
+    <bendpoint x="5058" y="1511"/>    
+    <bendpoint x="4795" y="1790"/>    
+    <end type="SOURCE" refId="54" navigable="false">      
+      <attribute id="457" name="robotchrono">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="458" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="91" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="459">    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="460" name="hookFactory">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="461" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="462">    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="463" name="locomotionCardSerial">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="464" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="69" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="465">    
+    <bendpoint x="8461" y="1511"/>    
+    <bendpoint x="8482" y="1790"/>    
+    <bendpoint x="8669" y="2339"/>    
+    <bendpoint x="8855" y="2834"/>    
+    <bendpoint x="9041" y="3671"/>    
+    <bendpoint x="9042" y="4220"/>    
+    <bendpoint x="9042" y="4571"/>    
+    <bendpoint x="9041" y="5138"/>    
+    <end type="SOURCE" refId="90"/>    
+    <end type="TARGET" refId="22"/>  
+  </realization>  
+  <association id="466">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="467" name="hookgenerator">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="468" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="469">    
+    <bendpoint x="7321" y="350"/>    
+    <bendpoint x="7412" y="845"/>    
+    <bendpoint x="7503" y="1178"/>    
+    <bendpoint x="7662" y="1511"/>    
+    <bendpoint x="7822" y="1790"/>    
+    <bendpoint x="7822" y="2339"/>    
+    <bendpoint x="7617" y="2834"/>    
+    <bendpoint x="7575" y="3671"/>    
+    <bendpoint x="7575" y="4220"/>    
+    <end type="SOURCE" refId="53" navigable="false">      
+      <attribute id="470" name="log">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="471" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="24" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="472">    
+    <end type="SOURCE" refId="40" navigable="false">      
+      <attribute id="473" name="hookgenerator">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="474" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="475">    
+    <bendpoint x="7941" y="4571"/>    
+    <bendpoint x="7941" y="5138"/>    
+    <end type="SOURCE" refId="69"/>    
+    <end type="TARGET" refId="22"/>  
+  </realization>  
+  <association id="476">    
+    <end type="SOURCE" refId="50" navigable="false">      
+      <attribute id="477" name="cards">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="478" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="28" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="479">    
+    <bendpoint x="6774" y="3671"/>    
+    <bendpoint x="7024" y="4220"/>    
+    <end type="SOURCE" refId="79" navigable="false">      
+      <attribute id="480" name="log">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="481" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="24" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="482">    
+    <end type="SOURCE" refId="24" navigable="false">      
+      <attribute id="483" name="config">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="484" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="72" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="485">    
+    <end type="SOURCE" refId="36" navigable="false">      
+      <attribute id="486" name="speed">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="487" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="29" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="488">    
+    <end type="SOURCE" refId="96"/>    
+    <end type="TARGET" refId="53"/>  
+  </generalization>  
+  <association id="489">    
+    <bendpoint x="7003" y="1511"/>    
+    <bendpoint x="7003" y="1790"/>    
+    <bendpoint x="7003" y="2339"/>    
+    <bendpoint x="7066" y="2834"/>    
+    <bendpoint x="7150" y="3671"/>    
+    <bendpoint x="7213" y="4220"/>    
+    <end type="SOURCE" refId="14" navigable="false">      
+      <attribute id="490" name="log">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="491" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="24" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="492">    
+    <bendpoint x="6202" y="845"/>    
+    <bendpoint x="6202" y="1178"/>    
+    <bendpoint x="6223" y="1511"/>    
+    <bendpoint x="6223" y="1790"/>    
+    <end type="SOURCE" refId="48" navigable="false">      
+      <attribute id="493" name="robotvrai">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="494" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

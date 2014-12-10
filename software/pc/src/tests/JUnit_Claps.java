@@ -6,7 +6,8 @@ import hook.types.HookGenerator;
 
 import org.junit.Before;
 import org.junit.Test;
-import pathdinding.Pathfinding;
+
+import pathDingDing.PathDingDing;
 import exceptions.serial.SerialException;
 import robot.Robot;
 import robot.cards.ActuatorsManager;
@@ -23,7 +24,7 @@ public class JUnit_Claps extends JUnit_Test {
 	Robot robot;
 	Table  table;
 	CloseClap scriptCloseClap;
-	Pathfinding pathfinding = new Pathfinding(table);
+	PathDingDing pathfinding = new PathDingDing(table);
 	HookGenerator hookgenerator;
 	
 	@Before

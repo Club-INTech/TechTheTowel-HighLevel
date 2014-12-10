@@ -17,16 +17,29 @@ abstract public class Hook
 {
 
 	protected ArrayList<Callback> callbacks = new ArrayList<Callback>();
-	
-	protected Config config;
-	protected Log log;
-	protected GameState<RobotReal> real_state;
 
-	public Hook(Config config, Log log, GameState<RobotReal> real_state)
+	/** Système de log sur lequel écrire */
+	@SuppressWarnings("unused")
+	private Log log;
+	
+	/** endroit ou lire la configuration du robot */
+	@SuppressWarnings("unused")
+	private Config config;
+	
+	/** Etat du jeu sur lequel on vérifie si le hook se déclenche ou non */
+	protected GameState<RobotReal> mState;
+
+	/**
+	 *  ce constructeur ne sera appellé que par les constructeurs des classes filles (des hooks bien précis)  
+	 * @param config endroit ou lire la configuration du robot 
+	 * @param log Système de log sur lequel écrire
+	 * @param gameState Etat du jeu sur lequel on vérifie si le hook se déclenche ou non
+	 */
+	public Hook(Config config, Log log, GameState<RobotReal> gameState)
 	{
 		this.config = config;
 		this.log = log;
-		this.real_state = real_state;
+		this.mState = gameState;
 	}
 	
 	/**
@@ -44,7 +57,7 @@ abstract public class Hook
 	 * Tous ses callbacks sont exécutés
 	 * @return true si ce hook modifie les déplacements du robot
 	 */
-	protected boolean declencher()
+	protected boolean trigger()
 	{
 		boolean retour = false;
 		
@@ -63,7 +76,7 @@ abstract public class Hook
 	
 	/**
 	 * On peut supprimer le hook s'il n'y a plus aucun callback déclenchable.
-	 * @return
+	 * @return vrai si le hook est supprimable
 	 */
 	public boolean supprimable()
 	{
