@@ -60,7 +60,17 @@ public abstract class Robot implements Service
 		this.log = log;
 		updateConfig();
 	}
+	
+	private int plotCounter=0;
+	public void setPlotCounter(int i) {
+		this.plotCounter=i;
 		
+	}
+	public int getPlotCounter()
+	{
+		return this.plotCounter;
+	}
+	
 	public void updateConfig()
 	{
 		symetrie = config.get("couleur").equals("rouge");
@@ -124,13 +134,5 @@ public abstract class Robot implements Service
     public abstract void desactiver_asservissement_rotation();
     public abstract void activer_asservissement_rotation();
 	
-    public boolean getIsLeftCarpetDropped() 
-	{
-		return isLeftCarpetDropped;
-	}
-    public void setIsLeftCarpetDropped(boolean newValue)
-    {
-    	isLeftCarpetDropped=newValue;
-    }
-    
+   
 }

@@ -61,5 +61,10 @@ public class GetGlass extends Script
 	{
 		// TODO fermer (ouvrir ?) le bras gauche et droit 
 	}
+	
+	private void eatGlass (boolean isSecondTry , boolean isArmChosenLeft)
+	{
+		
+	}
 
 }
