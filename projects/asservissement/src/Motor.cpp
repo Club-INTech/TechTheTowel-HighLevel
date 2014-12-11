@@ -31,7 +31,7 @@ Motor::Motor(Side s) :
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
 
 	if (s == Side::LEFT) {
-		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13;
+		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14;
 		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
 		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
 		GPIO_Init(GPIOD, &GPIO_InitStructure);
@@ -171,9 +171,9 @@ void Motor::setDirection(Direction dir) {
 		}
 	} else {
 		if (dir == Direction::FORWARD) {
-			GPIO_SetBits(GPIOD, GPIO_Pin_12);
+			GPIO_SetBits(GPIOD, GPIO_Pin_14);
 		} else {
-			GPIO_ResetBits(GPIOD, GPIO_Pin_12);
+			GPIO_ResetBits(GPIOD, GPIO_Pin_14);
 		}
 	}
 }
