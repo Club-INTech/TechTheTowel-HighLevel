@@ -1,20 +1,23 @@
+import hook.Hook;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
-import robot.Locomotion;
-import robot.RobotReal;
-import robot.cardsWrappers.LocomotionCardWrapper;
+import robot.Robot;
 import robot.cardsWrappers.SensorsCardWrapper;
 import scripts.ScriptManager;
 import strategie.GameState;
 import threads.ThreadTimer;
 import utils.Config;
 import container.Container;
-import enums.ActuatorOrder;
+import enums.ScriptNames;
 import enums.ServiceNames;
 import exceptions.ContainerException;
+import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
+import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialManagerException;
 
 
@@ -28,7 +31,8 @@ public class Main
 {
 	static Container container;
 	static Config config;
-	static GameState<RobotReal> real_state;
+	static GameState<Robot> real_state;
+	static ArrayList<Hook> emptyHook;
 	static ScriptManager scriptmanager;
 	static SensorsCardWrapper capteurs;
 	static boolean doitFaireDepartRapide;
@@ -52,7 +56,8 @@ public class Main
 		
 		
 		// Système d'injection de dépendances
-		try {
+		try 
+		{
 
 			container = new Container();
 			container.getService(ServiceNames.LOG);
@@ -64,43 +69,34 @@ public class Main
 		
 			
 			// initialise les singletons
-			real_state = (GameState<RobotReal>) container.getService(ServiceNames.GAME_STATE);
+			real_state = (GameState<Robot>) container.getService(ServiceNames.GAME_STATE);
 		    scriptmanager = (ScriptManager) container.getService(ServiceNames.SCRIPT_MANAGER);
 		    capteurs = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
+		    emptyHook = new ArrayList<Hook>();
 		    
 
 		
-		} catch (ContainerException e) {
+		} 
+		catch (ContainerException e) 
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}  catch (SerialManagerException e) {
+		}  
+		catch (SerialManagerException e) 
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (IOException e) {
+		} 
+		catch (IOException e) 
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		// Threads
 		//
-	//	container.demarreTousThreads();
+		//	container.demarreTousThreads();
 
-		
-		System.out.println("deplacement haut niveau");
-		try 
-		{
-			deplacements.moveLengthwise(100, null, true);
-		} 
-		catch (UnableToMoveException e)
-		{
-			e.printStackTrace();
-		}
-		System.out.println("fini !");
-
-
-		
-		
-		
 		// attends que le jumper soit retiré
 		try 
 		{
@@ -110,14 +106,41 @@ public class Main
 		{
 			e.printStackTrace();
 		}
-		
-		
+				
+		//initialisation du match		
 		System.out.println("Le robot commence le match");
-		 
+				 
+		try 
+		{
+			scriptmanager.getScript(ScriptNames.EXIT_START_ZONE).goToThenExec(0, real_state, true, emptyHook );
+		} 
+		catch (UnableToMoveException | SerialConnexionException | BlockedException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		
+		//debut du match
+		System.out.println("debut du match");
+		try 
+		{
+			scriptmanager.getScript(ScriptNames.DROP_CARPET).goToThenExec(0, real_state, true, emptyHook );
+			scriptmanager.getScript(ScriptNames.CLOSE_CLAP).goToThenExec(12, real_state, true, emptyHook );
+			scriptmanager.getScript(ScriptNames.CLOSE_CLAP).goToThenExec(3, real_state, true, emptyHook );
+		}
+		catch (UnableToMoveException | SerialConnexionException | BlockedException e1) 
+		{
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+		}
+		System.out.println("fini !");
+
+
 		//Le match s'arrête
 		container.destructor();
+		
+		
+		
 	}
 	
 	
@@ -150,7 +173,6 @@ public class Main
 		}
 		
 	}
-	
 	
 
 	/**

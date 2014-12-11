@@ -20,7 +20,7 @@ import utils.Log;
 public class ExitBeginZone extends AbstractScript
 {
 
-	int distanceToExit=450;
+	int distanceToExit=500;
 	ArrayList<Hook> emptyHook = new ArrayList<Hook>();
 	
 	public ExitBeginZone(HookFactory hookFactory, Config config, Log log) 
@@ -32,7 +32,7 @@ public class ExitBeginZone extends AbstractScript
 	public Vec2 entryPosition(int id)
 	{
 		// point de depart du match a modifier a chaque base roulante
-		return new Vec2(1340,1000);
+		return new Vec2(1500-71-48,1000);
 	}
 	
 	@Override
