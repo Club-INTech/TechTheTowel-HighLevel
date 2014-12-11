@@ -12,7 +12,7 @@ import smartMath.Path;
 import java.util.ArrayList;
 
 import enums.ServiceNames;
-import exceptions.Locomotion.BlockedException;
+import exceptions.*;
 
 public class JUnit_Pathfinding extends JUnit_Test
 {
@@ -40,7 +40,7 @@ public class JUnit_Pathfinding extends JUnit_Test
     	{
 			path = PathDingDing.computePath(new Vec2(-1200, 200), new Vec2(0, 500), (Table)cont.getService(ServiceNames.TABLE));
     	}
-    	catch(BlockedException e)
+    	catch(PathNotFoundException e)
     	{
     		System.out.println("--------------not on table------------------");
     	}

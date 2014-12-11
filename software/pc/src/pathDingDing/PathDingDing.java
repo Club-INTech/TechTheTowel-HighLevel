@@ -7,7 +7,7 @@ import smartMath.Vec2;
 
 import java.util.ArrayList;
 
-import exceptions.Locomotion.BlockedException;
+import exceptions.*;
 
 /**
  * Classe encapsulant les calculs de pathfinding 
@@ -72,7 +72,7 @@ public class PathDingDing
 	 * @return un chemin entre le point de d�part et d'arriv�e
 	 * @throws BlockedException 
 	 */
-	public static ArrayList<Vec2> computePath(Vec2 start, Vec2 end, Table table) throws BlockedException
+	public static ArrayList<Vec2> computePath(Vec2 start, Vec2 end, Table table) throws PathNotFoundException
 	{
 		Point DoubleStart = new Point(start.x, start.y), DoubleEnd = new Point(end.x, end.y);
 		Path path = new Path();
@@ -93,12 +93,12 @@ public class PathDingDing
 	 * @return un chemin entre le point de d�part et d'arriv�e en evitant uniquement les obstacles fixes
 	 * @throws BlockedException 
 	 */
-	private static Path dodgeStatic(Point start, Point end, Table table) throws BlockedException
+	private static Path dodgeStatic(Point start, Point end, Table table) throws PathNotFoundException
 	{
 		int compteur = 0;
 		
 		if(compteur >= 1000)
-			throw new BlockedException();
+			throw new PathNotFoundException();
 		
 		Path path = new Path();
 		
