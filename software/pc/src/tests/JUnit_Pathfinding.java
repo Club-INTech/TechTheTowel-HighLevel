@@ -11,6 +11,7 @@ import smartMath.Path;
 
 import java.util.ArrayList;
 
+import enums.ServiceNames;
 import exceptions.Locomotion.BlockedException;
 
 public class JUnit_Pathfinding extends JUnit_Test
@@ -34,11 +35,10 @@ public class JUnit_Pathfinding extends JUnit_Test
     public void testPF1() throws Exception
     {
     	Container cont = new Container();
-    	PathDingDing pf = new PathDingDing((Table)cont.getService("Table"));
     	ArrayList<Vec2> path = new ArrayList<Vec2>();
     	try
     	{
-    		path = pf.computePath(new Vec2(-1200, 200), new Vec2(0, 500));
+			path = PathDingDing.computePath(new Vec2(-1200, 200), new Vec2(0, 500), (Table)cont.getService(ServiceNames.TABLE));
     	}
     	catch(BlockedException e)
     	{
