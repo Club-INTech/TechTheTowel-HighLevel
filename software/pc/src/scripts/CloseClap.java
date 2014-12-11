@@ -14,7 +14,7 @@ import utils.Log;
  * 
  * @author theo
  * Exemple sur Paul
- *Sript Fermer les claps
+ * Script Fermer les claps
  *
  *Table :
  *
@@ -24,48 +24,27 @@ import utils.Log;
  *   |					|Debut du robot ici
  *   |					|
  *   |		N° claps	|
- *    6_5_4________3_2_1     // TODO: numérotation qui n'est pas a jour
+ *    /_3_/________2_/_1     
  *    
+ *    1,2,3 nous appartiennent
  *    
- *    
- *    
- *    
- *    
- *    
- *    //TODO: l'orientation n'as pas a être rappellée ici, ====> trouver un endroit logique pour la rappeller. Locomotion, Table, ou LocomotionCardWrapper sont de bon candidats
- *    Angles :
- *    
- *    ___________________
- *   |		PI/2		|
- * 	 |					|
- *   |PI			   0|  Debut du robot ici
- *   |					|
- *   |					|
- *   |______-PI/2_______|
  *   
  */
 
 public class CloseClap extends AbstractScript 
 {
-	//TODO spécifier SYSTEMETIQUEMENT les unitées
 
-	/** distance entre 2 claps (bout identique de claque clap, ex : charnieres) */
+	/** Distance entre 2 claps (bout identique de claque clap, ex : charnieres) en mm */
 	private int distanceBetweenClaps = 300;
 	
-	/** Longueur clap  */
+	/** Longueur clap en mm */
 	private int lenghtClap = 160;
 	
-	/** L'estradee fait 100, on met 200 */
+	/** L'estrade fait 100, on met 200 en mm */
 	private int lenghtStair = 200;
 	
-	/** distance intiale au script */ // TODO: ce commentaire ne veut rien dire
-	private int distanceInit;
-	
-	/** distance entre les deux triplettes de claps : entre le 3 et le 5 */
-	private int distanceRightLeft = 1700;
-	
-	/** le temps d'attente (en ms) entre la commande de dépose du tapis ( le bras se baisse) et la commande qui remonte le bras */ //TODO: ce n'est pas un tapis
-	private int sleepTime = 800;
+	/** Distance entre les deux triplettes de claps : entre le 2 (bout) et le 3 (charniere) en mm */
+	private int distanceRightLeft = 1460;
 
 	/**
 	 * Constructeur (normalement appelé uniquement par le scriptManager) du script fermant les Claps
@@ -74,42 +53,17 @@ public class CloseClap extends AbstractScript
 	 * @param config le fichier de config a partir duquel le script pourra se configurer
 	 * @param log le système de log qu'utilisera le script
 	 */
+	
 	public CloseClap(HookFactory hookFactory, Config config, Log log)
 	{
 		super(hookFactory, config, log);
-		
 		versions = new int[]{1, 2, 3 ,12 ,123 }; // TODO: il faut penser a le définir (tu l'avais oublié), puis a le garder a jour
 	}
 	
 	@Override
 	public void execute(int versionToExecute, GameState<Robot> stateToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
 	{
-		
-		/*
-		 * Théo, il y a une maladresse dans la structure de ton code:
-		 * 
-		 * tu as une duplication de code au niveau de la partie qui renverse chaque clap.
-		 * Pour s'en rendre compte, c'est simple: imagine que tu doive par exemple faire une nouvelle chose a chaque fois que le clap n°1 tombe: afficher un log par exemple.
-		 * Dans ce cas, tu devras ajouter 3 fois ton log, dans ta fonction _1, ta fonction _12, et dans ta fonction _123. (j'ai vu les bouts copiés/collés)
-		 * 
-		 * Je te conseilles plutot:
-		 * - une méthode pour le premier clap
-		 * - une méthode pour le second
-		 * - une dernière pour le dernier
-		 * 
-		 * - une méthode de transition entre le pemier et le second clap
-		 * - une méthode de transition entre le second et le dernier clap
-		 * 
-		 * Ansi, par exemple, pour la version 123 de ton scipt, tu metterais ici (dans la méthode execute directement) 
-		 * 1) premier clap
-		 * 2) transition
-		 * 3) second clap
-		 * 4) transition
-		 * 5) dernier clap
-		 * 
-		 * Au fait, tes noms de méthode en _ sont vraiment hideux
-		 * Au fait 2, un commentaire se met la plupart du temps sur une nouvelle ligne
-		 */
+		//Noté ! =X
 		
 		//FIXME: gestion de la symétrie !
 		if (versionToExecute == 123)
@@ -132,7 +86,7 @@ public class CloseClap extends AbstractScript
 		{
 			//On ouvre le bras puis on avance
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
-			
+		
 			//On baisse le premier clap, le notre
 			stateToConsider.robot.moveLengthwise(lenghtClap);
 			stateToConsider.table.setIsClap1Closed(true);	
@@ -157,7 +111,7 @@ public class CloseClap extends AbstractScript
 			//On ouvre le bras puis on avance
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
 			
-			// On baisse le premier clap, le notre TODO: tu vois ? copié/collé abusif xD
+			// On baisse notre clap 2
 			stateToConsider.robot.moveLengthwise(lenghtClap);
 			stateToConsider.table.setIsClap2Closed(true);	
 
@@ -192,7 +146,7 @@ public class CloseClap extends AbstractScript
 		}
 		catch (UnableToMoveException e) 
 		{
-		log.debug("Probleme avec le deplacement pendant le clap 3", this);// Viens me parler de cette ligne. Je dois t'expliquer ce que veut dire "remonter une exception"
+			log.debug("Probleme avec le deplacement pendant le clap 3", this);// Viens me parler de cette ligne. Je dois t'expliquer ce que veut dire "remonter une exception"
 		} 
 		catch (SerialConnexionException e) 
 		{
@@ -215,12 +169,15 @@ public class CloseClap extends AbstractScript
 			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, true); 
 			
 			// On avance entre le 1 et le 2
-			stateToConsider.robot.moveLengthwise(2*distanceBetweenClaps-lenghtClap-20);	// TODO: cette formule semble inexacte, réfères-toi plutot a  https://www.youtube.com/watch?v=I2H1-JHx6xk
-			// TODO: recopie la formaule en commentaire en l'expliquant, que le néophite puisse la comprendre
+			stateToConsider.robot.moveLengthwise(2*distanceBetweenClaps-lenghtClap-20);	
+			//On se deplace entre le clap 1 (son bout) et la charniere du deuxieme : 
+			//Ceci fais 2*longueur entre les claps (ici, le bout du clap 2)
+			//Et on enleve sa longueur (On est donc à la charniere du 2), moins 2 cm par securité 
+			//(Eviter de mettre le bras au milieu en plein dans le clap 2 par exemple
 
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
 			
-			// On tourne en fermant le clap
+			// On tourne tout en fermant le clap
 			stateToConsider.robot.turn(Math.PI/2);
 			stateToConsider.table.setIsClap2Closed(true);
 
@@ -246,10 +203,15 @@ public class CloseClap extends AbstractScript
 			stateToConsider.robot.moveLengthwise(lenghtClap);//On baisse le premier clap, le notre
 			stateToConsider.table.setIsClap1Closed(true);		
 
-			//on evite le clap adverse
+			//On evite le clap adverse
 			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, true); 
 			
-			stateToConsider.robot.moveLengthwise(2*distanceBetweenClaps-lenghtClap-20); // TODO: recopie la formaule en commentaire en l'expliquant, que le néophite puisse la comprendre
+			stateToConsider.robot.moveLengthwise(2*distanceBetweenClaps-lenghtClap-20);
+			//On se deplace entre le clap 1 (son bout) et la charniere du deuxieme : 
+			//Ceci fais 2*longueur entre les claps (ici, le bout du clap 2)
+			//Et on enleve sa longueur (On est donc à la charniere du 2), moins 2 cm par securité 
+			//(Eviter de mettre le bras au milieu en plein dans le clap 2 par exemple
+			
 			
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
 			
@@ -311,7 +273,6 @@ public class CloseClap extends AbstractScript
 	@Override
 	public int remainingScoreOfVersion(int version, GameState<?> stateToConsider)
 	{
-		
 		//TODO: le résultat est faux: si aucun clap n'est fermé, et que je demande la version 1, ne j'obtient que 5 points, pas 15 comme cette méthode le renvoit
 		int score = 15;
 		if(stateToConsider.table.getIsClap1Closed())
@@ -338,30 +299,5 @@ public class CloseClap extends AbstractScript
 		{
 			log.debug("Erreur termine : ne peux pas replier claps", this); // Viens me parler de cette ligne. Je dois t'expliquer ce que veut dire "remonter une exception"
 		}
-	}
-	
-	
-	//TODO: pitié, doc moi ces setters/getters, ca prends 20sec
-	// D"ailleurs je me demande même si leur existance est utile. 
-	
-	
-	public int getDistanceInit()
-	{
-		return distanceInit;
-	}
-
-	public void setDistanceInit(int distanceInit)
-	{
-		this.distanceInit = distanceInit;
-	}
-
-	public int getSleepTime()
-	{
-		return sleepTime;
-	}
-
-	public void setSleepTime(int sleepTime)
-	{
-		this.sleepTime = sleepTime;
 	}
 }

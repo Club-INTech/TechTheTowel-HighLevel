@@ -2,46 +2,52 @@ package tests;
 
 //@author Théo + architecture Paul
 
-import hook.types.HookGenerator;
+import hook.types.HookFactory;
 
 import org.junit.Before;
-import org.junit.Test;
 
 import pathDingDing.PathDingDing;
-import exceptions.serial.SerialException;
 import robot.Robot;
-import robot.cards.ActuatorsManager;
-import robot.cards.Locomotion;
+import robot.RobotReal;
+import scripts.DropCarpet;
+import strategie.GameState;
+import java.util.ArrayList;
+import hook.Hook;
 import scripts.CloseClap;
 import table.Table;
+import enums.ServiceNames;
 
-
+import exceptions.Locomotion.UnableToMoveException;
+import exceptions.serial.SerialConnexionException;
 
 public class JUnit_Claps extends JUnit_Test {
-	
-	Locomotion locomotion;
-	ActuatorsManager actionneurs;
-	Robot robot;
-	Table  table;
+
 	CloseClap scriptCloseClap;
-	PathDingDing pathfinding = new PathDingDing(table);
-	HookGenerator hookgenerator;
-	
+	DropCarpet scriptCarpet;
+	RobotReal robot;
+	Table table;
+	PathDingDing pathfinding;
+	HookFactory hookFactory;
+	GameState<Robot> game;
+	ArrayList<Hook> emptyHook = new ArrayList<Hook>();
+
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
-		locomotion = (Locomotion)container.getService("Deplacements");
-		actionneurs = (ActuatorsManager)container.getService("Actionneurs");
-		scriptCloseClap = new CloseClap (hookgenerator,config,log,pathfinding,robot, actionneurs, table);
+		
+		table = (Table)container.getService(ServiceNames.TABLE);
+		robot = (RobotReal)container.getService(ServiceNames.ROBOT_REAL);
+		hookFactory = (HookFactory)container.getService(ServiceNames.HOOK_FACTORY);
+		pathfinding = new PathDingDing(table);
+		scriptCloseClap = new CloseClap(hookFactory, config, log);
 	}
 	
-	
-	public void test()
+	public void test() throws UnableToMoveException, SerialConnexionException
 	{
-		scriptCloseClap.execute(1);
+		scriptCloseClap.execute(1, null, false);
+		//Test de fermeture des claps  1 , 2 , 3 (du plus proche au plu loin du depart)
 	}
-	
-	
+
 	{/* Premier jet du test, fonctionne 
 	@Test
 	public void test()
