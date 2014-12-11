@@ -15,6 +15,7 @@ import utils.Log;
 import utils.Config;
 
 // TODO: Auto-generated Javadoc
+// TODO ajouter les capteurs au robot.
 /**
  *  Classe abstraite du robot, dont héritent RobotVrai et RobotChrono
  *  Quand une action peut être faite soit pour en connaitre le temps d'exécution, soit pour la faire en vrai, c'est elle qu'il faut utiliser.
