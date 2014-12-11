@@ -30,8 +30,6 @@ public class Main
 	static Config config;
 	static GameState<RobotReal> real_state;
 	static ScriptManager scriptmanager;
-	static Locomotion deplacements;
-	static LocomotionCardWrapper dep;
 	static SensorsCardWrapper capteurs;
 	static boolean doitFaireDepartRapide;
 	
@@ -66,10 +64,8 @@ public class Main
 		
 			
 			// initialise les singletons
-		    dep = (LocomotionCardWrapper)container.getService(ServiceNames.LOCOMOTION_CARD_WRAPPER);
 			real_state = (GameState<RobotReal>) container.getService(ServiceNames.GAME_STATE);
 		    scriptmanager = (ScriptManager) container.getService(ServiceNames.SCRIPT_MANAGER);
-		    deplacements = (Locomotion)container.getService(ServiceNames.LOCOMOTION);
 		    capteurs = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
 		    
 
