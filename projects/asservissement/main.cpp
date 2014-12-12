@@ -100,44 +100,44 @@ int main(void)
 				serial.printfln("Pwm trans : %d", motionControlSystem->getPWMTranslation());
 				serial.printfln("Pwm rotation : %d", motionControlSystem->getPWMRotation());
 			}
-//			else if(!strcmp("ml",order))
-//			{
-//				serial.printfln("On bouge la codeuse gauche de 100 ticks");
-//				motionControlSystem->moveLeftEncoder(100);
-//			}
-//			else if(!strcmp("mr",order))
-//			{
-//				serial.printfln("On bouge la codeuse droite de 100 ticks");
-//				motionControlSystem->moveRightEncoder(100);
-//			}
-//			else if(!strcmp("m",order))
-//			{
-//				serial.printfln("On bouge les deux codeuses de 100 ticks");
-//				motionControlSystem->moveLeftEncoder(100);
-//				motionControlSystem->moveRightEncoder(100);
-//			}
-//			else if(!strcmp("mle",order))
-//			{
-//				int32_t value;
-//				serial.read(value);
-//				serial.printfln("On bouge la codeuse gauche de %d ticks", value);
-//				motionControlSystem->moveLeftEncoder(value);
-//			}
-//			else if(!strcmp("mre",order))
-//			{
-//				int32_t value;
-//				serial.read(value);
-//				serial.printfln("On bouge la codeuse droite de %d ticks", value);
-//				motionControlSystem->moveRightEncoder(value);
-//			}
-//			else if(!strcmp("me",order))
-//			{
-//				int32_t value;
-//				serial.read(value);
-//				serial.printfln("On bouge les deux codeuses de %d ticks", value);
-//				motionControlSystem->moveLeftEncoder(value);
-//				motionControlSystem->moveRightEncoder(value);
-//			}
+			else if(!strcmp("ml",order))
+			{
+				serial.printfln("On bouge la codeuse gauche de 100 ticks");
+				motionControlSystem->moveLeftEncoder(100);
+			}
+			else if(!strcmp("mr",order))
+			{
+				serial.printfln("On bouge la codeuse droite de 100 ticks");
+				motionControlSystem->moveRightEncoder(100);
+			}
+			else if(!strcmp("m",order))
+			{
+				serial.printfln("On bouge les deux codeuses de 100 ticks");
+				motionControlSystem->moveLeftEncoder(100);
+				motionControlSystem->moveRightEncoder(100);
+			}
+			else if(!strcmp("mle",order))
+			{
+				int32_t value;
+				serial.read(value);
+				serial.printfln("On bouge la codeuse gauche de %d ticks", value);
+				motionControlSystem->moveLeftEncoder(value);
+			}
+			else if(!strcmp("mre",order))
+			{
+				int32_t value;
+				serial.read(value);
+				serial.printfln("On bouge la codeuse droite de %d ticks", value);
+				motionControlSystem->moveRightEncoder(value);
+			}
+			else if(!strcmp("me",order))
+			{
+				int32_t value;
+				serial.read(value);
+				serial.printfln("On bouge les deux codeuses de %d ticks", value);
+				motionControlSystem->moveLeftEncoder(value);
+				motionControlSystem->moveRightEncoder(value);
+			}
 			else if(!strcmp("g",order))
 			{
 				serial.printfln("Objectif en translation: %d   actuel : %d", motionControlSystem->getTranslationGoal(), motionControlSystem->currentDistance);

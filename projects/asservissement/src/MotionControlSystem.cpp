@@ -24,9 +24,9 @@ void MotionControlSystem::init() {
 	 */
 
 	translationPID.setControllerDirection(PidDirection::DIRECT);
-	translationPID.setTunings(0.45, 0, 0.);
+	translationPID.setTunings(0.30, 0, 0.);
 	rotationPID.setControllerDirection(PidDirection::DIRECT);
-	rotationPID.setTunings(.6, 0, 0.);
+	rotationPID.setTunings(.45, 0, 0.);
 
 	/**
 	 * Initialisation de la boucle d'asservissement (TIMER 4)
@@ -108,10 +108,10 @@ void MotionControlSystem::enableRotationControl(bool enabled) {
 
 void MotionControlSystem::control() {
 
-	int32_t leftTicks = Counter::getLeftValue();
-	int32_t rightTicks = Counter::getRightValue();
-//	int32_t leftTicks = leftEncoderFake;
-//	int32_t rightTicks = rightEncoderFake;
+//	int32_t leftTicks = Counter::getLeftValue();
+//	int32_t rightTicks = Counter::getRightValue();
+	int32_t leftTicks = leftEncoderFake;
+	int32_t rightTicks = rightEncoderFake;
 
 	// currentDistance = leftTicks + rightTicks; // Il manque bel et bien un /2
 	currentDistance = (leftTicks + rightTicks) / 2;
