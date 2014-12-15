@@ -133,7 +133,7 @@ public class Main
 		attendreDebutMatch();
 		
 		
-		//debut du match
+		//premiere action du match
 		
 		System.out.println("Le robot commence le match");
 				 
@@ -143,15 +143,20 @@ public class Main
 		} 
 		catch (SerialConnexionException  e) 
 		{
-			// TODO Main erreur connexion serie
+			System.out.println("CRITICAL : Carte mal branchée. Match termine");
 			e.printStackTrace();
+			return;
 		}
-		catch (UnableToMoveException e) {
-			// TODO Main robot ennemi detecte
-			//il faut recommencer le script, bizarre a ce stade :/
-		} catch (PathNotFoundException e) {
-			// TODO Main le pathfinding ne sais as rester sur place.
-			e.printStackTrace();
+		catch (UnableToMoveException e) 
+		{
+			System.out.println("CRITICAL : Chemin bloque, enlevez votre main");
+			return;//TODO retry ?
+		}
+		catch (PathNotFoundException e) 
+		{
+			System.out.println("CRITICAL : Le robot ne sait pas rester sur place");
+			System.out.println("verifiez le point d'etree de ExitBeginZone");
+			return;
 		}
 		
 		//debut du match
@@ -173,6 +178,7 @@ public class Main
 		catch (PathNotFoundException e)
 		{
 			//TODO: le pathfinding ne trouve pas de chemin
+			
 		}
 		System.out.println("match fini !");
 
