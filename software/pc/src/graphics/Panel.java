@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import table.Table;
 import smartMath.Vec2;
 
+import table.Table;
+import table.obstacles.*;
+
 /**
  * panneau sur lequel est dessine la table
  * @author Etienne
@@ -17,10 +20,12 @@ import smartMath.Vec2;
  */
 public class Panel extends JPanel
 {
-	ArrayList<Vec2> m_path = new ArrayList<Vec2>();
+	private ArrayList<Vec2> m_path = new ArrayList<Vec2>();
+	private Table mTable;
 	
-	public Panel()
+	public Panel(Table table)
 	{
+		mTable = table;
 	}
 	
 	public void paintComponent(Graphics g)
@@ -29,6 +34,13 @@ public class Panel extends JPanel
 	    g.fillRect(0, 0, this.getWidth(), this.getHeight());
 	    
 	    g.setColor(Color.black);
+	    
+	    ArrayList<ObstacleRectangular> rects = mTable.getObstacleManager().getRects();
+	    for(int i = 0; i < rects.size(); i++)
+	    {
+	    	g.drawRect((rects.get(i).getPosition().x - (rects.get(i).getSizeX() / 2) + 1500) * this.getWidth() / 3000, -(rects.get(i).getPosition().y + rects.get(i).getSizeY()) * this.getHeight() / 2000 + this.getHeight(), rects.get(i).getSizeX() * this.getWidth() / 3000, rects.get(i).getSizeY() * this.getHeight() / 2000);
+	    }
+	    
 	    g.drawRect(0, 0, this.getWidth(), this.getHeight());
 	    
 	    g.setColor(Color.blue);
@@ -45,6 +57,7 @@ public class Panel extends JPanel
 	
 	public void drawArrayList(ArrayList<Vec2> path)
 	{
+		
 		m_path = path;
 		repaint();
 	}

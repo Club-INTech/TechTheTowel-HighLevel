@@ -271,8 +271,7 @@ public abstract class Robot implements Service
     public void moveToLocation(Vec2 aim, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, BlockedException
     {
     	//FIXME le pathDingDing reclame une table
-    	PathDingDing pathdingding = new PathDingDing (null);
-    	ArrayList<Vec2> path = pathdingding.computePath(getPosition(),aim);
+    	ArrayList<Vec2> path = PathDingDing.computePath(getPosition(), aim, /*table*/);
     	followPath(path , hooksToConsider);
     	
     }
