@@ -57,7 +57,8 @@ public class JUnit_CarpetDropper extends JUnit_Test
 		
 		//positionnement du robot
 		robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP,false);
-		robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP,true);
+		robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP,true); 
+		//on remonte les deux bras a tapis en meme temps
 		robot.moveLengthwise(1000);
 		Random rand = new Random();
 		robot.turn(rand.nextDouble());
@@ -69,7 +70,7 @@ public class JUnit_CarpetDropper extends JUnit_Test
 	{
 		robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP,false);
 		robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP,true);
-		//le robot reste sur place donc il est bien positionné pour le prochain test
+		//on remonte les deux bras a tapis en meme temps
 	}
 
 	@Test

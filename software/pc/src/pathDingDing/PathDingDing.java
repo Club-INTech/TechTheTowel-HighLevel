@@ -7,7 +7,7 @@ import smartMath.Vec2;
 
 import java.util.ArrayList;
 
-import exceptions.Locomotion.BlockedException;
+import exceptions.*;
 
 /**
  * Classe encapsulant les calculs de pathfinding 
@@ -16,15 +16,10 @@ import exceptions.Locomotion.BlockedException;
  */
 public class PathDingDing
 {
-	private Table mTable;
 	
-	// TODO: documenter a quoi sert cette variable
-	int compteur;
-	
-	public PathDingDing(Table mTable)
+	public PathDingDing()
 	{
-		this.mTable = mTable;
-		compteur = 0;
+		
 	}
 	
 	/**
@@ -77,15 +72,14 @@ public class PathDingDing
 	 * @return un chemin entre le point de d�part et d'arriv�e
 	 * @throws BlockedException 
 	 */
-	public ArrayList<Vec2> computePath(Vec2 start, Vec2 end) throws BlockedException
+	public static ArrayList<Vec2> computePath(Vec2 start, Vec2 end, Table table) throws PathNotFoundException
 	{
-		compteur = 0;
 		Point DoubleStart = new Point(start.x, start.y), DoubleEnd = new Point(end.x, end.y);
 		Path path = new Path();
 		path.add(DoubleStart);
-		path.addAll(dodgeStatic(DoubleStart, DoubleEnd));
+		path.addAll(dodgeStatic(DoubleStart, DoubleEnd, table));
 		path.add(DoubleEnd);
-		simplify(path);
+		simplify(path, table);
 		return path.toVec2Array();
 	}
 
@@ -99,10 +93,12 @@ public class PathDingDing
 	 * @return un chemin entre le point de d�part et d'arriv�e en evitant uniquement les obstacles fixes
 	 * @throws BlockedException 
 	 */
-	private Path dodgeStatic(Point start, Point end) throws BlockedException
+	private static Path dodgeStatic(Point start, Point end, Table table) throws PathNotFoundException
 	{
+		int compteur = 0;
+		
 		if(compteur >= 1000)
-			throw new BlockedException();
+			throw new PathNotFoundException();
 		
 		Path path = new Path();
 		
@@ -111,11 +107,11 @@ public class PathDingDing
 		int indiceDistMin = 0;
 		Point node = new Point();
 		boolean intersects = false;
-		for(int ind_ligne = 0 ; ind_ligne < mTable.getLines().size() ; ind_ligne++)
+		for(int ind_ligne = 0 ; ind_ligne < table.getLines().size() ; ind_ligne++)
     	{
-	    	if( intersects(start, end, mTable.getLines().get(ind_ligne).getA(), mTable.getLines().get(ind_ligne).getB()))
+	    	if( intersects(start, end, table.getLines().get(ind_ligne).getA(), table.getLines().get(ind_ligne).getB()))
 	    	{
-	    		node = intersection(start, end, mTable.getLines().get(ind_ligne).getA(), mTable.getLines().get(ind_ligne).getB());
+	    		node = intersection(start, end, table.getLines().get(ind_ligne).getA(), table.getLines().get(ind_ligne).getB());
 	    		intersects = true;
 	    		double dist = Math.pow(node.x - start.x, 2) + Math.pow(node.y - start.y, 2);
 		    	if (dist <= min)
@@ -130,29 +126,29 @@ public class PathDingDing
 		if(intersects)
 		{
 			//s'il n'y a qu'un seul point de passage sur l'obstacle
-			if( mTable.getLines().get(indiceDistMin).getNbPassagePoint() == 1 )
+			if( table.getLines().get(indiceDistMin).getNbPassagePoint() == 1 )
 			{
 				compteur++;
-				path.addAll(dodgeStatic(start, mTable.getLines().get(indiceDistMin).getPassagePoint1()));
-				path.add(mTable.getLines().get(indiceDistMin).getPassagePoint1());
-				path.addAll(dodgeStatic(mTable.getLines().get(indiceDistMin).getPassagePoint1(), end));
+				path.addAll(dodgeStatic(start, table.getLines().get(indiceDistMin).getPassagePoint1(), table));
+				path.add(table.getLines().get(indiceDistMin).getPassagePoint1());
+				path.addAll(dodgeStatic(table.getLines().get(indiceDistMin).getPassagePoint1(), end, table));
 			}
 			//s'il y a deux points de passage sur l'obstacle, prend le point de passage le plus proche du point d'arriv�e.
 			else
 			{
-				if(Math.pow(mTable.getLines().get(indiceDistMin).getPassagePoint1().x - end.x, 2) + Math.pow(mTable.getLines().get(indiceDistMin).getPassagePoint1().y - end.y, 2) <= Math.pow(mTable.getLines().get(indiceDistMin).getPassagePoint2().x - end.x, 2) + Math.pow(mTable.getLines().get(indiceDistMin).getPassagePoint2().y - end.y, 2))
+				if(Math.pow(table.getLines().get(indiceDistMin).getPassagePoint1().x - end.x, 2) + Math.pow(table.getLines().get(indiceDistMin).getPassagePoint1().y - end.y, 2) <= Math.pow(table.getLines().get(indiceDistMin).getPassagePoint2().x - end.x, 2) + Math.pow(table.getLines().get(indiceDistMin).getPassagePoint2().y - end.y, 2))
 				{
 					compteur++;
-					path.addAll(dodgeStatic(start, mTable.getLines().get(indiceDistMin).getPassagePoint1()));
-					path.add(mTable.getLines().get(indiceDistMin).getPassagePoint1());
-					path.addAll(dodgeStatic(mTable.getLines().get(indiceDistMin).getPassagePoint1(), end));
+					path.addAll(dodgeStatic(start, table.getLines().get(indiceDistMin).getPassagePoint1(), table));
+					path.add(table.getLines().get(indiceDistMin).getPassagePoint1());
+					path.addAll(dodgeStatic(table.getLines().get(indiceDistMin).getPassagePoint1(), end, table));
 				}
 				else
 				{
 					compteur++;
-					path.addAll(dodgeStatic(start, mTable.getLines().get(indiceDistMin).getPassagePoint2()));
-					path.add(mTable.getLines().get(indiceDistMin).getPassagePoint2());
-					path.addAll(dodgeStatic(mTable.getLines().get(indiceDistMin).getPassagePoint2(), end));
+					path.addAll(dodgeStatic(start, table.getLines().get(indiceDistMin).getPassagePoint2(), table));
+					path.add(table.getLines().get(indiceDistMin).getPassagePoint2());
+					path.addAll(dodgeStatic(table.getLines().get(indiceDistMin).getPassagePoint2(), end, table));
 				}
 			}
 		}
@@ -164,7 +160,7 @@ public class PathDingDing
 	 * @param path chemin � simplifier
 	 * @return un chemin simplifi�
 	 */
-	public Path simplify(Path path)
+	public static Path simplify(Path path, Table table)
 	{
 		
 		// TODO: expliciter en commentaire l'algo
@@ -172,9 +168,9 @@ public class PathDingDing
 		for(int i = 0; i < path.size() - 2; i++)
 		{
 			boolean removable = true;
-			for(int ind_ligne = 0 ; ind_ligne < mTable.getLines().size() ; ind_ligne++)
+			for(int ind_ligne = 0 ; ind_ligne < table.getLines().size() ; ind_ligne++)
 	    	{
-		    	if( intersects(path.getPosition(i), path.getPosition(i+2), mTable.getLines().get(ind_ligne).getA(), mTable.getLines().get(ind_ligne).getB()));
+		    	if( intersects(path.getPosition(i), path.getPosition(i+2), table.getLines().get(ind_ligne).getA(), table.getLines().get(ind_ligne).getB()));
 		    	{
 		    		removable = false;
 		    	}

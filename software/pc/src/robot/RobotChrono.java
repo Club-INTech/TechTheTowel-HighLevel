@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import hook.Hook;
 import smartMath.Vec2;
+import table.Table;
 import utils.Log;
 import utils.Config;
 import enums.ActuatorOrder;
@@ -116,11 +117,16 @@ public class RobotChrono extends Robot
 	{
 		// va sucessivement a tout les points
 		for(Vec2 point: path)
-			moveToLocation(point, hooksToConsider);
+		{
+			//TODO on utilise pas moveToLocation
+			//moveToLocation vas au point en utilisant le pathfinding, followPath suit le chemin donne par moveToLocation
+			//il faut calculer le temps pour parcourir le chemin donne : TempsPourTourner + distance/vitesse
+			//moveToLocation(point, hooksToConsider);
+		}
 	}
 	
 	@Override
-	public void moveToLocation(Vec2 point, ArrayList<Hook> hooksToConsider)
+	public void moveToLocation(Vec2 point, ArrayList<Hook> hooksToConsider,Table table)
 	{
 		// symétrise la table si l'on est équipe jaune
 		if(symmetry)
