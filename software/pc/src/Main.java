@@ -93,7 +93,7 @@ public class Main
 			if (numberOfTryContainer<maximumOfTryContainer)
 			{
 				numberOfTryContainer++;
-				System.out.println("erreur dans le conaineur, essai n°"+numberOfTryContainer);
+				System.out.println("erreur dans le containeur, essai n°"+numberOfTryContainer);
 			}
 			else
 			{
@@ -124,7 +124,8 @@ public class Main
 		
 		
 		//initialisation du match
-		real_state.robot.setPosition(new Vec2(1500-71-48,1000));
+		real_state.robot.setPosition(new Vec2(1381,1000));
+		real_state.robot.setOrientation(Math.PI);
 		
 		
 		
