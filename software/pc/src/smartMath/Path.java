@@ -69,7 +69,7 @@ public class Path
 	 */
 	public double duration()
 	{
-		// TODO
+		// TODO longueur/vitesse + nombrePoints * tempsPourTourner 
 		return 42;
 	}
 	

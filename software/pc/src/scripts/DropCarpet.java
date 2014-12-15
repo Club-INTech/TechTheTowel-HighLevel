@@ -16,13 +16,9 @@ import utils.Log;
  */
 public class DropCarpet extends AbstractScript 
 {
-	//TODO spécifier SYSTEMETIQUEMENT les unitées
 	
-	/** distance de déplacement pour placer les tapis */ //TODO: redondance avec le point d'entrée du script. Il faut fusionner.
-	private int distance=200;	// TODO: nom de variable peu explicite
-	
-	/** le temps d'attente (en ms) entre la commande de dépose du tapis ( le bras se baisse) et la commande qui remonte le bras */
-	private int sleepTime = 800; 
+	/**distance de déplacement entre le point de depart et les marches (position pour poser les tapis) en mm */
+	private int distanceBetweenEntryAndStairs=200;
 
 	/**
 	 * Constructeur (normalement appelé uniquement par le scriptManager) du script déposant les tapis
@@ -34,12 +30,12 @@ public class DropCarpet extends AbstractScript
 	public DropCarpet(HookFactory hookFactory, Config config, Log log)
 	{
 		super(hookFactory, config, log);
-		
-		versions = new int[]{1}; // TODO: il faut penser a le définir (tu l'avais oublié), puis a le garder a jour
+		versions = new int[]{1}; 
+		//definition du tableau des versions, a modifier a chaque ajout d'une version (si il n'y en a qu'une je vois pas trop l'interet mais bon)
 	}
 
 	@Override
-	public void execute (int versionToExecute, GameState<Robot> stateToConsider, boolean shouldRetryIfBlocke) 
+	public void execute (int versionToExecute, GameState<Robot> stateToConsider, boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException 
 	{
 		try 
 		{
@@ -47,7 +43,7 @@ public class DropCarpet extends AbstractScript
 			//on presente ses arrieres a l'escalier
 			stateToConsider.robot.turn(Math.PI);
 			// on avance vers ces demoiselles (les marches) 
-			stateToConsider.robot.moveLengthwiseTowardWall(-distance);
+			stateToConsider.robot.moveLengthwiseTowardWall(-distanceBetweenEntryAndStairs);
 			
 			if (!stateToConsider.table.getIsLeftCarpetDropped())
 			{
@@ -62,27 +58,28 @@ public class DropCarpet extends AbstractScript
 				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, true);
 			}
 			//on s'eloigne de l'escalier
-			stateToConsider.robot.moveLengthwise(distance);
+			stateToConsider.robot.moveLengthwise(distanceBetweenEntryAndStairs);
 		
 		} 
 		catch (UnableToMoveException e) 
 		{
-			log.debug("erreur DropCarpet Script : impossible de bouger", this);	//TODO: remonte cette exeption
+			if (shouldRetryIfBlocke)
+			{
+				execute (versionToExecute,stateToConsider,false);
+			}
+			else
+			{
+				log.debug("erreur DropCarpet Script : impossible de bouger", this);
+				throw e;
+			}
 		} 
-		catch (SerialConnexionException e) 
-		{
-			log.debug("mauvaise entree serie !",this);//TODO: remonte cette exeption
-			e.printStackTrace();
-			
-		}
+
 	}
 	
 	@Override
 	public Vec2 entryPosition(int id) 
 	{
-		// le point d'entrée (261,1210) pour les verts, on change comment de couleur si on est jaune ?
-		// TODO: réponse (efface quand tu a lu) La table est symétrisée quand on est jaune. Il n'y a rien a faire, les coordonnées restent les mêmes. C'est la magie du bas niveau. (bas niveau java hein)
-		return new Vec2(261,1310-distance);
+		return new Vec2(261,1310-distanceBetweenEntryAndStairs);
 	}
 
 	@Override
@@ -98,7 +95,7 @@ public class DropCarpet extends AbstractScript
 	}
 
 	@Override
-	protected void finalise(GameState<?> stateToConsider) 
+	protected void finalise(GameState<?> stateToConsider) throws SerialConnexionException 
 	{
 		try 
 		{
@@ -107,30 +104,9 @@ public class DropCarpet extends AbstractScript
 		} 
 		catch (SerialConnexionException e) 
 		{
-			log.debug("erreur termine DropCarpet script : impossible de ranger", this); // Remonte cette erreur (celle ci est particulièrement critique !, il faut interrompre le match !)
+			log.debug("erreur termine DropCarpet script : impossible de ranger", this);
+			throw e;
 		}
-	}
-
-	
-	
-	//TODO: pitié, doc moi ces setters/getters, ca prends 20sec
-	// D"ailleurs je me demande même si leur existance est utile. 
-	
-	public int getSleepTime()
-	{
-		return sleepTime;
-	}
-	public void setSleepTime(int newSleepTime)
-	{
-		this.sleepTime = newSleepTime;
-	}
-	public int getDistance()
-	{
-		return distance;
-	}
-	public void setDistance(int newDistance)
-	{
-		this.distance = newDistance;
 	}
 
 }

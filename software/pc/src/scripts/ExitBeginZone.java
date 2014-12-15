@@ -44,7 +44,15 @@ public class ExitBeginZone extends AbstractScript
 		}
 		catch (UnableToMoveException e)
 		{
-			log.debug("erreur ExitBeginZone script : impossible de sortir de la zone de depart\n", this);
+			if (shouldRetryIfBlocke)
+			{
+				execute (id_version, stateToConsider,false);
+			}
+			else
+			{
+				log.debug("erreur ExitBeginZone script : impossible de sortir de la zone de depart\n", this);
+				throw e;
+			}
 		}
 	}
 
@@ -58,5 +66,6 @@ public class ExitBeginZone extends AbstractScript
 	protected void finalise(GameState<?> state) 
 	{
 		//abwa ?
+		//en effet, pas d'actionneur a rentrer donc abwa !
 	}
 }
