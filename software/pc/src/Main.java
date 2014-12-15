@@ -16,7 +16,7 @@ import container.Container;
 import enums.ScriptNames;
 import enums.ServiceNames;
 import exceptions.ContainerException;
-import exceptions.Locomotion.BlockedException;
+import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialManagerException;
@@ -146,12 +146,12 @@ public class Main
 			// TODO Main erreur connexion serie
 			e.printStackTrace();
 		}
-		catch (BlockedException e)
-		{
-			//TODO Main erreur impossible de bouger, on cogne quelque part
-		} catch (UnableToMoveException e) {
+		catch (UnableToMoveException e) {
 			// TODO Main robot ennemi detecte
 			//il faut recommencer le script, bizarre a ce stade :/
+		} catch (PathNotFoundException e) {
+			// TODO Main le pathfinding ne sais as rester sur place.
+			e.printStackTrace();
 		}
 		
 		//debut du match
@@ -168,8 +168,9 @@ public class Main
 			//attention ce sont surement des erreurs dans le finally d'un script donc elle servent a proteger le meca !
 			//ou un robot ennemi devant. Donc beaucoup moins critique (ce serai bie de pouvoir differencer les deux)
 			e.printStackTrace();
-		}
-		catch (BlockedException e)
+		
+		} 
+		catch (PathNotFoundException e)
 		{
 			//TODO: le pathfinding ne trouve pas de chemin
 		}
