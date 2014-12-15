@@ -266,20 +266,35 @@ public class CloseClap extends AbstractScript
 	@Override
 	public Vec2 entryPosition(int version)
 	{
-		// FIXME: Euh, c'est assez urgent de renseigner les points d'entrée du script !
-		return null;
+		// FIXME: points exacts à entrer
+		
+		if (version == 1)
+			return new Vec2(0,0); //TODO  point d'entrée : bord de la table, robot devant le clap 1
+		else if(version == 2)
+			return new Vec2(0,0); //TODO  point d'entrée : devant le clap 2
+		else if(version == 3)
+			return new Vec2(0,0); //TODO  point d'entrée : devant le clap 3
+		else if(version == 12)
+			return new Vec2(0,0); //TODO  point d'entrée : devant le clap 1
+		else if(version == 123)
+			return new Vec2(0,0); //TODO  point d'entrée : devant le clap 1
+		else
+		{
+			log.debug("Probleme d'entrée de position", this);
+			return null;
+		}
 	}
 
 	@Override
 	public int remainingScoreOfVersion(int version, GameState<?> stateToConsider)
 	{
-		//TODO: le résultat est faux: si aucun clap n'est fermé, et que je demande la version 1, ne j'obtient que 5 points, pas 15 comme cette méthode le renvoit
+		//On met à jour le nombre de points restants pour la version : à  0, on a tout fait
 		int score = 15;
-		if(stateToConsider.table.getIsClap1Closed())
+		if(stateToConsider.table.getIsClap1Closed() || version==2 || version==3)
 			score -= 5;
-		if(stateToConsider.table.getIsClap2Closed())
+		if(stateToConsider.table.getIsClap2Closed() || version == 1 || version == 3)
 			score -= 5;
-		if(stateToConsider.table.getIsClap3Closed())
+		if(stateToConsider.table.getIsClap3Closed() || version == 1 || version == 2 || version == 12)
 			score -= 5;
 		return score;
 	}
@@ -301,3 +316,6 @@ public class CloseClap extends AbstractScript
 		}
 	}
 }
+
+
+
