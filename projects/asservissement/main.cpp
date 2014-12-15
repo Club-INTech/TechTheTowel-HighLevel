@@ -85,7 +85,7 @@ int main(void)
 			{
 				float angle = motionControlSystem->getAngleRadian();
 				serial.read(angle);
-				serial.printfln("On tourne a %d radian", order);
+				serial.printfln("On tourne a %d radian", angle);
 				motionControlSystem->orderRotation(angle);
 			}
 			else if(!strcmp("unitMove", order))
@@ -144,8 +144,43 @@ int main(void)
 				serial.printfln("Objectif en rotation : %d    actuel : %d", motionControlSystem->getRotationGoal(), motionControlSystem->currentAngle);
 
 			}
+			else if(!strcmp("kp",order))
+			{
+				float kp;
+				serial.printfln("kp?");
+				serial.read(kp);
+				serial.printfln("kp = %f", kp);
+				bool translation = false;
+				if (translation)
+				{
+					motionControlSystem->setTranslationTunings(kp,0,0);
+					motionControlSystem->orderTranslation(-1000);
+				}
+				else
+				{
+					motionControlSystem->setRotationTunings(kp,0,0);
+					motionControlSystem->orderRotation(PI);
+				}
+			}
+			else if(!strcmp("kd",order))
+			{
+				float kd;
+				serial.printfln("kd?");
+				serial.read(kd);
+				serial.printfln("kd = %f", kd);
+				bool translation = true;
+				if (translation)
+				{
+					motionControlSystem->setTranslationTunings(1.5,0,kd);
+					motionControlSystem->orderTranslation(-1000);
+				}
+				else
+				{
+					motionControlSystem->setRotationTunings(1,0,kd);
+					motionControlSystem->orderRotation(PI);
+				}
+			}
 		}
-
 	}
 }
 
