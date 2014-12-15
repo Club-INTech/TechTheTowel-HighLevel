@@ -5,10 +5,11 @@ import java.util.ArrayList;
 import pathDingDing.PathDingDing;
 import hook.Hook;
 import smartMath.Vec2;
+import table.Table;
 import container.Service;
 import enums.ActuatorOrder;
 import enums.Speed;
-import exceptions.Locomotion.BlockedException;
+import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import utils.Log;
@@ -265,15 +266,20 @@ public abstract class Robot implements Service
      *
      * @param aim le point de destination du mouvement
      * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
-     * @throws BlockedException  lorsque le pathdingding ne trouve pas de chemin
+     * @throws PathNotFoundException lorsque le pathdingding ne trouve pas de chemin 
      */
-    //TODO: faire une PathfindingException
-    public void moveToLocation(Vec2 aim, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, BlockedException
+    public void moveToLocation(Vec2 aim, ArrayList<Hook> hooksToConsider, Table table) throws UnableToMoveException, PathNotFoundException
     {
+<<<<<<< HEAD
     	//FIXME le pathDingDing reclame une table
     	ArrayList<Vec2> path = PathDingDing.computePath(getPosition(), aim, /*table*/);
     	followPath(path , hooksToConsider);
     	
+=======
+    	//TODO: le pathfinding reclame une table, mais ce n'est pas logique d'en avoir une dans Robot
+			ArrayList<Vec2> path = PathDingDing.computePath(getPosition(),aim,table);
+			followPath(path , hooksToConsider);	
+>>>>>>> ef2c1e6c8800a069adb5e3ba0a55229e6c07fc4b
     }
     
 	/**
