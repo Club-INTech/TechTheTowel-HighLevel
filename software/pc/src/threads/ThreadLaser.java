@@ -131,7 +131,7 @@ class ThreadLaser extends AbstractThread
 					// Vérification si l'obstacle est sur la table 
 					if(p_filtre.x > -sizeTableX/2 && p_filtre.y > 0 && p_filtre.x < sizeTableX/2 && p_filtre.y < sizeTableY)
 					{
-						table.mObstacleManager.setEnnemyNewLocation(balise.id, p_filtre);
+						table.getObstacleManager().setEnnemyNewLocation(balise.id, p_filtre);
 						log.debug("Laser voit ennemi en : " + p_filtre, this);
 					}
 

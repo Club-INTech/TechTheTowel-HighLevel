@@ -856,7 +856,7 @@ public class Locomotion implements Service
 		discCenter.plus(position);	// converti les coordonnées relative au centre du robot en coordonnées absolues sur la table
 		
 		// fais remonter un problème s'il y a un obstacle dans ce disque.
-		if(table.mObstacleManager.isDiscObstructed(discCenter, obstacleDetectionDiscRadius))
+		if(table.getObstacleManager().isDiscObstructed(discCenter, obstacleDetectionDiscRadius))
 		{
 			log.warning("Obstacle sur notre chemin ! Nous somme en :" +position + ", et on détecte un obstacle dans un rayon de " + obstacleDetectionDiscRadius + "mm autour du point " + discCenter, this);
 			throw new UnexpectedObstacleOnPathException();
