@@ -102,7 +102,7 @@ public class ThreadTimer extends AbstractThread
 			
 
 			// On retire périodiquement les obstacles périmés
-			table.mObstacleManager.removeOutdatedObstacles(System.currentTimeMillis());
+			table.getObstacleManager().removeOutdatedObstacles(System.currentTimeMillis());
 			
 			try
 			{

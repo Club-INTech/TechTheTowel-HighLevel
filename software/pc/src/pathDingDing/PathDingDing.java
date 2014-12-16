@@ -64,7 +64,6 @@ public class PathDingDing
 		return new Point(segment1A.x - k * (segment1B.x - segment1A.x), segment1A.y - k * (segment1B.y - segment1A.y));
 	}
 	
-	//TODO: expliquer quand BlockedException est lancé, etce que cela veut dire pour l'utilisateur de cette classe.
 	/**
 	 * 
 	 * @param start point de d�part
@@ -83,9 +82,7 @@ public class PathDingDing
 		return path.toVec2Array();
 	}
 
-	//TODO: expliquer quand BlockedException est lancé, etce que cela veut dire pour l'utilisateur de cette classe.
-	// D'ailleurs, est-ce réellement une BlockedException (bloquage mécanique du robot en cours contre un obstacle qui l'empèche avancer plus)
-	// ne pas hésiter a créer de nouveaux types d'exceptions
+	
 	/**
 	 * 
 	 * @param start point de d�part
@@ -107,11 +104,11 @@ public class PathDingDing
 		int indiceDistMin = 0;
 		Point node = new Point();
 		boolean intersects = false;
-		for(int ind_ligne = 0 ; ind_ligne < table.getLines().size() ; ind_ligne++)
+		for(int ind_ligne = 0 ; ind_ligne < table.getObstacleManager().getLines().size() ; ind_ligne++)
     	{
-	    	if( intersects(start, end, table.getLines().get(ind_ligne).getA(), table.getLines().get(ind_ligne).getB()))
+	    	if( intersects(start, end, table.getObstacleManager().getLines().get(ind_ligne).getA(), table.getObstacleManager().getLines().get(ind_ligne).getB()))
 	    	{
-	    		node = intersection(start, end, table.getLines().get(ind_ligne).getA(), table.getLines().get(ind_ligne).getB());
+	    		node = intersection(start, end, table.getObstacleManager().getLines().get(ind_ligne).getA(), table.getObstacleManager().getLines().get(ind_ligne).getB());
 	    		intersects = true;
 	    		double dist = Math.pow(node.x - start.x, 2) + Math.pow(node.y - start.y, 2);
 		    	if (dist <= min)
@@ -126,29 +123,29 @@ public class PathDingDing
 		if(intersects)
 		{
 			//s'il n'y a qu'un seul point de passage sur l'obstacle
-			if( table.getLines().get(indiceDistMin).getNbPassagePoint() == 1 )
+			if( table.getObstacleManager().getLines().get(indiceDistMin).getNbPassagePoint() == 1 )
 			{
 				compteur++;
-				path.addAll(dodgeStatic(start, table.getLines().get(indiceDistMin).getPassagePoint1(), table));
-				path.add(table.getLines().get(indiceDistMin).getPassagePoint1());
-				path.addAll(dodgeStatic(table.getLines().get(indiceDistMin).getPassagePoint1(), end, table));
+				path.addAll(dodgeStatic(start, table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint1(), table));
+				path.add(table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint1());
+				path.addAll(dodgeStatic(table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint1(), end, table));
 			}
 			//s'il y a deux points de passage sur l'obstacle, prend le point de passage le plus proche du point d'arriv�e.
 			else
 			{
-				if(Math.pow(table.getLines().get(indiceDistMin).getPassagePoint1().x - end.x, 2) + Math.pow(table.getLines().get(indiceDistMin).getPassagePoint1().y - end.y, 2) <= Math.pow(table.getLines().get(indiceDistMin).getPassagePoint2().x - end.x, 2) + Math.pow(table.getLines().get(indiceDistMin).getPassagePoint2().y - end.y, 2))
+				if(Math.pow(table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint1().x - end.x, 2) + Math.pow(table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint1().y - end.y, 2) <= Math.pow(table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint2().x - end.x, 2) + Math.pow(table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint2().y - end.y, 2))
 				{
 					compteur++;
-					path.addAll(dodgeStatic(start, table.getLines().get(indiceDistMin).getPassagePoint1(), table));
-					path.add(table.getLines().get(indiceDistMin).getPassagePoint1());
-					path.addAll(dodgeStatic(table.getLines().get(indiceDistMin).getPassagePoint1(), end, table));
+					path.addAll(dodgeStatic(start, table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint1(), table));
+					path.add(table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint1());
+					path.addAll(dodgeStatic(table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint1(), end, table));
 				}
 				else
 				{
 					compteur++;
-					path.addAll(dodgeStatic(start, table.getLines().get(indiceDistMin).getPassagePoint2(), table));
-					path.add(table.getLines().get(indiceDistMin).getPassagePoint2());
-					path.addAll(dodgeStatic(table.getLines().get(indiceDistMin).getPassagePoint2(), end, table));
+					path.addAll(dodgeStatic(start, table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint2(), table));
+					path.add(table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint2());
+					path.addAll(dodgeStatic(table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint2(), end, table));
 				}
 			}
 		}
@@ -157,8 +154,8 @@ public class PathDingDing
 	
 	/**
 	 * 
-	 * @param path chemin � simplifier
-	 * @return un chemin simplifi�
+	 * @param path chemin a simplifier
+	 * @return un chemin simplifie
 	 */
 	public static Path simplify(Path path, Table table)
 	{
@@ -168,9 +165,9 @@ public class PathDingDing
 		for(int i = 0; i < path.size() - 2; i++)
 		{
 			boolean removable = true;
-			for(int ind_ligne = 0 ; ind_ligne < table.getLines().size() ; ind_ligne++)
+			for(int ind_ligne = 0 ; ind_ligne < table.getObstacleManager().getLines().size() ; ind_ligne++)
 	    	{
-		    	if( intersects(path.getPosition(i), path.getPosition(i+2), table.getLines().get(ind_ligne).getA(), table.getLines().get(ind_ligne).getB()));
+		    	if( intersects(path.getPosition(i), path.getPosition(i+2), table.getObstacleManager().getLines().get(ind_ligne).getA(), table.getObstacleManager().getLines().get(ind_ligne).getB()));
 		    	{
 		    		removable = false;
 		    	}
