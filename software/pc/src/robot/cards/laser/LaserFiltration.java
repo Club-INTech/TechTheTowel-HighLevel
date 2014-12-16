@@ -39,7 +39,7 @@ public class LaserFiltration implements Service
 		Matrn r = new Matrn(tab_r); // incertitude sur la mesure
 		double[][] tab_q = {{Math.pow(this.dt, 3)/3., 0, Math.pow(this.dt, 2.)/2., 0},{0, Math.pow(this.dt, 3.)/3., 0, Math.pow(this.dt, 2.)/2},{Math.pow(this.dt, 2.)/2., 0, 4*this.dt, 0},{0, Math.pow(this.dt, 2.)/2, 0, 4*this.dt}};
 		Matrn q = new Matrn(tab_q);
-		q.multiplier_scalaire(30);
+		q.multiply_scalar(30);
 		this.kalmanFilter = new Kalman(x, p, f, h, r, q); 
 		this.history = new Stack<Vec2>();
 		this.rejectedValues = 0;

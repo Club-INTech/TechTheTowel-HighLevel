@@ -13,6 +13,7 @@ import exceptions.serial.SerialConnexionException;
 /**
  * Classe qui gère la balise laser
  * @author pf
+ * @author clément
  *
  */
 
@@ -91,7 +92,7 @@ public class LaserCardWrapper implements Service {
 
 	/**
 	 * Ping chaque balise et vérifie celles qui sont connectées
-	 * @return
+	 * @return nbeacons_ok : nombre de balises actives
 	 */
 	public int checkConnectedBeacons()//verifier_balises_connectes()
 	{
@@ -299,6 +300,7 @@ public class LaserCardWrapper implements Service {
 	*/
 	/**
 	 * Vérifie si les données des balises actives sont cohérentes en début de match
+	 * On calcule la moyenne et l'écart-type et ça aide pour voir la cohérence
 	 */
 	public void checkBeaconConsistency()//verifier_coherence_balise()
 	{
@@ -308,10 +310,10 @@ public class LaserCardWrapper implements Service {
 		ArrayList<Beacon> beacons_active = activeBeacons();
 		for(Beacon b : beacons_active)
 		{
-			float mean = 0;
+			float mean = 0; //moyenne
 			ArrayList<Float> valeurs = new ArrayList<Float>();
-			float standard_deviation = 0;
-			int n = 0;
+			float standard_deviation = 0; //écart-type
+			int n = 0; // nombre de réponses valides de la série 
 
 			for(int i = 0; i < trials; i++)
 			{

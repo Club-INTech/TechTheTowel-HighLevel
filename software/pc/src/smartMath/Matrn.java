@@ -9,13 +9,13 @@ import Jama.Matrix;
  *
  * @author pf
  * @author clément
- * @autor marsu
+ * @author marsu
  */
 
 public class Matrn
 {
 
-	/** coefficiants de la matrice */
+	/** coefficients de la matrice */
 	public double[][] data;
 	
 	/** couple de valeurs donnant la taille de la matrice. size[0] = nombre de lignes. size[1] = nombre de colones */
@@ -48,7 +48,7 @@ public class Matrn
 	}
 	
 	/**
-	 * Instantie une nouvelle matrice.
+	 * Instancie une nouvelle matrice.
 	 *
 	 * @param p nombre de lignes
 	 * @param n nombre de colonnes
@@ -62,14 +62,14 @@ public class Matrn
 	}
 	
 	/**
-	 * Instantie une nouvelle matrice.
+	 * Instancie une nouvelle matrice.
 	 * la matrice aura une taille (p,n) et tous les éléments vaudront valeur.
 	 *
 	 * @param p nombre de lignes que la nouvelle matrice aura
-	 * @param n nombere de collones que la nouvelle matrice aura
-	 * @param valeur la valeur par défaut que tout les coefficients de la nouvelle matrice aura
+	 * @param n nombre de collones que la nouvelle matrice aura
+	 * @param value la valeur par défaut que tout les coefficients de la nouvelle matrice aura
 	 */
-	public Matrn(int p,int n, int valeur)
+	public Matrn(int p,int n, int value)
 	{
 		data = new double[p][n];
 		size = new int[2];
@@ -79,7 +79,7 @@ public class Matrn
 		{
 			for(int j = 0; j < size[1]; j++)
 			{
-				setCoeff(valeur ,i, j);
+				setCoeff(value ,i, j);
 			}
 		}		
 	}
@@ -113,7 +113,7 @@ public class Matrn
 	 *
 	 * @return the nb lignes
 	 */
-	public int getNbLignes()
+	public int getNbLines()
 	{
 		return size[1];
 	}
@@ -123,7 +123,7 @@ public class Matrn
 	 *
 	 * @return the nb colonnes
 	 */
-	public int getNbColonnes()
+	public int getNbRows()
 	{
 		return size[0];
 	}
@@ -131,10 +131,10 @@ public class Matrn
 	/**
 	 * Additionner_egal.
 	 *
-	 * @param A the a
+	 * @param A la matrice qu'on veut additionner à l'objet
 	 * @throws MatrixException the matrix exception
 	 */
-	public void additionner_egal (Matrn A) throws MatrixException
+	public void add_equal (Matrn A) throws MatrixException
 	{	
 		if(size[0] != A.size[0] || size[1] != A.size[1])
 			throw new MatrixException();
@@ -146,11 +146,11 @@ public class Matrn
 	/**
 	 * Additionner.
 	 *
-	 * @param A the a
+	 * @param A une matrice
 	 * @return the matrn
 	 * @throws MatrixException the matrix exception
 	 */
-	public Matrn additionner (Matrn A) throws MatrixException
+	public Matrn add (Matrn A) throws MatrixException
 	{
 		Matrn a = new Matrn(size[0],size[1]);
 		if(size[0] != A.size[0] || size[1] != A.size[1])
@@ -164,11 +164,11 @@ public class Matrn
 	/**
 	 * Soustraire.
 	 *
-	 * @param A the a
+	 * @param A une matrice
 	 * @return the matrn
 	 * @throws MatrixException the matrix exception
 	 */
-	public Matrn soustraire (Matrn A) throws MatrixException
+	public Matrn substract (Matrn A) throws MatrixException
 	{	
 		Matrn a = new Matrn(size[0],size[1]);
 		if(size[0] != A.size[0] || size[1] != A.size[1])
@@ -182,10 +182,10 @@ public class Matrn
 	/**
 	 * Soustraire_egal.
 	 *
-	 * @param A the a
+	 * @param A une matrice
 	 * @throws MatrixException the matrix exception
 	 */
-	public void soustraire_egal (Matrn A) throws MatrixException
+	public void substract_equal (Matrn A) throws MatrixException
 	{	
 		if(size[0] != A.size[0] || size[1] != A.size[1])
 			throw new MatrixException();
@@ -197,10 +197,10 @@ public class Matrn
 	/**
 	 * Multiplier_egal.
 	 *
-	 * @param A the a
+	 * @param A une matrice
 	 * @throws MatrixException the matrix exception
 	 */
-	public void multiplier_egal(Matrn A) throws MatrixException
+	public void multiply_equal(Matrn A) throws MatrixException
 	{//multiplier this. avec A
 		if( this.size[0] != A.size[1])
 			throw new MatrixException();
@@ -226,7 +226,7 @@ public class Matrn
 	 * @return the matrn
 	 * @throws MatrixException the matrix exception
 	 */
-	public Matrn multiplier(Matrn A) throws MatrixException
+	public Matrn multiply(Matrn A) throws MatrixException
 	{//multiplier this. avec A
 		if( this.size[0] != A.size[1])
 			throw new MatrixException();
@@ -252,7 +252,7 @@ public class Matrn
 	 *
 	 * @throws MatrixException the matrix exception
 	 */
-	public void transpose_egal() throws MatrixException
+	public void transpose_equal() throws MatrixException
 	{
 		if(size[0] != size[1])
 			throw new MatrixException();
@@ -290,7 +290,7 @@ public class Matrn
 	 *
 	 * @return the matrn
 	 */
-	public Matrn inverser()
+	public Matrn invert()
 	{
 		// TODO : check
 		//Il faut impérativement que la matrice soit inversible !!! enfin je vais voir si je peux gérer le cas contraire
@@ -302,9 +302,10 @@ public class Matrn
 	
 	/**
 	 * Identiter.
+	 * 
 	 *
-	 * @param n the n
-	 * @return the matrn
+	 * @param n un entier 
+	 * @return la matrice identité
 	 */
 	static public Matrn identiter(int n)
 	{
@@ -322,7 +323,7 @@ public class Matrn
 	/**
 	 * Clone.
 	 *
-	 * @param m the m
+	 * @param m une matrice
 	 */
 	public void clone(Matrn m)
 	{
@@ -333,9 +334,9 @@ public class Matrn
 	/**
 	 * Multiplier_scalaire.
 	 *
-	 * @param a the a
+	 * @param a un double
 	 */
-	public void multiplier_scalaire(double a)
+	public void multiply_scalar(double a)
 	{
 		for(int i = 0; i < size[0]; i++)
 			for(int j = 0; j < size[1]; j++)
