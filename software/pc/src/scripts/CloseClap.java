@@ -229,11 +229,13 @@ public class CloseClap extends AbstractScript
 		catch (UnableToMoveException e) 
 		{
 			log.debug("Probleme avec le deplacement pendant les claps près, 1 et 2", this);// Viens me parler de cette ligne. Je dois t'expliquer ce que veut dire "remonter une exception"
+			throw e;
 		} 
 		catch (SerialConnexionException e) 
 		{
-			log.debug("Mauvaise entrée serie !",this);// Viens me parler de cette ligne. Je dois t'expliquer ce que veut dire "remonter une exception"
+			log.debug("Mauvaise entrée serie : script de fermeture des claps",this);// Viens me parler de cette ligne. Je dois t'expliquer ce que veut dire "remonter une exception"
 			e.printStackTrace();	
+			throw e;
 		}	
 	}
 	
@@ -337,6 +339,7 @@ public class CloseClap extends AbstractScript
 		catch (SerialConnexionException e) 
 		{
 			log.debug("Erreur termine : ne peux pas replier claps", this); // Viens me parler de cette ligne. Je dois t'expliquer ce que veut dire "remonter une exception"
+			//FIXME: il faut creer une exception de type SerialFinallyException
 		}
 	}
 	

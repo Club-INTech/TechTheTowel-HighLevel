@@ -2,48 +2,54 @@ package tests;
 
 //@author Théo + architecture Paul
 
-import hook.types.HookGenerator;
+import java.util.ArrayList;
+
+import hook.Hook;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import pathDingDing.PathDingDing;
-import exceptions.serial.SerialException;
+import enums.ScriptNames;
+import enums.ServiceNames;
+import exceptions.Locomotion.UnableToMoveException;
+import exceptions.serial.SerialConnexionException;
 import robot.Robot;
-import robot.cards.ActuatorsManager;
-import robot.cards.Locomotion;
-import scripts.CloseClap;
-import table.Table;
+import scripts.ScriptManager;
+import strategie.GameState;
 
 
 
 public class JUnit_Claps extends JUnit_Test {
 	
-	Locomotion locomotion;
-	ActuatorsManager actionneurs;
-	Robot robot;
-	Table  table;
-	CloseClap scriptCloseClap;
-	PathDingDing pathfinding = new PathDingDing(table);
-	HookGenerator hookgenerator;
+	GameState<Robot> real_state; //c'est bien un robot real a l'interieur ?
+	ScriptManager scriptManager;
+	ArrayList<Hook> emptyHook;
 	
+	@SuppressWarnings("unchecked")
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() throws Exception 
+	{
 		super.setUp();
-		locomotion = (Locomotion)container.getService("Deplacements");
-		actionneurs = (ActuatorsManager)container.getService("Actionneurs");
-		scriptCloseClap = new CloseClap (hookgenerator,config,log,pathfinding,robot, actionneurs, table);
+		real_state = (GameState<Robot>)container.getService(ServiceNames.GAME_STATE);
+		scriptManager = (ScriptManager)container.getService(ServiceNames.SCRIPT_MANAGER);
+		emptyHook = new ArrayList<Hook>();
+		
 	}
 	
-	
+	@Test
 	public void test()
 	{
-		scriptCloseClap.execute(1);
+		try {
+			scriptManager.getScript(ScriptNames.CLOSE_CLAP).execute(12, real_state, true);
+		} catch (UnableToMoveException | SerialConnexionException e) {
+			log.debug("BUG !",this);
+			e.printStackTrace();
+		}
 	}
 	
 	
 	{/* Premier jet du test, fonctionne 
-	@Test
+	
 	public void test()
 	{
 		try 
