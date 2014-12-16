@@ -37,6 +37,7 @@ public class JUnit_Pathfinding extends JUnit_Test
     	ArrayList<Vec2> path = new ArrayList<Vec2>();
     	try
     	{
+    		System.out.println("essai :");
 			path = PathDingDing.computePath(new Vec2(1300, 200), new Vec2(-1300, 200), (Table)container.getService(ServiceNames.TABLE));
     	}
     	catch(PathNotFoundException e)
