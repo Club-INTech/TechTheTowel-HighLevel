@@ -210,9 +210,17 @@ public class Locomotion implements Service
 		
 		try
 		{
-			// boucle surveillant que tout se passe bien lors de la rotation
-			while(!isMovementFinished()) // on attend la fin du mouvement
+			
+			boolean firstLoop = true;
+			//verifie si l'appel a la boucle est le premier
+			
+			// boucle surveillant que tout se passe bien lors de la rotation 
+			//on l'execute une fois pour initier le deplacement
+			while(firstLoop || !isTurnFinished((float)angle)) // on attend la fin du mouvement
 			{
+				firstLoop = false;
+				//c'est bon on a fait un appel
+				
 				// donne (éventuellement de nouveau) l'ordre de se déplacer
 				if(haveToGiveOrderToMove)
 				{
@@ -415,6 +423,8 @@ public class Locomotion implements Service
 			// Si on remarque que le robot a percuté un obstacle l'empéchant d'avancer plus loin
 			catch (BlockedException e)
 			{
+				e.printStackTrace();
+				
 				// Réaction générique aux exceptions de déplacement du robot
 				generalLocomotionExeptionReaction(blockedExceptionStillAllowed);
 				
@@ -546,11 +556,14 @@ public class Locomotion implements Service
 		
 		// Surveille les évènements qui peuvent survenir durant le déplacement
 		// le mouvement dure tant qu'il n'est pas fini
-		while(!isMovementFinished() || haveToGiveOrderToMove)	
+		while(haveToGiveOrderToMove || !isMovementFinished() )	
 		{
 			// donne (éventuellement de nouveau) l'ordre de se déplacer
 			if(haveToGiveOrderToMove)
+			{
 				moveInDirectionPlanner(allowCurvedPath, isBackward, allowCurvedPath);
+				Sleep.sleep(500); // attends que les moteurs se metttente a tourner avant de vérifier qu'il tournent effectivement. //TODO: faire en sorte que l'on ai plus besoin de ce délai
+			}
 			
 			// vérifie qu'il n'y a pas de blocage mécanique (n'importe quoi faisant que les moteurs tournent sans que les codeuses tournent)
 			// TODO: il y a double emploi entre isMovementFinished et checkRobotNotBlocked, les deux vérifient de deux facons différentes que le robot n'est pas mécaniquement bloqué. Il faut centraliser la vérification.
@@ -671,7 +684,8 @@ public class Locomotion implements Service
 
 				// TODO: mettre la boucle d'attente dans une fonction part enti�re (la prise de oldInfo est moche ici)
 				oldInfos = mLocomotionCardWrapper.getCurrentPositionAndOrientation();
-				float newOrientation = (float)oldInfos[2] + (float)direction*1000; // valeur absolue de l'orientation � atteindre
+				Sleep.sleep(300); // attends que les moteurs aient commencés a tourner avant de vérifier s'ils tournent bien //TODO: voir s'il existe un moyen de de passer ce cette attente
+				float newOrientation = (float)direction*1000; // valeur absolue de l'orientation � atteindre
 				while(!isTurnFinished(newOrientation)) 
 					Sleep.sleep(minimumDelayBetweenMovementStatusCheck);
 			}
@@ -703,11 +717,13 @@ public class Locomotion implements Service
 			double[] newInfos = mLocomotionCardWrapper.getCurrentPositionAndOrientation();
 
 			// Le robot tourne-t-il encore ?
+			// Le robot tourne encore si la différence entre l'orientation du robot lors du dernier appel et l'orientation du robot lors de cet appel est suffisamment grande
 			if(Math.abs(newInfos[2] - oldInfos[2]) > 20)
 				out = false;
 
 			// le robot est-t-il arrivé ?
-			else if(Math.abs(newInfos[2]/1000 - finalOrientation) > 20)
+			// le robot est arrivé si la différence entre l'orientation courante du robot et l'orientation voulue est suffisamment faible
+			else if(Math.abs(newInfos[2] - finalOrientation) < 20)
 				out = true;
 
 			// si on ne bouge plus, et qu'on n'est pas arrivé, c'est que ca bloque
@@ -731,23 +747,11 @@ public class Locomotion implements Service
 	 * @returnFaux si le robot bouge encore, vrai si il est arrivée au bon point.
 	 * @throws BlockedException en cas de bloquange mécanique du robot l'empéchant d'aller plus loin
 	 */
-	//TODO: le if... else if.... else.... est redondant avec la fonction checkRobotNotBlocked qui est elle aussi appellée dans moveInDirectionEventWatcher. 
+	//TODO: le if... else if.... else.... est redondant avec la fonction checkRobotNotBlocked qui est elle aussi appellée dans moveInDirectionEventWatcher.
+	
+	//FIXME: si le robot ne bouge pas (genre au demarage) bha il detecte un blocquage ! 
 	private boolean isMovementFinished() throws BlockedException
 	{
-		// si on vérifie si l'ona fini de bouger pour la première fois depuis l'initialisation de tout le, il faut remplir oldInfos
-		if(oldInfos == null)
-		{
-			try
-			{
-				oldInfos = mLocomotionCardWrapper.getCurrentPositionAndOrientation();
-			}
-			catch (SerialConnexionException e)
-			{
-				e.printStackTrace();
-			}
-			return false;
-		}
-		
 		boolean out = false;
 		
 		//distance parcourue par le robot entre deux rafraichissement de la position a partir de laquelle on considère que le robot est en mouvement
@@ -763,20 +767,28 @@ public class Locomotion implements Service
 		try
 		{
 			newInfos = mLocomotionCardWrapper.getCurrentPositionAndOrientation();
-
 		}
 		catch (SerialConnexionException e)
 		{
 			e.printStackTrace();
 		}
-			
+		
+		
+		// différence entre l'orientation du robot lors du dernier appel et l'orientation du robot lors de cet appel
+		float squaredDistanceSinceLastCall = new Vec2((int)oldInfos[0], (int)oldInfos[1]).squaredDistance(new Vec2((int)newInfos[0], (int)newInfos[1]));
+		
+		// différence entre la position courante du robot et la position voulue
+		float squaredDistanceTillAim = new Vec2((int)newInfos[0], (int)newInfos[1]).squaredDistance(aim);
+		
 		// Le robot bouge-t-il encore ?
-		if(new Vec2((int)oldInfos[0], (int)oldInfos[1]).squaredDistance(new Vec2((int)newInfos[0], (int)newInfos[1])) > motionThreshold || Math.abs(newInfos[2] - oldInfos[2]) > motionThreshold)
+		// Le robot tourne encore si la différence entre la position du robot lors du dernier appel et la position du robot lors de cet appel est suffisamment grande
+		if(squaredDistanceSinceLastCall > motionThreshold || Math.abs(newInfos[2] - oldInfos[2]) > motionThreshold)
 			out = false;
 		//TODO: si l'on veut savoir si le robot bouge encore, pourquoi ne pas utiliser mLocomotionCardWrapper.isRobotMoving() plutot ?
 
 		// le robot est-t-il arrivé ?
-		else if(new Vec2((int)newInfos[0], (int)newInfos[1]).squaredDistance(aim) < aimThreshold)
+		// le robot est arrivé si la différence entre la position courante du robot et la position voulue est suffisamment faible
+		else if(squaredDistanceTillAim < aimThreshold)
 			out = true;
 
 		// si on ne bouge plus, et qu'on n'est pas arrivé, c'est que ca bloque
