@@ -13,10 +13,9 @@ import org.junit.Test;
 
 import enums.ActuatorOrder;
 import enums.ServiceNames;
-import exceptions.Locomotion.BlockedException;
+import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
-import pathDingDing.PathDingDing;
 import robot.Robot;
 import robot.RobotReal;
 import scripts.DropCarpet;
@@ -34,7 +33,6 @@ public class JUnit_CarpetDropper extends JUnit_Test
 	DropCarpet scriptCarpet;
 	RobotReal robot;
 	Table table;
-	PathDingDing pathfinding;
 	HookFactory hookFactory;
 	GameState<Robot> game;
 	ArrayList<Hook> emptyHook = new ArrayList<Hook>();
@@ -48,7 +46,6 @@ public class JUnit_CarpetDropper extends JUnit_Test
 		table = (Table)container.getService(ServiceNames.TABLE);
 		robot = (RobotReal)container.getService(ServiceNames.ROBOT_REAL);
 		hookFactory = (HookFactory)container.getService(ServiceNames.HOOK_FACTORY);
-		pathfinding = new PathDingDing(table);
 		scriptCarpet = new DropCarpet(hookFactory, config, log);
 		game = (GameState<Robot>)container.getService(ServiceNames.GAME_STATE);
 		
@@ -81,10 +78,12 @@ public class JUnit_CarpetDropper extends JUnit_Test
 		{
 			scriptCarpet.goToThenExec(1, game, false, emptyHook);
 		} 
-			catch (UnableToMoveException | BlockedException | SerialConnexionException e) 
+			catch (UnableToMoveException | SerialConnexionException e) 
 		{
 			e.printStackTrace();
-		}
+		} catch (PathNotFoundException e) {
+				e.printStackTrace();
+			}
 
 		log.debug("fin du depose tapis", this);
 	}

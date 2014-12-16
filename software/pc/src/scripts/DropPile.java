@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import enums.ActuatorOrder;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
+import exceptions.serial.SerialFinallyException;
 import hook.types.HookFactory;
 import robot.Robot;
 import smartMath.Vec2;
@@ -86,12 +87,16 @@ public class DropPile extends AbstractScript
 	}
 
 	@Override
-	protected void finalise(GameState<?> stateToConsider) throws SerialConnexionException, UnableToMoveException
+	protected void finalise(GameState<?> stateToConsider) throws SerialFinallyException, UnableToMoveException 
 	{
-		stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, false);
-		stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);	
-		stateToConsider.robot.moveLengthwise(-20);
-		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+		try {
+			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);	
+			stateToConsider.robot.moveLengthwise(-20);
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+		} catch (SerialConnexionException e) {
+			throw new SerialFinallyException ();
+		}
 	}
 
 }

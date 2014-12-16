@@ -131,7 +131,7 @@ public class Main
 		
 		// attends que le jumper soit retiré
 
-		attendreDebutMatch();
+		waitMatchBegin();
 		
 		
 		//premiere action du match
@@ -162,10 +162,52 @@ public class Main
 		
 		//debut du match
 		System.out.println("debut du match");
+		
+		//premier script
+		
 		try 
 		{
 			scriptmanager.getScript(ScriptNames.DROP_CARPET).goToThenExec(0, real_state, true, emptyHook );
+		}
+		catch (UnableToMoveException | SerialConnexionException e) 
+		{
+			// TODO Main erreur critique :
+			//attention ce sont surement des erreurs dans le finally d'un script donc elle servent a proteger le meca !
+			//ou un robot ennemi devant. Donc beaucoup moins critique (ce serai bie de pouvoir differencer les deux)
+			e.printStackTrace();
+		
+		} 
+		catch (PathNotFoundException e)
+		{
+			//TODO: le pathfinding ne trouve pas de chemin
+			
+		}
+		
+		//second script
+		
+		try 
+		{
 			scriptmanager.getScript(ScriptNames.CLOSE_CLAP).goToThenExec(12, real_state, true, emptyHook );
+		}
+		catch (UnableToMoveException | SerialConnexionException e) 
+		{
+			// TODO Main erreur critique :
+			//attention ce sont surement des erreurs dans le finally d'un script donc elle servent a proteger le meca !
+			//ou un robot ennemi devant. Donc beaucoup moins critique (ce serai bie de pouvoir differencer les deux)
+			e.printStackTrace();
+		
+		} 
+		catch (PathNotFoundException e)
+		{
+			//TODO: le pathfinding ne trouve pas de chemin
+			
+		}
+		
+		
+		//dernier script
+		
+		try 
+		{
 			scriptmanager.getScript(ScriptNames.CLOSE_CLAP).goToThenExec(3, real_state, true, emptyHook );
 		}
 		catch (UnableToMoveException | SerialConnexionException e) 
@@ -247,7 +289,7 @@ public class Main
 	 * Attends que le match soit lancé
 	 * @throws Exception
 	 */
-	static void attendreDebutMatch()
+	static void waitMatchBegin()
 	{
 
 		System.out.println("Robot pret pour le match, attente du retrait du jumper");
