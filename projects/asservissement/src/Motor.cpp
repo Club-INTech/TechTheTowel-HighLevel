@@ -108,7 +108,7 @@ void Motor::initPWM(){
 	 ----------------------------------------------------------------------- */
 
 	//Le prescaler peut être n'importe quel entier entre 1 et 65535 (uint16_t)
-	uint16_t prescaler = (uint16_t)((SystemCoreClock / 2) / 256000) - 1;
+	uint16_t prescaler = 1;//(uint16_t)((SystemCoreClock / 2) / 256000) - 1;
 
 	//Configuration du TIMER 3
 	TIM_TimeBaseStructure.TIM_Period = 255;
