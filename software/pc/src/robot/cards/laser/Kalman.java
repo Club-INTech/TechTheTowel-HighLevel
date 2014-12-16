@@ -11,13 +11,16 @@ import smartMath.Matrn;
 
 
 class Kalman {
+	/**
+	 * Le filtrage de Kalman repose sur la postulat que le bruit s'ajoutant à l'observation est blanc gaussien
+	 */
 	//les attributs qui ont été mises en public sont utilisées dans FiltrageLaser.java
-	public Matrn x;
-	private Matrn p;
-	public Matrn f;
-	private Matrn h;
-	private Matrn r;
-	private Matrn q;
+	public Matrn x;  // vecteur d'observation
+	private Matrn p; //incertitude
+	public Matrn f;  //vecteur de transition linéaire
+	private Matrn h; //matrice d'observation
+	private Matrn r; //
+	private Matrn q; //
 	private Matrn ident;
 	public Kalman(Matrn x, Matrn p, Matrn f, Matrn h, Matrn r, Matrn q) 
 		{
@@ -39,8 +42,8 @@ class Kalman {
 				u = new Matrn(this.x.size[0], this.x.size[1], 0);
 			}
 			try {
-				this.x = this.f.multiplier(this.x).additionner(u);
-				this.p = this.f.multiplier(this.p).multiplier(this.f.transpose()).additionner(this.q);
+				this.x = this.f.multiply(this.x).add(u);
+				this.p = this.f.multiply(this.p).multiply(this.f.transpose()).add(this.q);
 			} catch (MatrixException e) {
 				e.printStackTrace();
 			}
@@ -59,11 +62,12 @@ class Kalman {
 		{
 			Matrn y;
 			try {
-				y = z.soustraire(this.h.multiplier(this.x));
-				Matrn s = this.h.multiplier(this.p).multiplier(this.h.transpose()).additionner(this.r);
-				Matrn k = this.p.multiplier(this.h.transpose()).multiplier(s.inverser());
-				this.x.additionner_egal(k.multiplier(y));
-				this.p = (this.ident.soustraire(k.multiplier(this.h))).multiplier(this.p);
+				y = z.substract(this.h.multiply(this.x));
+				Matrn s = this.h.multiply(this.p).multiply(this.h.transpose()).add(this.r);
+				Matrn k = this.p.multiply(this.h.transpose()).multiply(s.invert());
+				//k permet de corriger l'état prédit : c'est le degré de sérieux à accorder à 
+				this.x.add_equal(k.multiply(y));
+				this.p = (this.ident.substract(k.multiply(this.h))).multiply(this.p);
 			} catch (MatrixException e) {
 				e.printStackTrace();
 			}
