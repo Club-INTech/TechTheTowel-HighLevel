@@ -54,17 +54,19 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 		{
 			log.debug("impossible de bouger", this);
 		}
-		robot.sleep(5000);
-		log.debug("en position ("+robot.getPosition().x+", "+robot.getPosition().y+")", this);
-		while (true)
+		robot.sleep(3000);
+		System.out.println("en position ("+robot.getPosition().x+", "+robot.getPosition().y+")");
+		int i=0;
+		while (i<10)
 		{
 			int randX = rand.nextInt(3000)-1500;
 			int randY = rand.nextInt(2000);
 			try 
 			{
 				path = PathDingDing.computePath(robot.getPosition(), new Vec2(randX,randY), state.table);
-				log.debug(path.toString(), this);
+				System.out.println(path.toString());
 				robot.followPath(path, emptyHook);
+				robot.sleep(1000);
 			}
 			catch (PathNotFoundException e) 
 			{
@@ -74,7 +76,8 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 			{
 				log.debug("chemin bloque", this);
 			}
-			log.debug("en position ("+robot.getPosition().x+", "+robot.getPosition().y+")", this);
+			System.out.println("en position ("+robot.getPosition().x+", "+robot.getPosition().y+")");
+			i++;
 		}
 		
 	}
