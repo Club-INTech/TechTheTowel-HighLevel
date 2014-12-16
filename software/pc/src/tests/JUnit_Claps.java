@@ -5,18 +5,20 @@ package tests;
 import hook.types.HookFactory;
 
 import org.junit.Before;
+import org.junit.Test;
 
 import pathDingDing.PathDingDing;
 import robot.Robot;
 import robot.RobotReal;
 import scripts.DropCarpet;
 import strategie.GameState;
+
 import java.util.ArrayList;
+
 import hook.Hook;
 import scripts.CloseClap;
 import table.Table;
 import enums.ServiceNames;
-
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 
@@ -38,14 +40,36 @@ public class JUnit_Claps extends JUnit_Test {
 		table = (Table)container.getService(ServiceNames.TABLE);
 		robot = (RobotReal)container.getService(ServiceNames.ROBOT_REAL);
 		hookFactory = (HookFactory)container.getService(ServiceNames.HOOK_FACTORY);
-		pathfinding = new PathDingDing(table);
-		scriptCloseClap = new CloseClap(hookFactory, config, log);
+		//pathfinding = new PathDingDing(table);
+		scriptCloseClap = new CloseClap(hookFactory, config, log);		
+
 	}
 	
+	@Test
 	public void test() throws UnableToMoveException, SerialConnexionException
 	{
+		/*int sleepTime = 2500; //le temps d'attente (en ms) entre la commande de dépose du tapis ( le bras se baisse) et la commande qui remonte le bras
+
+		GameState<Robot> stateToConsider;
+		
+		stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, true);
+
+		stateToConsider.robot.moveLengthwise(500);
+		
+		robot.sleep(sleepTime);
+
+		stateToConsider.robot.turn(-Math.PI/2);
+		robot.sleep(sleepTime);                              
+		stateToConsider.robot.moveLengthwise(750);       
+		robot.sleep(sleepTime);
+		
+		stateToConsider.robot.turn(Math.PI);
+        robot.sleep(sleepTime);
+        stateToConsider.robot.moveLengthwise(-500);
+		robot.sleep(sleepTime);// A partir du coin de la table*/
+	
 		scriptCloseClap.execute(1, null, false);
-		//Test de fermeture des claps  1 , 2 , 3 (du plus proche au plu loin du depart)
+		//Test de fermeture des claps  1 , 2 , 3 (du plus proche au plu loin du depart)		
 	}
 
 	{/* Premier jet du test, fonctionne 
