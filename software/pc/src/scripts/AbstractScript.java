@@ -13,6 +13,7 @@ import hook.types.HookFactory;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
+import exceptions.serial.SerialFinallyException;
 
 /**
  * Classe abstraite dont héritent les différents scripts.
@@ -107,7 +108,7 @@ public abstract class AbstractScript implements Service
 	 * @throws UnableToMoveException losrque le robot veut se déplacer et que quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
 	 * @throws SerialConnexionException s'il y a un problème de communication avec une des cartes électroniques
 	 */
-	abstract protected void finalise(GameState<?> state) throws UnableToMoveException, SerialConnexionException;
+	abstract protected void finalise(GameState<?> state) throws UnableToMoveException, SerialFinallyException;
 	
 	/* (non-Javadoc)
 	 * @see container.Service#updateConfig()
