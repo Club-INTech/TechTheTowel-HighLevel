@@ -272,7 +272,7 @@ public abstract class Robot implements Service
     {
     	//TODO: le pathfinding reclame une table, mais ce n'est pas logique d'en avoir une dans Robot
 			ArrayList<Vec2> path = PathDingDing.computePath(getPosition(),aim,table);
-			followPath(path , hooksToConsider);	
+			followPath(path , hooksToConsider);
     }
     
 	/**
