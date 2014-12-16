@@ -2,12 +2,13 @@ package tests;
 
 //@author Théo + architecture Paul
 
+
 import java.util.ArrayList;
 
 import hook.Hook;
-
 import org.junit.Before;
 import org.junit.Test;
+
 
 import enums.ScriptNames;
 import enums.ServiceNames;
@@ -16,8 +17,6 @@ import exceptions.serial.SerialConnexionException;
 import robot.Robot;
 import scripts.ScriptManager;
 import strategie.GameState;
-
-
 
 public class JUnit_Claps extends JUnit_Test {
 	
@@ -48,6 +47,7 @@ public class JUnit_Claps extends JUnit_Test {
 	}
 	
 	
+
 	{/* Premier jet du test, fonctionne 
 	
 	public void test()
@@ -144,5 +144,6 @@ public class JUnit_Claps extends JUnit_Test {
 			e.printStackTrace();
 		}
 	}*/}
-
 }
+
+
