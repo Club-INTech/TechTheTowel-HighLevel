@@ -1,3 +1,4 @@
-asservissement.cogui
-asservissement.comarker
+*.cogui
+*.coproj
+*.comarker
 build/
