@@ -7,6 +7,9 @@ package smartMath;
  */
 public class Point
 {
+	//TODO: doc
+	
+	
 	public double x;
 	public double y;
 	
@@ -32,5 +35,10 @@ public class Point
 	{
 		x = X;
 		y = Y;
+	}
+	
+	public Vec2 toVec2()
+	{
+		return new Vec2((int)x, (int)y);
 	}
 }

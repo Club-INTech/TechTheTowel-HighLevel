@@ -8,15 +8,21 @@ import org.junit.Test;
 
 import robot.*;
 import smartMath.Vec2;
+// TODO: Auto-generated Javadoc
+
 /**
- * Tests unitaires pour RobotChrono
- * @author pf
+ * Tests unitaires pour RobotChrono.
  *
+ * @author pf
  */
 public class JUnit_RobotChrono extends JUnit_Test {
 
+	/** The robotchrono. */
 	private RobotChrono robotchrono;
 	
+	/* (non-Javadoc)
+	 * @see tests.JUnit_Test#setUp()
+	 */
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
@@ -26,16 +32,26 @@ public class JUnit_RobotChrono extends JUnit_Test {
 		robotchrono.setOrientation(0);
 	}
 
+	/**
+	 * Test_avancer.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_avancer() throws Exception
 	{
 		log.debug("JUnit_RobotChronoTest.test_avancer()", this);
-		robotchrono.avancer(10);
+		robotchrono.moveLengthwise(10);
 		System.out.println("Avant: "+robotchrono.getPosition());
 		Assert.assertTrue(robotchrono.getPosition().equals(new Vec2(10,1500)));
         System.out.println("Après: "+robotchrono.getPosition());
 	}
 
+	/**
+	 * Test_va_au_point_symetrie.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_va_au_point_symetrie() throws Exception
 	{
@@ -45,33 +61,48 @@ public class JUnit_RobotChrono extends JUnit_Test {
 		robotchrono = new RobotChrono(config, log);
 		robotchrono.setPosition(new Vec2(0, 1500));
 		robotchrono.setOrientation(0);
-		robotchrono.va_au_point(new Vec2(10, 1400));
+		robotchrono.moveToLocation(new Vec2(10, 1400));
 		Assert.assertTrue(robotchrono.getPosition().distance(new Vec2(10,1400)) < 2);
 
 		config.set("couleur", "rouge");
 		robotchrono = new RobotChrono(config, log);
 		robotchrono.setPosition(new Vec2(0, 1500));
 		robotchrono.setOrientation(0);
-		robotchrono.va_au_point(new Vec2(10, 1400));
+		robotchrono.moveToLocation(new Vec2(10, 1400));
 		Assert.assertTrue(robotchrono.getPosition().distance(new Vec2(-10,1400)) < 2);
 	}
 	
+	/**
+	 * Test_va_au_point.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_va_au_point() throws Exception
 	{
 		log.debug("JUnit_RobotChronoTest.test_va_au_point()", this);
-		robotchrono.va_au_point(new Vec2(10, 1400));
+		robotchrono.moveToLocation(new Vec2(10, 1400));
 		Assert.assertTrue(robotchrono.getPosition().distance(new Vec2(10,1400)) < 2);
 	}
 
+	/**
+	 * Test_tourner.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_tourner() throws Exception
 	{
 		log.debug("JUnit_RobotChronoTest.test_tourner()", this);
-		robotchrono.tourner((float)1.2);
+		robotchrono.turn((float)1.2);
 		Assert.assertTrue(robotchrono.getOrientation()==(float)1.2);
 	}
 
+	/**
+	 * Test_suit_chemin.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_suit_chemin() throws Exception
 	{
@@ -79,11 +110,16 @@ public class JUnit_RobotChrono extends JUnit_Test {
 		ArrayList<Vec2> chemin = new ArrayList<Vec2>();
 		chemin.add(new Vec2(20, 1400));
 		chemin.add(new Vec2(40, 1500));
-		robotchrono.suit_chemin(chemin, null);
+		robotchrono.followPath(chemin, null);
 		Assert.assertTrue(robotchrono.getPosition().distance(new Vec2(40,1500)) < 2);
 		
 	}
 	
+	/**
+	 * Test_actionneurs.
+	 *
+	 * @throws Exception the exception
+	 */
 	@Test
 	public void test_actionneurs() throws Exception
 	{

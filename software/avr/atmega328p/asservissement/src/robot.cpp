@@ -21,7 +21,7 @@ Robot::Robot() :
     serial_t_::activer_acquittement(true);
 	translation.valeur_bridage(120);
 	rotation.valeur_bridage   (100);
-	changer_orientation(-PI/2);
+	changer_orientation(PI);
 }
 
 void Robot::asservir()

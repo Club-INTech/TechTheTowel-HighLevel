@@ -5,11 +5,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import container.Container;
-import robot.cards.Locomotion;
+import enums.ServiceNames;
+import robot.cardsWrappers.LocomotionCardWrapper;
 
 /**
  * Application permettant de trouver les constantes d'asservissement en rotation
  * et en translation
+ * 
+ * Ce n'est pas un code utile en match, c'est une application a part
  * 
  * @author pf, kayou
  * 
@@ -18,19 +21,21 @@ public class SearchConst
 {
     private static float kp = 0, kd = 0;
     private static int pwm_max = 0;
-    private static BufferedReader bufferRead = new BufferedReader(
-            new InputStreamReader(System.in));
+    private static BufferedReader bufferRead = new BufferedReader( new InputStreamReader(System.in) );
 
+    /**
+     *  point d'entrée du programme
+     * @param args
+     */
     public static void main(String[] args)
-    {
+    {    		
         Container container;
-        Locomotion deplacements = null;
+        LocomotionCardWrapper deplacements = null;
         int signe = 1;
         try
         {
             container = new Container();
-            deplacements = (Locomotion) container.getService("Deplacements");
-
+            deplacements = (LocomotionCardWrapper) container.getService(ServiceNames.LOCOMOTION_CARD_WRAPPER);
             System.out.println("r ou t?");
             char asserv = (char) System.in.read();
             float distance = -1000;
@@ -47,9 +52,9 @@ public class SearchConst
 
                     set_kp_kd_pwm();
 
-                    deplacements.change_const_translation(kp, kd, pwm_max);
+                    deplacements.changeTranslationnalFeedbackParameters(kp, kd, pwm_max);
                     System.out.println(distance);
-                    deplacements.avancer(distance);
+                    deplacements.moveLengthwise(distance);
 
                 }
                 else if (asserv == 'r')
@@ -61,9 +66,9 @@ public class SearchConst
 
                     set_kp_kd_pwm();
 
-                    deplacements.change_const_rotation(kp, kd, pwm_max);
+                    deplacements.changeRotationnalFeedbackParameters(kp, kd, pwm_max);
                     System.out.println(angle);
-                    deplacements.tourner(angle);
+                    deplacements.turn(angle);
 
                 }
             }
@@ -72,7 +77,11 @@ public class SearchConst
             e.printStackTrace();
         }
     }
-
+	
+	/**
+	 *  demande à l'utilisateur de nouvelles valeurs de constantes
+	 * @throws IOException en cas d'erreur de saisie de l'utilisateur au clavier
+	 */
     public static void set_kp_kd_pwm() throws IOException
     {
         String s;

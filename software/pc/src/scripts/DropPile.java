@@ -2,63 +2,68 @@ package scripts;
 
 import java.util.ArrayList;
 
-import Pathfinding.Pathfinding;
-import exceptions.ScriptException;
-import hook.Hook;
-import hook.types.HookGenerator;
-import robot.RobotReal;
-import robot.cards.ActuatorsManager;
-import robot.highlevel.LocomotionHiLevel;
+import enums.ActuatorOrder;
+import exceptions.Locomotion.UnableToMoveException;
+import exceptions.serial.SerialConnexionException;
+import exceptions.serial.SerialFinallyException;
+import hook.types.HookFactory;
+import robot.Robot;
 import smartMath.Vec2;
 import strategie.GameState;
 import utils.Config;
 import utils.Log;
 
-public class DropPile extends Script {
-	
-	private ArrayList<Hook> emptyHook = new ArrayList<Hook>();
 
-	public DropPile(HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, LocomotionHiLevel locomotion, ActuatorsManager move) 
+//TODO: Doc ( notamment, expliquer ce que sont les différentes versions
+/**
+ * 
+ * @author ???
+ *
+ */
+public class DropPile extends AbstractScript
+{
+	
+
+	public DropPile(HookFactory hookFactory, Config config, Log log) 
 	{
-		super(hookgenerator, config, log,pathfinding, locomotion,move);
+		super(hookFactory, config, log);
+		
+		
+		// TODO: id n'est pas une variable temporaire du constructeur. C'est versions qui est un membre et qu'il faut initialiser ici
 		ArrayList<Integer> id = new ArrayList<Integer>();
 		id.add(1);
 		id.add(2);
 	}
 
 	@Override
-	protected void execute(int id_version)
+	public void execute(int version, GameState<Robot> stateToConsider, boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException
 	{
-		if (id_version==1)
+		if (version==1)
 		{
-			locomotion.tourner((Math.PI*0.5), emptyHook, false);
-			locomotion.avancer(100, emptyHook, true);
-			actionneurs.elevatorGround();
-			actionneurs.ouvrirLentGuide();
-			locomotion.avancer(-20, emptyHook, true);
-			this.setPlotCounter(0);
-			actionneurs.guideGaucheClose();
-			actionneurs.guideDroitClose();
-			locomotion.avancer(-80,emptyHook,true);
+			stateToConsider.robot.turn(Math.PI/2.0);
+			stateToConsider.robot.moveLengthwise(100);
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, true);		
+			stateToConsider.robot.moveLengthwise(-20);
+			stateToConsider.robot.setStoredPlotCount(0);
+			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);	
+			stateToConsider.robot.moveLengthwise(-80);
 		}
-		else if (id_version==2)
+		else if (version==2)
 		{
-			
+			// TODO: version 2
 		}
 		else
 		{
-			
+			// TODO: version ?
 		}
 	}
 	
-	@Override
-	public void goToThenExec(int id_version, GameState<RobotReal> state, boolean retenter_si_blocage) throws ScriptException
-	{
-		
-	}
 	
 	@Override
-	public Vec2 point_entree(int id) 
+	public Vec2 entryPosition(int id) 
 	{
 		if (id==1)
 		{
@@ -76,18 +81,22 @@ public class DropPile extends Script {
 	}
 
 	@Override
-	public int score(int id_version, GameState<?> state)
+	public int remainingScoreOfVersion(int version, GameState<?> stateToConsider)
 	{
-		return 5*this.getPlotCounter();
+		return 5*(8 -stateToConsider.robot.getStoredPlotCount());
 	}
 
 	@Override
-	protected void termine(GameState<?> state) 
+	protected void finalise(GameState<?> stateToConsider) throws SerialFinallyException, UnableToMoveException 
 	{
-		fermerMachoire();
-		locomotion.avancer(-20, emptyHook, true);
-		baisserAscenseur();
-		fermerGuide();
+		try {
+			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);	
+			stateToConsider.robot.moveLengthwise(-20);
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+		} catch (SerialConnexionException e) {
+			throw new SerialFinallyException ();
+		}
 	}
 
 }

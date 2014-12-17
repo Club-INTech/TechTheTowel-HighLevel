@@ -1,127 +1,113 @@
 package scripts;
 
-import java.util.ArrayList;
-
-import Pathfinding.Pathfinding;
+import enums.ActuatorOrder;
 import exceptions.Locomotion.UnableToMoveException;
-import exceptions.serial.SerialException;
-import hook.Hook;
-import hook.types.HookGenerator;
-import robot.cards.ActuatorsManager;
-import robot.highlevel.LocomotionHiLevel;
+import exceptions.serial.SerialConnexionException;
+import exceptions.serial.SerialFinallyException;
+import hook.types.HookFactory;
+import robot.Robot;
 import smartMath.Vec2;
 import strategie.GameState;
 import utils.Config;
 import utils.Log;
-import utils.Sleep;
 /**
  * 
  * @author paul
  * Script pour deposer les tapis sur l'escalier
  */
-public class DropCarpet extends Script 
+public class DropCarpet extends AbstractScript 
 {
-	// TODO ? bouger ces booléens dans table.
-	private boolean DroppedLeftCarpet=false, DroppedRightCarpet=false;//booleens pour savoir si le tapis gauche (respectivement droit) a ete depose
-	private int distance=200;//distance de déplacement pour placer les tapis
-	private int sleepTime = 800; //le temps d'attente (en ms) entre la commande de dépose du tapis ( le bras se baisse) et la commande qui remonte le bras
-
-	public DropCarpet (HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, LocomotionHiLevel locomotion, ActuatorsManager move) 
-	{
-		super(hookgenerator,config,log,pathfinding,locomotion,move);
-		//cree la liste des versions donc des id
-	}
 	
-	@Override
-	public void execute (int id_version) 
+	/**distance de déplacement entre le point de depart et les marches (position pour poser les tapis) en mm */
+	private int distanceBetweenEntryAndStairs=200;
+
+	/**
+	 * Constructeur (normalement appelé uniquement par le scriptManager) du script déposant les tapis
+	 * Le container se charge de renseigner la hookFactory, le système de config et de log.
+	 * @param hookFactory La factory a utiliser pour générer les hooks dont pourra avoir besoin le script
+	 * @param config le fichier de config a partir duquel le script pourra se configurer
+	 * @param log le système de log qu'utilisera le script
+	 */
+	public DropCarpet(HookFactory hookFactory, Config config, Log log)
 	{
-		ArrayList<Hook> emptyHookList = new ArrayList<Hook>(); //liste des hook vide pour le moment mais a modifier
+		super(hookFactory, config, log);
+		versions = new int[]{1}; 
+		//definition du tableau des versions, a modifier a chaque ajout d'une version (si il n'y en a qu'une je vois pas trop l'interet mais bon)
+	}
+
+	@Override
+	public void execute (int versionToExecute, GameState<Robot> stateToConsider, boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException 
+	{
 		try 
 		{
-			try 
-			{
-				//on presente ses arrieres a l'escalier
-				locomotion.tourner(Math.PI,emptyHookList,true);
-				// on avance vers ces demoiselles (les marches) 
-				locomotion.avancer(-distance,emptyHookList,true);
-				
-				if (!DroppedLeftCarpet)
-				{
-					actionneurs.downLeftCarpet();
-					Sleep.sleep(sleepTime);
-					DroppedLeftCarpet=true;
-					actionneurs.upLeftCarpet();
-				}
-				if (!DroppedRightCarpet)
-				{
-					actionneurs.downRightCarpet();
-					Sleep.sleep(sleepTime);
-					DroppedRightCarpet=true;
-					actionneurs.upRightCarpet();
-				}
-				locomotion.avancer(distance,emptyHookList,true);//on s'eloigne de l'escalier
-			} 
-			catch (UnableToMoveException e) 
-			{
-			log.debug("erreur DropCarpet Script : impossible de bouger", this);
-			} 
-		}
-		catch (SerialException e) 
-		{
-			log.debug("mauvaise entree serie !",this);
-			e.printStackTrace();
 			
-		}
+			//on presente ses arrieres a l'escalier
+			stateToConsider.robot.turn(Math.PI);
+			// on avance vers ces demoiselles (les marches) 
+			stateToConsider.robot.moveLengthwiseTowardWall(-distanceBetweenEntryAndStairs);
+			
+			if (!stateToConsider.table.getIsLeftCarpetDropped())
+			{
+				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_DROP, true);
+				stateToConsider.table.setIsLeftCarpetDropped(true);
+				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
+			}
+			if (!stateToConsider.table.getIsRightCarpetDropped())
+			{
+				stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_DROP, true);
+				stateToConsider.table.setIsRightCarpetDropped(true);
+				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, true);
+			}
+			//on s'eloigne de l'escalier
+			stateToConsider.robot.moveLengthwise(distanceBetweenEntryAndStairs);
+		
+		} 
+		catch (UnableToMoveException e) 
+		{
+			if (shouldRetryIfBlocke)
+			{
+				execute (versionToExecute,stateToConsider,false);
+			}
+			else
+			{
+				log.debug("erreur DropCarpet Script : impossible de bouger", this);
+				throw e;
+			}
+		} 
+
 	}
 	
 	@Override
-	public Vec2 point_entree(int id) 
+	public Vec2 entryPosition(int id) 
 	{
-		// le point d'entrée (261,1210) pour les verts, on change comment de couleur si on est jaune ?
-		return new Vec2(261,1310-distance);
+		return new Vec2(261,1310-distanceBetweenEntryAndStairs);
 	}
 
 	@Override
-	public int score(int id_version, GameState<?> state) 
+	public int remainingScoreOfVersion(int version, GameState<?> stateToConsider) 
 	{
 		int score = 24;
-		if(DroppedLeftCarpet)
+		if(stateToConsider.table.getIsLeftCarpetDropped())
 			score -= 12;
-		if(DroppedRightCarpet)
+		if(stateToConsider.table.getIsRightCarpetDropped())
 			score -= 12;
 		
 		return score;
 	}
 
 	@Override
-	protected void termine(GameState<?> state) 
+	protected void finalise(GameState<?> stateToConsider) throws SerialFinallyException 
 	{
 		try 
 		{
-			actionneurs.upLeftCarpet();
-			actionneurs.upRightCarpet();
+			stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, true);
 		} 
-		catch (SerialException e) 
+		catch (SerialConnexionException e) 
 		{
-			log.debug("erreur termine DropCarpet script : impossible de ranger", this);;
+			log.debug("erreur termine DropCarpet script : impossible de ranger", this);
+			throw new SerialFinallyException (); //TODO c'est la syntaxe correcte ?
 		}
-	}
-	
-	public int getSleepTime()
-	{
-		return sleepTime;
-	}
-	public void setSleepTime(int newSleepTime)
-	{
-		this.sleepTime = newSleepTime;
-	}
-	public int getDistance()
-	{
-		return distance;
-	}
-	public void setDistance(int newDistance)
-	{
-		this.distance = newDistance;
 	}
 
 }

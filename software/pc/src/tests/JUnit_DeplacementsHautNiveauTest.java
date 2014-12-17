@@ -1,83 +1,128 @@
 package tests;
 
-import hook.Callback;
-import hook.Executable;
-import hook.Hook;
-import hook.types.HookGenerator;
+import hook.types.HookFactory;
 
 import java.util.ArrayList;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import enums.ServiceNames;
+import robot.Locomotion;
 import robot.RobotReal;
-import robot.highlevel.LocomotionHiLevel;
 import smartMath.Vec2;
 import strategie.GameState;
 import utils.Sleep;
 
+// TODO: Auto-generated Javadoc
 /**
- * Teste les fonctions de déplacement de haut niveau
- * @author pf
+ * Teste les fonctions de déplacement de haut niveau.
  *
+ * @author pf
  */
 
 // TODO : comprendre ce système
 
 public class JUnit_DeplacementsHautNiveauTest extends JUnit_Test
 {
-    private LocomotionHiLevel robot;
-    private HookGenerator hookgenerator;
+    
+    /** The robot. */
+    private Locomotion robot;
+    
+    // TODO: pourquoi ce n'est pas utilisé ?
+    /** The hookgenerator. */
+    @SuppressWarnings("unused")
+	private HookFactory hookgenerator;
+    
+    /** The real_state. */
     private GameState<RobotReal> real_state;
     
+    /* (non-Javadoc)
+     * @see tests.JUnit_Test#setUp()
+     */
     @SuppressWarnings("unchecked")
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        robot = (LocomotionHiLevel) container.getService("DeplacementsHautNiveau");
-        hookgenerator = (HookGenerator) container.getService("HookGenerator");
-        real_state = (GameState<RobotReal>) container.getService("RealGameState");
+        robot = (Locomotion) container.getService(ServiceNames.LOCOMOTION);
+        hookgenerator = (HookFactory) container.getService(ServiceNames.HOOK_FACTORY);
+        real_state = (GameState<RobotReal>) container.getService(ServiceNames.GAME_STATE);
         robot.setPosition(new Vec2(1000, 900));
         robot.setOrientation(Math.PI/2);
         Vec2 consigne = new Vec2(700, 1400);
-        robot.setConsigne(consigne);
+        robot.setAim(consigne);
     }
     
+    /**
+     * Test_va_au_point_courbe.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void test_va_au_point_courbe() throws Exception
     {
 //        robot.va_au_point_courbe((float) Math.PI, 500, false);
-        robot.va_au_point_courbe((float) (Math.PI/4), 500, true, false);
+        robot.moveInDirection((float) (Math.PI/4), 500, true);
     }
 
+    /**
+     * Test_va_au_point_symetrie.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void test_va_au_point_symetrie() throws Exception
     {
-        robot.va_au_point_symetrie(false, true, false);
+    	//TODO: faire un test au sein de la classe Locomotion qui teste cela (ne pas mettre moveInDirectionPlanner en public, écrire un test dans Locomotion qui lui est en public)
+    	log.warning("Test a réécrire !", this);
+        //robot.moveInDirectionPlanner(false, true, false);
     }
     
+    /**
+     * Test_va_au_point_hook.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void test_va_au_point_hook() throws Exception
     {
-    	// TODO
+    	//TODO: faire un test au sein de la classe Locomotion qui teste cela (ne pas mettre la méthode en public, écrire un test dans Locomotion qui lui est en public)
+    	log.warning("Test a réécrire !", this);
+        //
     }
 
+    /**
+     * Test_va_au_point_correction.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void test_va_au_point_correction() throws Exception
     {
-        robot.va_au_point_hook_correction_detection(null, false, false);
+    	//TODO: faire un test au sein de la classe Locomotion qui teste cela (ne pas mettre moveInDirectionEventWatcher en public, écrire un test dans Locomotion qui lui est en public)
+    	log.warning("Test a réécrire !", this);
+        //robot.moveInDirectionEventWatcher(null, false, false);
     }
 
+    /**
+     * Test_va_au_point_detection.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void test_va_au_point_detection() throws Exception
     {
-        container.demarreTousThreads();
-        real_state.robot.initialiser_actionneurs_deplacements();
-        robot.setInsiste(true);
-        robot.va_au_point_gestion_exception(null, true, false, false);
+    	//TODO: faire un test au sein de la classe Locomotion qui teste cela (ne pas mettre moveInDirectionExeptionHandler en public, écrire un test dans Locomotion qui lui est en public)
+    	log.warning("Test a réécrire !", this);
+        container.startAllThreads();
+        //robot.moveInDirectionExeptionHandler(null, true, false, false);
     }
 
+    /**
+     * Test_va_au_point_relancer.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void test_va_au_point_relancer() throws Exception
     {
@@ -92,16 +137,25 @@ public class JUnit_DeplacementsHautNiveauTest extends JUnit_Test
         */
     }
 
+    /**
+     * Test_recaler.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void test_recaler() throws Exception
     {
-        robot.recaler();
+        robot.readjust();
     }
     
+    /**
+     * Test_suit_chemin.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void test_suit_chemin() throws Exception
     {
-        robot.setInsiste(true);
         for(int i = 0; i < 10; i++)
         {
             ArrayList<Vec2> chemin = new ArrayList<Vec2>();
@@ -110,38 +164,60 @@ public class JUnit_DeplacementsHautNiveauTest extends JUnit_Test
             chemin.add(new Vec2(-1000, 1200));
             chemin.add(new Vec2(0, 500));
             chemin.add(new Vec2(1000, 1200));
-            robot.suit_chemin(chemin, null);
+            robot.followPath(chemin, null);
         }
     }
 
+    /**
+     * Test_avancer.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void test_avancer() throws Exception
     {
-        robot.avancer(50, null, false);
+    	/*
+        robot.moveLengthwise(50, null, false);
         Sleep.sleep(1000);
-        robot.avancer(-50, null, false);
+        robot.moveLengthwise(-50, null, false);
+        */
+    	while(true)
+    	{
+            robot.moveLengthwise(100, null, false);
+            Sleep.sleep(500);
+    	}
     }
 
+    /**
+     * Test_avancer_mur.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void test_avancer_mur() throws Exception
     {
-        container.demarreTousThreads();
+        container.startAllThreads();
 //        robot.avancer(1500, null, true);
-        real_state.robot.avancer_dans_mur(1500);
+        real_state.robot.moveLengthwiseTowardWall(1500);
     }
 
+    /**
+     * Test_vitesse_avancer.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void test_vitesse_avancer() throws Exception
     {
-        real_state.robot.avancer(200);
+        real_state.robot.moveLengthwise(200);
         Sleep.sleep(1000);
-        real_state.robot.avancer_dans_mur(200);
+        real_state.robot.moveLengthwiseTowardWall(200);
         Sleep.sleep(1000);
-        real_state.robot.avancer(200);
+        real_state.robot.moveLengthwise(200);
         Sleep.sleep(1000);
-        real_state.robot.avancer_dans_mur(200);
+        real_state.robot.moveLengthwiseTowardWall(200);
         Sleep.sleep(1000);
-        real_state.robot.avancer(200);
+        real_state.robot.moveLengthwise(200);
     }
 
 }

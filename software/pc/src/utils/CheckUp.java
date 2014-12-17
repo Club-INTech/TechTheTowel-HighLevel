@@ -4,31 +4,44 @@ import robot.RobotReal;
 import container.Service;
 
 /**
- * Service qui permettra de faire un checkup du robot avant le match
- * @author pf
- * (marsu) : Cette année on l'utilisera, promi !
+ * Service qui permet de tester tout les actionneurs.
+ * Ce système est prévu pour être aussi utilisé durant les 3 minutes de préparations avant le début du match
+ *
+ * @author pf, marsu
  */
 
 public class CheckUp implements Service 
 {
 
+	/** Le système de log a utiliser pour écrire */
 	private Log log;
-	private RobotReal robotvrai;
 	
-	public CheckUp(Log log, RobotReal robotvrai)
+	/** Le RobotReal a tester */
+	private RobotReal robotReal;
+	
+	/**
+	 * Le système de log a utiliser pour écrire 
+	 *
+	 * @param log Le système de log a utiliser pour écrires
+	 * @param robotReal Le RobotReal a tester
+	 */
+	public CheckUp(Log log, RobotReal robotReal)
 	{
-		this.robotvrai = robotvrai;
+		this.robotReal = robotReal;
 		this.log = log;
 	}
 	
 	// TODO check-up du robot
-	public void lancer()
+	/**
+	 * Effectue un check-up du robot
+	 */
+	public void doCheckUp()
 	{
 		// Par exemple
 		log.debug("Lancement d'un check-up", this);
 		try
 		{
-		robotvrai.avancer(100);
+		robotReal.moveLengthwise(100);
 		}
 		catch(Exception e)
 		{
@@ -36,6 +49,9 @@ public class CheckUp implements Service
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see container.Service#updateConfig()
+	 */
 	public void updateConfig()
 	{
 	}

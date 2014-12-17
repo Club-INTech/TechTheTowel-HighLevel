@@ -1,13 +1,18 @@
 package tests;
 
-import org.junit.Before;
 import org.junit.*;
 
-import Pathfinding.PathFinding;
+import pathDingDing.PathDingDing;
 import container.Container;
 import table.Table;
 import smartMath.Point;
+import smartMath.Vec2;
 import smartMath.Path;
+
+import java.util.ArrayList;
+
+import enums.ServiceNames;
+import exceptions.*;
 
 public class JUnit_Pathfinding extends JUnit_Test
 {
@@ -21,8 +26,7 @@ public class JUnit_Pathfinding extends JUnit_Test
     @Test
     public void testIntersection() throws Exception
     {
-    	Container cont = new Container();
-    	if( !PathFinding.intersects(new Point(0, 0), new Point(1, 1), new Point(0, 1), new Point(1, 0)) )
+    	if( !PathDingDing.intersects(new Point(0, 0), new Point(1, 1), new Point(0, 1), new Point(1, 0)) )
     		Assert.fail();
     }
     
@@ -30,15 +34,19 @@ public class JUnit_Pathfinding extends JUnit_Test
     @Test
     public void testPF1() throws Exception
     {
-    	Container cont = new Container();
-    	PathFinding pf = new PathFinding((Table)cont.getService("Table"));
-    	long start = System.nanoTime();
-    	Path path = pf.computePath(new Point(-1200, 200), new Point(1200, 200));
-    	pf.simplify(path);
-    	long end = System.nanoTime();
-    	System.out.println("elapsed : " + (end - start) + " ns");
+    	ArrayList<Vec2> path = new ArrayList<Vec2>();
+    	try
+    	{
+    		System.out.println("essai :");
+			path = PathDingDing.computePath(new Vec2(1300, 200), new Vec2(-1300, 200), (Table)container.getService(ServiceNames.TABLE));
+    	}
+    	catch(PathNotFoundException e)
+    	{
+    		System.out.println("--------------not on table------------------");
+    	}
     	for(int i = 0; i < path.size(); i++)
-    		System.out.println("point : " + path.getPosition(i).x + " / " + path.getPosition(i).y);
+    	{
+    		System.out.println("-----------------------------" + path.get(i).toString());
+    	}
     }
-    
 }

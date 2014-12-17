@@ -1,49 +1,70 @@
 package robot.serial;
 import utils.Log;
+import enums.ServiceNames;
 import gnu.io.CommPortIdentifier;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Hashtable;
 import java.util.Iterator;
 
+import exceptions.ServiceTypeException;
 import exceptions.serial.SerialManagerException;
 
 /**
- * Instancie toutes les s�ries, si on lui demande gentillement!
+ * Instancie toutes les s�ries, il faut bien faire attention � d�finir les cartes
+ * qui seront utilis�es dans le robot, avec le ping et le baudrate de fonctionnement.
+ * 
+ * Cette classe va au pr�alable charger les param�tres des cartes (dans le constructeur),
+ * puis regarder toutes les liaisons s�ries qui sont susceptibles d'�tre connect�es
+ * (dans /dev/ttyUSB* ou /dev/ACM*, mais pas besoin de savoir �a, il se d�brouille comme un grand).
  * @author pierre
- *
+ * @author pf
  */
 public class SerialManager 
 {
-	// Dépendances
+	/**
+	 * Sortie de log a utiliser pour informer l'utilisateur
+	 */
 	private Log log;
 
-	//Series a instancier
-	public Serial serieAsservissement = null;
-	public Serial serieCapteursActionneurs = null;
-	public Serial serieLaser = null;
+	/** Series a instancier : celle pour la carte d'asser */
+	public SerialConnexion serieAsservissement = null;
 
-	//On stock les series dans une liste
-	private Hashtable<String, Serial> series = new Hashtable<String, Serial>();
+	/** Series a instancier : celle pour la carte capteur/actonneurs */
+	public SerialConnexion serieCapteursActionneurs = null;
+	
+	/** Series a instancier : celle pour la carte laser */
+	public SerialConnexion serieLaser = null;
+
+	/** Liste contenant les connexion séries avec les cartes */
+	private SerialConnexion[] series = new SerialConnexion[3];
 
 	//Pour chaque carte, on connait a l'avance son nom, son ping et son baudrate
-	private SpecificationCard carteAsservissement = new SpecificationCard("serieAsservissement", 0, 9600);
-	private SpecificationCard carteCapteursActionneurs = new SpecificationCard("serieCapteursActionneurs", 3, 9600);
-//	private SpecificationCard carteLaser = new SpecificationCard("serieLaser", 4, 57600);
+	/** Carte d'assservissement, paramétré a l'avance par son nom, son id et son baudrate */
+	private CardSpecification carteAsservissement = new CardSpecification(ServiceNames.SERIE_ASSERVISSEMENT, 0, 9600);
 
-	//On stock les cartes dans une liste
-	private ArrayList <SpecificationCard> cards = new ArrayList <SpecificationCard>();
+	/** Carte capteurs/actionneurs, paramétré a l'avance par son nom, son id et son baudrate */
+	private CardSpecification carteCapteursActionneurs = new CardSpecification(ServiceNames.SERIE_CAPTEURS_ACTIONNEURS, 3, 9600);
+	
+	/** Carte Laser, paramétré a l'avance par son nom, son id et son baudrate */
+	@SuppressWarnings("unused")
+	private CardSpecification carteLaser = new CardSpecification(ServiceNames.SERIE_LASER, 4, 57600);
 
-	//Liste pour stocker les series qui sont connectees au pc 
+	/** On stock les cartes dans une liste */
+	private ArrayList <CardSpecification> cards = new ArrayList <CardSpecification>();
+
+	/** Liste pour stocker les series qui sont connectees au pc */ 
 	private ArrayList<String> connectedSerial = new ArrayList<String>();
 
-	//Liste pour stocker les baudrates des differentes serie
-
+	/** Liste pour stocker les baudrates des differentes serie */
 	private ArrayList<Integer> baudrate = new ArrayList<Integer>();
 
 	/**
-	 * Recuperation de toutes les cartes dans cards et des baudrates dans baudrate
+	 * Recuperation des param�tres des cartes dans cards et des baudrates dans baudrate
+	 * (ceux d�finis plus haut), puis fait appel � checkSerial() et createSerial().
+	 * A la fin de ce constructeur, les s�ries sont d�tect�es et instanci�es. 
+	 * @param log : la sortie de log à utiliser
+	 * @throws SerialManagerException 
 	 */
 	public SerialManager(Log log) throws SerialManagerException
 	{
@@ -53,7 +74,7 @@ public class SerialManager
 		cards.add(this.carteCapteursActionneurs);
 //		cards.add(this.carteLaser);
 
-		Iterator<SpecificationCard> e = cards.iterator();
+		Iterator<CardSpecification> e = cards.iterator();
 		while (e.hasNext())
 		{
 			int baud = e.next().baudrate;
@@ -61,12 +82,28 @@ public class SerialManager
 				this.baudrate.add(baud);
 		}
 
-		this.serieAsservissement = new Serial(log, this.carteAsservissement.name);
-		this.serieCapteursActionneurs = new Serial(log, this.carteCapteursActionneurs.name);
+		this.serieAsservissement = new SerialConnexion(log, this.carteAsservissement.name);
+		this.serieCapteursActionneurs = new SerialConnexion(log, this.carteCapteursActionneurs.name);
 //		this.serieLaser = new Serial(log, this.carteLaser.name);
 
-		this.series.put(this.carteAsservissement.name, this.serieAsservissement);
-		this.series.put(this.carteCapteursActionneurs.name, this.serieCapteursActionneurs);
+		try
+		{
+			this.series[this.carteAsservissement.name.getSerialIndex()] = this.serieAsservissement;
+		} 
+		catch (ServiceTypeException e1)
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try
+		{
+			this.series[this.carteCapteursActionneurs.name.getSerialIndex()] = this.serieCapteursActionneurs;
+		}
+		catch (ServiceTypeException e1)
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 //		this.series.put(this.carteLaser.name, this.serieLaser);
 
 		checkSerial();
@@ -74,7 +111,7 @@ public class SerialManager
 	}
 
 	/**
-	 * Regarde toutes les series qui sont branchees dans /dev/ttyUSB*
+	 * Regarde toutes les series qui sont branchees (sur /dev/ttyUSB* et /dev/ttyACM*)
 	 */
 	public  void checkSerial()
 	{
@@ -86,7 +123,14 @@ public class SerialManager
 		}
 	}
 	/**
-	 * Création des series (il faut au prealable faire un checkSerial())
+	 * Création des series (il faut au prealable faire un checkSerial()).
+	 * 
+	 * Cette m�thode cr�e une s�rie de test pour chaque port /dev/ttyUSB* et /dev/ttyACM* d�tect�
+	 * dans le but de ping ces ports et d�terminer si il nous interesse (en v�rifiant le ping re�u,
+	 * si il en re�oit un). Si un /dev/ttyUSB (ou ACM) n'est pas une liaison s�rie,
+	 * il se peut que l'on ait un message d'erreur li� au fait que l'on ping un /dev/ttyUSB (ou ACM)
+	 * qui ne nous r�pond pas.
+	 * @throws SerialManagerException 
 	 */
 	public void createSerial() throws SerialManagerException
 	{
@@ -103,7 +147,7 @@ public class SerialManager
 				if (!deja_attribues.contains(k))
 				{
 					//Creation d'une serie de test
-					Serial serialTest = new Serial(log, "carte de test de ping");
+					SerialConnexion serialTest = new SerialConnexion(log, "Carte de test");
 					serialTest.initialize(this.connectedSerial.get(k), baudrate);
 					
 					
@@ -141,10 +185,10 @@ public class SerialManager
 		}
 
 		//Association de chaque serie a son port
-		Iterator<SpecificationCard> e = cards.iterator();
+		Iterator<CardSpecification> e = cards.iterator();
 		while (e.hasNext())
 		{
-			SpecificationCard serial = e.next();
+			CardSpecification serial = e.next();
 			if(serial.id == 0 && pings[serial.id] != null)
 			{
 				this.serieAsservissement.initialize(pings[serial.id], serial.baudrate);
@@ -167,17 +211,19 @@ public class SerialManager
 	}
 	
 	/**
-	 * 
-	 * @param baudrate
-	 * @param id
+	 * Cette m�thode v�rifie si id est bien associ� � baudrate
+	 * (en comparant avec les param�tres des SpecificationCard qu'on lui a donn� au d�but de cette classe).
+	 * Utilis� dans createSerial.
+	 * @param baudrate a tester
+	 * @param id a tester
 	 * @return
 	 */
 	private boolean goodBaudrate(int baudrate, int id)
 	{
-		Iterator<SpecificationCard> e = cards.iterator();
+		Iterator<CardSpecification> e = cards.iterator();
 		while(e.hasNext())
 		{
-			SpecificationCard serial = e.next();
+			CardSpecification serial = e.next();
 			if((id == serial.id) && (baudrate == serial.baudrate))
 				return true;
 		}
@@ -185,13 +231,13 @@ public class SerialManager
 	}
 
 	/**
-	 * Permet de savoir si une carte a déjà été pingée, utilisé que par SerialManager
-	 * @param id
+	 * Permet de savoir si id est connu (info qu'il trouve dans SpecificationCard.
+	 * @param id : id a v�rifier
 	 * @return
 	 */
 	private boolean isKnownPing(int id)
 	{
-		Iterator<SpecificationCard> e = cards.iterator();
+		Iterator<CardSpecification> e = cards.iterator();
 		while(e.hasNext())
 		{
 			if(id == e.next().id)
@@ -201,24 +247,32 @@ public class SerialManager
 	}
 
 	/**
-	 * Permet d'obtenir une série
-	 * @param name
-	 * 				Nom de la série
-	 * @return
-	 * 				L'instance de la série
+	 * Permet d'obtenir une série au pr�alable instanci� dans le constructeur.
+	 * @param name : Nom de la série
+	 * @return L'instance de la série
+	 * @throws SerialManagerException 
 	 */
-	public Serial getSerial(String name)	throws SerialManagerException
+	public SerialConnexion getSerial(ServiceNames name)	throws SerialManagerException
 	{
-		if (this.series.containsKey(name))
+		try
 		{
-			return this.series.get(name);
+			if (this.series[name.getSerialIndex()] != null)
+			{
+				return this.series[name.getSerialIndex()];
+			}
+			else
+			{
+				log.critical("Aucune série du nom : " + name.toString() + " n'existe", this);
+				log.critical("Vérifiez les branchements ou l'interface+simulateur (redémarrez si besoin).", this);
+				log.critical("Vérifiez aussi que tous les processus Java exécutant ce code sont éteints.", this);
+				throw new SerialManagerException("serie non trouvée");
+			}
 		}
-		else
+		catch (ServiceTypeException e)
 		{
-			log.critical("Aucune série du nom : " + name + " n'existe", this);
-			log.critical("Vérifiez les branchements ou l'interface+simulateur (redémarrez si besoin).", this);
-			log.critical("Vérifiez aussi que tous les processus Java exécutant ce code sont éteints.", this);
-			throw new SerialManagerException("serie non trouvée");
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		return serieAsservissement;
 	}
 }

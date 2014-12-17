@@ -21,62 +21,83 @@ import smartMath.*;
  *          TODO : migrer la liste d'obstacles vers l'obstacle manager
  */
 
-
-
+/**
+ * Stocke toute les informations liées a la table (muables et immuables) au cours d'un match.
+ */
 public class Table implements Service
 {
-
-	public ObstacleManager gestionobstacles;
-
-	// Dépendances
-	private Log log;
-	private Config config;
-	private ArrayList<ObstacleLinear> m_lines;
-	private ArrayList<ObstacleCircular> m_circles;
+	/** Le gestionnaire d'obstacle. */
+	private ObstacleManager mObstacleManager;
 	
+	/** système de log sur lequel écrire. */
+	private Log log;
+
+	/** endroit ou lire la configuration du robot */
+	private Config config;
+	
+	// TODO: doc
+	
+	private boolean isClap1Closed;
+	private boolean isClap2Closed;
+	private boolean isClap3Closed;
+
+	private boolean isLeftCarpetDropped;
+	private boolean isRightCarpetDropped;
+	
+	/**
+	 * Instancie une nouvelle table
+	 *
+	 * @param log le système de log sur lequel écrire.
+	 * @param config l'endroit ou lire la configuration du robot
+	 */
 	public Table(Log log, Config config)
 	{
 		this.log = log;
 		this.config = config;
-		this.gestionobstacles = new ObstacleManager(log, config);
+		this.mObstacleManager = new ObstacleManager(log, config);
 		initialise();
 	}
 	
-	public void initialise()//initialise la table du debut du jeu (obstacles fixes)
+	public void initialise() // initialise la table du debut du jeu
 	{
-		m_lines = new ArrayList<ObstacleLinear>();
-		
-		double radius = 190;
-		
-		//1 + 2 + 3 + nodes
-		m_lines.add(new ObstacleLinear(new Point(-1500 + radius, 778 - radius), new Point(-1100 + radius, 778 - radius), 1, new Point(-1095 + radius, 778 - radius), new Point(0, 0)));
-		m_lines.add(new ObstacleLinear(new Point(-1100 + radius, 778 - radius), new Point(-1100 + radius, 1222 + radius), 2, new Point(-1095 + radius, 778 - radius), new Point(-1095 + radius, 1222 + radius)));
-		m_lines.add(new ObstacleLinear(new Point(-1100 + radius, 1222 + radius), new Point(-1500 + radius, 1222 + radius), 1, new Point(-1095 + radius, 1222 + radius), new Point(0, 0)));
-		
-		//10 + 11 + 12 + nodes
-		m_lines.add(new ObstacleLinear(new Point(1500 - radius, 1222 + radius), new Point(1100 - radius, 1222 + radius), 1, new Point(1095 - radius, 1222 + radius), new Point(0, 0)));
-		m_lines.add(new ObstacleLinear(new Point(1100 - radius, 1222 + radius), new Point(1100 - radius, 778 - radius), 2, new Point(1095 - radius, 1222 + radius), new Point(1095 - radius, 778 - radius)));
-		m_lines.add(new ObstacleLinear(new Point(1100 - radius, 778 - radius), new Point(1500 - radius, 778 - radius), 1, new Point(1095 - radius, 778 - radius), new Point(0, 0)));
-		
-		//6 + nodes
-		m_lines.add(new ObstacleLinear(new Point(533 + radius, 1930 - radius), new Point(533 + radius, 1420 - radius), 1, new Point(533 + radius, 1415 - radius), new Point(0, 0)));
-		m_lines.add(new ObstacleLinear(new Point(533 + radius, 1420 - radius), new Point(-533 - radius, 1420 - radius), 2, new Point(533 + radius, 1415 - radius), new Point(-533 - radius, 1415 - radius)));
-		m_lines.add(new ObstacleLinear(new Point(-533 - radius, 1420 - radius), new Point(-533 - radius, 1930 - radius), 1, new Point(-533 - radius, 1415 - radius), new Point(0, 0)));
-		
-		
-		//7 + nodes
-		m_lines.add(new ObstacleLinear(new Point(300 + radius, 0 + radius), new Point(300 + radius, 100 + radius), 1, new Point(300 + radius, 105 + radius), new Point(0, 0)));
-		m_lines.add(new ObstacleLinear(new Point(300 + radius, 100 + radius), new Point(-300 - radius, 100 + radius), 2, new Point(300 + radius, 105 + radius), new Point(-300 - radius, 105 + radius)));
-		m_lines.add(new ObstacleLinear(new Point(-300 - radius, 100 + radius), new Point(-300 - radius, 0 + radius), 1, new Point(-300 - radius, 105 + radius), new Point(0, 0)));
-		
-		//table
-		m_lines.add(new ObstacleLinear(new Point(-1500 + radius, 0 + radius), new Point(1500 - radius, 0 + radius), 0, new Point(0, 0), new Point(0, 0)));
-		m_lines.add(new ObstacleLinear(new Point(1500 - radius, 0 + radius), new Point(1500 - radius, 1930 - radius), 0, new Point(0, 0), new Point(0, 0)));
-		m_lines.add(new ObstacleLinear(new Point(1500 - radius, 1930 - radius), new Point(-1500 + radius, 1930 - radius), 0, new Point(0, 0), new Point(0, 0)));
-		m_lines.add(new ObstacleLinear(new Point(-1500 + radius, 1930 - radius), new Point(-1500 + radius, 0 + radius), 0, new Point(0, 0), new Point(0, 0)));
-		
+		// Claps
+		isClap1Closed=false;
+		isClap2Closed=false;
+		isClap3Closed=false;
+
+		//les tapis
+		isLeftCarpetDropped = false;
+		isRightCarpetDropped = false;
+	}
+	public ObstacleManager getObstacleManager()
+	{
+		return mObstacleManager;
 	}
 	
+	public boolean getIsClap1Closed() {
+		return isClap1Closed;
+	}
+
+	public void setIsClap1Closed(boolean isClap1Closed) {
+		this.isClap1Closed = isClap1Closed;
+	}
+
+	public boolean getIsClap2Closed() {
+		return isClap2Closed;
+	}
+
+	public void setIsClap2Closed(boolean isClap2Closed) {
+		this.isClap2Closed = isClap2Closed;
+	}
+
+	public boolean getIsClap3Closed() {
+		return isClap3Closed;
+	}
+
+	public void setIsClap3Closed(boolean isClap3Closed) {
+		this.isClap3Closed = isClap3Closed;
+	}
+
 	//La table
 	/**
 	 * La table en argument deviendra la copie de this (this reste inchangé)
@@ -89,8 +110,8 @@ public class Table implements Service
         	// TODO: faire grande optimisation de ceci a grand coup de hashs
         	
         	
-			if(!gestionobstacles.equals(ct.gestionobstacles))
-			    gestionobstacles.copy(ct.gestionobstacles);
+			if(!mObstacleManager.equals(ct.mObstacleManager))
+				mObstacleManager.copy(ct.mObstacleManager);
 		}
 	}
 	
@@ -100,33 +121,45 @@ public class Table implements Service
 		copy(cloned_table);
 		return cloned_table;
 	}
-
-	/**
-	 * Utilisé pour les tests
-	 * @param other
-	 * @return
-	 */
-	public boolean equals(Table other)
-	{
-		return 	false; //TODO
- 	}
-
-	@Override
-	public void updateConfig() {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	//accesseurs
 	
-	public ArrayList<ObstacleLinear> getLines()
+    public boolean getIsLeftCarpetDropped() 
 	{
-		return m_lines;
+		return isLeftCarpetDropped;
 	}
-	
-	public ArrayList<ObstacleCircular> getCircles()
+    public void setIsLeftCarpetDropped(boolean newValue)
+    {
+    	isLeftCarpetDropped=newValue;
+    }
+    public boolean getIsRightCarpetDropped() 
+  	{
+  		return isRightCarpetDropped;
+  	}
+      public void setIsRightCarpetDropped(boolean newValue)
+      {
+      	isRightCarpetDropped=newValue;
+      }
+	/**
+	 * Compare deux tables et indique si elles sont égales.
+	 * Utilisé pour les tests.
+	 *
+	 * @param other l'autre table a comparer
+	 * @return true, si les deux tables sont identiques
+	 */
+	public boolean equals(Table other)
 	{
-		return m_circles;
+		return false; //TODO écrire puis compléter au fur et a mesure cette fonction pour qu'elle reste a jour.
+ 	}
+
+	/* (non-Javadoc)
+	 * @see container.Service#updateConfig()
+	 */
+	@Override
+	public void updateConfig()
+	{
+		// TODO Auto-generated method stub
+		
 	}
 }
 

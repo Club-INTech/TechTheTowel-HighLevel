@@ -1,58 +1,72 @@
 package scripts;
 
 import hook.Hook;
-import hook.types.HookGenerator;
+import hook.types.HookFactory;
 
 import java.util.ArrayList;
 
-import Pathfinding.Pathfinding;
 import exceptions.Locomotion.UnableToMoveException;
-import robot.cards.ActuatorsManager;
-import robot.highlevel.LocomotionHiLevel;
+import exceptions.serial.SerialConnexionException;
+import robot.Robot;
 import smartMath.Vec2;
 import strategie.GameState;
 import utils.Config;
 import utils.Log;
 
 /**
- * 
+ * script pour sortir de la zone de depart. a executer imperativement et uniquement au depart
  * @author paul
- *script pour sortir de la zone de depart. a executer imperativement et uniquement au depart
  */
-public class ExitBeginZone extends Script {
+public class ExitBeginZone extends AbstractScript
+{
 
-	int distanceToExit=450;
+	int distanceToExit=500;
+	//la distance dont on avance pour sortir de la zone de depart
 	ArrayList<Hook> emptyHook = new ArrayList<Hook>();
 	
-	public ExitBeginZone(HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, LocomotionHiLevel locomotion, ActuatorsManager move) 
+	public ExitBeginZone(HookFactory hookFactory, Config config, Log log) 
 	{
-		super(hookgenerator, config, log, pathfinding, locomotion, move);
+		super(hookFactory, config, log);
 	}
 
 	@Override
-	public Vec2 point_entree(int id) {
-		return new Vec2(1340,1000);//point de depart du match a modifier a chaque base roulante
+	public Vec2 entryPosition(int id)
+	{
+		// point de depart du match a modifier a chaque base roulante
+		return new Vec2(1500-71-48,1000); //1500 le bout de la table, 71 la taille du carre vert perce et 48 la taille de l'arriere du robot a son centre
 	}
 	
 	@Override
-	public void execute (int id_version)
+	public void execute (int id_version, GameState<Robot> stateToConsider, boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException
 	{
-		try {
-			locomotion.avancer(distanceToExit,emptyHook,true);
-		} catch (UnableToMoveException e) {
-			log.debug("erreur ExitBeginZone script : impossible de sortir de la zone de depart\n", this);
+		try
+		{
+			stateToConsider.robot.moveLengthwise(distanceToExit);
+		}
+		catch (UnableToMoveException e)
+		{
+			if (shouldRetryIfBlocke)
+			{
+				execute (id_version, stateToConsider,false);
+			}
+			else
+			{
+				log.debug("erreur ExitBeginZone script : impossible de sortir de la zone de depart\n", this);
+				throw e;
+			}
 		}
 	}
 
 	@Override
-	public int score(int id_version, GameState<?> state) 
+	public int remainingScoreOfVersion(int id_version, GameState<?> state) 
 	{		
 		return 0;
 	}
 
 	@Override
-	protected void termine(GameState<?> state) 
+	protected void finalise(GameState<?> state) 
 	{
 		//abwa ?
+		//en effet, pas d'actionneur a rentrer donc abwa !
 	}
 }
