@@ -61,17 +61,17 @@ public class JUnit_Math extends JUnit_Test {
 	{
 		log.debug("JUnit_MathTest.test_matrn_constructor()", this);
 		y = new Matrn(2);
-		Assert.assertTrue(y.getNbColonnes() == 2);
-		Assert.assertTrue(y.getNbLignes() == 2);
+		Assert.assertTrue(y.getNbRows() == 2);
+		Assert.assertTrue(y.getNbLines() == 2);
 		y = new Matrn(2, 1);
-		Assert.assertTrue(y.getNbColonnes() == 1);
-		Assert.assertTrue(y.getNbLignes() == 2);
+		Assert.assertTrue(y.getNbRows() == 1);
+		Assert.assertTrue(y.getNbLines() == 2);
 		double[][] tab = new double[2][1];
 		tab[0][0] = 1;
 		tab[1][0] = 2;
 		y = new Matrn(tab);
-		Assert.assertTrue(y.getNbColonnes() == 2);
-		Assert.assertTrue(y.getNbLignes() == 1);
+		Assert.assertTrue(y.getNbRows() == 2);
+		Assert.assertTrue(y.getNbLines() == 1);
 	}
 
 	/**
@@ -95,7 +95,7 @@ public class JUnit_Math extends JUnit_Test {
 		z.setCoeff(2, 1, 0);
 		z.setCoeff(12, 1, 1);
 
-		y.additionner_egal(z);
+		y.add_equal(z);
 		Assert.assertTrue(y.getCoeff(0, 0) == 6);
 		Assert.assertTrue(y.getCoeff(0, 1) == 10);
 		Assert.assertTrue(y.getCoeff(1, 0) == 5);
@@ -123,7 +123,7 @@ public class JUnit_Math extends JUnit_Test {
 		z.setCoeff(2, 1, 0);
 		z.setCoeff(12, 1, 1);
 
-		Matrn a = y.additionner(z);
+		Matrn a = y.add(z);
 		Assert.assertTrue(a.getCoeff(0, 0) == 6);
 		Assert.assertTrue(a.getCoeff(0, 1) == 10);
 		Assert.assertTrue(a.getCoeff(1, 0) == 5);
@@ -151,7 +151,7 @@ public class JUnit_Math extends JUnit_Test {
 		z.setCoeff(2, 1, 0);
 		z.setCoeff(12, 1, 1);
 
-		y.multiplier_egal(z);
+		y.multiply_equal(z);
 		Assert.assertTrue(y.getCoeff(0, 0) == 9);
 		Assert.assertTrue(y.getCoeff(0, 1) == 32);
 		Assert.assertTrue(y.getCoeff(1, 0) == 23);
@@ -179,7 +179,7 @@ public class JUnit_Math extends JUnit_Test {
 		z.setCoeff(2, 1, 0);
 		z.setCoeff(12, 1, 1);
 
-		Matrn a = y.multiplier(z);
+		Matrn a = y.multiply(z);
 		Assert.assertTrue(a.getCoeff(0, 0) == 9);
 		Assert.assertTrue(a.getCoeff(0, 1) == 32);
 		Assert.assertTrue(a.getCoeff(1, 0) == 23);
@@ -205,8 +205,8 @@ public class JUnit_Math extends JUnit_Test {
 		y.setCoeff(51, 2, 0);
 		y.setCoeff(-12, 2, 1);
 		y.setCoeff(0, 2, 2);
-
-		y.transpose_egal();
+		
+		y.transpose_equal();
 		Assert.assertTrue(y.getCoeff(0, 0) == 1);
 		Assert.assertTrue(y.getCoeff(0, 1) == 3);
 		Assert.assertTrue(y.getCoeff(0, 2) == 51);
@@ -268,7 +268,7 @@ public class JUnit_Math extends JUnit_Test {
 		z = new Matrn(1);
 		z.setCoeff(5, 0, 0);
 
-		y.additionner_egal(z);
+		y.add_equal(z);
 	}
 
 	/**
@@ -287,7 +287,7 @@ public class JUnit_Math extends JUnit_Test {
 		z = new Matrn(1,1);
 		z.setCoeff(5, 0, 0);
 
-		y.multiplier_egal(z);
+		y.multiply_equal(z);
 	}
 
 	/**
@@ -303,7 +303,7 @@ public class JUnit_Math extends JUnit_Test {
 		y.setCoeff(1, 0, 0);
 		y.setCoeff(2, 0, 1);
 
-		y.transpose_egal();
+		y.transpose_equal();
 	}
 	
 }
