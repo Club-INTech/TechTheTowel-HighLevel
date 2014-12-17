@@ -38,7 +38,7 @@ public class JUnit_Pathfinding extends JUnit_Test
     	try
     	{
     		System.out.println("essai :");
-			path = PathDingDing.computePath(new Vec2(1300, 200), new Vec2(-1300, 200), (Table)container.getService(ServiceNames.TABLE));
+			path = PathDingDing.computePath(new Vec2(0, 0), new Vec2(200, 1000), (Table)container.getService(ServiceNames.TABLE));
     	}
     	catch(PathNotFoundException e)
     	{
@@ -47,6 +47,19 @@ public class JUnit_Pathfinding extends JUnit_Test
     	for(int i = 0; i < path.size(); i++)
     	{
     		System.out.println("-----------------------------" + path.get(i).toString());
+    	}
+    	try
+    	{
+    		System.out.println("essai :");
+			path = PathDingDing.computePath(new Vec2(-200, 900), new Vec2(200, 1000), (Table)container.getService(ServiceNames.TABLE));
+    	}
+    	catch(PathNotFoundException e)
+    	{
+    		System.out.println("--------------not on table------------------");
+    	}
+    	for(int i = 0; i < path.size(); i++)
+    	{
+    		System.out.println("--------------" + path.get(i).toString() + "---------------------");
     	}
     }
 }
