@@ -21,6 +21,7 @@ public class ExitBeginZone extends AbstractScript
 {
 
 	int distanceToExit=500;
+	//la distance dont on avance pour sortir de la zone de depart
 	ArrayList<Hook> emptyHook = new ArrayList<Hook>();
 	
 	public ExitBeginZone(HookFactory hookFactory, Config config, Log log) 
@@ -32,7 +33,7 @@ public class ExitBeginZone extends AbstractScript
 	public Vec2 entryPosition(int id)
 	{
 		// point de depart du match a modifier a chaque base roulante
-		return new Vec2(1500-71-48,1000);
+		return new Vec2(1500-71-48,1000); //1500 le bout de la table, 71 la taille du carre vert perce et 48 la taille de l'arriere du robot a son centre
 	}
 	
 	@Override

@@ -3,6 +3,7 @@ package scripts;
 import enums.ActuatorOrder;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
+import exceptions.serial.SerialFinallyException;
 import hook.types.HookFactory;
 import robot.Robot;
 import smartMath.Vec2;
@@ -95,7 +96,7 @@ public class DropCarpet extends AbstractScript
 	}
 
 	@Override
-	protected void finalise(GameState<?> stateToConsider) throws SerialConnexionException 
+	protected void finalise(GameState<?> stateToConsider) throws SerialFinallyException 
 	{
 		try 
 		{
@@ -105,7 +106,7 @@ public class DropCarpet extends AbstractScript
 		catch (SerialConnexionException e) 
 		{
 			log.debug("erreur termine DropCarpet script : impossible de ranger", this);
-			throw e;
+			throw new SerialFinallyException (); //TODO c'est la syntaxe correcte ?
 		}
 	}
 

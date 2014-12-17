@@ -12,17 +12,15 @@ import org.junit.Before;
 import org.junit.Test;
 
 import enums.ActuatorOrder;
+import enums.ScriptNames;
 import enums.ServiceNames;
-import exceptions.Locomotion.BlockedException;
+import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
-import pathDingDing.PathDingDing;
 import robot.Robot;
-import robot.RobotReal;
-import scripts.DropCarpet;
+import scripts.ScriptManager;
 import smartMath.Vec2;
 import strategie.GameState;
-import table.Table;
 /**
  * test pour le script du depose tapis 
  * on suppose que le robot est place en (261,1410)
@@ -31,10 +29,7 @@ import table.Table;
  */
 public class JUnit_CarpetDropper extends JUnit_Test
 {
-	DropCarpet scriptCarpet;
-	RobotReal robot;
-	Table table;
-	PathDingDing pathfinding;
+	ScriptManager scriptManager;
 	HookFactory hookFactory;
 	GameState<Robot> game;
 	ArrayList<Hook> emptyHook = new ArrayList<Hook>();
@@ -45,31 +40,29 @@ public class JUnit_CarpetDropper extends JUnit_Test
 	{
 		//creation des objets pour le test
 		super.setUp();                                                                                                                                 
-		table = (Table)container.getService(ServiceNames.TABLE);
-		robot = (RobotReal)container.getService(ServiceNames.ROBOT_REAL);
 		hookFactory = (HookFactory)container.getService(ServiceNames.HOOK_FACTORY);
-		pathfinding = new PathDingDing(table);
-		scriptCarpet = new DropCarpet(hookFactory, config, log);
+		scriptManager = (ScriptManager)container.getService(ServiceNames.SCRIPT_MANAGER);
 		game = (GameState<Robot>)container.getService(ServiceNames.GAME_STATE);
 		
 		//position initiale du robot
-		robot.setPosition(new Vec2(1500-71-48,1000));
+		game.robot.setPosition(new Vec2(1381,1000));
 		
 		//positionnement du robot
-		robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP,false);
-		robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP,true); 
+		game.robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP,false);
+		game.robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP,true); 
 		//on remonte les deux bras a tapis en meme temps
-		robot.moveLengthwise(1000);
+		game.robot.moveLengthwise(1000);
+		//on sort de la zone de depart
 		Random rand = new Random();
-		robot.turn(rand.nextDouble());
+		game.robot.turn(rand.nextDouble());
 		
 	}
 
 	@After
 	public void tearDown() throws Exception 
 	{
-		robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP,false);
-		robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP,true);
+		game.robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP,false);
+		game.robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP,true);
 		//on remonte les deux bras a tapis en meme temps
 	}
 
@@ -79,13 +72,15 @@ public class JUnit_CarpetDropper extends JUnit_Test
 		log.debug("debut du depose tapis", this);
 		try 
 		{
-			scriptCarpet.goToThenExec(1, game, false, emptyHook);
+			game.robot.moveLengthwise(120);
+			game.robot.turn(Math.PI*-0.5);
+			game.robot.moveLengthwise(-110);
+			scriptManager.getScript(ScriptNames.DROP_CARPET).execute(1, game, false);
 		} 
-			catch (UnableToMoveException | BlockedException | SerialConnexionException e) 
+			catch (UnableToMoveException | SerialConnexionException e) 
 		{
 			e.printStackTrace();
 		}
-
 		log.debug("fin du depose tapis", this);
 	}
 

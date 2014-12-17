@@ -16,6 +16,7 @@ public class JUnit_Graphics extends JUnit_Test
     @Before
     public void setUp() throws Exception
     {
+    	//TODO : appeler le container pour creer la table
     	win = new Window(new Table(log, config));
         super.setUp();
     }

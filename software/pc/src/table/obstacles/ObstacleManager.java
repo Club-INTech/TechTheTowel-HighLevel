@@ -79,17 +79,17 @@ public class ObstacleManager
       	m_lines.add(new ObstacleLinear(new Point(-1500 + radius, 1930 - radius), new Point(-1500 + radius, 0 + radius), 0, new Point(0, 0), new Point(0, 0)));
       		
       	m_rects.add(new ObstacleRectangular(new Vec2(-1300, 1200), 400, 22));
-      	m_rects.add(new ObstacleRectangular(new Vec2(-1465,800),70,400));
-      	m_rects.add(new ObstacleRectangular(new Vec2(-1300,778),400,22));
-      	m_rects.add(new ObstacleRectangular(new Vec2(-1200,1930),70,70));
-      	m_rects.add(new ObstacleRectangular(new Vec2(-900,1930),70,70));
-      	m_rects.add(new ObstacleRectangular(new Vec2(0,1420),1066,580));
-      	m_rects.add(new ObstacleRectangular(new Vec2(0,0),600,100));
-      	m_rects.add(new ObstacleRectangular(new Vec2(900,1930),70,70));
-      	m_rects.add(new ObstacleRectangular(new Vec2(1200,1930),70,70));
-      	m_rects.add(new ObstacleRectangular(new Vec2(1300,1200),400,22));
-      	m_rects.add(new ObstacleRectangular(new Vec2(1465,800),70,400));
-      	m_rects.add(new ObstacleRectangular(new Vec2(1300,778),400,22));
+      	m_rects.add(new ObstacleRectangular(new Vec2(-1465, 800),70,400));
+      	m_rects.add(new ObstacleRectangular(new Vec2(-1300, 778),400,22));
+      	m_rects.add(new ObstacleRectangular(new Vec2(-1200, 1930),70,70));
+      	m_rects.add(new ObstacleRectangular(new Vec2(-900, 1930),70,70));
+      	m_rects.add(new ObstacleRectangular(new Vec2(0, 1420),1066,580));
+      	m_rects.add(new ObstacleRectangular(new Vec2(0,0), 600,100));
+      	m_rects.add(new ObstacleRectangular(new Vec2(900, 1930),70,70));
+      	m_rects.add(new ObstacleRectangular(new Vec2(1200, 1930),70,70));
+      	m_rects.add(new ObstacleRectangular(new Vec2(1300, 1200),400,22));
+      	m_rects.add(new ObstacleRectangular(new Vec2(1465, 800),70,400));
+      	m_rects.add(new ObstacleRectangular(new Vec2(1300, 778),400,22));
       	
       	//obstacle plots verts 
       	m_circles.add(new ObstacleCircular(new Vec2(-1410, 800), rayonPlot));

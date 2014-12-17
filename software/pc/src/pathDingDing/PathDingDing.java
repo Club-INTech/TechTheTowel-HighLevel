@@ -2,6 +2,7 @@ package pathDingDing;
 
 import smartMath.Point;
 import table.Table;
+import table.obstacles.*;
 import smartMath.Path;
 import smartMath.Vec2;
 
@@ -16,6 +17,7 @@ import exceptions.*;
  */
 public class PathDingDing
 {
+	int compteur;
 	
 	public PathDingDing()
 	{
@@ -73,6 +75,8 @@ public class PathDingDing
 	 */
 	public static ArrayList<Vec2> computePath(Vec2 start, Vec2 end, Table table) throws PathNotFoundException
 	{
+		if(!isOnTable(start.toPoint(), table) || !isOnTable(end.toPoint(), table))
+			throw new PathNotFoundException();
 		Point DoubleStart = new Point(start.x, start.y), DoubleEnd = new Point(end.x, end.y);
 		Path path = new Path();
 		path.add(DoubleStart);
@@ -81,7 +85,6 @@ public class PathDingDing
 		simplify(path, table);
 		return path.toVec2Array();
 	}
-
 	
 	/**
 	 * 
@@ -92,11 +95,6 @@ public class PathDingDing
 	 */
 	private static Path dodgeStatic(Point start, Point end, Table table) throws PathNotFoundException
 	{
-		int compteur = 0;
-		
-		if(compteur >= 1000)
-			throw new PathNotFoundException();
-		
 		Path path = new Path();
 		
 		// cherche le point d'intersection avec les obstacles le plus proche de point de d�part
@@ -125,7 +123,6 @@ public class PathDingDing
 			//s'il n'y a qu'un seul point de passage sur l'obstacle
 			if( table.getObstacleManager().getLines().get(indiceDistMin).getNbPassagePoint() == 1 )
 			{
-				compteur++;
 				path.addAll(dodgeStatic(start, table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint1(), table));
 				path.add(table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint1());
 				path.addAll(dodgeStatic(table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint1(), end, table));
@@ -135,14 +132,12 @@ public class PathDingDing
 			{
 				if(Math.pow(table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint1().x - end.x, 2) + Math.pow(table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint1().y - end.y, 2) <= Math.pow(table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint2().x - end.x, 2) + Math.pow(table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint2().y - end.y, 2))
 				{
-					compteur++;
 					path.addAll(dodgeStatic(start, table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint1(), table));
 					path.add(table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint1());
 					path.addAll(dodgeStatic(table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint1(), end, table));
 				}
 				else
 				{
-					compteur++;
 					path.addAll(dodgeStatic(start, table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint2(), table));
 					path.add(table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint2());
 					path.addAll(dodgeStatic(table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint2(), end, table));
@@ -150,6 +145,22 @@ public class PathDingDing
 			}
 		}
 		return path;
+	}
+	
+	public static boolean isOnTable(Point point, Table table)
+	{
+		if (point.x <= -1310 || point.x >= 1310 || point.y <= 190 || point.y >= 1740)
+			return false;
+		ArrayList<ObstacleRectangular> rects = table.getObstacleManager().getRects();
+		for(int i = 0; i < rects.size(); i++)
+		{
+			if(point.x <= rects.get(i).getPosition().x + rects.get(i).getSizeX() / 2 + 190
+			&& point.x >= rects.get(i).getPosition().x - rects.get(i).getSizeX() / 2 - 190
+			&& point.y <= rects.get(i).getPosition().y + rects.get(i).getSizeY() + 190
+			&& point.y >= rects.get(i).getPosition().y - 190)
+				return false;
+		}
+		return true;
 	}
 	
 	/**
