@@ -72,15 +72,15 @@ public class JUnit_CarpetDropper extends JUnit_Test
 		log.debug("debut du depose tapis", this);
 		try 
 		{
-			scriptManager.getScript(ScriptNames.DROP_CARPET).goToThenExec(1, game, false, emptyHook);
+			game.robot.moveLengthwise(120);
+			game.robot.turn(Math.PI*-0.5);
+			game.robot.moveLengthwise(-110);
+			scriptManager.getScript(ScriptNames.DROP_CARPET).execute(1, game, false);
 		} 
 			catch (UnableToMoveException | SerialConnexionException e) 
 		{
 			e.printStackTrace();
-		} catch (PathNotFoundException e) {
-				e.printStackTrace();
-			}
-
+		}
 		log.debug("fin du depose tapis", this);
 	}
 

@@ -2,6 +2,7 @@ package tests;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import enums.ServiceNames;
@@ -19,6 +20,16 @@ public class JUnit_Locomotion extends JUnit_Test
 
 	/** The deplacements. */
 	private LocomotionCardWrapper deplacements;
+	
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception
+	{
+		// appelé avant chaque batterie de test
+		/*
+		 * tearDownAfterClass
+		 * @AfterClass apres chaque batterie de test de la meme classe JUnit
+		 */
+	}
 	
 	/* (non-Javadoc)
 	 * @see tests.JUnit_Test#setUp()

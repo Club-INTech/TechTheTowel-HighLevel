@@ -36,7 +36,7 @@ public class DropPile extends AbstractScript
 	}
 
 	@Override
-	protected void execute(int version, GameState<Robot> stateToConsider, boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException
+	public void execute(int version, GameState<Robot> stateToConsider, boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException
 	{
 		if (version==1)
 		{
