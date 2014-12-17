@@ -3,6 +3,8 @@
 *.so
 *.user
 *.project
+*.s#*
+*.b#*
 software/build/
 software/bin/
 /software/pc/logs/
