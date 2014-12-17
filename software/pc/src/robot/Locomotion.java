@@ -216,6 +216,7 @@ public class Locomotion implements Service
 			
 			// boucle surveillant que tout se passe bien lors de la rotation 
 			//on l'execute une fois pour initier le deplacement
+			//FIXME: Martial, j'ai modifie isMovementFinished (pour les deplacement) en isTurnFinished (pour les rotations) et j'ai ajouté un bool pour entrer une fois dans la boucle.
 			while(firstLoop || !isTurnFinished((float)angle)) // on attend la fin du mouvement
 			{
 				firstLoop = false;
