@@ -35,18 +35,21 @@ public class JUnit_Pathfinding extends JUnit_Test
     public void testPF1() throws Exception
     {
     	ArrayList<Vec2> path = new ArrayList<Vec2>();
-    	try
+    	for(int n = 0; n < 100; n++)
     	{
-    		System.out.println("essai :");
-			path = PathDingDing.computePath(new Vec2(1300, 200), new Vec2(-1300, 200), (Table)container.getService(ServiceNames.TABLE));
-    	}
-    	catch(PathNotFoundException e)
-    	{
-    		System.out.println("--------------not on table------------------");
-    	}
-    	for(int i = 0; i < path.size(); i++)
-    	{
-    		System.out.println("-----------------------------" + path.get(i).toString());
+	    	try
+	    	{
+	    		System.out.println("essai :");
+				path = PathDingDing.computePath(new Vec2((int)((Math.random() - 0.5) * 1500), (int)(Math.random() * 2000)), new Vec2((int)((Math.random() - 0.5) * 1500), (int)(Math.random() * 2000)), (Table)container.getService(ServiceNames.TABLE));
+				for(int i = 0; i < path.size(); i++)
+		    	{
+		    		System.out.println("-----------------------------" + path.get(i).toString());
+		    	}
+	    	}
+	    	catch(PathNotFoundException e)
+	    	{
+	    		System.out.println("--------------not on table------------------");
+	    	}
     	}
     }
 }
