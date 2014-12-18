@@ -457,7 +457,7 @@ public class LocomotionCardWrapper implements Service
 
 	/**
 	 * Demande a la carte d'asservissement la position et l'orientation courrante du robot sur la table.
-	 * Renvoie x, y et orientation du robot
+	 * Renvoie x, y et orientation du robot (x en mm, y en mm, et orientation en miliradiants) 
 	 * @return un tableau de 3 cases: [x, y, orientation]
 	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
 	 */
