@@ -110,7 +110,6 @@ public class Container
 	 * @throws ContainerException Déclenché si on demande un service inconnu du système de container Cette exception signifie que cette méthode n'est pas a jour vis a vis de l'énummération ServiceNames
 	 * @throws SerialManagerException quand le service demandé est une carte et qu'elle n'est pas détecté
 	 */
-	//FIXME: pas de moyen d'avoir un RobotChrono ?
 	@SuppressWarnings("unchecked")
 	public Service getService(ServiceNames serviceRequested) throws ContainerException, SerialManagerException
 	{

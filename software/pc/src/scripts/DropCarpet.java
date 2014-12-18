@@ -46,18 +46,22 @@ public class DropCarpet extends AbstractScript
 			// on avance vers ces demoiselles (les marches) 
 			stateToConsider.robot.moveLengthwiseTowardWall(-distanceBetweenEntryAndStairs);
 			
+			//on depose le tapis gauche (si celui-ci n'est pas deja depose)
 			if (!stateToConsider.table.getIsLeftCarpetDropped())
 			{
 				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_DROP, true);
 				stateToConsider.table.setIsLeftCarpetDropped(true);
 				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
 			}
+			
+			//on depose le tapis droit (si celui-ci n'est pas deja depose)
 			if (!stateToConsider.table.getIsRightCarpetDropped())
 			{
 				stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_DROP, true);
 				stateToConsider.table.setIsRightCarpetDropped(true);
 				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, true);
 			}
+			
 			//on s'eloigne de l'escalier
 			stateToConsider.robot.moveLengthwise(distanceBetweenEntryAndStairs);
 		
@@ -80,7 +84,7 @@ public class DropCarpet extends AbstractScript
 	@Override
 	public Vec2 entryPosition(int id) 
 	{
-		return new Vec2(261,1310-distanceBetweenEntryAndStairs);
+		return new Vec2(261,1310-distanceBetweenEntryAndStairs); //soit (261,1110)
 	}
 
 	@Override
