@@ -2,18 +2,20 @@ package graphics;
 
 import javax.swing.JFrame;
 
-import container.Container;
-import enums.ServiceNames;
 import table.Table;
-import smartMath.Vec2;
 
 /**
  * interface graphique de debugage
  * @author Etienne
  *
  */
+//TODO: Ce genre de classe n'a rien a voir avec le code de match du robot. Ce n'est pas un gros inconvéniant, mais que ca n'empèche pas de documenter le code et de statuer clairement a un endroit bien visible que ce code ne sert qu'au debug et pas au match
 public class Window extends JFrame
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1790274611904785158L;
 	private Panel m_panel;
 	
 	public Window(Table table) throws Exception

@@ -3,13 +3,13 @@ package graphics;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 
-import table.Table;
 
 /**
  * gestion de la souris
  * @author Etienne
  *
  */
+// Ce genre de classe n'a rien a voir avec le code de match du robot. Ce n'est pas un gros inconvéniant, mais que ca n'empèche pas de documenter le code et de statuer clairement a un endroit bien visible que ce code ne sert qu'au debug
 public class Mouse implements MouseListener
 {
 	private Window m_fen;

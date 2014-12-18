@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import table.Table;
 import smartMath.Vec2;
 
-import table.Table;
 import table.obstacles.*;
 
 /**
@@ -18,8 +17,14 @@ import table.obstacles.*;
  * @author Etienne
  *
  */
+//TODO: Ce genre de classe n'a rien a voir avec le code de match du robot. Ce n'est pas un gros inconvéniant, mais que ca n'empèche pas de documenter le code et de statuer clairement a un endroit bien visible que ce code ne sert qu'au debug
 public class Panel extends JPanel
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 856331824502887046L;
+	
 	private ArrayList<Vec2> m_path = new ArrayList<Vec2>();
 	private Table mTable;
 	
