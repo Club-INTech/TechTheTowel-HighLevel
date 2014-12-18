@@ -40,8 +40,7 @@ public class JUnit_Locomotion extends JUnit_Test
 		super.setUp();
 		log.debug("JUnit_DeplacementsTest.setUp()", this);
 		mLocomotion = (Locomotion)container.getService(ServiceNames.LOCOMOTION);
-		mLocomotion.setX(0);
-		mLocomotion.setY(1500);
+		mLocomotion.set(new Vec2(0, 1500));
 		mLocomotion.setOrientation(0);
 		mLocomotion.setTranslationnalSpeed(80);
 	}
