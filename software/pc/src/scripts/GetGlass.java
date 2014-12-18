@@ -1,7 +1,10 @@
 package scripts;
 
+import java.util.ArrayList;
+
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
+import hook.Hook;
 import hook.types.HookFactory;
 import robot.Robot;
 import smartMath.Vec2;
@@ -19,7 +22,8 @@ public class GetGlass extends AbstractScript
 		//TODO: tableau des versions
 	}
 	
-	public void execute (int id_version, GameState<Robot> stateToConsider, boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException
+	@Override
+	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
 	{
 		//TODO le script en lui meme
 		//on se tourne vers le goblet

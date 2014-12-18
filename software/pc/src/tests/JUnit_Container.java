@@ -202,7 +202,7 @@ public class JUnit_Container extends JUnit_Test {
 	public void test_serieAsservissement() throws Exception
 	{
 		log.debug("JUnit_ContainerTest.test_serieAsservissement()", this);
-		container.getService(ServiceNames.SERIE_ASSERVISSEMENT);
+		container.getService(ServiceNames.LOCOMOTION_CARD);
 	}
 
 	/**
@@ -226,7 +226,7 @@ public class JUnit_Container extends JUnit_Test {
 	public void test_serieLaser() throws Exception
 	{
 		log.debug("JUnit_ContainerTest.test_serieLaser()", this);
-		container.getService(ServiceNames.SERIE_LASER);
+		container.getService(ServiceNames.LASER_CARD);
 	}
 
 	/**

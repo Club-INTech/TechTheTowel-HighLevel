@@ -79,7 +79,7 @@ public class Locomotion implements Service
 	private boolean symmetry;
 	
 	/** Temps d'attente e miliseconde entre deux vérification de l'état du déplacement quand le robot bouge. (arrivée, blocage, etc.) */
-	private int minimumDelayBetweenMovementStatusCheck = 50;
+	private int minimumDelayBetweenMovementStatusCheck = 100;
 	
 	/** nombre maximum d'excpetions levés d'un certain type lors d'un déplacement */
 	private int maxAllowedExceptionCount = 5;
@@ -217,7 +217,7 @@ public class Locomotion implements Service
 			// boucle surveillant que tout se passe bien lors de la rotation 
 			//on l'execute une fois pour initier le deplacement
 			//FIXME: Martial, j'ai modifie isMovementFinished (pour les deplacement) en isTurnFinished (pour les rotations) et j'ai ajouté un bool pour entrer une fois dans la boucle.
-			while(firstLoop || !isTurnFinished((float)angle)) // on attend la fin du mouvement
+			while(firstLoop || !isTurnFinished(angle*1000)) // on attend la fin du mouvement
 			{
 				firstLoop = false;
 				//c'est bon on a fait un appel
@@ -676,6 +676,7 @@ public class Locomotion implements Service
 		try
 		{
 			// demande aux moteurs de tourner le robot jusqu'a ce qu'il pointe dans la bonne direction
+			log.debug("mLocomotionCardWrapper.turn(direction) : " + direction, this);
 			mLocomotionCardWrapper.turn(direction);
 
 
@@ -709,7 +710,7 @@ public class Locomotion implements Service
 	 * @throws BlockedException si blocage mécanique du robot survient durant la rotation (pas de gestion des capteurs ici)
 	 */
 	// TODO: pourquoi ne pas utiliser mLocomotionCardWrapper.isRobotMoving() ?
-	private boolean isTurnFinished(float finalOrientation) throws BlockedException
+	private boolean isTurnFinished(double finalOrientation) throws BlockedException
 	{
 		boolean out = false; 
 		try
@@ -717,15 +718,16 @@ public class Locomotion implements Service
 			// demande ou l'on est et comment on est orienté a la carte d'asser
 			double[] newInfos = mLocomotionCardWrapper.getCurrentPositionAndOrientation();
 
-			// Le robot tourne-t-il encore ?
-			// Le robot tourne encore si la différence entre l'orientation du robot lors du dernier appel et l'orientation du robot lors de cet appel est suffisamment grande
-			if(Math.abs(newInfos[2] - oldInfos[2]) > 20)
-				out = false;
-
 			// le robot est-t-il arrivé ?
 			// le robot est arrivé si la différence entre l'orientation courante du robot et l'orientation voulue est suffisamment faible
-			else if(Math.abs(newInfos[2] - finalOrientation) < 20)
+			//FIXME : valeur a modifier (precedemment 20)
+			if(Math.abs(newInfos[2]%(2*Math.PI) - finalOrientation%(2*Math.PI)) < 40)
 				out = true;
+			 
+			// Le robot tourne-t-il encore ?
+			// Le robot tourne encore si la différence entre l'orientation du robot lors du dernier appel et l'orientation du robot lors de cet appel est suffisamment grande
+			else if(Math.abs(newInfos[2] - oldInfos[2]) > 2)
+				out = false;
 
 			// si on ne bouge plus, et qu'on n'est pas arrivé, c'est que ca bloque
 			else

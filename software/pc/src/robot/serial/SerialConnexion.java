@@ -168,7 +168,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 				for (String m : messages)
 				{
 					// affiche dans la console ce qu'on envois sur la série
-					/* System.out.println(m); */
+					log.debug("Envois serie : '" + m  + "'", this);
 					m += "\r";
 					output.write(m.getBytes());
 					int nb_tests = 0;
@@ -177,14 +177,19 @@ public class SerialConnexion implements SerialPortEventListener, Service
 					while (acquittement != '_')
 					{
 						nb_tests++;
-						acquittement = input.readLine().charAt(0);
+						String resposeFromCard = input.readLine();
+
+						// affiche dans la console ce qu'on envois sur la série
+						log.debug("Reception serie : '" + resposeFromCard  + "'", this);
+						
+						acquittement = resposeFromCard.charAt(0);
 						if (acquittement != '_')
 						{
 							output.write(m.getBytes());
 						}
 						if (nb_tests > 10)
 						{
-							log.critical("La série" + this.name + " ne répond pas après " + nb_tests + " tentatives", this);
+							log.critical("La série " + this.name + " ne répond pas après " + nb_tests + " tentatives (envoyé : '" + m + "', reponse : '" + resposeFromCard + "')", this);
 							break;
 						}
 					}

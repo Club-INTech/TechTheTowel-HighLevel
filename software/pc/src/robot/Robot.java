@@ -112,6 +112,8 @@ public abstract class Robot implements Service
 	 * @param expectsWallImpact true si le robot doit s'attendre a percuter un mur au cours du déplacement. false si la route est sensée être dégagée.
 	 * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
 	 */
+    // TODO: ne pas utiliser cette méthode. il faut utiliser moveLengthwiseTowardWall pour foncer dans un mur.
+    // à mettre en privé
     public abstract void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException;
     
 
@@ -252,7 +254,7 @@ public abstract class Robot implements Service
 	 * @param distance en mm que le robot doit franchir. Si cette distance est négative, le robot va reculer. Attention, en cas de distance négative, cette méthode ne vérifie pas s'il y a un système d'évitement a l'arrère du robot
 	 * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
 	 */
-    public void moveLengthwiseTowardWall(int distance) throws UnableToMoveException
+    public void moveLengthwiseTowardWall(int distance /* TODO: ajouter hook en argument */ ) throws UnableToMoveException
     {
         Speed oldSpeed = speed; 
         setLocomotionSpeed(Speed.INTO_WALL);

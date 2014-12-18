@@ -1,8 +1,11 @@
 package scripts;
 
+import java.util.ArrayList;
+
 import enums.ActuatorOrder;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
+import hook.Hook;
 import hook.types.HookFactory;
 import robot.Robot;
 import smartMath.Vec2;
@@ -27,7 +30,8 @@ public class GetPlot extends AbstractScript
 		//TODO: tableau des versions
 	}
 	
-	public void execute (int id_version, GameState<Robot> stateToConsider, boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException
+	@Override
+	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
 	{
 		//TODO le script en lui meme
 		
@@ -42,11 +46,11 @@ public class GetPlot extends AbstractScript
 		{
 			//TODO si on en a 3 au depart il ne faut pas ramasser le deuxieme plot mais il faut pouvoir recommencer le script a partir du deuxieme (point de depart different)
 			//version proche des escaliers
-			stateToConsider.robot.turn(Math.PI*0.5);
+			stateToConsider.robot.turn(Math.PI*0.5, hooksToConsider, false);
 			eatPlot(true, false, stateToConsider);
 			//si on a ramasse qqc on incrément le nb de plots
 			//si compteur < 4 on fait monter ?
-			stateToConsider.robot.moveLengthwise(distanceEntrePlots);
+			stateToConsider.robot.moveLengthwise(distanceEntrePlots, hooksToConsider, false);
 			eatPlot(true, false, stateToConsider);
 			//si on a ramasse qqc on incrément le nb de plots
 			//si compteur < 4 on fait monter ?

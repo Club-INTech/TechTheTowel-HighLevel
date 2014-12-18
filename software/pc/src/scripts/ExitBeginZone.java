@@ -19,10 +19,8 @@ import utils.Log;
  */
 public class ExitBeginZone extends AbstractScript
 {
-
-	int distanceToExit=500;
 	//la distance dont on avance pour sortir de la zone de depart
-	ArrayList<Hook> emptyHook = new ArrayList<Hook>();
+	int distanceToExit=500;
 	
 	public ExitBeginZone(HookFactory hookFactory, Config config, Log log) 
 	{
@@ -37,17 +35,17 @@ public class ExitBeginZone extends AbstractScript
 	}
 	
 	@Override
-	public void execute (int id_version, GameState<Robot> stateToConsider, boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException
+	public void execute (int id_version, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException
 	{
 		try
 		{
-			stateToConsider.robot.moveLengthwise(distanceToExit);
+			stateToConsider.robot.moveLengthwise(distanceToExit, hooksToConsider, false);
 		}
 		catch (UnableToMoveException e)
 		{
 			if (shouldRetryIfBlocke)
 			{
-				execute (id_version, stateToConsider,false);
+				execute (id_version, stateToConsider, hooksToConsider,false);
 			}
 			else
 			{
