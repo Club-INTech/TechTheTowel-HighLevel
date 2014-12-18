@@ -2,7 +2,6 @@ package tests;
 
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import hook.Hook;
 import hook.types.HookFactory;
@@ -14,7 +13,6 @@ import org.junit.Test;
 import enums.ActuatorOrder;
 import enums.ScriptNames;
 import enums.ServiceNames;
-import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import robot.Robot;
@@ -40,30 +38,28 @@ public class JUnit_CarpetDropper extends JUnit_Test
 	{
 		//creation des objets pour le test
 		super.setUp();                                                                                                                                 
-		hookFactory = (HookFactory)container.getService(ServiceNames.HOOK_FACTORY);
 		scriptManager = (ScriptManager)container.getService(ServiceNames.SCRIPT_MANAGER);
 		game = (GameState<Robot>)container.getService(ServiceNames.GAME_STATE);
 		
 		//position initiale du robot
 		game.robot.setPosition(new Vec2(1381,1000));
+		game.robot.setOrientation(Math.PI);
 		
 		//positionnement du robot
+		//on remonte les deux bras a tapis en meme temps
 		game.robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP,false);
 		game.robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP,true); 
-		//on remonte les deux bras a tapis en meme temps
-		game.robot.moveLengthwise(1000);
-		//on sort de la zone de depart
-		Random rand = new Random();
-		game.robot.turn(rand.nextDouble());
 		
+		//on sort de la zone de depart
+		game.robot.moveLengthwise(1000);
 	}
 
 	@After
 	public void tearDown() throws Exception 
 	{
+		//on remonte les deux bras a tapis en meme temps
 		game.robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP,false);
 		game.robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP,true);
-		//on remonte les deux bras a tapis en meme temps
 	}
 
 	@Test
@@ -73,7 +69,7 @@ public class JUnit_CarpetDropper extends JUnit_Test
 		try 
 		{
 			game.robot.moveLengthwise(120);
-			game.robot.turn(Math.PI*-0.5);
+			game.robot.turn(-0.5*Math.PI);
 			game.robot.moveLengthwise(-110);
 			scriptManager.getScript(ScriptNames.DROP_CARPET).execute(1, game, false);
 		} 
