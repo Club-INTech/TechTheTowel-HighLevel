@@ -8,7 +8,6 @@ import scripts.AbstractScript;
 import scripts.ScriptManager;
 import smartMath.Vec2;
 import strategie.GameState;
-import threads.ThreadTimer;
 import utils.Sleep;
 
 import org.junit.Before;
@@ -61,13 +60,13 @@ public class JUnit_serialMatch extends JUnit_Test
 			 	Sleep.sleep(100);
 		
 		// maintenant que le jumper est retiré, le match a commencé
-		ThreadTimer.matchStarted = true;
+		//ThreadTimer.matchStarted = true;
 	}
 
 	@Test
 	public void test()
 	{
-
+				waitMatchBegin();
 				//premiere action du match
 				
 				System.out.println("Le robot commence le match");
