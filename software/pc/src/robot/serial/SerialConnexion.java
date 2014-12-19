@@ -180,7 +180,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 						String resposeFromCard = input.readLine();
 
 						// affiche dans la console ce qu'on envois sur la série
-						log.debug("Reception serie : '" + resposeFromCard  + "'", this);
+						//log.debug("Reception serie : '" + resposeFromCard  + "'", this);
 						
 						acquittement = resposeFromCard.charAt(0);
 						if (acquittement != '_')
