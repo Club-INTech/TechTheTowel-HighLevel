@@ -1,26 +1,26 @@
-//import hook.sortes.HookGenerator;
+import hook.Hook;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
-//import org.junit.runner.JUnitCore;
-
-
-
-
-
-import robot.RobotReal;
-import robot.cards.Sensors;
-import robot.cards.Locomotion;
-import robot.highlevel.LocomotionHiLevel;
+import robot.Robot;
+import robot.cardsWrappers.SensorsCardWrapper;
 import scripts.ScriptManager;
+import smartMath.Vec2;
 import strategie.GameState;
 import threads.ThreadTimer;
-//import tests.JUnit_StrategieThreadTest;
-//import sun.rmi.runtime.Log;
-//import threads.ThreadTimer;
 import utils.Config;
+import utils.Sleep;
 import container.Container;
+import enums.ScriptNames;
+import enums.ServiceNames;
+import exceptions.ContainerException;
+import exceptions.PathNotFoundException;
+import exceptions.Locomotion.UnableToMoveException;
+import exceptions.serial.SerialConnexionException;
+import exceptions.serial.SerialManagerException;
 
 
 /**
@@ -28,96 +28,220 @@ import container.Container;
  * @author marsu
  *
  */
-
-		
+// TODO: refactor
 public class Main
 {
 	static Container container;
 	static Config config;
-	static GameState<RobotReal> real_state;
+	static GameState<Robot> real_state; //TODO le robot de ce game state est il un robot real ?
+	static ArrayList<Hook> emptyHook;
 	static ScriptManager scriptmanager;
-	static LocomotionHiLevel deplacements;
-	static Locomotion dep;
-	static Sensors capteurs;
+	static SensorsCardWrapper mSensorsCardWrapper;
 	static boolean doitFaireDepartRapide;
 	
 	
-// dans la config de debut de match, toujours demandé une entrée clavier assez longue (ex "oui" au lieu de "o", pour éviter les fautes de frappes. Une erreur a ce stade coûte cher.
+// dans la config de debut de match, toujours demander une entrée clavier assez longue (ex "oui" au lieu de "o", pour éviter les fautes de frappes. Une erreur a ce stade coûte cher.
 	
 	/**
-	 * TODO doc
-	 * @param args
-	 * @throws Exception
+	 * Point d'entrée du programme. C'est ici que le code commence par être exécuté 
+	 * @param args chaine de caractère des arguments de la ligne de commande
+	 * @throws Exception TODO : quels sont les exeptions lancés ?
 	 */
 	@SuppressWarnings("unchecked")
-	public static void main(String[] args) throws Exception
+	public static void main(String[] args)
 	{
+		//nombre initial des essai pour le container et la serie
+		int numberOfTryContainer=0;
+		int numberOfTrySerial=0;
 		
+		//nombre maximum d'essai autorisee pour le container et la serie
+		int maximumOfTryContainer=5;
+		int maximumOfTrySerial=3;
 
 		System.out.println("=== Robot INTech 2015 : initialisation ===");
-		System.out.println("LANCEUR DE TEST: version de nettoyage du code 2014");
-		
         // si on veut exécuter un test unitaire sur la rapbe, recopier test.nomDeLaClasseDeTest
 		//JUnitCore.main(		"tests.JUnit_DeplacementsTest");  
 		
 		
 		// Système d'injection de dépendances
-		container = new Container();
-		container.getService("Log");
-		config = (Config) container.getService("Read_Ini");
+		//tant que le nombre d'essai n'est pas trop grand on recommence
+		while (numberOfTryContainer<maximumOfTryContainer || numberOfTrySerial<maximumOfTrySerial)
+		{
+			try 
+			{
 	
-		
-		                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
-		
-		//Début des paramétrages
-		//configCouleur();
+				container = new Container();
+				container.getService(ServiceNames.LOG);
+				config = (Config) container.getService(ServiceNames.CONFIG);
+				                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+				
+				//Début des paramétrages
+				configColor();
+			
+				
+				// initialise les singletons
+				real_state = (GameState<Robot>) container.getService(ServiceNames.GAME_STATE);
+			    scriptmanager = (ScriptManager) container.getService(ServiceNames.SCRIPT_MANAGER);
+			    mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
+			    emptyHook = new ArrayList<Hook>(); //TODO la veritable liste des hooks pour le match
+			    
 	
-		
-		// initialise les singletons
-	    dep = (Locomotion)container.getService("Deplacements");
-		real_state = (GameState<RobotReal>) container.getService("RealGameState");
-	    scriptmanager = (ScriptManager) container.getService("ScriptManager");
-	    deplacements = (LocomotionHiLevel)container.getService("DeplacementsHautNiveau");
-	    capteurs = (Sensors) container.getService("Capteur");
-	    
-		real_state.robot.initialiser_actionneurs_deplacements();
-		
+			
+			} 
+			catch (ContainerException e) 
+			//on gere les exceptions du container, en cas de probleme on a pas d'aure solution que de reessayer, mais si c'est vraiment impossible il faut debugger
+			{
+				if (numberOfTryContainer<maximumOfTryContainer)
+				{
+					numberOfTryContainer++;
+					System.out.println("erreur dans le containeur, essai n°"+numberOfTryContainer);
+				}
+				else
+				{
+					System.out.println ("erreur dans le container, a debugger d'urgence !");
+					e.printStackTrace();
+				}
+			}  
+			catch (SerialManagerException | IOException e)  
+			//SerialManager gere le serie et IOException gere les entrees/sortie donc le probleme serai dans les deux cas un probleme de branchement
+			{
+				if (numberOfTrySerial<maximumOfTrySerial)
+				{
+					numberOfTrySerial++;
+					System.out.println("erreur dans la connexion serie, essai n°"+numberOfTrySerial);
+				}
+				else
+				{
+					System.out.println("mauvais branchement serie, la rasbe est-elle bien branchee ?");
+					e.printStackTrace();
+				}
+			} 
+		}
 
 		// Threads
-		//
-	//	container.demarreTousThreads();
-
+		container.startAllThreads();
 		
-		// mettre le checkup du robot.
-		// ici juste des tests de déplcement
-		System.out.println("deplacement bas niveau");
-		dep.avancer(300);
-		Thread.sleep(1000);
-		dep.avancer(-300);
-		Thread.sleep(1000);
-		dep.tourner(1.0);
-		Thread.sleep(1000);
-		dep.tourner(1.57);
-		Thread.sleep(1000);
-		System.out.println("fini !");
-		System.out.println("deplacement haut niveau");
-		deplacements.avancer(100, null, true);
-		System.out.println("fini !");
-
-
+		//initialisation du match
+		real_state.robot.setPosition(new Vec2(1381,1000));
+		real_state.robot.setOrientation(Math.PI);
 		
 		
 		
 		// attends que le jumper soit retiré
-		attendreDebutMatch();
+		waitMatchBegin();
 		
+		
+		//premiere action du match
 		
 		System.out.println("Le robot commence le match");
-		 
+		
+		//le nombre d'essai maximum autorise pour les exceptions UnableToMoveException
+		int maxNumberOfTryUnableToMove = 5;
+		
+		//le nombre d'essai courant pour les exceptions UnableToMoveException
+		int numberOfTryUnableToMove = 0;
+		
+		while (numberOfTryUnableToMove<=maxNumberOfTryUnableToMove)
+		{
+			try 
+			{
+				scriptmanager.getScript(ScriptNames.EXIT_START_ZONE).goToThenExec(0, real_state, true, emptyHook );
+			} 
+			catch (SerialConnexionException  e) 
+			{
+				System.out.println("CRITICAL : Carte mal branchée. Match termine");
+				e.printStackTrace();
+				return;
+			}
+			catch (UnableToMoveException e) 
+			{
+				System.out.println("CRITICAL : Chemin bloque, enlevez votre main");
+				if (numberOfTryUnableToMove>=maxNumberOfTryUnableToMove)
+				{
+					e.printStackTrace();
+					return;
+				}
+				numberOfTryUnableToMove++;
+			}
+			catch (PathNotFoundException e) 
+			{
+				System.out.println("CRITICAL : Le robot ne sait pas rester sur place");
+				System.out.println("verifiez le point d'etree de ExitBeginZone");
+				return;
+			}
+		}
+		
+		//debut du match
+		System.out.println("debut du match");
+		
+		//premier script
+		
+		try 
+		{
+			scriptmanager.getScript(ScriptNames.DROP_CARPET).goToThenExec(0, real_state, true, emptyHook );
+		}
+		catch (UnableToMoveException | SerialConnexionException e) 
+		{
+			// TODO Main erreur critique :
+			//attention ce sont surement des erreurs dans le finally d'un script donc elle servent a proteger le meca !
+			//ou un robot ennemi devant. Donc beaucoup moins critique (ce serai bie de pouvoir differencer les deux)
+			e.printStackTrace();
+		
+		} 
+		catch (PathNotFoundException e)
+		{
+			//TODO: le pathfinding ne trouve pas de chemin
+			e.printStackTrace();
+		}
+		
+		//second script
+		
+		try 
+		{
+			scriptmanager.getScript(ScriptNames.CLOSE_CLAP).goToThenExec(12, real_state, true, emptyHook );
+		}
+		catch (UnableToMoveException | SerialConnexionException e) 
+		{
+			// TODO Main erreur critique :
+			//attention ce sont surement des erreurs dans le finally d'un script donc elle servent a proteger le meca !
+			//ou un robot ennemi devant. Donc beaucoup moins critique (ce serai bie de pouvoir differencer les deux)
+			e.printStackTrace();
+		
+		} 
+		catch (PathNotFoundException e)
+		{
+			//TODO: le pathfinding ne trouve pas de chemin
+			
+		}
 		
 		
+		//dernier script
+		
+		try 
+		{
+			scriptmanager.getScript(ScriptNames.CLOSE_CLAP).goToThenExec(3, real_state, true, emptyHook );
+		}
+		catch (UnableToMoveException | SerialConnexionException e) 
+		{
+			// TODO Main erreur critique :
+			//attention ce sont surement des erreurs dans le finally d'un script donc elle servent a proteger le meca !
+			//ou un robot ennemi devant. Donc beaucoup moins critique (ce serai bie de pouvoir differencer les deux)
+			e.printStackTrace();
+		
+		} 
+		catch (PathNotFoundException e)
+		{
+			//TODO: le pathfinding ne trouve pas de chemin
+			
+		}
+		System.out.println("match fini !");
+
+
 		//Le match s'arrête
-		container.destructeur();
+		container.destructor();
+		
+		
+		
 	}
 	
 	
@@ -127,36 +251,42 @@ public class Main
 	 * Demande si la couleur est rouge au jaune
 	 * @throws Exception
 	 */
-	static void configCouleur()  throws Exception
+	static void configColor()
 	{
 
 		String couleur = "";
-		while(!couleur.contains("rouge") && !couleur.contains("jaune"))
+		while(!couleur.contains("jaune") && !couleur.contains("vert"))
 		{
-			System.out.println("Rentrez \"jaune\" ou \"rouge\" : ");
+			System.out.println("Rentrez \"vert\" ou \"jaune\" : ");
 			BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in)); 
 			 
-			couleur = keyboard.readLine(); 
-			if(couleur.contains("rouge"))
-				config.set("couleur","rouge");
-			else if(couleur.contains("jaune"))
-				config.set("couleur", "jaune");
+			try 
+			{
+				couleur = keyboard.readLine();
+			}
+			catch (IOException e) 
+			{
+				System.out.println("Eurreur IO: le clavier est il bien branché ?");
+			} 
+			if(couleur.contains("jaune"))
+				config.set("couleur","jaune");
+			else if(couleur.contains("vert"))
+				config.set("couleur", "vert");
 			
 		}
 		
 	}
-	
 	
 
 	/**
 	 * Recale le robot
 	 * @throws Exception
 	 */
-	static void recalerRobot()  throws Exception
+	static void recalerRobot()
 	{
 
 		// System.out.println("Pret au recalage, appuyez sur entrée pour continuer");
-		System.out.println("TODO : code de recalage");// TODO
+		System.out.println("TODO : code de recalage");// TODO le code de recalage
 
 		
 	}	
@@ -164,18 +294,20 @@ public class Main
 
 	/**
 	 * Attends que le match soit lancé
-	 * @throws Exception
+	 * cette fonciton prends fin quand le match a démarré
 	 */
-	static void attendreDebutMatch()  throws Exception
+	static void waitMatchBegin()
 	{
 
 		System.out.println("Robot pret pour le match, attente du retrait du jumper");
 		
-		// hack si le jumper est inopérant
-		ThreadTimer.match_demarre = true;
-
-		// while(!capteurs.demarrage_match())
-		//	 	Sleep.sleep(100);
+		// attends que le jumper soit retiré du robot
+		boolean jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
+		while(jumperWasAbsent && mSensorsCardWrapper.isJumperAbsent())
+			 	Sleep.sleep(100);
+		
+		// maintenant que le jumper est retiré, le match a commencé
+		ThreadTimer.matchStarted = true;
 	}
 	
 

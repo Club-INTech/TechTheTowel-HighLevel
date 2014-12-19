@@ -3,24 +3,37 @@ package tests;
 import org.junit.Before;
 import org.junit.Test;
 
-import enums.Side;
+import enums.ServiceNames;
 import robot.RobotReal;
-import utils.Sleep;
 
+
+// TODO: Auto-generated Javadoc
+/**
+ * The Class JUnit_RobotReal.
+ */
 public class JUnit_RobotReal extends JUnit_Test
 {
+    
+    /** The robotvrai. */
     RobotReal robotvrai;
     
+    /* (non-Javadoc)
+     * @see tests.JUnit_Test#setUp()
+     */
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        robotvrai = (RobotReal) container.getService("RobotVrai");
+        robotvrai = (RobotReal) container.getService(ServiceNames.ROBOT_REAL);
     }
 
+    /**
+     * Test_recaler.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void test_recaler() throws Exception
     {
-        robotvrai.initialiser_actionneurs_deplacements();
         robotvrai.recaler();
     }
     

@@ -1,34 +1,37 @@
 package scripts;
 
+import java.util.ArrayList;
+
+import enums.ActuatorOrder;
 import exceptions.Locomotion.UnableToMoveException;
-import exceptions.serial.SerialException;
-import hook.types.HookGenerator;
-import pathdinding.Pathfinding;
+import exceptions.serial.SerialConnexionException;
+import hook.Hook;
+import hook.types.HookFactory;
 import robot.Robot;
-import robot.cards.ActuatorsManager;
-import robot.highlevel.LocomotionHiLevel;
 import smartMath.Vec2;
 import strategie.GameState;
-import table.Table;
 import utils.Config;
 import utils.Log;
 
-public class GetPlot extends Script {
-
+public class GetPlot extends AbstractScript
+{
+	//TODO: doc	
 	private int timeLowClose=1000; //TODO calculer les valeurs
 	private int timeCloseJaw=1000;
 	private int TimeOpenArm=800;
 	private int timeOpenJaw=1000;
 	private int distanceEntrePlots;
 	
-	
-	public GetPlot(HookGenerator hookgenerator, Config config, Log log,	Pathfinding pathfinding, Robot robot, ActuatorsManager move,Table table) 
+
+	public GetPlot(HookFactory hookFactory, Config config, Log log) 
 	{
-		super(hookgenerator, config, log, pathfinding, robot, move, table);
-		// TODO le tableau des versions
+		super(hookFactory, config, log);
+		
+		//TODO: tableau des versions
 	}
 	
-	public void execute (int id_version) 
+	@Override
+	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
 	{
 		//TODO le script en lui meme
 		
@@ -43,22 +46,24 @@ public class GetPlot extends Script {
 		{
 			//TODO si on en a 3 au depart il ne faut pas ramasser le deuxieme plot mais il faut pouvoir recommencer le script a partir du deuxieme (point de depart different)
 			//version proche des escaliers
-			robot.tourner(Math.PI*0.5);
-			eatPlot(true, false);
+			stateToConsider.robot.turn(Math.PI*0.5, hooksToConsider, false);
+			eatPlot(true, false, stateToConsider);
 			//si on a ramasse qqc on incrément le nb de plots
 			//si compteur < 4 on fait monter ?
-			robot.avancer(distanceEntrePlots);
-			eatPlot(true, false);
+			stateToConsider.robot.moveLengthwise(distanceEntrePlots, hooksToConsider, false);
+			eatPlot(true, false, stateToConsider);
 			//si on a ramasse qqc on incrément le nb de plots
 			//si compteur < 4 on fait monter ?
 		} 
 		catch (UnableToMoveException e) 
 		{
 			log.debug("bloque", this);
-			e.printStackTrace();
-		} catch (SerialException e) {
+			e.printStackTrace();	// TODO: remonter cette exception
+		}
+		catch (SerialConnexionException e)
+		{
 			log.debug("mauvaise entree serie", this);
-			e.printStackTrace();
+			e.printStackTrace(); // TODO: remonter cette exception
 		}
 		
 		//TODO la version du tout seul et pas en cercle
@@ -77,7 +82,7 @@ public class GetPlot extends Script {
 	}
 
 	@Override
-	public Vec2 point_entree(int id) 
+	public Vec2 entryPosition(int id)
 	{
 		//le cercle autour des plots
 		//calcul des poins d'entree sur les deux versions non-circulaires
@@ -85,7 +90,7 @@ public class GetPlot extends Script {
 	}
 
 	@Override
-	public int score(int id_version, GameState<?> state) 
+	public int remainingScoreOfVersion(int id_version, GameState<?> state) 
 	{
 		//version circulaire
 		//si la pile est pas de 4 plots
@@ -98,58 +103,61 @@ public class GetPlot extends Script {
 	}
 
 	@Override
-	protected void termine(GameState<?> state) 
+	protected void finalise(GameState<?> stateToConsider) 
 	{
 		try 
 		{
-			actionneurs.closeLeftArm();
-			actionneurs.closeRightArm();
-			actionneurs.closeJaw();
-			actionneurs.groundElevator();
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
 		} 
-		catch (SerialException e) 
+		catch (SerialConnexionException e) 
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+	
 	/**
 	 * mangeage de plots, essaie a nouveau si il est impossible de manger 
 	 * ne se deplace pas
 	 * 
 	 * @param isSecondTry vrai si l'essai de mangeage de plot est le deuxieme ou si on ne veux pas reessayer
 	 * @param isArmChosenLeft vrai si on mange avec le bras droit
-	 * @param move les actionneurs
+	 * 
 	 * @throws SerialException
 	 */
-	private void eatPlot (boolean isSecondTry, boolean isArmChosenLeft) throws SerialException
+	private void eatPlot (boolean isSecondTry, boolean isArmChosenLeft, GameState<Robot> stateToConsider) throws SerialConnexionException
 	{
-		actionneurs.openJaw();
-		robot.sleep(timeOpenJaw);
+		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
 		if (isArmChosenLeft) 
 		{
-			actionneurs.openLowLeftArm();
-			robot.sleep(timeLowClose);
-			actionneurs.closeLeftArm();
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);
 		}
 		else
 		{
-			actionneurs.openLowRightArm();
-			robot.sleep(timeLowClose);
-			actionneurs.closeRightArm();
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);
 		}
-		actionneurs.closeJaw();
-		robot.sleep(Math.max(timeCloseJaw,TimeOpenArm));
+		//si on a attrape qqc on termine sinon on essaie avec l'autre bras (si isSecondTry == false)
+		//si deuxieme essai ecrire dans le log qu'on a essaye de manger un plot et on jette une exeption impossible de manger
+		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, false);
+		stateToConsider.robot.sleep(Math.max(timeCloseJaw,TimeOpenArm));
+		
 		//TODO le capteur de sylvain
 		if (true/*"on a rien attrape"*/)	
 			if (isSecondTry)
 			{
-				log.debug("impossible d'attraper le plot", this);
-				//TODO jetter une exeption ?
+				log.debug("impossible d'attraper le plot", this);	
+				//TODO jetter une exeption 
 			}
 			else
 			{
-				eatPlot(true,!isArmChosenLeft);
+				eatPlot(true,!isArmChosenLeft, stateToConsider);
 			}
 	}
 

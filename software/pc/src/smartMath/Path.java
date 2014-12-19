@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import smartMath.Point;
 
+// TODO: doc
 public class Path
 {
 	private ArrayList<Point> pointArray;
@@ -64,11 +65,11 @@ public class Path
 	
 	/**
 	 * 
-	 * @return la durée nécessaire pour parcourir le chemin, en secondes
+	 * @return la durï¿½e nï¿½cessaire pour parcourir le chemin, en secondes
 	 */
 	public double duration()
 	{
-		// TODO
+		// TODO longueur/vitesse + nombrePoints * tempsPourTourner 
 		return 42;
 	}
 	

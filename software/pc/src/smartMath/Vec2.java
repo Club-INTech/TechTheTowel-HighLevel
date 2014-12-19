@@ -10,24 +10,36 @@
 package smartMath;
 
 /**
- * Classe de calcul de vecteurs de dimension 2
+ * Classe de calcul de vecteurs de dimension 2.
+ *
  * @author martial
  * @author pf
- *
  */
 
 public class Vec2
 {
 
+	/** The x. */
 	public int x;
+	
+	/** The y. */
 	public int y;
 	
+	/**
+	 * Instantiates a new vec2.
+	 */
 	public Vec2()
 	{
 		x = 0;
 		y = 0;
 	}
 
+	/**
+	 * Instantiates a new vec2.
+	 *
+	 * @param requestedX the requested x
+	 * @param requestedY the requested y
+	 */
 	public Vec2(int requestedX, int requestedY)
 	{
 		x = requestedX;
@@ -36,18 +48,34 @@ public class Vec2
 	
 	// Do not square a length, use squared length directly
 	// to increase performances
-	public int SquaredLength()
+	/**
+	 * Squared length.
+	 *
+	 * @return the int
+	 */
+	public int squaredLength()
 	{
 		return x*x + y*y;
 	}
 
 	// Returns this vec2's magnitude
-	public float Length()
+	/**
+	 * Length.
+	 *
+	 * @return the float
+	 */
+	public float length()
 	{
-		return (float) Math.sqrt(SquaredLength());
+		return (float) Math.sqrt(squaredLength());
 	}
 	
 	// dot product
+	/**
+	 * Dot.
+	 *
+	 * @param other the other
+	 * @return the int
+	 */
 	public int dot(Vec2 other)
 	{
 		return x*other.x + y*other.y;
@@ -55,45 +83,85 @@ public class Vec2
 	
 
 	// build a new Vec2 by summing the calling Vec2 and the one in args
-	public Vec2 PlusNewVector(Vec2 other)
+	/**
+	 * Plus new vector.
+	 *
+	 * @param other the other
+	 * @return the vec2
+	 */
+	public Vec2 plusNewVector(Vec2 other)
 	{
 		return new Vec2(x + other.x, y + other.y);
 	}
 	
 	// build a new Vec2 with the value obtained by decrementing the
 	// calling Vec2 by the provided Vec2 in args
-	public Vec2 MinusNewVector(Vec2 other)
+	/**
+	 * Minus new vector.
+	 *
+	 * @param other the other
+	 * @return the vec2
+	 */
+	public Vec2 minusNewVector(Vec2 other)
 	{
 		return new Vec2(x - other.x, y - other.y);
 	}
 
-	public void Plus(Vec2 other)
+	/**
+	 * Plus.
+	 *
+	 * @param other the other
+	 */
+	public void plus(Vec2 other)
 	{
 		x += other.x;
 		y += other.y;
 	}
 	
-	public void Minus(Vec2 other)
+	/**
+	 * Minus.
+	 *
+	 * @param other the other
+	 */
+	public void minus(Vec2 other)
 	{
 		x -= other.x;
 		y -= other.y;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#clone()
+	 */
 	public Vec2 clone()
 	{
 		return new Vec2(this.x, this.y);
 	}
 	
-	public float SquaredDistance(Vec2 other)
+	/**
+	 * Squared distance.
+	 *
+	 * @param other the other
+	 * @return the float
+	 */
+	public float squaredDistance(Vec2 other)
 	{
 		return (x-other.x)*(x-other.x) + (y-other.y)*(y-other.y);
 	}
 
+	/**
+	 * Distance.
+	 *
+	 * @param other the other
+	 * @return the float
+	 */
 	public float distance(Vec2 other)
 	{
-		return (float) Math.sqrt(SquaredDistance(other));
+		return (float) Math.sqrt(squaredDistance(other));
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	public String toString()
 	{
 		return "("+x+","+y+")";
@@ -103,21 +171,42 @@ public class Vec2
 		return new Point((double)x,(double)y);
 	}
 	
+	/**
+	 * Equals.
+	 *
+	 * @param other the other
+	 * @return true, if successful
+	 */
 	public boolean equals(Vec2 other)
 	{
 		return x == other.x && y == other.y;
 	}
+	
+	/**
+	 * Dot float.
+	 *
+	 * @param a the a
+	 * @return the vec2
+	 */
 	public Vec2 dotFloat(int a)
 	{
 		return new Vec2(x*a,y*a);
 	}
 	
+	/**
+	 * Sets the.
+	 *
+	 * @param other the other
+	 */
 	public void set(Vec2 other)
 	{
 		x = other.x;
 		y = other.y;
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -127,11 +216,19 @@ public class Vec2
 		return result;
 	}
 	
+	/**
+	 * Make copy.
+	 *
+	 * @return the vec2
+	 */
 	public Vec2 makeCopy()
 	{
 		return new Vec2(x, y);
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -148,6 +245,12 @@ public class Vec2
 		return true;
 	}
 
+	/**
+	 * Manhattan_distance.
+	 *
+	 * @param other the other
+	 * @return the int
+	 */
 	public int manhattan_distance(Vec2 other)
 	{
 		return Math.abs(x - other.x) + Math.abs(y - other.y); 
@@ -155,7 +258,8 @@ public class Vec2
 
 	/**
 	 * Copie this dans other.
-	 * @param other
+	 *
+	 * @param other the other
 	 */
 	public void copy(Vec2 other)
 	{

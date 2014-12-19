@@ -2,74 +2,72 @@ package scripts;
 
 import java.util.ArrayList;
 
-import pathdinding.Pathfinding;
+import enums.ActuatorOrder;
 import exceptions.Locomotion.UnableToMoveException;
-import exceptions.serial.SerialException;
+import exceptions.serial.SerialConnexionException;
+import exceptions.serial.SerialFinallyException;
 import hook.Hook;
-import hook.types.HookGenerator;
+import hook.types.HookFactory;
 import robot.Robot;
-import robot.cards.ActuatorsManager;
 import smartMath.Vec2;
 import strategie.GameState;
-import table.Table;
 import utils.Config;
 import utils.Log;
 
-public class DropPile extends Script {
-	
-	private ArrayList<Hook> emptyHook = new ArrayList<Hook>();
 
-	/*
-	 *TODO il faut refaire cette classe 
-	 *
-	 */
-	public DropPile(HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, Robot robot, ActuatorsManager move, Table table) 
+/**
+ * 
+ * @author Paul
+ *
+ *Version 1 on pose la pile sur l'estrade (en (0,0))
+ *Version 2 on pose la pile dans notre zone de depart 
+ *attention executer le script 1 avant le 2 sinon impossible de recuperer la balle
+ */
+public class DropPile extends AbstractScript
+{
+	
+
+	public DropPile(HookFactory hookFactory, Config config, Log log) 
 	{
-		super(hookgenerator, config, log,pathfinding, robot,move,table);
+		super(hookFactory, config, log);
+		
+		
+		// TODO: id n'est pas une variable temporaire du constructeur. C'est versions qui est un membre et qu'il faut initialiser ici
 		ArrayList<Integer> id = new ArrayList<Integer>();
 		id.add(1);
 		id.add(2);
 	}
 
 	@Override
-	protected void execute(int id_version)
+	public void execute(int version, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider,boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException
+
 	{
-		if (id_version==1)
+		if (version==1)
 		{
-			try 
-			{
-				robot.tourner((Math.PI*0.5), emptyHook, false);
-				robot.avancer(100, emptyHook, true);
-				actionneurs.groundElevator();
-				actionneurs.openGuide();
-				robot.avancer(-20, emptyHook, true);
-				robot.setPlotCounter(0);
-				actionneurs.closeGuide();
-				robot.avancer(-80,emptyHook,true);
-			}
-			catch (UnableToMoveException e) 
-			{
-				log.debug("mouvement impossible", this);
-				e.printStackTrace();
-			} catch (SerialException e) 
-			{
-				log.debug("mauvaise entree serie", this);
-				e.printStackTrace();
-			}
+			stateToConsider.robot.turn(Math.PI/2.0, hooksToConsider, false);
+			stateToConsider.robot.moveLengthwise(100, hooksToConsider, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, true);		
+			stateToConsider.robot.moveLengthwise(-20, hooksToConsider, false);
+			stateToConsider.robot.setStoredPlotCount(0);
+			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);	
+			stateToConsider.robot.moveLengthwise(-80, hooksToConsider, false);
 		}
-		else if (id_version==2)
+		else if (version==2)
 		{
-			
+			// TODO: version 2
 		}
 		else
 		{
-			
+			// TODO: version ?
 		}
 	}
 	
 	
 	@Override
-	public Vec2 point_entree(int id) 
+	public Vec2 entryPosition(int id) 
 	{
 		if (id==1)
 		{
@@ -87,28 +85,21 @@ public class DropPile extends Script {
 	}
 
 	@Override
-	public int score(int id_version, GameState<?> state)
+	public int remainingScoreOfVersion(int version, GameState<?> stateToConsider)
 	{
-		return 5*robot.getPlotCounter();
+		return 5*(8 -stateToConsider.robot.getStoredPlotCount());
 	}
 
 	@Override
-	protected void termine(GameState<?> state) 
+	protected void finalise(GameState<?> stateToConsider) throws SerialFinallyException, UnableToMoveException 
 	{
-		try 
-		{
-			actionneurs.closeJaw();
-			robot.avancer(-20, emptyHook, true);
-			actionneurs.groundElevator();
-			actionneurs.closeGuide();
-		} 
-		catch (SerialException e) 
-		{
-			log.debug("mauvaise entree serie", this);
-			e.printStackTrace();
-		} catch (UnableToMoveException e) {
-			log.debug("impossible de bouger", this);
-			e.printStackTrace();
+		try {
+			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);	
+			stateToConsider.robot.moveLengthwise(-20);
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+		} catch (SerialConnexionException e) {
+			throw new SerialFinallyException ();
 		}
 	}
 

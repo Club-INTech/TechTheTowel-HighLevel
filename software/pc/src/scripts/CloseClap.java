@@ -1,16 +1,15 @@
 package scripts;
 
 import java.util.ArrayList;
-import pathdinding.Pathfinding;
+
+import enums.ActuatorOrder;
 import exceptions.Locomotion.UnableToMoveException;
-import exceptions.serial.SerialException;
+import exceptions.serial.SerialConnexionException;
 import hook.Hook;
-import hook.types.HookGenerator;
+import hook.types.HookFactory;
 import robot.Robot;
-import robot.cards.ActuatorsManager;
 import smartMath.Vec2;
 import strategie.GameState;
-import table.Table;
 import utils.Config;
 import utils.Log;
 
@@ -18,7 +17,7 @@ import utils.Log;
  * 
  * @author theo
  * Exemple sur Paul
- *Sript Fermer les claps
+ * Script Fermer les claps
  *
  *Table :
  *
@@ -28,299 +27,209 @@ import utils.Log;
  *   |					|Debut du robot ici
  *   |					|
  *   |		N° claps	|
- *    6_5_4________3_2_1
+ *    /_3_/________2_/_1     
  *    
+ *    1,2,3 nous appartiennent
  *    
- *    
- *    Angles :
- *    
- *    ___________________
- *   |		PI/2		|
- * 	 |					|
- *   |PI			   0|  Debut du robot ici
- *   |					|
- *   |					|
- *   |______-PI/2_______|
  *   
  */
 
-public class CloseClap extends Script 
+public class CloseClap extends AbstractScript 
 {
-	private int distanceBetweenClaps=300;//distance entre 2 claps (bout identique de claque clap, ex : charnieres)
-	private int lenghtClap=160; //LOngueur clap
-	private int lenghtStair=200; // L'estradee fait 100, on met 200
-	private int distanceInit;//distance intiale au script
-	private int distanceRightLeft=1700; // distance entre les deux triplettes de claps : entre le 3 et le 5
-	private int sleepTime = 800; // le temps d'attente (en ms) entre la commande de dépose du tapis ( le bras se baisse) et la commande qui remonte le bras
 
+	/**
+	 * Constructeur (normalement appelé uniquement par le scriptManager) du script fermant les Claps
+	 * Le container se charge de renseigner la hookFactory, le système de config et de log.
+	 * @param hookFactory La factory a utiliser pour générer les hooks dont pourra avoir besoin le script
+	 * @param config le fichier de config a partir duquel le script pourra se configurer
+	 * @param log le système de log qu'utilisera le script
+	 */
 	
-	public CloseClap (HookGenerator hookgenerator, Config config, Log log, Pathfinding pathfinding, Robot robot, ActuatorsManager move, Table table) 
+	public CloseClap(HookFactory hookFactory, Config config, Log log)
 	{
-		super(hookgenerator,config,log,pathfinding,robot,move,table);
+		super(hookFactory, config, log);
+		versions = new int[]{1, 2, 3 ,12 ,123 }; //il faut penser a le définir, puis a le garder a jour
 	}
 	
 	@Override
-	public void execute(int id)
+	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
 	{
-		if (id == 123)
-			_123();
-		else if (id == 1)
-			_1();
-		else if (id == 2)
-			_2();
-		else if (id == 3)
-			_3();
-		else if (id == 12)
-			_12();
-		else
-			log.debug("Souci de version", this);
-	}
-	
-	public void _1 ()  
-	{
-		ArrayList<Hook> emptyHookList = new ArrayList<Hook>(); //Liste Hook vide
-		try
-		{
-			try 
-			{
-				actionneurs.midLeftClap();//On ouvre puis on avance
-				robot.sleep(sleepTime);
-				
-				robot.avancer(lenghtClap,emptyHookList,true);//On baisse le premier clap, le notre
-				table.setIsClap1Closed(true);	
+		//Noté ! =X
 		
-				actionneurs.lowLeftClap();
-				robot.sleep(sleepTime);	
-			}
-			catch (UnableToMoveException e) 
-			{
-			log.debug("Probleme avec le deplacement pendant le clap 1", this);
-			} 
-		}
-		catch (SerialException e) 
-		{
-			log.debug("Mauvaise entrée serie !",this);
-			e.printStackTrace();	
-		}	
-	}
-
-	public void _2 ()  
-	{
-		ArrayList<Hook> emptyHookList = new ArrayList<Hook>(); //Liste Hook vide
-		try
-		{
-			try 
-			{
-				actionneurs.midLeftClap();//On ouvre puis on avance
-				robot.sleep(sleepTime);
-				
-				robot.avancer(lenghtClap,emptyHookList,true);//On baisse le premier clap, le notre
-				table.setIsClap2Closed(true);	
-				
-				actionneurs.lowLeftClap();
-				robot.sleep(sleepTime);	
-			}
-			catch (UnableToMoveException e) 
-			{
-			log.debug("Probleme avec le deplacement pendant le clap 2", this);
-			} 
-		}
-		catch (SerialException e) 
-		{
-			log.debug("Mauvaise entrée serie !",this);
-			e.printStackTrace();	
-		}	
+		//FIXME: gestion de la symétrie !
+		if (versionToExecute == 123)
+			closeAllOurClaps(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
+		else if (versionToExecute == 1)
+			closeFirstClap(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
+		else if (versionToExecute == 2)
+			closeSecondClap(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
+		else if (versionToExecute == 3)
+			closeThirdClap(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
+		else if (versionToExecute == 12)
+			closeFirstAndSecondClap(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
+		else
+			log.debug("Souci de version", this);	//TODO: lancer une exception de version inconnue (la créer si besoin)
 	}
 	
-	public void _3 ()  //Ferme le claps de fin
+	public void closeFirstClap (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
 	{
-		ArrayList<Hook> emptyHookList = new ArrayList<Hook>(); //Liste Hook vide
-		try
-		{
-			try 
-			{
-				actionneurs.midRightClap();
-				robot.sleep(sleepTime);	
-				
-				robot.avancer(lenghtClap,emptyHookList,true);
-				table.setIsClap3Closed(true);//On ferme notre clap	
+		//on commence en (1250,231), on se tourne dans le bon sens
+		stateToConsider.robot.turn(Math.PI);
+	
+		//On ouvre le bras puis on avance de 200mm pour se retrouver en (1050,231)
+		stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
+		stateToConsider.robot.moveLengthwise(200, hooksToConsider, false);
+		stateToConsider.table.setIsClap1Closed(true);
+	
+		//On baisse notre bras
+		stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, true);
+	}
 
-				//Partie fuite 
-				
-				robot.tourner(Math.PI/2,emptyHookList,true);
-				robot.avancer(lenghtStair,emptyHookList,true);
-				
-				actionneurs.lowRightClap();
-				robot.sleep(sleepTime);	
-			}
-			catch (UnableToMoveException e) 
-			{
-			log.debug("Probleme avec le deplacement pendant le clap 3", this);
-			} 
-		}
-		catch (SerialException e) 
-		{
-			log.debug("Mauvaise entrée serie !",this);
-			e.printStackTrace();	
-		}	
+	public void closeSecondClap (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
+	{
+		//on commence en (700,231), on se tourne dans le bon sens
+		stateToConsider.robot.turn(Math.PI, hooksToConsider, false);
+		
+		//On ouvre le bras puis on avance de 300mm pour se retrouver en (400,231)
+		stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
+		stateToConsider.robot.moveLengthwise(300, hooksToConsider, false);
+		stateToConsider.table.setIsClap2Closed(true);	
+
+		//on baisse notre bras
+		stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, true);	
 	}
 	
-	public void _12 ()  //Ferme les 2 claps du debut
+	public void closeThirdClap (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException  //Ferme le claps de fin
 	{
-		ArrayList<Hook> emptyHookList = new ArrayList<Hook>(); //Liste Hook vide
-		try
-		{
-			try 
-			{
-				actionneurs.midLeftClap();//On ouvre puis on avance
-				robot.sleep(sleepTime);
-				
-				robot.avancer(lenghtClap,emptyHookList,true);//On baisse le premier clap, le notre
-				table.setIsClap1Closed(true);	
-				
-				actionneurs.highLeftClap(); //on evite le clap adverse
-				
-				robot.sleep(sleepTime);	
-				robot.avancer(2*distanceBetweenClaps-lenghtClap-20,emptyHookList,true);//On avance entre le 1 et le 2
-				
-				actionneurs.midLeftClap();
-				robot.sleep(sleepTime);	
-				
-				robot.tourner(Math.PI/2,emptyHookList,true);//On tourne en fermant le clap
-				table.setIsClap2Closed(true);//On ferme notre 2eme clap	
-				
-				actionneurs.lowLeftClap(); //on referme le clap pour eviter de le perdre
-				robot.sleep(sleepTime);	
-			}
-			catch (UnableToMoveException e) 
-			{
-			log.debug("Probleme avec le deplacement pendant les claps près, 1 et 2", this);
-			} 
-		}
-		catch (SerialException e) 
-		{
-			log.debug("Mauvaise entrée serie !",this);
-			e.printStackTrace();	
-		}	
+		//on commence en (-1050,231), on se retourne dans le bon sens
+		stateToConsider.robot.turn(0, hooksToConsider, false);
+		
+		//on ouvre notre bras puis on avance de 200mm pour se retrouver en (-850,231) 
+		stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
+		stateToConsider.robot.moveLengthwise(200, hooksToConsider, false);
+		stateToConsider.table.setIsClap3Closed(true);
+		
+		//on baisse notre bras
+		stateToConsider.robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, true);
 	}
 	
-	public void _123()  //Ferme tous les Claps, depuis le  debut
+	public void closeFirstAndSecondClap (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
 	{
-		ArrayList<Hook> emptyHookList = new ArrayList<Hook>(); //Liste Hook vide
-		try
-		{
-			try 
-			{
-				actionneurs.midLeftClap();//On ouvre puis on avance
-				robot.sleep(sleepTime);
-				
-				robot.avancer(lenghtClap,emptyHookList,true);//On baisse le premier clap, le notre
-				table.setIsClap1Closed(true);	
-				
-				actionneurs.highLeftClap(); //on evite le clap adverse
-				
-				robot.sleep(sleepTime);	
-				robot.avancer(2*distanceBetweenClaps-lenghtClap-20,emptyHookList,true);//On avance entre le 1 et le 2
-				
-				actionneurs.midLeftClap();
-				robot.sleep(sleepTime);	
-				
-				robot.tourner(Math.PI/2,emptyHookList,true);//On tourne en fermant le clap
-				table.setIsClap2Closed(true);//On ferme notre 2eme clap	
-				
-				actionneurs.lowLeftClap(); //on referme le clap pour eviter de le perdre
-				robot.sleep(sleepTime);	
+		//on commence en (1250,231), on se tourne dans le bon sens
+		stateToConsider.robot.turn(Math.PI, hooksToConsider, false);
+	
+		//On ouvre le bras puis on avance de 200mm pour se retrouver en (1050,231)
+		stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
+		stateToConsider.robot.moveLengthwise(200, hooksToConsider, false);
+		stateToConsider.table.setIsClap1Closed(true);
+	
+		//On monte notre bras pour passer au dessus du clap ennemi notre bras et on avance de 350mm pour se retrouver en (700,231)
+		stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, true);
+		stateToConsider.robot.moveLengthwise(350, hooksToConsider, false);
 
-				
-				// On se tourne, on avance pour eviter l'estrade
-				robot.avancer(lenghtStair,emptyHookList,true); 
+		//On ouvre le bras puis on avance de 300mm pour se retrouver en (400,231)
+		stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
+		stateToConsider.robot.moveLengthwise(300, hooksToConsider, false);
+		stateToConsider.table.setIsClap2Closed(true);	
 
-				//On se tourne, on avance vers le clap interessant
-				robot.tourner(Math.PI,emptyHookList,true);
-				robot.avancer(distanceRightLeft,emptyHookList,true); 
-				
-				//On se tourne pour s'avancer des claps
-				robot.tourner(-Math.PI/2,emptyHookList,true);
-				robot.avancer(lenghtStair,emptyHookList,true);
-				
-				//On se tourne dans le bon sens
-				robot.tourner(0,emptyHookList,true);
-				
-				//Partie clap de fin
-				// A ce stade, on est devant le 3
-				
-				actionneurs.midRightClap();
-				robot.sleep(sleepTime);	
-				
-				robot.avancer(lenghtClap,emptyHookList,true);
-				table.setIsClap3Closed(true);//On ferme notre clap	
-
-				//Partie fuite 
-				
-				robot.tourner(Math.PI/2,emptyHookList,true);
-				robot.avancer(lenghtStair,emptyHookList,true);
-				
-				actionneurs.lowRightClap();
-				robot.sleep(sleepTime);					
-			}
-			catch (UnableToMoveException e) 
-			{
-			log.debug("Probleme avec le deplacement pendant tous les claps", this);
-			} 
-		}
-		catch (SerialException e) 
-		{
-			log.debug("Mauvaise entrée serie !",this);
-			e.printStackTrace();	
-		}	
+		//on baisse notre bras
+		stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, true);	
 	}
+	
+	public void closeAllOurClaps(GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException  //Ferme tous les Claps, depuis le  debut
+	{
+		//on commence en (1250,231), on se tourne dans le bon sens
+		stateToConsider.robot.turn(Math.PI, hooksToConsider, false);
+	
+		//On ouvre le bras puis on avance de 200mm pour se retrouver en (1050,231)
+		stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
+		stateToConsider.robot.moveLengthwise(200, hooksToConsider, false);
+		stateToConsider.table.setIsClap1Closed(true);
+	
+		//On monte notre bras pour passer au dessus du clap ennemi notre bras et on avance de 350mm pour se retrouver en (700,231)
+		stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, true);
+		stateToConsider.robot.moveLengthwise(350, hooksToConsider, false);
+
+		//On ouvre le bras puis on avance de 300mm pour se retrouver en (400,231)
+		stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
+		stateToConsider.robot.moveLengthwise(300, hooksToConsider, false);
+		stateToConsider.table.setIsClap2Closed(true);	
+
+		//on baisse notre bras
+		stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, true);
+		
+		//on vas au 3eme clap donc en (-1050,231)
+		stateToConsider.robot.turn(0.5*Math.PI, hooksToConsider, false);
+		stateToConsider.robot.moveLengthwise(300, hooksToConsider, false);
+		stateToConsider.robot.turn(Math.PI, hooksToConsider, false);
+		stateToConsider.robot.moveLengthwise(1450, hooksToConsider, false);
+		stateToConsider.robot.turn(-0.5*Math.PI, hooksToConsider, false);
+		stateToConsider.robot.moveLengthwise(300, hooksToConsider, false);
+		
+		//on est en (-1050,231), on se retourne dans le bon sens
+		stateToConsider.robot.turn(0, hooksToConsider, false);
+		
+		//on ouvre notre bras puis on avance de 200mm pour se retrouver en (-850,231) 
+		stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
+		stateToConsider.robot.moveLengthwise(200, hooksToConsider, false);
+		stateToConsider.table.setIsClap3Closed(true);
+	}
+	
 	
 	@Override
-	public Vec2 point_entree(int id) {
-		// TODO Auto-generated method stub
-		return null;
+	public Vec2 entryPosition(int version)
+	{
+		// FIXME: points exacts à entrer
+		
+		if (version == 1)
+			return new Vec2(1250,231); //point d'entrée : bord de la table, robot devant le clap 1
+		else if(version == 2)
+			return new Vec2(700,231); //point d'entrée : devant le clap 2
+		else if(version == 3)
+			return new Vec2(-1050,231);//point d'entrée : devant le clap 3
+		else if(version == 12)
+			return new Vec2(1250,231); //point d'entrée : devant le clap 1
+		else if(version == 123)
+			return new Vec2(1250,231); //point d'entrée : devant le clap 1
+		else
+		{
+			log.debug("Probleme d'entrée de position", this);
+			return null;
+		}
 	}
 
 	@Override
-	public int score(int id_version, GameState<?> state) {
+	public int remainingScoreOfVersion(int version, GameState<?> stateToConsider)
+	{
+		//On met à jour le nombre de points restants pour la version : à  0, on a tout fait
 		int score = 15;
-		if(table.getIsClap1Closed())
+		if(stateToConsider.table.getIsClap1Closed() || version==2 || version==3)
 			score -= 5;
-		if(table.getIsClap2Closed())
+		if(stateToConsider.table.getIsClap2Closed() || version == 1 || version == 3)
 			score -= 5;
-		if(table.getIsClap3Closed())
+		if(stateToConsider.table.getIsClap3Closed() || version == 1 || version == 2 || version == 12)
 			score -= 5;
 		return score;
 	}
 
 	@Override
-	protected void termine(GameState<?> state) {
-		
+	protected void finalise(GameState<?> stateToConsider)
+	{	
 		try 
 		{
-			actionneurs.lowRightClap();
-			actionneurs.lowLeftClap(); //On ferme le robot à la fin, attention à ne rien cogner (rembarde ,
+			//On ferme le robot à la fin, attention à ne rien cogner ! (rembarde , etc)
+			stateToConsider.robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
+			
+			// TODO: voir si on ne peut pas mettre ici une protection anti-cognage en demandant au service de gestion d'obstacle s'il y a un obstacle sur les cotés du robot. (Attention, les bras doivent toujours essayer de se fermer, mais c'est juste pour voir si on ne peut pas le faire 3cm plus loin)
 		} 
-		catch (SerialException e) 
+		catch (SerialConnexionException e) 
 		{
-			log.debug("Erreur termine : ne peux pas replier claps", this);;
+			log.debug("Erreur termine : ne peux pas replier claps", this); // Viens me parler de cette ligne. Je dois t'expliquer ce que veut dire "remonter une exception"
+			//FIXME: il faut creer une exception de type SerialFinallyException
 		}
 	}
-
-	public int getDistanceInit() {
-		return distanceInit;
-	}
-
-	public void setDistanceInit(int distanceInit) {
-		this.distanceInit = distanceInit;
-	}
-
-	public int getSleepTime() {
-		return sleepTime;
-	}
-
-	public void setSleepTime(int sleepTime) {
-		this.sleepTime = sleepTime;
-	}
-	
 }
+
+
+

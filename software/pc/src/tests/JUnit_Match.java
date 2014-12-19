@@ -26,9 +26,13 @@ ActuatorsManager actionneurs;
 DropCarpet scriptCarpet;
 ExitBeginZone scriptOut;
 LocomotionHiLevel locomotion;
+<<<<<<< HEAD
+PathDingDing pathfinding = new PathDingDing();
+=======
 Table table;
 Pathfinding pathfinding;
 RobotReal robot;
+>>>>>>> branch 'master' of gitosis@git.club-intech.fr:intech-2015.git
 HookGenerator hookgenerator;
 ArrayList<Hook> emptyHook = new ArrayList<Hook>();
 
