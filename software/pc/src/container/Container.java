@@ -134,7 +134,7 @@ public class Container
 		else if(serviceRequested == ServiceNames.LOCOMOTION_CARD_WRAPPER)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new LocomotionCardWrapper(
 																	(Log)getService(ServiceNames.LOG),
-																	(SerialConnexion)getService(ServiceNames.SERIE_ASSERVISSEMENT)
+																	(SerialConnexion)getService(ServiceNames.LOCOMOTION_CARD)
 																);
 		else if(serviceRequested == ServiceNames.SENSORS_CARD_WRAPPER)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new SensorsCardWrapper(
@@ -202,7 +202,7 @@ public class Container
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new LaserCardWrapper(
 																	(Config)getService(ServiceNames.CONFIG),
 																	(Log)getService(ServiceNames.LOG),
-																	(SerialConnexion)getService(ServiceNames.SERIE_LASER),
+																	(SerialConnexion)getService(ServiceNames.LASER_CARD),
 																	(RobotReal)getService(ServiceNames.ROBOT_REAL)
 																);
 		else if(serviceRequested == ServiceNames.LASER_FILTRATION)

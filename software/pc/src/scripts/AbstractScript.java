@@ -66,7 +66,7 @@ public abstract class AbstractScript implements Service
 		actualState.robot.moveToLocation(entryPosition(versionToExecute), hooksToConsider, actualState.table);
 		
 		// exécute la version demandée
-		execute(versionToExecute, actualState, shouldRetryIfBlocked);
+		execute(versionToExecute, actualState, hooksToConsider, shouldRetryIfBlocked);
 	}
 	   
 	/**
@@ -78,7 +78,7 @@ public abstract class AbstractScript implements Service
 	 * @throws UnableToMoveException losrque le robot veut se déplacer et que quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
 	 * @throws SerialConnexionException s'il y a un problème de communication avec une des cartes électroniques
 	 */
-	public abstract void execute(int versionToExecute, GameState<Robot> actualState, boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException;
+	public abstract void execute(int versionToExecute, GameState<Robot> actualState,ArrayList<Hook> hooksToConsider,boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException;
 
 	/**
 	 * Renvoie le score que peut fournir une version d'un script.

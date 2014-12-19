@@ -41,14 +41,14 @@ public class SerialManager
 
 	//Pour chaque carte, on connait a l'avance son nom, son ping et son baudrate
 	/** Carte d'assservissement, paramétré a l'avance par son nom, son id et son baudrate */
-	private CardSpecification carteAsservissement = new CardSpecification(ServiceNames.SERIE_ASSERVISSEMENT, 0, 9600);
+	private CardSpecification locomotionCard = new CardSpecification(ServiceNames.LOCOMOTION_CARD, 0, 9600);
 
 	/** Carte capteurs/actionneurs, paramétré a l'avance par son nom, son id et son baudrate */
-	private CardSpecification carteCapteursActionneurs = new CardSpecification(ServiceNames.SERIE_CAPTEURS_ACTIONNEURS, 3, 9600);
+	private CardSpecification sensorsAcuatorsCard = new CardSpecification(ServiceNames.SERIE_CAPTEURS_ACTIONNEURS, 3, 9600);
 	
 	/** Carte Laser, paramétré a l'avance par son nom, son id et son baudrate */
 	@SuppressWarnings("unused")
-	private CardSpecification carteLaser = new CardSpecification(ServiceNames.SERIE_LASER, 4, 57600);
+	private CardSpecification laserCard = new CardSpecification(ServiceNames.LASER_CARD, 4, 57600);
 
 	/** On stock les cartes dans une liste */
 	private ArrayList <CardSpecification> cards = new ArrayList <CardSpecification>();
@@ -70,8 +70,8 @@ public class SerialManager
 	{
 		this.log = log;
 
-		cards.add(this.carteAsservissement);
-		cards.add(this.carteCapteursActionneurs);
+		cards.add(this.locomotionCard);
+		cards.add(this.sensorsAcuatorsCard);
 //		cards.add(this.carteLaser);
 
 		Iterator<CardSpecification> e = cards.iterator();
@@ -82,13 +82,13 @@ public class SerialManager
 				this.baudrate.add(baud);
 		}
 
-		this.serieAsservissement = new SerialConnexion(log, this.carteAsservissement.name);
-		this.serieCapteursActionneurs = new SerialConnexion(log, this.carteCapteursActionneurs.name);
+		this.serieAsservissement = new SerialConnexion(log, this.locomotionCard.name);
+		this.serieCapteursActionneurs = new SerialConnexion(log, this.sensorsAcuatorsCard.name);
 //		this.serieLaser = new Serial(log, this.carteLaser.name);
 
 		try
 		{
-			this.series[this.carteAsservissement.name.getSerialIndex()] = this.serieAsservissement;
+			this.series[this.locomotionCard.name.getSerialIndex()] = this.serieAsservissement;
 		} 
 		catch (ServiceTypeException e1)
 		{
@@ -97,7 +97,7 @@ public class SerialManager
 		}
 		try
 		{
-			this.series[this.carteCapteursActionneurs.name.getSerialIndex()] = this.serieCapteursActionneurs;
+			this.series[this.sensorsAcuatorsCard.name.getSerialIndex()] = this.serieCapteursActionneurs;
 		}
 		catch (ServiceTypeException e1)
 		{

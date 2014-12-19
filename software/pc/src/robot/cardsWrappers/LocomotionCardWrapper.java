@@ -188,7 +188,10 @@ public class LocomotionCardWrapper implements Service
 	 */
 	public void turn(double angle) throws SerialConnexionException
 	{
-		String chaines[] = {"t", Double.toString(angle)};
+		// tronque l'angle que l'on envoit a la série pour éviter les overflows
+		float anggleTruncated = (float)angle;
+		
+		String chaines[] = {"t", Float.toString(anggleTruncated)};
 		locomotionCardSerial.communiquer(chaines, 0);		
 	}
 	
