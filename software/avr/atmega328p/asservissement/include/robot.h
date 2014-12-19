@@ -16,13 +16,16 @@
 #include <libintech/singleton.hpp>
 
 #define PI 3.14159265
-#define PI_TIC 4255
+//#define PI_TIC 4255
+#define PI_TIC 4339// = PI/CONVERSION_TIC_RADIAN
 
 #define LARGEUR_ROBOT 200.0
 #define LONGUEUR_TABLE 3000.0
 
 #define CONVERSION_TIC_MM 0.10392 //0.10341
-#define CONVERSION_TIC_RADIAN -0.0007401//0.0007382 No hack here, follow your path
+//#define CONVERSION_TIC_RADIAN -0.0007401//0.0007382 No hack here, follow your path
+#define CONVERSION_TIC_RADIAN -0.0007240// Maj de la valeur car modif des roues codeuses
+//CONVERSION_TIC_RADIAN a pour unité le radian par tic
 
 class Robot : public Singleton<Robot>{
 // Par défaut les attributs sont publics dans une struct

@@ -6,6 +6,7 @@ import enums.ActuatorOrder;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
+import hook.Hook;
 import hook.types.HookFactory;
 import robot.Robot;
 import smartMath.Vec2;
@@ -14,11 +15,13 @@ import utils.Config;
 import utils.Log;
 
 
-//TODO: Doc ( notamment, expliquer ce que sont les différentes versions
 /**
  * 
- * @author ???
+ * @author Paul
  *
+ *Version 1 on pose la pile sur l'estrade (en (0,0))
+ *Version 2 on pose la pile dans notre zone de depart 
+ *attention executer le script 1 avant le 2 sinon impossible de recuperer la balle
  */
 public class DropPile extends AbstractScript
 {
@@ -36,20 +39,21 @@ public class DropPile extends AbstractScript
 	}
 
 	@Override
-	public void execute(int version, GameState<Robot> stateToConsider, boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException
+	public void execute(int version, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider,boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException
+
 	{
 		if (version==1)
 		{
-			stateToConsider.robot.turn(Math.PI/2.0);
-			stateToConsider.robot.moveLengthwise(100);
+			stateToConsider.robot.turn(Math.PI/2.0, hooksToConsider, false);
+			stateToConsider.robot.moveLengthwise(100, hooksToConsider, false);
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
 			stateToConsider.robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, false);
 			stateToConsider.robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, true);		
-			stateToConsider.robot.moveLengthwise(-20);
+			stateToConsider.robot.moveLengthwise(-20, hooksToConsider, false);
 			stateToConsider.robot.setStoredPlotCount(0);
 			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, false);
 			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);	
-			stateToConsider.robot.moveLengthwise(-80);
+			stateToConsider.robot.moveLengthwise(-80, hooksToConsider, false);
 		}
 		else if (version==2)
 		{

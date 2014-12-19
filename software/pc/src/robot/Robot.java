@@ -112,6 +112,8 @@ public abstract class Robot implements Service
 	 * @param expectsWallImpact true si le robot doit s'attendre a percuter un mur au cours du déplacement. false si la route est sensée être dégagée.
 	 * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
 	 */
+    // TODO: ne pas utiliser cette méthode. il faut utiliser moveLengthwiseTowardWall pour foncer dans un mur.
+    // à mettre en privé
     public abstract void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException;
     
 
@@ -252,7 +254,7 @@ public abstract class Robot implements Service
 	 * @param distance en mm que le robot doit franchir. Si cette distance est négative, le robot va reculer. Attention, en cas de distance négative, cette méthode ne vérifie pas s'il y a un système d'évitement a l'arrère du robot
 	 * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
 	 */
-    public void moveLengthwiseTowardWall(int distance) throws UnableToMoveException
+    public void moveLengthwiseTowardWall(int distance /* TODO: ajouter hook en argument */ ) throws UnableToMoveException
     {
         Speed oldSpeed = speed; 
         setLocomotionSpeed(Speed.INTO_WALL);
@@ -270,9 +272,14 @@ public abstract class Robot implements Service
      */
     public void moveToLocation(Vec2 aim, ArrayList<Hook> hooksToConsider, Table table) throws UnableToMoveException, PathNotFoundException
     {
-    	//TODO: le pathfinding reclame une table, mais ce n'est pas logique d'en avoir une dans Robot
-			ArrayList<Vec2> path = PathDingDing.computePath(getPosition(),aim,table);
-			followPath(path , hooksToConsider);
+    	//TODO: remettre le pathDingDing et enlever les deux lignes en dessous
+		//ArrayList<Vec2> path = PathDingDing.computePath(getPosition(),aim,table);
+    	
+    	ArrayList<Vec2> path = new ArrayList<Vec2>();
+    	path.add(aim);
+    	
+    	
+		followPath(path , hooksToConsider);
     }
     
 	/**

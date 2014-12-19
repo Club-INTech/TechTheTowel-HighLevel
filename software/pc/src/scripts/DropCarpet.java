@@ -1,9 +1,12 @@
 package scripts;
 
+import java.util.ArrayList;
+
 import enums.ActuatorOrder;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
+import hook.Hook;
 import hook.types.HookFactory;
 import robot.Robot;
 import smartMath.Vec2;
@@ -36,51 +39,40 @@ public class DropCarpet extends AbstractScript
 	}
 
 	@Override
-	public void execute (int versionToExecute, GameState<Robot> stateToConsider, boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException 
+	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider,boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException
 	{
-		try 
-		{
-			
-			//on presente ses arrieres a l'escalier
-			stateToConsider.robot.turn(Math.PI);
-			// on avance vers ces demoiselles (les marches) 
-			stateToConsider.robot.moveLengthwiseTowardWall(-distanceBetweenEntryAndStairs);
-			
-			if (!stateToConsider.table.getIsLeftCarpetDropped())
-			{
-				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_DROP, true);
-				stateToConsider.table.setIsLeftCarpetDropped(true);
-				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
-			}
-			if (!stateToConsider.table.getIsRightCarpetDropped())
-			{
-				stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_DROP, true);
-				stateToConsider.table.setIsRightCarpetDropped(true);
-				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, true);
-			}
-			//on s'eloigne de l'escalier
-			stateToConsider.robot.moveLengthwise(distanceBetweenEntryAndStairs);
 		
-		} 
-		catch (UnableToMoveException e) 
+		//on presente ses arrieres a l'escalier
+		stateToConsider.robot.turn(-0.5*Math.PI, hooksToConsider, false);
+		stateToConsider.robot.sleep(1000);
+		// on avance vers ces demoiselles (les marches) (attention impact possible)
+		// TODO utiliser moveLengthwiseTorwardWalls
+		stateToConsider.robot.moveLengthwise(-distanceBetweenEntryAndStairs, hooksToConsider, true);
+		
+		//on depose le tapis gauche (si celui-ci n'est pas deja depose)
+		if (!stateToConsider.table.getIsLeftCarpetDropped())
 		{
-			if (shouldRetryIfBlocke)
-			{
-				execute (versionToExecute,stateToConsider,false);
-			}
-			else
-			{
-				log.debug("erreur DropCarpet Script : impossible de bouger", this);
-				throw e;
-			}
-		} 
-
+			stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_DROP, true);
+			stateToConsider.table.setIsLeftCarpetDropped(true);
+			stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
+		}
+		
+		//on depose le tapis droit (si celui-ci n'est pas deja depose)
+		if (!stateToConsider.table.getIsRightCarpetDropped())
+		{
+			stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_DROP, true);
+			stateToConsider.table.setIsRightCarpetDropped(true);
+			stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, true);
+		}
+		
+		//on s'eloigne de l'escalier
+		stateToConsider.robot.moveLengthwise(distanceBetweenEntryAndStairs, hooksToConsider, false);
 	}
 	
 	@Override
 	public Vec2 entryPosition(int id) 
 	{
-		return new Vec2(261,1310-distanceBetweenEntryAndStairs);
+		return new Vec2(290,1330-distanceBetweenEntryAndStairs); //soit (261,1130)
 	}
 
 	@Override
@@ -106,7 +98,7 @@ public class DropCarpet extends AbstractScript
 		catch (SerialConnexionException e) 
 		{
 			log.debug("erreur termine DropCarpet script : impossible de ranger", this);
-			throw new SerialFinallyException (); //TODO c'est la syntaxe correcte ?
+			throw new SerialFinallyException ();
 		}
 	}
 

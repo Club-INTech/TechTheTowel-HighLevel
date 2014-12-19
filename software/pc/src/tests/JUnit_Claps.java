@@ -21,8 +21,9 @@ import strategie.GameState;
 
 public class JUnit_Claps extends JUnit_Test {
 	
-	GameState<Robot> real_state; //c'est bien un robot real a l'interieur ?
+	GameState<Robot> real_state;
 	ScriptManager scriptManager;
+	ArrayList<Hook> emptyHook = new ArrayList<Hook>();
 	
 	@SuppressWarnings("unchecked")
 	@Before
@@ -58,7 +59,7 @@ public class JUnit_Claps extends JUnit_Test {
 			real_state.robot.sleep(sleepTime);
 			// A partir  de maintenant, le  robot estt au coin de la table
 			
-			scriptManager.getScript(ScriptNames.CLOSE_CLAP).execute(12, real_state, true);
+			scriptManager.getScript(ScriptNames.CLOSE_CLAP).execute(12, real_state, emptyHook, true);
 			
 		} catch (UnableToMoveException | SerialConnexionException e) {
 			log.debug("BUG !",this);
