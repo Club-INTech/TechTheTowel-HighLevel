@@ -272,9 +272,14 @@ public abstract class Robot implements Service
      */
     public void moveToLocation(Vec2 aim, ArrayList<Hook> hooksToConsider, Table table) throws UnableToMoveException, PathNotFoundException
     {
-    	//TODO: le pathfinding reclame une table, mais ce n'est pas logique d'en avoir une dans Robot
-			ArrayList<Vec2> path = PathDingDing.computePath(getPosition(),aim,table);
-			followPath(path , hooksToConsider);
+    	//TODO: remettre le pathDingDing et enlever les deux lignes en dessous
+		//ArrayList<Vec2> path = PathDingDing.computePath(getPosition(),aim,table);
+    	
+    	ArrayList<Vec2> path = new ArrayList<Vec2>();
+    	path.add(aim);
+    	
+    	
+		followPath(path , hooksToConsider);
     }
     
 	/**

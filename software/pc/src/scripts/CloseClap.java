@@ -54,6 +54,7 @@ public class CloseClap extends AbstractScript
 	@Override
 	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
 	{
+		stateToConsider.robot.sleep(1000);
 		//Noté ! =X
 		
 		//FIXME: gestion de la symétrie !
@@ -73,12 +74,15 @@ public class CloseClap extends AbstractScript
 	
 	public void closeFirstClap (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
 	{
-		//on commence en (1250,231), on se tourne dans le bon sens
-		stateToConsider.robot.turn(Math.PI);
-	
-		//On ouvre le bras puis on avance de 200mm pour se retrouver en (1050,231)
+		//on commence en (1290,231), on se tourne dans le bon sens
+		stateToConsider.robot.turn(Math.PI, hooksToConsider, false);
+				
+		//on reculle pour se mettre en (1350,231)
+		stateToConsider.robot.moveLengthwise(-60, hooksToConsider, true);
+			
+		//On ouvre le bras puis on avance de 300mm pour se retrouver en (1050,231)
 		stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
-		stateToConsider.robot.moveLengthwise(200, hooksToConsider, false);
+		stateToConsider.robot.moveLengthwise(300, hooksToConsider, false);
 		stateToConsider.table.setIsClap1Closed(true);
 	
 		//On baisse notre bras
@@ -115,12 +119,15 @@ public class CloseClap extends AbstractScript
 	
 	public void closeFirstAndSecondClap (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
 	{
-		//on commence en (1250,231), on se tourne dans le bon sens
+		//on commence en (1290,231), on se tourne dans le bon sens
 		stateToConsider.robot.turn(Math.PI, hooksToConsider, false);
+		
+		//on reculle pour se mettre en (1350,231)
+		stateToConsider.robot.moveLengthwise(-60, hooksToConsider, true);
 	
-		//On ouvre le bras puis on avance de 200mm pour se retrouver en (1050,231)
+		//On ouvre le bras puis on avance de 300mm pour se retrouver en (1050,231)
 		stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
-		stateToConsider.robot.moveLengthwise(200, hooksToConsider, false);
+		stateToConsider.robot.moveLengthwise(300, hooksToConsider, false);
 		stateToConsider.table.setIsClap1Closed(true);
 	
 		//On monte notre bras pour passer au dessus du clap ennemi notre bras et on avance de 350mm pour se retrouver en (700,231)
@@ -138,38 +145,46 @@ public class CloseClap extends AbstractScript
 	
 	public void closeAllOurClaps(GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException  //Ferme tous les Claps, depuis le  debut
 	{
-		//on commence en (1250,231), on se tourne dans le bon sens
+		//on commence en (1290,231), on se tourne dans le bon sens
 		stateToConsider.robot.turn(Math.PI, hooksToConsider, false);
+		stateToConsider.robot.sleep(1000);
+		
+		//on reculle pour se mettre en (1360,231)
+		stateToConsider.robot.moveLengthwise(-100, hooksToConsider, true);
 	
-		//On ouvre le bras puis on avance de 200mm pour se retrouver en (1050,231)
+		//On ouvre le bras puis on avance de 250mm pour se retrouver en (1010,231)
 		stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
-		stateToConsider.robot.moveLengthwise(200, hooksToConsider, false);
+		stateToConsider.robot.moveLengthwise(250, hooksToConsider, false);
 		stateToConsider.table.setIsClap1Closed(true);
 	
-		//On monte notre bras pour passer au dessus du clap ennemi notre bras et on avance de 350mm pour se retrouver en (700,231)
-		stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, true);
-		stateToConsider.robot.moveLengthwise(350, hooksToConsider, false);
+		//On monte notre bras pour passer au dessus du clap ennemi notre bras et on avance de 250mm pour se retrouver en (660,231)
+		stateToConsider.robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, true);
+		stateToConsider.robot.moveLengthwise(250, hooksToConsider, false);
 
-		//On ouvre le bras puis on avance de 300mm pour se retrouver en (400,231)
+		//On ouvre le bras puis on avance de 220mm pour se retrouver en (400,231)
 		stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
-		stateToConsider.robot.moveLengthwise(300, hooksToConsider, false);
+		stateToConsider.robot.moveLengthwise(220, hooksToConsider, false);
 		stateToConsider.table.setIsClap2Closed(true);	
 
 		//on baisse notre bras
+		stateToConsider.robot.turn(0.5*Math.PI, hooksToConsider, false);
+		stateToConsider.robot.sleep(1000);
 		stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, true);
 		
-		//on vas au 3eme clap donc en (-1050,231)
-		stateToConsider.robot.turn(0.5*Math.PI, hooksToConsider, false);
+		//on vas au 3eme clap donc en (-1340,231)
 		stateToConsider.robot.moveLengthwise(300, hooksToConsider, false);
 		stateToConsider.robot.turn(Math.PI, hooksToConsider, false);
-		stateToConsider.robot.moveLengthwise(1450, hooksToConsider, false);
+		stateToConsider.robot.sleep(1000);
+		stateToConsider.robot.moveLengthwise(1750, hooksToConsider, false);
 		stateToConsider.robot.turn(-0.5*Math.PI, hooksToConsider, false);
+		stateToConsider.robot.sleep(1000);
 		stateToConsider.robot.moveLengthwise(300, hooksToConsider, false);
 		
-		//on est en (-1050,231), on se retourne dans le bon sens
+		//on est en (-1340,231), on se retourne dans le bon sens
 		stateToConsider.robot.turn(0, hooksToConsider, false);
+		stateToConsider.robot.sleep(1000);
 		
-		//on ouvre notre bras puis on avance de 200mm pour se retrouver en (-850,231) 
+		//on ouvre notre bras puis on avance de 200mm pour se retrouver en (-1140,231) 
 		stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
 		stateToConsider.robot.moveLengthwise(200, hooksToConsider, false);
 		stateToConsider.table.setIsClap3Closed(true);
@@ -182,15 +197,15 @@ public class CloseClap extends AbstractScript
 		// FIXME: points exacts à entrer
 		
 		if (version == 1)
-			return new Vec2(1250,231); //point d'entrée : bord de la table, robot devant le clap 1
+			return new Vec2(1290,231); //point d'entrée : bord de la table, robot devant le clap 1
 		else if(version == 2)
 			return new Vec2(700,231); //point d'entrée : devant le clap 2
 		else if(version == 3)
 			return new Vec2(-1050,231);//point d'entrée : devant le clap 3
 		else if(version == 12)
-			return new Vec2(1250,231); //point d'entrée : devant le clap 1
+			return new Vec2(1290,231); //point d'entrée : devant le clap 1
 		else if(version == 123)
-			return new Vec2(1250,231); //point d'entrée : devant le clap 1
+			return new Vec2(1290,231); //point d'entrée : devant le clap 1
 		else
 		{
 			log.debug("Probleme d'entrée de position", this);
