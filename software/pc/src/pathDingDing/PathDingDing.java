@@ -17,13 +17,6 @@ import exceptions.*;
  */
 public class PathDingDing
 {
-	int compteur;
-	
-	public PathDingDing()
-	{
-		
-	}
-	
 	/**
 	 * 
 	 * @param segment1A point A du premier segment
@@ -147,6 +140,24 @@ public class PathDingDing
 		return path;
 	}
 	
+	/**
+	 * 
+	 * @param path
+	 * @param table
+	 * @return
+	 * @throws PathNotFoundException
+	 */
+	private static Path dodgeDynamic(Path path, Table table) throws PathNotFoundException
+	{
+		return new Path();
+	}
+	
+	/**
+	 * 
+	 * @param point
+	 * @param table
+	 * @return vrai si le point est accessible, faux sinon
+	 */
 	public static boolean isOnTable(Point point, Table table)
 	{
 		if (point.x <= -1310 || point.x >= 1310 || point.y <= 190 || point.y >= 1740)
