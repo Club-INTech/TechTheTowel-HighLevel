@@ -41,8 +41,10 @@ public class DropCarpet extends AbstractScript
 	@Override
 	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider,boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException
 	{
+		
 		//on presente ses arrieres a l'escalier
 		stateToConsider.robot.turn(-0.5*Math.PI, hooksToConsider, false);
+		stateToConsider.robot.sleep(1000);
 		// on avance vers ces demoiselles (les marches) (attention impact possible)
 		// TODO utiliser moveLengthwiseTorwardWalls
 		stateToConsider.robot.moveLengthwise(-distanceBetweenEntryAndStairs, hooksToConsider, true);
@@ -60,7 +62,7 @@ public class DropCarpet extends AbstractScript
 		{
 			stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_DROP, true);
 			stateToConsider.table.setIsRightCarpetDropped(true);
-			stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, true);
 		}
 		
 		//on s'eloigne de l'escalier
@@ -70,7 +72,7 @@ public class DropCarpet extends AbstractScript
 	@Override
 	public Vec2 entryPosition(int id) 
 	{
-		return new Vec2(261,1310-distanceBetweenEntryAndStairs); //soit (261,1110)
+		return new Vec2(290,1330-distanceBetweenEntryAndStairs); //soit (261,1130)
 	}
 
 	@Override

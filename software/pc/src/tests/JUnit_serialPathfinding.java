@@ -92,7 +92,7 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 		Robot robot = state.robot;
 		try 
 		{
-			state.robot.moveLengthwise(1000);
+			state.robot.moveLengthwise(600);
 		}
 		catch (UnableToMoveException e) 
 		{
@@ -102,19 +102,17 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 		System.out.println("en position ("+robot.getPosition().x+", "+robot.getPosition().y+")");
 		while (true)
 		{
-			int randX = rand.nextInt(3000)-1500;
-			int randY = rand.nextInt(2000);
 			try 
 			{
 				path = PathDingDing.computePath(robot.getPosition(), win.getMouse().getLeftClickPosition(), state.table);
 				log.debug("chemin : "+path.toString(),this);
 				path.remove(0);
 				robot.followPath(path, emptyHook);
-				robot.sleep(1000);
+				robot.sleep(5000);
 			}
 			catch (PathNotFoundException e) 
 			{
-				log.debug("point en dehors de la table : ("+randX+", "+randY+")", this);
+				log.debug("point en dehors de la table : ("+win.getMouse().getLeftClickPosition().x+", "+win.getMouse().getLeftClickPosition().y+")", this);
 			}
 			catch (UnableToMoveException e) 
 			{

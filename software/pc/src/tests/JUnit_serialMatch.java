@@ -8,6 +8,7 @@ import scripts.AbstractScript;
 import scripts.ScriptManager;
 import smartMath.Vec2;
 import strategie.GameState;
+import threads.ThreadTimer;
 import utils.Sleep;
 
 import org.junit.Before;
@@ -56,8 +57,11 @@ public class JUnit_serialMatch extends JUnit_Test
 		
 		// attends que le jumper soit retiré du robot
 		boolean jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
-		while(jumperWasAbsent && mSensorsCardWrapper.isJumperAbsent())
-			 	Sleep.sleep(100);
+		while(!jumperWasAbsent || mSensorsCardWrapper.isJumperAbsent())
+		{
+			jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
+			 Sleep.sleep(100);
+		}
 		
 		// maintenant que le jumper est retiré, le match a commencé
 		//ThreadTimer.matchStarted = true;
@@ -66,7 +70,9 @@ public class JUnit_serialMatch extends JUnit_Test
 	@Test
 	public void test()
 	{
-				waitMatchBegin();
+		
+				//container.startAllThreads();
+				//waitMatchBegin();
 				//premiere action du match
 				
 				System.out.println("Le robot commence le match");
@@ -95,7 +101,7 @@ public class JUnit_serialMatch extends JUnit_Test
 				
 				try 
 				{
-					scriptmanager.getScript(ScriptNames.DROP_CARPET).goToThenExec(0, real_state, true, emptyHook );
+					scriptmanager.getScript(ScriptNames.DROP_CARPET).goToThenExec(1, real_state, true, emptyHook );
 				}
 				catch (UnableToMoveException | SerialConnexionException e) 
 				{
@@ -115,28 +121,7 @@ public class JUnit_serialMatch extends JUnit_Test
 				
 				try 
 				{
-					scriptmanager.getScript(ScriptNames.CLOSE_CLAP).goToThenExec(12, real_state, true, emptyHook );
-				}
-				catch (UnableToMoveException | SerialConnexionException e) 
-				{
-					// TODO Main erreur critique :
-					//attention ce sont surement des erreurs dans le finally d'un script donc elle servent a proteger le meca !
-					//ou un robot ennemi devant. Donc beaucoup moins critique (ce serai bie de pouvoir differencer les deux)
-					e.printStackTrace();
-				
-				} 
-				catch (PathNotFoundException e)
-				{
-					//TODO: le pathfinding ne trouve pas de chemin
-					
-				}
-				
-				
-				//dernier script
-				
-				try 
-				{
-					scriptmanager.getScript(ScriptNames.CLOSE_CLAP).goToThenExec(3, real_state, true, emptyHook );
+					scriptmanager.getScript(ScriptNames.CLOSE_CLAP).goToThenExec(123, real_state, true, emptyHook );
 				}
 				catch (UnableToMoveException | SerialConnexionException e) 
 				{
