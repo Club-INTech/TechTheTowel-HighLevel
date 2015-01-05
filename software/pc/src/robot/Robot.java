@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import pathDingDing.PathDingDing;
 import hook.Hook;
+import smartMath.Circle;
 import smartMath.Vec2;
 import table.Table;
 import container.Service;
@@ -280,6 +281,42 @@ public abstract class Robot implements Service
     	
     	
 		followPath(path , hooksToConsider);
+    }
+    
+    /**
+     * deplace le robot vers un point quelconque du cercle donne, evite les obstacles. (appel du pathfinding)
+     * methode bloquante : l'execution ne se termine que lorsque le robot est arrive
+     * 
+     * @param aim le cercle ou l'on veut se rendre
+     * 
+     * @throws PathNotFoundException lorsque le pathdingding ne trouve pas de chemin 
+     * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
+     */
+    public void moveToCircle(Circle aim, ArrayList<Hook> hooksToConsider, Table table) throws PathNotFoundException, UnableToMoveException
+    {
+    	
+    	ArrayList<Vec2> path = PathDingDing.computePath(getPosition(),aim.toVec2(),table);
+    	
+    	//retire une distance egale au rayon du cercle au dernier point du chemin (le centre du cercle)
+    	path.remove(path.size()-1);
+    	Double angle = Math.atan((aim.toVec2().x-path.get(path.size()-1).x)/(aim.toVec2().y-path.get(path.size()-1).y));
+    	
+    	//TODO: formules a verifier
+    	if (0<=angle && angle<=Math.PI*0.5)
+    		path.add(new Vec2((int)(aim.ray*-Math.sin(angle)+aim.center.x),(int)(aim.ray*-Math.cos(angle)+aim.center.y)));
+    		//ne fonctionne que si 0<angle<PI/2 
+    	else if (Math.PI*0.5<angle && angle<=Math.PI)
+    		path.add(new Vec2((int)(aim.ray*Math.sin(angle)+aim.center.x),(int)(aim.ray*-Math.cos(angle)+aim.center.y)));
+    		//ne fonctionne que si Pi/2<angle<PI
+    	else if (-0.5*Math.PI<=angle && angle<0)
+    		path.add(new Vec2((int)(aim.ray*-Math.sin(angle)+aim.center.x),(int)(aim.ray*Math.cos(angle)+aim.center.y)));
+    		//ne fonctionne que si -PI/2<angle<0
+    	else
+    		//angle entre -PI et -PI/2
+    		path.add(new Vec2((int)(aim.ray*Math.sin(angle)+aim.center.x),(int)(aim.ray*Math.cos(angle)+aim.center.y)));
+    	
+    	
+    	followPath(path , hooksToConsider);
     }
     
 	/**

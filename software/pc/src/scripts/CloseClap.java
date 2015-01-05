@@ -8,7 +8,7 @@ import exceptions.serial.SerialConnexionException;
 import hook.Hook;
 import hook.types.HookFactory;
 import robot.Robot;
-import smartMath.Vec2;
+import smartMath.Circle;
 import strategie.GameState;
 import utils.Config;
 import utils.Log;
@@ -187,20 +187,20 @@ public class CloseClap extends AbstractScript
 	
 	
 	@Override
-	public Vec2 entryPosition(int version)
+	public Circle entryPosition(int version)
 	{
 		// FIXME: points exacts à entrer
 		
 		if (version == 1)
-			return new Vec2(1290,231); //point d'entrée : bord de la table, robot devant le clap 1
+			return new Circle(1290,231); //point d'entrée : bord de la table, robot devant le clap 1
 		else if(version == 2)
-			return new Vec2(700,231); //point d'entrée : devant le clap 2
+			return new Circle(700,231); //point d'entrée : devant le clap 2
 		else if(version == 3)
-			return new Vec2(-1050,231);//point d'entrée : devant le clap 3
+			return new Circle(-1050,231);//point d'entrée : devant le clap 3
 		else if(version == 12)
-			return new Vec2(1290,231); //point d'entrée : devant le clap 1
+			return new Circle(1290,231); //point d'entrée : devant le clap 1
 		else if(version == 123)
-			return new Vec2(1290,231); //point d'entrée : devant le clap 1
+			return new Circle(1290,231); //point d'entrée : devant le clap 1
 		else
 		{
 			log.debug("Probleme d'entrée de position", this);

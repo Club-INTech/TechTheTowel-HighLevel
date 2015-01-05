@@ -8,7 +8,7 @@ import exceptions.serial.SerialConnexionException;
 import hook.Hook;
 import hook.types.HookFactory;
 import robot.Robot;
-import smartMath.Vec2;
+import smartMath.Circle;
 import strategie.GameState;
 import utils.Config;
 import utils.Log;
@@ -82,7 +82,7 @@ public class GetPlot extends AbstractScript
 	}
 
 	@Override
-	public Vec2 entryPosition(int id)
+	public Circle entryPosition(int id)
 	{
 		//le cercle autour des plots
 		//calcul des poins d'entree sur les deux versions non-circulaires
