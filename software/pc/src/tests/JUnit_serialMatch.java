@@ -71,8 +71,8 @@ public class JUnit_serialMatch extends JUnit_Test
 	public void test()
 	{
 		
-				//container.startAllThreads();
-				//waitMatchBegin();
+				container.startAllThreads();
+				waitMatchBegin();
 				//premiere action du match
 				
 				System.out.println("Le robot commence le match");

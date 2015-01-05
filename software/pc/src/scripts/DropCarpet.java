@@ -44,7 +44,6 @@ public class DropCarpet extends AbstractScript
 		
 		//on presente ses arrieres a l'escalier
 		stateToConsider.robot.turn(-0.5*Math.PI, hooksToConsider, false);
-		stateToConsider.robot.sleep(1000);
 		// on avance vers ces demoiselles (les marches) (attention impact possible)
 		// TODO utiliser moveLengthwiseTorwardWalls
 		stateToConsider.robot.moveLengthwise(-distanceBetweenEntryAndStairs, hooksToConsider, true);

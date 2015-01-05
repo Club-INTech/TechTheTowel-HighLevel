@@ -278,6 +278,7 @@ public class Locomotion implements Service
 		{
 			e.printStackTrace();
 		}
+		Sleep.sleep(1000); // FIXME: ajouté parce que la méthode n'est pas bloquante alors qu'elle le devrait
 	}
 
 	/**

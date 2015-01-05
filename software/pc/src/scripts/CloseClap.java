@@ -43,6 +43,7 @@ public class CloseClap extends AbstractScript
 	 * @param hookFactory La factory a utiliser pour générer les hooks dont pourra avoir besoin le script
 	 * @param config le fichier de config a partir duquel le script pourra se configurer
 	 * @param log le système de log qu'utilisera le script
+	 * TODO: seul closeAllClaps fonctionne, il faut modifier les autres
 	 */
 	
 	public CloseClap(HookFactory hookFactory, Config config, Log log)
@@ -54,7 +55,6 @@ public class CloseClap extends AbstractScript
 	@Override
 	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
 	{
-		stateToConsider.robot.sleep(1000);
 		//Noté ! =X
 		
 		//FIXME: gestion de la symétrie !
@@ -147,7 +147,6 @@ public class CloseClap extends AbstractScript
 	{
 		//on commence en (1290,231), on se tourne dans le bon sens
 		stateToConsider.robot.turn(Math.PI, hooksToConsider, false);
-		stateToConsider.robot.sleep(1000);
 		
 		//on reculle pour se mettre en (1360,231)
 		stateToConsider.robot.moveLengthwise(-100, hooksToConsider, true);
@@ -168,21 +167,17 @@ public class CloseClap extends AbstractScript
 
 		//on baisse notre bras
 		stateToConsider.robot.turn(0.5*Math.PI, hooksToConsider, false);
-		stateToConsider.robot.sleep(1000);
 		stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, true);
 		
 		//on vas au 3eme clap donc en (-1340,231)
 		stateToConsider.robot.moveLengthwise(300, hooksToConsider, false);
 		stateToConsider.robot.turn(Math.PI, hooksToConsider, false);
-		stateToConsider.robot.sleep(1000);
 		stateToConsider.robot.moveLengthwise(1750, hooksToConsider, false);
 		stateToConsider.robot.turn(-0.5*Math.PI, hooksToConsider, false);
-		stateToConsider.robot.sleep(1000);
 		stateToConsider.robot.moveLengthwise(300, hooksToConsider, false);
 		
 		//on est en (-1340,231), on se retourne dans le bon sens
 		stateToConsider.robot.turn(0, hooksToConsider, false);
-		stateToConsider.robot.sleep(1000);
 		
 		//on ouvre notre bras puis on avance de 200mm pour se retrouver en (-1140,231) 
 		stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
