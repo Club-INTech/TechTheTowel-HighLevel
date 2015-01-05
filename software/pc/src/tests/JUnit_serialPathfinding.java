@@ -92,7 +92,7 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 		Robot robot = state.robot;
 		try 
 		{
-			state.robot.moveLengthwise(1000);
+			state.robot.moveLengthwise(600);
 		}
 		catch (UnableToMoveException e) 
 		{

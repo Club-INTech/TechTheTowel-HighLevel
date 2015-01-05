@@ -26,12 +26,11 @@ public class JUnit_Pathfinding extends JUnit_Test
         win = new Window(new Table(log, config));
     }
     
-    //test du pathfinding
     //@Test
     public void testRandPF1() throws Exception
     {
     	ArrayList<Vec2> path = new ArrayList<Vec2>();
-    	for(int n = 0; n < 1000; n++)
+    	for(int n = 0; n < 100000; n++)
     	{
 	    	try
 	    	{
