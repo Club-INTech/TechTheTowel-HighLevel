@@ -40,6 +40,7 @@ public class Circle {
 	public Circle (int centerX, int centerY)
 	{
 		this.center=new Vec2(centerX,centerY);
+		this.ray=0;
 	}
 
 	/**
