@@ -1,18 +1,18 @@
 package pathDingDing;
 
-import smartMath.Point;
+import smartMath.*;
 import table.Table;
 import table.obstacles.*;
-import smartMath.Path;
-import smartMath.Vec2;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Arrays;
 
 import exceptions.*;
 
 /**
  * Classe encapsulant les calculs de pathfinding 
- * @author Marsya et etienne
+ * @author Marsya et Etienne
  *
  */
 public class PathDingDing
@@ -27,7 +27,7 @@ public class PathDingDing
 	 */
 	public static boolean intersects(Point segment1A, Point segment1B, Point segment2A, Point segment2B)
 	{
-		// TODO: expliciter en comentaire les formules utilisés. 
+		// TODO: expliciter en comentaire les formules utilisees. 
 		return (segment1B.x - segment1A.x) * (segment2B.y - segment2A.y) - (segment1B.y - segment1A.y) * (segment2B.x - segment2A.x) != 0
 			&& ((segment1B.x - segment1A.x) * (segment2B.y - segment1A.y) - (segment1B.y - segment1A.y) * (segment2B.x - segment1A.x)) * ((segment1B.x - segment1A.x) * (segment2A.y - segment1A.y) - (segment1B.y - segment1A.y) * (segment2A.x - segment1A.x)) <= 0
 			&& ((segment2B.x - segment2A.x) * (segment1B.y - segment2A.y) - (segment2B.y - segment2A.y) * (segment1B.x - segment2A.x)) * ((segment2B.x - segment2A.x) * (segment1A.y - segment2A.y) - (segment2B.y - segment2A.y) * (segment1A.x - segment2A.x)) <= 0
@@ -76,6 +76,7 @@ public class PathDingDing
 		path.addAll(dodgeStatic(DoubleStart, DoubleEnd, table));
 		path.add(DoubleEnd);
 		simplify(path, table);
+		dodgeDynamic(path, table);
 		return path.toVec2Array();
 	}
 	
@@ -149,7 +150,78 @@ public class PathDingDing
 	 */
 	private static Path dodgeDynamic(Path path, Table table) throws PathNotFoundException
 	{
-		return new Path();
+		ArrayList<ObstacleCircular> ennemy = table.getObstacleManager().getEnnemyRobot();
+		//parcours des robots ennemis
+		for(int robotsCount = 0; robotsCount < ennemy.size(); robotsCount++)
+		{
+			//parcours des points du chemin
+			for(int pathCount = 0; pathCount < path.size(); pathCount++)
+			{
+				//si un point est dans un robot, on le supprime
+				if((path.get(pathCount).x - ennemy.get(robotsCount).getPosition().x)*(path.get(pathCount).x - ennemy.get(robotsCount).getPosition().x) + (path.get(pathCount).y - ennemy.get(robotsCount).getPosition().y)*(path.get(pathCount).y - ennemy.get(robotsCount).getPosition().y) <= ennemy.get(robotsCount).getRadius()*ennemy.get(robotsCount).getRadius())
+				{
+					path.remove(pathCount);
+					pathCount--;
+				}
+			}
+			
+			//parcours des points du chemin
+			for(int pathCount = 0; pathCount < path.size() - 1; pathCount++)
+			{
+				//si un segment coupe le robot ennemi
+				if(intersects(new Segment(path.get(pathCount), path.get(pathCount + 1)), ennemy.get(robotsCount)))
+				{
+					
+				}
+			}
+		}
+		return path;
+	}
+	
+	public Path dodgeCircle(Point a, Point b, Circle circle)
+	{
+		Path path = new Path();
+		path.add(a);
+		
+		path.add(b);
+		return path;
+	}
+	
+	public static List<Point> tangentPoints(Point point, ObstacleCircular circle)
+	{
+		double x1, x2, y1, y2;
+		double a  = point.x - circle.getPosition().x;
+		double b = point.y - circle.getPosition().y;
+		double R2 = a*a + b*b - circle.getRadius()*circle.getRadius();
+		double r2 = circle.getRadius()*circle.getRadius();
+		double c = a*a + b*b - R2 + circle.getRadius()*circle.getRadius();
+		a *= 2;
+		b *= 2;
+		double sqrtDelta = Math.sqrt(4*a*a*c*c - 4*(a*a+b*b)*(c*c-b*b*r2));
+		//recherche des points d'intersection
+		x1 = circle.getPosition().x + (2*a*c - sqrtDelta)/(2*(a*a + b*b));
+		x2 = circle.getPosition().x + (2*a*c + sqrtDelta)/(2*(a*a + b*b));
+		if (b == 0)
+		{
+			double inter = (2*c - a*a) / (2*a);
+			inter = Math.sqrt(R2 - inter * inter);
+			y1 = circle.getPosition().y + 0.5*b + inter;
+			y2 = circle.getPosition().y + 0.5*b - inter;
+		}
+		else
+		{ 
+			y1 = circle.getPosition().y + (c - a*(x1-circle.getPosition().x)) / b;
+			y2 = circle.getPosition().y + (c - a*(x2-circle.getPosition().x)) / b;
+		}
+		return Arrays.asList(new Point(x1, y1), new Point(x2, y2));
+	}
+	
+	public static boolean intersects(Segment line, ObstacleCircular circle)
+	{
+		double aire = (circle.getPosition().x - line.getA().x)*(line.getB().y - line.getA().y) - (circle.getPosition().y - line.getA().y)*(line.getB().x - line.getA().x);
+		return aire * aire / ((line.getB().x - line.getA().x)*(line.getB().x - line.getA().x)+(line.getB().y - line.getA().y)*(line.getB().y - line.getA().y)) <= circle.getRadius() * circle.getRadius()
+			&& (line.getB().x - line.getA().x)*(circle.getPosition().x - line.getA().x) + (line.getB().y - line.getA().y)*(circle.getPosition().y - line.getA().y) >= 0
+			&& (line.getA().x - line.getB().x)*(circle.getPosition().x - line.getB().x) + (line.getA().y - line.getB().y)*(circle.getPosition().y - line.getB().y) >= 0 ;
 	}
 	
 	/**
@@ -160,6 +232,7 @@ public class PathDingDing
 	 */
 	public static boolean isOnTable(Point point, Table table)
 	{
+		//TODO : ajouter le rayon du robot
 		if (point.x <= -1310 || point.x >= 1310 || point.y <= 190 || point.y >= 1740)
 			return false;
 		ArrayList<ObstacleRectangular> rects = table.getObstacleManager().getRects();
@@ -189,7 +262,7 @@ public class PathDingDing
 			boolean removable = true;
 			for(int ind_ligne = 0 ; ind_ligne < table.getObstacleManager().getLines().size() ; ind_ligne++)
 	    	{
-		    	if( intersects(path.getPosition(i), path.getPosition(i+2), table.getObstacleManager().getLines().get(ind_ligne).getA(), table.getObstacleManager().getLines().get(ind_ligne).getB()));
+		    	if( intersects(path.get(i), path.get(i+2), table.getObstacleManager().getLines().get(ind_ligne).getA(), table.getObstacleManager().getLines().get(ind_ligne).getB()));
 		    	{
 		    		removable = false;
 		    	}

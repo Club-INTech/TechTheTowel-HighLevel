@@ -31,6 +31,7 @@ public class ObstacleManager
     private ArrayList<ObstacleLinear> mLines;
 	private ArrayList<ObstacleCircular> mGreenPlots;
 	private ArrayList<ObstacleCircular> mYellowPlots;
+	private ArrayList<ObstacleCircular> mEnnemyRobot;
 	private ArrayList<ObstacleRectangular> mRects;
   
     /**
@@ -48,6 +49,7 @@ public class ObstacleManager
         mLines = new ArrayList<ObstacleLinear>();
 		mGreenPlots = new ArrayList<ObstacleCircular>();
 		mYellowPlots = new ArrayList<ObstacleCircular>();
+		mEnnemyRobot = new ArrayList<ObstacleCircular>();
 		mRects = new ArrayList<ObstacleRectangular>();
         
 		//TODO: appeler la config pour ces valeurs
@@ -91,24 +93,27 @@ public class ObstacleManager
       	mRects.add(new ObstacleRectangular(new Vec2(1300, 778),400,444));
 
       	//obstacles plots verts 
-      	mGreenPlots.add(new ObstacleCircular(new Vec2(-1410, 800), rayonPlot));
-      	mGreenPlots.add(new ObstacleCircular(new Vec2(-650, 900), rayonPlot));
-      	mGreenPlots.add(new ObstacleCircular(new Vec2(-650, 800), rayonPlot));
-      	mGreenPlots.add(new ObstacleCircular(new Vec2(-630, -355), rayonPlot));
-      	mGreenPlots.add(new ObstacleCircular(new Vec2(-200, -400), rayonPlot));
-      	mGreenPlots.add(new ObstacleCircular(new Vec2(-400, -750), rayonPlot));
-      	mGreenPlots.add(new ObstacleCircular(new Vec2(-1410, -750), rayonPlot));
-      	mGreenPlots.add(new ObstacleCircular(new Vec2(-1410, -850), rayonPlot));
+      	mGreenPlots.add(new ObstacleCircular(new Vec2(-1410, 1800), rayonPlot));
+      	mGreenPlots.add(new ObstacleCircular(new Vec2(-650, 1900), rayonPlot));
+      	mGreenPlots.add(new ObstacleCircular(new Vec2(-650, 1800), rayonPlot));
+      	mGreenPlots.add(new ObstacleCircular(new Vec2(-630, 645), rayonPlot));
+      	mGreenPlots.add(new ObstacleCircular(new Vec2(-200, 600), rayonPlot));
+      	mGreenPlots.add(new ObstacleCircular(new Vec2(-400, 250), rayonPlot));
+      	mGreenPlots.add(new ObstacleCircular(new Vec2(-1410, 250), rayonPlot));
+      	mGreenPlots.add(new ObstacleCircular(new Vec2(-1410, 150), rayonPlot));
 
       	// obstacles plots jaunes
-      	mYellowPlots.add(new ObstacleCircular(new Vec2(1410, 800), rayonPlot));
-      	mYellowPlots.add(new ObstacleCircular(new Vec2(650, 900), rayonPlot));
-      	mYellowPlots.add(new ObstacleCircular(new Vec2(650, 800), rayonPlot));
-      	mYellowPlots.add(new ObstacleCircular(new Vec2(630, -355), rayonPlot));
-      	mYellowPlots.add(new ObstacleCircular(new Vec2(200, -400), rayonPlot));
-      	mYellowPlots.add(new ObstacleCircular(new Vec2(400, -750), rayonPlot));
-      	mYellowPlots.add(new ObstacleCircular(new Vec2(1410, -750), rayonPlot));
-      	mYellowPlots.add(new ObstacleCircular(new Vec2(1410, -850), rayonPlot));
+      	mYellowPlots.add(new ObstacleCircular(new Vec2(1410, 1800), rayonPlot));
+      	mYellowPlots.add(new ObstacleCircular(new Vec2(650, 1900), rayonPlot));
+      	mYellowPlots.add(new ObstacleCircular(new Vec2(650, 1800), rayonPlot));
+      	mYellowPlots.add(new ObstacleCircular(new Vec2(630, 645), rayonPlot));
+      	mYellowPlots.add(new ObstacleCircular(new Vec2(200, 600), rayonPlot));
+      	mYellowPlots.add(new ObstacleCircular(new Vec2(400, 250), rayonPlot));
+      	mYellowPlots.add(new ObstacleCircular(new Vec2(1410, 250), rayonPlot));
+      	mYellowPlots.add(new ObstacleCircular(new Vec2(1410, 150), rayonPlot));
+      	
+      	//ennemi
+      	mEnnemyRobot.add(new ObstacleCircular(new Vec2(0, 1000), 200));
     }    
 
     /**
@@ -170,6 +175,16 @@ public class ObstacleManager
 	public ArrayList<ObstacleCircular> getYellowPlots()
 	{
 		return mYellowPlots;
+	}
+	
+	public ArrayList<ObstacleCircular> getEnnemyRobot()
+	{
+		return mEnnemyRobot;
+	}
+	
+	public void setEnnemyRobotPosition(Vec2 position, int index)
+	{
+		mEnnemyRobot.get(index).setPosition(position);
 	}
 	
 	public ArrayList<ObstacleRectangular> getRects()

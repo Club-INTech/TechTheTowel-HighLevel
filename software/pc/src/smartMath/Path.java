@@ -44,7 +44,7 @@ public class Path
 		return pointArray.size();
 	}
 	
-	public Point getPosition(int index)
+	public Point get(int index)
 	{
 		return pointArray.get(index);
 	}

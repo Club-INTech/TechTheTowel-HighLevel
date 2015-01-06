@@ -18,29 +18,33 @@ import graphics.Window;
 public class JUnit_Pathfinding extends JUnit_Test
 {
 	Window win;
+	Table table;
 	
     @Before
     public void setUp() throws Exception
     {
         super.setUp();
-        win = new Window(new Table(log, config));
+        table = (Table)container.getService(ServiceNames.TABLE);
+        win = new Window(table);
     }
     
     //@Test
     public void testRandPF1() throws Exception
     {
+    	int compt = 0;
     	ArrayList<Vec2> path = new ArrayList<Vec2>();
     	for(int n = 0; n < 100000; n++)
     	{
 	    	try
 	    	{
 	    		System.out.println("essai :");
-				path = PathDingDing.computePath(new Vec2((int)((Math.random() - 0.5) * 1500), (int)(Math.random() * 2000)), new Vec2((int)((Math.random() - 0.5) * 1500), (int)(Math.random() * 2000)), (Table)container.getService(ServiceNames.TABLE));
+				path = PathDingDing.computePath(new Vec2((int)((Math.random() - 0.5) * 3000), (int)(Math.random() * 2000)), new Vec2((int)((Math.random() - 0.5) * 3000), (int)(Math.random() * 2000)), (Table)container.getService(ServiceNames.TABLE));
 				for(int i = 0; i < path.size(); i++)
 		    	{
 		    		System.out.println("-----------------------------" + path.get(i).toString());
 		    	}
 				win.getPanel().drawArrayList(path);
+				compt++;
 				Thread.sleep(10);
 	    	}
 	    	catch(PathNotFoundException e)
@@ -48,6 +52,7 @@ public class JUnit_Pathfinding extends JUnit_Test
 	    		System.out.println("--------------not on table------------------");
 	    	}
     	}
+    	System.out.println("nombre de calculs : " + compt);
     }
     
     @Test
@@ -55,16 +60,21 @@ public class JUnit_Pathfinding extends JUnit_Test
     {
     	while(true)
     	{
-	    	try
-	    	{
-		    	win.getPanel().drawArrayList(PathDingDing.computePath(win.getMouse().getLeftClickPosition(), win.getMouse().getRightClickPosition(), (Table)container.getService(ServiceNames.TABLE)));
-		    	Thread.sleep(100);
-	    	}
-	    	catch(PathNotFoundException e)
-	    	{
-	    		System.out.println("--------------not on table------------------");
-	    		Thread.sleep(200);
-	    	}
+    		if(win.getMouse().hasClicked())
+    		{
+		    	try
+		    	{
+		    		table.getObstacleManager().setEnnemyRobotPosition(win.getMouse().getMiddleClickPosition(), 0);
+			    	win.getPanel().drawArrayList(PathDingDing.computePath(win.getMouse().getLeftClickPosition(), win.getMouse().getRightClickPosition(), table));
+			    }
+		    	catch(PathNotFoundException e)
+		    	{
+		    		System.out.println("--------------not on table------------------");
+		    	}
+		    	win.getPanel().repaint();
+    		}
+    		else
+    			Thread.sleep(100);
     	}
     }
 }

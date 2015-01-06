@@ -49,20 +49,27 @@ public class Panel extends JPanel
 	    	g.fillRect((rects.get(i).getPosition().x - (rects.get(i).getSizeX() / 2) + 1500) * this.getWidth() / 3000, -(rects.get(i).getPosition().y + rects.get(i).getSizeY()) * this.getHeight() / 2000 + this.getHeight(), rects.get(i).getSizeX() * this.getWidth() / 3000, rects.get(i).getSizeY() * this.getHeight() / 2000);
 	    }
 	    
-	    g.setColor(Color.GREEN);
+	    g.setColor(Color.green);
 	    
 	    ArrayList<ObstacleCircular> greenPlots = mTable.getObstacleManager().getGreenPlots();
 	    for(int i = 0; i < greenPlots.size(); i++)
 	    {
-	    	g.drawOval((greenPlots.get(i).getPosition().x - greenPlots.get(i).getRadius() + 1500) * this.getWidth() / 3000, -(greenPlots.get(i).getPosition().y - greenPlots.get(i).getRadius()) * this.getHeight() / 2000 + this.getHeight()/2, (2 * greenPlots.get(i).getRadius()) * this.getWidth() / 3000, (2 * greenPlots.get(i).getRadius()) * this.getHeight() / 2000);
+	    	g.drawOval((greenPlots.get(i).getPosition().x - greenPlots.get(i).getRadius() + 1500) * this.getWidth() / 3000, -(greenPlots.get(i).getPosition().y + greenPlots.get(i).getRadius()) * this.getHeight() / 2000 + this.getHeight(), (2 * greenPlots.get(i).getRadius()) * this.getWidth() / 3000, (2 * greenPlots.get(i).getRadius()) * this.getHeight() / 2000);
 	    }
 	    
-	    g.setColor(Color.YELLOW);
+	    g.setColor(Color.yellow);
 	    
 	    ArrayList<ObstacleCircular> yellowPlots = mTable.getObstacleManager().getYellowPlots();
 	    for(int i = 0; i < yellowPlots.size(); i++)
 	    {
-	    	g.drawOval((yellowPlots.get(i).getPosition().x - yellowPlots.get(i).getRadius() + 1500) * this.getWidth() / 3000, -(yellowPlots.get(i).getPosition().y - yellowPlots.get(i).getRadius()) * this.getHeight() / 2000 + this.getHeight()/2, (2 * yellowPlots.get(i).getRadius()) * this.getWidth() / 3000, (2 * yellowPlots.get(i).getRadius()) * this.getHeight() / 2000);
+	    	g.drawOval((yellowPlots.get(i).getPosition().x - yellowPlots.get(i).getRadius() + 1500) * this.getWidth() / 3000, -(yellowPlots.get(i).getPosition().y + yellowPlots.get(i).getRadius()) * this.getHeight() / 2000 + this.getHeight(), (2 * yellowPlots.get(i).getRadius()) * this.getWidth() / 3000, (2 * yellowPlots.get(i).getRadius()) * this.getHeight() / 2000);
+	    }
+	    
+	    g.setColor(Color.red);
+	    ArrayList<ObstacleCircular> ennemyRobot = mTable.getObstacleManager().getEnnemyRobot();
+	    for(int i = 0; i < ennemyRobot.size(); i++)
+	    {
+	    	g.drawOval((ennemyRobot.get(i).getPosition().x - ennemyRobot.get(i).getRadius() + 1500) * this.getWidth() / 3000, -(ennemyRobot.get(i).getPosition().y + ennemyRobot.get(i).getRadius()) * this.getHeight() / 2000 + this.getHeight(), (2 * ennemyRobot.get(i).getRadius()) * this.getWidth() / 3000, (2 * ennemyRobot.get(i).getRadius()) * this.getHeight() / 2000);
 	    }
 	    
 	    g.setColor(Color.blue);
@@ -70,18 +77,16 @@ public class Panel extends JPanel
 	    {
 	    	g.drawLine((mPath.get(i).x + 1500) * this.getWidth() / 3000, -mPath.get(i).y * this.getHeight() / 2000 + this.getHeight(), (mPath.get(i+1).x + 1500) * this.getWidth() / 3000, -mPath.get(i+1).y * this.getHeight() / 2000 + this.getHeight());
 	    }
-	    g.setColor(Color.red);
+	    
+	    g.setColor(Color.magenta);
 	    for(int i = 0; i < mPath.size(); i++)
 	    {
 	    	g.drawString(mPath.get(i).x + ", " + mPath.get(i).y, (mPath.get(i).x + 1500) * this.getWidth() / 3000, -mPath.get(i).y * this.getHeight() / 2000 + this.getHeight());
 	    }
-	    
-	    
 	}
 	
 	public void drawArrayList(ArrayList<Vec2> path)
 	{
-		
 		mPath = path;
 		repaint();
 	}
