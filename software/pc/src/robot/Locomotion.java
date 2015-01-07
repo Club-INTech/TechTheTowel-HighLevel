@@ -195,8 +195,15 @@ public class Locomotion implements Service
 	{
 
 		// prends en compte la symétrie: si on est équipe jaune, et non équipe verte on doit tourner de PI moins l'angle
+		// on oublie pas de mettre l'angle entre -PI et PI
 		if(symmetry)
-			angle = Math.PI-angle;
+		{
+			angle = (Math.PI-angle)%(2*Math.PI);
+			//l'angle est maintenant dans [0 , 2PI[
+			if (angle>Math.PI)
+				angle = -(angle-Math.PI);
+				//si l'angle est superieur a PI on le replace dans ]-PI , 0[ (l'angle 2PI n'est pas possible car 2PI%2PI=0)
+		}
 		
 		// on souhaite rester ou l'on est : la position d'arrivée est le position courrante
 		aim = position.clone();
@@ -216,7 +223,6 @@ public class Locomotion implements Service
 			
 			// boucle surveillant que tout se passe bien lors de la rotation 
 			//on l'execute une fois pour initier le deplacement
-			//FIXME: Martial, j'ai modifie isMovementFinished (pour les deplacement) en isTurnFinished (pour les rotations) et j'ai ajouté un bool pour entrer une fois dans la boucle.
 			while(firstLoop || !isTurnFinished(angle*1000)) // on attend la fin du mouvement
 			{
 				firstLoop = false;

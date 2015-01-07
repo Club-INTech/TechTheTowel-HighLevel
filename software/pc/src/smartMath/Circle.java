@@ -40,6 +40,16 @@ public class Circle {
 	public Circle (int centerX, int centerY)
 	{
 		this.center=new Vec2(centerX,centerY);
+		this.ray=0;
+	}
+
+	/**
+	 * 
+	 * @return le centre du cercle (position en mm)
+	 */
+	public Vec2 toVec2()
+	{
+		return this.center;
 	}
 
 	/**
@@ -57,7 +67,7 @@ public class Circle {
 	 * @param point un Point a tester
 	 * @return vrai si le point est sur le cercle
 	 */
-	public boolean containsPoint(Point point)
+	public boolean containCircle(Point point)
 	{
 		double dx=point.x-this.center.x;
 		double dy=point.y-this.center.y;
@@ -69,7 +79,7 @@ public class Circle {
 	 * @param point un Vec2 a tester
 	 * @return vrai si le point est sur le cercle
 	 */
-	public boolean containsPoint(Vec2 point)
+	public boolean containCircle(Vec2 point)
 	{
 		double dx=point.x-this.center.x;
 		double dy=point.y-this.center.y;

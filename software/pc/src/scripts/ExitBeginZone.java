@@ -31,7 +31,8 @@ public class ExitBeginZone extends AbstractScript
 	public Circle entryPosition(int id)
 	{
 		// point de depart du match a modifier a chaque base roulante
-		return new Circle(1500-71-48,1000); //1500 le bout de la table, 71 la taille du carre vert perce et 48 la taille de l'arriere du robot a son centre
+		return new Circle(1500-71-48,1000);
+		//1500 le bout de la table, 71 la taille du carre vert perce et 48 la taille de l'arriere du robot a son centre
 	}
 	
 	@Override
@@ -49,7 +50,7 @@ public class ExitBeginZone extends AbstractScript
 			}
 			else
 			{
-				log.debug("erreur ExitBeginZone script : impossible de sortir de la zone de depart\n", this);
+				log.critical("erreur ExitBeginZone script : impossible de sortir de la zone de depart\n", this);
 				throw e;
 			}
 		}

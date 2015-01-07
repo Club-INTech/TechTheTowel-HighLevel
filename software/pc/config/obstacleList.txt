@@ -24,7 +24,7 @@
  * 			|           	 		  			  |
  * 			|           	 		  			  |
  * 			|           	 		  			  |
- * 			|-1500,0           		 0,0       	    1500,0|
+ * 			|-1500,0           	 0,0       		    1500,0|
  *        		  -------------------------------------------------------
 
 Origine des obstacles pris de meme : origine abscisse milieu + ordonée bas 
