@@ -23,7 +23,7 @@ public class Mouse implements MouseListener
 		mPanel = pan;
 		mHasClicked = false;
 		mRightClickPosition = new Vec2(0, 0);
-		mMiddleClickPosition = new Vec2(0, 0);
+		mMiddleClickPosition = new Vec2(0, 1000);
 		mLeftClickPosition = new Vec2(0, 0);
 	}
 	
