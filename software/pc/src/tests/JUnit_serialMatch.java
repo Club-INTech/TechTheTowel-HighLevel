@@ -45,14 +45,15 @@ public class JUnit_serialMatch extends JUnit_Test
 		mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
 		emptyHook = new ArrayList<Hook> ();
 		
-		real_state.robot.setPosition(new Vec2 (1381,1000));
 		if (config.getProperty("couleur").equals("jaune"))
 		{
+			real_state.robot.setPosition(new Vec2 (-1381,1000));
 			real_state.robot.setOrientation(0); 
 			//si on est jaune on est en 0 
 		}
 		else
 		{
+			real_state.robot.setPosition(new Vec2 (1381,1000));
 			real_state.robot.setOrientation(Math.PI);
 			//sinon on est vert donc on est en PI
 		}
