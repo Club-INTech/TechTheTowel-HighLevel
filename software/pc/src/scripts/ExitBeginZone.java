@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import robot.Robot;
-import smartMath.Vec2;
+import smartMath.Circle;
 import strategie.GameState;
 import utils.Config;
 import utils.Log;
@@ -28,10 +28,11 @@ public class ExitBeginZone extends AbstractScript
 	}
 
 	@Override
-	public Vec2 entryPosition(int id)
+	public Circle entryPosition(int id)
 	{
 		// point de depart du match a modifier a chaque base roulante
-		return new Vec2(1500-71-48,1000); //1500 le bout de la table, 71 la taille du carre vert perce et 48 la taille de l'arriere du robot a son centre
+		return new Circle(1500-71-48,1000);
+		//1500 le bout de la table, 71 la taille du carre vert perce et 48 la taille de l'arriere du robot a son centre
 	}
 	
 	@Override
@@ -49,7 +50,7 @@ public class ExitBeginZone extends AbstractScript
 			}
 			else
 			{
-				log.debug("erreur ExitBeginZone script : impossible de sortir de la zone de depart\n", this);
+				log.critical("erreur ExitBeginZone script : impossible de sortir de la zone de depart\n", this);
 				throw e;
 			}
 		}

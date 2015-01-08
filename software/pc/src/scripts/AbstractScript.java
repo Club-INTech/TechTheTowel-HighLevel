@@ -2,7 +2,7 @@ package scripts;
 
 import java.util.ArrayList;
 
-import smartMath.Vec2;
+import smartMath.Circle;
 import strategie.GameState;
 import robot.Robot;
 import utils.Log;
@@ -63,7 +63,7 @@ public abstract class AbstractScript implements Service
 	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, boolean shouldRetryIfBlocked, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException
 	{
 		// va jusqu'au point d'entrée de la version demandée
-		actualState.robot.moveToLocation(entryPosition(versionToExecute), hooksToConsider, actualState.table);
+		actualState.robot.moveToCircle(entryPosition(versionToExecute), hooksToConsider, actualState.table);
 		
 		// exécute la version demandée
 		actualState.robot.sleep(1000);
@@ -98,7 +98,7 @@ public abstract class AbstractScript implements Service
 	 * @param version version dont on veut le point d'entrée
 	 * @return la position du point d'entrée
 	 */
-	public abstract Vec2 entryPosition(int version);
+	public abstract Circle entryPosition(int version);
 	
 	/**
 	 * Méthode toujours appelée à la fin du script via un finally. On des donc certain  que son exécution aura lieu.

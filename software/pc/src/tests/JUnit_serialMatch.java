@@ -8,7 +8,6 @@ import scripts.AbstractScript;
 import scripts.ScriptManager;
 import smartMath.Vec2;
 import strategie.GameState;
-import threads.ThreadTimer;
 import utils.Sleep;
 
 import org.junit.Before;
@@ -48,6 +47,7 @@ public class JUnit_serialMatch extends JUnit_Test
 		
 		real_state.robot.setPosition(new Vec2 (1381,1000));
 		real_state.robot.setOrientation(Math.PI);
+		real_state.robot.updateConfig();
 	}
 	
 	public void waitMatchBegin()
@@ -71,8 +71,8 @@ public class JUnit_serialMatch extends JUnit_Test
 	public void test()
 	{
 		
-				//container.startAllThreads();
-				//waitMatchBegin();
+				container.startAllThreads();
+				waitMatchBegin();
 				//premiere action du match
 				
 				System.out.println("Le robot commence le match");

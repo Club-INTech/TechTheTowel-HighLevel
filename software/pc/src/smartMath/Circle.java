@@ -7,8 +7,8 @@ package smartMath;
  */
 public class Circle {
 
-	Vec2 center;
-	double ray;
+	public Vec2 center;
+	public double ray;
 	
 	/**
 	 * construit un cercle
@@ -30,6 +30,16 @@ public class Circle {
 	public Circle(Vec2 center)
 	{
 		this.center=center;
+		this.ray=0;
+	}
+	/**
+	 * construit un cercle de rayon nul
+	 * @param centerX la coordonee en abscisse du centre
+	 * @param centerY la coordonee en ordonne du centre
+	 */
+	public Circle (int centerX, int centerY)
+	{
+		this.center=new Vec2(centerX,centerY);
 		this.ray=0;
 	}
 

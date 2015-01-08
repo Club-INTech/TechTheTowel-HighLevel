@@ -71,7 +71,7 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 				log.debug("chemin : "+path.toString(),this);
 				path.remove(0);
 				robot.followPath(path, emptyHook);
-				robot.sleep(1000);
+				robot.sleep(5000);
 			}
 			catch (PathNotFoundException e) 
 			{

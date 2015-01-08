@@ -9,7 +9,7 @@ import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import hook.types.HookFactory;
 import robot.Robot;
-import smartMath.Vec2;
+import smartMath.Circle;
 import strategie.GameState;
 import utils.Config;
 import utils.Log;
@@ -44,7 +44,6 @@ public class DropCarpet extends AbstractScript
 		
 		//on presente ses arrieres a l'escalier
 		stateToConsider.robot.turn(-0.5*Math.PI, hooksToConsider, false);
-		stateToConsider.robot.sleep(1000);
 		// on avance vers ces demoiselles (les marches) (attention impact possible)
 		// TODO utiliser moveLengthwiseTorwardWalls
 		stateToConsider.robot.moveLengthwise(-distanceBetweenEntryAndStairs, hooksToConsider, true);
@@ -70,9 +69,9 @@ public class DropCarpet extends AbstractScript
 	}
 	
 	@Override
-	public Vec2 entryPosition(int id) 
+	public Circle entryPosition(int id) 
 	{
-		return new Vec2(290,1330-distanceBetweenEntryAndStairs); //soit (261,1130)
+		return new Circle(290,1330-distanceBetweenEntryAndStairs); //soit (261,1130)
 	}
 
 	@Override

@@ -9,7 +9,7 @@ import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import hook.types.HookFactory;
 import robot.Robot;
-import smartMath.Vec2;
+import smartMath.Circle;
 import strategie.GameState;
 import utils.Config;
 import utils.Log;
@@ -67,20 +67,20 @@ public class DropPile extends AbstractScript
 	
 	
 	@Override
-	public Vec2 entryPosition(int id) 
+	public Circle entryPosition(int id) 
 	{
 		if (id==1)
 		{
-			return new Vec2(1300,1000);
+			return new Circle(1300,1000);
 		}
 		else if (id==2)
 		{
-			return new Vec2(70,40);
+			return new Circle(70,40);
 		}
 		else
 		{
 			log.debug("erreur DropPile script : out of bound id", this);
-			return new Vec2(0,1000);
+			return new Circle(0,1000);
 		}
 	}
 

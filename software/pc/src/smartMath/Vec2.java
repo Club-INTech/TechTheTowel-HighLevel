@@ -170,6 +170,14 @@ public class Vec2
 	{
 		return new Point((double)x,(double)y);
 	}
+	/**
+	 * transforme un point en un cercle de rayon nul
+	 * @return un cercle de centre ce Vec2 et de rayon nul.
+	 */
+	public Circle toCircle()
+	{
+		return new Circle (this,0);
+	}
 	
 	/**
 	 * Equals.
