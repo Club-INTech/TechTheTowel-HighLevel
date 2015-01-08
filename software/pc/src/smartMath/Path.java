@@ -24,6 +24,11 @@ public class Path
 		pointArray.add(point);
 	}
 	
+	public void add(int index, Point point)
+	{
+		pointArray.add(index, point);
+	}
+	
 	public void addAll(Path path)
 	{
 		pointArray.addAll(path.pointArray);
@@ -39,12 +44,12 @@ public class Path
 		pointArray.remove(index);
 	}
 	
-	public double size()
+	public int size()
 	{
 		return pointArray.size();
 	}
 	
-	public Point getPosition(int index)
+	public Point get(int index)
 	{
 		return pointArray.get(index);
 	}
