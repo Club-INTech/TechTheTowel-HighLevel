@@ -294,28 +294,31 @@ public abstract class Robot implements Service
      */
     public void moveToCircle(Circle aim, ArrayList<Hook> hooksToConsider, Table table) throws PathNotFoundException, UnableToMoveException
     {
+    	//TODO: remettre le pathDingDing et enlever les deux lignes en dessous
+    	//ArrayList<Vec2> path = PathDingDing.computePath(getPosition(),aim.toVec2(),table);
     	
-    	ArrayList<Vec2> path = PathDingDing.computePath(getPosition(),aim.toVec2(),table);
+    	ArrayList<Vec2> path = new ArrayList<Vec2>();
+    	path.add(aim.center);
+    	
     	
     	//retire une distance egale au rayon du cercle au dernier point du chemin (le centre du cercle)
     	path.remove(path.size()-1);
-    	Double angle = Math.atan((aim.toVec2().x-path.get(path.size()-1).x)/(aim.toVec2().y-path.get(path.size()-1).y));
-    	
-    	//TODO: formules a verifier
-    	if (0<=angle && angle<=Math.PI*0.5)
-    		path.add(new Vec2((int)(aim.ray*-Math.sin(angle)+aim.center.x),(int)(aim.ray*-Math.cos(angle)+aim.center.y)));
-    		//ne fonctionne que si 0<angle<PI/2 
-    	else if (Math.PI*0.5<angle && angle<=Math.PI)
-    		path.add(new Vec2((int)(aim.ray*Math.sin(angle)+aim.center.x),(int)(aim.ray*-Math.cos(angle)+aim.center.y)));
-    		//ne fonctionne que si Pi/2<angle<PI
-    	else if (-0.5*Math.PI<=angle && angle<0)
-    		path.add(new Vec2((int)(aim.ray*-Math.sin(angle)+aim.center.x),(int)(aim.ray*Math.cos(angle)+aim.center.y)));
-    		//ne fonctionne que si -PI/2<angle<0
+    	//on retire le dernier point (le centre du cercle)
+    	Vec2 precedentPathPoint = new Vec2();
+    	if (path.size()==0)
+    	{
+    		precedentPathPoint = getPosition();
+    	}
     	else
-    		//angle entre -PI et -PI/2
-    		path.add(new Vec2((int)(aim.ray*Math.sin(angle)+aim.center.x),(int)(aim.ray*Math.cos(angle)+aim.center.y)));
+    	{
+    		precedentPathPoint = path.get(path.size()-1);
+    	}
+    	//le point precedent dans le path
+    	Vec2 movementVector = aim.center.minusNewVector(precedentPathPoint);
+    	//le dernier vecteur deplacement 
     	
-    	
+    	path.add(movementVector.dotFloat((movementVector.length()-aim.ray)/movementVector.length()).plusNewVector(precedentPathPoint));
+    	//on ajoute le point du cercle B'=(B-A)*(L-r)/L+A
     	followPath(path , hooksToConsider);
     }
     

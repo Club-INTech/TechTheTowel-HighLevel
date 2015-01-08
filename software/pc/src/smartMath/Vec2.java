@@ -202,6 +202,17 @@ public class Vec2
 	}
 	
 	/**
+	 * Dot float.
+	 *
+	 * @param a the scalar to multiply the Vec2 with
+	 * @return the vec2 multiplied by a
+	 */
+	public Vec2 dotFloat(double a)
+	{
+		return new Vec2((int)(x*a),(int)(y*a));
+	}
+	
+	/**
 	 * Sets the.
 	 *
 	 * @param other the other
