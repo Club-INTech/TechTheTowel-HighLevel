@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="7.2.0">
+<eagle version="6.3">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.05" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
@@ -27139,6 +27139,10 @@ Es handelt sich hierbei um AK500 in horizontaler Ausführung.&lt;p&gt;
 <part name="BUZZER" library="con-ptr500" deviceset="AK300/2" device=""/>
 <part name="AX12-7" library="con-amp" deviceset="MTA03-100" device=""/>
 <part name="AX12-8" library="con-amp" deviceset="MTA03-100" device=""/>
+<part name="SUPPLY74" library="supply2" deviceset="GND" device=""/>
+<part name="R10" library="rcl" deviceset="R-EU_" device="0207/2V" value="1k"/>
+<part name="LED4" library="led" deviceset="LED" device="5MM" value="GREEN"/>
+<part name="SUPPLY73" library="supply2" deviceset="+5V" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -27336,6 +27340,10 @@ Es handelt sich hierbei um AK500 in horizontaler Ausführung.&lt;p&gt;
 <instance part="BUZZER" gate="-2" x="153.67" y="-182.88"/>
 <instance part="AX12-7" gate="G$1" x="182.88" y="15.24"/>
 <instance part="AX12-8" gate="G$1" x="182.88" y="7.62"/>
+<instance part="SUPPLY74" gate="GND" x="271.78" y="-139.7" rot="R90"/>
+<instance part="R10" gate="G$1" x="261.62" y="-139.7" rot="R180"/>
+<instance part="LED4" gate="G$1" x="248.92" y="-139.7" rot="R90"/>
+<instance part="SUPPLY73" gate="+5V" x="241.3" y="-139.7" rot="R90"/>
 </instances>
 <busses>
 </busses>
@@ -27721,6 +27729,11 @@ Es handelt sich hierbei um AK500 in horizontaler Ausführung.&lt;p&gt;
 <wire x1="25.4" y1="35.56" x2="30.48" y2="35.56" width="0.1524" layer="91"/>
 <label x="30.48" y="35.56" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="R10" gate="G$1" pin="1"/>
+<pinref part="SUPPLY74" gate="GND" pin="GND"/>
+<wire x1="266.7" y1="-139.7" x2="269.24" y2="-139.7" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="+24V" class="0">
 <segment>
@@ -28066,6 +28079,11 @@ Es handelt sich hierbei um AK500 in horizontaler Ausführung.&lt;p&gt;
 <segment>
 <pinref part="R7" gate="G$1" pin="1"/>
 <pinref part="SUPPLY70" gate="+5V" pin="+5V"/>
+</segment>
+<segment>
+<pinref part="SUPPLY73" gate="+5V" pin="+5V"/>
+<pinref part="LED4" gate="G$1" pin="A"/>
+<wire x1="243.84" y1="-139.7" x2="246.38" y2="-139.7" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="CODDROITA" class="0">
@@ -28709,6 +28727,13 @@ Es handelt sich hierbei um AK500 in horizontaler Ausführung.&lt;p&gt;
 <segment>
 <pinref part="DIODE24V" gate="1" pin="A"/>
 <pinref part="ARRET_URGENCE" gate="-2" pin="KL"/>
+</segment>
+</net>
+<net name="N$22" class="0">
+<segment>
+<pinref part="LED4" gate="G$1" pin="C"/>
+<pinref part="R10" gate="G$1" pin="2"/>
+<wire x1="254" y1="-139.7" x2="256.54" y2="-139.7" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
