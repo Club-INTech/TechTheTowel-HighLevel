@@ -68,13 +68,12 @@ public class JUnit_serialMatch extends JUnit_Test
 		// attends que le jumper soit retiré du robot
 		
 		boolean jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
-		while(!jumperWasAbsent || mSensorsCardWrapper.isJumperAbsent())
+		while(jumperWasAbsent || !mSensorsCardWrapper.isJumperAbsent())
 		{
 			jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
 			 Sleep.sleep(100);
 		}
-		
-		
+
 		
 		// maintenant que le jumper est retiré, le match a commencé
 		//ThreadTimer.matchStarted = true;
@@ -83,11 +82,9 @@ public class JUnit_serialMatch extends JUnit_Test
 	@Test
 	public void test()
 	{
-		
 				container.startAllThreads();
 				waitMatchBegin();
 				//premiere action du match
-				
 				
 				System.out.println("Le robot commence le match");
 				

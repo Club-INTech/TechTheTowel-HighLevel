@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import enums.ActuatorOrder;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
+import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import hook.types.HookFactory;
 import robot.Robot;
@@ -301,6 +302,11 @@ public class CloseClap extends AbstractScript
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
 		}		stateToConsider.robot.moveLengthwise(200, hooksToConsider, false);
 		stateToConsider.table.setIsClap3Closed(true);
+		
+		stateToConsider.robot.turn(Math.PI/2, hooksToConsider, false);
+		stateToConsider.robot.moveLengthwise(50, hooksToConsider, false);
+		stateToConsider.robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
+		stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
 	}
 	
 	
@@ -341,7 +347,7 @@ public class CloseClap extends AbstractScript
 	}
 
 	@Override
-	protected void finalise(GameState<?> stateToConsider)
+	protected void finalise(GameState<?> stateToConsider) throws SerialFinallyException
 	{	
 		try 
 		{
@@ -354,7 +360,7 @@ public class CloseClap extends AbstractScript
 		catch (SerialConnexionException e) 
 		{
 			log.debug("Erreur termine : ne peux pas replier claps", this); // Viens me parler de cette ligne. Je dois t'expliquer ce que veut dire "remonter une exception"
-			//FIXME: il faut creer une exception de type SerialFinallyException
+			throw new SerialFinallyException ();
 		}
 	}
 }
