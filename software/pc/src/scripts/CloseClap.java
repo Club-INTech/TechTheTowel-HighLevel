@@ -228,7 +228,7 @@ public class CloseClap extends AbstractScript
 		stateToConsider.robot.turn(Math.PI, hooksToConsider, false);
 		
 		//on reculle pour se mettre en (1360,231)
-		stateToConsider.robot.moveLengthwise(-100, hooksToConsider, true);
+		stateToConsider.robot.moveLengthwise(-120, hooksToConsider, true);//-100
 	
 		//On ouvre le bras puis on avance de 250mm pour se retrouver en (1010,231)
 		if(stateToConsider.robot.getSymmetry())
@@ -280,11 +280,11 @@ public class CloseClap extends AbstractScript
 			stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, true);
 		}		
 		//on vas au 3eme clap donc en (-1340,231)
-		stateToConsider.robot.moveLengthwise(300, hooksToConsider, false);
+		stateToConsider.robot.moveLengthwise(250, hooksToConsider, false);//300
 		stateToConsider.robot.turn(Math.PI, hooksToConsider, false);
-		stateToConsider.robot.moveLengthwise(1600, hooksToConsider, false);//1750
+		stateToConsider.robot.moveLengthwise(1720, hooksToConsider, false);//1750
 		stateToConsider.robot.turn(-0.5*Math.PI, hooksToConsider, false);
-		stateToConsider.robot.moveLengthwise(300, hooksToConsider, false);
+		stateToConsider.robot.moveLengthwise(250, hooksToConsider, false);//300
 		
 		//on est en (-1340,231), on se retourne dans le bon sens
 		stateToConsider.robot.turn(0, hooksToConsider, false);

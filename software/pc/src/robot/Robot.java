@@ -349,4 +349,10 @@ public abstract class Robot implements Service
 	{
 		this.storedPlotCount = storedPlotCount;
 	}
+	
+	public boolean getSymmetry()
+	{
+		return symmetry;
+	}
+
 }
