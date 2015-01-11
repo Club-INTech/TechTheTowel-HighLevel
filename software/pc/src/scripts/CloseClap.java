@@ -37,7 +37,13 @@ import utils.Log;
 
 public class CloseClap extends AbstractScript 
 {
-
+	//Distance à avancer après le clap 2 pour esquiver l'estrade rouge en (0,0)
+	private int distanceToDodgeEstrade = 250;
+	
+	//Distance à avancer après le clap 2 pour aller au clap 3
+	private int distanceBetween2and3 = 1700;
+	
+	
 	/**
 	 * Constructeur (normalement appelé uniquement par le scriptManager) du script fermant les Claps
 	 * Le container se charge de renseigner la hookFactory, le système de config et de log.
@@ -75,11 +81,10 @@ public class CloseClap extends AbstractScript
 		//on commence en (1290,231), on se tourne dans le bon sens
 		stateToConsider.robot.turn(Math.PI, hooksToConsider, false);
 				
-		//on recule pour se mettre en (1350,231)
-		stateToConsider.robot.moveLengthwise(-80, hooksToConsider, true);//-60
+		//on recule pour se mettre en (1360,231)
+		stateToConsider.robot.moveLengthwise(-120, hooksToConsider, true);//-100
 			
-		//On ouvre le bras puis on avance de 300mm pour se retrouver en (1050,231)
-		
+		//On ouvre le bras puis on avance pour se retrouver en (1010,231)
 		if(stateToConsider.robot.getSymmetry())
 		{
 			//Coté jaune
@@ -89,19 +94,24 @@ public class CloseClap extends AbstractScript
 		{
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
 		}
-		stateToConsider.robot.moveLengthwise(300, hooksToConsider, false);
+		stateToConsider.robot.moveLengthwise(250, hooksToConsider, false);
 		stateToConsider.table.setIsClap1Closed(true);
 	
-		//On baisse notre bras
 		if(stateToConsider.robot.getSymmetry())
 		{
 			//Coté jaune
-			stateToConsider.robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, true);
 		}
 		else //coté vert
 		{
-			stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, true);
-		}
+			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, true);
+		}	
+		//On s'echape
+		stateToConsider.robot.turn(Math.PI/2, hooksToConsider, false);
+		
+		//On ferme tout pour finir
+		stateToConsider.robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
+		stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
 	}
 
 	public void closeSecondClap (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
@@ -122,17 +132,22 @@ public class CloseClap extends AbstractScript
 		
 		stateToConsider.robot.moveLengthwise(300, hooksToConsider, false);
 		stateToConsider.table.setIsClap2Closed(true);	
-
-		//on baisse notre bras
+		
 		if(stateToConsider.robot.getSymmetry())
 		{
 			//Coté jaune
-			stateToConsider.robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, true);
 		}
 		else //coté vert
 		{
-			stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, true);
-		}	
+			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, true);
+		}
+		//On s'echape
+		stateToConsider.robot.turn(Math.PI/2, hooksToConsider, false);
+						
+		//On ferme tout pour finir
+		stateToConsider.robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
+		stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);	
 	}
 	
 	public void closeThirdClap (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException  //Ferme le claps de fin
@@ -153,16 +168,21 @@ public class CloseClap extends AbstractScript
 		stateToConsider.robot.moveLengthwise(200, hooksToConsider, false);
 		stateToConsider.table.setIsClap3Closed(true);
 		
-		//on baisse notre bras
 		if(!stateToConsider.robot.getSymmetry())
 		{
 			//Coté jaune
-			stateToConsider.robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, true);
 		}
 		else //coté vert
 		{
-			stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, true);
-		}	
+			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, true);
+		}		
+		//On s'echape
+		stateToConsider.robot.turn(Math.PI/2, hooksToConsider, false);
+				
+		//On ferme tout pour finir
+		stateToConsider.robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
+		stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
 	}
 	
 	public void closeFirstAndSecondClap (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
@@ -210,18 +230,23 @@ public class CloseClap extends AbstractScript
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
 		}		
 		stateToConsider.robot.moveLengthwise(300, hooksToConsider, false);
-		stateToConsider.table.setIsClap2Closed(true);	
-
-		//on baisse notre bras
+		stateToConsider.table.setIsClap2Closed(true);
+		
 		if(stateToConsider.robot.getSymmetry())
 		{
 			//Coté jaune
-			stateToConsider.robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, true);
 		}
 		else //coté vert
 		{
-			stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, true);
-		}
+			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, true);
+		}	
+		//On s'echape
+		stateToConsider.robot.turn(Math.PI/2, hooksToConsider, false);
+				
+		//On ferme tout pour finir
+		stateToConsider.robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
+		stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
 	}
 	
 	public void closeAllOurClaps(GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException  //Ferme tous les Claps, depuis le  debut
@@ -229,7 +254,7 @@ public class CloseClap extends AbstractScript
 		//on commence en (1290,231), on se tourne dans le bon sens
 		stateToConsider.robot.turn(Math.PI, hooksToConsider, false);
 		
-		//on reculle pour se mettre en (1360,231)
+		//on recule pour se mettre en (1360,231)
 		stateToConsider.robot.moveLengthwise(-120, hooksToConsider, true);//-100
 	
 		//On ouvre le bras puis on avance de 250mm pour se retrouver en (1010,231)
@@ -282,11 +307,11 @@ public class CloseClap extends AbstractScript
 			stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, true);
 		}		
 		//on vas au 3eme clap donc en (-1340,231)
-		stateToConsider.robot.moveLengthwise(250, hooksToConsider, false);//300
+		stateToConsider.robot.moveLengthwise(distanceToDodgeEstrade, hooksToConsider, false);
 		stateToConsider.robot.turn(Math.PI, hooksToConsider, false);
-		stateToConsider.robot.moveLengthwise(1700, hooksToConsider, false);//1750
+		stateToConsider.robot.moveLengthwise(distanceBetween2and3, hooksToConsider, false);
 		stateToConsider.robot.turn(-0.5*Math.PI, hooksToConsider, false);
-		stateToConsider.robot.moveLengthwise(250, hooksToConsider, false);//300
+		stateToConsider.robot.moveLengthwise(distanceToDodgeEstrade, hooksToConsider, false);
 		
 		//on est en (-1340,231), on se retourne dans le bon sens
 		stateToConsider.robot.turn(0, hooksToConsider, false);
@@ -300,11 +325,22 @@ public class CloseClap extends AbstractScript
 		else //coté vert
 		{
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
-		}		stateToConsider.robot.moveLengthwise(200, hooksToConsider, false);
+		}	
+		stateToConsider.robot.moveLengthwise(200, hooksToConsider, false);
 		stateToConsider.table.setIsClap3Closed(true);
 		
+		if(!stateToConsider.robot.getSymmetry())
+		{
+			//Coté jaune
+			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, true);
+		}
+		else //coté vert
+		{
+			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, true);
+		}		//On s'echape
 		stateToConsider.robot.turn(Math.PI/2, hooksToConsider, false);
-		stateToConsider.robot.moveLengthwise(50, hooksToConsider, false);
+		
+		//On ferme tout pour finir
 		stateToConsider.robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
 		stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
 	}
