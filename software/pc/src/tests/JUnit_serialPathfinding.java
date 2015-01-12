@@ -40,11 +40,13 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 
 
 		
-		state.robot.setPosition(new Vec2 (1381,1000));
-		state.robot.setOrientation(Math.PI);
+		state.robot.setPosition(new Vec2 (-1381,1000));
+		state.robot.setOrientation(0);
 		
 		
 		win = new Window(new Table(log, config));
+		
+		state.robot.updateConfig();
 	}
 
 	//@Test
