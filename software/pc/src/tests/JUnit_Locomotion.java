@@ -6,7 +6,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import enums.ServiceNames;
+import robot.Locomotion;
 import robot.cardsWrappers.*;
+import smartMath.Vec2;
 import utils.Sleep;
 
 // TODO: Auto-generated Javadoc

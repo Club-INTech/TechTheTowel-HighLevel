@@ -59,8 +59,9 @@ public abstract class AbstractScript implements Service
 	 * @throws UnableToMoveException losrque le robot veut se déplacer et que quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
 	 * @throws SerialConnexionException s'il y a un problème de communication avec une des cartes électroniques
 	 * @throws PathNotFoundException  si le pathfinding ne trouve pas de chemin
+	 * @throws SerialFinallyException si le finally n'est pas correctement execute (erreur critique)
 	 */
-	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, boolean shouldRetryIfBlocked, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException
+	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, boolean shouldRetryIfBlocked, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException
 	{
 		// va jusqu'au point d'entrée de la version demandée
 		actualState.robot.moveToCircle(entryPosition(versionToExecute), hooksToConsider, actualState.table);
@@ -68,6 +69,7 @@ public abstract class AbstractScript implements Service
 		// exécute la version demandée
 		actualState.robot.sleep(1000);
 		execute(versionToExecute, actualState, hooksToConsider, shouldRetryIfBlocked);
+		finalise(actualState);
 	}
 	   
 	/**

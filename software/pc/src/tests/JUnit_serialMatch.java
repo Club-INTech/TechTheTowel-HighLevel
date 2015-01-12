@@ -18,6 +18,7 @@ import enums.ServiceNames;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
+import exceptions.serial.SerialFinallyException;
 import robot.Robot;
 import robot.cardsWrappers.SensorsCardWrapper;
 
@@ -45,8 +46,18 @@ public class JUnit_serialMatch extends JUnit_Test
 		mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
 		emptyHook = new ArrayList<Hook> ();
 		
-		real_state.robot.setPosition(new Vec2 (1381,1000));
-		real_state.robot.setOrientation(Math.PI);
+		if (config.getProperty("couleur").equals("jaune"))
+		{
+			real_state.robot.setPosition(new Vec2 (-1381,1000));
+			real_state.robot.setOrientation(0); 
+			//si on est jaune on est en 0 
+		}
+		else
+		{
+			real_state.robot.setPosition(new Vec2 (1381,1000));
+			real_state.robot.setOrientation(Math.PI);
+			//sinon on est vert donc on est en PI
+		}
 		real_state.robot.updateConfig();
 	}
 	
@@ -56,12 +67,14 @@ public class JUnit_serialMatch extends JUnit_Test
 		System.out.println("Robot pret pour le match, attente du retrait du jumper");
 		
 		// attends que le jumper soit retiré du robot
+		
 		boolean jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
-		while(!jumperWasAbsent || mSensorsCardWrapper.isJumperAbsent())
+		while(jumperWasAbsent || !mSensorsCardWrapper.isJumperAbsent())
 		{
 			jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
 			 Sleep.sleep(100);
 		}
+
 		
 		// maintenant que le jumper est retiré, le match a commencé
 		//ThreadTimer.matchStarted = true;
@@ -70,7 +83,6 @@ public class JUnit_serialMatch extends JUnit_Test
 	@Test
 	public void test()
 	{
-		
 				container.startAllThreads();
 				waitMatchBegin();
 				//premiere action du match
@@ -115,6 +127,11 @@ public class JUnit_serialMatch extends JUnit_Test
 				{
 					//TODO: le pathfinding ne trouve pas de chemin
 					e.printStackTrace();
+				} 
+				catch (SerialFinallyException e) 
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 				
 				//second script
@@ -135,6 +152,11 @@ public class JUnit_serialMatch extends JUnit_Test
 				{
 					//TODO: le pathfinding ne trouve pas de chemin
 					
+				} 
+				catch (SerialFinallyException e) 
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 				System.out.println("match fini !");
 

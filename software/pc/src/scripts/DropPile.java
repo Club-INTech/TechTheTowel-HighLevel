@@ -50,7 +50,7 @@ public class DropPile extends AbstractScript
 			stateToConsider.robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, false);
 			stateToConsider.robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, true);		
 			stateToConsider.robot.moveLengthwise(-20, hooksToConsider, false);
-			stateToConsider.robot.setStoredPlotCount(0);
+			stateToConsider.robot.storedPlotCount = 0;
 			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, false);
 			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);	
 			stateToConsider.robot.moveLengthwise(-80, hooksToConsider, false);
@@ -87,7 +87,7 @@ public class DropPile extends AbstractScript
 	@Override
 	public int remainingScoreOfVersion(int version, GameState<?> stateToConsider)
 	{
-		return 5*(8 -stateToConsider.robot.getStoredPlotCount());
+		return 5*(8 -stateToConsider.robot.storedPlotCount);
 	}
 
 	@Override
