@@ -76,7 +76,7 @@ public class PathDingDing
 		path.addAll(dodgeStatic(DoubleStart, DoubleEnd, table));
 		path.add(DoubleEnd);
 		simplify(path, table);
-		dodgeDynamic(path, table);
+		//dodgeDynamic(path, table);
 		return path.toVec2Array();
 	}
 	
@@ -141,6 +141,7 @@ public class PathDingDing
 		return path;
 	}
 	
+
 	/**
 	 * 
 	 * @param path
@@ -171,6 +172,9 @@ public class PathDingDing
 				//si un segment du chemin coupe le robot ennemi
 				if(intersects(new Segment(path.get(pathCount), path.get(pathCount + 1)), ennemy.get(robotsCount)))
 				{
+					//path.insert(pathCount + 1, dodgeCircle(path.get(pathCount), path.get(pathCount + 1), new Circle(ennemy.get(robotsCount).getPosition(), ennemy.get(robotsCount).getRadius()), true, 0));
+					/*
+					//TODO : factoriser le code suivant
 					//si le chemin le plus court semble etre dans le sens direct
 					if(Geometry.isCCWOriented(path.get(pathCount), path.get(pathCount + 1), ennemy.get(robotsCount).getPosition().toPoint()))
 					{
@@ -218,12 +222,14 @@ public class PathDingDing
 								path.insert(pathCount + 1, dodgeCircle);
 						}
 					}
-					pathCount++;
+					*/
+					pathCount+=2;
 				}
 			}
 		}
 	}
 	
+	/*
 	public static Path dodgeCircle(Point a, Point b, Circle circle, boolean CCW, int precision)
 	{
 		Path path = new Path();
@@ -246,15 +252,28 @@ public class PathDingDing
 		
 		return path;
 	}
+	*/
+	
+	/*
+	public static Path dodgeCircle(Point a, Point b, Circle circle, boolean CCW, int precision)
+	{
+		Path path = new Path();
+		List<Point> intersectionPoints = intersection(new Segment(a, b), new ObstacleCircular(circle.center, (int)circle.radius));
+		path.add(intersectionPoints.get(0));
+		path.add(intersectionPoints.get(1));
+		return path;
+	}
+	*/
+	
 	
 	public static List<Point> tangentPoints(Point point, Circle circle)
 	{
 		double x1, x2, y1, y2;
 		double a  = point.x - circle.center.x;
 		double b = point.y - circle.center.y;
-		double R2 = a*a + b*b - circle.ray*circle.ray;
-		double r2 = circle.ray*circle.ray;
-		double c = a*a + b*b - R2 + circle.ray*circle.ray;
+		double R2 = a*a + b*b - circle.radius*circle.radius;
+		double r2 = circle.radius*circle.radius;
+		double c = a*a + b*b - R2 + circle.radius*circle.radius;
 		a *= 2;
 		b *= 2;
 		double sqrtDelta = Math.sqrt(4*a*a*c*c - 4*(a*a+b*b)*(c*c-b*b*r2));
@@ -278,11 +297,27 @@ public class PathDingDing
 	
 	public static boolean intersects(Segment line, ObstacleCircular circle)
 	{
+		//TODO : commenter + nommer les variables ;)
+		double radius = circle.getRadius() * 0.99;
 		double aire = (circle.getPosition().x - line.getA().x)*(line.getB().y - line.getA().y) - (circle.getPosition().y - line.getA().y)*(line.getB().x - line.getA().x);
-		return aire * aire / ((line.getB().x - line.getA().x)*(line.getB().x - line.getA().x)+(line.getB().y - line.getA().y)*(line.getB().y - line.getA().y)) <= circle.getRadius() * circle.getRadius()
+		return aire * aire / ((line.getB().x - line.getA().x)*(line.getB().x - line.getA().x)+(line.getB().y - line.getA().y)*(line.getB().y - line.getA().y)) <= radius * radius
 			&& (line.getB().x - line.getA().x)*(circle.getPosition().x - line.getA().x) + (line.getB().y - line.getA().y)*(circle.getPosition().y - line.getA().y) >= 0
 			&& (line.getA().x - line.getB().x)*(circle.getPosition().x - line.getB().x) + (line.getA().y - line.getB().y)*(circle.getPosition().y - line.getB().y) >= 0 ;
 	}
+	
+	/*
+	public static List<Point> intersection(Segment line, ObstacleCircular circle)
+	{
+		double x1 = line.getA().x - circle.getPosition().x, y1 = line.getA().y - circle.getPosition().y, x2 = line.getB().x - line.getA().x, y2 = line.getB().y - line.getA().y;
+		double a = (line.getB().x - line.getA().x)*(line.getB().x - line.getA().x)+(line.getB().y - line.getA().y)*(line.getB().y - line.getA().y), b = 2*((line.getB().x - line.getA().x)+), c = x1*x1+y1*y1-circle.getRadius()*circle.getRadius();
+		double delta = b*b - 4*a*c;
+		double k1 = (-b-Math.sqrt(delta))/(2*a);
+		double k2 = (-b+Math.sqrt(delta))/(2*a);
+		return Arrays.asList(new Point(line.getA().x+k1*x2, line.getA().y+k1*y2), new Point(line.getA().x+k2*x2, line.getA().y+k2*y2));
+	}
+	*/
+	
+	
 	
 	/**
 	 * 

@@ -8,7 +8,7 @@ package smartMath;
 public class Circle {
 
 	public Vec2 center;
-	public double ray;
+	public double radius;
 	
 	/**
 	 * construit un cercle
@@ -18,7 +18,7 @@ public class Circle {
 	public Circle(Vec2 center, double ray) 
 	{
 		this.center=center;
-		this.ray=ray;
+		this.radius=ray;
 	}
 
 	/**
@@ -30,7 +30,7 @@ public class Circle {
 	public Circle(Vec2 center)
 	{
 		this.center=center;
-		this.ray=0;
+		this.radius=0;
 	}
 	/**
 	 * construit un cercle de rayon nul
@@ -40,7 +40,7 @@ public class Circle {
 	public Circle (int centerX, int centerY)
 	{
 		this.center=new Vec2(centerX,centerY);
-		this.ray=0;
+		this.radius=0;
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class Circle {
 	 */
 	public boolean containDisk(Vec2 point)
 	{
-		return (point.distance(this.center)<=this.ray);
+		return (point.distance(this.center)<=this.radius);
 	}
 	
 	/**
@@ -71,7 +71,7 @@ public class Circle {
 	{
 		double dx=point.x-this.center.x;
 		double dy=point.y-this.center.y;
-		return (dx*dx+dy*dy)==(ray*ray);
+		return (dx*dx+dy*dy)==(radius*radius);
 	}
 	
 	/**
@@ -83,6 +83,6 @@ public class Circle {
 	{
 		double dx=point.x-this.center.x;
 		double dy=point.y-this.center.y;
-		return (dx*dx+dy*dy)==(ray*ray);
+		return (dx*dx+dy*dy)==(radius*radius);
 	}
 }

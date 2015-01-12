@@ -78,6 +78,12 @@ public class Panel extends JPanel
 	    	g.drawLine((mPath.get(i).x + 1500) * this.getWidth() / 3000, -mPath.get(i).y * this.getHeight() / 2000 + this.getHeight(), (mPath.get(i+1).x + 1500) * this.getWidth() / 3000, -mPath.get(i+1).y * this.getHeight() / 2000 + this.getHeight());
 	    }
 	    
+	    g.setColor(Color.cyan);
+	    for(int i = 0; i < mPath.size(); i++)
+	    {
+	    	g.fillOval((mPath.get(i).x + 1500) * this.getWidth() / 3000 - 3, -mPath.get(i).y * this.getHeight() / 2000 + this.getHeight() - 3, 6, 6);
+	    }
+	    
 	    g.setColor(Color.magenta);
 	    for(int i = 0; i < mPath.size(); i++)
 	    {

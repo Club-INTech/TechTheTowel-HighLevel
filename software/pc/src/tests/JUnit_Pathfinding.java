@@ -28,7 +28,7 @@ public class JUnit_Pathfinding extends JUnit_Test
         win = new Window(table);
     }
     
-    @Test
+    //@Test
     public void testRandPF1() throws Exception
     {
     	int compt = 0;
@@ -55,7 +55,7 @@ public class JUnit_Pathfinding extends JUnit_Test
     	System.out.println("nombre de calculs : " + compt);
     }
     
-    //@Test
+    @Test
     public void testClickedPF() throws Exception
     {
     	while(true)

@@ -303,17 +303,17 @@ public abstract class Robot implements Service
     	
     	//TODO: formules a verifier
     	if (0<=angle && angle<=Math.PI*0.5)
-    		path.add(new Vec2((int)(aim.ray*-Math.sin(angle)+aim.center.x),(int)(aim.ray*-Math.cos(angle)+aim.center.y)));
+    		path.add(new Vec2((int)(aim.radius*-Math.sin(angle)+aim.center.x),(int)(aim.radius*-Math.cos(angle)+aim.center.y)));
     		//ne fonctionne que si 0<angle<PI/2 
     	else if (Math.PI*0.5<angle && angle<=Math.PI)
-    		path.add(new Vec2((int)(aim.ray*Math.sin(angle)+aim.center.x),(int)(aim.ray*-Math.cos(angle)+aim.center.y)));
+    		path.add(new Vec2((int)(aim.radius*Math.sin(angle)+aim.center.x),(int)(aim.radius*-Math.cos(angle)+aim.center.y)));
     		//ne fonctionne que si Pi/2<angle<PI
     	else if (-0.5*Math.PI<=angle && angle<0)
-    		path.add(new Vec2((int)(aim.ray*-Math.sin(angle)+aim.center.x),(int)(aim.ray*Math.cos(angle)+aim.center.y)));
+    		path.add(new Vec2((int)(aim.radius*-Math.sin(angle)+aim.center.x),(int)(aim.radius*Math.cos(angle)+aim.center.y)));
     		//ne fonctionne que si -PI/2<angle<0
     	else
     		//angle entre -PI et -PI/2
-    		path.add(new Vec2((int)(aim.ray*Math.sin(angle)+aim.center.x),(int)(aim.ray*Math.cos(angle)+aim.center.y)));
+    		path.add(new Vec2((int)(aim.radius*Math.sin(angle)+aim.center.x),(int)(aim.radius*Math.cos(angle)+aim.center.y)));
     	
     	
     	followPath(path , hooksToConsider);
