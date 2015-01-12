@@ -302,6 +302,8 @@ public class CloseClap extends AbstractScript
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
 		}		stateToConsider.robot.moveLengthwise(200, hooksToConsider, false);
 		stateToConsider.table.setIsClap3Closed(true);
+		//on se recule legerement pour ne pas fermer le clap ennemi
+		stateToConsider.robot.moveLengthwise(-50);
 		
 		stateToConsider.robot.turn(Math.PI/2, hooksToConsider, false);
 		stateToConsider.robot.moveLengthwise(50, hooksToConsider, false);

@@ -192,17 +192,17 @@ public class GetPlot extends AbstractScript
 	public Circle entryPosition(int id)
 	{
 		if (id==0)
-			return new Circle (200,600,10);
+			return new Circle (200,600,200);
 		else if (id==1)
-			return new Circle (400,250,10);
+			return new Circle (400,250,200);
 		else if (id==2)
-			return new Circle (630,645,10);
+			return new Circle (630,645,200);
 		else if (id==34)
 			return new Circle (410,550,0);
 		else if (id==56)
 			return new Circle (650,1700,0);
 		else if (id==7)
-			return new Circle (1410,1800,10);
+			return new Circle (1410,1800,200);
 		else 
 			log.debug("out of bound : mauvais numero de script", this);
 			return new Circle (0,0);
