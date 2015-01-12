@@ -3,6 +3,7 @@ package scripts;
 import java.util.ArrayList;
 
 import enums.ActuatorOrder;
+import exceptions.UnableToEatPlot;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import hook.Hook;
@@ -47,27 +48,118 @@ public class GetPlot extends AbstractScript
 	@Override
 	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
 	{
-		//TODO le script en lui meme
 		
-		//version au centre de la table (version circulaire)
-		//monter le plot en cours (sauf si pas de plot stocke)
-		//choisir le bras le plus adapte (assez dificile)
-		//se placer en face
-		//manger le plot
-		//si on a ramasse qqc on incrément le nb de plots
+		//version circulaire
+		if (versionToExecute == 0 || versionToExecute == 1 || versionToExecute == 2 || versionToExecute == 7)
+		{
+			//si on a plus de place dans la pile on termine
+			if (stateToConsider.robot.storedPlotCount == 4)
+			{
+				return;
+			}
+			
+			//TODO: trouver le bon bras pour manger
+			//on choisi le bras le plus adapte (assez dificile)
+			boolean isChoosenArmLeft = true;
+			
+			//on se place en face
+			stateToConsider.robot.turn(Math.atan2(entryPosition(versionToExecute).center.y-stateToConsider.robot.getPosition().y/*position voulue - position actuelle*/
+					, entryPosition(versionToExecute).center.x-stateToConsider.robot.getPosition().x/*de meme*/));
+			
+			//on mange le plot
+			try 
+			{
+				eatPlot(false, isChoosenArmLeft, stateToConsider);
+			} 
+			catch (UnableToEatPlot e) 
+			{
+				//on a pas reussi a manger, on le dit et on termine le script
+				log.debug("impossible de manger le plot n°"+versionToExecute+" mangeage echoue", this);
+				finalise(stateToConsider);
+				return;
+			}
+			
+			//si on a ramasse qqc on incrément le nb de plots
+			stateToConsider.robot.storedPlotCount++;
+			stateToConsider.table.eatPlotX(versionToExecute);
+		}
+		//TODO les versions maquantes du script en lui meme
+		else if (versionToExecute == 34)
+		{
+			//si on a plus de place dans la pile on termine
+			if (stateToConsider.robot.storedPlotCount == 4)
+			{
+				return;
+			}
+			stateToConsider.robot.turn(Math.PI*0.5);
+			
+			//si le plot 3 a deja ete mangé
+			if (stateToConsider.table.isPlotXEaten(3))
+			{
+				//si les plots 3 et 4 ont deja ete manges alors on a fini
+				if (stateToConsider.table.isPlotXEaten(4))
+				{
+					return;
+				}
+				
+				//on mange le plot 4 avec le bras droit (si on est vert)
+				stateToConsider.robot.moveLengthwise(distanceEntrePlots, hooksToConsider);
+				try 
+				{
+					//on ne veut pas reessayer
+					eatPlot(true, false, stateToConsider);
+				} 
+				catch (UnableToEatPlot e) 
+				{
+					//on a pas reussi a manger, on le dit et on termine le script
+					log.debug("impossible de manger le plot n°4 mangeage echoue", this);
+					finalise(stateToConsider);
+					return;
+				}
+			}
+			//si le plot 3 n'a pas ete mange
+			else
+			{
+				//si on a plus qu'un seule place dans la pile
+				if (stateToConsider.robot.storedPlotCount == 3)
+				{
+					//on mange le plot 3 uniquement
+				}
+				else
+				{
+					//sinon on mange les deux
+				}
+			}
+		}
+		else if (versionToExecute == 56)
+		{
+			stateToConsider.robot.turn(Math.PI*-0.5);
+			
+			//si le plot 3 a deja ete mangé
+			if (stateToConsider.table.isPlotXEaten(5))
+			{
+				
+			}
+			else
+			{
+				
+			}
+		}
+		else
+		
 		
 		try 
 		{
 			//TODO si on en a 3 au depart il ne faut pas ramasser le deuxieme plot mais il faut pouvoir recommencer le script a partir du deuxieme (point de depart different)
-			//version proche des escaliers
+			//version double
+			//on fait monter le potenetiel plot en cours
 			stateToConsider.robot.turn(Math.PI*0.5, hooksToConsider, false);
 			eatPlot(true, false, stateToConsider);
 			//si on a ramasse qqc on incrément le nb de plots
-			//si compteur < 4 on fait monter ?
+			//on fait monter
 			stateToConsider.robot.moveLengthwise(distanceEntrePlots, hooksToConsider, false);
 			eatPlot(true, false, stateToConsider);
 			//si on a ramasse qqc on incrément le nb de plots
-			//si compteur < 4 on fait monter ?
 		} 
 		catch (UnableToMoveException e) 
 		{
@@ -78,9 +170,10 @@ public class GetPlot extends AbstractScript
 		{
 			log.debug("mauvaise entree serie", this);
 			e.printStackTrace(); // TODO: remonter cette exception
+		} catch (UnableToEatPlot e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		
-		//TODO la version du tout seul et pas en cercle
 		
 		//TODO si on en a 3 au depart il ne faut pas ramasser le deuxieme plot mais il faut pouvoir recommencer le script a partir du deuxieme (point de depart different)
 		//version proche de la zone de depart TODO ne pas oublier le goblet
@@ -98,9 +191,21 @@ public class GetPlot extends AbstractScript
 	@Override
 	public Circle entryPosition(int id)
 	{
-		//le cercle autour des plots
-		//calcul des poins d'entree sur les deux versions non-circulaires
-		return null;
+		if (id==0)
+			return new Circle (200,600,10);
+		else if (id==1)
+			return new Circle (400,250,10);
+		else if (id==2)
+			return new Circle (630,645,10);
+		else if (id==34)
+			return new Circle (410,550,0);
+		else if (id==56)
+			return new Circle (650,1700,0);
+		else if (id==7)
+			return new Circle (1410,1800,10);
+		else 
+			log.debug("out of bound : mauvais numero de script", this);
+			return new Circle (0,0);
 	}
 
 	@Override
@@ -170,15 +275,22 @@ public class GetPlot extends AbstractScript
 	
 	/**
 	 * mangeage de plots, essaie a nouveau si il est impossible de manger 
-	 * ne se deplace pas
+	 * ne se deplace pas, bloquante
+	 * eleve le plot precedemment dans les machoires (si il existe)
 	 * 
 	 * @param isSecondTry vrai si l'essai de mangeage de plot est le deuxieme ou si on ne veux pas reessayer
-	 * @param isArmChosenLeft vrai si on mange avec le bras droit
+	 * @param isArmChosenLeft vrai si on mange avec le bras gauche
+	 * @throws UnableToEatPlot si le mangeage echoue
 	 * 
 	 * @throws SerialException
 	 */
-	private void eatPlot (boolean isSecondTry, boolean isArmChosenLeft, GameState<Robot> stateToConsider) throws SerialConnexionException
+	private void eatPlot (boolean isSecondTry, boolean isArmChosenLeft, GameState<Robot> stateToConsider) throws SerialConnexionException, UnableToEatPlot
 	{
+		
+		if (stateToConsider.robot.storedPlotCount!=0)
+		{
+			elevatePlot(stateToConsider);
+		}
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
 		if (isArmChosenLeft) 
 		{
@@ -201,7 +313,7 @@ public class GetPlot extends AbstractScript
 			if (isSecondTry)
 			{
 				log.debug("impossible d'attraper le plot", this);	
-				//TODO jetter une exeption 
+				throw new UnableToEatPlot();
 			}
 			else
 			{
@@ -210,4 +322,14 @@ public class GetPlot extends AbstractScript
 		//sinon on a attrape qqc, mettre a jour la table
 	}
 
+	/**
+	 * eleve un plot, bloquante
+	 * @param stateToConsider l'etat de la table a considerer
+	 * @throws SerialConnexionException si la connexion serie fonctionne mal
+	 */
+	private void elevatePlot (GameState<Robot> stateToConsider) throws SerialConnexionException
+	{
+		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_HIGH, true);
+		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+	}
 }
