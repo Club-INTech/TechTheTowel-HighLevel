@@ -18,6 +18,7 @@ import enums.ServiceNames;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
+import exceptions.serial.SerialFinallyException;
 import robot.Robot;
 import robot.cardsWrappers.SensorsCardWrapper;
 
@@ -126,6 +127,11 @@ public class JUnit_serialMatch extends JUnit_Test
 				{
 					//TODO: le pathfinding ne trouve pas de chemin
 					e.printStackTrace();
+				} 
+				catch (SerialFinallyException e) 
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 				
 				//second script
@@ -146,6 +152,11 @@ public class JUnit_serialMatch extends JUnit_Test
 				{
 					//TODO: le pathfinding ne trouve pas de chemin
 					
+				} 
+				catch (SerialFinallyException e) 
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 				System.out.println("match fini !");
 

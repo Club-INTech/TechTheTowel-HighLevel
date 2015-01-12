@@ -39,7 +39,11 @@ public abstract class Robot implements Service
 	/**  vitesse du robot sur la table. */
 	protected Speed speed;
 
-	private int storedPlotCount;
+	/** nombre de plots stockes dans le robot (mis a jour et utlisé par les scripts) */
+	public int storedPlotCount;
+	
+	/** si le robot stocke une balle de tennis (mis a jour et utilise par les scripts) */
+	public boolean asBallStored;
 	
 	/**
 	 * Instancie le robot.
@@ -332,23 +336,6 @@ public abstract class Robot implements Service
 	 */
     public abstract void disableTranslationnalFeedbackLoop();
 
-    /**
-     * renvois le nombre de plot socké dans le robot
-     * @return le nombre de plot socké dans le robot
-     */
-	public int getStoredPlotCount()
-	{
-		return storedPlotCount;
-	}
-
-	/**
-	 * change le nombre de plot socké dans le robot
-	 * @param storedPlotCount 
-	 */
-	public void setStoredPlotCount(int storedPlotCount)
-	{
-		this.storedPlotCount = storedPlotCount;
-	}
 	
 	public boolean getSymmetry()
 	{

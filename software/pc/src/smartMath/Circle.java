@@ -44,6 +44,18 @@ public class Circle {
 	}
 
 	/**
+	 * cree un nouveau cerlce
+	 * @param centerX la position en abscisse du centre
+	 * @param centerY la position en ordonnee du centre
+	 * @param ray le rayon
+	 */
+	public Circle(int centerX, int centerY, int ray) 
+	{
+		this.center=new Vec2(centerX,centerY);
+		this.ray=ray;
+	}
+
+	/**
 	 * 
 	 * @return le centre du cercle (position en mm)
 	 */
