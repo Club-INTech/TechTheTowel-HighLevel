@@ -13,8 +13,8 @@
 #define bdFerme 203
 #define mgOuvert 240
 #define mgFerme 65
-#define mdOuvert 0 //a mettre à jour
-#define mdFerme 145
+#define mdOuvert 80
+#define mdFerme 230
 #define tdPose 211
 #define tdRange 150
 #define tgPose 160
@@ -99,7 +99,7 @@ public :											//constructeur
  			serial_pc::printfln("angle ?");
  			serial_pc::read(angle);
  			if(angle >= 0 && angle <= 300)
- 				brasGauche.goTo(angle);
+ 				machoireDroite.goTo(angle);
  		}
 
 		else if (strcmp (ordre , "obd") == 0)			// ouvrir le bras droit
