@@ -153,12 +153,13 @@ public class Container
 																	(Log)getService(ServiceNames.LOG),
 																	(GameState<RobotReal>)getService(ServiceNames.GAME_STATE)
 																);
+		//FIXME: robo real modifie je suis pas sur de moi
 		else if(serviceRequested == ServiceNames.ROBOT_REAL)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new RobotReal(
 																	(Locomotion)getService(ServiceNames.LOCOMOTION),
 																	(ActuatorCardWrapper)getService(ServiceNames.ACTUATOR_CARD_WRAPPER),
 																	(Config)getService(ServiceNames.CONFIG),
-																	(Log)getService(ServiceNames.LOG)
+																	(Log)getService(ServiceNames.LOG), (SensorsCardWrapper)getService(ServiceNames.SENSORS_CARD_WRAPPER)
 																);		
         else if(serviceRequested == ServiceNames.LOCOMOTION)
             instanciedServices[serviceRequested.ordinal()] = 	(Service)new Locomotion(

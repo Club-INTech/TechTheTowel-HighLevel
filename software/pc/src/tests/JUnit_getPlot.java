@@ -86,8 +86,8 @@ public class JUnit_getPlot extends JUnit_Test
 	{
 		// on remplis la liste des plots a attraper (dans l'ordre)
 			listToGrab.add(2);
-			listToGrab.add(1);
-			listToGrab.add(0);
+			//listToGrab.add(1);
+			//listToGrab.add(0);
 		
 		container.startAllThreads();
 		waitMatchBegin();

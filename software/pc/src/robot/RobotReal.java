@@ -1,6 +1,7 @@
 package robot;
 
 import robot.cardsWrappers.ActuatorCardWrapper;
+import robot.cardsWrappers.SensorsCardWrapper;
 import smartMath.Vec2;
 import utils.Log;
 import utils.Config;
@@ -10,6 +11,7 @@ import hook.Hook;
 import java.util.ArrayList;
 
 import enums.ActuatorOrder;
+import enums.SensorNames;
 import enums.Speed;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
@@ -22,14 +24,16 @@ import exceptions.serial.SerialConnexionException;
 public class RobotReal extends Robot
 {
 	private ActuatorCardWrapper mActuatorCardWrapper;
+	private SensorsCardWrapper mSensorsCardWrapper;
 	
 	/** Système de locomotion a utiliser pour déplacer le robot */
 	private Locomotion mLocomotion;
 
 	// Constructeur
-	public RobotReal( Locomotion deplacements, ActuatorCardWrapper mActuatorCardWrapper, Config config, Log log)
+	public RobotReal( Locomotion deplacements, ActuatorCardWrapper mActuatorCardWrapper, Config config, Log log, SensorsCardWrapper mSensorsCardWrapper)
  	{
 		super(config, log);
+		this.mSensorsCardWrapper = mSensorsCardWrapper;
 		this.mActuatorCardWrapper = mActuatorCardWrapper;
 		this.mLocomotion = deplacements;
 		updateConfig();
@@ -51,6 +55,12 @@ public class RobotReal extends Robot
 		
 		if(waitForCompletion)
 			Sleep.sleep(order.getDuration());
+	}
+	
+	@Override
+	public Object getCaptor (SensorNames captor) throws SerialConnexionException
+	{
+		return mSensorsCardWrapper.getSensor(captor);
 	}
 
 	
@@ -173,4 +183,6 @@ public class RobotReal extends Robot
         mLocomotion.setTranslationnalSpeed(vitesse.PWMTranslation);
         mLocomotion.setRotationnalSpeed(vitesse.PWMRotation);
 	}
+
+	
 }

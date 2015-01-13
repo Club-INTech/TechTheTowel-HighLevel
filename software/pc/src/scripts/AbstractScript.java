@@ -74,7 +74,6 @@ public abstract class AbstractScript implements Service
 	   
 	/**
 	 * Exécute le script
-	 * TODO: laiser en public ?
 	 * @param versionToExecute la version du
 	 * @param actualState l'état courrant du match.
 	 * @param shouldRetryIfBlocked vrai si le robot doit renter le script s'il bloque mécaniquement

@@ -9,6 +9,7 @@ import smartMath.Vec2;
 import table.Table;
 import container.Service;
 import enums.ActuatorOrder;
+import enums.SensorNames;
 import enums.Speed;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -74,6 +75,7 @@ public abstract class Robot implements Service
 	 * @throws SerialConnexionException  en cas de problème de communication avec la carte actionneurs
 	 */
 	public abstract void useActuator(ActuatorOrder order, boolean waitForCompletion) throws SerialConnexionException;
+	
 	
     /**
      * Fais attendre le robot.
@@ -341,5 +343,13 @@ public abstract class Robot implements Service
 	{
 		return symmetry;
 	}
+
+	/**
+	 * le robot demande l'etat de ses capteurs
+	 * @param captor le nom du capteur dont on veut l'etat
+	 * @return la valeur du capteur
+	 * @throws SerialConnexionException si la connexion avec le capteur est interrompue
+	 */
+	public abstract Object getCaptor(SensorNames captor) throws SerialConnexionException;
 
 }
