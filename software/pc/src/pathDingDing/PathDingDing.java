@@ -76,7 +76,7 @@ public class PathDingDing
 		path.addAll(dodgeStatic(DoubleStart, DoubleEnd, table));
 		path.add(DoubleEnd);
 		simplify(path, table);
-		dodgeDynamic(path, table);
+		//dodgeDynamic(path, table);
 		return path.toVec2Array();
 	}
 	
@@ -148,6 +148,7 @@ public class PathDingDing
 	 * @return
 	 * @throws PathNotFoundException
 	 */
+	/*
 	private static void dodgeDynamic(Path path, Table table) throws PathNotFoundException
 	{
 		ArrayList<ObstacleCircular> ennemy = table.getObstacleManager().getEnnemyRobot();
@@ -283,7 +284,7 @@ public class PathDingDing
 			&& (line.getB().x - line.getA().x)*(circle.getPosition().x - line.getA().x) + (line.getB().y - line.getA().y)*(circle.getPosition().y - line.getA().y) >= 0
 			&& (line.getA().x - line.getB().x)*(circle.getPosition().x - line.getB().x) + (line.getA().y - line.getB().y)*(circle.getPosition().y - line.getB().y) >= 0 ;
 	}
-	
+	*/
 	/**
 	 * 
 	 * @param point

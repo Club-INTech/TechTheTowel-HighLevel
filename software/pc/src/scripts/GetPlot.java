@@ -3,6 +3,7 @@ package scripts;
 import java.util.ArrayList;
 
 import enums.ActuatorOrder;
+import enums.SensorNames;
 import exceptions.UnableToEatPlot;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
@@ -275,51 +276,58 @@ public class GetPlot extends AbstractScript
 	
 	/**
 	 * mangeage de plots, essaie a nouveau si il est impossible de manger 
-	 * ne se deplace pas, bloquante
+	 * ne se deplace pas, bloquante, ne met pas a jour la table
 	 * eleve le plot precedemment dans les machoires (si il existe)
 	 * 
 	 * @param isSecondTry vrai si l'essai de mangeage de plot est le deuxieme ou si on ne veux pas reessayer
 	 * @param isArmChosenLeft vrai si on mange avec le bras gauche
 	 * @throws UnableToEatPlot si le mangeage echoue
+	 * @throws SerialConnexionException si impossible de communiquer avec les cartes
 	 * 
 	 * @throws SerialException
 	 */
-	private void eatPlot (boolean isSecondTry, boolean isArmChosenLeft, GameState<Robot> stateToConsider) throws SerialConnexionException, UnableToEatPlot
+	private void eatPlot (boolean isSecondTry, boolean isArmChosenLeft, GameState<Robot> stateToConsider) throws UnableToEatPlot, SerialConnexionException
 	{
 		
 		if (stateToConsider.robot.storedPlotCount!=0)
 		{
 			elevatePlot(stateToConsider);
 		}
-		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
+		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
 		if (isArmChosenLeft) 
 		{
-			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
 		}
 		else
 		{
-			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN_SLOW, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
 		}
 		//si on a attrape qqc on termine sinon on essaie avec l'autre bras (si isSecondTry == false)
 		//si deuxieme essai ecrire dans le log qu'on a essaye de manger un plot et on jette une exeption impossible de manger
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 		
-		//TODO le capteur de sylvain
-		if (true/*"on a rien attrape"*/)	
-			if (isSecondTry)
+		try 
+		{
+			if (!(boolean) stateToConsider.robot.getSensor(SensorNames.JAW_SENSOR));
+		} 
+		catch (SerialConnexionException e) 
+		{
+			//si impossible de communiquer avec le capteur on suppose qu'on a attrape le plot
+			if((boolean) SensorNames.JAW_SENSOR.getDefaultValue());
+		}
 			{
-				log.debug("impossible d'attraper le plot", this);	
-				throw new UnableToEatPlot();
+				if (isSecondTry)
+				{
+					log.debug("impossible d'attraper le plot", this);	
+					throw new UnableToEatPlot();
+				}
+				else
+				{
+					eatPlot(true,!isArmChosenLeft, stateToConsider);
+				}
 			}
-			else
-			{
-				eatPlot(true,!isArmChosenLeft, stateToConsider);
-			}
-		//sinon on a attrape qqc, mettre a jour la table
 	}
 
 	/**

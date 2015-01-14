@@ -76,7 +76,9 @@ Obtention de l'état des capteurs
 La carte répont via la série, à la requête du haut niveau.
 
 requête	description			réponse
-j		état du jumper		O = jumper en place (robot arrêté, si vous n'êtes pas des singes)
+j		état du jumper		0 = jumper en place (robot arrêté, si vous n'êtes pas des singes)
 							1 = pas de jumper (là il faut que le robot démarre !)
+
+mp		etat de la machoire	0 = machoire vide; 1 = machoire pleine
 
 

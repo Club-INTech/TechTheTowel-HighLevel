@@ -1,14 +1,18 @@
 package tests;
 
+import hook.Hook;
+
 import java.util.ArrayList;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import enums.ServiceNames;
 import robot.*;
 import smartMath.Vec2;
 // TODO: Auto-generated Javadoc
+import table.Table;
 
 /**
  * Tests unitaires pour RobotChrono.
@@ -20,6 +24,9 @@ public class JUnit_RobotChrono extends JUnit_Test {
 	/** The robotchrono. */
 	private RobotChrono robotchrono;
 	
+	/** the table */
+	private Table table;
+	
 	/* (non-Javadoc)
 	 * @see tests.JUnit_Test#setUp()
 	 */
@@ -27,6 +34,7 @@ public class JUnit_RobotChrono extends JUnit_Test {
 	public void setUp() throws Exception {
 		super.setUp();
 		log.debug("JUnit_RobotChronoTest.setUp()", this);
+		table = (Table)container.getService(ServiceNames.TABLE);
 		robotchrono = new RobotChrono(config, log);
 		robotchrono.setPosition(new Vec2(0, 1500));
 		robotchrono.setOrientation(0);
@@ -61,14 +69,14 @@ public class JUnit_RobotChrono extends JUnit_Test {
 		robotchrono = new RobotChrono(config, log);
 		robotchrono.setPosition(new Vec2(0, 1500));
 		robotchrono.setOrientation(0);
-		robotchrono.moveToLocation(new Vec2(10, 1400));
+		robotchrono.moveToLocation(new Vec2(10, 1400), new ArrayList<Hook>(), table);
 		Assert.assertTrue(robotchrono.getPosition().distance(new Vec2(10,1400)) < 2);
 
 		config.set("couleur", "rouge");
 		robotchrono = new RobotChrono(config, log);
 		robotchrono.setPosition(new Vec2(0, 1500));
 		robotchrono.setOrientation(0);
-		robotchrono.moveToLocation(new Vec2(10, 1400));
+		robotchrono.moveToLocation(new Vec2(10, 1400), new ArrayList<Hook>(), table);
 		Assert.assertTrue(robotchrono.getPosition().distance(new Vec2(-10,1400)) < 2);
 	}
 	
@@ -81,7 +89,7 @@ public class JUnit_RobotChrono extends JUnit_Test {
 	public void test_va_au_point() throws Exception
 	{
 		log.debug("JUnit_RobotChronoTest.test_va_au_point()", this);
-		robotchrono.moveToLocation(new Vec2(10, 1400));
+		robotchrono.moveToLocation(new Vec2(10, 1400), new ArrayList<Hook>(), table);
 		Assert.assertTrue(robotchrono.getPosition().distance(new Vec2(10,1400)) < 2);
 	}
 

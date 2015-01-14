@@ -57,7 +57,7 @@ public enum ActuatorOrder
 	ARM_RIGHT_OPEN_SLOW("obdl"),
 	ARM_LEFT_OPEN_SLOW("obgl"),
 	ARM_RIGHT_CLOSE_SLOW("fbdl"),
-	ARM_LEFT_CLOSE_SLOW("fbdl");
+	ARM_LEFT_CLOSE_SLOW("fbgl");
 
 
 	/**

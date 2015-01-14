@@ -4,6 +4,7 @@ import robot.serial.SerialConnexion;
 import utils.Log;
 import utils.Config;
 import container.Service;
+import enums.SensorNames;
 import exceptions.serial.SerialConnexionException;
 
 /**
@@ -95,10 +96,22 @@ public class SensorsCardWrapper implements Service
 		}
 		catch (SerialConnexionException e)
 		{
-			log.critical(" Problème de communication avec la carte capteurs en essayent de patler au jumper.", this);
+			log.critical(" Problème de communication avec la carte capteurs en essayent de parler au jumper.", this);
 			e.printStackTrace();
 			return false;
 		}
+    }
+    
+    /**
+     * 
+     * @param sensor le capteur dont on veut recuperer la valeur
+     * @return la valeur du capteur
+     * @throws SerialConnexionException si erreur de connexion avec le capteur
+     */
+    public Object getSensor (SensorNames sensor) throws SerialConnexionException
+    {
+    	log.debug("demande aux capteurs : \""+sensor.getSerialCommunication()+"\"", this);
+		return sensorsCardSerial.communiquer(sensor.getSerialCommunication(),sensor.getAwnserLineAmount());
     }
      
 }

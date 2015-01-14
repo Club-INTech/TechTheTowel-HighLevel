@@ -20,6 +20,7 @@ import exceptions.ContainerException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
+import exceptions.serial.SerialFinallyException;
 import exceptions.serial.SerialManagerException;
 
 
@@ -168,6 +169,9 @@ public class Main
 				System.out.println("CRITICAL : Le robot ne sait pas rester sur place");
 				System.out.println("verifiez le point d'etree de ExitBeginZone");
 				return;
+			} catch (SerialFinallyException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 		
@@ -192,6 +196,9 @@ public class Main
 		{
 			//TODO: le pathfinding ne trouve pas de chemin
 			e.printStackTrace();
+		} catch (SerialFinallyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		//second script
@@ -212,6 +219,9 @@ public class Main
 		{
 			//TODO: le pathfinding ne trouve pas de chemin
 			
+		} catch (SerialFinallyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		
@@ -233,6 +243,9 @@ public class Main
 		{
 			//TODO: le pathfinding ne trouve pas de chemin
 			
+		} catch (SerialFinallyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		System.out.println("match fini !");
 

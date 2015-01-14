@@ -26,7 +26,7 @@ import robot.cardsWrappers.SensorsCardWrapper;
  * @author paul
  *classe de test pour les plots, attrape les plots dans l'orde donne par l'utilisateur
  */
-public class JUnit_getPlot extends JUnit_Test 
+public class JUnit_GetPlot extends JUnit_Test 
 {
 
 	ArrayList<Hook> emptyHook;
