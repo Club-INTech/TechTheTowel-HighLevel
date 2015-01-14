@@ -310,7 +310,7 @@ public class GetPlot extends AbstractScript
 		
 		try 
 		{
-			if ((boolean) stateToConsider.robot.getCaptor(SensorNames.JAW_SENSOR));
+			if (!(boolean) stateToConsider.robot.getSensor(SensorNames.JAW_SENSOR));
 		} 
 		catch (SerialConnexionException e) 
 		{

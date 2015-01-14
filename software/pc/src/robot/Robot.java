@@ -350,6 +350,6 @@ public abstract class Robot implements Service
 	 * @return la valeur du capteur
 	 * @throws SerialConnexionException si la connexion avec le capteur est interrompue
 	 */
-	public abstract Object getCaptor(SensorNames captor) throws SerialConnexionException;
+	public abstract Object getSensor(SensorNames captor) throws SerialConnexionException;
 
 }

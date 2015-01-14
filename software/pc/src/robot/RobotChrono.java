@@ -255,7 +255,7 @@ public class RobotChrono extends Robot
 	}
 
 	@Override
-	public Object getCaptor(SensorNames sensor) 
+	public Object getSensor(SensorNames sensor) 
 	{
 		this.chrono += approximateSerialLatency;
 		this.chrono += sensor.getAverageDuration();

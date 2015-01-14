@@ -1,7 +1,7 @@
 package enums;
 
 public enum SensorNames {
-	JAW_SENSOR("mp",100,true,1), //TODO: valeurs a modifier
+	JAW_SENSOR("mp",100,true,1), //true on a attrape qqc //TODO: valeurs a modifier
 	LEFT_ZONE_SENSOR("bgp",100,true,1),
 	RIGHT_ZONE_SENSOR("bdp",100,true,1),
 	;

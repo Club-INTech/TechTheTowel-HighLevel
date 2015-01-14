@@ -110,6 +110,7 @@ public class SensorsCardWrapper implements Service
      */
     public Object getSensor (SensorNames sensor) throws SerialConnexionException
     {
+    	log.debug("demande aux capteurs : \""+sensor.getSerialCommunication()+"\"", this);
 		return sensorsCardSerial.communiquer(sensor.getSerialCommunication(),sensor.getAwnserLineAmount());
     }
     

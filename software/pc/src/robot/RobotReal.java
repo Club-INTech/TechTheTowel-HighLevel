@@ -58,7 +58,7 @@ public class RobotReal extends Robot
 	}
 	
 	@Override
-	public Object getCaptor (SensorNames captor) throws SerialConnexionException
+	public Object getSensor (SensorNames captor) throws SerialConnexionException
 	{
 		return mSensorsCardWrapper.getSensor(captor);
 	}
