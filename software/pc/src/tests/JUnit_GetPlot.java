@@ -26,7 +26,7 @@ import robot.cardsWrappers.SensorsCardWrapper;
  * @author paul
  *classe de test pour les plots, attrape les plots dans l'orde donne par l'utilisateur
  */
-public class JUnit_getPlot extends JUnit_Test 
+public class JUnit_GetPlot extends JUnit_Test 
 {
 
 	ArrayList<Hook> emptyHook;
@@ -86,8 +86,8 @@ public class JUnit_getPlot extends JUnit_Test
 	{
 		// on remplis la liste des plots a attraper (dans l'ordre)
 			listToGrab.add(2);
-			//listToGrab.add(1);
-			//listToGrab.add(0);
+			listToGrab.add(1);
+			listToGrab.add(0);
 		
 		container.startAllThreads();
 		waitMatchBegin();

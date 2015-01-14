@@ -301,8 +301,8 @@ public class GetPlot extends AbstractScript
 		}
 		else
 		{
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN_SLOW, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
 		}
 		//si on a attrape qqc on termine sinon on essaie avec l'autre bras (si isSecondTry == false)
 		//si deuxieme essai ecrire dans le log qu'on a essaye de manger un plot et on jette une exeption impossible de manger

@@ -113,29 +113,5 @@ public class SensorsCardWrapper implements Service
     	log.debug("demande aux capteurs : \""+sensor.getSerialCommunication()+"\"", this);
 		return sensorsCardSerial.communiquer(sensor.getSerialCommunication(),sensor.getAwnserLineAmount());
     }
-    
-    /**
-     * demande au bouton de la machoire si un plot est dans la bouche du robot
-     * @return vrai si un plot est detecte, faux sinon
-     */
-    public boolean isPlotEaten()
-    {
-    	try 
-    	{
-			return Integer.parseInt(sensorsCardSerial.communiquer("mp", 1)[0]) != 0;
-		}
-    	catch (NumberFormatException e) 
-    	{
-    		log.critical("réponse corrompue du capteur machoire !", this);
-			e.printStackTrace();
-			return false;
-		} 
-    	catch (SerialConnexionException e) 
-    	{
-    		log.critical(" Problème de communication avec la carte capteurs en essayent de parler au capteur machoire.", this);
-			e.printStackTrace();
-			return false;
-		}
-    }
      
 }
