@@ -12,6 +12,7 @@ import utils.Sleep;
 import org.junit.Before;
 import org.junit.Test;
 
+import enums.ActuatorOrder;
 import enums.ScriptNames;
 import enums.ServiceNames;
 import exceptions.PathNotFoundException;
@@ -84,10 +85,19 @@ public class JUnit_GetPlot extends JUnit_Test
 	@Test
 	public void test()
 	{
+		try 
+		{
+			real_state.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+			real_state.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
+		} 
+		catch (SerialConnexionException e1) 
+		{
+			e1.printStackTrace();
+		}
 		// on remplis la liste des plots a attraper (dans l'ordre)
 			listToGrab.add(2);
+			listToGrab.add(34);
 			listToGrab.add(1);
-			listToGrab.add(0);
 		
 		container.startAllThreads();
 		waitMatchBegin();

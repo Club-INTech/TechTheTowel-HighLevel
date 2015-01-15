@@ -108,10 +108,31 @@ public class SensorsCardWrapper implements Service
      * @return la valeur du capteur
      * @throws SerialConnexionException si erreur de connexion avec le capteur
      */
-    public Object getSensor (SensorNames sensor) throws SerialConnexionException
+    public Object getSensorValue (SensorNames sensor) throws SerialConnexionException
     {
     	log.debug("demande aux capteurs : \""+sensor.getSerialCommunication()+"\"", this);
-		return sensorsCardSerial.communiquer(sensor.getSerialCommunication(),sensor.getAwnserLineAmount());
+		Object sensorAnswer = sensorsCardSerial.communiquer(sensor.getSerialCommunication(),sensor.getAwnserLineAmount());
+		
+		if (sensor.getDefaultValue().getClass() == Boolean.class)
+		{
+			return Boolean.parseBoolean(sensorAnswer.toString());
+		}
+		else if (sensor.getDefaultValue().getClass() == Integer.class)
+		{
+			return Integer.parseInt(sensorAnswer.toString());
+		}
+		else if (sensor.getDefaultValue().getClass() == Float.class)
+		{
+			return Float.parseFloat(sensorAnswer.toString());
+		}
+		else
+		{
+			log.critical("Le type de retour du capteur n'est pas pris en compte : modifiez SensorsCardWrapper.getSensorValue", this);
+			return false;
+		}
+		
+		
+		
     }
      
 }
