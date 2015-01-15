@@ -5,6 +5,7 @@ import hook.types.HookFactory;
 
 import java.util.ArrayList;
 
+import enums.ActuatorOrder;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import robot.Robot;
@@ -40,6 +41,9 @@ public class ExitBeginZone extends AbstractScript
 	{
 		try
 		{
+			//on met l'ascenseur en haut pour ne pas frotter
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+			
 			stateToConsider.robot.moveLengthwise(distanceToExit, hooksToConsider, false);
 		}
 		catch (UnableToMoveException e)
