@@ -23,7 +23,6 @@ import robot.Robot;
 import robot.cardsWrappers.SensorsCardWrapper;
 
 /**
- * 
  * @author theo
  */
 public class JUnit_Verres extends JUnit_Test 
@@ -34,7 +33,6 @@ public class JUnit_Verres extends JUnit_Test
 	ScriptManager scriptmanager;
 	SensorsCardWrapper  mSensorsCardWrapper;
 	ArrayList<Integer> listToGrab = new ArrayList<Integer>();
-
 	
 	@SuppressWarnings("unchecked")
 	@Before
@@ -84,6 +82,7 @@ public class JUnit_Verres extends JUnit_Test
 	{
 		try 
 		{
+			//debut : on met tout en "fermé"
 			real_state.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
 			real_state.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
 		} 
@@ -118,22 +117,25 @@ public class JUnit_Verres extends JUnit_Test
 		
 		//debut du match
 		System.out.println("debut du match");
-		try
+		try 
 		{
-				scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(0, real_state, true, emptyHook );
-				System.out.println("Verre 0 attrapé");
+			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
+			exitScript.execute(0, real_state, emptyHook, true );
+		
+			scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(0, real_state, true, emptyHook );
+			System.out.println("Verre 0 attrapé");
 
-				scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(1, real_state, true, emptyHook );
-				System.out.println("Verre 1 attrapé");
+			scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(1, real_state, true, emptyHook );
+			System.out.println("Verre 1 attrapé");
 
-				scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(2, real_state, true, emptyHook );
-				System.out.println("Verre 2 attrapé");
+			scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(2, real_state, true, emptyHook );
+			System.out.println("Verre 2 attrapé");
 
-				scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(3, real_state, true, emptyHook );
-				System.out.println("Verre 3 attrapé");
+			scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(3, real_state, true, emptyHook );
+			System.out.println("Verre 3 attrapé");
 
-				scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(4, real_state, true, emptyHook );
-				System.out.println("Verre 4 attrapé");
+			scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(4, real_state, true, emptyHook );
+			System.out.println("Verre 4 attrapé");
 
 		}
 		catch (UnableToMoveException | SerialConnexionException e) 
@@ -142,12 +144,11 @@ public class JUnit_Verres extends JUnit_Test
 		} 
 		catch (PathNotFoundException e)
 		{
-			//TODO: le pathfinding ne trouve pas de chemin
+			//TODO: le pathfinding ne trouve pas de chemin ?
 			e.printStackTrace();
 		} 
 		catch (SerialFinallyException e) 
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

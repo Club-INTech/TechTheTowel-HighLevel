@@ -56,7 +56,7 @@ public class CloseClap extends AbstractScript
 	public CloseClap(HookFactory hookFactory, Config config, Log log)
 	{
 		super(hookFactory, config, log);
-		versions = new int[]{1, 2, 3 ,12 ,123 }; //il faut penser a le définir, puis a le garder a jour
+		versions = new int[]{1, 2, 3 ,12 ,123 , -1}; // liste des versions
 	}
 	
 	@Override
@@ -72,6 +72,8 @@ public class CloseClap extends AbstractScript
 			closeThirdClap(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
 		else if (versionToExecute == 12)
 			closeFirstAndSecondClap(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
+		else if (versionToExecute == -1)
+			closeFirstClapBackward(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
 		else
 			log.debug("Souci de version", this);	//TODO: lancer une exception de version inconnue (la créer si besoin)
 	}
@@ -362,12 +364,56 @@ public class CloseClap extends AbstractScript
 	}
 	
 	
+	void closeFirstClapBackward(GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
+	{
+		//pour ne pas frotter l'ascenceur
+		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+
+		//on commence en (1290,231), on se tourne dans le sens inverse au clap
+		stateToConsider.robot.turn(0, hooksToConsider, false);
+				
+		//on recule pour se mettre en (1360,231)
+		stateToConsider.robot.moveLengthwise(120, hooksToConsider, true);//-100
+			
+		//On ouvre le bras puis on recule pour se retrouver en (1010,231)
+		if(!stateToConsider.robot.getSymmetry())
+		{
+			//Coté jaune
+			stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
+		}
+		else //coté vert
+		{
+			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
+		}
+		
+		stateToConsider.robot.moveLengthwise(-250, hooksToConsider, false);
+		stateToConsider.table.setIsClap1Closed(true);
+	
+		if(!stateToConsider.robot.getSymmetry())
+		{
+			//Coté jaune
+			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, true);
+		}
+		else //coté vert
+		{
+			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, true);
+		}	
+		//On s'echape dans le sens normal
+		stateToConsider.robot.turn(Math.PI/2, hooksToConsider, false);
+		
+		//On ferme tout pour finir
+		stateToConsider.robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
+		stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
+	}
+
+
+	
 	@Override
 	public Circle entryPosition(int version)
 	{
 		// FIXME: points exacts à entrer
 		
-		if (version == 1)
+		if (version == 1 || version == -1)
 			return new Circle(1290,231); //point d'entrée : bord de la table, robot devant le clap 1
 		else if(version == 2)
 			return new Circle(700,231); //point d'entrée : devant le clap 2
@@ -391,9 +437,9 @@ public class CloseClap extends AbstractScript
 		int score = 15;
 		if(stateToConsider.table.getIsClap1Closed() || version==2 || version==3)
 			score -= 5;
-		if(stateToConsider.table.getIsClap2Closed() || version == 1 || version == 3)
+		if(stateToConsider.table.getIsClap2Closed() || version == 1 || version == 3 || version == -1 )
 			score -= 5;
-		if(stateToConsider.table.getIsClap3Closed() || version == 1 || version == 2 || version == 12)
+		if(stateToConsider.table.getIsClap3Closed() || version == 1 || version == 2 || version == 12 || version == -1 )
 			score -= 5;
 		return score;
 	}
