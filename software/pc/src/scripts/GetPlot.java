@@ -15,10 +15,14 @@ import strategie.GameState;
 import utils.Config;
 import utils.Log;
 
+/**
+ * script de mangeage de plots. 
+ * plots numerotes de 0 a 7
+ * @author paul
+ *
+ */
 public class GetPlot extends AbstractScript
 {
-	//TODO: doc	
-	private int distanceEntrePlots;
 	
 
 	public GetPlot(HookFactory hookFactory, Config config, Log log) 
@@ -89,6 +93,7 @@ public class GetPlot extends AbstractScript
 		else if (versionToExecute == 34)
 		{
 			//debut du script recuperation du goblet
+			if (stateToConsider.table.isGlassXTaken(0))
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);
 			stateToConsider.robot.moveLengthwise(80, hooksToConsider);
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
@@ -155,33 +160,33 @@ public class GetPlot extends AbstractScript
 		
 		try 
 		{
-			//TODO si on en a 3 au depart il ne faut pas ramasser le deuxieme plot mais il faut pouvoir recommencer le script a partir du deuxieme (point de depart different)
+			//pas d'actualite si on en a 3 au depart il ne faut pas ramasser le deuxieme plot mais il faut pouvoir recommencer le script a partir du deuxieme (point de depart different)
 			//version double
 			//on fait monter le potenetiel plot en cours
 			stateToConsider.robot.turn(Math.PI*0.5, hooksToConsider, false);
 			eatPlot(true, false, stateToConsider);
 			//si on a ramasse qqc on incrément le nb de plots
 			//on fait monter
-			stateToConsider.robot.moveLengthwise(distanceEntrePlots, hooksToConsider, false);
+			stateToConsider.robot.moveLengthwise(1, hooksToConsider, false);
 			eatPlot(true, false, stateToConsider);
 			//si on a ramasse qqc on incrément le nb de plots
 		} 
 		catch (UnableToMoveException e) 
 		{
 			log.debug("bloque", this);
-			e.printStackTrace();	// TODO: remonter cette exception
+			e.printStackTrace();	// remonter cette exception
 		}
 		catch (SerialConnexionException e)
 		{
 			log.debug("mauvaise entree serie", this);
-			e.printStackTrace(); // TODO: remonter cette exception
+			e.printStackTrace(); //  remonter cette exception
 		} catch (UnableToEatPlot e) {
-			// TODO Auto-generated catch block
+			// Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		//TODO si on en a 3 au depart il ne faut pas ramasser le deuxieme plot mais il faut pouvoir recommencer le script a partir du deuxieme (point de depart different)
-		//version proche de la zone de depart TODO ne pas oublier le goblet
+		//si on en a 3 au depart il ne faut pas ramasser le deuxieme plot mais il faut pouvoir recommencer le script a partir du deuxieme (point de depart different)
+		//version proche de la zone de depart ! ne pas oublier le goblet
 		//se placer dans le bon sens
 		//manger premier plot (bras gauche) (on essaiera quand meme avec l'autre bras au cas où ?)
 		//si on a ramasse qqc on incrément le nb de plots
