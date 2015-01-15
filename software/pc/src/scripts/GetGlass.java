@@ -2,6 +2,7 @@ package scripts;
 
 import java.util.ArrayList;
 
+import enums.ActuatorOrder;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import hook.Hook;
@@ -48,29 +49,30 @@ public class GetGlass extends AbstractScript
 		//si on a toujours rien on arrete		
 		//si on a attrape quelque chose on le dit au robot ainsi que sa position (gauche / droite)
 		
+		//gestion des version, si le verre est deja pris on ne le re-prend pas (bawi)
 		if (versionToExecute == 0)
 		{
-			if(stateToConsider.table.isPlotXEaten(0))
+			if(stateToConsider.table.isGlassXTaken(0))
 				takeGlass0(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
 		}
 		else if (versionToExecute == 1)
 		{
-			if(stateToConsider.table.isPlotXEaten(1))
+			if(stateToConsider.table.isGlassXTaken(1))
 				takeGlass1(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
 		}
 		else if (versionToExecute == 2)
 		{
-			if(stateToConsider.table.isPlotXEaten(2))
+			if(stateToConsider.table.isGlassXTaken(2))
 				takeGlass2(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
 		}
 		else if (versionToExecute == 3)
 		{
-			if(stateToConsider.table.isPlotXEaten(3))
+			if(stateToConsider.table.isGlassXTaken(3))
 				takeGlass3(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
 		}
 		else if (versionToExecute == 4)
 		{
-			if(stateToConsider.table.isPlotXEaten(4))
+			if(stateToConsider.table.isGlassXTaken(4))
 				takeGlass4(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
 		}
 		else
@@ -79,27 +81,32 @@ public class GetGlass extends AbstractScript
 	
 	public void takeGlass0 (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
 	{
-		
+		takeGlass(stateToConsider,false,false);
+		stateToConsider.table.glassXTaken(0);
 	}
 	
 	public void takeGlass1 (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
 	{
-		
+		takeGlass(stateToConsider,false,false);
+		stateToConsider.table.glassXTaken(1);
 	}
 	
 	public void takeGlass2 (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
 	{
-		
+		takeGlass(stateToConsider,false,false);
+		stateToConsider.table.glassXTaken(2);
 	}
 	
 	public void takeGlass3 (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
 	{
-		
+		takeGlass(stateToConsider, false,false);
+		stateToConsider.table.glassXTaken(3);
 	}
 	
 	public void takeGlass4 (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
 	{
-		
+		takeGlass(stateToConsider, false,false);
+		stateToConsider.table.glassXTaken(4);
 	}
 
 	@Override
@@ -140,9 +147,17 @@ public class GetGlass extends AbstractScript
 		// TODO fermer (ouvrir ?) le bras gauche et droit 
 	}
 	
-	private void eatGlass (boolean isSecondTry , boolean isArmChosenLeft)
+	//attrape le plot (ouvre / avance / ferme )
+	private void takeGlass (GameState<Robot> stateToConsider, boolean isSecondTry , boolean isArmChosenLeft)
 	{
-		
+		stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
+		stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
+		//On ouvre le bras
+		//On avance vers le plot
+		//10 cm
+		//On prend le verre
+		//on verifie
+		//si non, et si second essai on retente
 	}
 
 }
