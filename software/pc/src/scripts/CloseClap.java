@@ -78,6 +78,9 @@ public class CloseClap extends AbstractScript
 	
 	public void closeFirstClap (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
 	{
+		//pour ne pas frotter l'ascenceur
+		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+
 		//on commence en (1290,231), on se tourne dans le bon sens
 		stateToConsider.robot.turn(Math.PI, hooksToConsider, false);
 				
@@ -116,6 +119,9 @@ public class CloseClap extends AbstractScript
 
 	public void closeSecondClap (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
 	{
+		//pour ne pas frotter l'ascenceur
+		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+				
 		//on commence en (700,231), on se tourne dans le bon sens
 		stateToConsider.robot.turn(Math.PI, hooksToConsider, false);
 		
@@ -152,6 +158,10 @@ public class CloseClap extends AbstractScript
 	
 	public void closeThirdClap (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException  //Ferme le claps de fin
 	{
+		
+		//pour ne pas frotter l'ascenceur
+		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+		
 		//on commence en (-1050,231), on se retourne dans le bon sens
 		stateToConsider.robot.turn(0, hooksToConsider, false);
 		
@@ -187,6 +197,9 @@ public class CloseClap extends AbstractScript
 	
 	public void closeFirstAndSecondClap (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
 	{
+		//pour ne pas frotter l'ascenceur
+		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+		
 		//on commence en (1290,231), on se tourne dans le bon sens
 		stateToConsider.robot.turn(Math.PI, hooksToConsider, false);
 		
@@ -251,6 +264,9 @@ public class CloseClap extends AbstractScript
 	
 	public void closeAllOurClaps(GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException  //Ferme tous les Claps, depuis le  debut
 	{
+		//pour ne pas frotter l'ascenceur
+		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+				
 		//on commence en (1290,231), on se tourne dans le bon sens
 		stateToConsider.robot.turn(Math.PI, hooksToConsider, false);
 		
@@ -328,8 +344,6 @@ public class CloseClap extends AbstractScript
 		}	
 		stateToConsider.robot.moveLengthwise(200, hooksToConsider, false);
 		stateToConsider.table.setIsClap3Closed(true);
-		//on se recule legerement pour ne pas fermer le clap ennemi
-		stateToConsider.robot.moveLengthwise(-50);
 		
 		if(!stateToConsider.robot.getSymmetry())
 		{
