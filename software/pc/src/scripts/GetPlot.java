@@ -35,7 +35,7 @@ public class GetPlot extends AbstractScript
 		//pour le plot 2
 		versionList.add(2); 
 		
-		//pour les plots 3 et 4
+		//pour les plots 3 et 4 et le goblet devant
 		versionList.add(34); 
 		
 		//pour les plots 5 et 6
@@ -64,8 +64,13 @@ public class GetPlot extends AbstractScript
 			boolean isChoosenArmLeft = true;
 			
 			//on se place en face
+			int symetryForEntryPoint = 1;
+			if (stateToConsider.robot.getSymmetry())
+			{
+				symetryForEntryPoint = -1;
+			}
 			stateToConsider.robot.turn(Math.atan2(entryPosition(versionToExecute).center.y-stateToConsider.robot.getPosition().y/*position voulue - position actuelle*/
-					, entryPosition(versionToExecute).center.x-stateToConsider.robot.getPosition().x/*de meme*/));
+					, entryPosition(versionToExecute).center.x*symetryForEntryPoint-stateToConsider.robot.getPosition().x/*de meme*/));
 			
 			//on mange le plot
 			try 
@@ -79,59 +84,58 @@ public class GetPlot extends AbstractScript
 				finalise(stateToConsider);
 				return;
 			}
-			
-			//si on a ramasse qqc on incrément le nb de plots
-			stateToConsider.robot.storedPlotCount++;
 			stateToConsider.table.eatPlotX(versionToExecute);
 		}
-		//TODO les versions maquantes du script en lui meme
 		else if (versionToExecute == 34)
 		{
+			//debut du script recuperation du goblet
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);
+			stateToConsider.robot.moveLengthwise(80, hooksToConsider);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
+			stateToConsider.robot.moveLengthwise(150, hooksToConsider);
+			stateToConsider.robot.isGlassStoredLeft = true;
+			
 			//si on a plus de place dans la pile on termine
 			if (stateToConsider.robot.storedPlotCount == 4)
 			{
 				return;
 			}
-			stateToConsider.robot.turn(Math.PI*0.5);
 			
-			//si le plot 3 a deja ete mangé
-			if (stateToConsider.table.isPlotXEaten(3))
+			stateToConsider.robot.turn(0);
+			
+			//on mange le plot 3
+			try 
 			{
-				//si les plots 3 et 4 ont deja ete manges alors on a fini
-				if (stateToConsider.table.isPlotXEaten(4))
-				{
-					return;
-				}
-				
-				//on mange le plot 4 avec le bras droit (si on est vert)
-				stateToConsider.robot.moveLengthwise(distanceEntrePlots, hooksToConsider);
+				eatPlot(false, false, stateToConsider);
+			}
+			catch (UnableToEatPlot e) 
+			{
+				stateToConsider.robot.moveLengthwise(-150, hooksToConsider);
+				finalise(stateToConsider);
+			}
+			stateToConsider.table.eatPlotX(3);
+			
+			//on mange le plot 4
+			try 
+			{
+				eatPlot(false, false, stateToConsider);
+			}
+			catch (UnableToEatPlot e) 
+			{
 				try 
 				{
-					//on ne veut pas reessayer
-					eatPlot(true, false, stateToConsider);
-				} 
-				catch (UnableToEatPlot e) 
+					eatPlot(false, false, stateToConsider);
+				}
+				catch (UnableToEatPlot e1) 
 				{
-					//on a pas reussi a manger, on le dit et on termine le script
-					log.debug("impossible de manger le plot n°4 mangeage echoue", this);
+					stateToConsider.robot.moveLengthwise(-150, hooksToConsider);
 					finalise(stateToConsider);
-					return;
 				}
 			}
-			//si le plot 3 n'a pas ete mange
-			else
-			{
-				//si on a plus qu'un seule place dans la pile
-				if (stateToConsider.robot.storedPlotCount == 3)
-				{
-					//on mange le plot 3 uniquement
-				}
-				else
-				{
-					//sinon on mange les deux
-				}
-			}
+			stateToConsider.table.eatPlotX(4);
+			
 		}
+		//TODO derniere version a treter
 		else if (versionToExecute == 56)
 		{
 			stateToConsider.robot.turn(Math.PI*-0.5);
@@ -199,62 +203,20 @@ public class GetPlot extends AbstractScript
 		else if (id==2)
 			return new Circle (630,645,200);
 		else if (id==34)
-			return new Circle (410,550,0);
+			return new Circle (930,250,0);
 		else if (id==56)
 			return new Circle (650,1700,0);
 		else if (id==7)
 			return new Circle (1410,1800,200);
 		else 
 			log.debug("out of bound : mauvais numero de script", this);
-			return new Circle (0,0);
+			return new Circle (0,1000);
 	}
 
 	@Override
 	public int remainingScoreOfVersion(int id_version, GameState<?> state) 
 	{
-		//Uniquement pour la version ou on attrape une unique balle
-		if (id_version == 0 || id_version == 1 || id_version == 2 || id_version == 7)
-		{
-			if (state.robot.storedPlotCount<4 && !state.table.isPlotXEaten(id_version))
-			//si la pile est moins de 4 plots et que le plot n'a pas ete mange
-				if (state.robot.asBallStored)
-					return 5;
-				else
-					return 2;
-			else
-				return 0;
-		}
-		//verions ou on attrape deux plots
-		else
-		{
-			int plot1ToEat;
-			int plot2ToEat;
-			if (id_version == 34)
-			{
-				plot1ToEat = 3;
-				plot2ToEat = 4;
-			}
-			else
-			{
-				plot1ToEat = 5;
-				plot2ToEat = 6;
-			}
-				
-			if (state.robot.storedPlotCount<3 && !state.table.isPlotXEaten(plot1ToEat) && !state.table.isPlotXEaten(plot2ToEat))
-				//si la pile est de moins de 3 plots et que le premier et le second plot n'a pas ete mange
-					if (state.robot.asBallStored)
-						return 10;
-					else
-						return 4;
-				else if (state.robot.storedPlotCount<4 && (!state.table.isPlotXEaten(plot1ToEat) || !state.table.isPlotXEaten(plot2ToEat)))
-					//si la pile est de 3 et que le plot 1 ou 2 n'a pas ete mange 
-					if (state.robot.asBallStored)
-						return 5;
-					else
-						return 2;
-				else
-					return 0;
-		}
+		return 0;
 	}
 
 	@Override
@@ -265,7 +227,7 @@ public class GetPlot extends AbstractScript
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, false);
-			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
 		} 
 		catch (SerialConnexionException e) 
 		{
@@ -275,8 +237,8 @@ public class GetPlot extends AbstractScript
 	}
 	
 	/**
-	 * mangeage de plots, essaie a nouveau si il est impossible de manger 
-	 * ne se deplace pas, bloquante, ne met pas a jour la table
+	 * mangeage de plots, essaie a nouveau si il est impossible de manger (et que isSecondTry est = a false)
+	 * ne se deplace pas, bloquante, ne met pas a jour la table mais met a jour le robot
 	 * eleve le plot precedemment dans les machoires (si il existe)
 	 * 
 	 * @param isSecondTry vrai si l'essai de mangeage de plot est le deuxieme ou si on ne veux pas reessayer
@@ -289,10 +251,7 @@ public class GetPlot extends AbstractScript
 	private void eatPlot (boolean isSecondTry, boolean isArmChosenLeft, GameState<Robot> stateToConsider) throws UnableToEatPlot, SerialConnexionException
 	{
 		
-		if (stateToConsider.robot.storedPlotCount!=0)
-		{
-			elevatePlot(stateToConsider);
-		}
+		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
 		if (isArmChosenLeft) 
 		{
@@ -308,15 +267,18 @@ public class GetPlot extends AbstractScript
 		//si deuxieme essai ecrire dans le log qu'on a essaye de manger un plot et on jette une exeption impossible de manger
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 		
+		boolean sensorAnswer;
 		try 
 		{
-			if (!(boolean) stateToConsider.robot.getSensor(SensorNames.JAW_SENSOR));
+			sensorAnswer = ((Boolean) stateToConsider.robot.getSensorValue(SensorNames.JAW_SENSOR));
 		} 
 		catch (SerialConnexionException e) 
 		{
 			//si impossible de communiquer avec le capteur on suppose qu'on a attrape le plot
-			if((boolean) SensorNames.JAW_SENSOR.getDefaultValue());
+			sensorAnswer = ((Boolean) SensorNames.JAW_SENSOR.getDefaultValue());
 		}
+
+		if (sensorAnswer)
 			{
 				if (isSecondTry)
 				{
@@ -328,16 +290,11 @@ public class GetPlot extends AbstractScript
 					eatPlot(true,!isArmChosenLeft, stateToConsider);
 				}
 			}
-	}
-
-	/**
-	 * eleve un plot, bloquante
-	 * @param stateToConsider l'etat de la table a considerer
-	 * @throws SerialConnexionException si la connexion serie fonctionne mal
-	 */
-	private void elevatePlot (GameState<Robot> stateToConsider) throws SerialConnexionException
-	{
-		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_HIGH, true);
-		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+		stateToConsider.robot.storedPlotCount++;
+		
+		//si on a encore de la place dans le guide alors on monte le plot
+		if (stateToConsider.robot.storedPlotCount<4)
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_HIGH, true);
+		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
 	}
 }

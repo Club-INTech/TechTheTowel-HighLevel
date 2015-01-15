@@ -44,7 +44,13 @@ public abstract class Robot implements Service
 	public int storedPlotCount;
 	
 	/** si le robot stocke une balle de tennis (mis a jour et utilise par les scripts) */
-	public boolean asBallStored;
+	public boolean isBallStored;
+
+	/** si le robot a un verre dans la zone gauche (mis a jour et utilise par les scripts) */
+	public boolean isGlassStoredLeft;
+	
+	/** si le robot a un verre dans la zone droit (mis a jour et utilise par les scripts) */
+	public boolean isGlassStoredRight;
 	
 	/**
 	 * Instancie le robot.
@@ -350,6 +356,6 @@ public abstract class Robot implements Service
 	 * @return la valeur du capteur
 	 * @throws SerialConnexionException si la connexion avec le capteur est interrompue
 	 */
-	public abstract Object getSensor(SensorNames captor) throws SerialConnexionException;
+	public abstract Object getSensorValue(SensorNames captor) throws SerialConnexionException;
 
 }
