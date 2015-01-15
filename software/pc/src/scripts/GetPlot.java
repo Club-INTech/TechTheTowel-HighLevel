@@ -99,15 +99,15 @@ public class GetPlot extends AbstractScript
 			if (!stateToConsider.table.isGlassXTaken(0))
 			{
 				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);
-				stateToConsider.robot.moveLengthwise(175, hooksToConsider);
+				stateToConsider.robot.moveLengthwise(160, hooksToConsider);
 				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
-				stateToConsider.robot.moveLengthwise(200, hooksToConsider);
+				stateToConsider.robot.moveLengthwise(180, hooksToConsider);
 				stateToConsider.robot.isGlassStoredLeft = true;
 				stateToConsider.table.takeGlassX(0);
 			}
 			else
 			{
-				stateToConsider.robot.moveLengthwise(375, hooksToConsider);
+				stateToConsider.robot.moveLengthwise(340, hooksToConsider);
 			}
 			
 			//si on a plus de place dans la pile on termine
@@ -133,7 +133,7 @@ public class GetPlot extends AbstractScript
 			//on mange le plot 4
 			try 
 			{
-				eatPlot(false, false, stateToConsider);
+				eatPlot(false, true, stateToConsider);
 			}
 			catch (UnableToEatPlot e) 
 			{
@@ -218,7 +218,7 @@ public class GetPlot extends AbstractScript
 		else if (id==2)
 			return new Circle (630,645,200);
 		else if (id==34)
-			return new Circle (900,250,0);
+			return new Circle (900,220,0);
 		else if (id==56)
 			return new Circle (650,1700,0);
 		else if (id==7)
@@ -271,11 +271,13 @@ public class GetPlot extends AbstractScript
 		if (isArmChosenLeft) 
 		{
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
+			stateToConsider.robot.sleep(500); //TODO modifier le temps d'xecution de ARM_LEFT_OPEN_SLOW a la place
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
 		}
 		else
 		{
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN_SLOW, true);
+			stateToConsider.robot.sleep(500); //TODO modifier le temps d'xecution de ARM_RIGHT_OPEN_SLOW a la place
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
 		}
 		//si on a attrape qqc on termine sinon on essaie avec l'autre bras (si isSecondTry == false)

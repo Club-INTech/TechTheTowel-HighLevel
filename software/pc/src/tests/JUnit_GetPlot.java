@@ -88,7 +88,10 @@ public class JUnit_GetPlot extends JUnit_Test
 		try 
 		{
 			real_state.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+			real_state.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, false);
+			real_state.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, false);			
 			real_state.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
+			
 		} 
 		catch (SerialConnexionException e1) 
 		{
