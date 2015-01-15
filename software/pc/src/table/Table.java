@@ -178,6 +178,22 @@ public class Table implements Service
 			log.debug("Probleme dans isGlassTaken",this);
 			return false;
 	}
+	
+	public void takeGlassX (int x)
+	{
+		if (x==0)
+			isGlass0Taken=true;
+		else if (x==1)
+			isGlass1Taken=true;
+		else if (x==2)
+			isGlass2Taken=true;
+		else if (x==3)
+			isGlass3Taken=true;
+		else if (x==4)
+			isGlass4Taken=true;
+		else
+			log.debug("Probleme dans isGlassTaken",this);
+	}
 
 	/**
 	 * mange le plot x
