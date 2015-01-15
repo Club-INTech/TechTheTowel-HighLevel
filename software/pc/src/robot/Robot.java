@@ -296,10 +296,12 @@ public abstract class Robot implements Service
     }
     
     /**
-     * deplace le robot vers un point quelconque du cercle donne, evite les obstacles. (appel du pathfinding)
+     * deplace le robot vers le point du cercle donnné le plus proche, en evitant les obstacles. (appel du pathfinding)
      * methode bloquante : l'execution ne se termine que lorsque le robot est arrive
      * 
      * @param aim le cercle ou l'on veut se rendre
+	 * @param hooksToConsider the hooks to consider
+     * @param table la table sur laquell on est sensé se déplacer
      * 
      * @throws PathNotFoundException lorsque le pathdingding ne trouve pas de chemin 
      * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
@@ -314,8 +316,12 @@ public abstract class Robot implements Service
     	
     	
     	//retire une distance egale au rayon du cercle au dernier point du chemin (le centre du cercle)
-    	path.remove(path.size()-1);
+    	
+    	
     	//on retire le dernier point (le centre du cercle)
+    	path.remove(path.size()-1);
+
+    	//le point precedent dans le path
     	Vec2 precedentPathPoint = new Vec2();
     	if (path.size()==0)
     	{
@@ -325,12 +331,16 @@ public abstract class Robot implements Service
     	{
     		precedentPathPoint = path.get(path.size()-1);
     	}
-    	//le point precedent dans le path
+
+    	//le dernier vecteur deplacement
     	Vec2 movementVector = aim.center.minusNewVector(precedentPathPoint);
-    	//le dernier vecteur deplacement 
     	
-    	path.add(movementVector.dotFloat((movementVector.length()-aim.ray)/movementVector.length()).plusNewVector(precedentPathPoint));
-    	//on ajoute le point du cercle B'=(B-A)*(L-r)/L+A
+    	
+    	/* on ajoute le point du cercle B'=(B-A)*(L-r)/L+A
+    	 * B le centre du cercle, r le rayon du cercle, A le point precedent dans le path et L la taille du dernier vecteur deplacement
+    	 */
+    	path.add(movementVector.dotFloat( (movementVector.length()-aim.ray)/movementVector.length() ).plusNewVector(precedentPathPoint));
+
     	followPath(path , hooksToConsider);
     }
     

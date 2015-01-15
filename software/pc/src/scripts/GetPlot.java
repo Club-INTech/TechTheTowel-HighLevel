@@ -73,8 +73,9 @@ public class GetPlot extends AbstractScript
 			{
 				symetryForEntryPoint = -1;
 			}
-			stateToConsider.robot.turn(Math.atan2(entryPosition(versionToExecute).center.y-stateToConsider.robot.getPosition().y/*position voulue - position actuelle*/
-					, entryPosition(versionToExecute).center.x*symetryForEntryPoint-stateToConsider.robot.getPosition().x/*de meme*/));
+			stateToConsider.robot.turn(Math.atan2(	entryPosition(versionToExecute).center.y						- stateToConsider.robot.getPosition().y,	// position voulue - position actuelle
+						 							entryPosition(versionToExecute).center.x * symetryForEntryPoint	- stateToConsider.robot.getPosition().x		// de meme
+						 						 ));
 			
 			//on mange le plot
 			try 
@@ -93,12 +94,21 @@ public class GetPlot extends AbstractScript
 		else if (versionToExecute == 34)
 		{
 			//debut du script recuperation du goblet
-			if (stateToConsider.table.isGlassXTaken(0))
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);
-			stateToConsider.robot.moveLengthwise(80, hooksToConsider);
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
-			stateToConsider.robot.moveLengthwise(150, hooksToConsider);
-			stateToConsider.robot.isGlassStoredLeft = true;
+			stateToConsider.robot.turn(0,hooksToConsider, false);
+			
+			if (!stateToConsider.table.isGlassXTaken(0))
+			{
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);
+				stateToConsider.robot.moveLengthwise(175, hooksToConsider);
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
+				stateToConsider.robot.moveLengthwise(200, hooksToConsider);
+				stateToConsider.robot.isGlassStoredLeft = true;
+				stateToConsider.table.takeGlassX(0);
+			}
+			else
+			{
+				stateToConsider.robot.moveLengthwise(375, hooksToConsider);
+			}
 			
 			//si on a plus de place dans la pile on termine
 			if (stateToConsider.robot.storedPlotCount == 4)
@@ -208,7 +218,7 @@ public class GetPlot extends AbstractScript
 		else if (id==2)
 			return new Circle (630,645,200);
 		else if (id==34)
-			return new Circle (930,250,0);
+			return new Circle (900,250,0);
 		else if (id==56)
 			return new Circle (650,1700,0);
 		else if (id==7)
@@ -299,7 +309,10 @@ public class GetPlot extends AbstractScript
 		
 		//si on a encore de la place dans le guide alors on monte le plot
 		if (stateToConsider.robot.storedPlotCount<4)
+		{
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_HIGH, true);
+			stateToConsider.robot.sleep(500);//TODO modifier le temps d'xecution de ELEVATOR_HIGH a la place
+		}
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
 	}
 }
