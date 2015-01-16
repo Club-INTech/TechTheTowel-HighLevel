@@ -6,19 +6,22 @@ import enums.ActuatorOrder;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
+import hook.Hook;
 import hook.types.HookFactory;
 import robot.Robot;
-import smartMath.Vec2;
+import smartMath.Circle;
 import strategie.GameState;
 import utils.Config;
 import utils.Log;
 
 
-//TODO: Doc ( notamment, expliquer ce que sont les différentes versions
 /**
  * 
- * @author ???
+ * @author Paul
  *
+ *Version 1 on pose la pile sur l'estrade (en (0,0))
+ *Version 2 on pose la pile dans notre zone de depart 
+ *attention executer le script 1 avant le 2 sinon impossible de recuperer la balle
  */
 public class DropPile extends AbstractScript
 {
@@ -36,20 +39,21 @@ public class DropPile extends AbstractScript
 	}
 
 	@Override
-	public void execute(int version, GameState<Robot> stateToConsider, boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException
+	public void execute(int version, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider,boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException
+
 	{
 		if (version==1)
 		{
-			stateToConsider.robot.turn(Math.PI/2.0);
-			stateToConsider.robot.moveLengthwise(100);
+			stateToConsider.robot.turn(Math.PI/2.0, hooksToConsider, false);
+			stateToConsider.robot.moveLengthwise(100, hooksToConsider, false);
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
 			stateToConsider.robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, false);
 			stateToConsider.robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, true);		
-			stateToConsider.robot.moveLengthwise(-20);
-			stateToConsider.robot.setStoredPlotCount(0);
+			stateToConsider.robot.moveLengthwise(-20, hooksToConsider, false);
+			stateToConsider.robot.storedPlotCount = 0;
 			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, false);
 			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);	
-			stateToConsider.robot.moveLengthwise(-80);
+			stateToConsider.robot.moveLengthwise(-80, hooksToConsider, false);
 		}
 		else if (version==2)
 		{
@@ -63,27 +67,27 @@ public class DropPile extends AbstractScript
 	
 	
 	@Override
-	public Vec2 entryPosition(int id) 
+	public Circle entryPosition(int id) 
 	{
 		if (id==1)
 		{
-			return new Vec2(1300,1000);
+			return new Circle(1300,1000);
 		}
 		else if (id==2)
 		{
-			return new Vec2(70,40);
+			return new Circle(70,40);
 		}
 		else
 		{
 			log.debug("erreur DropPile script : out of bound id", this);
-			return new Vec2(0,1000);
+			return new Circle(0,1000);
 		}
 	}
 
 	@Override
 	public int remainingScoreOfVersion(int version, GameState<?> stateToConsider)
 	{
-		return 5*(8 -stateToConsider.robot.getStoredPlotCount());
+		return 5*(8 -stateToConsider.robot.storedPlotCount);
 	}
 
 	@Override

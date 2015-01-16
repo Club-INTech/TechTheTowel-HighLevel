@@ -8,6 +8,7 @@ import table.Table;
 import utils.Log;
 import utils.Config;
 import enums.ActuatorOrder;
+import enums.SensorNames;
 import enums.Speed;
 import exceptions.Locomotion.UnableToMoveException;
 
@@ -251,5 +252,13 @@ public class RobotChrono extends Robot
 	public double getOrientationFast()
 	{
         return orientation;
+	}
+
+	@Override
+	public Object getSensorValue(SensorNames sensor) 
+	{
+		this.chrono += approximateSerialLatency;
+		this.chrono += sensor.getAverageDuration();
+		return sensor.getDefaultValue();
 	}
 }

@@ -161,8 +161,11 @@ public class LocomotionCardWrapper implements Service
 		
 		// TODO:VALEURS A REVOIR
 		// Décide si on considère le robot immobile ou non.
+		//FIXME: a quoi sert rotationStopped et translationStopped
 		boolean rotationStopped = Math.abs(rotationnalError) <= 60;
+		rotationStopped = true;
 		boolean translationStopped = Math.abs(translationnalError) <= 60;
+		translationStopped = true;
 		boolean isImmobile = Math.abs(derivedRotationnalError) <= 20 && Math.abs(derivedTranslationnalError) <= 20;
 		
 		
@@ -188,7 +191,10 @@ public class LocomotionCardWrapper implements Service
 	 */
 	public void turn(double angle) throws SerialConnexionException
 	{
-		String chaines[] = {"t", Double.toString(angle)};
+		// tronque l'angle que l'on envoit a la série pour éviter les overflows
+		float anggleTruncated = (float)angle;
+		
+		String chaines[] = {"t", Float.toString(anggleTruncated)};
 		locomotionCardSerial.communiquer(chaines, 0);		
 	}
 	
@@ -454,7 +460,7 @@ public class LocomotionCardWrapper implements Service
 
 	/**
 	 * Demande a la carte d'asservissement la position et l'orientation courrante du robot sur la table.
-	 * Renvoie x, y et orientation du robot
+	 * Renvoie x, y et orientation du robot (x en mm, y en mm, et orientation en miliradiants) 
 	 * @return un tableau de 3 cases: [x, y, orientation]
 	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
 	 */

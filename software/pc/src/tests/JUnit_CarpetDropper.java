@@ -71,7 +71,7 @@ public class JUnit_CarpetDropper extends JUnit_Test
 			game.robot.moveLengthwise(120);
 			game.robot.turn(-0.5*Math.PI);
 			game.robot.moveLengthwise(-110);
-			scriptManager.getScript(ScriptNames.DROP_CARPET).execute(1, game, false);
+			scriptManager.getScript(ScriptNames.DROP_CARPET).execute(1, game, emptyHook, false);
 		} 
 			catch (UnableToMoveException | SerialConnexionException e) 
 		{

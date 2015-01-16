@@ -1,5 +1,6 @@
 package tests;
 
+import graphics.Window;
 import hook.Hook;
 
 import java.util.ArrayList;
@@ -7,6 +8,7 @@ import java.util.Random;
 
 import smartMath.Vec2;
 import strategie.GameState;
+import table.Table;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -25,25 +27,30 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 	ArrayList<Vec2> path = new ArrayList<Vec2>();
 	Random rand = new Random();
 	ArrayList<Hook> emptyHook = new ArrayList<Hook>();	
+	Window win;
 		
 	
 	@SuppressWarnings("unchecked")
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() throws Exception
+	{
 		super.setUp();
 		state = ((GameState<Robot>)container.getService(ServiceNames.GAME_STATE));
 		actionneurs = (ActuatorCardWrapper)container.getService(ServiceNames.ACTUATOR_CARD_WRAPPER);
 
 
 		
-		state.robot.setPosition(new Vec2 (1381,1000));
-		state.robot.setOrientation(Math.PI);
+		state.robot.setPosition(new Vec2 (-1381,1000));
+		state.robot.setOrientation(0);
 		
 		
+		win = new Window(new Table(log, config));
+		
+		state.robot.updateConfig();
 	}
 
-	@Test
-	public void test()
+	//@Test
+	public void RandomTest()
 	{
 		Robot robot = state.robot;
 		try 
@@ -66,11 +73,48 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 				log.debug("chemin : "+path.toString(),this);
 				path.remove(0);
 				robot.followPath(path, emptyHook);
-				robot.sleep(1000);
+				robot.sleep(5000);
 			}
 			catch (PathNotFoundException e) 
 			{
 				log.debug("pas de chemin vers ("+randX+", "+randY+")", this);
+			}
+			catch (UnableToMoveException e) 
+			{
+				log.debug("chemin bloque", this);
+			}
+			log.debug("en position ("+robot.getPosition().x+", "+robot.getPosition().y+")", this);
+		}
+		
+	}
+	
+	@Test
+	public void ClickedTest()
+	{
+		Robot robot = state.robot;
+		try 
+		{
+			state.robot.moveLengthwise(600);
+		}
+		catch (UnableToMoveException e) 
+		{
+			log.debug("impossible de bouger", this);
+		}
+		robot.sleep(3000);
+		System.out.println("en position ("+robot.getPosition().x+", "+robot.getPosition().y+")");
+		while (true)
+		{
+			try 
+			{
+				path = PathDingDing.computePath(robot.getPosition(), win.getMouse().getLeftClickPosition(), state.table);
+				log.debug("chemin : "+path.toString(),this);
+				path.remove(0);
+				robot.followPath(path, emptyHook);
+				robot.sleep(5000);
+			}
+			catch (PathNotFoundException e) 
+			{
+				log.debug("point en dehors de la table : ("+win.getMouse().getLeftClickPosition().x+", "+win.getMouse().getLeftClickPosition().y+")", this);
 			}
 			catch (UnableToMoveException e) 
 			{

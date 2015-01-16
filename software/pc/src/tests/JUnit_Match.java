@@ -3,83 +3,94 @@ package tests;
 import java.util.ArrayList;
 
 import hook.Hook;
-import hook.types.HookGenerator;
-
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import pathdinding.Pathfinding;
+import enums.ScriptNames;
+import enums.ServiceNames;
 import exceptions.Locomotion.UnableToMoveException;
-import robot.RobotReal;
-import robot.cards.ActuatorsManager;
-import robot.highlevel.LocomotionHiLevel;
-import scripts.DropCarpet;
-import scripts.ExitBeginZone;
-import table.Table;
-import utils.Sleep;
+import exceptions.serial.SerialConnexionException;
+import robot.Robot;
+import robot.cardsWrappers.SensorsCardWrapper;
+import scripts.AbstractScript;
+import scripts.ScriptManager;
+import smartMath.Vec2;
+import strategie.GameState;
 
 
 public class JUnit_Match extends JUnit_Test 
 {
-ActuatorsManager actionneurs;
-DropCarpet scriptCarpet;
-ExitBeginZone scriptOut;
-LocomotionHiLevel locomotion;
-<<<<<<< HEAD
-PathDingDing pathfinding = new PathDingDing();
-=======
-Table table;
-Pathfinding pathfinding;
-RobotReal robot;
->>>>>>> branch 'master' of gitosis@git.club-intech.fr:intech-2015.git
-HookGenerator hookgenerator;
-ArrayList<Hook> emptyHook = new ArrayList<Hook>();
-
-@Before
-public void setUp() throws Exception 
-{
-	//creation des objets pour le test
-	super.setUp();                                                                                                                                 
-	actionneurs = (ActuatorsManager)container.getService("Actionneurs");
-	hookgenerator = (HookGenerator)container.getService("HookGenerator");
-	locomotion = (LocomotionHiLevel)container.getService("DeplacementsHautNiveau");
-	robot = (RobotReal)container.getService("RobotVrai");
-	table = (Table)container.getService("Table");
-	scriptCarpet = new DropCarpet(hookgenerator, config, log, pathfinding, robot, actionneurs, table);
-	scriptOut = new ExitBeginZone(hookgenerator, config, log, pathfinding, robot, actionneurs, table);
+	ArrayList<Hook> emptyHook;
+	GameState<Robot> real_state;
+	ScriptManager scriptmanager;
+	SensorsCardWrapper  mSensorsCardWrapper;
+		
 	
-	//positionnement du robot
-	actionneurs.highRightCarpet();
-	actionneurs.highLeftCarpet();
-}
-
-@After
-public void tearDown() throws Exception 
-{
-	actionneurs.highRightCarpet();
-	actionneurs.highLeftCarpet();
-	
-}
-
-@Test
-public void test() 
-{
-	scriptOut.execute(0);
-	Sleep.sleep(2000);
-	try 
+	@SuppressWarnings("unchecked")
+	@Before
+	public void setUp() throws Exception 
 	{
-		locomotion.avancer(639, emptyHook, false);
-		locomotion.tourner(0, emptyHook, false);
-		locomotion.avancer(scriptCarpet.point_entree(0).y-1000, emptyHook, false);
-	} 
-	catch (UnableToMoveException e) 
-	{
-		e.printStackTrace();
-		log.debug("robot bloque", this);
+		super.setUp();
+		real_state = (GameState<Robot>) container.getService(ServiceNames.GAME_STATE);
+		scriptmanager = (ScriptManager) container.getService(ServiceNames.SCRIPT_MANAGER);
+		mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
+		emptyHook = new ArrayList<Hook> ();
+		
+		real_state.robot.setPosition(new Vec2 (1381,1000));
+		if (config.getProperty("couleur").equals("jaune"))
+		{
+			real_state.robot.setOrientation(0); 
+			//si on est jaune on est en 0 
+		}
+		else
+		{
+			real_state.robot.setOrientation(Math.PI);
+			//sinon on est vert donc on est en PI
+		}
+		real_state.robot.updateConfig();
 	}
-	Sleep.sleep(2000);
-	scriptCarpet.execute(0);
-}
+	
+	@Test
+	public void test() 
+	{
+		try 
+		{
+			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
+			exitScript.execute(0, real_state, emptyHook, true );
+		} 
+		catch (SerialConnexionException  e) 
+		{
+			log.debug("CRITICAL : Carte mal branchée. Match termine",this);
+			e.printStackTrace();
+			return;
+		}
+		catch (UnableToMoveException e) 
+		{
+			log.debug("CRITICAL : Chemin bloque, enlevez votre main",this);
+			e.printStackTrace();
+		}
+		
+		
+		try 
+		{
+			real_state.robot.turn(Math.PI*0.5);
+		} 
+		catch (UnableToMoveException e) 
+		{
+			log.debug("impossible de tourner",this);
+			e.printStackTrace();
+		}
+		
+		try 
+		{
+			real_state.robot.turn(0);
+		} 
+		catch (UnableToMoveException e) 
+		{
+			log.debug("impossible de tourner",this);
+			e.printStackTrace();
+		}
+		
+	}
 }
 

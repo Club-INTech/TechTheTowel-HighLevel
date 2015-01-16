@@ -84,11 +84,7 @@ public class Config implements Service
 	 * @return Leparamètre coresspondant a ce nom
 	 */
 	public String getProperty(String nom)
-	{
-		// Pour la correction de Deboc
-		if(nom == "debocIntegralCorrectionBehavior")
-				return System.getProperty("user.name").startsWith("kar") ? "disabled" : "default";
-		
+	{		
 		String out = null;
 		out = configProperties.getProperty(nom);
 		if(out == null)

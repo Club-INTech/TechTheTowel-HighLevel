@@ -31,15 +31,9 @@ public class JUnit_javaToRobotLink  extends JUnit_Test
 		super.setUp();
 		config.set("couleur", "jaune");
 		
-<<<<<<< HEAD
-		robotvrai = (RobotReal)container.getService("RobotVrai");
-		robotvrai.setPosition(new Vec2(1484, 1000));	// TODO : cette position doit être la position de départ du robot 
-		//On démarre avec les cales !!!!
-=======
 		robotvrai = (RobotReal)container.getService(ServiceNames.ROBOT_REAL);
 		robotvrai.setPosition(new Vec2(1251, 1695));	// TODO : cette position doit être la position de départ du robot 
 		//On démarre avec la cale !!!!
->>>>>>> refs/remotes/origin/refactor
 		robotvrai.setOrientation((float)(-Math.PI/2));
 		robotvrai.setLocomotionSpeed(Speed.BETWEEN_SCRIPTS);
 		container.startInstanciedThreads();

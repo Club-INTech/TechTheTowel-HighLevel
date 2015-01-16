@@ -38,6 +38,11 @@ public abstract class Obstacle
 		return this.position;
 	}
 	
+	public void setPosition(Vec2 position)
+	{
+		this.position = position;
+	}
+	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */

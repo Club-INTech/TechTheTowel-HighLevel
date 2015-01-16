@@ -4,10 +4,12 @@ import java.util.ArrayList;
 
 import pathDingDing.PathDingDing;
 import hook.Hook;
+import smartMath.Circle;
 import smartMath.Vec2;
 import table.Table;
 import container.Service;
 import enums.ActuatorOrder;
+import enums.SensorNames;
 import enums.Speed;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -38,7 +40,17 @@ public abstract class Robot implements Service
 	/**  vitesse du robot sur la table. */
 	protected Speed speed;
 
-	private int storedPlotCount;
+	/** nombre de plots stockes dans le robot (mis a jour et utlisé par les scripts) */
+	public int storedPlotCount;
+	
+	/** si le robot stocke une balle de tennis (mis a jour et utilise par les scripts) */
+	public boolean isBallStored;
+
+	/** si le robot a un verre dans la zone gauche (mis a jour et utilise par les scripts) */
+	public boolean isGlassStoredLeft;
+	
+	/** si le robot a un verre dans la zone droit (mis a jour et utilise par les scripts) */
+	public boolean isGlassStoredRight;
 	
 	/**
 	 * Instancie le robot.
@@ -69,6 +81,7 @@ public abstract class Robot implements Service
 	 * @throws SerialConnexionException  en cas de problème de communication avec la carte actionneurs
 	 */
 	public abstract void useActuator(ActuatorOrder order, boolean waitForCompletion) throws SerialConnexionException;
+	
 	
     /**
      * Fais attendre le robot.
@@ -112,6 +125,8 @@ public abstract class Robot implements Service
 	 * @param expectsWallImpact true si le robot doit s'attendre a percuter un mur au cours du déplacement. false si la route est sensée être dégagée.
 	 * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
 	 */
+    // TODO: ne pas utiliser cette méthode. il faut utiliser moveLengthwiseTowardWall pour foncer dans un mur.
+    // à mettre en privé
     public abstract void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException;
     
 
@@ -252,7 +267,7 @@ public abstract class Robot implements Service
 	 * @param distance en mm que le robot doit franchir. Si cette distance est négative, le robot va reculer. Attention, en cas de distance négative, cette méthode ne vérifie pas s'il y a un système d'évitement a l'arrère du robot
 	 * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
 	 */
-    public void moveLengthwiseTowardWall(int distance) throws UnableToMoveException
+    public void moveLengthwiseTowardWall(int distance /* TODO: ajouter hook en argument */ ) throws UnableToMoveException
     {
         Speed oldSpeed = speed; 
         setLocomotionSpeed(Speed.INTO_WALL);
@@ -270,9 +285,63 @@ public abstract class Robot implements Service
      */
     public void moveToLocation(Vec2 aim, ArrayList<Hook> hooksToConsider, Table table) throws UnableToMoveException, PathNotFoundException
     {
-    	//TODO: le pathfinding reclame une table, mais ce n'est pas logique d'en avoir une dans Robot
-			ArrayList<Vec2> path = PathDingDing.computePath(getPosition(),aim,table);
-			followPath(path , hooksToConsider);
+    	//TODO: remettre le pathDingDing et enlever les deux lignes en dessous
+		//ArrayList<Vec2> path = PathDingDing.computePath(getPosition(),aim,table);
+    	
+    	ArrayList<Vec2> path = new ArrayList<Vec2>();
+    	path.add(aim);
+    	
+    	
+		followPath(path , hooksToConsider);
+    }
+    
+    /**
+     * deplace le robot vers le point du cercle donnné le plus proche, en evitant les obstacles. (appel du pathfinding)
+     * methode bloquante : l'execution ne se termine que lorsque le robot est arrive
+     * 
+     * @param aim le cercle ou l'on veut se rendre
+	 * @param hooksToConsider the hooks to consider
+     * @param table la table sur laquell on est sensé se déplacer
+     * 
+     * @throws PathNotFoundException lorsque le pathdingding ne trouve pas de chemin 
+     * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
+     */
+    public void moveToCircle(Circle aim, ArrayList<Hook> hooksToConsider, Table table) throws PathNotFoundException, UnableToMoveException
+    {
+    	//TODO: remettre le pathDingDing et enlever les deux lignes en dessous
+    	//ArrayList<Vec2> path = PathDingDing.computePath(getPosition(),aim.toVec2(),table);
+    	
+    	ArrayList<Vec2> path = new ArrayList<Vec2>();
+    	path.add(aim.center);
+    	
+    	
+    	//retire une distance egale au rayon du cercle au dernier point du chemin (le centre du cercle)
+    	
+    	
+    	//on retire le dernier point (le centre du cercle)
+    	path.remove(path.size()-1);
+
+    	//le point precedent dans le path
+    	Vec2 precedentPathPoint = new Vec2();
+    	if (path.size()==0)
+    	{
+    		precedentPathPoint = getPosition();
+    	}
+    	else
+    	{
+    		precedentPathPoint = path.get(path.size()-1);
+    	}
+
+    	//le dernier vecteur deplacement
+    	Vec2 movementVector = aim.center.minusNewVector(precedentPathPoint);
+    	
+    	
+    	/* on ajoute le point du cercle B'=(B-A)*(L-r)/L+A
+    	 * B le centre du cercle, r le rayon du cercle, A le point precedent dans le path et L la taille du dernier vecteur deplacement
+    	 */
+    	path.add(movementVector.dotFloat( (movementVector.length()-aim.ray)/movementVector.length() ).plusNewVector(precedentPathPoint));
+
+    	followPath(path , hooksToConsider);
     }
     
 	/**
@@ -285,21 +354,18 @@ public abstract class Robot implements Service
 	 */
     public abstract void disableTranslationnalFeedbackLoop();
 
-    /**
-     * renvois le nombre de plot socké dans le robot
-     * @return le nombre de plot socké dans le robot
-     */
-	public int getStoredPlotCount()
+	
+	public boolean getSymmetry()
 	{
-		return storedPlotCount;
+		return symmetry;
 	}
 
 	/**
-	 * change le nombre de plot socké dans le robot
-	 * @param storedPlotCount 
+	 * le robot demande l'etat de ses capteurs
+	 * @param captor le nom du capteur dont on veut l'etat
+	 * @return la valeur du capteur
+	 * @throws SerialConnexionException si la connexion avec le capteur est interrompue
 	 */
-	public void setStoredPlotCount(int storedPlotCount)
-	{
-		this.storedPlotCount = storedPlotCount;
-	}
+	public abstract Object getSensorValue(SensorNames captor) throws SerialConnexionException;
+
 }

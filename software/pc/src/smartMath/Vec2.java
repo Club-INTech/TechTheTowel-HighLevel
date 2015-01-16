@@ -170,6 +170,14 @@ public class Vec2
 	{
 		return new Point((double)x,(double)y);
 	}
+	/**
+	 * transforme un point en un cercle de rayon nul
+	 * @return un cercle de centre ce Vec2 et de rayon nul.
+	 */
+	public Circle toCircle()
+	{
+		return new Circle (this,0);
+	}
 	
 	/**
 	 * Equals.
@@ -191,6 +199,17 @@ public class Vec2
 	public Vec2 dotFloat(int a)
 	{
 		return new Vec2(x*a,y*a);
+	}
+	
+	/**
+	 * Dot float.
+	 *
+	 * @param a the scalar to multiply the Vec2 with
+	 * @return the vec2 multiplied by a
+	 */
+	public Vec2 dotFloat(double a)
+	{
+		return new Vec2((int)(x*a),(int)(y*a));
 	}
 	
 	/**

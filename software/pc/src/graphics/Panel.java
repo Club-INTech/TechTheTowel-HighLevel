@@ -17,15 +17,13 @@ import table.obstacles.*;
  * @author Etienne
  *
  */
-//TODO: Ce genre de classe n'a rien a voir avec le code de match du robot. Ce n'est pas un gros inconvéniant, mais que ca n'empèche pas de documenter le code et de statuer clairement a un endroit bien visible que ce code ne sert qu'au debug
 public class Panel extends JPanel
-{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 856331824502887046L;
+{	
+	/** numéro pour la serialisation	 */
+	private static final long serialVersionUID = -3033815690221481964L;
 	
-	private ArrayList<Vec2> m_path = new ArrayList<Vec2>();
+	
+	private ArrayList<Vec2> mPath = new ArrayList<Vec2>();
 	private Table mTable;
 	
 	public Panel(Table table)
@@ -35,35 +33,69 @@ public class Panel extends JPanel
 	
 	public void paintComponent(Graphics g)
 	{
-		g.setColor(Color.white);
+		g.setColor(Color.black);
 	    g.fillRect(0, 0, this.getWidth(), this.getHeight());
 	    
-	    g.setColor(Color.black);
+	    g.setColor(Color.darkGray);
+	    
+	    ArrayList<ObstacleLinear> lines = mTable.getObstacleManager().getLines();
+	    for(int i = 0; i < lines.size(); i++)
+	    {
+	    	g.drawLine((int)((lines.get(i).getA().x + 1500) * this.getWidth() / 3000), (int)((-lines.get(i).getA().y) * this.getHeight() / 2000 + this.getHeight()), (int)((lines.get(i).getB().x + 1500) * this.getWidth() / 3000), (int)((-lines.get(i).getB().y) * this.getHeight() / 2000 + this.getHeight()));
+	    }
+	    
+	    g.setColor(Color.white);
 	    
 	    ArrayList<ObstacleRectangular> rects = mTable.getObstacleManager().getRects();
 	    for(int i = 0; i < rects.size(); i++)
 	    {
-	    	g.drawRect((rects.get(i).getPosition().x - (rects.get(i).getSizeX() / 2) + 1500) * this.getWidth() / 3000, -(rects.get(i).getPosition().y + rects.get(i).getSizeY()) * this.getHeight() / 2000 + this.getHeight(), rects.get(i).getSizeX() * this.getWidth() / 3000, rects.get(i).getSizeY() * this.getHeight() / 2000);
+	    	g.fillRect((rects.get(i).getPosition().x - (rects.get(i).getSizeX() / 2) + 1500) * this.getWidth() / 3000, -(rects.get(i).getPosition().y + rects.get(i).getSizeY()) * this.getHeight() / 2000 + this.getHeight(), rects.get(i).getSizeX() * this.getWidth() / 3000, rects.get(i).getSizeY() * this.getHeight() / 2000);
 	    }
 	    
-	    g.drawRect(0, 0, this.getWidth(), this.getHeight());
+	    g.setColor(Color.green);
+	    
+	    ArrayList<ObstacleCircular> greenPlots = mTable.getObstacleManager().getGreenPlots();
+	    for(int i = 0; i < greenPlots.size(); i++)
+	    {
+	    	g.drawOval((greenPlots.get(i).getPosition().x - greenPlots.get(i).getRadius() + 1500) * this.getWidth() / 3000, -(greenPlots.get(i).getPosition().y + greenPlots.get(i).getRadius()) * this.getHeight() / 2000 + this.getHeight(), (2 * greenPlots.get(i).getRadius()) * this.getWidth() / 3000, (2 * greenPlots.get(i).getRadius()) * this.getHeight() / 2000);
+	    }
+	    
+	    g.setColor(Color.yellow);
+	    
+	    ArrayList<ObstacleCircular> yellowPlots = mTable.getObstacleManager().getYellowPlots();
+	    for(int i = 0; i < yellowPlots.size(); i++)
+	    {
+	    	g.drawOval((yellowPlots.get(i).getPosition().x - yellowPlots.get(i).getRadius() + 1500) * this.getWidth() / 3000, -(yellowPlots.get(i).getPosition().y + yellowPlots.get(i).getRadius()) * this.getHeight() / 2000 + this.getHeight(), (2 * yellowPlots.get(i).getRadius()) * this.getWidth() / 3000, (2 * yellowPlots.get(i).getRadius()) * this.getHeight() / 2000);
+	    }
+	    
+	    g.setColor(Color.red);
+	    ArrayList<ObstacleCircular> ennemyRobot = mTable.getObstacleManager().getEnnemyRobot();
+	    for(int i = 0; i < ennemyRobot.size(); i++)
+	    {
+	    	g.drawOval((ennemyRobot.get(i).getPosition().x - ennemyRobot.get(i).getRadius() + 1500) * this.getWidth() / 3000, -(ennemyRobot.get(i).getPosition().y + ennemyRobot.get(i).getRadius()) * this.getHeight() / 2000 + this.getHeight(), (2 * ennemyRobot.get(i).getRadius()) * this.getWidth() / 3000, (2 * ennemyRobot.get(i).getRadius()) * this.getHeight() / 2000);
+	    }
 	    
 	    g.setColor(Color.blue);
-	    for(int i = 0; i+1 < m_path.size(); i++)
+	    for(int i = 0; i+1 < mPath.size(); i++)
 	    {
-	    	g.drawLine((m_path.get(i).x + 1500) * this.getWidth() / 3000, -m_path.get(i).y * this.getHeight() / 2000 + this.getHeight(), (m_path.get(i+1).x + 1500) * this.getWidth() / 3000, -m_path.get(i+1).y * this.getHeight() / 2000 + this.getHeight());
+	    	g.drawLine((mPath.get(i).x + 1500) * this.getWidth() / 3000, -mPath.get(i).y * this.getHeight() / 2000 + this.getHeight(), (mPath.get(i+1).x + 1500) * this.getWidth() / 3000, -mPath.get(i+1).y * this.getHeight() / 2000 + this.getHeight());
 	    }
-	    g.setColor(Color.red);
-	    for(int i = 0; i < m_path.size(); i++)
+	    
+	    g.setColor(Color.magenta);
+	    for(int i = 0; i < mPath.size(); i++)
 	    {
-	    	g.drawString(m_path.get(i).x + ", " + m_path.get(i).y, (m_path.get(i).x + 1500) * this.getWidth() / 3000, -m_path.get(i).y * this.getHeight() / 2000 + this.getHeight());
+	    	g.drawString(mPath.get(i).x + ", " + mPath.get(i).y, (mPath.get(i).x + 1500) * this.getWidth() / 3000, -mPath.get(i).y * this.getHeight() / 2000 + this.getHeight());
 	    }
 	}
 	
 	public void drawArrayList(ArrayList<Vec2> path)
 	{
-		
-		m_path = path;
+		mPath = path;
 		repaint();
+	}
+	
+	public Table getTable()
+	{
+		return mTable;
 	}
 }

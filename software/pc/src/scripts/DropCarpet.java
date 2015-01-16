@@ -1,12 +1,15 @@
 package scripts;
 
+import java.util.ArrayList;
+
 import enums.ActuatorOrder;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
+import hook.Hook;
 import hook.types.HookFactory;
 import robot.Robot;
-import smartMath.Vec2;
+import smartMath.Circle;
 import strategie.GameState;
 import utils.Config;
 import utils.Log;
@@ -36,16 +39,21 @@ public class DropCarpet extends AbstractScript
 	}
 
 	@Override
-	public void execute (int versionToExecute, GameState<Robot> stateToConsider, boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException 
+	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider,boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException
 	{
-		try 
+		
+		//on presente ses arrieres a l'escalier
+		stateToConsider.robot.turn(-0.5*Math.PI, hooksToConsider, false);
+		// on avance vers ces demoiselles (les marches) (attention impact possible)
+		// TODO utiliser moveLengthwiseTorwardWalls
+		stateToConsider.robot.moveLengthwise(-distanceBetweenEntryAndStairs, hooksToConsider, true);
+		
+		System.out.println("en position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") avant depose-tapis");
+
+		
+		//verification de la position : on n'effectue l'action que si on est assez proche (ie pas d'obstacle)
+		if(Math.abs((stateToConsider.robot.getPosition().y-1340))<40) // position- position du centre parfait<marge d'erreur
 		{
-			
-			//on presente ses arrieres a l'escalier
-			stateToConsider.robot.turn(Math.PI);
-			// on avance vers ces demoiselles (les marches) 
-			stateToConsider.robot.moveLengthwiseTowardWall(-distanceBetweenEntryAndStairs);
-			
 			//on depose le tapis gauche (si celui-ci n'est pas deja depose)
 			if (!stateToConsider.table.getIsLeftCarpetDropped())
 			{
@@ -59,32 +67,18 @@ public class DropCarpet extends AbstractScript
 			{
 				stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_DROP, true);
 				stateToConsider.table.setIsRightCarpetDropped(true);
-				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, true);
 			}
-			
-			//on s'eloigne de l'escalier
-			stateToConsider.robot.moveLengthwise(distanceBetweenEntryAndStairs);
-		
-		} 
-		catch (UnableToMoveException e) 
-		{
-			if (shouldRetryIfBlocke)
-			{
-				execute (versionToExecute,stateToConsider,false);
-			}
-			else
-			{
-				log.debug("erreur DropCarpet Script : impossible de bouger", this);
-				throw e;
-			}
-		} 
-
+			System.out.println("en position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") après depose-tapis");
+		}
+		//on s'eloigne de l'escalier
+		stateToConsider.robot.moveLengthwise(distanceBetweenEntryAndStairs, hooksToConsider, false);
 	}
 	
 	@Override
-	public Vec2 entryPosition(int id) 
+	public Circle entryPosition(int id) 
 	{
-		return new Vec2(261,1310-distanceBetweenEntryAndStairs); //soit (261,1110)
+		return new Circle(290,1330-distanceBetweenEntryAndStairs); //soit (261,1130)
 	}
 
 	@Override
@@ -110,7 +104,7 @@ public class DropCarpet extends AbstractScript
 		catch (SerialConnexionException e) 
 		{
 			log.debug("erreur termine DropCarpet script : impossible de ranger", this);
-			throw new SerialFinallyException (); //TODO c'est la syntaxe correcte ?
+			throw new SerialFinallyException ();
 		}
 	}
 

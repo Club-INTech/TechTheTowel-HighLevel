@@ -5,10 +5,11 @@ import hook.types.HookFactory;
 
 import java.util.ArrayList;
 
+import enums.ActuatorOrder;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import robot.Robot;
-import smartMath.Vec2;
+import smartMath.Circle;
 import strategie.GameState;
 import utils.Config;
 import utils.Log;
@@ -19,10 +20,8 @@ import utils.Log;
  */
 public class ExitBeginZone extends AbstractScript
 {
-
-	int distanceToExit=500;
 	//la distance dont on avance pour sortir de la zone de depart
-	ArrayList<Hook> emptyHook = new ArrayList<Hook>();
+	int distanceToExit=500;
 	
 	public ExitBeginZone(HookFactory hookFactory, Config config, Log log) 
 	{
@@ -30,28 +29,32 @@ public class ExitBeginZone extends AbstractScript
 	}
 
 	@Override
-	public Vec2 entryPosition(int id)
+	public Circle entryPosition(int id)
 	{
 		// point de depart du match a modifier a chaque base roulante
-		return new Vec2(1500-71-48,1000); //1500 le bout de la table, 71 la taille du carre vert perce et 48 la taille de l'arriere du robot a son centre
+		return new Circle(1500-71-48,1000);
+		//1500 le bout de la table, 71 la taille du carre vert perce et 48 la taille de l'arriere du robot a son centre
 	}
 	
 	@Override
-	public void execute (int id_version, GameState<Robot> stateToConsider, boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException
+	public void execute (int id_version, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException
 	{
 		try
 		{
-			stateToConsider.robot.moveLengthwise(distanceToExit);
+			//on met l'ascenseur en haut pour ne pas frotter
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+			
+			stateToConsider.robot.moveLengthwise(distanceToExit, hooksToConsider, false);
 		}
 		catch (UnableToMoveException e)
 		{
 			if (shouldRetryIfBlocke)
 			{
-				execute (id_version, stateToConsider,false);
+				execute (id_version, stateToConsider, hooksToConsider,false);
 			}
 			else
 			{
-				log.debug("erreur ExitBeginZone script : impossible de sortir de la zone de depart\n", this);
+				log.critical("erreur ExitBeginZone script : impossible de sortir de la zone de depart\n", this);
 				throw e;
 			}
 		}

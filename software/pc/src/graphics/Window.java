@@ -3,20 +3,21 @@ package graphics;
 import javax.swing.JFrame;
 
 import table.Table;
+import graphics.Mouse;
 
 /**
  * interface graphique de debugage
  * @author Etienne
  *
  */
-//TODO: Ce genre de classe n'a rien a voir avec le code de match du robot. Ce n'est pas un gros inconvéniant, mais que ca n'empèche pas de documenter le code et de statuer clairement a un endroit bien visible que ce code ne sert qu'au debug et pas au match
 public class Window extends JFrame
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1790274611904785158L;
-	private Panel m_panel;
+	/** numéro de serialisation	 */
+	private static final long serialVersionUID = -3140220993568124763L;
+	
+	
+	private Panel mPanel;
+	private Mouse mMouse;
 	
 	public Window(Table table) throws Exception
 	{
@@ -25,10 +26,11 @@ public class Window extends JFrame
 	    this.setSize(600, 400);
 	    this.setLocationRelativeTo(null);
 	    
-	    m_panel = new Panel(table);
-	    this.setContentPane(m_panel);
+	    mPanel = new Panel(table);
+	    this.setContentPane(mPanel);
 	    
-	    addMouseListener(new Mouse(this));
+	    mMouse = new Mouse(mPanel);
+	    addMouseListener(mMouse);
 	}
 	
 	/**
@@ -37,6 +39,11 @@ public class Window extends JFrame
 	 */
 	public Panel getPanel()
 	{
-		return m_panel;
+		return mPanel;
+	}
+	
+	public Mouse getMouse()
+	{
+		return mMouse;
 	}
 }

@@ -2,7 +2,7 @@ package scripts;
 
 import java.util.ArrayList;
 
-import smartMath.Vec2;
+import smartMath.Circle;
 import strategie.GameState;
 import robot.Robot;
 import utils.Log;
@@ -59,26 +59,28 @@ public abstract class AbstractScript implements Service
 	 * @throws UnableToMoveException losrque le robot veut se déplacer et que quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
 	 * @throws SerialConnexionException s'il y a un problème de communication avec une des cartes électroniques
 	 * @throws PathNotFoundException  si le pathfinding ne trouve pas de chemin
+	 * @throws SerialFinallyException si le finally n'est pas correctement execute (erreur critique)
 	 */
-	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, boolean shouldRetryIfBlocked, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException
+	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, boolean shouldRetryIfBlocked, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException
 	{
 		// va jusqu'au point d'entrée de la version demandée
-		actualState.robot.moveToLocation(entryPosition(versionToExecute), hooksToConsider, actualState.table);
+		actualState.robot.moveToCircle(entryPosition(versionToExecute), hooksToConsider, actualState.table);
 		
 		// exécute la version demandée
-		execute(versionToExecute, actualState, shouldRetryIfBlocked);
+		actualState.robot.sleep(1000);
+		execute(versionToExecute, actualState, hooksToConsider, shouldRetryIfBlocked);
+		finalise(actualState);
 	}
 	   
 	/**
 	 * Exécute le script
-	 * TODO: laiser en public ?
 	 * @param versionToExecute la version du
 	 * @param actualState l'état courrant du match.
 	 * @param shouldRetryIfBlocked vrai si le robot doit renter le script s'il bloque mécaniquement
 	 * @throws UnableToMoveException losrque le robot veut se déplacer et que quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
 	 * @throws SerialConnexionException s'il y a un problème de communication avec une des cartes électroniques
 	 */
-	public abstract void execute(int versionToExecute, GameState<Robot> actualState, boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException;
+	public abstract void execute(int versionToExecute, GameState<Robot> actualState,ArrayList<Hook> hooksToConsider,boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException;
 
 	/**
 	 * Renvoie le score que peut fournir une version d'un script.
@@ -97,7 +99,7 @@ public abstract class AbstractScript implements Service
 	 * @param version version dont on veut le point d'entrée
 	 * @return la position du point d'entrée
 	 */
-	public abstract Vec2 entryPosition(int version);
+	public abstract Circle entryPosition(int version);
 	
 	/**
 	 * Méthode toujours appelée à la fin du script via un finally. On des donc certain  que son exécution aura lieu.
