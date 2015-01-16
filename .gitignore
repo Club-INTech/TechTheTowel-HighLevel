@@ -19,3 +19,4 @@ hardware/*/*.s\#*
 /bin/
 /Debug/
 .metadata/
+.recommenders/

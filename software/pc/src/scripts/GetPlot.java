@@ -67,15 +67,10 @@ public class GetPlot extends AbstractScript
 			//on choisi le bras le plus adapte (assez dificile)
 			boolean isChoosenArmLeft = true;
 			
-			//on se place en face
-			int symetryForEntryPoint = 1;
-			if (stateToConsider.robot.getSymmetry())
-			{
-				symetryForEntryPoint = -1;
-			}
-			stateToConsider.robot.turn(Math.atan2(	entryPosition(versionToExecute).center.y						- stateToConsider.robot.getPosition().y,	// position voulue - position actuelle
-						 							entryPosition(versionToExecute).center.x * symetryForEntryPoint	- stateToConsider.robot.getPosition().x		// de meme
-						 						 ));
+			//le robot est deja en face du plot puisqu'on a appele goToThenExec (qui met en face du centre du script) si un jour on autorise de lancer exec il faudra remettre ces lignes (et les debugger)
+			//stateToConsider.robot.turn(Math.atan2(	entryPosition(versionToExecute).center.y - stateToConsider.robot.getPosition().y,	// position voulue - position actuelle
+			//			 							entryPosition(versionToExecute).center.x - stateToConsider.robot.getPosition().x	// de meme
+			//			 						 ));
 			
 			//on mange le plot
 			try 
@@ -271,13 +266,13 @@ public class GetPlot extends AbstractScript
 		if (isArmChosenLeft) 
 		{
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
-			stateToConsider.robot.sleep(500); //TODO modifier le temps d'xecution de ARM_LEFT_OPEN_SLOW a la place
+			stateToConsider.robot.sleep(1000); //TODO modifier le temps d'xecution de ARM_LEFT_OPEN_SLOW a la place
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
 		}
 		else
 		{
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN_SLOW, true);
-			stateToConsider.robot.sleep(500); //TODO modifier le temps d'xecution de ARM_RIGHT_OPEN_SLOW a la place
+			stateToConsider.robot.sleep(1000); //TODO modifier le temps d'xecution de ARM_RIGHT_OPEN_SLOW a la place
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
 		}
 		//si on a attrape qqc on termine sinon on essaie avec l'autre bras (si isSecondTry == false)
@@ -305,6 +300,7 @@ public class GetPlot extends AbstractScript
 				else
 				{
 					eatPlot(true,!isArmChosenLeft, stateToConsider);
+					return;
 				}
 			}
 		stateToConsider.robot.storedPlotCount++;

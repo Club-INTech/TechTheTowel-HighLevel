@@ -68,9 +68,7 @@ public abstract class AbstractScript implements Service
 		actualState.robot.moveToCircle(entryPosition(versionToExecute), hooksToConsider, actualState.table);
 		
 		// exécute la version demandée
-		actualState.robot.sleep(1000);
 		execute(versionToExecute, actualState, hooksToConsider, shouldRetryIfBlocked);
-		finalise(actualState);
 	}
 	   
 	/**
