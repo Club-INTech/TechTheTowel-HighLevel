@@ -68,7 +68,6 @@ public abstract class AbstractScript implements Service
 		
 		// exécute la version demandée
 		execute(versionToExecute, actualState, hooksToConsider, shouldRetryIfBlocked);
-		finalise(actualState);
 	}
 	   
 	/**

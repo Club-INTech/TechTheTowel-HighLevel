@@ -326,6 +326,10 @@ public abstract class Robot implements Service
     	if (path.size()==0)
     	{
     		precedentPathPoint = getPosition();
+    		if (symmetry)
+    		{
+    			precedentPathPoint.x *= -1;
+    		}
     	}
     	else
     	{

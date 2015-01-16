@@ -67,15 +67,10 @@ public class GetPlot extends AbstractScript
 			//on choisi le bras le plus adapte (assez dificile)
 			boolean isChoosenArmLeft = true;
 			
-			//on se place en face
-			int symetryForEntryPoint = 1;
-			if (stateToConsider.robot.getSymmetry())
-			{
-				symetryForEntryPoint = -1;
-			}
-			stateToConsider.robot.turn(Math.atan2(	entryPosition(versionToExecute).center.y						- stateToConsider.robot.getPosition().y,	// position voulue - position actuelle
-						 							entryPosition(versionToExecute).center.x * symetryForEntryPoint	- stateToConsider.robot.getPosition().x		// de meme
-						 						 ));
+			//le robot est deja en face du plot puisqu'on a appele goToThenExec (qui met en face du centre du script) si un jour on autorise de lancer exec il faudra remettre ces lignes (et les debugger)
+			//stateToConsider.robot.turn(Math.atan2(	entryPosition(versionToExecute).center.y - stateToConsider.robot.getPosition().y,	// position voulue - position actuelle
+			//			 							entryPosition(versionToExecute).center.x - stateToConsider.robot.getPosition().x	// de meme
+			//			 						 ));
 			
 			//on mange le plot
 			try 
