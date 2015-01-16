@@ -9,6 +9,7 @@ import smartMath.Vec2;
 import table.Table;
 import container.Service;
 import enums.ActuatorOrder;
+import enums.SensorNames;
 import enums.Speed;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -39,7 +40,11 @@ public abstract class Robot implements Service
 	/**  vitesse du robot sur la table. */
 	protected Speed speed;
 
-	private int storedPlotCount;
+	/** nombre de plots stockes dans le robot (mis a jour et utlisé par les scripts) */
+	public int storedPlotCount;
+	
+	/** si le robot stocke une balle de tennis (mis a jour et utilise par les scripts) */
+	public boolean asBallStored;
 	
 	/**
 	 * Instancie le robot.
@@ -70,6 +75,7 @@ public abstract class Robot implements Service
 	 * @throws SerialConnexionException  en cas de problème de communication avec la carte actionneurs
 	 */
 	public abstract void useActuator(ActuatorOrder order, boolean waitForCompletion) throws SerialConnexionException;
+	
 	
     /**
      * Fais attendre le robot.
@@ -294,28 +300,31 @@ public abstract class Robot implements Service
      */
     public void moveToCircle(Circle aim, ArrayList<Hook> hooksToConsider, Table table) throws PathNotFoundException, UnableToMoveException
     {
+    	//TODO: remettre le pathDingDing et enlever les deux lignes en dessous
+    	//ArrayList<Vec2> path = PathDingDing.computePath(getPosition(),aim.toVec2(),table);
     	
-    	ArrayList<Vec2> path = PathDingDing.computePath(getPosition(),aim.toVec2(),table);
+    	ArrayList<Vec2> path = new ArrayList<Vec2>();
+    	path.add(aim.center);
+    	
     	
     	//retire une distance egale au rayon du cercle au dernier point du chemin (le centre du cercle)
     	path.remove(path.size()-1);
-    	Double angle = Math.atan((aim.toVec2().x-path.get(path.size()-1).x)/(aim.toVec2().y-path.get(path.size()-1).y));
-    	
-    	//TODO: formules a verifier
-    	if (0<=angle && angle<=Math.PI*0.5)
-    		path.add(new Vec2((int)(aim.radius*-Math.sin(angle)+aim.center.x),(int)(aim.radius*-Math.cos(angle)+aim.center.y)));
-    		//ne fonctionne que si 0<angle<PI/2 
-    	else if (Math.PI*0.5<angle && angle<=Math.PI)
-    		path.add(new Vec2((int)(aim.radius*Math.sin(angle)+aim.center.x),(int)(aim.radius*-Math.cos(angle)+aim.center.y)));
-    		//ne fonctionne que si Pi/2<angle<PI
-    	else if (-0.5*Math.PI<=angle && angle<0)
-    		path.add(new Vec2((int)(aim.radius*-Math.sin(angle)+aim.center.x),(int)(aim.radius*Math.cos(angle)+aim.center.y)));
-    		//ne fonctionne que si -PI/2<angle<0
+    	//on retire le dernier point (le centre du cercle)
+    	Vec2 precedentPathPoint = new Vec2();
+    	if (path.size()==0)
+    	{
+    		precedentPathPoint = getPosition();
+    	}
     	else
-    		//angle entre -PI et -PI/2
-    		path.add(new Vec2((int)(aim.radius*Math.sin(angle)+aim.center.x),(int)(aim.radius*Math.cos(angle)+aim.center.y)));
+    	{
+    		precedentPathPoint = path.get(path.size()-1);
+    	}
+    	//le point precedent dans le path
+    	Vec2 movementVector = aim.center.minusNewVector(precedentPathPoint);
+    	//le dernier vecteur deplacement 
     	
-    	
+    	path.add(movementVector.dotFloat((movementVector.length()-aim.ray)/movementVector.length()).plusNewVector(precedentPathPoint));
+    	//on ajoute le point du cercle B'=(B-A)*(L-r)/L+A
     	followPath(path , hooksToConsider);
     }
     
@@ -329,21 +338,18 @@ public abstract class Robot implements Service
 	 */
     public abstract void disableTranslationnalFeedbackLoop();
 
-    /**
-     * renvois le nombre de plot socké dans le robot
-     * @return le nombre de plot socké dans le robot
-     */
-	public int getStoredPlotCount()
+	
+	public boolean getSymmetry()
 	{
-		return storedPlotCount;
+		return symmetry;
 	}
 
 	/**
-	 * change le nombre de plot socké dans le robot
-	 * @param storedPlotCount 
+	 * le robot demande l'etat de ses capteurs
+	 * @param captor le nom du capteur dont on veut l'etat
+	 * @return la valeur du capteur
+	 * @throws SerialConnexionException si la connexion avec le capteur est interrompue
 	 */
-	public void setStoredPlotCount(int storedPlotCount)
-	{
-		this.storedPlotCount = storedPlotCount;
-	}
+	public abstract Object getSensor(SensorNames captor) throws SerialConnexionException;
+
 }

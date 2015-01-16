@@ -195,15 +195,8 @@ public class Locomotion implements Service
 	{
 
 		// prends en compte la symétrie: si on est équipe jaune, et non équipe verte on doit tourner de PI moins l'angle
-		// on oublie pas de mettre l'angle entre -PI et PI
 		if(symmetry)
-		{
-			angle = (Math.PI-angle)%(2*Math.PI);
-			//l'angle est maintenant dans [0 , 2PI[
-			if (angle>Math.PI)
-				angle = -(angle-Math.PI);
-				//si l'angle est superieur a PI on le replace dans ]-PI , 0[ (l'angle 2PI n'est pas possible car 2PI%2PI=0)
-		}
+			angle = (Math.PI-angle);
 		
 		// on souhaite rester ou l'on est : la position d'arrivée est le position courrante
 		aim = position.clone();
@@ -557,7 +550,7 @@ public class Locomotion implements Service
 	 * @throws UnexpectedObstacleOnPathException en cas de détection par les capteurs a distance d'un obstacle sur la route que le robot s'apprête a suivre
 	 * @throws SerialConnexionException si la carte d'asservissement cesse de répondre
 	 */
-	private void moveInDirectionEventWatcher(ArrayList<Hook> hooksToConsider, boolean allowCurvedPath, boolean isBackward) throws BlockedException, UnexpectedObstacleOnPathException, SerialConnexionException
+	private void moveInDirectionEventWatcher(ArrayList<Hook> hooksToConsider, boolean allowCurvedPath, boolean isBackward) throws  UnexpectedObstacleOnPathException, SerialConnexionException, BlockedException
 	{	
 		// On donnera l'odre de se déplacer au robot
 		boolean haveToGiveOrderToMove = true;
@@ -610,7 +603,7 @@ public class Locomotion implements Service
 	 * @param isBackward true si le déplacement doit se faire en marche arrière, false si le robot doit avancer en marche avant.
 	 * @throws BlockedException en cas de blocage mécanique du robot: un obstacle non détecté par les capteurs a distance immobilise le robot
 	 */
-	private void moveInDirectionPlanner(boolean allowCurvedPath, boolean isBackward, boolean correction) throws BlockedException
+	private void moveInDirectionPlanner(boolean allowCurvedPath, boolean isBackward, boolean correction) throws BlockedException 
 	{
 		// Calcul du vecteur de déplacement: on doit se déplacer du vecteur égal a la position visée soustrait de la position actuelle
 		// mise a jour de la position actuelle pour avoir un vecteur de déplacement a jour
@@ -674,7 +667,7 @@ public class Locomotion implements Service
 	 * @param allowCurvedPath si true, le robot essayera de tourner et avancer en m�me temps
 	 * @throws BlockedException si blocage mécanique du robot en chemin (pas de gestion des capteurs ici)
 	 */
-	public void moveInDirection(double direction, double distance, boolean allowCurvedPath) throws BlockedException
+	public void moveInDirection(double direction, double distance, boolean allowCurvedPath) throws BlockedException 
 	{
 		// On interdit la trajectoire courbe si on doit faire un virage trop grand (plus d'un quart de tour).
 		if(Math.abs(direction - orientation) > Math.PI/2)
@@ -782,6 +775,8 @@ public class Locomotion implements Service
 		{
 			e.printStackTrace();
 		}
+		if (symmetry)
+			newInfos[0]= -newInfos[0];
 		
 		
 		// différence entre l'orientation du robot lors du dernier appel et l'orientation du robot lors de cet appel
@@ -923,7 +918,7 @@ public class Locomotion implements Service
 		pullOutAngleInCaseOfBlockageWhileTurning = Double.parseDouble(config.getProperty("angle_degagement_robot"));
 		//anticipation_trajectoire_courbe = Integer.parseInt(config.get("anticipation_trajectoire_courbe"));
 		allowCurvedPath = Boolean.parseBoolean(config.getProperty("trajectoire_courbe"));
-		symmetry = config.getProperty("couleur").equals("rouge");
+		symmetry = config.getProperty("couleur").equals("jaune");
 	}
 
 	/**

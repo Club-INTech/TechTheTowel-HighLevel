@@ -161,8 +161,11 @@ public class LocomotionCardWrapper implements Service
 		
 		// TODO:VALEURS A REVOIR
 		// Décide si on considère le robot immobile ou non.
+		//FIXME: a quoi sert rotationStopped et translationStopped
 		boolean rotationStopped = Math.abs(rotationnalError) <= 60;
+		rotationStopped = true;
 		boolean translationStopped = Math.abs(translationnalError) <= 60;
+		translationStopped = true;
 		boolean isImmobile = Math.abs(derivedRotationnalError) <= 20 && Math.abs(derivedTranslationnalError) <= 20;
 		
 		

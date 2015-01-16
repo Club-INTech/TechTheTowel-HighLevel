@@ -48,22 +48,29 @@ public class DropCarpet extends AbstractScript
 		// TODO utiliser moveLengthwiseTorwardWalls
 		stateToConsider.robot.moveLengthwise(-distanceBetweenEntryAndStairs, hooksToConsider, true);
 		
-		//on depose le tapis gauche (si celui-ci n'est pas deja depose)
-		if (!stateToConsider.table.getIsLeftCarpetDropped())
-		{
-			stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_DROP, true);
-			stateToConsider.table.setIsLeftCarpetDropped(true);
-			stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
-		}
+		System.out.println("en position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") avant depose-tapis");
+
 		
-		//on depose le tapis droit (si celui-ci n'est pas deja depose)
-		if (!stateToConsider.table.getIsRightCarpetDropped())
+		//verification de la position : on n'effectue l'action que si on est assez proche (ie pas d'obstacle)
+		if(Math.abs((stateToConsider.robot.getPosition().y-1340))<40) // position- position du centre parfait<marge d'erreur
 		{
-			stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_DROP, true);
-			stateToConsider.table.setIsRightCarpetDropped(true);
-			stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, true);
+			//on depose le tapis gauche (si celui-ci n'est pas deja depose)
+			if (!stateToConsider.table.getIsLeftCarpetDropped())
+			{
+				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_DROP, true);
+				stateToConsider.table.setIsLeftCarpetDropped(true);
+				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
+			}
+			
+			//on depose le tapis droit (si celui-ci n'est pas deja depose)
+			if (!stateToConsider.table.getIsRightCarpetDropped())
+			{
+				stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_DROP, true);
+				stateToConsider.table.setIsRightCarpetDropped(true);
+				stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, true);
+			}
+			System.out.println("en position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") après depose-tapis");
 		}
-		
 		//on s'eloigne de l'escalier
 		stateToConsider.robot.moveLengthwise(distanceBetweenEntryAndStairs, hooksToConsider, false);
 	}
