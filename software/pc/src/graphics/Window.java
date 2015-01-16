@@ -2,10 +2,7 @@ package graphics;
 
 import javax.swing.JFrame;
 
-import container.Container;
-import enums.ServiceNames;
 import table.Table;
-import smartMath.Vec2;
 import graphics.Mouse;
 
 /**
@@ -15,6 +12,10 @@ import graphics.Mouse;
  */
 public class Window extends JFrame
 {
+	/** numéro de serialisation	 */
+	private static final long serialVersionUID = -3140220993568124763L;
+	
+	
 	private Panel mPanel;
 	private Mouse mMouse;
 	

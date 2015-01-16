@@ -26,6 +26,11 @@
 #define cgHaut 237
 #define cgMilieu 207
 #define cgBas 152
+#define ggOuvert 180
+#define ggFerme 143
+#define ggIntermediaire 160 
+#define gdOuvert 30
+#define gdFerme 64
 
 class Communication : public Singleton<Communication>
 {
@@ -106,7 +111,7 @@ public:
  			serial_pc::printfln("angle ?");
  			serial_pc::read(angle);
  			if(angle >= 0 && angle <= 300)
- 				machoireDroite.goTo(angle);
+ 				guideGauche.goTo(angle);
  		}
 
 		else if (strcmp (ordre , "obd") == 0)			// ouvrir le bras droit
@@ -309,7 +314,26 @@ public:
 		{
 			consigneAscenseur = Estrade;
 		}
- 		
+		else if (strcmp (ordre , "ogd") == 0)
+		{
+			guideDroit.goTo(gdOuvert);
+		}
+		else if (strcmp (ordre , "fgd") == 0)
+		{
+			guideDroit.goTo(gdFerme);
+		}
+		else if (strcmp (ordre , "ogg") == 0)
+		{
+			guideGauche.goTo(ggOuvert);
+		}
+		else if (strcmp (ordre , "fgg") == 0)
+		{
+			guideGauche.goTo(ggFerme);
+		}
+		else if (strcmp (ordre , "ggi") == 0)
+		{
+			guideGauche.goTo(ggIntermediaire);
+		}
  		/// REPONSE AUX REQUETES DU HAUT NIVEAU
 		else if (strcmp (ordre , "j") == 0)				// état du jumper
 		{

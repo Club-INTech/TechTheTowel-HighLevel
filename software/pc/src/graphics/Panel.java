@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import table.Table;
 import smartMath.Vec2;
 
-import table.Table;
 import table.obstacles.*;
 
 /**
@@ -20,6 +19,10 @@ import table.obstacles.*;
  */
 public class Panel extends JPanel
 {	
+	/** numéro pour la serialisation	 */
+	private static final long serialVersionUID = -3033815690221481964L;
+	
+	
 	private ArrayList<Vec2> mPath = new ArrayList<Vec2>();
 	private Table mTable;
 	
