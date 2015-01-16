@@ -252,7 +252,7 @@ public abstract class Robot implements Service
 	 * Cette méthode est bloquante: son exécution ne se termine que lorsque le robot a atteint le point d'arrivée
 	 *
 	 * @param distance en mm que le robot doit franchir. Si cette distance est négative, le robot va reculer. Attention, en cas de distance négative, cette méthode ne vérifie pas s'il y a un système d'évitement a l'arrère du robot
-	 * @param hooksToConsider the hooks to consider
+	 * @param hooksToConsider les hooks déclenchables durant ce mouvement
 	 * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
 	 */
     public void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider) throws UnableToMoveException
@@ -280,10 +280,11 @@ public abstract class Robot implements Service
      * Cette méthode est bloquante: son exécution ne se termine que lorsque le robot a atteint le point d'arrivée
      *
      * @param aim le point de destination du mouvement
+     * @param hooksToConsider les hooks déclenchables durant ce mouvement
      * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
      * @throws PathNotFoundException lorsque le pathdingding ne trouve pas de chemin 
      */
-    public void moveToLocation(Vec2 aim, ArrayList<Hook> hooksToConsider, Table table) throws UnableToMoveException, PathNotFoundException
+    public void moveToLocation(Vec2 aim, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, PathNotFoundException
     {
     	//TODO: remettre le pathDingDing et enlever les deux lignes en dessous
 		//ArrayList<Vec2> path = PathDingDing.computePath(getPosition(),aim,table);
@@ -313,7 +314,6 @@ public abstract class Robot implements Service
     	
     	ArrayList<Vec2> path = new ArrayList<Vec2>();
     	path.add(aim.center);
-    	
     	
     	//retire une distance egale au rayon du cercle au dernier point du chemin (le centre du cercle)
     	

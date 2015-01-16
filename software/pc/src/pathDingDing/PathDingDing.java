@@ -5,8 +5,6 @@ import table.Table;
 import table.obstacles.*;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Arrays;
 
 import exceptions.*;
 
@@ -63,7 +61,9 @@ public class PathDingDing
 	 * 
 	 * @param start point de d�part
 	 * @param end point d'arriv�e
+	 * @param table 
 	 * @return un chemin entre le point de d�part et d'arriv�e
+	 * @throws PathNotFoundException 
 	 * @throws BlockedException 
 	 */
 	public static ArrayList<Vec2> computePath(Vec2 start, Vec2 end, Table table) throws PathNotFoundException
@@ -312,7 +312,7 @@ public class PathDingDing
 	 * si le chemin est considere comme correct pour la recherche de chemin statique
 	 * @param path
 	 * @param table
-	 * @return
+	 * @return si le chemin est correct
 	 */
 	public static boolean isPathCorrect(Path path, Table table)
 	{
@@ -331,6 +331,7 @@ public class PathDingDing
 	
 	/**
 	 * 
+	 * @param table
 	 * @param path chemin a simplifier
 	 * @return un chemin simplifie
 	 */
