@@ -271,13 +271,13 @@ public class GetPlot extends AbstractScript
 		if (isArmChosenLeft) 
 		{
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
-			stateToConsider.robot.sleep(500); //TODO modifier le temps d'xecution de ARM_LEFT_OPEN_SLOW a la place
+			stateToConsider.robot.sleep(1000); //TODO modifier le temps d'xecution de ARM_LEFT_OPEN_SLOW a la place
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
 		}
 		else
 		{
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN_SLOW, true);
-			stateToConsider.robot.sleep(500); //TODO modifier le temps d'xecution de ARM_RIGHT_OPEN_SLOW a la place
+			stateToConsider.robot.sleep(1000); //TODO modifier le temps d'xecution de ARM_RIGHT_OPEN_SLOW a la place
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
 		}
 		//si on a attrape qqc on termine sinon on essaie avec l'autre bras (si isSecondTry == false)
@@ -305,6 +305,7 @@ public class GetPlot extends AbstractScript
 				else
 				{
 					eatPlot(true,!isArmChosenLeft, stateToConsider);
+					return;
 				}
 			}
 		stateToConsider.robot.storedPlotCount++;
