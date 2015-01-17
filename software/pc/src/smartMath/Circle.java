@@ -49,10 +49,10 @@ public class Circle {
 	 * @param centerY la position en ordonnee du centre
 	 * @param ray le rayon
 	 */
-	public Circle(int centerX, int centerY, int ray) 
+	public Circle(int centerX, int centerY, int radius) 
 	{
 		this.center=new Vec2(centerX,centerY);
-		this.ray=ray;
+		this.radius=radius;
 	}
 
 	/**
@@ -72,18 +72,6 @@ public class Circle {
 	public boolean containDisk(Vec2 point)
 	{
 		return (point.distance(this.center)<=this.radius);
-	}
-	
-	/**
-	 * test si le point appartient au cercle
-	 * @param point un Point a tester
-	 * @return vrai si le point est sur le cercle
-	 */
-	public boolean containCircle(Point point)
-	{
-		double dx=point.x-this.center.x;
-		double dy=point.y-this.center.y;
-		return (dx*dx+dy*dy)==(radius*radius);
 	}
 	
 	/**

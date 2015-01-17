@@ -8,7 +8,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 import table.Table;
-import smartMath.Vec2;
+import smartMath.*;
 
 import table.Table;
 import table.obstacles.*;
@@ -21,11 +21,13 @@ import table.obstacles.*;
 public class Panel extends JPanel
 {	
 	private ArrayList<Vec2> mPath = new ArrayList<Vec2>();
+	private Vec2 mPoint;
 	private Table mTable;
 	
 	public Panel(Table table)
 	{
 		mTable = table;
+		mPoint = new Vec2();
 	}
 	
 	public void paintComponent(Graphics g)
@@ -35,7 +37,7 @@ public class Panel extends JPanel
 	    
 	    g.setColor(Color.darkGray);
 	    
-	    ArrayList<ObstacleLinear> lines = mTable.getObstacleManager().getLines();
+	    ArrayList<Segment> lines = mTable.getObstacleManager().getLines();
 	    for(int i = 0; i < lines.size(); i++)
 	    {
 	    	g.drawLine((int)((lines.get(i).getA().x + 1500) * this.getWidth() / 3000), (int)((-lines.get(i).getA().y) * this.getHeight() / 2000 + this.getHeight()), (int)((lines.get(i).getB().x + 1500) * this.getWidth() / 3000), (int)((-lines.get(i).getB().y) * this.getHeight() / 2000 + this.getHeight()));
@@ -79,6 +81,9 @@ public class Panel extends JPanel
 	    }
 	    
 	    g.setColor(Color.cyan);
+	    g.fillOval((mPoint.x + 1500) * this.getWidth() / 3000 - 3, -mPoint.y * this.getHeight() / 2000 + this.getHeight() - 3, 6, 6);
+	    
+	    g.setColor(Color.cyan);
 	    for(int i = 0; i < mPath.size(); i++)
 	    {
 	    	g.fillOval((mPath.get(i).x + 1500) * this.getWidth() / 3000 - 3, -mPath.get(i).y * this.getHeight() / 2000 + this.getHeight() - 3, 6, 6);
@@ -94,6 +99,12 @@ public class Panel extends JPanel
 	public void drawArrayList(ArrayList<Vec2> path)
 	{
 		mPath = path;
+		repaint();
+	}
+	
+	public void drawPoint(Vec2 point)
+	{
+		mPoint = point;
 		repaint();
 	}
 	

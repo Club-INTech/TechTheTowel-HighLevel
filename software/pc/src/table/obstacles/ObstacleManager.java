@@ -2,8 +2,7 @@ package table.obstacles;
 
 import java.util.ArrayList;
 
-import smartMath.Point;
-import smartMath.Vec2;
+import smartMath.*;
 import utils.Log;
 import utils.Config;
 
@@ -28,7 +27,7 @@ public class ObstacleManager
     /** Ensemble des obstacles mobiles/temporaires se trouvant sur la table */
     private ArrayList<Obstacle> mobileObstacles = new ArrayList<Obstacle>();
     
-    private ArrayList<ObstacleLinear> mLines;
+    private ArrayList<Segment> mLines;
 	private ArrayList<ObstacleCircular> mGreenPlots;
 	private ArrayList<ObstacleCircular> mYellowPlots;
 	private ArrayList<ObstacleCircular> mEnnemyRobot;
@@ -46,7 +45,7 @@ public class ObstacleManager
         this.config = config;
         
         //creation des obstacles
-        mLines = new ArrayList<ObstacleLinear>();
+        mLines = new ArrayList<Segment>();
 		mGreenPlots = new ArrayList<ObstacleCircular>();
 		mYellowPlots = new ArrayList<ObstacleCircular>();
 		mEnnemyRobot = new ArrayList<ObstacleCircular>();
@@ -56,32 +55,33 @@ public class ObstacleManager
         double radius = 190;
 		int rayonPlot = 30;
 		
-        //obstacles 1, 2, 3
-      	mLines.add(new ObstacleLinear(new Point(-1500 + radius, 778 - radius), new Point(-1100 + radius, 778 - radius), 1, new Point(-1095 + radius, 778 - radius), new Point(0, 0)));
-      	mLines.add(new ObstacleLinear(new Point(-1100 + radius, 778 - radius), new Point(-1100 + radius, 1222 + radius), 2, new Point(-1095 + radius, 778 - radius), new Point(-1095 + radius, 1222 + radius)));
-   		mLines.add(new ObstacleLinear(new Point(-1100 + radius, 1222 + radius), new Point(-1500 + radius, 1222 + radius), 1, new Point(-1095 + radius, 1222 + radius), new Point(0, 0)));
+		
+		//obstacles 1, 2, 3
+      	mLines.add(new Segment(new Vec2(-1500, 778), new Vec2(-1100, 778)));
+      	mLines.add(new Segment(new Vec2(-1100, 778), new Vec2(-1100, 1222)));
+   		mLines.add(new Segment(new Vec2(-1100, 1222), new Vec2(-1500, 1222)));
      		
       	//obstacles 10, 11, 12
-     	mLines.add(new ObstacleLinear(new Point(1500 - radius, 1222 + radius), new Point(1100 - radius, 1222 + radius), 1, new Point(1095 - radius, 1222 + radius), new Point(0, 0)));
-   		mLines.add(new ObstacleLinear(new Point(1100 - radius, 1222 + radius), new Point(1100 - radius, 778 - radius), 2, new Point(1095 - radius, 1222 + radius), new Point(1095 - radius, 778 - radius)));
-      	mLines.add(new ObstacleLinear(new Point(1100 - radius, 778 - radius), new Point(1500 - radius, 778 - radius), 1, new Point(1095 - radius, 778 - radius), new Point(0, 0)));
+     	mLines.add(new Segment(new Vec2(1500, 1222), new Vec2(1100, 1222)));
+   		mLines.add(new Segment(new Vec2(1100, 1222), new Vec2(1100, 778)));
+      	mLines.add(new Segment(new Vec2(1100, 778), new Vec2(1500, 778)));
       		
       	//obstacle 6
-      	mLines.add(new ObstacleLinear(new Point(533 + radius, 1930 - radius), new Point(533 + radius, 1420 - radius), 1, new Point(533 + radius, 1415 - radius), new Point(0, 0)));
-      	mLines.add(new ObstacleLinear(new Point(533 + radius, 1420 - radius), new Point(-533 - radius, 1420 - radius), 2, new Point(533 + radius, 1415 - radius), new Point(-533 - radius, 1415 - radius)));
-      	mLines.add(new ObstacleLinear(new Point(-533 - radius, 1420 - radius), new Point(-533 - radius, 1930 - radius), 1, new Point(-533 - radius, 1415 - radius), new Point(0, 0)));
+      	mLines.add(new Segment(new Vec2(533, 1930), new Vec2(533, 1420)));
+      	mLines.add(new Segment(new Vec2(533, 1420), new Vec2(-533, 1420)));
+      	mLines.add(new Segment(new Vec2(-533, 1420), new Vec2(-533, 1930)));
       		
       		
       	//obstacle 7
-      	mLines.add(new ObstacleLinear(new Point(300 + radius, 0 + radius), new Point(300 + radius, 100 + radius), 1, new Point(300 + radius, 105 + radius), new Point(0, 0)));
-      	mLines.add(new ObstacleLinear(new Point(300 + radius, 100 + radius), new Point(-300 - radius, 100 + radius), 2, new Point(300 + radius, 105 + radius), new Point(-300 - radius, 105 + radius)));
-      	mLines.add(new ObstacleLinear(new Point(-300 - radius, 100 + radius), new Point(-300 - radius, 0 + radius), 1, new Point(-300 - radius, 105 + radius), new Point(0, 0)));
+      	mLines.add(new Segment(new Vec2(300, 0), new Vec2(300, 100)));
+      	mLines.add(new Segment(new Vec2(300, 100), new Vec2(-300, 100)));
+      	mLines.add(new Segment(new Vec2(-300, 100), new Vec2(-300, 0)));
       		
       	//bords de la table
-      	mLines.add(new ObstacleLinear(new Point(-1500 + radius, 0 + radius), new Point(1500 - radius, 0 + radius), 0, new Point(0, 0), new Point(0, 0)));
-      	mLines.add(new ObstacleLinear(new Point(1500 - radius, 0 + radius), new Point(1500 - radius, 1930 - radius), 0, new Point(0, 0), new Point(0, 0)));
-      	mLines.add(new ObstacleLinear(new Point(1500 - radius, 1930 - radius), new Point(-1500 + radius, 1930 - radius), 0, new Point(0, 0), new Point(0, 0)));
-      	mLines.add(new ObstacleLinear(new Point(-1500 + radius, 1930 - radius), new Point(-1500 + radius, 0 + radius), 0, new Point(0, 0), new Point(0, 0)));
+      	mLines.add(new Segment(new Vec2(-1500, 0), new Vec2(1500, 0)));
+      	mLines.add(new Segment(new Vec2(1500, 0), new Vec2(1500, 1930)));
+      	mLines.add(new Segment(new Vec2(1500, 1930), new Vec2(-1500, 1930)));
+      	mLines.add(new Segment(new Vec2(-1500, 1930), new Vec2(-1500, 0)));
       	
       	mRects.add(new ObstacleRectangular(new Vec2(-1300, 778),400,444));
       	mRects.add(new ObstacleRectangular(new Vec2(-1200, 1930),70,70));
@@ -162,7 +162,7 @@ public class ObstacleManager
         return new ArrayList<Obstacle>();
     }
     
-	public ArrayList<ObstacleLinear> getLines()
+	public ArrayList<Segment> getLines()
 	{
 		return mLines;
 	}
