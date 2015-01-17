@@ -4,6 +4,7 @@
 #include <libintech/ax12.hpp>
 #include <libintech/uart.hpp>
 #include <util/delay.h>
+#include <libintech/singleton.hpp>
 #include <libintech/gpio.hpp>
 
 #define delai_mouvement 7			// temps d'attente par degré pour les mouvements lents (ms)
@@ -25,8 +26,13 @@
 #define cgHaut 237
 #define cgMilieu 207
 #define cgBas 152
+#define ggOuvert 180
+#define ggFerme 143
+#define ggIntermediaire 160 
+#define gdOuvert 30
+#define gdFerme 64
 
-class Communication
+class Communication : public Singleton<Communication>
 {
 public:
 
@@ -46,19 +52,24 @@ private:
     Ax12 tapisGauche;
     Ax12 clapDroit;
     Ax12 clapGauche;
+
+public:
     enum EtatAscenseur
-	{
-    	Haut,
-		Bas,
-		Sol,
-		Estrade
-	};
+    {
+    	Haut,		//Position extrème haute (dépassement de l'anti-retour, pour monter un plot)
+    	Milieu,		//Quelque part entre 'Estrade' et 'Haut' (très peu précis)
+    	Estrade,	//A plus de 22mm du sol (et pas beaucoup plus haut)
+    	Bas,		//Ne touche ni le sol ni les plots supérieurs (position pour rouler)
+    	Sol			//Position extrème basse (touche le sol)
+    };
     typedef enum EtatAscenseur EtatAscenseur;
+
     EtatAscenseur etatAscenseur;
+    EtatAscenseur consigneAscenseur;
+    
+public:
 
-
-
-public :											//constructeur
+											//constructeur
 
  	 Communication():
 
@@ -83,7 +94,8 @@ public :											//constructeur
 			serial_ax12::change_baudrate (9600);
 			B3::output();
 			B4::output();
-			etatAscenseur = Bas;
+			etatAscenseur = Sol;
+			consigneAscenseur = Sol;
 		}
  	 	 	 	 	 	 	 	 	 	 	 //fonction d'execution
 
@@ -99,7 +111,7 @@ public :											//constructeur
  			serial_pc::printfln("angle ?");
  			serial_pc::read(angle);
  			if(angle >= 0 && angle <= 300)
- 				machoireDroite.goTo(angle);
+ 				guideGauche.goTo(angle);
  		}
 
 		else if (strcmp (ordre , "obd") == 0)			// ouvrir le bras droit
@@ -244,13 +256,93 @@ public :											//constructeur
 		{
 			B3::toggle();
 		}
+		else if (strcmp (ordre , "ah") == 0)
+		{
+			consigneAscenseur = Haut;
+			/*
+			if(etatAscenseur != Haut)
+			{
+				B3::high();
+				B4::high();
+				while(B1::read()){}
+				B4::low();
+				etatAscenseur = Haut;
+			}//*/
+		}
+		else if (strcmp (ordre , "ab") == 0)
+		{
+			consigneAscenseur = Bas;
+			/*
+			const unsigned int delaiMiniMontee = 100;
+			if(etatAscenseur == Haut)
+			{
+				B3::low();
+				B4::high();
+				while(!B0::read()){}
+				while(B0::read()){}
+				B3::high();
+				_delay_ms(delaiMiniMontee);
+				B4::low();
+				etatAscenseur = Bas;
+			}
+			if(etatAscenseur == Sol)
+			{
+				B3::high();
+				B4::high();
+				_delay_ms(delaiMiniMontee);
+				B4::low();
+				etatAscenseur = Bas;
+			}//*/
 
+		}
+		else if (strcmp (ordre , "as") == 0)
+		{
+			consigneAscenseur = Sol;
+			/*
+			if(etatAscenseur != Sol)
+			{
+				B3::low();
+				B4::high();
+				while(!B0::read()){}
+				while(B0::read()){}
+				B4::low();
+				etatAscenseur = Sol;
+			}//*/
+
+		}
+		else if (strcmp (ordre , "ae") == 0)
+		{
+			consigneAscenseur = Estrade;
+		}
+		else if (strcmp (ordre , "ogd") == 0)
+		{
+			guideDroit.goTo(gdOuvert);
+		}
+		else if (strcmp (ordre , "fgd") == 0)
+		{
+			guideDroit.goTo(gdFerme);
+		}
+		else if (strcmp (ordre , "ogg") == 0)
+		{
+			guideGauche.goTo(ggOuvert);
+		}
+		else if (strcmp (ordre , "fgg") == 0)
+		{
+			guideGauche.goTo(ggFerme);
+		}
+		else if (strcmp (ordre , "ggi") == 0)
+		{
+			guideGauche.goTo(ggIntermediaire);
+		}
  		/// REPONSE AUX REQUETES DU HAUT NIVEAU
 		else if (strcmp (ordre , "j") == 0)				// état du jumper
 		{
 			serial_pc::print(D7::read());
 		}
-
+		else if (strcmp (ordre , "mp") == 0)
+		{
+			serial_pc::print(true);
+		}
 	}
 };
 

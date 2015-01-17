@@ -108,34 +108,31 @@ public class SensorsCardWrapper implements Service
      * @return la valeur du capteur
      * @throws SerialConnexionException si erreur de connexion avec le capteur
      */
-    public Object getSensor (SensorNames sensor) throws SerialConnexionException
+    public Object getSensorValue (SensorNames sensor) throws SerialConnexionException
     {
     	log.debug("demande aux capteurs : \""+sensor.getSerialCommunication()+"\"", this);
-		return sensorsCardSerial.communiquer(sensor.getSerialCommunication(),sensor.getAwnserLineAmount());
-    }
-    
-    /**
-     * demande au bouton de la machoire si un plot est dans la bouche du robot
-     * @return vrai si un plot est detecte, faux sinon
-     */
-    public boolean isPlotEaten()
-    {
-    	try 
-    	{
-			return Integer.parseInt(sensorsCardSerial.communiquer("mp", 1)[0]) != 0;
+		Object sensorAnswer = sensorsCardSerial.communiquer(sensor.getSerialCommunication(),sensor.getAwnserLineAmount());
+		
+		if (sensor.getDefaultValue().getClass() == Boolean.class)
+		{
+			return Boolean.parseBoolean(sensorAnswer.toString());
 		}
-    	catch (NumberFormatException e) 
-    	{
-    		log.critical("réponse corrompue du capteur machoire !", this);
-			e.printStackTrace();
-			return false;
-		} 
-    	catch (SerialConnexionException e) 
-    	{
-    		log.critical(" Problème de communication avec la carte capteurs en essayent de parler au capteur machoire.", this);
-			e.printStackTrace();
+		else if (sensor.getDefaultValue().getClass() == Integer.class)
+		{
+			return Integer.parseInt(sensorAnswer.toString());
+		}
+		else if (sensor.getDefaultValue().getClass() == Float.class)
+		{
+			return Float.parseFloat(sensorAnswer.toString());
+		}
+		else
+		{
+			log.critical("Le type de retour du capteur n'est pas pris en compte : modifiez SensorsCardWrapper.getSensorValue", this);
 			return false;
 		}
+		
+		
+		
     }
      
 }

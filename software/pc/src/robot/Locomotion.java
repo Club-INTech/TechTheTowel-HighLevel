@@ -14,6 +14,7 @@ import exceptions.Locomotion.UnexpectedObstacleOnPathException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import robot.cardsWrappers.LocomotionCardWrapper;
+import smartMath.Geometry;
 import smartMath.Vec2;
 import table.Table;
 import utils.Log;
@@ -277,7 +278,6 @@ public class Locomotion implements Service
 		{
 			e.printStackTrace();
 		}
-		Sleep.sleep(1000); // FIXME: ajouté parce que la méthode n'est pas bloquante alors qu'elle le devrait
 	}
 
 	/**
@@ -616,24 +616,7 @@ public class Locomotion implements Service
 			displacement.x = -displacement.x;
 		// soustraction de la position actuelle a la position visée
 		displacement.minus(position);
-		
-		// ajuste le déplacement par le correcteur de Deboc si la configuration du match le demande
-		
-//on retire le facteur de deboc
-/*      if(config.getProperty("debocIntegralCorrectionBehavior") == "default")
-        {
-        	// valeur de la correction de deboc
-        	float debocFactor = mLocomotionCardWrapper.getTranslationnalDebocFactor();
-        	
-        	// ajuste le point d'arrivée
-        	aim.x += displacement.x * (debocFactor - 1);
-        	aim.y += displacement.y * (debocFactor - 1);
-        	
-        	// ajuste la valeur de déplacement
-        	displacement.x *= debocFactor;
-        	displacement.y *= debocFactor;
-        }
-*/		
+
 		// le robot doit avancer d'une distance égale a la longeur du vecteur délacement
 		double distance = displacement.length();
 		
@@ -705,14 +688,14 @@ public class Locomotion implements Service
 
 	/**
 	 * V�rifie si le robot a fini de tourner. (On suppose que l'on a pr�c�demment demand� au robot de tourner)
-	 * @param finalOrientation on d�cr�te que le robot a fini de tourner lorsque son orientation �gale cette valeur (en radian, valeur absolue) 
+	 * @param finalOrientation on d�cr�te que le robot a fini de tourner lorsque son orientation �gale cette valeur (en miliRadian, valeur absolue) 
 	 * @return Faux si le robot tourne encore, vrai si arrivée au bon point, exception si blocage
 	 * @throws BlockedException si blocage mécanique du robot survient durant la rotation (pas de gestion des capteurs ici)
 	 */
 	// TODO: pourquoi ne pas utiliser mLocomotionCardWrapper.isRobotMoving() ?
 	private boolean isTurnFinished(double finalOrientation) throws BlockedException
 	{
-		boolean out = false; 
+		boolean out = false;
 		try
 		{
 			// demande ou l'on est et comment on est orienté a la carte d'asser
@@ -720,8 +703,8 @@ public class Locomotion implements Service
 
 			// le robot est-t-il arrivé ?
 			// le robot est arrivé si la différence entre l'orientation courante du robot et l'orientation voulue est suffisamment faible
-			//FIXME : valeur a modifier (precedemment 20)
-			if(Math.abs(newInfos[2]%(2*Math.PI) - finalOrientation%(2*Math.PI)) < 40)
+			//on fait un modulo 2000PI car les informations sont en miliRadiant
+			if(Geometry.minusAngle((Geometry.modulo(newInfos[2],(2000*Math.PI))), Geometry.modulo(finalOrientation,(2000*Math.PI)), 2000*Math.PI) < 20)
 				out = true;
 			 
 			// Le robot tourne-t-il encore ?
@@ -729,10 +712,15 @@ public class Locomotion implements Service
 			else if(Math.abs(newInfos[2] - oldInfos[2]) > 2)
 				out = false;
 
+
 			// si on ne bouge plus, et qu'on n'est pas arrivé, c'est que ca bloque
 			else
+			{
+				log.debug("reponse isTurnFinished : "+out+", position : "+newInfos[2]+"->"+Geometry.modulo(newInfos[2],(2000*Math.PI))+" precedent : "+oldInfos[2]+"->"+Geometry.modulo(oldInfos[2],(2000*Math.PI))+" aim : "+finalOrientation+"->"+Geometry.modulo(finalOrientation,(2000*Math.PI))+", difference"+Geometry.minusAngle((Geometry.modulo(newInfos[2],(2000*Math.PI))), Geometry.modulo(finalOrientation,(2000*Math.PI)), 2000*Math.PI), this);
 				throw new BlockedException();
 
+			}
+			log.debug("reponse isTurnFinished : "+out+", position : "+newInfos[2]+"->"+Geometry.modulo(newInfos[2],(2000*Math.PI))+" precedent : "+oldInfos[2]+"->"+Geometry.modulo(oldInfos[2],(2000*Math.PI))+" aim : "+finalOrientation+"->"+Geometry.modulo(finalOrientation,(2000*Math.PI))+", difference"+Geometry.minusAngle((Geometry.modulo(newInfos[2],(2000*Math.PI))), Geometry.modulo(finalOrientation,(2000*Math.PI)), 2000*Math.PI), this);
 			oldInfos = newInfos;
 		} 
 		catch (SerialConnexionException e)
@@ -752,7 +740,6 @@ public class Locomotion implements Service
 	 */
 	//TODO: le if... else if.... else.... est redondant avec la fonction checkRobotNotBlocked qui est elle aussi appellée dans moveInDirectionEventWatcher.
 	
-	//FIXME: si le robot ne bouge pas (genre au demarage) bha il detecte un blocquage ! 
 	private boolean isMovementFinished() throws BlockedException
 	{
 		boolean out = false;

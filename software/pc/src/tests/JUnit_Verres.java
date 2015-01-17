@@ -12,6 +12,7 @@ import utils.Sleep;
 import org.junit.Before;
 import org.junit.Test;
 
+import enums.ActuatorOrder;
 import enums.ScriptNames;
 import enums.ServiceNames;
 import exceptions.PathNotFoundException;
@@ -22,11 +23,9 @@ import robot.Robot;
 import robot.cardsWrappers.SensorsCardWrapper;
 
 /**
- * 
- * @author paul
- *classe de test pour les plots, attrape les plots dans l'orde donne par l'utilisateur
+ * @author theo
  */
-public class JUnit_getPlot extends JUnit_Test 
+public class JUnit_Verres extends JUnit_Test 
 {
 
 	ArrayList<Hook> emptyHook;
@@ -34,8 +33,6 @@ public class JUnit_getPlot extends JUnit_Test
 	ScriptManager scriptmanager;
 	SensorsCardWrapper  mSensorsCardWrapper;
 	ArrayList<Integer> listToGrab = new ArrayList<Integer>();
-	
-		
 	
 	@SuppressWarnings("unchecked")
 	@Before
@@ -47,6 +44,7 @@ public class JUnit_getPlot extends JUnit_Test
 		mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
 		emptyHook = new ArrayList<Hook> ();
 		
+		//gestion de la symmetrie pour les points d'entrée, dans les zones de depart
 		if (config.getProperty("couleur").equals("jaune"))
 		{
 			real_state.robot.setPosition(new Vec2 (-1381,1000));
@@ -62,40 +60,43 @@ public class JUnit_getPlot extends JUnit_Test
 		real_state.robot.updateConfig();
 	}
 	
+	
 	public void waitMatchBegin()
 	{
 
 		System.out.println("Robot pret pour le match, attente du retrait du jumper");
 		
-		// attends que le jumper soit retiré du robot
-		
+		// attends que le jumper soit retiré du robot OU qu'il soit mis puis retiré (orang outangs)
 		boolean jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
 		while(jumperWasAbsent || !mSensorsCardWrapper.isJumperAbsent())
 		{
 			jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
 			 Sleep.sleep(100);
 		}
-
-		
 		// maintenant que le jumper est retiré, le match a commencé
-		//ThreadTimer.matchStarted = true;
 	}
+	
 
 	@Test
 	public void test()
 	{
-		// on remplis la liste des plots a attraper (dans l'ordre)
-			listToGrab.add(2);
-			//listToGrab.add(1);
-			//listToGrab.add(0);
+		try 
+		{
+			//debut : on met tout en "fermé"
+			real_state.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
+			real_state.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
+		} 
 		
+		catch (SerialConnexionException e1) 
+		{
+			e1.printStackTrace();
+		}
 		container.startAllThreads();
-		waitMatchBegin();
-		//premiere action du match
-		
+		waitMatchBegin();		
 		System.out.println("Le robot commence le match");
 		
-		//on sort de la zone de depart
+		
+		//on sort de la zone de depart, et gestion de ses exceptions
 		try 
 		{
 			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
@@ -113,38 +114,47 @@ public class JUnit_getPlot extends JUnit_Test
 			e.printStackTrace();
 		}
 		
+		
 		//debut du match
 		System.out.println("debut du match");
-		
-		//premier script
-		for (int i=0; i<listToGrab.size();i++)
+		try 
 		{
-			try 
-			{
-				scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(listToGrab.get(i), real_state, true, emptyHook );
-			}
-			catch (UnableToMoveException | SerialConnexionException e) 
-			{
-				// un robot ennemi devant ?
-				e.printStackTrace();
-			
-			} 
-			catch (PathNotFoundException e)
-			{
-				//TODO: le pathfinding ne trouve pas de chemin
-				e.printStackTrace();
-			} 
-			catch (SerialFinallyException e) 
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
+			exitScript.execute(0, real_state, emptyHook, true );
+		
+			scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(0, real_state, true, emptyHook );
+			System.out.println("Verre 0 attrapé");
+
+			scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(1, real_state, true, emptyHook );
+			System.out.println("Verre 1 attrapé");
+
+			scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(2, real_state, true, emptyHook );
+			System.out.println("Verre 2 attrapé");
+
+			scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(3, real_state, true, emptyHook );
+			System.out.println("Verre 3 attrapé");
+
+			scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(4, real_state, true, emptyHook );
+			System.out.println("Verre 4 attrapé");
+
+		}
+		catch (UnableToMoveException | SerialConnexionException e) 
+		{
+			e.printStackTrace();
+		} 
+		catch (PathNotFoundException e)
+		{
+			//TODO: le pathfinding ne trouve pas de chemin ?
+			e.printStackTrace();
+		} 
+		catch (SerialFinallyException e) 
+		{
+			e.printStackTrace();
 		}
 		
-		System.out.println("match fini !");
-
-
+		
 		//Le match s'arrête
+		System.out.println("match fini !");
 		container.destructor();
 	}
 }

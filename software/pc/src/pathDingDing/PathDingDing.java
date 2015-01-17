@@ -5,8 +5,6 @@ import table.Table;
 import table.obstacles.*;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Arrays;
 
 import exceptions.*;
 
@@ -46,9 +44,10 @@ public class PathDingDing
 		
 		Graph graph = new Graph();
 		
+
 		//ajout du noeud de départ au graphe
 		graph.setStartNode(new Node(start.x, start.y));
-		
+
 		//ajout du noeud de fin au graphe
 		graph.setEndNode(new Node(end.x, end.y));
 		

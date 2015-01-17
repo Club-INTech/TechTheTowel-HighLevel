@@ -44,7 +44,13 @@ public abstract class Robot implements Service
 	public int storedPlotCount;
 	
 	/** si le robot stocke une balle de tennis (mis a jour et utilise par les scripts) */
-	public boolean asBallStored;
+	public boolean isBallStored;
+
+	/** si le robot a un verre dans la zone gauche (mis a jour et utilise par les scripts) */
+	public boolean isGlassStoredLeft;
+	
+	/** si le robot a un verre dans la zone droit (mis a jour et utilise par les scripts) */
+	public boolean isGlassStoredRight;
 	
 	/**
 	 * Instancie le robot.
@@ -246,7 +252,7 @@ public abstract class Robot implements Service
 	 * Cette méthode est bloquante: son exécution ne se termine que lorsque le robot a atteint le point d'arrivée
 	 *
 	 * @param distance en mm que le robot doit franchir. Si cette distance est négative, le robot va reculer. Attention, en cas de distance négative, cette méthode ne vérifie pas s'il y a un système d'évitement a l'arrère du robot
-	 * @param hooksToConsider the hooks to consider
+	 * @param hooksToConsider les hooks déclenchables durant ce mouvement
 	 * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
 	 */
     public void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider) throws UnableToMoveException
@@ -274,10 +280,11 @@ public abstract class Robot implements Service
      * Cette méthode est bloquante: son exécution ne se termine que lorsque le robot a atteint le point d'arrivée
      *
      * @param aim le point de destination du mouvement
+     * @param hooksToConsider les hooks déclenchables durant ce mouvement
      * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
      * @throws PathNotFoundException lorsque le pathdingding ne trouve pas de chemin 
      */
-    public void moveToLocation(Vec2 aim, ArrayList<Hook> hooksToConsider, Table table) throws UnableToMoveException, PathNotFoundException
+    public void moveToLocation(Vec2 aim, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, PathNotFoundException
     {
     	//TODO: remettre le pathDingDing et enlever les deux lignes en dessous
 		//ArrayList<Vec2> path = PathDingDing.computePath(getPosition(),aim,table);
@@ -290,10 +297,12 @@ public abstract class Robot implements Service
     }
     
     /**
-     * deplace le robot vers un point quelconque du cercle donne, evite les obstacles. (appel du pathfinding)
+     * deplace le robot vers le point du cercle donnné le plus proche, en evitant les obstacles. (appel du pathfinding)
      * methode bloquante : l'execution ne se termine que lorsque le robot est arrive
      * 
      * @param aim le cercle ou l'on veut se rendre
+	 * @param hooksToConsider the hooks to consider
+     * @param table la table sur laquell on est sensé se déplacer
      * 
      * @throws PathNotFoundException lorsque le pathdingding ne trouve pas de chemin 
      * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
@@ -306,25 +315,36 @@ public abstract class Robot implements Service
     	ArrayList<Vec2> path = new ArrayList<Vec2>();
     	path.add(aim.center);
     	
-    	
     	//retire une distance egale au rayon du cercle au dernier point du chemin (le centre du cercle)
-    	path.remove(path.size()-1);
+    	
+    	
     	//on retire le dernier point (le centre du cercle)
+    	path.remove(path.size()-1);
+
+    	//le point precedent dans le path
     	Vec2 precedentPathPoint = new Vec2();
     	if (path.size()==0)
     	{
     		precedentPathPoint = getPosition();
+    		if (symmetry)
+    		{
+    			precedentPathPoint.x *= -1;
+    		}
     	}
     	else
     	{
     		precedentPathPoint = path.get(path.size()-1);
     	}
-    	//le point precedent dans le path
+
+    	//le dernier vecteur deplacement
     	Vec2 movementVector = aim.center.minusNewVector(precedentPathPoint);
-    	//le dernier vecteur deplacement 
     	
-    	path.add(movementVector.dotFloat((movementVector.length()-aim.ray)/movementVector.length()).plusNewVector(precedentPathPoint));
-    	//on ajoute le point du cercle B'=(B-A)*(L-r)/L+A
+    	
+    	/* on ajoute le point du cercle B'=(B-A)*(L-r)/L+A
+    	 * B le centre du cercle, r le rayon du cercle, A le point precedent dans le path et L la taille du dernier vecteur deplacement
+    	 */
+    	path.add(movementVector.dotFloat( (movementVector.length()-aim.ray)/movementVector.length() ).plusNewVector(precedentPathPoint));
+
     	followPath(path , hooksToConsider);
     }
     
@@ -350,6 +370,6 @@ public abstract class Robot implements Service
 	 * @return la valeur du capteur
 	 * @throws SerialConnexionException si la connexion avec le capteur est interrompue
 	 */
-	public abstract Object getSensor(SensorNames captor) throws SerialConnexionException;
+	public abstract Object getSensorValue(SensorNames captor) throws SerialConnexionException;
 
 }

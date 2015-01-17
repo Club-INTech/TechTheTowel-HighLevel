@@ -53,6 +53,14 @@ public class Table implements Service
 	private boolean isPlot6Eaten;
 	private boolean isPlot7Eaten;
 	
+	//les 5 verres
+	private boolean isGlass0Taken;
+	private boolean isGlass1Taken;
+	private boolean isGlass2Taken;
+	private boolean isGlass3Taken;
+	private boolean isGlass4Taken;
+
+	
 	
 	/**
 	 * Instancie une nouvelle table
@@ -88,6 +96,14 @@ public class Table implements Service
 		isPlot5Eaten = false;
 		isPlot6Eaten = false;
 		isPlot7Eaten = false;
+		
+		//les verres
+		isGlass0Taken=false;
+		isGlass1Taken=false;
+		isGlass2Taken=false;
+		isGlass3Taken=false;
+		isGlass4Taken=false;
+
 	}
 	public ObstacleManager getObstacleManager()
 	{
@@ -145,6 +161,39 @@ public class Table implements Service
 			log.debug("out of bound, plot counter",this);
 			return false;
 	}
+	
+	public boolean isGlassXTaken (int x)
+	{
+		if (x==0)
+			return isGlass0Taken;
+		else if (x==1)
+			return isGlass1Taken;
+		else if (x==2)
+			return isGlass2Taken;
+		else if (x==3)
+			return isGlass3Taken;
+		else if (x==4)
+			return isGlass4Taken;
+		else
+			log.debug("Probleme dans isGlassTaken",this);
+			return false;
+	}
+	
+	public void takeGlassX (int x)
+	{
+		if (x==0)
+			isGlass0Taken=true;
+		else if (x==1)
+			isGlass1Taken=true;
+		else if (x==2)
+			isGlass2Taken=true;
+		else if (x==3)
+			isGlass3Taken=true;
+		else if (x==4)
+			isGlass4Taken=true;
+		else
+			log.debug("Probleme dans isGlassTaken",this);
+	}
 
 	/**
 	 * mange le plot x
@@ -170,6 +219,23 @@ public class Table implements Service
 			isPlot7Eaten=true;
 		else
 			log.debug("out of bound, plot counter",this);
+	}
+	
+	
+	public void glassXTaken (int x)
+	{
+		if (x==0)
+			isGlass0Taken=true;
+		else if (x==1)
+			isGlass1Taken=true;
+		else if (x==2)
+			isGlass2Taken=true;
+		else if (x==3)
+			isGlass3Taken=true;
+		else if (x==4)
+			isGlass4Taken=true;
+		else
+			log.debug("Probleme dans isGlassTaken",this);
 	}
 	
 	//La table
