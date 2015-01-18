@@ -69,6 +69,7 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 			int randY = rand.nextInt(2000);
 			try 
 			{
+				//TOTO : adapter au nouveau pf
 				path = PathDingDing.computePath(robot.getPosition(), new Vec2(randX,randY), state.table);
 				log.debug("chemin : "+path.toString(),this);
 				path.remove(0);

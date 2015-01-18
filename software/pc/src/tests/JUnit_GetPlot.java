@@ -102,8 +102,8 @@ public class JUnit_GetPlot extends JUnit_Test
 			listToGrab.add(34);
 			listToGrab.add(1);
 		
-		container.startAllThreads();
-		waitMatchBegin();
+		//container.startAllThreads();
+		//waitMatchBegin();
 		//premiere action du match
 		
 		System.out.println("Le robot commence le match");
@@ -130,7 +130,7 @@ public class JUnit_GetPlot extends JUnit_Test
 		System.out.println("debut du match");
 		
 		//premier script
-		for (int i=0; i<listToGrab.size();i++)
+		for (int i=0; i<listToGrab.size(); i++)
 		{
 			try 
 			{

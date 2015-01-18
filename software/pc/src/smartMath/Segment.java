@@ -7,38 +7,38 @@ package smartMath;
  */
 public class Segment
 {
-	private Point mA;
-	private Point mB;
+	private Vec2 mPointA;
+	private Vec2 mPointB;
 	
 	public Segment()
 	{
-		mA = new Point(0, 0);
-		mB = new Point(0, 0);
+		mPointA = new Vec2();
+		mPointB = new Vec2();
 	}
 	
-	public Segment(Point a, Point b)
+	public Segment(Vec2 pointA, Vec2 pointB)
 	{
-		mA = a;
-		mB = b;
+		mPointA = pointA;
+		mPointB = pointB;
 	}
 
-	public Point getA()
+	public Vec2 getA()
 	{
-		return mA;
+		return mPointA;
 	}
 	
-	public Point getB()
+	public Vec2 getB()
 	{
-		return mB;
+		return mPointB;
 	}
 	
-	public void setA(Point a)
+	public void setA(Vec2 pointA)
 	{
-		mA = a;
+		mPointA = pointA;
 	}
 	
-	public void setB(Point b)
+	public void setB(Vec2 pointB)
 	{
-		mB = b;
+		mPointB = pointB;
 	}
 }

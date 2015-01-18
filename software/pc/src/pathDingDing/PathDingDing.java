@@ -5,356 +5,215 @@ import table.Table;
 import table.obstacles.*;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Arrays;
 
 import exceptions.*;
 
 /**
- * Classe encapsulant les calculs de pathfinding 
- * @author Marsya et Etienne
+ * Classe de calcul de chemins
+ * @author Etienne
  *
  */
 public class PathDingDing
 {
-	/**
-	 * 
-	 * @param segment1A point A du premier segment
-	 * @param segment1B point B du premier segment
-	 * @param segment2A point A de second segment
-	 * @param segment2B point B du second segment
-	 * @return vrai si intersection, faux sinon
-	 */
-	public static boolean intersects(Point segment1A, Point segment1B, Point segment2A, Point segment2B)
-	{
-		// TODO: expliciter en comentaire les formules utilisees. 
-		return (segment1B.x - segment1A.x) * (segment2B.y - segment2A.y) - (segment1B.y - segment1A.y) * (segment2B.x - segment2A.x) != 0
-			&& ((segment1B.x - segment1A.x) * (segment2B.y - segment1A.y) - (segment1B.y - segment1A.y) * (segment2B.x - segment1A.x)) * ((segment1B.x - segment1A.x) * (segment2A.y - segment1A.y) - (segment1B.y - segment1A.y) * (segment2A.x - segment1A.x)) <= 0
-			&& ((segment2B.x - segment2A.x) * (segment1B.y - segment2A.y) - (segment2B.y - segment2A.y) * (segment1B.x - segment2A.x)) * ((segment2B.x - segment2A.x) * (segment1A.y - segment2A.y) - (segment2B.y - segment2A.y) * (segment1A.x - segment2A.x)) <= 0
-			;
-	}
+	private Table mTable;
 	
 	/**
-	 * 
-	 * @param segment1A point A du segment 1
-	 * @param segment1B point B du segment 1
-	 * @param segment2A point A du segment 2
-	 * @param segment2B point B du segment 2
-	 * @return le point d'intersection des droites portï¿½es par les segments 1 et 2
-	 */
-	public static Point intersection(Point segment1A, Point segment1B, Point segment2A, Point segment2B)
-	{
-		// TODO: commenter pour expliquer a quoi sert ces variables, et les renommer pour reflÃ©ter cette utilitÃ©
-		double inter, k;
-		// TODO: expliciter en comentaire les formules utilisÃ©s. 
-		
-		if((segment2B.y - segment2A.y) != 0)
-		{
-			inter = (segment2B.x - segment2A.x) / (segment2B.y - segment2A.y);
-			k = (segment1A.x - segment2A.x + inter * (segment2A.y - segment1A.y)) / (segment1B.x - segment1A.x - inter * (segment1B.y - segment1A.y));
-		}
-		else
-			k = -(segment2A.y - segment1A.y) / (segment1B.y - segment1A.y);
-		
-		return new Point(segment1A.x - k * (segment1B.x - segment1A.x), segment1A.y - k * (segment1B.y - segment1A.y));
-	}
-	
-	/**
-	 * 
-	 * @param start point de dï¿½part
-	 * @param end point d'arrivï¿½e
-	 * @return un chemin entre le point de dï¿½part et d'arrivï¿½e
-	 * @throws BlockedException 
-	 */
-	public static ArrayList<Vec2> computePath(Vec2 start, Vec2 end, Table table) throws PathNotFoundException
-	{
-		if(!isOnTable(start.toPoint(), table) || !isOnTable(end.toPoint(), table))
-			throw new PathNotFoundException();
-		Point DoubleStart = new Point(start.x, start.y), DoubleEnd = new Point(end.x, end.y);
-		Path path = new Path();
-		path.add(DoubleStart);
-		path.addAll(dodgeStatic(DoubleStart, DoubleEnd, table));
-		path.add(DoubleEnd);
-		simplify(path, table);
-		//dodgeDynamic(path, table);
-		return path.toVec2Array();
-	}
-	
-	/**
-	 * 
-	 * @param start point de dï¿½part
-	 * @param end point d'arrivï¿½e
-	 * @return un chemin entre le point de dï¿½part et d'arrivï¿½e en evitant uniquement les obstacles fixes
-	 * @throws BlockedException 
-	 */
-	private static Path dodgeStatic(Point start, Point end, Table table) throws PathNotFoundException
-	{
-		Path path = new Path();
-		
-		// cherche le point d'intersection avec les obstacles le plus proche de point de dï¿½part
-		double min = 13000000;
-		int indiceDistMin = 0;
-		Point node = new Point();
-		boolean intersects = false;
-		for(int ind_ligne = 0 ; ind_ligne < table.getObstacleManager().getLines().size() ; ind_ligne++)
-    	{
-	    	if( intersects(start, end, table.getObstacleManager().getLines().get(ind_ligne).getA(), table.getObstacleManager().getLines().get(ind_ligne).getB()))
-	    	{
-	    		node = intersection(start, end, table.getObstacleManager().getLines().get(ind_ligne).getA(), table.getObstacleManager().getLines().get(ind_ligne).getB());
-	    		intersects = true;
-	    		double dist = Math.pow(node.x - start.x, 2) + Math.pow(node.y - start.y, 2);
-		    	if (dist <= min)
-		    	{
-		    		min = dist;
-		    		indiceDistMin = ind_ligne;
-		    	}
-		    }
-    	}
-		//si il y a un point d'intersection, ajoute ce point au chemin, et recommence la recherche de chemin sur les chemins dï¿½but -> point de passage du point d'intersection
-		//                                                                                                                   point de passage du point d'intersection -> fin
-		if(intersects)
-		{
-			//s'il n'y a qu'un seul point de passage sur l'obstacle
-			if( table.getObstacleManager().getLines().get(indiceDistMin).getNbPassagePoint() == 1 )
-			{
-				path.addAll(dodgeStatic(start, table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint1(), table));
-				path.add(table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint1());
-				path.addAll(dodgeStatic(table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint1(), end, table));
-			}
-			//s'il y a deux points de passage sur l'obstacle, prend le point de passage le plus proche du point d'arrivï¿½e.
-			else
-			{
-				if(Math.pow(table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint1().x - end.x, 2) + Math.pow(table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint1().y - end.y, 2) <= Math.pow(table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint2().x - end.x, 2) + Math.pow(table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint2().y - end.y, 2))
-				{
-					path.addAll(dodgeStatic(start, table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint1(), table));
-					path.add(table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint1());
-					path.addAll(dodgeStatic(table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint1(), end, table));
-				}
-				else
-				{
-					path.addAll(dodgeStatic(start, table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint2(), table));
-					path.add(table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint2());
-					path.addAll(dodgeStatic(table.getObstacleManager().getLines().get(indiceDistMin).getPassagePoint2(), end, table));
-				}
-			}
-		}
-		return path;
-	}
-	
-	/**
-	 * 
-	 * @param path
+	 * constructeur
 	 * @param table
-	 * @return
-	 * @throws PathNotFoundException
 	 */
-	/*
-	private static void dodgeDynamic(Path path, Table table) throws PathNotFoundException
+	public PathDingDing(Table table)
 	{
-		ArrayList<ObstacleCircular> ennemy = table.getObstacleManager().getEnnemyRobot();
-		//parcours des robots ennemis
-		for(int robotsCount = 0; robotsCount < ennemy.size(); robotsCount++)
+		mTable = table;
+	}
+	
+	/**
+	 * methode a appeler
+	 * @param start le point de depart
+	 * @param end le point d'arrivee
+	 * @return un chemin optimise liant depart et arrivee
+	 * @throws Exception pas encore implemente
+	 */
+	public ArrayList<Vec2> computePath(Vec2 start, Vec2 end) throws Exception
+	{
+		//le cas ou les points de depart et d'arrivee sont reliables en ligne droite est directement traite
+		ArrayList<Vec2> directPath =  new ArrayList<Vec2>();
+		directPath.add(start);
+		directPath.add(end);
+		if(isPathCorrect(directPath))
+			return directPath;
+		
+		Graph graph = new Graph();
+		
+
+		//ajout du noeud de départ au graphe
+		graph.setStartNode(new Node(start.x, start.y));
+
+		//ajout du noeud de fin au graphe
+		graph.setEndNode(new Node(end.x, end.y));
+		
+		//calcul du chemin via computeGraph, convertion, et simplification.
+		ArrayList<Vec2> pathVec2 = new ArrayList<Vec2>();
+		ArrayList<Node> pathNode = computeGraph(graph);
+		for(int i = 0; i < pathNode.size(); i++)
+			pathVec2.add(pathNode.get(i).toVec2());
+		simplify(pathVec2);
+		return pathVec2;
+	}
+	
+	/**
+	 * renvoie un chemin sous forme de node, non optimise. methode interne a la classe.
+	 * @param graph
+	 * @return
+	 */
+	private ArrayList<Node> computeGraph(Graph graph)
+	{
+		//algo A star
+		
+		ArrayList<Node> openList = new ArrayList<Node>(); //liste ouverte des points, triee par heuristique croissante
+		ArrayList<Node> closedList = new ArrayList<Node>(); //liste fermee des points, triee par cout croissant
+		openList.add(graph.getStartNode());
+		graph.getStartNode().setHeuristicCost(graph.getEndNode());
+		//le noeud precedant le premier noeud est lui-même
+		graph.getStartNode().setPrevious(graph.getStartNode());
+		//tant que la liste ouverte n'est pas vide ou que l'on n'est pas encore arrivé
+		while(!openList.isEmpty() && openList.get(0) != graph.getEndNode())
 		{
-			//parcours des points du chemin
-			for(int pathCount = 0; pathCount < path.size(); pathCount++)
+			//on supprime le point a l'heuristique le plus faible a la liste ouverte
+			Node current = openList.remove(0);
+			
+			//on ajoute tous les points adjacents a ce noeud dans la liste ouverte, en la laissant triee par cout total = cout heuristique + cout croissant.
+			//i designe l'indice des noeuds adjacents au noeud actuel
+			for(int i = 0; i < current.getLinkNumber(); i++)
 			{
-				//si un point est dans un robot, on le supprime
-				if((path.get(pathCount).x - ennemy.get(robotsCount).getPosition().x)*(path.get(pathCount).x - ennemy.get(robotsCount).getPosition().x) + (path.get(pathCount).y - ennemy.get(robotsCount).getPosition().y)*(path.get(pathCount).y - ennemy.get(robotsCount).getPosition().y) <= ennemy.get(robotsCount).getRadius()*ennemy.get(robotsCount).getRadius())
+				//j designe l'indice permettant de placer chaque noeud adjacent au bon endroit dans la liste ouverte
+				int j = 0;
+				Node adjacent = current.getLink(i).getDestination();
+				if((!openList.contains(adjacent) || adjacent.getCost() > adjacent.calculateCost(current))  && !closedList.contains(adjacent))
 				{
-					path.remove(pathCount);
-					pathCount--;
+					//le noeud actuel est designe comme predecesseur de son successeur
+					adjacent.setPrevious(current);
+					//calcul de l'heuristique
+					adjacent.setHeuristicCost(graph.getEndNode());
+					//calcul du cout
+					adjacent.setCost(current.getLink(i).getDestination().getPrevious());
+					while(j < openList.size() && openList.get(j).getHeuristicCost() + openList.get(j).getCost() < adjacent.getHeuristicCost() + adjacent.getCost())
+						j++;
+					//ajout du noeud suivant le noeud actuel dans la liste ouverte
+					openList.add(j, adjacent);
 				}
 			}
 			
-			//parcours des points du chemin
-			for(int pathCount = 0; pathCount < path.size() - 1; pathCount++)
+			//ajout du point actuel a la liste fermee, tout en la maintenant triee par cout croissant
+			int j = 0;
+			while(j < closedList.size() && current.getCost() < closedList.get(j).getCost())
+				j++;
+			closedList.add(j, current);
+		}
+		ArrayList<Node> path = new ArrayList<Node>();
+		//si on a vide la liste ouverte, c'est qu'aucun chemin ne peut etre trouve
+		if(openList.isEmpty())
+			System.out.println("aucun chemin trouve :(");
+		//sinon, des chemins ont ete trouves, on determine le plus court
+		else
+		{
+			path.add(graph.getEndNode());
+			while(path.get(path.size() - 1) != graph.getStartNode())
 			{
-				//si un segment du chemin coupe le robot ennemi
-				if(intersects(new Segment(path.get(pathCount), path.get(pathCount + 1)), ennemy.get(robotsCount)))
+				path.add(path.get(path.size() - 1).getPrevious());
+			}
+		}
+		return path;
+	}
+
+	/**
+	 * 
+	 * @param segment1
+	 * @param segment2
+	 * @return vrai si il y a intersection entre les deux segments, faux sinon (les extremites ne sont pas comptees comme intersection)
+	 */
+	public static boolean intersects(Segment segment1, Segment segment2)
+	{
+		// les points formant les segments 1 et 2 sont A1, B1, A2, B2
+		// pour qu'il y ait intersection, il faut :
+		// - les segments ne soient pas paralleles : (A1B1)^(A2B2) != 0
+		// - les point d'intersection est entre A2 et B2 : (A1B1)^(A1B2) * (A1B1)^(A1A2) < 0
+		// - les point d'intersection est entre A1 et B1 : (A2B2)^(A2B1) * (A2B2)^(A2A1) < 0
+		// ^ = produit vectoriel
+		return ((double)segment1.getB().x - (double)segment1.getA().x) * ((double)segment2.getB().y - (double)segment2.getA().y) - ((double)segment1.getB().y - (double)segment1.getA().y) * ((double)segment2.getB().x - (double)segment2.getA().x) != 0
+				&& (((double)segment1.getB().x - (double)segment1.getA().x) * ((double)segment2.getB().y - (double)segment1.getA().y) - ((double)segment1.getB().y - (double)segment1.getA().y) * ((double)segment2.getB().x - (double)segment1.getA().x)) * (((double)segment1.getB().x - (double)segment1.getA().x) * ((double)segment2.getA().y - (double)segment1.getA().y) - ((double)segment1.getB().y - (double)segment1.getA().y) * ((double)segment2.getA().x - (double)segment1.getA().x)) < 0
+				&& (((double)segment2.getB().x - (double)segment2.getA().x) * ((double)segment1.getB().y - (double)segment2.getA().y) - ((double)segment2.getB().y - (double)segment2.getA().y) * ((double)segment1.getB().x - (double)segment2.getA().x)) * (((double)segment2.getB().x - (double)segment2.getA().x) * ((double)segment1.getA().y - (double)segment2.getA().y) - ((double)segment2.getB().y - (double)segment2.getA().y) * ((double)segment1.getA().x - (double)segment2.getA().x)) < 0
+				;
+	}
+	
+	/**
+	 * 
+	 * @param segment1
+	 * @param segment2
+	 * @return le point d'intersection des droites portees par les segments.
+	 */
+	public static Vec2 intersection(Segment segment1, Segment segment2)
+	{
+		// resolution du systeme associe aux deux segments
+		double inter, k;
+		
+		if((segment2.getB().y - segment2.getA().y) != 0)
+		{
+			inter = (double)(segment2.getB().x - segment2.getA().x) / (double)(segment2.getB().y - segment2.getA().y);
+			k = (segment1.getA().x - segment2.getA().x + inter * (double)(segment2.getA().y - segment1.getA().y)) / (double)(segment1.getB().x - segment1.getA().x - inter * (segment1.getB().y - segment1.getA().y));
+		}
+		else
+			k = -(double)(segment2.getA().y - segment1.getA().y) / (double)(segment1.getB().y - segment1.getA().y);
+		
+		return new Vec2((int)(segment1.getA().x - k * (segment1.getB().x - segment1.getA().x)), (int)(segment1.getA().y - k * (segment1.getB().y - segment1.getA().y)));
+	}
+	
+	/**
+	 * 
+	 * @param path
+	 * @return vrai si le chemin est correct(ne rencontre pas d'obstacles), faux sinon
+	 */
+	public boolean isPathCorrect(ArrayList<Vec2> path)
+	{
+		boolean intersects = false;
+		//parcours du chemin
+		for(int i = 0; i < path.size() - 1; i++)
+		{
+			//test de collision avec chaque segment
+			for(int j = 0; j < mTable.getObstacleManager().getLines().size(); j++)
+			{
+				//si les deux segments de coupent
+				if(intersects(mTable.getObstacleManager().getLines().get(j), new Segment(path.get(i), path.get(i+1))))
 				{
-					//si le chemin le plus court semble etre dans le sens direct
-					if(Geometry.isCCWOriented(path.get(pathCount), path.get(pathCount + 1), ennemy.get(robotsCount).getPosition().toPoint()))
-					{
-						int precision = 0;
-						Path dodgeCircle = dodgeCircle(path.get(pathCount), path.get(pathCount + 1), new Circle(ennemy.get(robotsCount).getPosition(), ennemy.get(robotsCount).getRadius()), true, precision);
-						//on teste le chemin calcule
-						Path toTest = new Path();
-						toTest.add(path.get(pathCount));
-						toTest.insert(toTest.size(), dodgeCircle);
-						toTest.add(path.get(pathCount + 1));
-						if(isPathCorrect(toTest, table))
-							path.insert(pathCount + 1, dodgeCircle);
-						else //sinon on essaye dans l'autre sens
-						{
-							dodgeCircle = dodgeCircle(path.get(pathCount), path.get(pathCount + 1), new Circle(ennemy.get(robotsCount).getPosition(), ennemy.get(robotsCount).getRadius()), false, precision);
-							//on teste le chemin calcule
-							toTest = new Path();
-							toTest.add(path.get(pathCount));
-							toTest.insert(toTest.size(), dodgeCircle);
-							toTest.add(path.get(pathCount + 1));
-							if(isPathCorrect(toTest, table))
-								path.insert(pathCount + 1, dodgeCircle);
-						}
-					}
-					else
-					{
-						int precision = 0;
-						Path dodgeCircle = dodgeCircle(path.get(pathCount), path.get(pathCount + 1), new Circle(ennemy.get(robotsCount).getPosition(), ennemy.get(robotsCount).getRadius()), false, precision);
-						//on teste le chemin calcule
-						Path toTest = new Path();
-						toTest.add(path.get(pathCount));
-						toTest.insert(toTest.size(), dodgeCircle);
-						toTest.add(path.get(pathCount + 1));
-						if(isPathCorrect(toTest, table))
-							path.insert(pathCount + 1, dodgeCircle);
-						else //sinon on essaye dans l'autre sens
-						{
-							dodgeCircle = dodgeCircle(path.get(pathCount), path.get(pathCount + 1), new Circle(ennemy.get(robotsCount).getPosition(), ennemy.get(robotsCount).getRadius()), true, precision);
-							//on teste le chemin calcule
-							toTest = new Path();
-							toTest.add(path.get(pathCount));
-							toTest.insert(toTest.size(), dodgeCircle);
-							toTest.add(path.get(pathCount + 1));
-							if(isPathCorrect(toTest, table))
-								path.insert(pathCount + 1, dodgeCircle);
-						}
-					}
-					pathCount++;
+					intersects = true;
+					//System.out.println("intersection avec la ligne "+j);
 				}
 			}
 		}
-	}
-	
-	public static Path dodgeCircle(Point a, Point b, Circle circle, boolean CCW, int precision)
-	{
-		Path path = new Path();
-		Point firstTangentPoint, secondTangentPoint;
-		//a->b
-		List<Point> tangentPoints = tangentPoints(a, circle);
-		if(Geometry.isCCWOriented(a, tangentPoints.get(0), circle.center.toPoint()) == CCW)
-			firstTangentPoint = tangentPoints.get(0);
-		else
-			firstTangentPoint = tangentPoints.get(1);
-		//b->a
-		tangentPoints = tangentPoints(b, circle);
-		if(Geometry.isCCWOriented(tangentPoints.get(0), b, circle.center.toPoint()) == CCW)
-			secondTangentPoint = tangentPoints.get(0);
-		else
-			secondTangentPoint = tangentPoints.get(1);
-
-
-		path.add(intersection(a, firstTangentPoint, secondTangentPoint, b));
-		
-		return path;
-	}
-	
-	public static List<Point> tangentPoints(Point point, Circle circle)
-	{
-		double x1, x2, y1, y2;
-		double a  = point.x - circle.center.x;
-		double b = point.y - circle.center.y;
-		double R2 = a*a + b*b - circle.ray*circle.ray;
-		double r2 = circle.ray*circle.ray;
-		double c = a*a + b*b - R2 + circle.ray*circle.ray;
-		a *= 2;
-		b *= 2;
-		double sqrtDelta = Math.sqrt(4*a*a*c*c - 4*(a*a+b*b)*(c*c-b*b*r2));
-		//recherche des points d'intersection
-		x1 = circle.center.x + (2*a*c - sqrtDelta)/(2*(a*a + b*b));
-		x2 = circle.center.x + (2*a*c + sqrtDelta)/(2*(a*a + b*b));
-		if (b == 0)
-		{
-			double inter = (2*c - a*a) / (2*a);
-			inter = Math.sqrt(R2 - inter * inter);
-			y1 = circle.center.y + 0.5*b + inter;
-			y2 = circle.center.y + 0.5*b - inter;
-		}
-		else
-		{
-			y1 = circle.center.y + (c - a*(x1-circle.center.x)) / b;
-			y2 = circle.center.y + (c - a*(x2-circle.center.x)) / b;
-		}
-		return Arrays.asList(new Point(x1, y1), new Point(x2, y2));
-	}
-	
-	public static boolean intersects(Segment line, ObstacleCircular circle)
-	{
-		double aire = (circle.getPosition().x - line.getA().x)*(line.getB().y - line.getA().y) - (circle.getPosition().y - line.getA().y)*(line.getB().x - line.getA().x);
-		return aire * aire / ((line.getB().x - line.getA().x)*(line.getB().x - line.getA().x)+(line.getB().y - line.getA().y)*(line.getB().y - line.getA().y)) <= circle.getRadius() * circle.getRadius()
-			&& (line.getB().x - line.getA().x)*(circle.getPosition().x - line.getA().x) + (line.getB().y - line.getA().y)*(circle.getPosition().y - line.getA().y) >= 0
-			&& (line.getA().x - line.getB().x)*(circle.getPosition().x - line.getB().x) + (line.getA().y - line.getB().y)*(circle.getPosition().y - line.getB().y) >= 0 ;
-	}
-	*/
-	/**
-	 * 
-	 * @param point
-	 * @param table
-	 * @return vrai si le point est accessible, faux sinon
-	 */
-	public static boolean isOnTable(Point point, Table table)
-	{
-		//TODO : ajouter le rayon du robot
-		if (point.x <= -1310 || point.x >= 1310 || point.y <= 190 || point.y >= 1740)
-			return false;
-		ArrayList<ObstacleRectangular> rects = table.getObstacleManager().getRects();
-		for(int i = 0; i < rects.size(); i++)
-		{
-			if(point.x <= rects.get(i).getPosition().x + rects.get(i).getSizeX() / 2 + 190
-			&& point.x >= rects.get(i).getPosition().x - rects.get(i).getSizeX() / 2 - 190
-			&& point.y <= rects.get(i).getPosition().y + rects.get(i).getSizeY() + 190
-			&& point.y >= rects.get(i).getPosition().y - 190)
-				return false;
-		}
-		return true;
+		return !intersects;
 	}
 	
 	/**
-	 * si le chemin est considere comme correct pour la recherche de chemin statique
+	 * simplifie un chemin en tenant compte des obstacles
 	 * @param path
-	 * @param table
-	 * @return
 	 */
-	public static boolean isPathCorrect(Path path, Table table)
+	public void simplify(ArrayList<Vec2> path)
 	{
-		if(!isOnTable(path.get(0), table))
-			return false;
-		for(int ind_path = 0; ind_path < path.size() - 1; ind_path++)
-		{
-			if(!isOnTable(path.get(ind_path + 1), table))
-				return false;
-			for(int ind_ligne = 0 ; ind_ligne < table.getObstacleManager().getLines().size() ; ind_ligne++)
-		    	if(intersects(path.get(ind_path), path.get(ind_path + 1), table.getObstacleManager().getLines().get(ind_ligne).getA(), table.getObstacleManager().getLines().get(ind_ligne).getB()))
-		    		return false;
-		}
-		return true;
-	}
-	
-	/**
-	 * 
-	 * @param path chemin a simplifier
-	 * @return un chemin simplifie
-	 */
-	public static Path simplify(Path path, Table table)
-	{
-		
-		// TODO: expliciter en commentaire l'algo
-		
+		//parcours du chemin
 		for(int i = 0; i < path.size() - 2; i++)
 		{
-			boolean removable = true;
-			for(int ind_ligne = 0 ; ind_ligne < table.getObstacleManager().getLines().size() ; ind_ligne++)
-	    	{
-		    	if( intersects(path.get(i), path.get(i+2), table.getObstacleManager().getLines().get(ind_ligne).getA(), table.getObstacleManager().getLines().get(ind_ligne).getB()));
-		    	{
-		    		removable = false;
-		    	}
-	    	}
-			if(removable)
+			ArrayList<Vec2> segment = new ArrayList<Vec2>();
+			segment.add(path.get(i));
+			segment.add(path.get(i+2));
+			if(isPathCorrect(segment))
 			{
+				//si possible on retire un point inutile dans le chemin
 				path.remove(i+1);
 				i--;
 			}
 		}
-		return path;
 	}
 }
+
+
+
+

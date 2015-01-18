@@ -67,15 +67,11 @@ public class GetPlot extends AbstractScript
 			//on choisi le bras le plus adapte (assez dificile)
 			boolean isChoosenArmLeft = true;
 			
-			//on se place en face
-			int symetryForEntryPoint = 1;
-			if (stateToConsider.robot.getSymmetry())
-			{
-				symetryForEntryPoint = -1;
-			}
-			stateToConsider.robot.turn(Math.atan2(	entryPosition(versionToExecute).center.y						- stateToConsider.robot.getPosition().y,	// position voulue - position actuelle
-						 							entryPosition(versionToExecute).center.x * symetryForEntryPoint	- stateToConsider.robot.getPosition().x		// de meme
-						 						 ));
+			//le robot est deja en face du plot puisqu'on a appele goToThenExec (qui met en face du centre du script) si un jour on autorise de lancer exec il faudra remettre ces lignes (et les debugger)
+			//stateToConsider.robot.turn(Math.atan2(	entryPosition(versionToExecute).center.y - stateToConsider.robot.getPosition().y,	// position voulue - position actuelle
+			//			 							entryPosition(versionToExecute).center.x - stateToConsider.robot.getPosition().x	// de meme
+			//			 						 ));
+			
 			
 			//on mange le plot
 			try 
@@ -98,11 +94,23 @@ public class GetPlot extends AbstractScript
 			
 			if (!stateToConsider.table.isGlassXTaken(0))
 			{
-				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);
-				stateToConsider.robot.moveLengthwise(160, hooksToConsider);
-				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
-				stateToConsider.robot.moveLengthwise(180, hooksToConsider);
-				stateToConsider.robot.isGlassStoredLeft = true;
+				if (!stateToConsider.robot.isGlassStoredLeft)
+				{
+					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);					
+					stateToConsider.robot.moveLengthwise(160, hooksToConsider);
+					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
+					stateToConsider.robot.moveLengthwise(180, hooksToConsider);
+					stateToConsider.robot.isGlassStoredLeft = true;
+				}
+				else
+				{
+					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);					
+					stateToConsider.robot.moveLengthwise(160, hooksToConsider);
+					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
+					stateToConsider.robot.moveLengthwise(180, hooksToConsider);
+					stateToConsider.robot.isGlassStoredRight = true;
+				}
+				
 				stateToConsider.table.takeGlassX(0);
 			}
 			else
@@ -117,18 +125,6 @@ public class GetPlot extends AbstractScript
 			}
 			
 			stateToConsider.robot.turn(0);
-			
-			//on mange le plot 3
-			try 
-			{
-				eatPlot(false, false, stateToConsider);
-			}
-			catch (UnableToEatPlot e) 
-			{
-				stateToConsider.robot.moveLengthwise(-150, hooksToConsider);
-				finalise(stateToConsider);
-			}
-			stateToConsider.table.eatPlotX(3);
 			
 			//on mange le plot 4
 			try 
@@ -148,6 +144,25 @@ public class GetPlot extends AbstractScript
 				}
 			}
 			stateToConsider.table.eatPlotX(4);
+			
+			//on mange le plot 3
+			try 
+			{
+				eatPlot(false, false, stateToConsider);
+			}
+			catch (UnableToEatPlot e) 
+			{
+				try 
+				{
+					eatPlot(false, false, stateToConsider);
+				}
+				catch (UnableToEatPlot e1) 
+				{
+					stateToConsider.robot.moveLengthwise(-150, hooksToConsider);
+					finalise(stateToConsider);
+				}
+			}
+			stateToConsider.table.eatPlotX(3);
 			
 		}
 		//TODO derniere version a treter
@@ -212,17 +227,17 @@ public class GetPlot extends AbstractScript
 	public Circle entryPosition(int id)
 	{
 		if (id==0)
-			return new Circle (200,600,200);
+			return new Circle (200,600,180);
 		else if (id==1)
-			return new Circle (400,250,200);
+			return new Circle (400,250,180);
 		else if (id==2)
-			return new Circle (630,645,200);
+			return new Circle (630,645,180);
 		else if (id==34)
 			return new Circle (900,220,0);
 		else if (id==56)
 			return new Circle (650,1700,0);
 		else if (id==7)
-			return new Circle (1410,1800,200);
+			return new Circle (1410,1800,180);
 		else 
 			log.debug("out of bound : mauvais numero de script", this);
 			return new Circle (0,1000);
@@ -271,13 +286,13 @@ public class GetPlot extends AbstractScript
 		if (isArmChosenLeft) 
 		{
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
-			stateToConsider.robot.sleep(500); //TODO modifier le temps d'xecution de ARM_LEFT_OPEN_SLOW a la place
+			stateToConsider.robot.sleep(1000); //TODO modifier le temps d'xecution de ARM_LEFT_OPEN_SLOW a la place
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
 		}
 		else
 		{
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN_SLOW, true);
-			stateToConsider.robot.sleep(500); //TODO modifier le temps d'xecution de ARM_RIGHT_OPEN_SLOW a la place
+			stateToConsider.robot.sleep(1000); //TODO modifier le temps d'xecution de ARM_RIGHT_OPEN_SLOW a la place
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
 		}
 		//si on a attrape qqc on termine sinon on essaie avec l'autre bras (si isSecondTry == false)
@@ -305,6 +320,7 @@ public class GetPlot extends AbstractScript
 				else
 				{
 					eatPlot(true,!isArmChosenLeft, stateToConsider);
+					return;
 				}
 			}
 		stateToConsider.robot.storedPlotCount++;
