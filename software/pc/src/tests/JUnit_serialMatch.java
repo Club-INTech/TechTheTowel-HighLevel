@@ -39,7 +39,7 @@ public class JUnit_serialMatch extends JUnit_Test
 	
 	@SuppressWarnings("unchecked")
 	@Before
-	public void setUp() throws Exception 
+	public void setUp() throws Exception
 	{
 		super.setUp();
 		real_state = (GameState<Robot>) container.getService(ServiceNames.GAME_STATE);
@@ -47,7 +47,7 @@ public class JUnit_serialMatch extends JUnit_Test
 		mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
 		emptyHook = new ArrayList<Hook> ();
 		
-		if (config.getProperty("couleur").equals("jaune"))
+		if (real_state.robot.getSymmetry())
 		{
 			real_state.robot.setPosition(new Vec2 (-1381,1000));
 			real_state.robot.setOrientation(0); 
@@ -59,7 +59,19 @@ public class JUnit_serialMatch extends JUnit_Test
 			real_state.robot.setOrientation(Math.PI);
 			//sinon on est vert donc on est en PI
 		}
+		
+		
 		real_state.robot.updateConfig();
+		try 
+		{
+			matchSetUp(real_state.robot);
+		} 
+		catch (SerialConnexionException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		
 	}
 	
 	public void waitMatchBegin()
@@ -79,6 +91,26 @@ public class JUnit_serialMatch extends JUnit_Test
 		
 		// maintenant que le jumper est retiré, le match a commencé
 		//ThreadTimer.matchStarted = true;
+	}
+	
+	/**
+	 * le set up du match en cours (mise en place des actionneurs)
+	 * @param robot le robot a setuper
+	 * @throws SerialConnexionException si l'ordinateur n'arrive pas a communiquer avec les cartes
+	 */
+	public void matchSetUp(Robot robot) throws SerialConnexionException
+	{
+		robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
+		robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
+		robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, false);
+		robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, false);
+		robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
+		robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
+		robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
+		robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
+		robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, false);
+		robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+		
 	}
 
 	@Test
@@ -178,11 +210,12 @@ public class JUnit_serialMatch extends JUnit_Test
 						real_state.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
 					else
 						real_state.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
-					real_state.robot.turn (Math.PI);
+					real_state.robot.turn(Math.PI*-0.5);
 					if (real_state.robot.getSymmetry())
 						real_state.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, true);
 					else
 						real_state.robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, true);
+					real_state.robot.turn (Math.PI);
 				}
 				catch (UnableToMoveException e1) 
 				{
@@ -282,15 +315,6 @@ public class JUnit_serialMatch extends JUnit_Test
 					state.robot.moveLengthwise(1000);
 					state.robot.turn(Math.PI);
 				}
-				//state.robot.moveLengthwise(1120);
-				//state.robot.turn(-0.5*Math.PI);
-				//state.robot.moveLengthwise(-110);
-				//scriptManager.getScript(ScriptNames.DROP_CARPET).execute(1, state, emptyHook, true);
-				
-				//aller en () point d'entree de fermeture du clap 1-2
-				//scriptManager.getScript(ScriptNames.CLOSE_CLAP).execute(12, state, emptyHook, true);
-				//aller en () point d'entree de fermeture du clap 3
-				//scriptManager.getScript(ScriptNames.CLOSE_CLAP).execute(3, state, emptyHook, true);
 			} 
 			catch (UnableToMoveException e) 
 			{
