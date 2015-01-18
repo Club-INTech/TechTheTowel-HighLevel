@@ -5,9 +5,7 @@ import org.junit.*;
 import pathDingDing.PathDingDing;
 import container.Container;
 import table.Table;
-import smartMath.Point;
-import smartMath.Vec2;
-import smartMath.Path;
+import smartMath.*;
 
 import java.util.ArrayList;
 
@@ -19,6 +17,7 @@ public class JUnit_Pathfinding extends JUnit_Test
 {
 	Window win;
 	Table table;
+	PathDingDing pf;
 	
     @Before
     public void setUp() throws Exception
@@ -26,9 +25,10 @@ public class JUnit_Pathfinding extends JUnit_Test
         super.setUp();
         table = (Table)container.getService(ServiceNames.TABLE);
         win = new Window(table);
+        pf = new PathDingDing(table);
     }
     
-    @Test
+    //@Test
     public void testRandPF1() throws Exception
     {
     	int compt = 0;
@@ -38,7 +38,7 @@ public class JUnit_Pathfinding extends JUnit_Test
 	    	try
 	    	{
 	    		System.out.println("essai :");
-				path = PathDingDing.computePath(new Vec2((int)((Math.random() - 0.5) * 3000), (int)(Math.random() * 2000)), new Vec2((int)((Math.random() - 0.5) * 3000), (int)(Math.random() * 2000)), (Table)container.getService(ServiceNames.TABLE));
+				path = pf.computePath(new Vec2((int)((Math.random() - 0.5) * 3000), (int)(Math.random() * 2000)), new Vec2((int)((Math.random() - 0.5) * 3000), (int)(Math.random() * 2000)));
 				for(int i = 0; i < path.size(); i++)
 		    	{
 		    		System.out.println("-----------------------------" + path.get(i).toString());
@@ -55,7 +55,7 @@ public class JUnit_Pathfinding extends JUnit_Test
     	System.out.println("nombre de calculs : " + compt);
     }
     
-    //@Test
+    @Test
     public void testClickedPF() throws Exception
     {
     	while(true)
@@ -65,12 +65,41 @@ public class JUnit_Pathfinding extends JUnit_Test
 		    	try
 		    	{
 		    		table.getObstacleManager().setEnnemyRobotPosition(win.getMouse().getMiddleClickPosition(), 0);
-			    	win.getPanel().drawArrayList(PathDingDing.computePath(win.getMouse().getLeftClickPosition(), win.getMouse().getRightClickPosition(), table));
+			    	win.getPanel().drawArrayList(pf.computePath(win.getMouse().getLeftClickPosition(), win.getMouse().getRightClickPosition()));
 			    }
 		    	catch(PathNotFoundException e)
 		    	{
 		    		System.out.println("--------------not on table------------------");
 		    	}
+		    	win.getPanel().repaint();
+    		}
+    		else
+    			Thread.sleep(100);
+    	}
+    }
+    
+    //@Test
+    public void testCollision() throws Exception
+    {
+    	while(true)
+    	{
+    		if(win.getMouse().hasClicked())
+    		{
+    			ArrayList<Vec2> path = new ArrayList<Vec2>();
+    			path.add(win.getMouse().getLeftClickPosition());
+    			path.add(win.getMouse().getRightClickPosition());
+			    win.getPanel().drawArrayList(path);
+    			ArrayList<Vec2> path2 = new ArrayList<Vec2>();
+    			path2.add(new Vec2(-1100, 778));
+    			path2.add(new Vec2(-1100, 1222));
+			    win.getPanel().drawArrayList(path2);
+			    if(pf.intersects(new Segment(win.getMouse().getLeftClickPosition(), win.getMouse().getRightClickPosition()), new Segment(new Vec2(-1100, 778), new Vec2(-1100, 1222))))
+			    {
+		    		System.out.println("intersection...");
+		    		win.getPanel().drawPoint(pf.intersection(new Segment(win.getMouse().getLeftClickPosition(), win.getMouse().getRightClickPosition()), new Segment(new Vec2(-1100, 778), new Vec2(-1100, 1222))));
+			    }
+			    else
+			    	System.out.println("not");
 		    	win.getPanel().repaint();
     		}
     		else
