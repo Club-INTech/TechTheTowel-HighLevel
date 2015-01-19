@@ -1,7 +1,6 @@
 package robot.cardsWrappers;
 
 import java.util.Hashtable;
-import java.util.Random;
 
 import robot.serial.SerialConnexion;
 import utils.*;

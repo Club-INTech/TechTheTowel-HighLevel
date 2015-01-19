@@ -281,10 +281,11 @@ public abstract class Robot implements Service
      *
      * @param aim le point de destination du mouvement
      * @param hooksToConsider les hooks déclenchables durant ce mouvement
+     * @param table, la table sur laquelle le robot se deplace
      * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
      * @throws PathNotFoundException lorsque le pathdingding ne trouve pas de chemin 
      */
-    public void moveToLocation(Vec2 aim, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, PathNotFoundException
+    public void moveToLocation(Vec2 aim, ArrayList<Hook> hooksToConsider, Table table) throws UnableToMoveException, PathNotFoundException
     {
     	//TODO: remettre le pathDingDing et enlever les deux lignes en dessous
 		//ArrayList<Vec2> path = PathDingDing.computePath(getPosition(),aim,table);
