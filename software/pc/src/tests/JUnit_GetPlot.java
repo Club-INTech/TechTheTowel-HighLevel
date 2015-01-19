@@ -29,7 +29,7 @@ import robot.cardsWrappers.SensorsCardWrapper;
  */
 public class JUnit_GetPlot extends JUnit_Test 
 {
-
+	// TODO doc
 	ArrayList<Hook> emptyHook;
 	GameState<Robot> real_state;
 	ScriptManager scriptmanager;

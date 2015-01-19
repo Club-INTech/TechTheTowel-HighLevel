@@ -116,23 +116,23 @@ public class JUnit_serialMatch extends JUnit_Test
 				//premiere action du match
 				
 				System.out.println("Le robot commence le match");
-				
-					try 
-					{
-						AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
-						exitScript.execute(0, real_state, emptyHook, true );
-					} 
-					catch (SerialConnexionException  e) 
-					{
-						System.out.println("CRITICAL : Carte mal branchée. Match termine");
-						e.printStackTrace();
-						return;
-					}
-					catch (UnableToMoveException e) 
-					{
-						System.out.println("CRITICAL : Chemin bloque, enlevez votre main");
-						e.printStackTrace();
-					}
+			
+				try 
+				{
+					AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
+					exitScript.execute(0, real_state, emptyHook, true );
+				} 
+				catch (SerialConnexionException  e) 
+				{
+					System.out.println("CRITICAL : Carte mal branchée. Match termine");
+					e.printStackTrace();
+					return;
+				}
+				catch (UnableToMoveException e) 
+				{
+					System.out.println("CRITICAL : Chemin bloque, enlevez votre main");
+					e.printStackTrace();
+				}
 				
 				//debut du match
 				System.out.println("Debut du match");
