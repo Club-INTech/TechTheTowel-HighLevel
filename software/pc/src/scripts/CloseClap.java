@@ -56,7 +56,7 @@ public class CloseClap extends AbstractScript
 	public CloseClap(HookFactory hookFactory, Config config, Log log)
 	{
 		super(hookFactory, config, log);
-		versions = new int[]{1, 2, 3 ,12 ,123 , -1}; // liste des versions
+		versions = new int[]{1, 2, 3 ,12 ,123 , -1, -12}; // liste des versions
 	}
 	
 	@Override
@@ -74,6 +74,8 @@ public class CloseClap extends AbstractScript
 			closeFirstAndSecondClap(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
 		else if (versionToExecute == -1)
 			closeFirstClapBackward(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
+		else if (versionToExecute == -12)
+			closeFirstAndSecondClapBackward(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
 		else
 			log.debug("Souci de version", this);	//TODO: lancer une exception de version inconnue (la créer si besoin)
 	}
@@ -406,7 +408,48 @@ public class CloseClap extends AbstractScript
 		stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
 	}
 
-
+	void closeFirstAndSecondClapBackward(GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
+	{
+		try 
+		{
+			//TODO ferme les 2 claps proches, à mettre en script
+			stateToConsider.robot.turn (Math.PI*0.25);
+			
+			if (stateToConsider.robot.getSymmetry())
+				stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
+			else
+				stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
+			
+			stateToConsider.robot.turn (0);
+			if (stateToConsider.robot.getSymmetry())
+				stateToConsider.robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, true);
+			else
+				stateToConsider.robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, true);
+			
+			stateToConsider.robot.moveLengthwise(-400);
+			if (stateToConsider.robot.getSymmetry())
+				stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
+			else
+				stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
+			
+			stateToConsider.robot.turn(Math.PI*-0.5);
+			if (stateToConsider.robot.getSymmetry())
+				stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, true);
+			else
+				stateToConsider.robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, true);
+			
+			stateToConsider.robot.turn (Math.PI);
+			
+			//On ferme tout pour finir
+			stateToConsider.robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
+		}
+		catch (UnableToMoveException e1) 
+		{
+			e1.printStackTrace();
+		} 
+	}
+	
 	
 	@Override
 	public Circle entryPosition(int version)
@@ -423,6 +466,10 @@ public class CloseClap extends AbstractScript
 			return new Circle(1290,231); //point d'entrée : devant le clap 1
 		else if(version == 123)
 			return new Circle(1290,231); //point d'entrée : devant le clap 1
+		else if(version == -1)
+			return new Circle(1290,231); //point d'entrée : devant le clap 1 //FIXME point d'entrée à changer
+		else if(version == -12)
+			return new Circle(1290,231); //point d'entrée : devant le clap 1 //FIXME point d'entrée à changer
 		else
 		{
 			log.debug("Probleme d'entrée de position", this);
@@ -439,7 +486,7 @@ public class CloseClap extends AbstractScript
 			score -= 5;
 		if(stateToConsider.table.getIsClap2Closed() || version == 1 || version == 3 || version == -1 )
 			score -= 5;
-		if(stateToConsider.table.getIsClap3Closed() || version == 1 || version == 2 || version == 12 || version == -1 )
+		if(stateToConsider.table.getIsClap3Closed() || version == 1 || version == 2 || version == 12 || version == -1 || version == -12)
 			score -= 5;
 		return score;
 	}

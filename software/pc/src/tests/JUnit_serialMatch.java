@@ -114,7 +114,7 @@ public class JUnit_serialMatch extends JUnit_Test
 	}
 
 	@Test
-	public void test()
+	public void test() throws PathNotFoundException, SerialFinallyException
 	{
 				container.startAllThreads();
 				waitMatchBegin();
@@ -194,6 +194,8 @@ public class JUnit_serialMatch extends JUnit_Test
 				
 				try 
 				{
+					//TODO ferme les 2 claps proches, à mettre en script : 
+					//scriptmanager.getScript(ScriptNames.CLOSE_CLAP).goToThenExec(-12, real_state, true, emptyHook);
 					real_state.robot.turn (Math.PI*0.25);
 					
 					if (real_state.robot.getSymmetry())
@@ -227,7 +229,6 @@ public class JUnit_serialMatch extends JUnit_Test
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
 				try 
 				{
 					scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(1, real_state, true, emptyHook );
@@ -238,7 +239,6 @@ public class JUnit_serialMatch extends JUnit_Test
 					//attention ce sont surement des erreurs dans le finally d'un script donc elle servent a proteger le meca !
 					//ou un robot ennemi devant. Donc beaucoup moins critique (ce serai bie de pouvoir differencer les deux)
 					e.printStackTrace();
-				
 				} 
 				catch (PathNotFoundException e)
 				{
@@ -247,10 +247,8 @@ public class JUnit_serialMatch extends JUnit_Test
 				} 
 				catch (SerialFinallyException e) 
 				{
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
 				try 
 				{
 					real_state.robot.turn (Math.PI*0.5);
@@ -272,7 +270,6 @@ public class JUnit_serialMatch extends JUnit_Test
 					//attention ce sont surement des erreurs dans le finally d'un script donc elle servent a proteger le meca !
 					//ou un robot ennemi devant. Donc beaucoup moins critique (ce serai bie de pouvoir differencer les deux)
 					e.printStackTrace();
-				
 				} 
 				catch (PathNotFoundException e)
 				{
@@ -284,14 +281,12 @@ public class JUnit_serialMatch extends JUnit_Test
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
 				try 
 				{
 					real_state.robot.moveLengthwise(-400);
 				}
 				catch (UnableToMoveException e1) 
 				{
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				
