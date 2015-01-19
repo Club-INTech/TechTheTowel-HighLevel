@@ -343,7 +343,7 @@ public abstract class Robot implements Service
     	/* on ajoute le point du cercle B'=(B-A)*(L-r)/L+A
     	 * B le centre du cercle, r le rayon du cercle, A le point precedent dans le path et L la taille du dernier vecteur deplacement
     	 */
-    	path.add(movementVector.dotFloat( (movementVector.length()-aim.ray)/movementVector.length() ).plusNewVector(precedentPathPoint));
+    	path.add(movementVector.dotFloat( (movementVector.length()-aim.radius)/movementVector.length() ).plusNewVector(precedentPathPoint));
 
     	followPath(path , hooksToConsider);
     }

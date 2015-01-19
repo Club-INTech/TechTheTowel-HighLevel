@@ -412,7 +412,6 @@ public class CloseClap extends AbstractScript
 	{
 		try 
 		{
-			//TODO ferme les 2 claps proches, à mettre en script
 			stateToConsider.robot.turn (Math.PI*0.25);
 			
 			if (stateToConsider.robot.getSymmetry())
@@ -453,23 +452,21 @@ public class CloseClap extends AbstractScript
 	
 	@Override
 	public Circle entryPosition(int version)
-	{
-		// FIXME: points exacts à entrer
-		
-		if (version == 1 || version == -1)
-			return new Circle(1290,231); //point d'entrée : bord de la table, robot devant le clap 1
+	{		
+		if (version == 1)
+			return new Circle(1290,230); //point d'entrée : bord de la table, robot devant le clap 1
 		else if(version == 2)
-			return new Circle(700,231); //point d'entrée : devant le clap 2
+			return new Circle(700,230); //point d'entrée : devant le clap 2
 		else if(version == 3)
-			return new Circle(-1050,231);//point d'entrée : devant le clap 3
+			return new Circle(-1050,230);//point d'entrée : devant le clap 3
 		else if(version == 12)
-			return new Circle(1290,231); //point d'entrée : devant le clap 1
+			return new Circle(1290,230); //point d'entrée : devant le clap 1
 		else if(version == 123)
-			return new Circle(1290,231); //point d'entrée : devant le clap 1
+			return new Circle(1290,230); //point d'entrée : devant le clap 1
 		else if(version == -1)
-			return new Circle(1290,231); //point d'entrée : devant le clap 1 //FIXME point d'entrée à changer
+			return new Circle(1240,230); //point d'entrée : devant le clap 1 //FIXME point d'entrée à changer
 		else if(version == -12)
-			return new Circle(1290,231); //point d'entrée : devant le clap 1 //FIXME point d'entrée à changer
+			return new Circle(1240,230); //point d'entrée : devant le clap 1 //FIXME point d'entrée à changer
 		else
 		{
 			log.debug("Probleme d'entrée de position", this);

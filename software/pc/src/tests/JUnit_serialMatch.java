@@ -35,8 +35,6 @@ public class JUnit_serialMatch extends JUnit_Test
 	ScriptManager scriptmanager;
 	SensorsCardWrapper  mSensorsCardWrapper;
 	
-		
-	
 	@SuppressWarnings("unchecked")
 	@Before
 	public void setUp() throws Exception
@@ -60,7 +58,6 @@ public class JUnit_serialMatch extends JUnit_Test
 			//sinon on est vert donc on est en PI
 		}
 		
-		
 		real_state.robot.updateConfig();
 		try 
 		{
@@ -69,9 +66,7 @@ public class JUnit_serialMatch extends JUnit_Test
 		catch (SerialConnexionException e) 
 		{
 			e.printStackTrace();
-		}
-		
-		
+		}		
 	}
 	
 	public void waitMatchBegin()
@@ -140,11 +135,9 @@ public class JUnit_serialMatch extends JUnit_Test
 					}
 				
 				//debut du match
-				System.out.println("debut du match");
-
+				System.out.println("Debut du match");
 				
 				//premier script
-				
 				try 
 				{
 					scriptmanager.getScript(ScriptNames.DROP_CARPET).goToThenExec(1, real_state, true, emptyHook );
@@ -169,7 +162,6 @@ public class JUnit_serialMatch extends JUnit_Test
 				}
 				
 				//second script
-				
 				try 
 				{
 					scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(2, real_state, true, emptyHook );
@@ -180,7 +172,6 @@ public class JUnit_serialMatch extends JUnit_Test
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
 				try 
 				{
 					scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(34, real_state, true, emptyHook );
@@ -194,30 +185,8 @@ public class JUnit_serialMatch extends JUnit_Test
 				
 				try 
 				{
-					//TODO ferme les 2 claps proches, à mettre en script : 
-					//scriptmanager.getScript(ScriptNames.CLOSE_CLAP).goToThenExec(-12, real_state, true, emptyHook);
-					real_state.robot.turn (Math.PI*0.25);
-					
-					if (real_state.robot.getSymmetry())
-						real_state.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
-					else
-						real_state.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
-					real_state.robot.turn (0);
-					if (real_state.robot.getSymmetry())
-						real_state.robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, true);
-					else
-						real_state.robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, true);
-					real_state.robot.moveLengthwise(-400);
-					if (real_state.robot.getSymmetry())
-						real_state.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
-					else
-						real_state.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
-					real_state.robot.turn(Math.PI*-0.5);
-					if (real_state.robot.getSymmetry())
-						real_state.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, true);
-					else
-						real_state.robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, true);
-					real_state.robot.turn (Math.PI);
+					//ferme les 2 claps proches : 
+					scriptmanager.getScript(ScriptNames.CLOSE_CLAP).goToThenExec(-12, real_state, true, emptyHook);
 				}
 				catch (UnableToMoveException e1) 
 				{
@@ -297,24 +266,5 @@ public class JUnit_serialMatch extends JUnit_Test
 
 				//Le match s'arrête
 				container.destructor();
-				
-		
-		/*
-			try 
-			{
-				state.robot.moveLengthwise(1000);
-				while(true)
-				{
-					state.robot.moveLengthwise(1000);
-					state.robot.turn(0);
-					state.robot.moveLengthwise(1000);
-					state.robot.turn(Math.PI);
-				}
-			} 
-			catch (UnableToMoveException e) 
-			{
-				e.printStackTrace();
-			}
-	*/
 	}
 }
