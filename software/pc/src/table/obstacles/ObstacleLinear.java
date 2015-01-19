@@ -4,6 +4,7 @@ import smartMath.Point;
 
 /**
  * classe non complètement rattachée au projet. Eventuellement à refaire...
+ * TODO: la description de cette classe doit être compléter pour expliquer ce a quoi elle sert
  * @author Étienne
  *
  */

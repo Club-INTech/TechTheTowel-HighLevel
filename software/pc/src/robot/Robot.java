@@ -281,7 +281,7 @@ public abstract class Robot implements Service
      *
      * @param aim le point de destination du mouvement
      * @param hooksToConsider les hooks déclenchables durant ce mouvement
-     * @param table, la table sur laquelle le robot se deplace
+     * @param table la table sur laquelle le robot se deplace
      * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
      * @throws PathNotFoundException lorsque le pathdingding ne trouve pas de chemin 
      */
