@@ -72,6 +72,7 @@ public class GetPlot extends AbstractScript
 			//			 							entryPosition(versionToExecute).center.x - stateToConsider.robot.getPosition().x	// de meme
 			//			 						 ));
 			
+			
 			//on mange le plot
 			try 
 			{
@@ -93,11 +94,23 @@ public class GetPlot extends AbstractScript
 			
 			if (!stateToConsider.table.isGlassXTaken(0))
 			{
-				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);
-				stateToConsider.robot.moveLengthwise(160, hooksToConsider);
-				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
-				stateToConsider.robot.moveLengthwise(180, hooksToConsider);
-				stateToConsider.robot.isGlassStoredLeft = true;
+				if (!stateToConsider.robot.isGlassStoredLeft)
+				{
+					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);					
+					stateToConsider.robot.moveLengthwise(160, hooksToConsider);
+					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
+					stateToConsider.robot.moveLengthwise(180, hooksToConsider);
+					stateToConsider.robot.isGlassStoredLeft = true;
+				}
+				else
+				{
+					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);					
+					stateToConsider.robot.moveLengthwise(160, hooksToConsider);
+					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
+					stateToConsider.robot.moveLengthwise(180, hooksToConsider);
+					stateToConsider.robot.isGlassStoredRight = true;
+				}
+				
 				stateToConsider.table.takeGlassX(0);
 			}
 			else
@@ -112,18 +125,6 @@ public class GetPlot extends AbstractScript
 			}
 			
 			stateToConsider.robot.turn(0);
-			
-			//on mange le plot 3
-			try 
-			{
-				eatPlot(false, false, stateToConsider);
-			}
-			catch (UnableToEatPlot e) 
-			{
-				stateToConsider.robot.moveLengthwise(-150, hooksToConsider);
-				finalise(stateToConsider);
-			}
-			stateToConsider.table.eatPlotX(3);
 			
 			//on mange le plot 4
 			try 
@@ -143,6 +144,25 @@ public class GetPlot extends AbstractScript
 				}
 			}
 			stateToConsider.table.eatPlotX(4);
+			
+			//on mange le plot 3
+			try 
+			{
+				eatPlot(false, false, stateToConsider);
+			}
+			catch (UnableToEatPlot e) 
+			{
+				try 
+				{
+					eatPlot(false, false, stateToConsider);
+				}
+				catch (UnableToEatPlot e1) 
+				{
+					stateToConsider.robot.moveLengthwise(-150, hooksToConsider);
+					finalise(stateToConsider);
+				}
+			}
+			stateToConsider.table.eatPlotX(3);
 			
 		}
 		//TODO derniere version a treter
@@ -207,17 +227,17 @@ public class GetPlot extends AbstractScript
 	public Circle entryPosition(int id)
 	{
 		if (id==0)
-			return new Circle (200,600,200);
+			return new Circle (200,600,180);
 		else if (id==1)
-			return new Circle (400,250,200);
+			return new Circle (400,250,180);
 		else if (id==2)
-			return new Circle (630,645,200);
+			return new Circle (630,645,180);
 		else if (id==34)
 			return new Circle (900,220,0);
 		else if (id==56)
 			return new Circle (650,1700,0);
 		else if (id==7)
-			return new Circle (1410,1800,200);
+			return new Circle (1410,1800,180);
 		else 
 			log.debug("out of bound : mauvais numero de script", this);
 			return new Circle (0,1000);

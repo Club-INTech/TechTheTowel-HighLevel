@@ -42,14 +42,14 @@ public class JUnit_DropPile extends JUnit_Test {
 		if (config.getProperty("couleur").equals("jaune"))
 		{
 			real_state.robot.setPosition(new Vec2 (-1381,1000));
+			//On est jaune donc on est en 0 
 			real_state.robot.setOrientation(0); 
-			//si on est jaune on est en 0 
 		}
 		else
 		{
 			real_state.robot.setPosition(new Vec2 (1381,1000));
+			//On est vert donc on est en PI
 			real_state.robot.setOrientation(Math.PI);
-			//sinon on est vert donc on est en PI
 		}
 		real_state.robot.updateConfig();
 		
@@ -71,46 +71,45 @@ public class JUnit_DropPile extends JUnit_Test {
 	@Test
 	public void test()
 	{
-		
-		
 		//on sort de la zone de depart
-				try 
-				{
-					AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
-					exitScript.execute(0, real_state, emptyHook, true );
-				} 
-				catch (SerialConnexionException  e) 
-				{
-					System.out.println("CRITICAL : Carte mal branchée. Match termine");
-					e.printStackTrace();
-					return;
-				}
-				catch (UnableToMoveException e) 
-				{
-					System.out.println("CRITICAL : Chemin bloque, enlevez votre main");
-					e.printStackTrace();
-				}
-				
-				try 
-				{
-					scriptmanager.getScript(ScriptNames.FREE_STACK).goToThenExec(1, real_state, true, emptyHook );
-				}
-				catch (UnableToMoveException | SerialConnexionException e) 
-				{
-					// un robot ennemi devant ?
-					e.printStackTrace();
-				
-				} 
-				catch (PathNotFoundException e)
-				{
-					//TODO: le pathfinding ne trouve pas de chemin
-					e.printStackTrace();
-				} 
-				catch (SerialFinallyException e) 
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+		try 
+		{
+			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
+			exitScript.execute(0, real_state, emptyHook, true );
+		} 
+		catch (SerialConnexionException  e) 
+		{
+			log.critical("Carte mal branchée. Match termine", this);
+			e.printStackTrace();
+			return;
+		}
+		catch (UnableToMoveException e) 
+		{
+			log.critical("CRITICAL : Chemin bloque, enlevez votre main", this);
+			e.printStackTrace();
+		}
+		
+		// libère la pile de plots
+		try 
+		{
+			scriptmanager.getScript(ScriptNames.FREE_STACK).goToThenExec(1, real_state, true, emptyHook );
+		}
+		catch (UnableToMoveException | SerialConnexionException e) 
+		{
+			// un robot ennemi devant ?
+			e.printStackTrace();
+		
+		} 
+		catch (PathNotFoundException e)
+		{
+			//TODO: le pathfinding ne trouve pas de chemin
+			e.printStackTrace();
+		} 
+		catch (SerialFinallyException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 }

@@ -35,11 +35,9 @@ public class JUnit_serialMatch extends JUnit_Test
 	ScriptManager scriptmanager;
 	SensorsCardWrapper  mSensorsCardWrapper;
 	
-		
-	
 	@SuppressWarnings("unchecked")
 	@Before
-	public void setUp() throws Exception 
+	public void setUp() throws Exception
 	{
 		super.setUp();
 		real_state = (GameState<Robot>) container.getService(ServiceNames.GAME_STATE);
@@ -47,7 +45,7 @@ public class JUnit_serialMatch extends JUnit_Test
 		mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
 		emptyHook = new ArrayList<Hook> ();
 		
-		if (config.getProperty("couleur").equals("jaune"))
+		if (real_state.robot.getSymmetry())
 		{
 			real_state.robot.setPosition(new Vec2 (-1381,1000));
 			real_state.robot.setOrientation(0); 
@@ -59,7 +57,16 @@ public class JUnit_serialMatch extends JUnit_Test
 			real_state.robot.setOrientation(Math.PI);
 			//sinon on est vert donc on est en PI
 		}
+		
 		real_state.robot.updateConfig();
+		try 
+		{
+			matchSetUp(real_state.robot);
+		} 
+		catch (SerialConnexionException e) 
+		{
+			e.printStackTrace();
+		}		
 	}
 	
 	public void waitMatchBegin()
@@ -80,39 +87,57 @@ public class JUnit_serialMatch extends JUnit_Test
 		// maintenant que le jumper est retiré, le match a commencé
 		//ThreadTimer.matchStarted = true;
 	}
+	
+	/**
+	 * le set up du match en cours (mise en place des actionneurs)
+	 * @param robot le robot a setuper
+	 * @throws SerialConnexionException si l'ordinateur n'arrive pas a communiquer avec les cartes
+	 */
+	public void matchSetUp(Robot robot) throws SerialConnexionException
+	{
+		robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
+		robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
+		robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, false);
+		robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, false);
+		robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
+		robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
+		robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
+		robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
+		robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, false);
+		robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+		
+	}
 
 	@Test
-	public void test()
+	public void test() throws PathNotFoundException, SerialFinallyException
 	{
 				container.startAllThreads();
 				waitMatchBegin();
 				//premiere action du match
 				
 				System.out.println("Le robot commence le match");
-				
-					try 
-					{
-						AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
-						exitScript.execute(0, real_state, emptyHook, true );
-					} 
-					catch (SerialConnexionException  e) 
-					{
-						System.out.println("CRITICAL : Carte mal branchée. Match termine");
-						e.printStackTrace();
-						return;
-					}
-					catch (UnableToMoveException e) 
-					{
-						System.out.println("CRITICAL : Chemin bloque, enlevez votre main");
-						e.printStackTrace();
-					}
+			
+				try 
+				{
+					AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
+					exitScript.execute(0, real_state, emptyHook, true );
+				} 
+				catch (SerialConnexionException  e) 
+				{
+					System.out.println("CRITICAL : Carte mal branchée. Match termine");
+					e.printStackTrace();
+					return;
+				}
+				catch (UnableToMoveException e) 
+				{
+					System.out.println("CRITICAL : Chemin bloque, enlevez votre main");
+					e.printStackTrace();
+				}
 				
 				//debut du match
-				System.out.println("debut du match");
-
+				System.out.println("Debut du match");
 				
 				//premier script
-				
 				try 
 				{
 					scriptmanager.getScript(ScriptNames.DROP_CARPET).goToThenExec(1, real_state, true, emptyHook );
@@ -137,7 +162,6 @@ public class JUnit_serialMatch extends JUnit_Test
 				}
 				
 				//second script
-				
 				try 
 				{
 					scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(2, real_state, true, emptyHook );
@@ -148,7 +172,6 @@ public class JUnit_serialMatch extends JUnit_Test
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
 				try 
 				{
 					scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(34, real_state, true, emptyHook );
@@ -162,27 +185,8 @@ public class JUnit_serialMatch extends JUnit_Test
 				
 				try 
 				{
-					real_state.robot.turn (Math.PI*0.25);
-					
-					if (real_state.robot.getSymmetry())
-						real_state.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
-					else
-						real_state.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
-					real_state.robot.turn (0);
-					if (real_state.robot.getSymmetry())
-						real_state.robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, true);
-					else
-						real_state.robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, true);
-					real_state.robot.moveLengthwise(-400);
-					if (real_state.robot.getSymmetry())
-						real_state.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
-					else
-						real_state.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
-					real_state.robot.turn (Math.PI);
-					if (real_state.robot.getSymmetry())
-						real_state.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, true);
-					else
-						real_state.robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, true);
+					//ferme les 2 claps proches : 
+					scriptmanager.getScript(ScriptNames.CLOSE_CLAP).goToThenExec(-12, real_state, true, emptyHook);
 				}
 				catch (UnableToMoveException e1) 
 				{
@@ -194,7 +198,6 @@ public class JUnit_serialMatch extends JUnit_Test
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
 				try 
 				{
 					scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(1, real_state, true, emptyHook );
@@ -205,7 +208,6 @@ public class JUnit_serialMatch extends JUnit_Test
 					//attention ce sont surement des erreurs dans le finally d'un script donc elle servent a proteger le meca !
 					//ou un robot ennemi devant. Donc beaucoup moins critique (ce serai bie de pouvoir differencer les deux)
 					e.printStackTrace();
-				
 				} 
 				catch (PathNotFoundException e)
 				{
@@ -214,10 +216,8 @@ public class JUnit_serialMatch extends JUnit_Test
 				} 
 				catch (SerialFinallyException e) 
 				{
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
 				try 
 				{
 					real_state.robot.turn (Math.PI*0.5);
@@ -239,7 +239,6 @@ public class JUnit_serialMatch extends JUnit_Test
 					//attention ce sont surement des erreurs dans le finally d'un script donc elle servent a proteger le meca !
 					//ou un robot ennemi devant. Donc beaucoup moins critique (ce serai bie de pouvoir differencer les deux)
 					e.printStackTrace();
-				
 				} 
 				catch (PathNotFoundException e)
 				{
@@ -251,14 +250,12 @@ public class JUnit_serialMatch extends JUnit_Test
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
 				try 
 				{
 					real_state.robot.moveLengthwise(-400);
 				}
 				catch (UnableToMoveException e1) 
 				{
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				
@@ -269,33 +266,5 @@ public class JUnit_serialMatch extends JUnit_Test
 
 				//Le match s'arrête
 				container.destructor();
-				
-		
-		/*
-			try 
-			{
-				state.robot.moveLengthwise(1000);
-				while(true)
-				{
-					state.robot.moveLengthwise(1000);
-					state.robot.turn(0);
-					state.robot.moveLengthwise(1000);
-					state.robot.turn(Math.PI);
-				}
-				//state.robot.moveLengthwise(1120);
-				//state.robot.turn(-0.5*Math.PI);
-				//state.robot.moveLengthwise(-110);
-				//scriptManager.getScript(ScriptNames.DROP_CARPET).execute(1, state, emptyHook, true);
-				
-				//aller en () point d'entree de fermeture du clap 1-2
-				//scriptManager.getScript(ScriptNames.CLOSE_CLAP).execute(12, state, emptyHook, true);
-				//aller en () point d'entree de fermeture du clap 3
-				//scriptManager.getScript(ScriptNames.CLOSE_CLAP).execute(3, state, emptyHook, true);
-			} 
-			catch (UnableToMoveException e) 
-			{
-				e.printStackTrace();
-			}
-	*/
 	}
 }

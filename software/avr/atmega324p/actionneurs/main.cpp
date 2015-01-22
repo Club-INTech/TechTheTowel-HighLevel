@@ -28,7 +28,7 @@ void positionnerAscenseur()
 	else if(captBasON && communication.etatAscenseur == communication.Sol)
 		communication.etatAscenseur = communication.Bas;
 	else if(!captBasON && (communication.etatAscenseur == communication.Estrade || communication.etatAscenseur == communication.Bas) && moteurMonte)
-		communication.etatAscenseur = communication.Milieu;
+		communication.etatAscenseur = communication.Estrade;
 	
 	
 	

@@ -712,15 +712,12 @@ public class Locomotion implements Service
 			else if(Math.abs(newInfos[2] - oldInfos[2]) > 2)
 				out = false;
 
-
 			// si on ne bouge plus, et qu'on n'est pas arrivé, c'est que ca bloque
 			else
 			{
-				log.debug("reponse isTurnFinished : "+out+", position : "+newInfos[2]+"->"+Geometry.modulo(newInfos[2],(2000*Math.PI))+" precedent : "+oldInfos[2]+"->"+Geometry.modulo(oldInfos[2],(2000*Math.PI))+" aim : "+finalOrientation+"->"+Geometry.modulo(finalOrientation,(2000*Math.PI))+", difference"+Geometry.minusAngle((Geometry.modulo(newInfos[2],(2000*Math.PI))), Geometry.modulo(finalOrientation,(2000*Math.PI)), 2000*Math.PI), this);
 				throw new BlockedException();
 
 			}
-			log.debug("reponse isTurnFinished : "+out+", position : "+newInfos[2]+"->"+Geometry.modulo(newInfos[2],(2000*Math.PI))+" precedent : "+oldInfos[2]+"->"+Geometry.modulo(oldInfos[2],(2000*Math.PI))+" aim : "+finalOrientation+"->"+Geometry.modulo(finalOrientation,(2000*Math.PI))+", difference"+Geometry.minusAngle((Geometry.modulo(newInfos[2],(2000*Math.PI))), Geometry.modulo(finalOrientation,(2000*Math.PI)), 2000*Math.PI), this);
 			oldInfos = newInfos;
 		} 
 		catch (SerialConnexionException e)

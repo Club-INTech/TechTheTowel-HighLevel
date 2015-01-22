@@ -28,9 +28,10 @@
 #define cgBas 152
 #define ggOuvert 180
 #define ggFerme 143
-#define ggIntermediaire 160 
+#define ggIntermediaire 153
 #define gdOuvert 30
 #define gdFerme 64
+#define gdIntermediaire 54
 
 class Communication : public Singleton<Communication>
 {
@@ -332,6 +333,25 @@ public:
 		}
 		else if (strcmp (ordre , "ggi") == 0)
 		{
+			guideGauche.goTo(ggIntermediaire);
+		}
+		else if (strcmp (ordre , "gdi") == 0)
+		{
+			guideDroit.goTo(gdIntermediaire);
+		}
+		else if (strcmp (ordre , "go") == 0)
+		{
+			guideDroit.goTo(gdOuvert);
+			guideGauche.goTo(ggOuvert);
+		}
+		else if (strcmp (ordre , "gf") == 0)
+		{
+			guideDroit.goTo(gdFerme);
+			guideGauche.goTo(ggFerme);
+		}
+		else if (strcmp (ordre , "gi") == 0)
+		{
+			guideDroit.goTo(gdIntermediaire);
 			guideGauche.goTo(ggIntermediaire);
 		}
  		/// REPONSE AUX REQUETES DU HAUT NIVEAU
