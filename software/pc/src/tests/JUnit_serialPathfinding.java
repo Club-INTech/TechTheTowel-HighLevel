@@ -28,6 +28,8 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 	Random rand = new Random();
 	ArrayList<Hook> emptyHook = new ArrayList<Hook>();	
 	Window win;
+	Table table;
+	PathDingDing pf;
 		
 	
 	@SuppressWarnings("unchecked")
@@ -44,7 +46,9 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 		state.robot.setOrientation(0);
 		
 		
-		win = new Window(new Table(log, config));
+        table = (Table)container.getService(ServiceNames.TABLE);
+        win = new Window(table);
+        pf = new PathDingDing(table);
 		
 		state.robot.updateConfig();
 	}
@@ -70,7 +74,7 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 			try 
 			{
 				//TOTO : adapter au nouveau pf
-				path = PathDingDing.computePath(robot.getPosition(), new Vec2(randX,randY));
+				path = pf.computePath(robot.getPosition(), new Vec2(randX,randY));
 				log.debug("chemin : "+path.toString(),this);
 				path.remove(0);
 				robot.followPath(path, emptyHook);
@@ -110,7 +114,7 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 		{
 			try 
 			{
-				path = PathDingDing.computePath(robot.getPosition(), win.getMouse().getLeftClickPosition());
+				path = pf.computePath(robot.getPosition(), win.getMouse().getLeftClickPosition());
 				log.debug("chemin : "+path.toString(),this);
 				path.remove(0);
 				robot.followPath(path, emptyHook);
