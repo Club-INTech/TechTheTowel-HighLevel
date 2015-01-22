@@ -44,7 +44,7 @@ public class ObstacleManager
         this.log = log;
         this.config = config;
         
-        //creation des obstacles
+        //creation des listes qui contiendrons les différents types d'obstacles
         mLines = new ArrayList<Segment>();
 		mGreenPlots = new ArrayList<ObstacleCircular>();
 		mYellowPlots = new ArrayList<ObstacleCircular>();
@@ -52,9 +52,11 @@ public class ObstacleManager
 		mRects = new ArrayList<ObstacleRectangular>();
         
 		//TODO: appeler la config pour ces valeurs
-        double radius = 190;
-		int rayonPlot = 30;
 		
+        //double radius = 190; // TODO: trouver un nom de varible plus explicite.
+		int rayonPlot = 30; // TODO: pourquoi est-ce une varible ?
+		
+		// TODO: a quoi coresspondent des numéros ?
 		
 		//obstacles 1, 2, 3
       	mLines.add(new Segment(new Vec2(-1500, 778), new Vec2(-1100, 778)));
@@ -113,6 +115,7 @@ public class ObstacleManager
       	mYellowPlots.add(new ObstacleCircular(new Vec2(1410, 150), rayonPlot));
       	
       	//ennemi
+      	//TODO: deux ennemis
       	mEnnemyRobot.add(new ObstacleCircular(new Vec2(0, 1000), 200));
     }    
 

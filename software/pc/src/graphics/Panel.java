@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import table.Table;
 import smartMath.*;
+import pathDingDing.*;
 
 import table.obstacles.*;
 
@@ -22,15 +23,17 @@ public class Panel extends JPanel
 	/** numéro pour la serialisation	 */
 	private static final long serialVersionUID = -3033815690221481964L;
 	
-	
-	private ArrayList<Vec2> mPath = new ArrayList<Vec2>();
-	private Vec2 mPoint;
+	private ArrayList<Vec2> mPath;
 	private Table mTable;
+	private boolean showGraph;
+	private Graph mGraph;
+	
 	
 	public Panel(Table table)
 	{
+		mPath = new ArrayList<Vec2>();
 		mTable = table;
-		mPoint = new Vec2();
+		showGraph = false;
 	}
 	
 	public void paintComponent(Graphics g)
@@ -52,6 +55,16 @@ public class Panel extends JPanel
 	    for(int i = 0; i < rects.size(); i++)
 	    {
 	    	g.fillRect((rects.get(i).getPosition().x - (rects.get(i).getSizeX() / 2) + 1500) * this.getWidth() / 3000, -(rects.get(i).getPosition().y + rects.get(i).getSizeY()) * this.getHeight() / 2000 + this.getHeight(), rects.get(i).getSizeX() * this.getWidth() / 3000, rects.get(i).getSizeY() * this.getHeight() / 2000);
+	    }
+	    
+	    g.setColor(Color.orange);
+	    if(showGraph)
+	    {
+	    	//parcours des noeuds
+	    	for(int i = 0; i < mGraph.getNodes().size(); i++)
+	    		//parcours des liens de chaque noeud
+	    		for(int j = 0; j < mGraph.getNodes().get(i).getLinkNumber(); j++)
+	    			g.drawLine((mGraph.getNodes().get(i).x + 1500) * this.getWidth() / 3000, -mGraph.getNodes().get(i).y * this.getHeight() / 2000 + this.getHeight(), (mGraph.getNodes().get(i).getLink(j).getDestination().x + 1500) * this.getWidth() / 3000, -mGraph.getNodes().get(i).getLink(j).getDestination().y * this.getHeight() / 2000 + this.getHeight());
 	    }
 	    
 	    g.setColor(Color.green);
@@ -84,9 +97,6 @@ public class Panel extends JPanel
 	    }
 	    
 	    g.setColor(Color.cyan);
-	    g.fillOval((mPoint.x + 1500) * this.getWidth() / 3000 - 3, -mPoint.y * this.getHeight() / 2000 + this.getHeight() - 3, 6, 6);
-	    
-	    g.setColor(Color.cyan);
 	    for(int i = 0; i < mPath.size(); i++)
 	    {
 	    	g.fillOval((mPath.get(i).x + 1500) * this.getWidth() / 3000 - 3, -mPath.get(i).y * this.getHeight() / 2000 + this.getHeight() - 3, 6, 6);
@@ -105,10 +115,10 @@ public class Panel extends JPanel
 		repaint();
 	}
 	
-	public void drawPoint(Vec2 point)
+	public void drawGraph(Graph graph)
 	{
-		mPoint = point;
-		repaint();
+		mGraph = graph;
+		showGraph = true;
 	}
 	
 	public Table getTable()

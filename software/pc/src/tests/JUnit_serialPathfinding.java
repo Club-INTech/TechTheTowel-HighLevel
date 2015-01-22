@@ -70,7 +70,7 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 			try 
 			{
 				//TOTO : adapter au nouveau pf
-				path = PathDingDing.computePath(robot.getPosition(), new Vec2(randX,randY), state.table);
+				path = PathDingDing.computePath(robot.getPosition(), new Vec2(randX,randY));
 				log.debug("chemin : "+path.toString(),this);
 				path.remove(0);
 				robot.followPath(path, emptyHook);
@@ -83,6 +83,9 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 			catch (UnableToMoveException e) 
 			{
 				log.debug("chemin bloque", this);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 			log.debug("en position ("+robot.getPosition().x+", "+robot.getPosition().y+")", this);
 		}
@@ -107,7 +110,7 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 		{
 			try 
 			{
-				path = PathDingDing.computePath(robot.getPosition(), win.getMouse().getLeftClickPosition(), state.table);
+				path = PathDingDing.computePath(robot.getPosition(), win.getMouse().getLeftClickPosition());
 				log.debug("chemin : "+path.toString(),this);
 				path.remove(0);
 				robot.followPath(path, emptyHook);
@@ -120,6 +123,9 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 			catch (UnableToMoveException e) 
 			{
 				log.debug("chemin bloque", this);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 			log.debug("en position ("+robot.getPosition().x+", "+robot.getPosition().y+")", this);
 		}

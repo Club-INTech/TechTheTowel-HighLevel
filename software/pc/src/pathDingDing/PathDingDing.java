@@ -16,6 +16,7 @@ import exceptions.*;
 public class PathDingDing
 {
 	private Table mTable;
+	private Graph mGraph;
 	
 	/**
 	 * constructeur
@@ -24,6 +25,7 @@ public class PathDingDing
 	public PathDingDing(Table table)
 	{
 		mTable = table;
+		//mGraph = new Graph(mTable);
 	}
 	
 	/**
@@ -35,28 +37,32 @@ public class PathDingDing
 	 */
 	public ArrayList<Vec2> computePath(Vec2 start, Vec2 end) throws Exception
 	{
+		//on recree un graphe... pour l'instant
+		//TODO : a revoir
+		mGraph = new Graph(mTable);
+		
 		//le cas ou les points de depart et d'arrivee sont reliables en ligne droite est directement traite
 		ArrayList<Vec2> directPath =  new ArrayList<Vec2>();
 		directPath.add(start);
 		directPath.add(end);
 		if(isPathCorrect(directPath))
 			return directPath;
-		
-		Graph graph = new Graph();
-		
 
 		//ajout du noeud de départ au graphe
-		graph.setStartNode(new Node(start.x, start.y));
+		mGraph.setStartNode(new Node(start.x, start.y));
 
 		//ajout du noeud de fin au graphe
-		graph.setEndNode(new Node(end.x, end.y));
+		Node endNode = new Node(end.x, end.y);
+		mGraph.setEndNode(endNode);
 		
 		//calcul du chemin via computeGraph, convertion, et simplification.
 		ArrayList<Vec2> pathVec2 = new ArrayList<Vec2>();
-		ArrayList<Node> pathNode = computeGraph(graph);
+		ArrayList<Node> pathNode = computeGraph(mGraph);
 		for(int i = 0; i < pathNode.size(); i++)
 			pathVec2.add(pathNode.get(i).toVec2());
 		simplify(pathVec2);
+		//on detache le dernier noeud du graphe
+		mGraph.unlinkNode(endNode);
 		return pathVec2;
 	}
 	
@@ -147,6 +153,27 @@ public class PathDingDing
 	
 	/**
 	 * 
+	 * @param segment
+	 * @param circle
+	 * @return vrai si il y a intersection entre le segment et le cercle, faux sinon
+	 */
+	public static boolean intersects(Segment segment, Circle circle)
+	{
+		// TODO : commenter
+		double area = (circle.position.x - segment.getA().x)*(segment.getB().y - segment.getA().y) - (circle.position.y - segment.getA().y)*(segment.getB().x - segment.getA().x);
+		double distA = (segment.getA().x - circle.position.x)*(segment.getA().x - circle.position.x) + (segment.getA().y - circle.position.y)*(segment.getA().y - circle.position.y);
+		double distB = (segment.getB().x - circle.position.x)*(segment.getB().x - circle.position.x) + (segment.getB().y - circle.position.y)*(segment.getB().y - circle.position.y);
+		if(distA >= circle.radius*circle.radius && distB < circle.radius*circle.radius || distA < circle.radius*circle.radius && distB >= circle.radius*circle.radius)
+			return true;
+		return distA >= circle.radius*circle.radius
+			&& distB >= circle.radius*circle.radius
+			&& area * area / ((segment.getB().x - segment.getA().x)*(segment.getB().x - segment.getA().x)+(segment.getB().y - segment.getA().y)*(segment.getB().y - segment.getA().y)) <= circle.radius * circle.radius
+			&& (segment.getB().x - segment.getA().x)*(circle.position.x - segment.getA().x) + (segment.getB().y - segment.getA().y)*(circle.position.y - segment.getA().y) >= 0
+			&& (segment.getA().x - segment.getB().x)*(circle.position.x - segment.getB().x) + (segment.getA().y - segment.getB().y)*(circle.position.y - segment.getB().y) >= 0;
+	}
+	
+	/**
+	 * 
 	 * @param segment1
 	 * @param segment2
 	 * @return le point d'intersection des droites portees par les segments.
@@ -211,6 +238,11 @@ public class PathDingDing
 				i--;
 			}
 		}
+	}
+	
+	public Graph getGraph()
+	{
+		return mGraph;
 	}
 }
 

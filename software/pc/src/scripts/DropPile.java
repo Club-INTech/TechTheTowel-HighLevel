@@ -50,23 +50,31 @@ public class DropPile extends AbstractScript
 			//on eleve notre membre (l'ascenseur)
 			//stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_STAGE, true);
 			//on se deplace vers elle
-			stateToConsider.robot.moveLengthwise(20, hooksToConsider, true);
+			stateToConsider.robot.moveLengthwise(50, hooksToConsider, true);
 			
 			//on y place notre membre
 			//stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
-			//on ouvre notre coeur (le guide)
+			//on ouvre notre coeur (le guide) un peu
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
 			//stateToConsider.robot.moveLengthwise(50, hooksToConsider, true);
-			stateToConsider.robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_GUIDE, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_GUIDE, true);
+			
+			//puis beaucoup
 			stateToConsider.robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, true);
 			//on se vide (de nos plots)
 			stateToConsider.robot.storedPlotCount = 0;
 			
 			//on sort notre membre
 			stateToConsider.robot.moveLengthwise(-200, hooksToConsider, false);
 			
-			//mais on se referme
+			//mais on se referme un peu
+			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_GUIDE, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_GUIDE, true);
+			
+			//puis beaucoup
 			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, false);
 			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);

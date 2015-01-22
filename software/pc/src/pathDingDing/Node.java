@@ -32,9 +32,18 @@ public class Node
 		mLinks = new ArrayList<Link>();
 	}
 	
+	//ajoute une lien vers le noeud en argument
 	public void addLink(Node node)
 	{
 		mLinks.add(new Link(this, node));
+	}
+	
+	//supprime tous les liens vers le noeud en argument
+	public void deleteLink(Node node)
+	{
+		for(int i = 0; i < mLinks.size(); i++)
+			if(node == mLinks.get(i).getDestination())
+				mLinks.remove(i);
 	}
 	
 	public double distanceTo(Node destination)

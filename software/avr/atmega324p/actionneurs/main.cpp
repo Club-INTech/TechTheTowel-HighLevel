@@ -15,19 +15,49 @@ void positionnerAscenseur()
 	captBasON = B0::read(),
 	moteurON = B4::read(),
 	moteurMonte = B3::read();
+	//pour le débug...
+	/*
+	Communication::serial_pc::printfln("Etat ascenseur =");
+	if(communication.etatAscenseur == communication.Sol)
+		Communication::serial_pc::printfln("Sol");
+	else if(communication.etatAscenseur == communication.Bas)
+		Communication::serial_pc::printfln("Bas");
+	else if(communication.etatAscenseur == communication.Estrade)
+		Communication::serial_pc::printfln("Estrade");
+	else if(communication.etatAscenseur == communication.SousEstrade)
+		Communication::serial_pc::printfln("SousEstrade");
+	else if(communication.etatAscenseur == communication.Milieu)
+		Communication::serial_pc::printfln("Milieu");
+	else if(communication.etatAscenseur == communication.Haut)
+		Communication::serial_pc::printfln("Haut");
+	
+	Communication::serial_pc::printfln("Consigne ascenseur =");
+	if(communication.consigneAscenseur == communication.Sol)
+		Communication::serial_pc::printfln("Sol");
+	else if(communication.consigneAscenseur == communication.Bas)
+		Communication::serial_pc::printfln("Bas");
+	else if(communication.consigneAscenseur == communication.Estrade)
+		Communication::serial_pc::printfln("Estrade");
+	else if(communication.consigneAscenseur == communication.SousEstrade)
+		Communication::serial_pc::printfln("SousEstrade");
+	else if(communication.consigneAscenseur == communication.Milieu)
+		Communication::serial_pc::printfln("Milieu");
+	else if(communication.consigneAscenseur == communication.Haut)
+		Communication::serial_pc::printfln("Haut");
+	*/
 	
 	//Mise à jour de la position à partir des capteurs
 	if(captHautON)//Si le contact du haut est appuyé
 		communication.etatAscenseur = communication.Haut;	
 	else if(!captHautON && communication.etatAscenseur == communication.Haut)//Si le contact haut est relaché alors qu'on était en haut
 		communication.etatAscenseur = communication.Milieu;
-	else if(captBasON && communication.etatAscenseur == communication.Milieu)//Contact bas appuyé alors qu'on était au milieu
-		communication.etatAscenseur = communication.Estrade;
-	else if(!captBasON && (communication.etatAscenseur == communication.Estrade || communication.etatAscenseur == communication.Bas) && (!moteurMonte || !moteurON))
+	else if(captBasON && (communication.etatAscenseur == communication.Milieu || communication.etatAscenseur == communication.Estrade))//Contact bas appuyé alors qu'on était au milieu
+		communication.etatAscenseur = communication.SousEstrade;
+	else if(!captBasON && (communication.etatAscenseur == communication.Estrade || communication.etatAscenseur == communication.Bas || communication.etatAscenseur == communication.SousEstrade) && (!moteurMonte || !moteurON))
 		communication.etatAscenseur = communication.Sol;
 	else if(captBasON && communication.etatAscenseur == communication.Sol)
 		communication.etatAscenseur = communication.Bas;
-	else if(!captBasON && (communication.etatAscenseur == communication.Estrade || communication.etatAscenseur == communication.Bas) && moteurMonte)
+	else if(!captBasON && (communication.etatAscenseur == communication.SousEstrade || communication.etatAscenseur == communication.Bas) && moteurMonte)
 		communication.etatAscenseur = communication.Estrade;
 	
 	
@@ -57,7 +87,7 @@ void positionnerAscenseur()
 		B3::low();//Sens de l'ascenseur = Descendre
 		B4::high();//Mise en marche du moteur
 	}
-	else if(communication.consigneAscenseur == communication.Estrade && (communication.etatAscenseur == communication.Bas || communication.etatAscenseur == communication.Sol))
+	else if(communication.consigneAscenseur == communication.Estrade && (communication.etatAscenseur == communication.Bas || communication.etatAscenseur == communication.Sol || communication.etatAscenseur == communication.SousEstrade))
 	{
 		B3::high();//Sens de l'ascenseur = Monter
 		B4::high();//Mise en marche du moteur
