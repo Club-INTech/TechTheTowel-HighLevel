@@ -111,194 +111,194 @@ public class JUnit_serialMatch extends JUnit_Test
 	@Test
 	public void test() throws PathNotFoundException, SerialFinallyException
 	{
-				container.startAllThreads();
-				waitMatchBegin();
-				//premiere action du match
-				
-				System.out.println("Le robot commence le match");
+		container.startAllThreads();
+			waitMatchBegin();
+			//premiere action du match
 			
-				try 
-				{
-					AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
-					exitScript.execute(0, real_state, emptyHook, true );
-				} 
-				catch (SerialConnexionException  e) 
-				{
-					System.out.println("CRITICAL : Carte mal branchée. Match termine");
-					e.printStackTrace();
-					return;
-				}
-				catch (UnableToMoveException e) 
-				{
-					System.out.println("CRITICAL : Chemin bloque, enlevez votre main");
-					e.printStackTrace();
-				}
-				
-				//debut du match
-				System.out.println("Debut du match");
-				
-				
-				try 
-				{
-					scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(1, real_state, true, emptyHook );
-				} 
-				catch (SerialConnexionException  e) 
-				{
-					System.out.println("CRITICAL : Carte mal branchée. Match termine");
-					e.printStackTrace();
-					return;
-				}
-				catch (UnableToMoveException e) 
-				{
-					System.out.println("CRITICAL : Chemin bloque, enlevez votre main");
-					e.printStackTrace();
-				}
-				
-				//premier script
-				try 
-				{
-					scriptmanager.getScript(ScriptNames.DROP_CARPET).goToThenExec(1, real_state, true, emptyHook );
-				}
-				catch (UnableToMoveException | SerialConnexionException e) 
-				{
-					// TODO Main erreur critique :
-					//attention ce sont surement des erreurs dans le finally d'un script donc elle servent a proteger le meca !
-					//ou un robot ennemi devant. Donc beaucoup moins critique (ce serai bie de pouvoir differencer les deux)
-
-					e.printStackTrace();
-				
-				} 
-				catch (PathNotFoundException e)
-				{
-					//TODO: le pathfinding ne trouve pas de chemin
-					e.printStackTrace();
-				} 
-				catch (SerialFinallyException e) 
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				System.out.println("Tapis deposés");
-
-				//second script
-				try 
-				{
-					scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(2, real_state, true, emptyHook );
-				} 
-				catch (UnableToMoveException | SerialConnexionException
-						| PathNotFoundException | SerialFinallyException e1) 
-				{
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
-				System.out.println("PLot 2 pris");
-
-				
-				try 
-				{
-					scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(34, real_state, true, emptyHook );
-				} 
-				catch (UnableToMoveException | SerialConnexionException
-						| PathNotFoundException | SerialFinallyException e1) 
-				{
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
-				System.out.println("PLot 3, 4 et gobelet pris");
-				
-				try 
-				{
-					//ferme les 2 claps proches : 
-					scriptmanager.getScript(ScriptNames.CLOSE_CLAP).goToThenExec(-12, real_state, true, emptyHook);
-				}
-				catch (UnableToMoveException e1) 
-				{
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} 
-				catch (SerialConnexionException e) 
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				System.out.println("Clap 1 et 2 Fermés");
-
+		System.out.println("Le robot commence le match");
+		
+		try 
+		{
+			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
+			exitScript.execute(0, real_state, emptyHook, true );
+		} 
+		catch (SerialConnexionException  e) 
+		{
+			System.out.println("CRITICAL : Carte mal branchée. Match termine");
+			e.printStackTrace();
+			return;
+		}
+		catch (UnableToMoveException e) 
+		{
+			System.out.println("CRITICAL : Chemin bloque, enlevez votre main");
+			e.printStackTrace();
+		}
+		
+		//debut du match
+		System.out.println("Debut du match");
+		
 			
-				try 
-				{
-					scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(1, real_state, true, emptyHook );
-				}
-				catch (UnableToMoveException | SerialConnexionException e) 
-				{
-					// TODO Main erreur critique :
-					//attention ce sont surement des erreurs dans le finally d'un script donc elle servent a proteger le meca !
-					//ou un robot ennemi devant. Donc beaucoup moins critique (ce serai bie de pouvoir differencer les deux)
-					e.printStackTrace();
-				} 
-				catch (PathNotFoundException e)
-				{
-					//TODO: le pathfinding ne trouve pas de chemin
-					
-				} 
-				catch (SerialFinallyException e) 
-				{
-					e.printStackTrace();
-				}
-				
-				System.out.println("PLot 1 pris");
+		try 
+		{
+			scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(1, real_state, true, emptyHook );
+		} 
+		catch (SerialConnexionException  e) 
+		{
+			System.out.println("CRITICAL : Carte mal branchée. Match termine");
+			e.printStackTrace();
+			return;
+		}
+		catch (UnableToMoveException e) 
+		{
+			System.out.println("CRITICAL : Chemin bloque, enlevez votre main");
+			e.printStackTrace();
+		}
+		
+		//premier script
+		try 
+		{
+			scriptmanager.getScript(ScriptNames.DROP_CARPET).goToThenExec(1, real_state, true, emptyHook );
+		}
+		catch (UnableToMoveException | SerialConnexionException e) 
+		{
+			// TODO Main erreur critique :
+			//attention ce sont surement des erreurs dans le finally d'un script donc elle servent a proteger le meca !
+			//ou un robot ennemi devant. Donc beaucoup moins critique (ce serai bie de pouvoir differencer les deux)
 
-				
-				try 
-				{
-					real_state.robot.turn (Math.PI*0.5);
-					real_state.robot.moveLengthwise(400);
-				}
-				catch (UnableToMoveException e1) 
-				{
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
-				try 
-				{
-					scriptmanager.getScript(ScriptNames.FREE_STACK).goToThenExec(1, real_state, true, emptyHook );
-				}
-				catch (UnableToMoveException | SerialConnexionException e) 
-				{
-					// TODO Main erreur critique :
-					//attention ce sont surement des erreurs dans le finally d'un script donc elle servent a proteger le meca !
-					//ou un robot ennemi devant. Donc beaucoup moins critique (ce serai bie de pouvoir differencer les deux)
-					e.printStackTrace();
-				} 
-				catch (PathNotFoundException e)
-				{
-					//TODO: le pathfinding ne trouve pas de chemin
-					
-				} 
-				catch (SerialFinallyException e) 
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				try 
-				{
-					real_state.robot.moveLengthwise(-400);
-				}
-				catch (UnableToMoveException e1) 
-				{
-					e1.printStackTrace();
-				}
-				
-				//TODO fermer le troisieme clap !!!
-				
-				System.out.println("match fini !");
+			e.printStackTrace();
+		
+		} 
+		catch (PathNotFoundException e)
+		{
+			//TODO: le pathfinding ne trouve pas de chemin
+			e.printStackTrace();
+		} 
+		catch (SerialFinallyException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		System.out.println("Tapis deposés");
+
+		//second script
+		try 
+		{
+			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(2, real_state, true, emptyHook );
+		} 
+		catch (UnableToMoveException | SerialConnexionException
+				| PathNotFoundException | SerialFinallyException e1) 
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		System.out.println("PLot 2 pris");
+
+		
+		try 
+		{
+			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(34, real_state, true, emptyHook );
+		} 
+		catch (UnableToMoveException | SerialConnexionException
+				| PathNotFoundException | SerialFinallyException e1) 
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		System.out.println("PLot 3, 4 et gobelet pris");
+		
+		try 
+		{
+			//ferme les 2 claps proches : 
+			scriptmanager.getScript(ScriptNames.CLOSE_CLAP).goToThenExec(-12, real_state, true, emptyHook);
+		}
+		catch (UnableToMoveException e1) 
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} 
+		catch (SerialConnexionException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		System.out.println("Clap 1 et 2 Fermés");
+
+	
+		try 
+		{
+			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(1, real_state, true, emptyHook );
+		}
+		catch (UnableToMoveException | SerialConnexionException e) 
+		{
+			// TODO Main erreur critique :
+			//attention ce sont surement des erreurs dans le finally d'un script donc elle servent a proteger le meca !
+			//ou un robot ennemi devant. Donc beaucoup moins critique (ce serai bie de pouvoir differencer les deux)
+			e.printStackTrace();
+		} 
+		catch (PathNotFoundException e)
+		{
+			//TODO: le pathfinding ne trouve pas de chemin
+			
+		} 
+		catch (SerialFinallyException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		System.out.println("PLot 1 pris");
+
+		
+		try 
+		{
+			real_state.robot.turn (Math.PI*0.5);
+			real_state.robot.moveLengthwise(400);
+		}
+		catch (UnableToMoveException e1) 
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try 
+		{
+			scriptmanager.getScript(ScriptNames.FREE_STACK).goToThenExec(1, real_state, true, emptyHook );
+		}
+		catch (UnableToMoveException | SerialConnexionException e) 
+		{
+			// TODO Main erreur critique :
+			//attention ce sont surement des erreurs dans le finally d'un script donc elle servent a proteger le meca !
+			//ou un robot ennemi devant. Donc beaucoup moins critique (ce serai bie de pouvoir differencer les deux)
+			e.printStackTrace();
+		} 
+		catch (PathNotFoundException e)
+		{
+			//TODO: le pathfinding ne trouve pas de chemin
+			
+		} 
+		catch (SerialFinallyException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try 
+		{
+			real_state.robot.moveLengthwise(-400);
+		}
+		catch (UnableToMoveException e1) 
+		{
+			e1.printStackTrace();
+		}
+		
+		//TODO fermer le troisieme clap !!!
+		
+		System.out.println("match fini !");
 
 
-				//Le match s'arrête
-				container.destructor();
+		//Le match s'arrête
+		container.destructor();
 	}
 }

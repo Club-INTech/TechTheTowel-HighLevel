@@ -75,14 +75,14 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		System.out.println("Robot pret pour le match, attente du retrait du jumper");
 		
 		// attends que le jumper soit retiré du robot
-		
+		/*
 		boolean jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
 		while(jumperWasAbsent || !mSensorsCardWrapper.isJumperAbsent())
 		{
 			jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
 			 Sleep.sleep(100);
 		}
-
+*/
 		
 		// maintenant que le jumper est retiré, le match a commencé
 		//ThreadTimer.matchStarted = true;
@@ -95,10 +95,10 @@ public class JUnit_scriptedMatch extends JUnit_Test
 	 */
 	public void matchSetUp(Robot robot) throws SerialConnexionException
 	{
+		robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, false);
+		robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, true);
 		robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
 		robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
-		robot.useActuator(ActuatorOrder.MID_LEFT_GUIDE, false);
-		robot.useActuator(ActuatorOrder.MID_RIGHT_GUIDE, true);
 		robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, false);
 		robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, false);
 		robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
@@ -139,6 +139,23 @@ public class JUnit_scriptedMatch extends JUnit_Test
 				//debut du match
 				System.out.println("Debut du match");
 				
+				
+				try 
+				{
+					scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(1, real_state, true, emptyHook );
+				} 
+				catch (SerialConnexionException  e) 
+				{
+					System.out.println("CRITICAL : Carte mal branchée. Match termine");
+					e.printStackTrace();
+					return;
+				}
+				catch (UnableToMoveException e) 
+				{
+					System.out.println("CRITICAL : Chemin bloque, enlevez votre main");
+					e.printStackTrace();
+				}
+				
 				//premier script
 				try 
 				{
@@ -149,6 +166,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 					// TODO Main erreur critique :
 					//attention ce sont surement des erreurs dans le finally d'un script donc elle servent a proteger le meca !
 					//ou un robot ennemi devant. Donc beaucoup moins critique (ce serai bie de pouvoir differencer les deux)
+
 					e.printStackTrace();
 				
 				} 
@@ -163,6 +181,8 @@ public class JUnit_scriptedMatch extends JUnit_Test
 					e.printStackTrace();
 				}
 				
+				System.out.println("Tapis deposés");
+
 				//second script
 				try 
 				{
@@ -174,6 +194,10 @@ public class JUnit_scriptedMatch extends JUnit_Test
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+				
+				System.out.println("PLot 2 pris");
+
+				
 				try 
 				{
 					scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(34, real_state, true, emptyHook );
@@ -184,6 +208,8 @@ public class JUnit_scriptedMatch extends JUnit_Test
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+				
+				System.out.println("PLot 3, 4 et gobelet pris");
 				
 				try 
 				{
@@ -200,6 +226,10 @@ public class JUnit_scriptedMatch extends JUnit_Test
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				
+				System.out.println("Clap 1 et 2 Fermés");
+
+			
 				try 
 				{
 					scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(1, real_state, true, emptyHook );
@@ -220,6 +250,10 @@ public class JUnit_scriptedMatch extends JUnit_Test
 				{
 					e.printStackTrace();
 				}
+				
+				System.out.println("PLot 1 pris");
+
+				
 				try 
 				{
 					real_state.robot.turn (Math.PI*0.5);

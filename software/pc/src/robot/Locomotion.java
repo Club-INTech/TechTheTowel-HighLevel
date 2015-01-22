@@ -709,7 +709,7 @@ public class Locomotion implements Service
 			 
 			// Le robot tourne-t-il encore ?
 			// Le robot tourne encore si la différence entre l'orientation du robot lors du dernier appel et l'orientation du robot lors de cet appel est suffisamment grande
-			else if(Math.abs(newInfos[2] - oldInfos[2]) > 2)
+			else if(Geometry.minusAngle(Geometry.modulo(newInfos[2],(2000*Math.PI)) , (Geometry.modulo(oldInfos[2],(2000*Math.PI))) , 2000*Math.PI) > 2)
 				out = false;
 
 			// si on ne bouge plus, et qu'on n'est pas arrivé, c'est que ca bloque
