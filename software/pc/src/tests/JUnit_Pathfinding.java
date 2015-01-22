@@ -33,7 +33,7 @@ public class JUnit_Pathfinding extends JUnit_Test
     {
     	int compt = 0;
     	ArrayList<Vec2> path = new ArrayList<Vec2>();
-    	for(int n = 0; n < 100000; n++)
+    	for(int n = 0; n < 10000; n++)
     	{
 	    	try
 	    	{
@@ -58,6 +58,7 @@ public class JUnit_Pathfinding extends JUnit_Test
     @Test
     public void testClickedPF() throws Exception
     {
+    	win.getPanel().drawGraph(pf.getGraph());
     	while(true)
     	{
     		if(win.getMouse().hasClicked())
@@ -65,7 +66,10 @@ public class JUnit_Pathfinding extends JUnit_Test
 		    	try
 		    	{
 		    		table.getObstacleManager().setEnnemyRobotPosition(win.getMouse().getMiddleClickPosition(), 0);
+		    		long start = System.nanoTime();
 			    	win.getPanel().drawArrayList(pf.computePath(win.getMouse().getLeftClickPosition(), win.getMouse().getRightClickPosition()));
+			    	long end = System.nanoTime();
+			    	System.out.println("elapsed : " + (end - start) + " ns");
 			    }
 		    	catch(PathNotFoundException e)
 		    	{
@@ -74,36 +78,7 @@ public class JUnit_Pathfinding extends JUnit_Test
 		    	win.getPanel().repaint();
     		}
     		else
-    			Thread.sleep(100);
-    	}
-    }
-    
-    //@Test
-    public void testCollision() throws Exception
-    {
-    	while(true)
-    	{
-    		if(win.getMouse().hasClicked())
-    		{
-    			ArrayList<Vec2> path = new ArrayList<Vec2>();
-    			path.add(win.getMouse().getLeftClickPosition());
-    			path.add(win.getMouse().getRightClickPosition());
-			    win.getPanel().drawArrayList(path);
-    			ArrayList<Vec2> path2 = new ArrayList<Vec2>();
-    			path2.add(new Vec2(-1100, 778));
-    			path2.add(new Vec2(-1100, 1222));
-			    win.getPanel().drawArrayList(path2);
-			    if(pf.intersects(new Segment(win.getMouse().getLeftClickPosition(), win.getMouse().getRightClickPosition()), new Segment(new Vec2(-1100, 778), new Vec2(-1100, 1222))))
-			    {
-		    		System.out.println("intersection...");
-		    		win.getPanel().drawPoint(pf.intersection(new Segment(win.getMouse().getLeftClickPosition(), win.getMouse().getRightClickPosition()), new Segment(new Vec2(-1100, 778), new Vec2(-1100, 1222))));
-			    }
-			    else
-			    	System.out.println("not");
-		    	win.getPanel().repaint();
-    		}
-    		else
-    			Thread.sleep(100);
+    			Thread.sleep(200);
     	}
     }
 }

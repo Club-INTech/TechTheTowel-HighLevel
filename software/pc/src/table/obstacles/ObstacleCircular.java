@@ -1,6 +1,6 @@
 package table.obstacles;
 
-import smartMath.Vec2;
+import smartMath.*;
 
 /**
  * Obstacle de forme circulaire.
@@ -54,6 +54,16 @@ public class ObstacleCircular extends Obstacle
 	public int getRadius()
 	{
 		return radius;
+	}
+	
+	/**
+	 * Convertit l'obstacle en cercle.
+	 * 
+	 * @return
+	 */
+	public Circle toCircle()
+	{
+		return new Circle(position, radius);
 	}
 	
 	/* (non-Javadoc)
