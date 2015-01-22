@@ -53,6 +53,8 @@ private:
     Ax12 tapisGauche;
     Ax12 clapDroit;
     Ax12 clapGauche;
+    Ax12 bouffeBillesGauche;
+    Ax12 bouffeBillesDroit;
 
 public:
     enum EtatAscenseur
@@ -60,6 +62,7 @@ public:
     	Haut,		//Position extrème haute (dépassement de l'anti-retour, pour monter un plot)
     	Milieu,		//Quelque part entre 'Estrade' et 'Haut' (très peu précis)
     	Estrade,	//A plus de 22mm du sol (et pas beaucoup plus haut)
+		SousEstrade,
     	Bas,		//Ne touche ni le sol ni les plots supérieurs (position pour rouler)
     	Sol			//Position extrème basse (touche le sol)
     };
@@ -83,7 +86,9 @@ public:
 		tapisDroit (6,1,1023),
 		tapisGauche (7,1,1023),
 		clapDroit (8,1,1023),
-		clapGauche (9,1,1023)
+		clapGauche (9,1,1023),
+		bouffeBillesGauche (10,1,1023),
+		bouffeBillesDroit (11,1,1023)
 
 
 		{
@@ -101,7 +106,7 @@ public:
  	 	 	 	 	 	 	 	 	 	 	 //fonction d'execution
 
  	void execute (char ordre[])
-	{
+	{	
  		if (strcmp (ordre , "?") == 0)					// L'ID de la carte est 3
 		{
 			serial_pc::printfln ("3");
@@ -112,7 +117,7 @@ public:
  			serial_pc::printfln("angle ?");
  			serial_pc::read(angle);
  			if(angle >= 0 && angle <= 300)
- 				guideGauche.goTo(angle);
+ 				bouffeBillesGauche.goTo(angle);
  		}
 
 		else if (strcmp (ordre , "obd") == 0)			// ouvrir le bras droit
@@ -354,6 +359,15 @@ public:
 			guideDroit.goTo(gdIntermediaire);
 			guideGauche.goTo(ggIntermediaire);
 		}
+		else if (strcmp (ordre , "bh") == 0)
+		{
+			bouffeBillesGauche.goTo(0);
+		}
+		else if (strcmp (ordre , "bh") == 0)
+		{
+			bouffeBillesGauche.goTo(0);
+		}
+ 		
  		/// REPONSE AUX REQUETES DU HAUT NIVEAU
 		else if (strcmp (ordre , "j") == 0)				// état du jumper
 		{
