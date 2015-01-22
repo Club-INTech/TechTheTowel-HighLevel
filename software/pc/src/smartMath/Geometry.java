@@ -25,7 +25,7 @@ public class Geometry
 	{
 		double modulo = number%module;
 		if (modulo<0)
-			modulo *= -1;
+			modulo += module;
 		return modulo;
 	}
 	
