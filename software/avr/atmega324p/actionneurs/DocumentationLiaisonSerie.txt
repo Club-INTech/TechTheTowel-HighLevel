@@ -1,4 +1,4 @@
- _______________________________________
+﻿ _______________________________________
 |Liste des commandes de la liaison série|
 |_______________________________________|
 
@@ -43,10 +43,15 @@ Commandes du guide à plots
 
 ogd		ouvrir le guide de droite
 fgd		fermer le guide de droite
+gdi		mettre le guide de droite en position intermédiaire
 
 ogg		ouvrir le guide de gauche
 fgg		fermer le guide de gauche
 ggi		mettre le guide de gauche en position intermédiaire (désactive l'anti-retour en continuant de maintenir la pile)
+
+go		équivalent à ogg et ogd
+gf		équivalent à fgg et fgd
+gi		équivalent à ggi et gdi
 
 
 Commandes des pose-tapis

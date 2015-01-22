@@ -709,18 +709,16 @@ public class Locomotion implements Service
 			 
 			// Le robot tourne-t-il encore ?
 			// Le robot tourne encore si la différence entre l'orientation du robot lors du dernier appel et l'orientation du robot lors de cet appel est suffisamment grande
-			else if(Math.abs(newInfos[2] - oldInfos[2]) > 2)
+			else if(Geometry.minusAngle(Geometry.modulo(newInfos[2],(2000*Math.PI)) , (Geometry.modulo(oldInfos[2],(2000*Math.PI))) , 2000*Math.PI) > 2)
 				out = false;
-
 
 			// si on ne bouge plus, et qu'on n'est pas arrivé, c'est que ca bloque
 			else
 			{
-				log.debug("reponse isTurnFinished : "+out+", position : "+newInfos[2]+"->"+Geometry.modulo(newInfos[2],(2000*Math.PI))+" precedent : "+oldInfos[2]+"->"+Geometry.modulo(oldInfos[2],(2000*Math.PI))+" aim : "+finalOrientation+"->"+Geometry.modulo(finalOrientation,(2000*Math.PI))+", difference"+Geometry.minusAngle((Geometry.modulo(newInfos[2],(2000*Math.PI))), Geometry.modulo(finalOrientation,(2000*Math.PI)), 2000*Math.PI), this);
 				throw new BlockedException();
 
 			}
-			log.debug("reponse isTurnFinished : "+out+", position : "+newInfos[2]+"->"+Geometry.modulo(newInfos[2],(2000*Math.PI))+" precedent : "+oldInfos[2]+"->"+Geometry.modulo(oldInfos[2],(2000*Math.PI))+" aim : "+finalOrientation+"->"+Geometry.modulo(finalOrientation,(2000*Math.PI))+", difference"+Geometry.minusAngle((Geometry.modulo(newInfos[2],(2000*Math.PI))), Geometry.modulo(finalOrientation,(2000*Math.PI)), 2000*Math.PI), this);
+			log.debug("reponse:"+out+", angle actuel:"+Geometry.modulo(newInfos[2],(2000*Math.PI))+", angle precedent:"+Geometry.modulo(oldInfos[2],(2000*Math.PI))+", angle vise"+Geometry.modulo(finalOrientation,(2000*Math.PI))+", difference:"+Geometry.minusAngle((Geometry.modulo(newInfos[2],(2000*Math.PI))), Geometry.modulo(finalOrientation,(2000*Math.PI)), 2000*Math.PI), this);
 			oldInfos = newInfos;
 		} 
 		catch (SerialConnexionException e)

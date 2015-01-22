@@ -7,18 +7,18 @@ package smartMath;
  */
 public class Circle {
 
-	public Vec2 center;
+	public Vec2 position;
 	public double radius;
 	
 	/**
 	 * construit un cercle
-	 * @param center le centre en mm  pas de virgule
+	 * @param position le centre en mm  pas de virgule
 	 * @param ray le rayon en mm, avec virgule
 	 */
-	public Circle(Vec2 center, double ray) 
+	public Circle(Vec2 position, double radius)
 	{
-		this.center=center;
-		this.radius=ray;
+		this.position=position;
+		this.radius=radius;
 	}
 
 	/**
@@ -29,7 +29,7 @@ public class Circle {
 	 */
 	public Circle(Vec2 center)
 	{
-		this.center=center;
+		this.position=center;
 		this.radius=0;
 	}
 	/**
@@ -39,7 +39,7 @@ public class Circle {
 	 */
 	public Circle (int centerX, int centerY)
 	{
-		this.center=new Vec2(centerX,centerY);
+		this.position=new Vec2(centerX,centerY);
 		this.radius=0;
 	}
 
@@ -51,7 +51,7 @@ public class Circle {
 	 */
 	public Circle(int centerX, int centerY, int radius) 
 	{
-		this.center=new Vec2(centerX,centerY);
+		this.position=new Vec2(centerX,centerY);
 		this.radius=radius;
 	}
 
@@ -61,7 +61,7 @@ public class Circle {
 	 */
 	public Vec2 toVec2()
 	{
-		return this.center;
+		return this.position;
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class Circle {
 	 */
 	public boolean containDisk(Vec2 point)
 	{
-		return (point.distance(this.center)<=this.radius);
+		return (point.distance(this.position)<=this.radius);
 	}
 	
 	/**
@@ -81,8 +81,8 @@ public class Circle {
 	 */
 	public boolean containCircle(Vec2 point)
 	{
-		double dx=point.x-this.center.x;
-		double dy=point.y-this.center.y;
+		double dx=point.x-this.position.x;
+		double dy=point.y-this.position.y;
 		return (dx*dx+dy*dy)==(radius*radius);
 	}
 }

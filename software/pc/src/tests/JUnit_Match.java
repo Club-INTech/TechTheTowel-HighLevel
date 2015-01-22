@@ -18,8 +18,15 @@ import smartMath.Vec2;
 import strategie.GameState;
 
 
+/**
+ * TODO: doc
+ * @author paul, theo
+ *
+ */
 public class JUnit_Match extends JUnit_Test 
 {
+	
+	// TODO: doc
 	ArrayList<Hook> emptyHook;
 	GameState<Robot> real_state;
 	ScriptManager scriptmanager;
@@ -39,13 +46,13 @@ public class JUnit_Match extends JUnit_Test
 		real_state.robot.setPosition(new Vec2 (1381,1000));
 		if (config.getProperty("couleur").equals("jaune"))
 		{
+			//On est jaune donc on est en 0 
 			real_state.robot.setOrientation(0); 
-			//si on est jaune on est en 0 
 		}
 		else
 		{
+			//On est vert donc on est en PI
 			real_state.robot.setOrientation(Math.PI);
-			//sinon on est vert donc on est en PI
 		}
 		real_state.robot.updateConfig();
 	}
@@ -60,13 +67,13 @@ public class JUnit_Match extends JUnit_Test
 		} 
 		catch (SerialConnexionException  e) 
 		{
-			log.debug("CRITICAL : Carte mal branchée. Match termine",this);
+			log.critical("Carte mal branchée. Match termine",this);
 			e.printStackTrace();
 			return;
 		}
 		catch (UnableToMoveException e) 
 		{
-			log.debug("CRITICAL : Chemin bloque, enlevez votre main",this);
+			log.critical("Chemin bloque, enlevez votre main",this);
 			e.printStackTrace();
 		}
 		

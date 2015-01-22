@@ -68,10 +68,11 @@ public abstract class Robot implements Service
 	
 	/**
 	 * Met a jour la configuration de la classe via le fichier de configuration fourni par le sysème de container.
+	 * et supprime les espaces (si si c'est utile)
 	 */
 	public void updateConfig()
 	{
-		symmetry = config.getProperty("couleur").equals("jaune");
+		symmetry = config.getProperty("couleur").replaceAll(" ","").equals("jaune");
 	}
 
 	/**
@@ -281,10 +282,11 @@ public abstract class Robot implements Service
      *
      * @param aim le point de destination du mouvement
      * @param hooksToConsider les hooks déclenchables durant ce mouvement
+     * @param table la table sur laquelle le robot se deplace
      * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
      * @throws PathNotFoundException lorsque le pathdingding ne trouve pas de chemin 
      */
-    public void moveToLocation(Vec2 aim, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, PathNotFoundException
+    public void moveToLocation(Vec2 aim, ArrayList<Hook> hooksToConsider, Table table) throws UnableToMoveException, PathNotFoundException
     {
     	//TODO: remettre le pathDingDing et enlever les deux lignes en dessous
 		//ArrayList<Vec2> path = PathDingDing.computePath(getPosition(),aim,table);
@@ -313,7 +315,7 @@ public abstract class Robot implements Service
     	//ArrayList<Vec2> path = PathDingDing.computePath(getPosition(),aim.toVec2(),table);
     	
     	ArrayList<Vec2> path = new ArrayList<Vec2>();
-    	path.add(aim.center);
+    	path.add(aim.position);
     	
     	//retire une distance egale au rayon du cercle au dernier point du chemin (le centre du cercle)
     	
@@ -337,13 +339,13 @@ public abstract class Robot implements Service
     	}
 
     	//le dernier vecteur deplacement
-    	Vec2 movementVector = aim.center.minusNewVector(precedentPathPoint);
+    	Vec2 movementVector = aim.position.minusNewVector(precedentPathPoint);
     	
     	
     	/* on ajoute le point du cercle B'=(B-A)*(L-r)/L+A
     	 * B le centre du cercle, r le rayon du cercle, A le point precedent dans le path et L la taille du dernier vecteur deplacement
     	 */
-    	path.add(movementVector.dotFloat( (movementVector.length()-aim.ray)/movementVector.length() ).plusNewVector(precedentPathPoint));
+    	path.add(movementVector.dotFloat( (movementVector.length()-aim.radius)/movementVector.length() ).plusNewVector(precedentPathPoint));
 
     	followPath(path , hooksToConsider);
     }
