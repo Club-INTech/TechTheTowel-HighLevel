@@ -17,11 +17,13 @@ public class Graph
 	private Node mStartNode;
 	private Node mEndNode;
 	private ArrayList<Area> mAreas;
+	private Table mTable;
 	
-	public Graph()
+	public Graph(Table table)
 	{
 		mNodes = new ArrayList<Node>();
 		mAreas = new ArrayList<Area>();
+		mTable = table;
 		buildGraph();
 	}
 	
@@ -30,62 +32,73 @@ public class Graph
 	 */
 	private void buildGraph()
 	{
+		//ajout des noeuds fixes
 		mNodes.add(new Node(-1100, 1222));//noeud 0
-		mNodes.add(new Node(-1100, 1200));//noeud 1
-		mNodes.add(new Node(-1100, 800));//noeud 2
-		mNodes.add(new Node(-1100, 778));//noeud 3
-		mNodes.add(new Node(-300, 100));//noeud 4
-		mNodes.add(new Node(300, 100));//noeud 5
-		mNodes.add(new Node(1100, 778));//noeud 6
-		mNodes.add(new Node(1100, 800));//noeud 7
-		mNodes.add(new Node(1100, 1200));//noeud 8
-		mNodes.add(new Node(1100, 1222));//noeud 9
-		mNodes.add(new Node(533, 1420));//noeud 10
-		mNodes.add(new Node(-533, 1420));//noeud 11
+		mNodes.add(new Node(-1100, 778));//noeud 1
+		mNodes.add(new Node(-300, 100));//noeud 2
+		mNodes.add(new Node(300, 100));//noeud 3
+		mNodes.add(new Node(1100, 778));//noeud 4
+		mNodes.add(new Node(1100, 1222));//noeud 5
+		mNodes.add(new Node(533, 1420));//noeud 6
+		mNodes.add(new Node(-533, 1420));//noeud 7
 		
+		//obstacles circulaires
+		ArrayList<Circle> circles = new ArrayList<Circle>();
+		circles.add(new Circle(new Vec2(0, 1000), 200));
+		
+		//creation des liens du graphe
+		//parcours des noeuds
 		for(int i = 0; i < mNodes.size(); i++)
 			for(int j = 0; j < mNodes.size(); j++)
 				if(i != j)
-					mNodes.get(i).addLink(mNodes.get(j));
+				{
+					//parcours des cercles, si le lien ne coupe aucun cercle, on le rajoute
+					boolean intersects = false;
+					for(int k = 0; k < circles.size(); k++)
+						if(PathDingDing.intersects(new Segment(mNodes.get(i).toVec2(), mNodes.get(j).toVec2()), circles.get(k)))
+							intersects = true;
+					if(!intersects)
+						mNodes.get(i).addLink(mNodes.get(j));
+				}
 		
 		Area area = new Area(-1300, 1222, 400, 800);//zone 0
 		area.attachNode(mNodes.get(0));
-		area.attachNode(mNodes.get(11));
+		area.attachNode(mNodes.get(7));
 		mAreas.add(area);
 		
 		area = new Area(-1300, 0, 400, 800);//zone 1
-		area.attachNode(mNodes.get(3));
-		area.attachNode(mNodes.get(4));
+		area.attachNode(mNodes.get(1));
+		area.attachNode(mNodes.get(2));
 		mAreas.add(area);
 		
 		area = new Area(-700, 0, 800, 100);//zone 2
+		area.attachNode(mNodes.get(1));
+		area.attachNode(mNodes.get(2));
+		mAreas.add(area);
+		
+		area = new Area(700, 0, 800, 100);//zone 3
 		area.attachNode(mNodes.get(3));
 		area.attachNode(mNodes.get(4));
 		mAreas.add(area);
 		
-		area = new Area(700, 0, 800, 100);//zone 3
-		area.attachNode(mNodes.get(5));
-		area.attachNode(mNodes.get(6));
-		mAreas.add(area);
-		
 		area = new Area(1300, 0, 400, 800);//zone 4
-		area.attachNode(mNodes.get(5));
-		area.attachNode(mNodes.get(6));
+		area.attachNode(mNodes.get(3));
+		area.attachNode(mNodes.get(4));
 		mAreas.add(area);
 		
 		area = new Area(1300, 1222, 400, 800);//zone 5
-		area.attachNode(mNodes.get(9));
-		area.attachNode(mNodes.get(10));
+		area.attachNode(mNodes.get(5));
+		area.attachNode(mNodes.get(6));
 		mAreas.add(area);
 		
 		area = new Area(817, 1420, 568, 530);//zone 6
-		area.attachNode(mNodes.get(9));
-		area.attachNode(mNodes.get(10));
+		area.attachNode(mNodes.get(5));
+		area.attachNode(mNodes.get(6));
 		mAreas.add(area);
 		
 		area = new Area(-817, 1420, 568, 530);//zone 7
 		area.attachNode(mNodes.get(0));
-		area.attachNode(mNodes.get(11));
+		area.attachNode(mNodes.get(7));
 		mAreas.add(area);
 		
 		area = new Area(0, 100, 2200, 1320);//zone 10
@@ -97,10 +110,6 @@ public class Graph
 		area.attachNode(mNodes.get(5));
 		area.attachNode(mNodes.get(6));
 		area.attachNode(mNodes.get(7));
-		area.attachNode(mNodes.get(8));
-		area.attachNode(mNodes.get(9));
-		area.attachNode(mNodes.get(10));
-		area.attachNode(mNodes.get(11));
 		mAreas.add(area);
 	}
 	
@@ -154,6 +163,16 @@ public class Graph
 					mAreas.get(i).getAttachedNode(j).addLink(mEndNode);
 				}
 			}
+		}
+	}
+	
+	//detache un noeud du graphe
+	public void unlinkNode(Node node)
+	{
+		//parcours des noeuds
+		for(int i = 0; i< mNodes.size(); i++)
+		{
+			mNodes.get(i).deleteLink(node);
 		}
 	}
 	

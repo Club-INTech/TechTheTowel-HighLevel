@@ -23,15 +23,10 @@ public class Geometry
 	 */
 	public static double modulo(double number, double module)
 	{
-		
-		while (number > module || number<0 )
-		{
-			if (number<0)
-				number += module;
-			else
-				number -= module;
-		}
-		return number;
+		double modulo = number%module;
+		if (modulo<0)
+			modulo *= -1;
+		return modulo;
 	}
 	
 	/**

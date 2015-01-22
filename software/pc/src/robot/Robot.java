@@ -314,7 +314,7 @@ public abstract class Robot implements Service
     	//ArrayList<Vec2> path = PathDingDing.computePath(getPosition(),aim.toVec2(),table);
     	
     	ArrayList<Vec2> path = new ArrayList<Vec2>();
-    	path.add(aim.center);
+    	path.add(aim.position);
     	
     	//retire une distance egale au rayon du cercle au dernier point du chemin (le centre du cercle)
     	
@@ -338,7 +338,7 @@ public abstract class Robot implements Service
     	}
 
     	//le dernier vecteur deplacement
-    	Vec2 movementVector = aim.center.minusNewVector(precedentPathPoint);
+    	Vec2 movementVector = aim.position.minusNewVector(precedentPathPoint);
     	
     	
     	/* on ajoute le point du cercle B'=(B-A)*(L-r)/L+A
