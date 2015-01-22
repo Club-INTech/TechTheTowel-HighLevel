@@ -97,6 +97,8 @@ public class JUnit_scriptedMatch extends JUnit_Test
 	{
 		robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
 		robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
+		robot.useActuator(ActuatorOrder.MID_LEFT_GUIDE, false);
+		robot.useActuator(ActuatorOrder.MID_RIGHT_GUIDE, true);
 		robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, false);
 		robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, false);
 		robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
@@ -116,23 +118,23 @@ public class JUnit_scriptedMatch extends JUnit_Test
 				//premiere action du match
 				
 				System.out.println("Le robot commence le match");
-				
-					try 
-					{
-						AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
-						exitScript.execute(0, real_state, emptyHook, true );
-					} 
-					catch (SerialConnexionException  e) 
-					{
-						System.out.println("CRITICAL : Carte mal branchée. Match termine");
-						e.printStackTrace();
-						return;
-					}
-					catch (UnableToMoveException e) 
-					{
-						System.out.println("CRITICAL : Chemin bloque, enlevez votre main");
-						e.printStackTrace();
-					}
+			
+				try 
+				{
+					AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
+					exitScript.execute(0, real_state, emptyHook, true );
+				} 
+				catch (SerialConnexionException  e) 
+				{
+					System.out.println("CRITICAL : Carte mal branchée. Match termine");
+					e.printStackTrace();
+					return;
+				}
+				catch (UnableToMoveException e) 
+				{
+					System.out.println("CRITICAL : Chemin bloque, enlevez votre main");
+					e.printStackTrace();
+				}
 				
 				//debut du match
 				System.out.println("Debut du match");
