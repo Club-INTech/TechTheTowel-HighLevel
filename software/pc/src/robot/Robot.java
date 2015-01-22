@@ -68,10 +68,11 @@ public abstract class Robot implements Service
 	
 	/**
 	 * Met a jour la configuration de la classe via le fichier de configuration fourni par le sysème de container.
+	 * et supprime les espaces (si si c'est utile)
 	 */
 	public void updateConfig()
 	{
-		symmetry = config.getProperty("couleur").equals("jaune");
+		symmetry = config.getProperty("couleur").replaceAll(" ","").equals("jaune");
 	}
 
 	/**
