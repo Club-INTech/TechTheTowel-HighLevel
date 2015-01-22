@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.05" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
@@ -27140,7 +27140,7 @@ Es handelt sich hierbei um AK500 in horizontaler Ausführung.&lt;p&gt;
 <part name="AX12-7" library="con-amp" deviceset="MTA03-100" device=""/>
 <part name="AX12-8" library="con-amp" deviceset="MTA03-100" device=""/>
 <part name="SUPPLY74" library="supply2" deviceset="GND" device=""/>
-<part name="R10" library="rcl" deviceset="R-EU_" device="0207/2V" value="1k"/>
+<part name="R10" library="rcl" deviceset="R-EU_" device="0207/2V" value="270"/>
 <part name="LED4" library="led" deviceset="LED" device="5MM" value="GREEN"/>
 <part name="SUPPLY73" library="supply2" deviceset="+5V" device=""/>
 </parts>
