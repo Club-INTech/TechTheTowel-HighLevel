@@ -27,9 +27,12 @@ public class TakeTennisBall extends AbstractScript
 		super(hookFactory, config, log);
 		versions = new int[]{1}; //Une seule version disponible car une seule balle, et une seule entrée
 	}
+	
 	@Override
 	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider,boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException
 	{
+		stateToConsider.robot.turn(Math.PI, hooksToConsider, false);//on se tourne bien
+
 		//On initialise l'ascenceur
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, false);
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
@@ -55,7 +58,13 @@ public class TakeTennisBall extends AbstractScript
 	@Override
 	public Circle entryPosition(int id) 
 	{
-		return new Circle(0,0,0);//TODO : entrée
+		if(id==1)
+				return new Circle(-881,1000,0); //debut-500
+		else
+		{
+			System.out.println("Probleme de version");
+			return new Circle(-881,1000,0);
+		}
 	}
 	
 	@Override
