@@ -67,20 +67,12 @@ public class Panel extends JPanel
 	    			g.drawLine((mGraph.getNodes().get(i).x + 1500) * this.getWidth() / 3000, -mGraph.getNodes().get(i).y * this.getHeight() / 2000 + this.getHeight(), (mGraph.getNodes().get(i).getLink(j).getDestination().x + 1500) * this.getWidth() / 3000, -mGraph.getNodes().get(i).getLink(j).getDestination().y * this.getHeight() / 2000 + this.getHeight());
 	    }
 	    
-	    g.setColor(Color.green);
+	    g.setColor(Color.white);
 	    
-	    ArrayList<ObstacleCircular> greenPlots = mTable.getObstacleManager().getGreenPlots();
-	    for(int i = 0; i < greenPlots.size(); i++)
+	    ArrayList<ObstacleCircular> plots = mTable.getObstacleManager().getPlots();
+	    for(int i = 0; i < plots.size(); i++)
 	    {
-	    	g.drawOval((greenPlots.get(i).getPosition().x - greenPlots.get(i).getRadius() + 1500) * this.getWidth() / 3000, -(greenPlots.get(i).getPosition().y + greenPlots.get(i).getRadius()) * this.getHeight() / 2000 + this.getHeight(), (2 * greenPlots.get(i).getRadius()) * this.getWidth() / 3000, (2 * greenPlots.get(i).getRadius()) * this.getHeight() / 2000);
-	    }
-	    
-	    g.setColor(Color.yellow);
-	    
-	    ArrayList<ObstacleCircular> yellowPlots = mTable.getObstacleManager().getYellowPlots();
-	    for(int i = 0; i < yellowPlots.size(); i++)
-	    {
-	    	g.drawOval((yellowPlots.get(i).getPosition().x - yellowPlots.get(i).getRadius() + 1500) * this.getWidth() / 3000, -(yellowPlots.get(i).getPosition().y + yellowPlots.get(i).getRadius()) * this.getHeight() / 2000 + this.getHeight(), (2 * yellowPlots.get(i).getRadius()) * this.getWidth() / 3000, (2 * yellowPlots.get(i).getRadius()) * this.getHeight() / 2000);
+	    	g.drawOval((plots.get(i).getPosition().x - plots.get(i).getRadius() + 1500) * this.getWidth() / 3000, -(plots.get(i).getPosition().y + plots.get(i).getRadius()) * this.getHeight() / 2000 + this.getHeight(), (2 * plots.get(i).getRadius()) * this.getWidth() / 3000, (2 * plots.get(i).getRadius()) * this.getHeight() / 2000);
 	    }
 	    
 	    g.setColor(Color.red);

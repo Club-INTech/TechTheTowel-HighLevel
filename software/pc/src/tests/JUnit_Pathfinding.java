@@ -58,6 +58,7 @@ public class JUnit_Pathfinding extends JUnit_Test
     @Test
     public void testClickedPF() throws Exception
     {
+    	win.getPanel().drawGraph(pf.getGraph());
     	while(true)
     	{
     		if(win.getMouse().hasClicked())
@@ -69,12 +70,31 @@ public class JUnit_Pathfinding extends JUnit_Test
 			    	win.getPanel().drawArrayList(pf.computePath(win.getMouse().getLeftClickPosition(), win.getMouse().getRightClickPosition()));
 			    	long end = System.nanoTime();
 			    	System.out.println("elapsed : " + (end - start) + " ns");
-			    	win.getPanel().drawGraph(pf.getGraph());
 			    }
 		    	catch(PathNotFoundException e)
 		    	{
 		    		System.out.println("--------------not on table------------------");
 		    	}
+		    	win.getPanel().repaint();
+    		}
+    		else
+    			Thread.sleep(200);
+    	}
+    }
+    
+    //@Test
+    public void testCircleCollision() throws Exception
+    {
+    	while(true)
+    	{
+    		if(win.getMouse().hasClicked())
+    		{
+		    	table.getObstacleManager().setEnnemyRobotPosition(win.getMouse().getMiddleClickPosition(), 0);
+		    	ArrayList<Vec2> path = new ArrayList<Vec2>();
+		    	path.add(win.getMouse().getLeftClickPosition());
+		    	path.add(win.getMouse().getRightClickPosition());
+		    	if(pf.isPathCorrect(path))
+			   		win.getPanel().drawArrayList(path);
 		    	win.getPanel().repaint();
     		}
     		else

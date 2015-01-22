@@ -32,19 +32,21 @@ public class Graph
 	 */
 	private void buildGraph()
 	{
+		int robotRadius = Integer.parseInt(mTable.getConfig().getProperty("rayon_robot"));
 		//ajout des noeuds fixes
-		mNodes.add(new Node(-1100, 1222));//noeud 0
-		mNodes.add(new Node(-1100, 778));//noeud 1
-		mNodes.add(new Node(-300, 100));//noeud 2
-		mNodes.add(new Node(300, 100));//noeud 3
-		mNodes.add(new Node(1100, 778));//noeud 4
-		mNodes.add(new Node(1100, 1222));//noeud 5
-		mNodes.add(new Node(533, 1420));//noeud 6
-		mNodes.add(new Node(-533, 1420));//noeud 7
+		mNodes.add(new Node(-1100 + robotRadius, 1222 + robotRadius));//noeud 0
+		mNodes.add(new Node(-1100 + robotRadius, 778 - robotRadius));//noeud 1
+		mNodes.add(new Node(-300 - robotRadius, 100 + robotRadius));//noeud 2
+		mNodes.add(new Node(300 + robotRadius, 100 + robotRadius));//noeud 3
+		mNodes.add(new Node(1100 - robotRadius, 778 - robotRadius));//noeud 4
+		mNodes.add(new Node(1100 - robotRadius, 1222 + robotRadius));//noeud 5
+		mNodes.add(new Node(533 + robotRadius, 1420 - robotRadius));//noeud 6
+		mNodes.add(new Node(-533 - robotRadius, 1420 - robotRadius));//noeud 7
 		
 		//obstacles circulaires
 		ArrayList<Circle> circles = new ArrayList<Circle>();
-		circles.add(new Circle(new Vec2(0, 1000), 200));
+		//ObstacleCircular oc = new ObstacleCircular(new Vec2(0, 1000), 200);
+		//circles.add(oc.toCircle());
 		
 		//creation des liens du graphe
 		//parcours des noeuds

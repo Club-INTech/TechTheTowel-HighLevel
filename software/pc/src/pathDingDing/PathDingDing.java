@@ -25,7 +25,7 @@ public class PathDingDing
 	public PathDingDing(Table table)
 	{
 		mTable = table;
-		//mGraph = new Graph(mTable);
+		mGraph = new Graph(mTable);
 	}
 	
 	/**
@@ -37,10 +37,6 @@ public class PathDingDing
 	 */
 	public ArrayList<Vec2> computePath(Vec2 start, Vec2 end) throws Exception
 	{
-		//on recree un graphe... pour l'instant
-		//TODO : a revoir
-		mGraph = new Graph(mTable);
-		
 		//le cas ou les points de depart et d'arrivee sont reliables en ligne droite est directement traite
 		ArrayList<Vec2> directPath =  new ArrayList<Vec2>();
 		directPath.add(start);
@@ -91,21 +87,28 @@ public class PathDingDing
 			//i designe l'indice des noeuds adjacents au noeud actuel
 			for(int i = 0; i < current.getLinkNumber(); i++)
 			{
-				//j designe l'indice permettant de placer chaque noeud adjacent au bon endroit dans la liste ouverte
-				int j = 0;
 				Node adjacent = current.getLink(i).getDestination();
-				if((!openList.contains(adjacent) || adjacent.getCost() > adjacent.calculateCost(current))  && !closedList.contains(adjacent))
+				//si le noeud adjacent est visible (pas d'obstacle)
+				ArrayList<Vec2> segment = new ArrayList<Vec2>();
+				segment.add(current.toVec2());
+				segment.add(adjacent.toVec2());
+				if(isPathCorrect(segment))
 				{
-					//le noeud actuel est designe comme predecesseur de son successeur
-					adjacent.setPrevious(current);
-					//calcul de l'heuristique
-					adjacent.setHeuristicCost(graph.getEndNode());
-					//calcul du cout
-					adjacent.setCost(current.getLink(i).getDestination().getPrevious());
-					while(j < openList.size() && openList.get(j).getHeuristicCost() + openList.get(j).getCost() < adjacent.getHeuristicCost() + adjacent.getCost())
-						j++;
-					//ajout du noeud suivant le noeud actuel dans la liste ouverte
-					openList.add(j, adjacent);
+					//j designe l'indice permettant de placer chaque noeud adjacent au bon endroit dans la liste ouverte
+					int j = 0;
+					if((!openList.contains(adjacent) || adjacent.getCost() > adjacent.calculateCost(current))  && !closedList.contains(adjacent))
+					{
+						//le noeud actuel est designe comme predecesseur de son successeur
+						adjacent.setPrevious(current);
+						//calcul de l'heuristique
+						adjacent.setHeuristicCost(graph.getEndNode());
+						//calcul du cout
+						adjacent.setCost(current.getLink(i).getDestination().getPrevious());
+						while(j < openList.size() && openList.get(j).getHeuristicCost() + openList.get(j).getCost() < adjacent.getHeuristicCost() + adjacent.getCost())
+							j++;
+						//ajout du noeud suivant le noeud actuel dans la liste ouverte
+						openList.add(j, adjacent);
+					}
 				}
 			}
 			
@@ -160,16 +163,16 @@ public class PathDingDing
 	public static boolean intersects(Segment segment, Circle circle)
 	{
 		// TODO : commenter
-		double area = (circle.position.x - segment.getA().x)*(segment.getB().y - segment.getA().y) - (circle.position.y - segment.getA().y)*(segment.getB().x - segment.getA().x);
-		double distA = (segment.getA().x - circle.position.x)*(segment.getA().x - circle.position.x) + (segment.getA().y - circle.position.y)*(segment.getA().y - circle.position.y);
-		double distB = (segment.getB().x - circle.position.x)*(segment.getB().x - circle.position.x) + (segment.getB().y - circle.position.y)*(segment.getB().y - circle.position.y);
-		if(distA >= circle.radius*circle.radius && distB < circle.radius*circle.radius || distA < circle.radius*circle.radius && distB >= circle.radius*circle.radius)
+		double area = ((double)circle.position.x - (double)segment.getA().x)*((double)segment.getB().y - (double)segment.getA().y) - ((double)circle.position.y - (double)segment.getA().y)*((double)segment.getB().x - (double)segment.getA().x);
+		double distA = ((double)segment.getA().x - (double)circle.position.x)*((double)segment.getA().x - (double)circle.position.x) + ((double)segment.getA().y - (double)circle.position.y)*((double)segment.getA().y - (double)circle.position.y);
+		double distB = ((double)segment.getB().x - (double)circle.position.x)*((double)segment.getB().x - (double)circle.position.x) + ((double)segment.getB().y - (double)circle.position.y)*((double)segment.getB().y - (double)circle.position.y);
+		if(distA >= (double)circle.radius*(double)circle.radius && distB < (double)circle.radius*(double)circle.radius || distA < (double)circle.radius*(double)circle.radius && distB >= (double)circle.radius*(double)circle.radius)
 			return true;
-		return distA >= circle.radius*circle.radius
-			&& distB >= circle.radius*circle.radius
-			&& area * area / ((segment.getB().x - segment.getA().x)*(segment.getB().x - segment.getA().x)+(segment.getB().y - segment.getA().y)*(segment.getB().y - segment.getA().y)) <= circle.radius * circle.radius
-			&& (segment.getB().x - segment.getA().x)*(circle.position.x - segment.getA().x) + (segment.getB().y - segment.getA().y)*(circle.position.y - segment.getA().y) >= 0
-			&& (segment.getA().x - segment.getB().x)*(circle.position.x - segment.getB().x) + (segment.getA().y - segment.getB().y)*(circle.position.y - segment.getB().y) >= 0;
+		return distA >= (double)circle.radius*(double)circle.radius
+			&& distB >= (double)circle.radius*(double)circle.radius
+			&& area * area / (((double)segment.getB().x - (double)segment.getA().x)*((double)segment.getB().x - (double)segment.getA().x)+((double)segment.getB().y - (double)segment.getA().y)*((double)segment.getB().y - (double)segment.getA().y)) <= (double)circle.radius * (double)circle.radius
+			&& ((double)segment.getB().x - (double)segment.getA().x)*((double)circle.position.x - (double)segment.getA().x) + ((double)segment.getB().y - (double)segment.getA().y)*((double)circle.position.y - (double)segment.getA().y) >= 0
+			&& ((double)segment.getA().x - (double)segment.getB().x)*((double)circle.position.x - (double)segment.getB().x) + ((double)segment.getA().y - (double)segment.getB().y)*((double)circle.position.y - (double)segment.getB().y) >= 0;
 	}
 	
 	/**
@@ -201,18 +204,29 @@ public class PathDingDing
 	 */
 	public boolean isPathCorrect(ArrayList<Vec2> path)
 	{
+		//conversion des obstacles circulaires en cercles
+		ArrayList<Circle> circles = new ArrayList<Circle>();
+		circles.add(new Circle(mTable.getObstacleManager().getEnnemyRobot().get(0).getPosition(), mTable.getObstacleManager().getEnnemyRobot().get(0).getRadius()));
+		//parcours des plots
+		for(int i = 0; i < mTable.getObstacleManager().getPlots().size(); i++)
+			circles.add(new Circle(mTable.getObstacleManager().getPlots().get(i).getPosition(), mTable.getObstacleManager().getPlots().get(i).getRadius()));
+		
 		boolean intersects = false;
 		//parcours du chemin
 		for(int i = 0; i < path.size() - 1; i++)
 		{
 			//test de collision avec chaque segment
 			for(int j = 0; j < mTable.getObstacleManager().getLines().size(); j++)
-			{
 				//si les deux segments de coupent
 				if(intersects(mTable.getObstacleManager().getLines().get(j), new Segment(path.get(i), path.get(i+1))))
+					intersects = true;
+			//test de collision avec chaque cercle
+			for(int j = 0; j < circles.size(); j++)
+			{
+				//si le segment et le cercle se coupent
+				if(intersects(new Segment(path.get(i), path.get(i+1)), circles.get(j)))
 				{
 					intersects = true;
-					//System.out.println("intersection avec la ligne "+j);
 				}
 			}
 		}

@@ -301,5 +301,10 @@ public class Table implements Service
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public Config getConfig()
+	{
+		return config;
+	}
 }
 

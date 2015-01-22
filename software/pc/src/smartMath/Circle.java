@@ -13,7 +13,7 @@ public class Circle {
 	/**
 	 * construit un cercle
 	 * @param position le centre en mm  pas de virgule
-	 * @param ray le rayon en mm, avec virgule
+	 * @param radius le rayon en mm, avec virgule
 	 */
 	public Circle(Vec2 position, double radius)
 	{
