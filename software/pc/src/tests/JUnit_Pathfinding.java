@@ -58,7 +58,6 @@ public class JUnit_Pathfinding extends JUnit_Test
     @Test
     public void testClickedPF() throws Exception
     {
-    	win.getPanel().drawGraph(pf.getGraph());
     	while(true)
     	{
     		if(win.getMouse().hasClicked())
@@ -70,6 +69,7 @@ public class JUnit_Pathfinding extends JUnit_Test
 			    	win.getPanel().drawArrayList(pf.computePath(win.getMouse().getLeftClickPosition(), win.getMouse().getRightClickPosition()));
 			    	long end = System.nanoTime();
 			    	System.out.println("elapsed : " + (end - start) + " ns");
+			    	win.getPanel().drawGraph(pf.getGraph());
 			    }
 		    	catch(PathNotFoundException e)
 		    	{

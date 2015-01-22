@@ -32,6 +32,7 @@ public class Graph
 	 */
 	private void buildGraph()
 	{
+		//ajout des noeuds fixes
 		mNodes.add(new Node(-1100, 1222));//noeud 0
 		mNodes.add(new Node(-1100, 778));//noeud 1
 		mNodes.add(new Node(-300, 100));//noeud 2
@@ -52,13 +53,11 @@ public class Graph
 				if(i != j)
 				{
 					//parcours des cercles, si le lien ne coupe aucun cercle, on le rajoute
-					/*
 					boolean intersects = false;
 					for(int k = 0; k < circles.size(); k++)
 						if(PathDingDing.intersects(new Segment(mNodes.get(i).toVec2(), mNodes.get(j).toVec2()), circles.get(k)))
 							intersects = true;
 					if(!intersects)
-					*/
 						mNodes.get(i).addLink(mNodes.get(j));
 				}
 		
@@ -164,6 +163,16 @@ public class Graph
 					mAreas.get(i).getAttachedNode(j).addLink(mEndNode);
 				}
 			}
+		}
+	}
+	
+	//detache un noeud du graphe
+	public void unlinkNode(Node node)
+	{
+		//parcours des noeuds
+		for(int i = 0; i< mNodes.size(); i++)
+		{
+			mNodes.get(i).deleteLink(node);
 		}
 	}
 	

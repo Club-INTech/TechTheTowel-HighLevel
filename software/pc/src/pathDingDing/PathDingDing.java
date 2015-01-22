@@ -25,7 +25,7 @@ public class PathDingDing
 	public PathDingDing(Table table)
 	{
 		mTable = table;
-		mGraph = new Graph(mTable);
+		//mGraph = new Graph(mTable);
 	}
 	
 	/**
@@ -37,6 +37,10 @@ public class PathDingDing
 	 */
 	public ArrayList<Vec2> computePath(Vec2 start, Vec2 end) throws Exception
 	{
+		//on recree un graphe... pour l'instant
+		//TODO : a revoir
+		mGraph = new Graph(mTable);
+		
 		//le cas ou les points de depart et d'arrivee sont reliables en ligne droite est directement traite
 		ArrayList<Vec2> directPath =  new ArrayList<Vec2>();
 		directPath.add(start);
@@ -48,7 +52,8 @@ public class PathDingDing
 		mGraph.setStartNode(new Node(start.x, start.y));
 
 		//ajout du noeud de fin au graphe
-		mGraph.setEndNode(new Node(end.x, end.y));
+		Node endNode = new Node(end.x, end.y);
+		mGraph.setEndNode(endNode);
 		
 		//calcul du chemin via computeGraph, convertion, et simplification.
 		ArrayList<Vec2> pathVec2 = new ArrayList<Vec2>();
@@ -56,6 +61,8 @@ public class PathDingDing
 		for(int i = 0; i < pathNode.size(); i++)
 			pathVec2.add(pathNode.get(i).toVec2());
 		simplify(pathVec2);
+		//on detache le dernier noeud du graphe
+		mGraph.unlinkNode(endNode);
 		return pathVec2;
 	}
 	
