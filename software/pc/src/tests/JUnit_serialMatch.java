@@ -6,9 +6,10 @@ import java.util.ArrayList;
 
 import scripts.AbstractScript;
 import scripts.ScriptManager;
+import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
-import utils.Sleep;
+import table.Table;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -109,7 +110,7 @@ public class JUnit_serialMatch extends JUnit_Test
 	}
 
 	@Test
-	public void test() throws PathNotFoundException, SerialFinallyException
+	public void test() throws PathNotFoundException, SerialFinallyException, SerialConnexionException
 	{
 		container.startAllThreads();
 			waitMatchBegin();
@@ -226,7 +227,6 @@ public class JUnit_serialMatch extends JUnit_Test
 		}
 		
 		System.out.println("Clap 1 et 2 Fermés");
-
 	
 		try 
 		{
@@ -251,21 +251,11 @@ public class JUnit_serialMatch extends JUnit_Test
 		
 		System.out.println("PLot 1 pris");
 
-		
-		try 
-		{
-			real_state.robot.turn (Math.PI*0.5);
-			real_state.robot.moveLengthwise(400);
-		}
-		catch (UnableToMoveException e1) 
-		{
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
+
 		try 
 		{
 			scriptmanager.getScript(ScriptNames.FREE_STACK).goToThenExec(1, real_state, true, emptyHook );
+			real_state.robot.moveLengthwise(-600);
 		}
 		catch (UnableToMoveException | SerialConnexionException e) 
 		{
@@ -284,16 +274,16 @@ public class JUnit_serialMatch extends JUnit_Test
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		try 
 		{
-			real_state.robot.moveLengthwise(-400);
+			scriptmanager.getScript(ScriptNames.CLOSE_CLAP).goToThenExec(3, real_state, true, emptyHook );
 		}
 		catch (UnableToMoveException e1) 
 		{
 			e1.printStackTrace();
 		}
-		
-		//TODO fermer le troisieme clap !!!
+//GoToThenExec de deposer verres
 		
 		System.out.println("match fini !");
 

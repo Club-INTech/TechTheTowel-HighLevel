@@ -47,6 +47,8 @@ public class ScriptManager implements Service
 		instanciedScripts[ScriptNames.FREE_STACK.ordinal()] = new DropPile(factory, config, log);
 		instanciedScripts[ScriptNames.GRAB_GLASS.ordinal()] = new GetGlass(factory, config, log);
 		instanciedScripts[ScriptNames.GRAB_PLOT.ordinal()] = new GetPlot(factory, config, log);
+		instanciedScripts[ScriptNames.TAKE_TENNIS_BALL.ordinal()] = new TakeTennisBall(factory, config, log);
+
 	}
 	
 	/**

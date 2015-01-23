@@ -97,13 +97,13 @@ public class GetGlass extends AbstractScript
 	
 	public void takeGlass2 (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
 	{
-		takeGlass(stateToConsider,hooksToConsider,false,false);
+		takeGlass(stateToConsider,hooksToConsider,false,true);
 		stateToConsider.table.glassXTaken(2);
 	}
 	
 	public void takeGlass3 (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
 	{
-		takeGlass(stateToConsider,hooksToConsider, false,false);
+		takeGlass(stateToConsider,hooksToConsider, false,true);
 		stateToConsider.table.glassXTaken(3);
 	}
 	
@@ -118,15 +118,15 @@ public class GetGlass extends AbstractScript
 	public Circle entryPosition(int id)
 	{
 		if (id==0)
-			return new Circle (1355,250,320);
+			return new Circle (1355,250,310);
 		else if (id==1)
-			return new Circle (590,1170,320);
+			return new Circle (590,1170,310);
 		else if (id==2)
-			return new Circle (0,350,320);
+			return new Circle (0,350,310);
 		else if (id==3)
-			return new Circle (-590,1170,320);
+			return new Circle (-590,1170,310);
 		else if (id==4)
-			return new Circle (-1355,250,320);
+			return new Circle (-1355,250,310);
 		else 
 		{
 			log.debug("Probleme de numero de script de Verre", this);

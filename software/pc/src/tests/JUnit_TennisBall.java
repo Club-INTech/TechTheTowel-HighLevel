@@ -8,11 +8,8 @@ import scripts.AbstractScript;
 import scripts.ScriptManager;
 import smartMath.Vec2;
 import strategie.GameState;
-import utils.Sleep;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import enums.ActuatorOrder;
 import enums.ScriptNames;
 import enums.ServiceNames;
@@ -72,7 +69,7 @@ public class JUnit_TennisBall extends JUnit_Test
 	{
 
 		System.out.println("Robot pret pour le match, attente du retrait du jumper");
-		
+		/*
 		// attends que le jumper soit retiré du robot
 		
 		boolean jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
@@ -80,7 +77,7 @@ public class JUnit_TennisBall extends JUnit_Test
 		{
 			jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
 			 Sleep.sleep(100);
-		}
+		}*/
 
 		
 		// maintenant que le jumper est retiré, le match a commencé
@@ -146,7 +143,6 @@ public class JUnit_TennisBall extends JUnit_Test
 					//attention ce sont surement des erreurs dans le finally d'un script donc elle servent a proteger le meca !
 					//ou un robot ennemi devant. Donc beaucoup moins critique (ce serai bie de pouvoir differencer les deux)
 					e.printStackTrace();
-				
 				} 
 				catch (PathNotFoundException e)
 				{

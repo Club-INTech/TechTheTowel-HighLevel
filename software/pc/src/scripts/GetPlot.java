@@ -97,17 +97,17 @@ public class GetPlot extends AbstractScript
 				if (!stateToConsider.robot.isGlassStoredLeft)
 				{
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);					
-					stateToConsider.robot.moveLengthwise(160, hooksToConsider);
-					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
 					stateToConsider.robot.moveLengthwise(180, hooksToConsider);
+					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
+					stateToConsider.robot.moveLengthwise(140, hooksToConsider);
 					stateToConsider.robot.isGlassStoredLeft = true;
 				}
 				else
 				{
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);					
-					stateToConsider.robot.moveLengthwise(160, hooksToConsider);
-					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
 					stateToConsider.robot.moveLengthwise(180, hooksToConsider);
+					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
+					stateToConsider.robot.moveLengthwise(140, hooksToConsider);
 					stateToConsider.robot.isGlassStoredRight = true;
 				}
 				
@@ -115,7 +115,7 @@ public class GetPlot extends AbstractScript
 			}
 			else
 			{
-				stateToConsider.robot.moveLengthwise(340, hooksToConsider);
+				stateToConsider.robot.moveLengthwise(320, hooksToConsider);
 			}
 			
 			//si on a plus de place dans la pile on termine
