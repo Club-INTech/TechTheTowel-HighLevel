@@ -111,7 +111,7 @@ public class GetPlot extends AbstractScript
 					stateToConsider.robot.isGlassStoredRight = true;
 				}
 				
-				stateToConsider.table.takeGlassX(0);
+				stateToConsider.table.glassXTaken(0);
 			}
 			else
 			{

@@ -59,7 +59,20 @@ public class Table implements Service
 	private boolean isGlass2Taken;
 	private boolean isGlass3Taken;
 	private boolean isGlass4Taken;
+	
+	//les verres posés ou non
+	private boolean isGlass0Dropped;
+	private boolean isGlass1Dropped;
+	private boolean isGlass2Dropped;
+	private boolean isGlass3Dropped;
+	private boolean isGlass4Dropped;
 
+	//Les emplacements où sont posés les verres (voir doc des zones dans DropGlasss : 
+	//1=Notre zone, 2=haut zone ennemi, 3=bas zone ennemi
+	
+	private boolean isArea1FilledWithGlass;
+	private boolean isArea2FilledWithGlass;
+	private boolean isArea3FilledWithGlass;
 	
 	
 	/**
@@ -103,7 +116,18 @@ public class Table implements Service
 		isGlass2Taken=false;
 		isGlass3Taken=false;
 		isGlass4Taken=false;
-
+		
+		//Les verres posés et leurs zones
+		isGlass0Dropped=false;
+		isGlass1Dropped=false;
+		isGlass2Dropped=false;
+		isGlass3Dropped=false;
+		isGlass4Dropped=false;
+		
+		//Les zones où sont posés les verres
+		isArea1FilledWithGlass=false;
+		isArea2FilledWithGlass=false;
+		isArea3FilledWithGlass=false;
 	}
 	public ObstacleManager getObstacleManager()
 	{
@@ -179,22 +203,10 @@ public class Table implements Service
 			return false;
 	}
 	
-	public void takeGlassX (int x)
-	{
-		if (x==0)
-			isGlass0Taken=true;
-		else if (x==1)
-			isGlass1Taken=true;
-		else if (x==2)
-			isGlass2Taken=true;
-		else if (x==3)
-			isGlass3Taken=true;
-		else if (x==4)
-			isGlass4Taken=true;
-		else
-			log.debug("Probleme dans isGlassTaken",this);
-	}
+	
 
+	
+	
 	/**
 	 * mange le plot x
 	 * @param x le numero du plot doit etre dans [0..7]
@@ -237,6 +249,35 @@ public class Table implements Service
 		else
 			log.debug("Probleme dans isGlassTaken",this);
 	}
+	
+	public void glassXDropped (int x)
+	{
+		if (x==0)
+			isGlass0Dropped=true;
+		else if (x==1)
+			isGlass1Dropped=true;
+		else if (x==2)
+			isGlass2Dropped=true;
+		else if (x==3)
+			isGlass3Dropped=true;
+		else if (x==4)
+			isGlass4Dropped=true;
+		else
+			log.debug("Probleme dans glassXDropped",this);
+	}
+	
+	public void areaXFilled (int x)
+	{
+		if (x==1)
+			isArea1FilledWithGlass=true;
+		else if (x==2)
+			isArea2FilledWithGlass=true;
+		else if (x==3)
+			isArea3FilledWithGlass=true;
+		else
+			log.debug("Probleme dans areaXFilled",this);
+	}
+
 	
 	//La table
 	/**
