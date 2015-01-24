@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -g -nostartfiles -Map=total.map -O0 --gc-sections -LD:\CooCox\CoIDE\configuration\ProgramData\total -TD:\CooCox\CoIDE\configuration\ProgramData\total/arm-gcc-link.ld -g -L..\..\.. -lstdc++">
+      <target file="total.elf" lastModified="14b1c831f58">
+         <source file="..\obj\stm32f4xx_usart.o" lastModified="14b1c831a12"/>
+         <source file="..\obj\startup_stm32f4xx.o" lastModified="14b1c831a34"/>
+         <source file="..\obj\main.o" lastModified="14b1c831a63"/>
+         <source file="..\obj\stm32f4xx_rcc.o" lastModified="14b1c831ad0"/>
+         <source file="..\obj\stm32f4xx_gpio.o" lastModified="14b1c831b2e"/>
+         <source file="..\obj\system_stm32f4xx.o" lastModified="14b1c831b6c"/>
+         <source file="..\obj\syscalls.o" lastModified="14b1c831bab"/>
+         <source file="..\obj\stm32f4xx_rtc.o" lastModified="14b1c831c57"/>
+         <source file="..\obj\stm32f4xx_tim.o" lastModified="14b1c831d70"/>
+      </target>
+   </processor>
+</history>
