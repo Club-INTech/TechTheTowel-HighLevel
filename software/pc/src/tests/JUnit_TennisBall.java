@@ -8,11 +8,8 @@ import scripts.AbstractScript;
 import scripts.ScriptManager;
 import smartMath.Vec2;
 import strategie.GameState;
-import utils.Sleep;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import enums.ActuatorOrder;
 import enums.ScriptNames;
 import enums.ServiceNames;
@@ -24,10 +21,9 @@ import robot.Robot;
 import robot.cardsWrappers.SensorsCardWrapper;
 
 /**
- * classe des matchs scriptes.
- * sert de bases pour nimporte quel test
+ *  Classe de test pour la prise de balle de tennis
  */
-public class JUnit_serialMatch extends JUnit_Test 
+public class JUnit_TennisBall extends JUnit_Test 
 {
 
 	ArrayList<Hook> emptyHook;
@@ -73,7 +69,7 @@ public class JUnit_serialMatch extends JUnit_Test
 	{
 
 		System.out.println("Robot pret pour le match, attente du retrait du jumper");
-		
+		/*
 		// attends que le jumper soit retiré du robot
 		
 		boolean jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
@@ -81,7 +77,7 @@ public class JUnit_serialMatch extends JUnit_Test
 		{
 			jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
 			 Sleep.sleep(100);
-		}
+		}*/
 
 		
 		// maintenant que le jumper est retiré, le match a commencé
@@ -105,7 +101,6 @@ public class JUnit_serialMatch extends JUnit_Test
 		robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
 		robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, false);
 		robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
-		
 	}
 
 	@Test
@@ -140,67 +135,7 @@ public class JUnit_serialMatch extends JUnit_Test
 				//premier script
 				try 
 				{
-					scriptmanager.getScript(ScriptNames.DROP_CARPET).goToThenExec(1, real_state, true, emptyHook );
-				}
-				catch (UnableToMoveException | SerialConnexionException e) 
-				{
-					// TODO Main erreur critique :
-					//attention ce sont surement des erreurs dans le finally d'un script donc elle servent a proteger le meca !
-					//ou un robot ennemi devant. Donc beaucoup moins critique (ce serai bie de pouvoir differencer les deux)
-					e.printStackTrace();
-				
-				} 
-				catch (PathNotFoundException e)
-				{
-					//TODO: le pathfinding ne trouve pas de chemin
-					e.printStackTrace();
-				} 
-				catch (SerialFinallyException e) 
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				//second script
-				try 
-				{
-					scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(2, real_state, true, emptyHook );
-				} 
-				catch (UnableToMoveException | SerialConnexionException
-						| PathNotFoundException | SerialFinallyException e1) 
-				{
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				try 
-				{
-					scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(34, real_state, true, emptyHook );
-				} 
-				catch (UnableToMoveException | SerialConnexionException
-						| PathNotFoundException | SerialFinallyException e1) 
-				{
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
-				try 
-				{
-					//ferme les 2 claps proches : 
-					scriptmanager.getScript(ScriptNames.CLOSE_CLAP).goToThenExec(-12, real_state, true, emptyHook);
-				}
-				catch (UnableToMoveException e1) 
-				{
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} 
-				catch (SerialConnexionException e) 
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				try 
-				{
-					scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(1, real_state, true, emptyHook );
+					scriptmanager.getScript(ScriptNames.TAKE_TENNIS_BALL).goToThenExec(1, real_state, true, emptyHook );
 				}
 				catch (UnableToMoveException | SerialConnexionException e) 
 				{
@@ -212,57 +147,15 @@ public class JUnit_serialMatch extends JUnit_Test
 				catch (PathNotFoundException e)
 				{
 					//TODO: le pathfinding ne trouve pas de chemin
-					
-				} 
-				catch (SerialFinallyException e) 
-				{
 					e.printStackTrace();
-				}
-				try 
-				{
-					real_state.robot.turn (Math.PI*0.5);
-					real_state.robot.moveLengthwise(400);
-				}
-				catch (UnableToMoveException e1) 
-				{
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
-				try 
-				{
-					scriptmanager.getScript(ScriptNames.FREE_STACK).goToThenExec(1, real_state, true, emptyHook );
-				}
-				catch (UnableToMoveException | SerialConnexionException e) 
-				{
-					// TODO Main erreur critique :
-					//attention ce sont surement des erreurs dans le finally d'un script donc elle servent a proteger le meca !
-					//ou un robot ennemi devant. Donc beaucoup moins critique (ce serai bie de pouvoir differencer les deux)
-					e.printStackTrace();
-				} 
-				catch (PathNotFoundException e)
-				{
-					//TODO: le pathfinding ne trouve pas de chemin
-					
 				} 
 				catch (SerialFinallyException e) 
 				{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				try 
-				{
-					real_state.robot.moveLengthwise(-400);
-				}
-				catch (UnableToMoveException e1) 
-				{
-					e1.printStackTrace();
-				}
-				
-				//TODO fermer le troisieme clap !!!
-				
+								
 				System.out.println("match fini !");
-
 
 				//Le match s'arrête
 				container.destructor();

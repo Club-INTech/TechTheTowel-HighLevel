@@ -99,7 +99,7 @@ public class DropPile extends AbstractScript
 	{
 		if (id==1)
 		{
-			return new Circle(0,300);
+			return new Circle(400,270);
 		}
 		else if (id==2)
 		{
@@ -124,12 +124,15 @@ public class DropPile extends AbstractScript
 	@Override
 	protected void finalise(GameState<?> stateToConsider) throws SerialFinallyException, UnableToMoveException 
 	{
-		try {
+		try 
+		{
 			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, false);
 			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);	
 			stateToConsider.robot.moveLengthwise(-20);
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
-		} catch (SerialConnexionException e) {
+		} 
+		catch (SerialConnexionException e) 
+		{
 			throw new SerialFinallyException ();
 		}
 	}

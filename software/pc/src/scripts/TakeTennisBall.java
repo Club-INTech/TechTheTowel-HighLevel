@@ -35,23 +35,40 @@ public class TakeTennisBall extends AbstractScript
 
 		//On initialise l'ascenceur
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, false);
+		stateToConsider.robot.sleep(1000);
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+		stateToConsider.robot.sleep(1000);
+
 		
 		//On ferme tous les bras, si ce n'est deja fait (bras vers l'exterieur, vers les gobelets)
 		stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
+		stateToConsider.robot.sleep(1000);
+
 		stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
+		stateToConsider.robot.sleep(1000);
+
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
 
 		//On avance vers la balle
-		stateToConsider.robot.moveLengthwise(500,hooksToConsider);//TODO
+		stateToConsider.robot.moveLengthwise(370,hooksToConsider);
+		System.out.println("On avance vers la balle");
+
 		
 		//On la recupere
-		stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
-		stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
-		
+		stateToConsider.robot.sleep(1000);
+		stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);//FIXME faire une option bras au milieu : |_|  |_\  /_\  
+		stateToConsider.robot.sleep(5000);
+		stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN_SLOW, true);
+		stateToConsider.robot.sleep(5000);
+
 		//On refereme et on remonte le tout
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, false);
+
+		System.out.println("Balle prise");
+
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_HIGH, true);
+		stateToConsider.robot.sleep(1000);
+
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
 	}
 	
@@ -64,6 +81,7 @@ public class TakeTennisBall extends AbstractScript
 		{
 			System.out.println("Probleme de version");
 			return new Circle(-881,1000,0);
+
 		}
 	}
 	

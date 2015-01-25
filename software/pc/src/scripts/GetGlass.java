@@ -97,13 +97,13 @@ public class GetGlass extends AbstractScript
 	
 	public void takeGlass2 (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
 	{
-		takeGlass(stateToConsider,hooksToConsider,false,false);
+		takeGlass(stateToConsider,hooksToConsider,false,true);
 		stateToConsider.table.glassXTaken(2);
 	}
 	
 	public void takeGlass3 (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
 	{
-		takeGlass(stateToConsider,hooksToConsider, false,false);
+		takeGlass(stateToConsider,hooksToConsider, false,true);
 		stateToConsider.table.glassXTaken(3);
 	}
 	
@@ -118,18 +118,20 @@ public class GetGlass extends AbstractScript
 	public Circle entryPosition(int id)
 	{
 		if (id==0)
-			return new Circle (-1250,250,300);
+			return new Circle (1355,250,310);
 		else if (id==1)
-			return new Circle (-590,1170,300);
+			return new Circle (590,1170,310);
 		else if (id==2)
-			return new Circle (0,350,300);
+			return new Circle (0,350,310);
 		else if (id==3)
-			return new Circle (590,1170,300);
+			return new Circle (-590,1170,310);
 		else if (id==4)
-			return new Circle (1250,250,300);
+			return new Circle (-1355,250,310);
 		else 
+		{
 			log.debug("Probleme de numero de script de Verre", this);
 			return new Circle (0,0);
+		}
 	}
 
 	@Override
@@ -143,7 +145,7 @@ public class GetGlass extends AbstractScript
 		//		return 0;
 		//	}
 		//}
-		return 4;
+		return 0;
 	}
 
 	@Override
@@ -155,6 +157,7 @@ public class GetGlass extends AbstractScript
 	//attrape le plot (ouvre / avance / ferme )
 	private void takeGlass (GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider, boolean isSecondTry , boolean isArmChosenLeft) throws SerialConnexionException, UnableToMoveException
 	{
+
 		//On ouvre le bras
 		if(isArmChosenLeft)
 		{
@@ -164,7 +167,7 @@ public class GetGlass extends AbstractScript
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);
 		
 		//On avance vers le plot
-		stateToConsider.robot.moveLengthwise(100,hooksToConsider);
+		stateToConsider.robot.moveLengthwise(80,hooksToConsider);
 
 		//On prend le verre
 		if(isArmChosenLeft)
@@ -174,8 +177,9 @@ public class GetGlass extends AbstractScript
 		else 
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
 		
-		//on verifie
+		stateToConsider.robot.sleep(200);
 		
+		//on verifie
 		//si non, et si second essai on retente
 	}
 
