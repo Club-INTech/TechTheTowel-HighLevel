@@ -106,58 +106,58 @@ public class JUnit_TennisBall extends JUnit_Test
 	@Test
 	public void test() throws PathNotFoundException, SerialFinallyException
 	{
-				container.startAllThreads();
-				waitMatchBegin();
-				//premiere action du match
-				
-				System.out.println("Le robot commence le match");
-			
-				try 
-				{
-					AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
-					exitScript.execute(0, real_state, emptyHook, true );
-				} 
-				catch (SerialConnexionException  e) 
-				{
-					System.out.println("CRITICAL : Carte mal branchée. Match termine");
-					e.printStackTrace();
-					return;
-				}
-				catch (UnableToMoveException e) 
-				{
-					System.out.println("CRITICAL : Chemin bloque, enlevez votre main");
-					e.printStackTrace();
-				}
-				
-				//debut du match
-				System.out.println("Debut du match");
-				
-				//premier script
-				try 
-				{
-					scriptmanager.getScript(ScriptNames.TAKE_TENNIS_BALL).goToThenExec(1, real_state, true, emptyHook );
-				}
-				catch (UnableToMoveException | SerialConnexionException e) 
-				{
-					// TODO Main erreur critique :
-					//attention ce sont surement des erreurs dans le finally d'un script donc elle servent a proteger le meca !
-					//ou un robot ennemi devant. Donc beaucoup moins critique (ce serai bie de pouvoir differencer les deux)
-					e.printStackTrace();
-				} 
-				catch (PathNotFoundException e)
-				{
-					//TODO: le pathfinding ne trouve pas de chemin
-					e.printStackTrace();
-				} 
-				catch (SerialFinallyException e) 
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-								
-				System.out.println("match fini !");
+		container.startAllThreads();
+		waitMatchBegin();
+		//premiere action du match
+		
+		System.out.println("Le robot commence le match");
+	
+		try 
+		{
+			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
+			exitScript.execute(0, real_state, emptyHook, true );
+		} 
+		catch (SerialConnexionException  e) 
+		{
+			System.out.println("CRITICAL : Carte mal branchée. Match termine");
+			e.printStackTrace();
+			return;
+		}
+		catch (UnableToMoveException e) 
+		{
+			System.out.println("CRITICAL : Chemin bloque, enlevez votre main");
+			e.printStackTrace();
+		}
+		
+		//debut du match
+		System.out.println("Debut du match");
+		
+		//premier script
+		try 
+		{
+			scriptmanager.getScript(ScriptNames.TAKE_TENNIS_BALL).goToThenExec(1, real_state, true, emptyHook );
+		}
+		catch (UnableToMoveException | SerialConnexionException e) 
+		{
+			// TODO Main erreur critique :
+			//attention ce sont surement des erreurs dans le finally d'un script donc elle servent a proteger le meca !
+			//ou un robot ennemi devant. Donc beaucoup moins critique (ce serai bie de pouvoir differencer les deux)
+			e.printStackTrace();
+		} 
+		catch (PathNotFoundException e)
+		{
+			//TODO: le pathfinding ne trouve pas de chemin
+			e.printStackTrace();
+		} 
+		catch (SerialFinallyException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+						
+		System.out.println("match fini !");
 
-				//Le match s'arrête
-				container.destructor();
+		//Le match s'arrête
+		container.destructor();
 	}
 }

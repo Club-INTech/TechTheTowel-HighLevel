@@ -67,6 +67,12 @@ public class GetPlot extends AbstractScript
 			//on choisi le bras le plus adapte (assez dificile)
 			boolean isChoosenArmLeft = true;
 			
+			//On change le bras choisi suivant la symetrie : à voir si l'IA s'en occupera, mais pour les tests ca reste là
+			if(stateToConsider.robot.getSymmetry())
+			{
+				isChoosenArmLeft=!isChoosenArmLeft;
+			}
+			
 			//le robot est deja en face du plot puisqu'on a appele goToThenExec (qui met en face du centre du script) si un jour on autorise de lancer exec il faudra remettre ces lignes (et les debugger)
 			//stateToConsider.robot.turn(Math.atan2(	entryPosition(versionToExecute).center.y - stateToConsider.robot.getPosition().y,	// position voulue - position actuelle
 			//			 							entryPosition(versionToExecute).center.x - stateToConsider.robot.getPosition().x	// de meme
@@ -280,6 +286,11 @@ public class GetPlot extends AbstractScript
 	 */
 	private void eatPlot (boolean isSecondTry, boolean isArmChosenLeft, GameState<Robot> stateToConsider) throws UnableToEatPlot, SerialConnexionException
 	{
+		//On change le bras choisi suivant la symetrie : à voir si l'IA s'en occupera, mais pour les tests ca reste là
+		if(stateToConsider.robot.getSymmetry())
+		{
+			isArmChosenLeft=!isArmChosenLeft;
+		}
 		
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);

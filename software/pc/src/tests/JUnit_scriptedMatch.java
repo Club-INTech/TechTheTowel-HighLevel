@@ -6,9 +6,9 @@ import java.util.ArrayList;
 
 import scripts.AbstractScript;
 import scripts.ScriptManager;
+import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
-import utils.Sleep;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,6 +27,22 @@ import robot.cardsWrappers.SensorsCardWrapper;
  * classe des matchs scriptes.
  * sert de bases pour nimporte quel test
  */
+
+///FIXME : soucis pour le moment :
+/// COTE JAUNE : Le robot part embrasser le mur au lieu de lancer le script "plots 3+4+ verre"
+/// COTE JAUNE : Le robot ne prend meme pas la peine de prendre le plot après 
+/// L'ascenceur se ferme mal : le systeme d'anti-retour empeche l'ascenceur de bien se fermer, après deposage des plots ET meme au tout debut du match.
+/// Les tapis se tordent, mais sont bien posés 2/3 du temps.
+/// COTE VERT : Le robot ne ferme pas lees claps
+
+///Reussites à 100% du temps : 
+/// Sortir
+/// Le verre 1
+/// COTE VERT : Les 3 claps
+/// Le deposage des plots
+/// COTE JAUNE : Les 2 plots+verre dans le coin
+
+
 public class JUnit_scriptedMatch extends JUnit_Test 
 {
 
@@ -253,7 +269,6 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		
 		System.out.println("PLot 1 pris");
 
-		
 		try 
 		{
 			scriptmanager.getScript(ScriptNames.FREE_STACK).goToThenExec(1, real_state, true, emptyHook );
@@ -276,6 +291,28 @@ public class JUnit_scriptedMatch extends JUnit_Test
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		/*Le robot n'en est pas encore capable mais ca va venir avec le bas niveau et les fonctions "bras au milieu" etc
+		try 
+		{
+		    real_state.robot.moveToCircle(new Circle(800,1000,0), emptyHook, real_state.table); // PDD à appeler / On va vers notre emplacement de depart
+			scriptmanager.getScript(ScriptNames.TAKE_TENNIS_BALL).goToThenExec(1, real_state, true, emptyHook );
+		}
+		catch (UnableToMoveException e1) 
+		{
+			e1.printStackTrace();
+		}*/
+		
+		try 
+		{
+			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(1, real_state, true, emptyHook );
+		    real_state.robot.moveToCircle(new Circle(500,1000,0), emptyHook, real_state.table); // PDD à appeler / On va vers notre emplacement de depart
+		}
+		catch (UnableToMoveException e1) 
+		{
+			e1.printStackTrace();
+		}
+		
 		try 
 		{
 			scriptmanager.getScript(ScriptNames.CLOSE_CLAP).goToThenExec(3, real_state, true, emptyHook );

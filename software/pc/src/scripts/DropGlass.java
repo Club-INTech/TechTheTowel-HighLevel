@@ -49,6 +49,8 @@ public class DropGlass extends AbstractScript
 
 		if (version==1)
 		{
+			stateToConsider.robot.turn(0);//On se tourne dans le bon sens
+			
 			//On avance
 			stateToConsider.robot.moveLengthwise(350, hooksToConsider, true);
 			
