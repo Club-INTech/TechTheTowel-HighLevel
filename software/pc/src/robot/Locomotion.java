@@ -552,44 +552,39 @@ public class Locomotion implements Service
 	 */
 	private void moveInDirectionEventWatcher(ArrayList<Hook> hooksToConsider, boolean allowCurvedPath, boolean isBackward) throws  UnexpectedObstacleOnPathException, SerialConnexionException, BlockedException
 	{	
-		// On donnera l'odre de se déplacer au robot
-		boolean haveToGiveOrderToMove = true;
 		
 		// Surveille les évènements qui peuvent survenir durant le déplacement
 		// le mouvement dure tant qu'il n'est pas fini
-		while(haveToGiveOrderToMove || !isMovementFinished() )	
+
+		moveInDirectionPlanner(allowCurvedPath, isBackward, allowCurvedPath);
+		Sleep.sleep(500); // attends que les moteurs se metttente a tourner avant de vérifier qu'il tournent effectivement. //TODO: faire en sorte que l'on ai plus besoin de ce délai
+
+		while(!isMovementFinished() )	
 		{
-			// donne (éventuellement de nouveau) l'ordre de se déplacer
-			if(haveToGiveOrderToMove)
-			{
-				moveInDirectionPlanner(allowCurvedPath, isBackward, allowCurvedPath);
-				Sleep.sleep(500); // attends que les moteurs se metttente a tourner avant de vérifier qu'il tournent effectivement. //TODO: faire en sorte que l'on ai plus besoin de ce délai
-			}
+			// met a jour ou nous sommes sur la table
+			updatePositionAndOrientation();
+			
+			// l'angle vers le point vise, sert a corriger la trajectoire en temps reel
+			double angle = Math.atan2(aim.y-position.y, aim.x-position.x);
+			
+			//si l'angle de correction n'est pas trop grand on corrige la trajectoire (sinon on ne peut pas corriger donc on oublie)
+			if (Math.abs(Geometry.minusAngle(angle, orientation , 2*Math.PI))<10)
+				mLocomotionCardWrapper.turn(angle);
 			
 			// vérifie qu'il n'y a pas de blocage mécanique (n'importe quoi faisant que les moteurs tournent sans que les codeuses tournent)
 			// TODO: il y a double emploi entre isMovementFinished et checkRobotNotBlocked, les deux vérifient de deux facons différentes que le robot n'est pas mécaniquement bloqué. Il faut centraliser la vérification.
 			checkRobotNotBlocked();
 			
-			// met a jour ou nous sommes sur la table
-			updatePositionAndOrientation();
+		
 			
 			// vérifie qu'il n'y a rien la ou l'on se dirige qui pourrait obstruer le passage
 			checkPathIsObstacleFree(!isBackward);
 
 			// Vérifie si les hooks fournis doivent être déclenchés, et les déclenche si besoin
-			haveToGiveOrderToMove = false;
 			if(hooksToConsider != null)
 				for(Hook hook : hooksToConsider)
-				{
-					// savegarde la consige de position, ca si un hook fait appel a cette classe, il écrase l'ancienne valeur de aim
-					Vec2 oldAim = aim.clone();
-					
 					// vérifie si ce hook doit être déclenché, le déclenche si c'est le cas, et fera renvoyer au prochain tour de while l'ordre de déplacement si le hook a fait bouger le robot
-					haveToGiveOrderToMove |= hook.evaluate();
-					
-					// restaure le aim de ce déplacement (au lieu ce celui d'un hook)
-					aim = oldAim;
-				}
+					hook.evaluate();
 			
 			// on attends un peu pour ne pas saturer la série
 			Sleep.sleep(minimumDelayBetweenMovementStatusCheck);
