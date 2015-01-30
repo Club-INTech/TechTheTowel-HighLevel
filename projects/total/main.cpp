@@ -2,8 +2,11 @@
 #include "MotionControlSystem.h"
 #include "delay.h"
 #include "Motor.h"
+#include "ManagerMgr.h"
+#include "ActuatorsMgr.hpp"
 
 	Uart<1> serial;
+	Uart<2> serial_ax;
 
 int main(void)
 {
@@ -13,6 +16,10 @@ int main(void)
 	MotionControlSystem* motionControlSystem = &MotionControlSystem::Instance();
 	motionControlSystem->init();
 
+	serial_ax.init(9600);
+	ManagerMgr managerMgr = ManagerMgr();
+	ActuatorsMgr* actuatorsMgr = managerMgr.getActuatorsMgr();
+
 	while(1)
 	{
 		if (serial.available()) {
@@ -21,7 +28,7 @@ int main(void)
 
 			if(!strcmp("?",order))
 			{
-				serial.printfln("asservissement");
+				serial.printfln("3");
 			}
 			else if (!strcmp("at", order))	// Commute l'asservissement en translation
 			{
@@ -55,7 +62,8 @@ int main(void)
 			}
 			else if(!strcmp("!",order))
 			{
-				serial.printfln("%lf", 3.15402151024021654);
+				actuatorsMgr->monterBras();
+				//serial.printfln("%lf", 3.15402151024021654);
 			}
 			else if(!strcmp("oxy",order))
 			{

@@ -11,7 +11,7 @@ Counter::Counter() {
 
 	/**
 	 * Configuration encodeur gauche sur TIMER 5 (32 bits)
-	 * Pins A0 (jaune) et A1 (vert)
+	 * Pins A0 (jaune, 'A') et A1 (vert, 'B')
 	 */
 
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
@@ -31,7 +31,7 @@ Counter::Counter() {
 
 	//Mode encoder du timer 5
 	TIM_EncoderInterfaceConfig(TIM5, TIM_EncoderMode_TI12,
-			TIM_ICPolarity_Rising, TIM_ICPolarity_Rising);
+				TIM_ICPolarity_Rising, TIM_ICPolarity_Rising);
 
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
 	TIM_TimeBaseStructInit(&TIM_TimeBaseStructure);
@@ -46,30 +46,29 @@ Counter::Counter() {
 	TIM_SetCounter(TIM5, 2147483647);
 
 	/**
-	 * Configuration encodeur droit sur TIMER 2 (32 bits)
-	 * Pins B3 (jaune) et A15 (vert)
+	 * Configuration encodeur droit sur TIMER 3 (32 bits)
+	 *  ////obsolète : Configuration encodeur droit sur TIMER 2 (32 bits)////
+	 *
+	 * Pins B5 (jaune, 'A') et B4  (vert, 'B')
+	 *  ////obsolète : Pins B3 (jaune, 'A') et A15 (vert, 'B')////
 	 */
 
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
 
 	GPIO_StructInit(&GPIO_InitStructure);
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4 | GPIO_Pin_5;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
 
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;
-	GPIO_Init(GPIOA, &GPIO_InitStructure);
+	GPIO_PinAFConfig(GPIOB, GPIO_PinSource5, GPIO_AF_TIM3);
+	GPIO_PinAFConfig(GPIOB, GPIO_PinSource4, GPIO_AF_TIM3);
 
-	GPIO_PinAFConfig(GPIOB, GPIO_PinSource3, GPIO_AF_TIM2);
-	GPIO_PinAFConfig(GPIOA, GPIO_PinSource15, GPIO_AF_TIM2);
-
-	//Mode encoder du timer 2
-	TIM_EncoderInterfaceConfig(TIM2, TIM_EncoderMode_TI12,
+	//Mode encoder du timer 3
+	TIM_EncoderInterfaceConfig(TIM3, TIM_EncoderMode_TI12,
 			TIM_ICPolarity_Rising, TIM_ICPolarity_Rising);
 
 	TIM_TimeBaseStructInit(&TIM_TimeBaseStructure);
@@ -77,11 +76,11 @@ Counter::Counter() {
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
 	TIM_TimeBaseStructure.TIM_Period = -1;
 	TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
-	TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
+	TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStructure);
 
-	TIM_Cmd(TIM2, ENABLE);
+	TIM_Cmd(TIM3, ENABLE);
 
-	TIM_SetCounter(TIM2, 2147483647);
+	TIM_SetCounter(TIM3, 2147483647);
 
 }
 
@@ -92,5 +91,5 @@ int32_t Counter::getLeftValue() {
 
 int32_t Counter::getRightValue() {
 	//Translate to int32_t
-	return (TIM_GetCounter(TIM2)-2147483647);
+	return (TIM_GetCounter(TIM3)-2147483647);
 }
