@@ -20,7 +20,7 @@
  */
 //#define PERIMETER_MM 123.825*PI
 //#define TICK_TO_MM 0.0324173 // PERIMETER_MM/12000
-#define TICK_TO_MM 0.207555
+#define TICK_TO_MM 0.207555//Unité : mm/Tick
 //#define TICK_TO_RADIAN 0.00012663 // TICK_TO_MM/256 : entre roues de 25.6cm
 #define TICK_TO_RADIAN 0.00072024
 

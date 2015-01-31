@@ -1,24 +1,23 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <history>
    <processor signature="arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -g -nostartfiles -Map=total.map -O0 --gc-sections -lgcc -lc -lm -LD:\CooCox\CoIDE\configuration\ProgramData\total -TD:\CooCox\CoIDE\configuration\ProgramData\total/arm-gcc-link.ld -g -L..\..\.. -lstdc++ -L..\..\..\..\..\..\..\..\Program Files (x86)\GNU Tools ARM Embedded\4.7 2012q4\arm-none-eabi\lib\armv7e-m\softfp -lm">
-      <target file="total.elf" lastModified="14b3caba8da">
+      <target file="total.elf" lastModified="14b40772113">
          <source file="..\..\..\..\..\..\..\..\Program Files (x86)\GNU Tools ARM Embedded\4.7 2012q4\arm-none-eabi\lib\armv7e-m\softfp\libm.a" lastModified="13b769b5a98"/>
-         <source file="..\obj\delay.o" lastModified="14b3cab9f26"/>
-         <source file="..\obj\stm32f4xx_usart.o" lastModified="14b3cab9f93"/>
-         <source file="..\obj\startup_stm32f4xx.o" lastModified="14b3cab9fc2"/>
-         <source file="..\obj\main.o" lastModified="14b3caba07e"/>
-         <source file="..\obj\stm32f4xx_rcc.o" lastModified="14b3caba139"/>
-         <source file="..\obj\ManagerMgr.o" lastModified="14b3caba1b6"/>
-         <source file="..\obj\MotionControlSystem.o" lastModified="14b3caba262"/>
-         <source file="..\obj\stm32f4xx_gpio.o" lastModified="14b3caba2c0"/>
-         <source file="..\obj\system_stm32f4xx.o" lastModified="14b3caba2ef"/>
-         <source file="..\obj\syscalls.o" lastModified="14b3caba32d"/>
-         <source file="..\obj\misc.o" lastModified="14b3caba36c"/>
-         <source file="..\obj\Uart_IT.o" lastModified="14b3caba3ca"/>
-         <source file="..\obj\Motor.o" lastModified="14b3caba427"/>
-         <source file="..\obj\Counter.o" lastModified="14b3caba475"/>
-         <source file="..\obj\stm32f4xx_rtc.o" lastModified="14b3caba521"/>
-         <source file="..\obj\stm32f4xx_tim.o" lastModified="14b3caba5dd"/>
+         <source file="..\obj\delay.o" lastModified="14b407713d1"/>
+         <source file="..\obj\stm32f4xx_usart.o" lastModified="14b4077143d"/>
+         <source file="..\obj\startup_stm32f4xx.o" lastModified="14b4077146a"/>
+         <source file="..\obj\main.o" lastModified="14b40771880"/>
+         <source file="..\obj\stm32f4xx_rcc.o" lastModified="14b407718df"/>
+         <source file="..\obj\MotionControlSystem.o" lastModified="14b40771991"/>
+         <source file="..\obj\stm32f4xx_gpio.o" lastModified="14b407719dc"/>
+         <source file="..\obj\system_stm32f4xx.o" lastModified="14b40771a14"/>
+         <source file="..\obj\syscalls.o" lastModified="14b40771a59"/>
+         <source file="..\obj\misc.o" lastModified="14b40771a96"/>
+         <source file="..\obj\Uart_IT.o" lastModified="14b40771b00"/>
+         <source file="..\obj\Motor.o" lastModified="14b40771b5b"/>
+         <source file="..\obj\Counter.o" lastModified="14b40771ba7"/>
+         <source file="..\obj\stm32f4xx_rtc.o" lastModified="14b40771c39"/>
+         <source file="..\obj\stm32f4xx_tim.o" lastModified="14b40771cec"/>
       </target>
    </processor>
 </history>

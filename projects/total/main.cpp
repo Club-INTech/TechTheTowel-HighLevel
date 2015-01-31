@@ -2,8 +2,7 @@
 #include "MotionControlSystem.h"
 #include "delay.h"
 #include "Motor.h"
-#include "ManagerMgr.h"
-#include "ActuatorsMgr.hpp"
+#include "include/ActuatorsMgr.hpp"
 
 	Uart<1> serial;
 	Uart<2> serial_ax;
@@ -17,8 +16,7 @@ int main(void)
 	motionControlSystem->init();
 
 	serial_ax.init(9600);
-	ManagerMgr managerMgr = ManagerMgr();
-	ActuatorsMgr* actuatorsMgr = managerMgr.getActuatorsMgr();
+	ActuatorsMgr actuatorsMgr;
 
 	while(1)
 	{
@@ -62,7 +60,7 @@ int main(void)
 			}
 			else if(!strcmp("!",order))
 			{
-				actuatorsMgr->monterBras();
+				//actuatorsMgr.monterBras();
 				//serial.printfln("%lf", 3.15402151024021654);
 			}
 			else if(!strcmp("oxy",order))
@@ -187,6 +185,159 @@ int main(void)
 					motionControlSystem->setRotationTunings(1,0,kd);
 					motionControlSystem->orderRotation(PI);
 				}
+			}
+			else if(!strcmp("obd",order))
+			{
+				actuatorsMgr.obd();
+			}
+			else if(!strcmp("fbd",order))
+			{
+				actuatorsMgr.fbd();
+			}
+			else if(!strcmp("obg",order))
+			{
+				actuatorsMgr.obg();
+			}
+			else if(!strcmp("fbg",order))
+			{
+				actuatorsMgr.fbg();
+			}
+			else if(!strcmp("obdl",order))
+			{
+				actuatorsMgr.obdl();
+			}
+			else if(!strcmp("fbdl",order))
+			{
+				actuatorsMgr.fbdl();
+			}
+			else if(!strcmp("obgl",order))
+			{
+				actuatorsMgr.obgl();
+			}
+			else if(!strcmp("fbgl",order))
+			{
+				actuatorsMgr.fbgl();
+			}
+			else if(!strcmp("omd",order))
+			{
+				actuatorsMgr.omd();
+			}
+			else if(!strcmp("fmd",order))
+			{
+				actuatorsMgr.fmd();
+			}
+			else if(!strcmp("omg",order))
+			{
+				actuatorsMgr.omg();
+			}
+			else if(!strcmp("fmg",order))
+			{
+				actuatorsMgr.fmg();
+			}
+			else if(!strcmp("om",order))
+			{
+				actuatorsMgr.omg();
+				actuatorsMgr.omd();
+			}
+			else if(!strcmp("fm",order))
+			{
+				actuatorsMgr.fmg();
+				actuatorsMgr.fmd();
+			}
+			else if(!strcmp("ah",order))
+			{
+				actuatorsMgr.ah();
+			}
+			else if(!strcmp("ab",order))
+			{
+				actuatorsMgr.ab();
+			}
+			else if(!strcmp("as",order))
+			{
+				actuatorsMgr.as();
+			}
+			else if(!strcmp("ae",order))
+			{
+				actuatorsMgr.ae();
+			}
+			else if(!strcmp("ogd",order))
+			{
+				actuatorsMgr.ogd();
+			}
+			else if(!strcmp("fgd",order))
+			{
+				actuatorsMgr.fgd();
+			}
+			else if(!strcmp("gdi",order))
+			{
+				actuatorsMgr.gdi();
+			}
+			else if(!strcmp("ogg",order))
+			{
+				actuatorsMgr.ogg();
+			}
+			else if(!strcmp("fgg",order))
+			{
+				actuatorsMgr.fgg();
+			}
+			else if(!strcmp("ggi",order))
+			{
+				actuatorsMgr.ggi();
+			}
+			else if(!strcmp("go",order))
+			{
+				actuatorsMgr.ogg();
+				actuatorsMgr.ogd();
+			}
+			else if(!strcmp("gf",order))
+			{
+				actuatorsMgr.fgg();
+				actuatorsMgr.fgd();
+			}
+			else if(!strcmp("gi",order))
+			{
+				actuatorsMgr.ggi();
+				actuatorsMgr.gdi();
+			}
+			else if(!strcmp("ptd",order))
+			{
+				actuatorsMgr.ptd();
+			}
+			else if(!strcmp("rtd",order))
+			{
+				actuatorsMgr.rtd();
+			}
+			else if(!strcmp("ptg",order))
+			{
+				actuatorsMgr.ptg();
+			}
+			else if(!strcmp("rtg",order))
+			{
+				actuatorsMgr.rtg();
+			}
+			else if(!strcmp("cdh",order))
+			{
+				actuatorsMgr.cdh();
+			}
+			else if(!strcmp("cdm",order))
+			{
+				actuatorsMgr.cdm();
+			}
+			else if(!strcmp("cdb",order))
+			{
+				actuatorsMgr.cdb();
+			}
+			else if(!strcmp("cgh",order))
+			{
+				actuatorsMgr.cgh();
+			}
+			else if(!strcmp("cgm",order))
+			{
+				actuatorsMgr.cgm();
+			}
+			else if(!strcmp("cgb",order))
+			{
+				actuatorsMgr.cgb();
 			}
 		}
 	}
