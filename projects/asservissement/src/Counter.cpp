@@ -80,7 +80,7 @@ Counter::Counter() {
 
 	TIM_Cmd(TIM3, ENABLE);
 
-	TIM_SetCounter(TIM3, 2147483647);
+	TIM_SetCounter(TIM3, 32767);
 
 }
 
@@ -91,5 +91,5 @@ int32_t Counter::getLeftValue() {
 
 int32_t Counter::getRightValue() {
 	//Translate to int32_t
-	return (TIM_GetCounter(TIM3)-2147483647);
+	return (TIM_GetCounter(TIM3)-32767);
 }
