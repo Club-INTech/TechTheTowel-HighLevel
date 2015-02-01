@@ -66,7 +66,7 @@ public class ObstacleManager
       	//obstacle 6
       	mLines.add(new Segment(new Vec2(533 + robotRadius, 2000), new Vec2(533 + robotRadius, 1420 - robotRadius)));
       	mLines.add(new Segment(new Vec2(533 + robotRadius, 1420 - robotRadius), new Vec2(-533 - robotRadius, 1420 - robotRadius)));
-      	mLines.add(new Segment(new Vec2(-533 - robotRadius, 1420 - robotRadius), new Vec2(-533 - robotRadius, 1930)));
+      	mLines.add(new Segment(new Vec2(-533 - robotRadius, 1420 - robotRadius), new Vec2(-533 - robotRadius, 2000)));
       		
       		
       	//obstacle 7

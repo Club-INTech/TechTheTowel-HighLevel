@@ -42,6 +42,15 @@ public class Graph
 		mNodes.add(new Node(1100 - robotRadius, 1222 + robotRadius));//noeud 5
 		mNodes.add(new Node(533 + robotRadius, 1420 - robotRadius));//noeud 6
 		mNodes.add(new Node(-533 - robotRadius, 1420 - robotRadius));//noeud 7
+		//noeuds additionnels
+		mNodes.add(new Node(-1100 + robotRadius, 1000));//noeud 0.5
+		mNodes.add(new Node(0, 100 + robotRadius));//noeud 2.5
+		mNodes.add(new Node(1100 - robotRadius, 1000));//noeud 4.5
+		mNodes.add(new Node(0, 1420 - robotRadius));//noeud 6.5
+		mNodes.add(new Node(-500, 1000));
+		mNodes.add(new Node(500, 1000));
+		mNodes.add(new Node(-500, 500));
+		mNodes.add(new Node(500, 500));
 		
 		//obstacles circulaires
 		ArrayList<Circle> circles = new ArrayList<Circle>();
@@ -63,7 +72,7 @@ public class Graph
 						mNodes.get(i).addLink(mNodes.get(j));
 				}
 		
-		Area area = new Area(-1300, 1222, 400, 800);//zone 0
+		Area area = new Area(-1300 + robotRadius/2, 1222 + robotRadius, 400 - robotRadius/2, 800);//zone 0
 		area.attachNode(mNodes.get(0));
 		area.attachNode(mNodes.get(7));
 		mAreas.add(area);
