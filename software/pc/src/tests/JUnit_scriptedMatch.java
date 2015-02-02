@@ -200,6 +200,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		System.out.println("Tapis deposés");
 
 		//second script
+
 		try 
 		{
 			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(2, real_state, true, emptyHook );
@@ -214,6 +215,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		System.out.println("PLot 2 pris");
 
 		
+		/// TODO COTE JAUNE : Le robot part embrasser le mur au lieu de lancer le script "plots 3+4+ verre"
 		try 
 		{
 			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(34, real_state, true, emptyHook );
@@ -227,6 +229,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		
 		System.out.println("PLot 3, 4 et gobelet pris");
 		
+		/// TODO COTE VERT : Le robot ne ferme pas lees claps
 		try 
 		{
 			//ferme les 2 claps proches : 
@@ -245,7 +248,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		
 		System.out.println("Clap 1 et 2 Fermés");
 
-	
+		/// TODO COTE JAUNE : Le robot ne prend meme pas la peine de prendre le plot après 
 		try 
 		{
 			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(1, real_state, true, emptyHook );
