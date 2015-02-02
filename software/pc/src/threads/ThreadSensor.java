@@ -70,9 +70,7 @@ class ThreadSensor extends AbstractThread
 			int distance = mSensorsCardWrapper.getSensedDistance();
 			log.debug("Distance selon ultrason: "+distance, this);
 			if (distance > 0 && distance < 70)
-				log.debug("Câlin !", this);
-			
-			
+				log.debug("obstacle detecte a moins de 7 cm !", this);
 			
 			Sleep.sleep((long)(1000./sensorFrequency));
 			
