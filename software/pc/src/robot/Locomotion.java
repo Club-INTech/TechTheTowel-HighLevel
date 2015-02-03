@@ -184,7 +184,7 @@ public class Locomotion implements Service
 	}
 
 	/**
-	 * Fait tourner le robot (méthode bloquante)
+	 * Fait tourner le robot (méthode bloquante), gere la symetrie
 	 * @param angle : valeur absolue en radiant de l'orientation que le robot doit avoir après cet appel
 	 * @param hooksToConsider hooks a considérer lors de ce déplacement. Le hook n'est déclenché que s'il est dans cette liste et que sa condition d'activation est remplie
 	 * @param expectsWallImpact true si le robot doit s'attendre a percuter un mur au cours de la rotation. false si les alentours du robot sont sensés être dégagés.
@@ -194,64 +194,25 @@ public class Locomotion implements Service
 	// C'est la faute au système de moveForwardInDirection, qui n'est pas complètement générique. notamment BlockedExceptionReaction qui est en réalité spécialisé dans une réaction a un blocage lors d'une translation.
 	public void turn(double angle, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
 	{
-
+		
 		// prends en compte la symétrie: si on est équipe jaune, et non équipe verte on doit tourner de PI moins l'angle
 		if(symmetry)
 			angle = (Math.PI-angle);
 		
 		// on souhaite rester ou l'on est : la position d'arrivée est le position courrante
 		aim = position.clone();
-
-		// Tourne-t-on dans le sens trigonométrique?
-		// C'est important de savoir pour se dégager.
-		boolean isTurnCCW = angle > orientation; // CCw pour  Counter-ClocWise, ie sens trigonométrique
-
-		// On donnera l'odre de se déplacer au robot
-		boolean haveToGiveOrderToMove = true;
 		
-		try
+		//on regarde si on tourne dans le sens des aiguilles d'une montre
+		boolean isTurnCCW = ! Geometry.isFurtherInTrigoCircle(orientation, angle); 
+		
+		try 
 		{
-			
-			boolean firstLoop = true;
-			//verifie si l'appel a la boucle est le premier
-			
-			// boucle surveillant que tout se passe bien lors de la rotation 
-			//on l'execute une fois pour initier le deplacement
-			while(firstLoop || !isTurnFinished(angle*1000)) // on attend la fin du mouvement
-			{
-				firstLoop = false;
-				//c'est bon on a fait un appel
-				
-				// donne (éventuellement de nouveau) l'ordre de se déplacer
-				if(haveToGiveOrderToMove)
-				{
-					oldInfos = mLocomotionCardWrapper.getCurrentPositionAndOrientation();
-					mLocomotionCardWrapper.turn(angle);
-				}
-				
-				// Vérifie si les hooks fournis doivent être déclenchés, et les déclenche si besoin
-				haveToGiveOrderToMove = false;
-				if(hooksToConsider != null)
-					for(Hook currentHook : hooksToConsider)
-					{
-						// savegarde la consige de position, ca si un hook fait appel a cette classe, il écrase l'ancienne valeur de aim
-						Vec2 oldAim = aim.clone();
-						
-						// vérifie si ce hook doit être déclenché, le déclenche si c'est le cas, et fera renvoyer au prochain tour de while l'ordre de déplacement si le hook a fait bouger le robot
-						haveToGiveOrderToMove |= currentHook.evaluate();
-						
-						// restaure le aim de ce déplacement (au lieu ce celui d'un hook)
-						aim = oldAim;
-					}
-				
-				//attends un peu entre deux tours de boucle histoire de ne pas trop spammer la connexion série
-				Sleep.sleep(minimumDelayBetweenMovementStatusCheck);
-			}
+			moveInDirection(angle, 0, allowCurvedPath);
 		}
 		catch(BlockedException e)	// TODO: a fusionner avec BlockedExceptionReaction
 		{
 			updatePositionAndOrientation();
-			
+				
 			// Si on ne devait pas tapper dans un obstacle, il faut essayer de s'en dégager puis faire rementer le problème
 			if(!expectsWallImpact)
 			{
@@ -264,20 +225,13 @@ public class Locomotion implements Service
 					else
 						mLocomotionCardWrapper.turn(orientation-pullOutAngleInCaseOfBlockageWhileTurning);
 				}
-
 				catch(SerialConnexionException e1)
 				{
 					e1.printStackTrace();
 				}
-
-				// informe l'utilisateur qu'un problème est survenu
-				throw new UnableToMoveException();
 			}
 		}
-		catch(SerialConnexionException e)
-		{
-			e.printStackTrace();
-		}
+		
 	}
 
 	/**
@@ -609,6 +563,7 @@ public class Locomotion implements Service
 		Vec2 displacement = aim.clone();
 		if(symmetry)	// on oppose la composante X si l'on est de l'équipe jaune et non verte
 			displacement.x = -displacement.x;
+
 		// soustraction de la position actuelle a la position visée
 		displacement.minus(position);
 
@@ -621,6 +576,12 @@ public class Locomotion implements Service
 
 		// calcul de l'angle duquel le robot doit tourner pour pointer dans la bonne direction avant d'avancer
 		double angle =  Math.atan2(displacement.y, displacement.x);
+		
+		//si le depacement en x est nul et que la symetrie est activee il faut modifier l'angle vise (typiquement quand on tourne)
+		//si le deplacement en x est non nul alors la symetrie est geree par l'inversion de displacement.x
+		if (displacement.x == 0 && symmetry)
+			//on doit tourner de PI moins l'angle
+			angle = (Math.PI-angle);
 
 		//gestion de la marche arrière du déplacement (peut aller à l'encontre de marche_arriere)
 		// Si on demande faire ce mouvemnet en marche arrière, on doit tourner d'un demi-tour supplémentaire, puis avancer d'une distance négative.
@@ -644,6 +605,7 @@ public class Locomotion implements Service
 	 * @param distance valeur en mm indiquant de combien on veut avancer.
 	 * @param allowCurvedPath si true, le robot essayera de tourner et avancer en m�me temps
 	 * @throws BlockedException si blocage mécanique du robot en chemin (pas de gestion des capteurs ici)
+	 * TODO: c'est ici qu'il faut gerer le turn
 	 */
 	public void moveInDirection(double direction, double distance, boolean allowCurvedPath) throws BlockedException 
 	{
@@ -651,29 +613,36 @@ public class Locomotion implements Service
 		if(Math.abs(direction - orientation) > Math.PI/2)
 			allowCurvedPath = false;
 
+				
+					
 		try
 		{
-			// demande aux moteurs de tourner le robot jusqu'a ce qu'il pointe dans la bonne direction
-			log.debug("mLocomotionCardWrapper.turn(direction) : " + direction, this);
-			mLocomotionCardWrapper.turn(direction);
-
-
-			// attends que le robot soit dans la bonne direction si nous ne sommes pas autoris� � tourner en avancant
+			//si la trajectoire courbe est desactivee on attends que le tour soit termine
 			if(!allowCurvedPath) 
 			{
-
-				// TODO: mettre la boucle d'attente dans une fonction part enti�re (la prise de oldInfo est moche ici)
-				oldInfos = mLocomotionCardWrapper.getCurrentPositionAndOrientation();
-				Sleep.sleep(300); // attends que les moteurs aient commencés a tourner avant de vérifier s'ils tournent bien //TODO: voir s'il existe un moyen de de passer ce cette attente
-				float newOrientation = (float)direction*1000; // valeur absolue de l'orientation � atteindre
-				while(!isTurnFinished(newOrientation)) 
-					Sleep.sleep(minimumDelayBetweenMovementStatusCheck);
+				//verifie si l'appel a la boucle est le premier
+				boolean firstLoop = true;
+				
+				// boucle surveillant que tout se passe bien lors de la rotation 
+				//on l'execute une fois pour initier le deplacement
+				while(firstLoop || !isTurnFinished(direction*1000)) // on attend la fin du mouvement
+				{
+					//c'est bon on a fait un appel
+					firstLoop = false;
+					oldInfos = mLocomotionCardWrapper.getCurrentPositionAndOrientation();
+						
+						mLocomotionCardWrapper.turn(direction);
+						
+						//attends un peu entre deux tours de boucle histoire de ne pas trop spammer la connexion série
+						Sleep.sleep(minimumDelayBetweenMovementStatusCheck);
+				}
 			}
+				
+				// demande aux moteurs d'avancer le robot de la distance demand�e
+				mLocomotionCardWrapper.moveLengthwise(distance);
 
-			// demande aux moteurs d'avancer le robot de la distance demand�e
-			mLocomotionCardWrapper.moveLengthwise(distance);
 		} 
-		catch (SerialConnexionException e)
+		catch (SerialConnexionException e) 
 		{
 			e.printStackTrace();
 		}
