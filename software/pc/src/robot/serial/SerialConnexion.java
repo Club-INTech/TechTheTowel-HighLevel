@@ -167,8 +167,8 @@ public class SerialConnexion implements SerialPortEventListener, Service
 			{
 				for (String m : messages)
 				{
-					// affiche dans la console ce qu'on envois sur la série
-					log.debug("Envois serie : '" + m  + "'", this);
+					// affiche dans la console ce qu'on envois sur la série -> On cache ca, pour eviter le xy0? en permanence, mais ca peux etre interessant de le garder.
+					//log.debug("Envois serie : '" + m  + "'", this);
 					m += "\r";
 					output.write(m.getBytes());
 					int nb_tests = 0;

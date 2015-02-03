@@ -3,6 +3,7 @@ package tests;
 import hook.Callback;
 import hook.Executable;
 import hook.Hook;
+import hook.methods.OuvreBrasExe;
 import hook.types.HookFactory;
 
 import java.util.ArrayList;
@@ -18,10 +19,12 @@ import org.junit.Test;
 import enums.ActuatorOrder;
 import enums.ScriptNames;
 import enums.ServiceNames;
+import exceptions.ContainerException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
+import exceptions.serial.SerialManagerException;
 import robot.Robot;
 import robot.cardsWrappers.SensorsCardWrapper;
 
@@ -44,12 +47,8 @@ public class JUnit_Hooks extends JUnit_Test
 		real_state = (GameState<Robot>) container.getService(ServiceNames.GAME_STATE);
 		scriptmanager = (ScriptManager) container.getService(ServiceNames.SCRIPT_MANAGER);
 		mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
-		hookFactory = (HookFactory) container.getService(ServiceNames.HOOK_FACTORY);
+
 		
-		ArrayList<Hook> hooks = new ArrayList<Hook> ();
-		//Executable ouvreBras  = new Executable();//real_state.robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, true);
-		//Callback c= new Callback(ouvreBras, true);
-		Hook h= hookFactory.newHookX(500,10);
 		
 		if (real_state.robot.getSymmetry())
 		{
@@ -95,7 +94,7 @@ public class JUnit_Hooks extends JUnit_Test
 	}
 
 	@Test
-	public void test() throws PathNotFoundException, SerialFinallyException
+	public void test() throws PathNotFoundException, SerialFinallyException, ContainerException, SerialManagerException, SerialConnexionException
 	{
 		container.startAllThreads();
 		//premiere action du match
@@ -104,7 +103,14 @@ public class JUnit_Hooks extends JUnit_Test
 		
 		try 
 		{
-			real_state.robot.moveLengthwise(2000);
+			//Bon ordre 
+			hookFactory = (HookFactory) container.getService(ServiceNames.HOOK_FACTORY);
+			ArrayList<Hook> hooks = new ArrayList<Hook> ();
+			Executable ouvreBras  = new OuvreBrasExe();
+			Callback c = new Callback(ouvreBras, true);
+			Hook h = hookFactory.newHookX(1000,10);//TODO changer ?
+			
+			scriptmanager.getScript(ScriptNames.EXIT_START_ZONE).goToThenExec(1, real_state, true, hooks );
 		} 
 		catch (UnableToMoveException e) 
 		{

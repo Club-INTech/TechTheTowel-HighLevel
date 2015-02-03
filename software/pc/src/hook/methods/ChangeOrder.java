@@ -2,7 +2,9 @@ package hook.methods;
 
 import hook.Executable;
 import robot.Locomotion;
+import robot.Robot;
 import smartMath.Vec2;
+import strategie.GameState;
 
 /**
  * Classe implémentant la méthode changement de consigne, utilisée pour avoir une trajectoire courbe.
@@ -25,6 +27,7 @@ public class ChangeOrder implements Executable
          * @param newOrder the nouvelle_consigne
          * @param locomotion le système de locomotion a modifier
          */
+        
         public ChangeOrder(Vec2 newOrder, Locomotion locomotion)
         {
             this.mLocomotion = locomotion;
@@ -35,7 +38,7 @@ public class ChangeOrder implements Executable
          * @see hook.Executable#execute()
          */
         @Override
-        public boolean execute()
+        public boolean execute(GameState<Robot> stateToConsider)
         {
             mLocomotion.setAim(newOrder);
             return true; // le robot doit bouger

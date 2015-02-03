@@ -1,5 +1,8 @@
 package hook;
 
+import robot.Robot;
+import strategie.GameState;
+
 /**
  * Interface utilisée pour passer des méthodes à Callback.
  * Il faut créer une classe implémentant cette interface par méthode d'intérêt.
@@ -15,6 +18,6 @@ public interface Executable
 	 * La méthode qui sera exécutée par le hook
      * @return un booléen qui renseignera sur le fait que la méthode fait ou non bouger le robot
 	 */
-	public boolean execute();
+	public boolean execute(GameState<Robot> stateToConsider);
 	
 }

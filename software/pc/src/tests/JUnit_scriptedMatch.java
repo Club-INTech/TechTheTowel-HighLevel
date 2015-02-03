@@ -218,6 +218,8 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		/// TODO COTE JAUNE : Le robot part embrasser le mur au lieu de lancer le script "plots 3+4+ verre"
 		try 
 		{
+			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant les plots 3 et 4 eet verre 1");
+
 			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(34, real_state, true, emptyHook );
 		} 
 		catch (UnableToMoveException | SerialConnexionException
@@ -232,6 +234,8 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		/// TODO COTE VERT : Le robot ne ferme pas lees claps
 		try 
 		{
+			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant les claps 1 et 2");
+
 			//ferme les 2 claps proches : 
 			scriptmanager.getScript(ScriptNames.CLOSE_CLAP).goToThenExec(-12, real_state, true, emptyHook);
 		}
@@ -251,6 +255,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		/// TODO COTE JAUNE : Le robot ne prend meme pas la peine de prendre le plot après 
 		try 
 		{
+			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le plot 1");
 			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(1, real_state, true, emptyHook );
 		}
 		catch (UnableToMoveException | SerialConnexionException e) 

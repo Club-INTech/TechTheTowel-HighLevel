@@ -1,5 +1,8 @@
 package hook;
 
+import robot.Robot;
+import strategie.GameState;
+
 /**
  * Classe de callback. Contient la fonction et ses arguments à appeler.
  * @author pf
@@ -15,8 +18,10 @@ public class Callback
 	private boolean isUnique;
 	
 	/** le code à éxecuter lors de l'évènement */
-	public Executable method;
+	public Executable mExecutable;
 	
+	GameState<Robot> stateToConsider = null;
+
 	/**
 	 * Constructeur d'un callback avec 2 paramètres: la méthode et si elle doit être exécutée une seule fois
 	 * @param methode
@@ -24,7 +29,7 @@ public class Callback
 	 */
 	public Callback(Executable methode, boolean unique)
 	{
-		this.method = methode;
+		this.mExecutable = methode;
 		this.isUnique = unique;
 	}
 	
@@ -34,7 +39,7 @@ public class Callback
 	 */
 	public Callback(Executable methode)
 	{
-		this.method = methode;
+		this.mExecutable = methode;
 		isUnique = true;
 	}
 	
@@ -47,7 +52,7 @@ public class Callback
 		if(!(shouldBeDeleted()))
 		{
             isDone = true;
-			return method.execute();
+			return mExecutable.execute(stateToConsider);
 		}
 		return false;
 	}
