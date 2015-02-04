@@ -53,6 +53,12 @@ public class Locomotion implements Service
 	/** La table sur laquelle le robot se déplace */
 	private Table table;
 	
+	/** l'angle maximum duquel le robot peut tourner pour corriger son orientation durant son mouvement */
+	private double inMotionCorrectionMaxAngle = 0.25 * Math.PI;
+	
+	/** la distance maximum entre notre position et le point vise a laquelle on autorise le robot a corriger son orientation durant son mouvement */
+	private double inMotionCorrectionMaxDistance = 20;
+	
 	/** la longueur du robot (ie la distance qui sépare son devant de son arrière)
 	 * Cette valeur est utilisée pour placer le disque devant le robot ou l'on va vérifier qu'il n'y a pas d'obstacle */
 	private int robotLengh; //TODO: cette variable n'a pas sa place ici. Elle n'est même pas initialisée ici
@@ -190,8 +196,6 @@ public class Locomotion implements Service
 	 * @param expectsWallImpact true si le robot doit s'attendre a percuter un mur au cours de la rotation. false si les alentours du robot sont sensés être dégagés.
 	 * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
 	 */
-	// TODO: refactor massif de la facon dont le robot tourne en haut niveau. La rotation ne passe pas du tout par le système de moveForwardInDirection. 
-	// C'est la faute au système de moveForwardInDirection, qui n'est pas complètement générique. notamment BlockedExceptionReaction qui est en réalité spécialisé dans une réaction a un blocage lors d'une translation.
 	public void turn(double angle, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
 	{
 		
@@ -521,8 +525,9 @@ public class Locomotion implements Service
 			// l'angle vers le point vise, sert a corriger la trajectoire en temps reel
 			double angle = Math.atan2(aim.y-position.y, aim.x-position.x);
 			
+			
 			//si l'angle de correction n'est pas trop grand on corrige la trajectoire (sinon on ne peut pas corriger donc on oublie)
-			if (Math.abs(Geometry.minusAngle(angle, orientation , 2*Math.PI))<10)
+			if (Math.abs(Geometry.minusAngle(angle, orientation , 2*Math.PI))<inMotionCorrectionMaxAngle && aim.clone().minusNewVector(position).length()>inMotionCorrectionMaxDistance)
 				mLocomotionCardWrapper.turn(angle);
 			
 			// vérifie qu'il n'y a pas de blocage mécanique (n'importe quoi faisant que les moteurs tournent sans que les codeuses tournent)
@@ -605,7 +610,6 @@ public class Locomotion implements Service
 	 * @param distance valeur en mm indiquant de combien on veut avancer.
 	 * @param allowCurvedPath si true, le robot essayera de tourner et avancer en m�me temps
 	 * @throws BlockedException si blocage mécanique du robot en chemin (pas de gestion des capteurs ici)
-	 * TODO: c'est ici qu'il faut gerer le turn
 	 */
 	public void moveInDirection(double direction, double distance, boolean allowCurvedPath) throws BlockedException 
 	{
