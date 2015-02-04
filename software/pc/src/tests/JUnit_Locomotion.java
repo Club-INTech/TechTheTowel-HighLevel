@@ -1,15 +1,14 @@
 package tests;
 
-import hook.Hook;
 
 import java.util.ArrayList;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import enums.ServiceNames;
+import exceptions.Locomotion.UnableToMoveException;
 import robot.Locomotion;
 import smartMath.Vec2;
 
@@ -43,25 +42,50 @@ public class JUnit_Locomotion extends JUnit_Test
 		super.setUp();
 		log.debug("JUnit_DeplacementsTest.setUp()", this);
 		mLocomotion = (Locomotion)container.getService(ServiceNames.LOCOMOTION);
-		mLocomotion.setPosition(new Vec2(0, 1500));
-		mLocomotion.setOrientation(0);
+		mLocomotion.setPosition(new Vec2(1500-71-48, 1000));
+		mLocomotion.setOrientation(Math.PI);
 	}
 	
 	/**
 	 * Test_tourner.
-	 *
+	 * ATTENTION NE FONCTIONNE QUE DU COTE VERT !
 	 * @throws Exception the exception
 	 */
 	@Test
-	public void testTurn() throws Exception
+	public void test()
 	{
-		log.debug("JUnit_DeplacementsTest.test_tourner()", this);
-		mLocomotion.turn((float)1.2, new ArrayList<Hook>(), false);
-		Thread.sleep(2000);
+		ArrayList<Vec2> path = new ArrayList<Vec2>();
+		path.add(new Vec2 (-500,1000));
+		path.add(new Vec2 (500,1000));
+		log.debug("JUnit_DeplacementsTest", this);
 		Vec2 position = mLocomotion.getPosition();
-		Assert.assertEquals(0, position.x, 5);
-		Assert.assertEquals(1500, position.y, 5);
-		Assert.assertEquals(1200, mLocomotion.getOrientation(), 50);
+		log.debug("en position : x="+position.x+"; y="+position.y, this);
+		try 
+		{
+			mLocomotion.moveLengthwise(-2000,null, false);
+		} 
+		catch (UnableToMoveException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		position = mLocomotion.getPosition();
+		log.debug("en position : x="+position.x+"; y="+position.y, this);
+		log.debug("orientation : "+mLocomotion.getOrientation(), this);
+		while (true)
+		{
+			try 
+			{
+				mLocomotion.followPath(path, null);
+				position = mLocomotion.getPosition();
+				log.debug("en position : x="+position.x+"; y="+position.y, this);
+			} 
+			catch (UnableToMoveException e) 
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 }

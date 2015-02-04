@@ -168,7 +168,8 @@ public class SerialConnexion implements SerialPortEventListener, Service
 				for (String m : messages)
 				{
 					// affiche dans la console ce qu'on envois sur la série
-					log.debug("Envois serie : '" + m  + "'", this);
+					//ne jamais push un code avec cette ligne decommentee
+					//log.debug("Envois serie : '" + m  + "'", this);
 					m += "\r";
 					output.write(m.getBytes());
 					int nb_tests = 0;
@@ -180,7 +181,8 @@ public class SerialConnexion implements SerialPortEventListener, Service
 						String resposeFromCard = input.readLine();
 
 						// affiche dans la console ce qu'on envois sur la série
-						log.debug("Reception serie : '" + resposeFromCard  + "'", this);
+						//ne jamais push un code avec cette ligne decommentee
+						//log.debug("Reception serie : '" + resposeFromCard  + "'", this);
 						
 						acquittement = resposeFromCard.charAt(0);
 						if (acquittement != '_')

@@ -527,13 +527,13 @@ public class Locomotion implements Service
 			
 			
 			//si l'angle de correction n'est pas trop grand on corrige la trajectoire (sinon on ne peut pas corriger donc on oublie)
-			if (Math.abs(Geometry.minusAngle(angle, orientation , 2*Math.PI))<inMotionCorrectionMaxAngle && aim.clone().minusNewVector(position).length()>inMotionCorrectionMaxDistance)
+			if (	Math.abs(Geometry.minusAngle(angle, orientation , 2*Math.PI)) < inMotionCorrectionMaxAngle && 
+					aim.clone().minusNewVector(position).length() 				  > inMotionCorrectionMaxDistance )
 				mLocomotionCardWrapper.turn(angle);
 			
 			// vérifie qu'il n'y a pas de blocage mécanique (n'importe quoi faisant que les moteurs tournent sans que les codeuses tournent)
 			// TODO: il y a double emploi entre isMovementFinished et checkRobotNotBlocked, les deux vérifient de deux facons différentes que le robot n'est pas mécaniquement bloqué. Il faut centraliser la vérification.
 			checkRobotNotBlocked();
-			
 		
 			
 			// vérifie qu'il n'y a rien la ou l'on se dirige qui pourrait obstruer le passage
