@@ -54,7 +54,7 @@ void Motor::initPWM(){
 	/**
 	 * Configuration des PWM générés sur les canaux 1 et 2 du TIMER3
 	 */
-
+	// /!\ Va falloir changer de timer, le 3 est utilisé par la codeuse droite. Passer au 8.
 	//Active l'horloge du TIMER 3
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
 	//Active l'horloge du port C
@@ -63,6 +63,7 @@ void Motor::initPWM(){
 	/**
 	 * Configuration pins PWM :
 	 * TIM3 CH1 (PC6 = moteur gauche) et TIM3 CH2 (PC7 = moteur droit)
+	 * !\ Passer à TIM8
 	 */
 
 	GPIO_StructInit(&GPIO_InitStructure); //Remplit avec les valeurs par défaut
@@ -110,7 +111,7 @@ void Motor::initPWM(){
 	//Le prescaler peut être n'importe quel entier entre 1 et 65535 (uint16_t)
 	uint16_t prescaler = (uint16_t)((SystemCoreClock / 2) / 256000) - 1;
 
-	//Configuration du TIMER 3
+	//Configuration du TIMER 3 /!\Passer à TIM8
 	TIM_TimeBaseStructure.TIM_Period = 255;
 	TIM_TimeBaseStructure.TIM_Prescaler = prescaler;
 	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
@@ -137,7 +138,7 @@ void Motor::initPWM(){
 
 	TIM_ARRPreloadConfig(TIM3, ENABLE);
 
-	//Active le TIMER 3
+	//Active le TIMER 3 /!\Passer à TIM8
 	TIM_Cmd(TIM3, ENABLE);
 }
 
