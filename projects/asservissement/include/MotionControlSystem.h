@@ -11,15 +11,18 @@
 #include <Uart.hpp>
 
 #define PI 3.14159265
-#define PI_TIC 24809 // pi/TICK_TO_RADIAN
+//#define PI_TIC 24809 // pi/TICK_TO_RADIAN
+#define PI_TIC 4361.9
 
 /**
  * 123,825 mm : diametre des roues
  * 12000 ticks par tour de roue
  */
-#define PERIMETER_MM 123.825*PI
-#define TICK_TO_MM 0.0324173 // PERIMETER_MM/12000
-#define TICK_TO_RADIAN 0.00012663 // TICK_TO_MM/256 : entre roues de 25.6cm
+//#define PERIMETER_MM 123.825*PI
+//#define TICK_TO_MM 0.0324173 // PERIMETER_MM/12000
+#define TICK_TO_MM 0.207555//Unité : mm/Tick
+//#define TICK_TO_RADIAN 0.00012663 // TICK_TO_MM/256 : entre roues de 25.6cm
+#define TICK_TO_RADIAN 0.00072024
 
 class MotionControlSystem : public Singleton<MotionControlSystem> {
 private:
@@ -30,6 +33,8 @@ private:
 	PID translationPID;
 	PID rotationPID;
 
+	int32_t leftEncoderFake;
+	int32_t rightEncoderFake;
 	float originalAngle;
 
 	//Consignes à atteindre en tick
@@ -44,7 +49,7 @@ private:
 	float x;
 	float y;
 	bool moving;
-
+	bool movingForPositioningServo;
 	void applyControl();
 	bool isPhysicallyStopped();
 
@@ -69,6 +74,15 @@ public:
 	void enable(bool);
 	void enableTranslationControl(bool);
 	void enableRotationControl(bool);
+
+	int getPWMTranslation();
+	int getPWMRotation();
+	int getTranslationGoal();
+	int getRotationGoal();
+	int getLeftEncoder();
+	int getRightEncoder();
+	void moveLeftEncoder(int32_t);
+	void moveRightEncoder(int32_t);
 
 	void orderTranslation(int32_t);
 	void orderRotation(float);

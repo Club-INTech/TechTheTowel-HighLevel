@@ -25,14 +25,14 @@ class PID {
 public:
 
 	PID(int32_t* input, int16_t* output, int32_t* setPoint) :
-			controllerDirection(PidDirection::DIRECT), epsilon(40), pre_error(
+			controllerDirection(PidDirection::DIRECT), epsilon(0), pre_error(
 					0), integral(0) {
 
 		this->output = output;
 		this->input = input;
 		this->setPoint = setPoint;
 
-		setOutputLimits(-210, 210);
+		setOutputLimits(-170, 170);
 		setTunings(0, 0, 0);
 	}
 
@@ -97,6 +97,10 @@ public:
 		controllerDirection = dir;
 	}
 
+	void resetErrors() {
+		pre_error = 0;
+		integral = 0;
+	}
 	float getKp() const {
 		return kp;
 	}
