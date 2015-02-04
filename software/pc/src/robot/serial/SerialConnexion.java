@@ -168,6 +168,8 @@ public class SerialConnexion implements SerialPortEventListener, Service
 				for (String m : messages)
 				{
 					// affiche dans la console ce qu'on envois sur la série -> On cache ca, pour eviter le xy0? en permanence, mais ca peux etre interessant de le garder.
+					//ne jamais push un code avec cette ligne decommentee
+
 					//log.debug("Envois serie : '" + m  + "'", this);
 					m += "\r";
 					output.write(m.getBytes());
@@ -182,6 +184,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 						// affiche dans la console ce qu'on envois sur la série
 						//log.debug("Reception serie : '" + resposeFromCard  + "'", this); 
 						//TODO attention : a remettre, juste enlevé pour les debugs / tests
+						
 						
 						acquittement = resposeFromCard.charAt(0);
 						if (acquittement != '_')

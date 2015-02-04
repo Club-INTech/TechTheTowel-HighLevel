@@ -42,4 +42,25 @@ public class Geometry
 		double angleMax = Math.max(angle1, angle2);
 		return Math.min(angleMax-angleMin, sizeOfCircle-angleMax+angleMin);
 	}
+
+	/**
+	 * dit si l'angleEnd est plus loin que angleBegin sur le cercle trigo (prends en compte le fait que le cercle soit circulaire)
+	 * @param angleBegin l'angle de position initiale (doit etre en Radiant pas milliRadiant)
+	 * @param angleEnd l'angle dont on veut savoir si il est plus loin sur le cercle trigo (doit estre en Radiant et pas en milliRadiant)
+	 * @return true si angleEnd est plus loin que angleBegin sur le cercle trigo
+	 */
+	public static boolean isFurtherInTrigoCircle(double angleBegin, double angleEnd) 
+	{
+		// si on ne passe pas par 2PI alors sera le plus petit (en abs)
+		double possibility1 = modulo(angleEnd, 2*Math.PI)-modulo(angleBegin, 2*Math.PI);
+		// si on passe par 2PI alors sera le plus petit (en abs)
+		double possibility2 = modulo(angleEnd, 2*Math.PI)+2*Math.PI-modulo(angleBegin, 2*Math.PI);
+		
+		if (Math.abs(possibility1)<Math.abs(possibility2))
+			//on ne passe pas par 2PI, on regarde si on tourne dans le sens trigo
+			return possibility1>0;
+		else
+			//on passe par 2PI, on regarde si on tourne dans le sens trigo
+			return possibility2>0;
+	}
 }

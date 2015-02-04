@@ -128,8 +128,8 @@ public class JUnit_scriptedMatch extends JUnit_Test
 	@Test
 	public void test() throws PathNotFoundException, SerialFinallyException, SerialConnexionException
 	{
-		container.startAllThreads();
-		waitMatchBegin();
+		//container.startAllThreads();
+		//waitMatchBegin();
 		//premiere action du match
 		
 		System.out.println("Le robot commence le match");
