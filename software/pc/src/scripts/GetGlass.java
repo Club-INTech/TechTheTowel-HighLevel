@@ -49,7 +49,6 @@ public class GetGlass extends AbstractScript
 		//si on a toujours rien on arrete		
 		//si on a attrape quelque chose on le dit au robot ainsi que sa position (gauche / droite)
 		
-		
 		stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
 		stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
 		
@@ -137,7 +136,7 @@ public class GetGlass extends AbstractScript
 	@Override
 	public int remainingScoreOfVersion(int id_version, GameState<?> state) 
 	{
-		//TODO si le robot est pein a droite et a gauche (on attends les capteurs de sylvain)
+		//TODO si le robot est plein a droite et a gauche (on attends les capteurs)
 		//if (robot.fullRight) 
 		//{
 		//	if (robot.fullLeft)

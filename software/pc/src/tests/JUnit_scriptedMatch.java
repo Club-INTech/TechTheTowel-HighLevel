@@ -45,7 +45,6 @@ import robot.cardsWrappers.SensorsCardWrapper;
 
 public class JUnit_scriptedMatch extends JUnit_Test 
 {
-
 	ArrayList<Hook> emptyHook;
 	GameState<Robot> real_state;
 	ScriptManager scriptmanager;
@@ -60,7 +59,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		scriptmanager = (ScriptManager) container.getService(ServiceNames.SCRIPT_MANAGER);
 		mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
 		emptyHook = new ArrayList<Hook> ();  
-		
+
 		if (real_state.robot.getSymmetry())
 		{
 			real_state.robot.setPosition(new Vec2 (-1381,1000));
@@ -91,14 +90,14 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		System.out.println("Robot pret pour le match, attente du retrait du jumper");
 		
 		// attends que le jumper soit retiré du robot
-		/*
+		
 		boolean jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
 		while(jumperWasAbsent || !mSensorsCardWrapper.isJumperAbsent())
 		{
 			jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
-			 Sleep.sleep(100);
+			 real_state.robot.sleep(100);
 		}
-*/
+
 		
 		// maintenant que le jumper est retiré, le match a commencé
 		//ThreadTimer.matchStarted = true;
@@ -154,7 +153,8 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		
 		//debut du match
 		System.out.println("Debut du match");
-		
+		System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+")");
+
 		
 		try 
 		{
@@ -331,7 +331,6 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		//GoToThenExec de deposer verres
 		
 		System.out.println("match fini !");
-
 
 		//Le match s'arrête
 		container.destructor();

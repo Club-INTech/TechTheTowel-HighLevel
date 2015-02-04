@@ -16,6 +16,7 @@ public class OuvreBrasExe implements Executable
    
 	 public OuvreBrasExe()
      {
+			System.out.println("Hook de lever de bras créé");
      }
 	
     @Override
@@ -23,7 +24,9 @@ public class OuvreBrasExe implements Executable
     {
     	try 
     	{
-			nRobot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, false);
+			nRobot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, false);
+			nRobot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, false);
+			System.out.println("2 Bras Ouverts Haut");
 		} 
     	catch (SerialConnexionException e) 
     	{
