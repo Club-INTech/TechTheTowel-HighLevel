@@ -29,9 +29,9 @@
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/complete_low_level/main.cpp"/>
 <editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="876" selectionTopPixel="2952"/>
 </editor>
-<editor id="org.eclipse.cdt.ui.editor.CEditor" name="Motor.cpp" partName="Motor.cpp" path="C:/Boulot/intech/intech/Code/stm32f4/projects/complete_low_level/src/Motor.cpp" title="Motor.cpp" tooltip="C:/Boulot/intech/intech/Code/stm32f4/projects/complete_low_level/src/Motor.cpp" workbook="DefaultEditorWorkbook">
+<editor activePart="true" focus="true" id="org.eclipse.cdt.ui.editor.CEditor" name="Motor.cpp" partName="Motor.cpp" path="C:/Boulot/intech/intech/Code/stm32f4/projects/complete_low_level/src/Motor.cpp" title="Motor.cpp" tooltip="C:/Boulot/intech/intech/Code/stm32f4/projects/complete_low_level/src/Motor.cpp" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/complete_low_level/src/Motor.cpp"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="5315" selectionTopPixel="441"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="5315" selectionTopPixel="2812"/>
 </editor>
 <editor id="org.eclipse.cdt.ui.editor.CEditor" name="ActuatorsMgr.hpp" partName="ActuatorsMgr.hpp" path="C:/Boulot/intech/intech/Code/stm32f4/projects/complete_low_level/include/ActuatorsMgr.hpp" title="ActuatorsMgr.hpp" tooltip="C:/Boulot/intech/intech/Code/stm32f4/projects/complete_low_level/include/ActuatorsMgr.hpp" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/complete_low_level/include/ActuatorsMgr.hpp"/>
@@ -57,9 +57,9 @@
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/complete_low_level/include/Counter.h"/>
 <editorState selectionHorizontalPixel="0" selectionLength="13" selectionOffset="251" selectionTopPixel="0"/>
 </editor>
-<editor activePart="true" focus="true" id="org.eclipse.cdt.ui.editor.CEditor" name="Counter.cpp" partName="Counter.cpp" path="C:/Boulot/intech/intech/Code/stm32f4/projects/complete_low_level/src/Counter.cpp" title="Counter.cpp" tooltip="C:/Boulot/intech/intech/Code/stm32f4/projects/complete_low_level/src/Counter.cpp" workbook="DefaultEditorWorkbook">
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="Counter.cpp" partName="Counter.cpp" path="C:/Boulot/intech/intech/Code/stm32f4/projects/complete_low_level/src/Counter.cpp" title="Counter.cpp" tooltip="C:/Boulot/intech/intech/Code/stm32f4/projects/complete_low_level/src/Counter.cpp" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/complete_low_level/src/Counter.cpp"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1685" selectionTopPixel="992"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="2341" selectionTopPixel="1072"/>
 </editor>
 <editor id="org.eclipse.cdt.ui.editor.CEditor" name="Uart.hpp" partName="Uart.hpp" path="C:/Boulot/intech/intech/Code/stm32f4/library/Uart.hpp" title="Uart.hpp" tooltip="C:/Boulot/intech/intech/Code/stm32f4/library/Uart.hpp" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/complete_low_level/library/Uart.hpp"/>
@@ -71,6 +71,9 @@
 </editor>
 </editors>
 <views>
+<view id="org.coocox.component.ui.ComponentView" partName="Components">
+<viewState/>
+</view>
 <view id="org.coocox.builder.ui.views.ProjectView" partName="Project">
 <viewState CommonNavigator.LINKING_ENABLED="0" horizontalPosition="0" org.eclipse.ui.navigator.resources.workingSets.showTopLevelWorkingSets="0" verticalPosition="0">
 <expanded>
@@ -81,9 +84,6 @@
 <element path="/complete_low_level/main.cpp"/>
 </selection>
 </viewState>
-</view>
-<view id="org.coocox.component.ui.ComponentView" partName="Components">
-<viewState/>
 </view>
 <view id="org.coocox.codebugger.trace.ui.traceview" partName="Semihosting">
 <viewState/>
@@ -137,14 +137,14 @@
 </fastViewBar>
 <fastViewBar fastViewLocation="1024" id="org.eclipse.ui.internal.ViewStack@544e03" orientation="256" selectedTabId="org.eclipse.ui.console.ConsoleView" style="1">
 <fastViews>
-<view id="org.eclipse.ui.console.ConsoleView" ratio="0.29847494"/>
+<view id="org.eclipse.ui.console.ConsoleView" ratio="0.29816514"/>
 </fastViews>
 </fastViewBar>
 </fastViewBars>
 <layout>
 <mainWindow>
 <info folder="true" part="org.eclipse.ui.internal.ViewStack@13f21d4">
-<folder appearance="2" expanded="0">
+<folder appearance="2" expanded="2">
 <page content="org.coocox.component.ui.ComponentView" label="LabelNotFound"/>
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
 </folder>
@@ -156,7 +156,7 @@
 </folder>
 </info>
 <info folder="true" part="org.eclipse.ui.internal.ViewStack@544e03" ratio="0.8284153" ratioLeft="758" ratioRight="157" relationship="4" relative="org.eclipse.ui.internal.ViewStack@13f21d4">
-<folder appearance="2" expanded="0">
+<folder appearance="2" expanded="2">
 <page content="org.eclipse.ui.console.ConsoleView" label="LabelNotFound"/>
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
 </folder>
@@ -174,7 +174,7 @@
 </info>
 <info part="org.eclipse.ui.editorss" ratio="0.44989106" ratioLeft="413" ratioRight="505" relationship="4" relative="org.coocox.builder.ui.exampleView"/>
 <info folder="true" part="org.eclipse.ui.internal.ViewStack@1c5f031" ratio="0.54545456" ratioLeft="438" ratioRight="365" relationship="4" relative="org.eclipse.ui.internal.ViewStack@13f21d4">
-<folder appearance="2" expanded="0">
+<folder appearance="2" expanded="2">
 <page content="org.coocox.builder.ui.views.ProjectView" label="LabelNotFound"/>
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
 </folder>
@@ -293,22 +293,8 @@
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/complete_low_level/src/MotionControlSystem.cpp"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/complete_low_level/include/Counter.h"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/complete_low_level/src/Motor.cpp"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/complete_low_level/src/Motor.cpp"/>
 </editors>
-<item historyLabel="Motor.cpp" index="1">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="main.cpp" index="0">
-<position info="not_deleted" x="6993" y="0"/>
-</item>
-<item historyLabel="Motor.cpp" index="1">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="Motor.cpp" index="1">
-<position info="not_deleted" x="5001" y="0"/>
-</item>
-<item historyLabel="Motor.cpp" index="1">
-<position info="not_deleted" x="5315" y="0"/>
-</item>
 <item historyLabel="main.cpp" index="0">
 <position info="not_deleted" x="6993" y="0"/>
 </item>
@@ -439,8 +425,23 @@
 <item historyLabel="MotionControlSystem.cpp" index="13">
 <position info="not_deleted" x="2375" y="0"/>
 </item>
-<item active="true" historyLabel="Counter.cpp" index="7">
+<item historyLabel="Counter.cpp" index="7">
 <position info="not_deleted" x="1685" y="0"/>
+</item>
+<item historyLabel="Motor.cpp" index="16">
+<position info="not_deleted" x="5315" y="0"/>
+</item>
+<item historyLabel="Counter.cpp" index="7">
+<position info="not_deleted" x="2341" y="0"/>
+</item>
+<item historyLabel="Motor.cpp" index="16">
+<position info="not_deleted" x="5315" y="0"/>
+</item>
+<item historyLabel="Counter.cpp" index="7">
+<position info="not_deleted" x="2341" y="0"/>
+</item>
+<item active="true" historyLabel="Motor.cpp" index="16">
+<position info="not_deleted" x="5315" y="0"/>
 </item>
 </navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
@@ -487,6 +488,9 @@
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="main.cpp" tooltip="asservissement/main.cpp">
 <persistable path="/asservissement/main.cpp"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="Uart_IT.cpp" tooltip="asservissement/src/Uart_IT.cpp">
+<persistable path="/asservissement/src/Uart_IT.cpp"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="Uart_IT.cpp" tooltip="asservissement/src/Uart_IT.cpp">
 <persistable path="/asservissement/src/Uart_IT.cpp"/>
