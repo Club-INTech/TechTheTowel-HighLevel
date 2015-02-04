@@ -23,7 +23,7 @@ public class OuvreBrasExe implements Executable
     {
     	try 
     	{
-			nRobot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
+			nRobot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, false);
 		} 
     	catch (SerialConnexionException e) 
     	{

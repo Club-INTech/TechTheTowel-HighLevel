@@ -23,7 +23,8 @@ import utils.Log;
  */
 public class GetPlot extends AbstractScript
 {
-	
+	int sleepAfterSlow=500;
+
 
 	public GetPlot(HookFactory hookFactory, Config config, Log log) 
 	{
@@ -53,7 +54,7 @@ public class GetPlot extends AbstractScript
 	@Override
 	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
 	{
-		
+
 		//version circulaire
 		if (versionToExecute == 0 || versionToExecute == 1 || versionToExecute == 2 || versionToExecute == 7)
 		{
@@ -105,6 +106,7 @@ public class GetPlot extends AbstractScript
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);					
 					stateToConsider.robot.moveLengthwise(180, hooksToConsider);
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
+					stateToConsider.robot.sleep(sleepAfterSlow);
 					stateToConsider.robot.moveLengthwise(140, hooksToConsider);
 					stateToConsider.robot.isGlassStoredLeft = true;
 				}
@@ -113,6 +115,7 @@ public class GetPlot extends AbstractScript
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);					
 					stateToConsider.robot.moveLengthwise(180, hooksToConsider);
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
+					stateToConsider.robot.sleep(sleepAfterSlow);
 					stateToConsider.robot.moveLengthwise(140, hooksToConsider);
 					stateToConsider.robot.isGlassStoredRight = true;
 				}
@@ -297,13 +300,13 @@ public class GetPlot extends AbstractScript
 		if (isArmChosenLeft) 
 		{
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
-			stateToConsider.robot.sleep(1000); //TODO modifier le temps d'xecution de ARM_LEFT_OPEN_SLOW a la place
+			stateToConsider.robot.sleep(sleepAfterSlow); //TODO modifier le temps d'xecution de ARM_LEFT_OPEN_SLOW a la place
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
 		}
 		else
 		{
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN_SLOW, true);
-			stateToConsider.robot.sleep(1000); //TODO modifier le temps d'xecution de ARM_RIGHT_OPEN_SLOW a la place
+			stateToConsider.robot.sleep(sleepAfterSlow); //TODO modifier le temps d'xecution de ARM_RIGHT_OPEN_SLOW a la place
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
 		}
 		//si on a attrape qqc on termine sinon on essaie avec l'autre bras (si isSecondTry == false)

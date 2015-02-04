@@ -47,7 +47,7 @@ abstract public class Hook
 	 * Il n'y a pas de méthode pour en retirer, car il n'y en a a priori pas besoin
 	 * @param callback
 	 */
-	public void ajouter_callback(Callback callback)
+	public void addCallback(Callback callback)
 	{
 		callbacks.add(callback);
 	}
@@ -78,7 +78,7 @@ abstract public class Hook
 	 * On peut supprimer le hook s'il n'y a plus aucun callback déclenchable.
 	 * @return vrai si le hook est supprimable
 	 */
-	public boolean supprimable()
+	public boolean canBeDeleted()
 	{
 	    for(Callback c: callbacks)
 	        if(!c.shouldBeDeleted())

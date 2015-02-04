@@ -59,7 +59,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		real_state = (GameState<Robot>) container.getService(ServiceNames.GAME_STATE);
 		scriptmanager = (ScriptManager) container.getService(ServiceNames.SCRIPT_MANAGER);
 		mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
-		emptyHook = new ArrayList<Hook> ();
+		emptyHook = new ArrayList<Hook> ();  
 		
 		if (real_state.robot.getSymmetry())
 		{
@@ -280,7 +280,6 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		try 
 		{
 			scriptmanager.getScript(ScriptNames.FREE_STACK).goToThenExec(1, real_state, true, emptyHook );
-			real_state.robot.moveLengthwise(-300);
 		}
 		catch (UnableToMoveException | SerialConnexionException e) 
 		{

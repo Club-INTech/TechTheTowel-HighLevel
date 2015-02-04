@@ -100,23 +100,29 @@ public class JUnit_Hooks extends JUnit_Test
 		//premiere action du match
 		
 		System.out.println("Le robot commence le match");
-		
 		try 
 		{
-			//Bon ordre 
+			//hookfactory qui contient les differents hooks
 			hookFactory = (HookFactory) container.getService(ServiceNames.HOOK_FACTORY);
-			ArrayList<Hook> hooks = new ArrayList<Hook> ();
-			Executable ouvreBras  = new OuvreBrasExe();
-			Callback c = new Callback(ouvreBras, true);
-			Hook h = hookFactory.newHookX(1000,10);//TODO changer ?
+
+			// liste de hook a passer a la locomotion
+			ArrayList<Hook> testHookList = new ArrayList<Hook> ();
 			
-			scriptmanager.getScript(ScriptNames.EXIT_START_ZONE).goToThenExec(1, real_state, true, hooks );
+			// hook pour ouvrir le bras en X = 1000
+			Hook openArmTestHook = hookFactory.newHookX(1000,10);//TODO changer ?
+			
+			// ajoute un callback au hook de position qui ouvre le bras  bras
+			openArmTestHook.addCallback(	new Callback(new OuvreBrasExe(),true)	);
+					
+			// ajoute le hook a la liste a passer a la locomotion
+			testHookList.add(openArmTestHook);
+						
+			scriptmanager.getScript(ScriptNames.EXIT_START_ZONE).goToThenExec(1, real_state, true, testHookList );
 		} 
 		catch (UnableToMoveException e) 
 		{
 			e.printStackTrace();
-		}
-						
+		}		
 		System.out.println("match fini !");
 
 		//Le match s'arrête
