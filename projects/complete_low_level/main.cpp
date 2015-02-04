@@ -94,11 +94,6 @@ int main(void)
 				}
 				asservRotation = !asservRotation;
 			}
-			else if(!strcmp("!",order))
-			{
-				//actuatorsMgr.monterBras();
-				//serial.printfln("%lf", 3.15402151024021654);
-			}
 			else if(!strcmp("unitMove", order))
 			{
 				motionControlSystem->orderRawPwm(Side::LEFT, 90);
