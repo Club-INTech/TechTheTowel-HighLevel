@@ -105,6 +105,7 @@ public class Panel extends JPanel
 	    
 	    g.setColor(Color.green);
 	    g.drawOval((mRobot.getPosition().x - 100 + 1500) * this.getWidth() / 3000, -(mRobot.getPosition().y + 100) * this.getHeight() / 2000 + this.getHeight(), (2 * 100) * this.getWidth() / 3000, (2 * 100) * this.getHeight() / 2000);
+	    System.out.println("Graphique : position du robot : ("+mRobot.getPosition().x+", "+mRobot.getPosition().y+")");
 	}
 	
 	public void drawArrayList(ArrayList<Vec2> path)
