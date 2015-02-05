@@ -526,6 +526,7 @@ public class Locomotion implements Service
 			// met a jour ou nous sommes sur la table
 			updatePositionAndOrientation();
 			
+			nAim=aim; //On actualise les information de nAim
 			if(symmetry)	//FIXME Hack by Théo : Pas normal de devoir passer par là ! 
 			{
 				nAim.y=aim.y;

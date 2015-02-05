@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import table.Table;
 import smartMath.*;
 import pathDingDing.*;
+import robot.*;
 
 import table.obstacles.*;
 
@@ -25,14 +26,16 @@ public class Panel extends JPanel
 	
 	private ArrayList<Vec2> mPath;
 	private Table mTable;
+	private Robot mRobot;
 	private boolean showGraph;
 	private Graph mGraph;
 	
 	
-	public Panel(Table table)
+	public Panel(Table table, RobotReal robot)
 	{
 		mPath = new ArrayList<Vec2>();
 		mTable = table;
+		mRobot = robot;
 		showGraph = false;
 	}
 	
@@ -99,6 +102,9 @@ public class Panel extends JPanel
 	    {
 	    	g.drawString(mPath.get(i).x + ", " + mPath.get(i).y, (mPath.get(i).x + 1500) * this.getWidth() / 3000, -mPath.get(i).y * this.getHeight() / 2000 + this.getHeight());
 	    }
+	    
+	    g.setColor(Color.green);
+	    g.drawOval((mRobot.getPositionFast().x - 100 + 1500) * this.getWidth() / 3000, -(mRobot.getPositionFast().y + 100) * this.getHeight() / 2000 + this.getHeight(), (2 * 100) * this.getWidth() / 3000, (2 * 100) * this.getHeight() / 2000);
 	}
 	
 	public void drawArrayList(ArrayList<Vec2> path)
