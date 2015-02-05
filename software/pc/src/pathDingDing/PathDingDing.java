@@ -44,7 +44,7 @@ public class PathDingDing
 		if(isPathCorrect(directPath))
 			return directPath;
 
-		//ajout du noeud de d�part au graphe
+		//ajout du noeud de depart au graphe
 		mGraph.setStartNode(new Node(start.x, start.y));
 
 		//ajout du noeud de fin au graphe
@@ -54,7 +54,7 @@ public class PathDingDing
 		//calcul du chemin via computeGraph, convertion, et simplification.
 		ArrayList<Vec2> pathVec2 = new ArrayList<Vec2>();
 		ArrayList<Node> pathNode = computeGraph(mGraph);
-		for(int i = 0; i < pathNode.size(); i++)
+		for(int i = pathNode.size() - 1; i >= 0; i--)
 			pathVec2.add(pathNode.get(i).toVec2());
 		simplify(pathVec2);
 		//on detache le dernier noeud du graphe

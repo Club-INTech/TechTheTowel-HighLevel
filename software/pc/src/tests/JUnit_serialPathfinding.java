@@ -120,11 +120,14 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 		System.out.println("en position ("+robot.getPosition().x+", "+robot.getPosition().y+")");
 		while (true)
 		{
-			try 
+			try
 			{
 				path = pf.computePath(robot.getPosition(), win.getMouse().getLeftClickPosition());
 				log.debug("chemin : "+path.toString(),this);
 				path.remove(0);
+				System.out.println("----------------Nouveau chemin---------------");
+				for(int i = 0; i < path.size(); i++)
+					System.out.println("noeud : ("+path.get(i).x+", "+path.get(i).y+")");
 				robot.followPath(path, emptyHook);
 			}
 			catch (PathNotFoundException e) 

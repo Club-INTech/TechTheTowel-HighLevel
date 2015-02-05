@@ -104,7 +104,7 @@ public class Panel extends JPanel
 	    }
 	    
 	    g.setColor(Color.green);
-	    g.drawOval((mRobot.getPositionFast().x - 100 + 1500) * this.getWidth() / 3000, -(mRobot.getPositionFast().y + 100) * this.getHeight() / 2000 + this.getHeight(), (2 * 100) * this.getWidth() / 3000, (2 * 100) * this.getHeight() / 2000);
+	    g.drawOval((mRobot.getPosition().x - 100 + 1500) * this.getWidth() / 3000, -(mRobot.getPosition().y + 100) * this.getHeight() / 2000 + this.getHeight(), (2 * 100) * this.getWidth() / 3000, (2 * 100) * this.getHeight() / 2000);
 	}
 	
 	public void drawArrayList(ArrayList<Vec2> path)
