@@ -52,30 +52,33 @@ void Motor::initPWM(){
 	TIM_OCInitTypeDef TIM_OCInitStructure;
 
 	/**
-	 * Configuration des PWM générés sur les canaux 1 et 2 du TIMER3
+	 * Configuration des PWM générés sur les canaux 1 et 2 du TIMER8
 	 */
-	// /!\ Va falloir changer de timer, le 3 est utilisé par la codeuse droite. Passer au 8.
-	//Active l'horloge du TIMER 3
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
+	//Active l'horloge du TIMER 8
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
 	//Active l'horloge du port C
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
 
 	/**
 	 * Configuration pins PWM :
-	 * TIM3 CH1 (PC6 = moteur gauche) et TIM3 CH2 (PC7 = moteur droit)
-	 * !\ Passer à TIM8
+	 * TIM8 CH1 (PC6 = moteur gauche) et TIM8 CH2 (PC7 = moteur droit)
+	 *
 	 */
 
 	GPIO_StructInit(&GPIO_InitStructure); //Remplit avec les valeurs par défaut
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7;
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
-	GPIO_Init(GPIOC, &GPIO_InitStructure);
-	//Connexion des 2 pins PC6 et PC7 à la fonction alternative liée au TIMER 3
-	GPIO_PinAFConfig(GPIOC, GPIO_PinSource6, GPIO_AF_TIM3);
-	GPIO_PinAFConfig(GPIOC, GPIO_PinSource7, GPIO_AF_TIM3);
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
+	//Connexion des 2 pins PC6 et PC7 à la fonction alternative liée au TIMER 8
+	GPIO_PinAFConfig(GPIOA, GPIO_PinSource15, GPIO_AF_TIM2);
+
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
+	GPIO_PinAFConfig(GPIOB, GPIO_PinSource3, GPIO_AF_TIM2);
 
 	/* -----------------------------------------------------------------------
 	 TIM3 Configuration: génère 2 PWM à deux rapports cycliques différents (un timer a 4 canaux,
@@ -109,15 +112,15 @@ void Motor::initPWM(){
 	 ----------------------------------------------------------------------- */
 
 	//Le prescaler peut être n'importe quel entier entre 1 et 65535 (uint16_t)
-	uint16_t prescaler = (uint16_t)((SystemCoreClock / 2) / 256000) - 1;
+	uint16_t prescaler = (uint16_t)((SystemCoreClock / 2) / 256000) - 1; //le deuxième /2 est dû au changement pour un timer de clock doublée
 
-	//Configuration du TIMER 3 /!\Passer à TIM8
+	//Configuration du TIMER 8
 	TIM_TimeBaseStructure.TIM_Period = 255;
 	TIM_TimeBaseStructure.TIM_Prescaler = prescaler;
 	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
 
-	TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStructure);
+	TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
 
 	//Configuration du canal 1
 	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
@@ -126,20 +129,20 @@ void Motor::initPWM(){
 	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
 	TIM_OCInitStructure.TIM_Pulse = 0; //Valeur du cycle initial
 
-	TIM_OC1Init(TIM3, &TIM_OCInitStructure);
-	TIM_OC1PreloadConfig(TIM3, TIM_OCPreload_Enable);
+	TIM_OC1Init(TIM2, &TIM_OCInitStructure);
+	TIM_OC1PreloadConfig(TIM2, TIM_OCPreload_Enable);
 
 	//Configuration du canal 2
 	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
 	TIM_OCInitStructure.TIM_Pulse = 0; //Valeur du cycle initial
 
-	TIM_OC2Init(TIM3, &TIM_OCInitStructure);
-	TIM_OC2PreloadConfig(TIM3, TIM_OCPreload_Enable);
+	TIM_OC2Init(TIM2, &TIM_OCInitStructure);
+	TIM_OC2PreloadConfig(TIM2, TIM_OCPreload_Enable);
 
-	TIM_ARRPreloadConfig(TIM3, ENABLE);
+	TIM_ARRPreloadConfig(TIM2, ENABLE);
 
-	//Active le TIMER 3 /!\Passer à TIM8
-	TIM_Cmd(TIM3, ENABLE);
+	//Active le TIMER 8
+	TIM_Cmd(TIM2, ENABLE);
 }
 
 void Motor::run(int16_t pwm){
@@ -148,17 +151,17 @@ void Motor::run(int16_t pwm){
 		setDirection(Direction::FORWARD);
 
 		if (side == Side::LEFT) {
-			TIM3->CCR1 = MIN(pwm, maxPWM);
+			TIM2->CCR1 = MIN(pwm, maxPWM);
 		} else {
-			TIM3->CCR2 = MIN(pwm, maxPWM);
+			TIM2->CCR2 = MIN(pwm, maxPWM);
 		}
 
 	} else {
 		setDirection(Direction::BACKWARD);
 		if (side == Side::LEFT) {
-			TIM3->CCR1 = MIN(-pwm, maxPWM);
+			TIM2->CCR1 = MIN(-pwm, maxPWM);
 		} else {
-			TIM3->CCR2 = MIN(-pwm, maxPWM);
+			TIM2->CCR2 = MIN(-pwm, maxPWM);
 		}
 	}
 }

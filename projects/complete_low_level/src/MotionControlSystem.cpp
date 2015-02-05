@@ -97,21 +97,22 @@ void MotionControlSystem::enableRotationControl(bool enabled) {
 }
 
 void MotionControlSystem::control() {
-
-	int32_t leftTicks = Counter::getLeftValue();
-	int32_t rightTicks = Counter::getRightValue();
-
-	if (translationControlled) {
-		currentDistance = leftTicks + rightTicks;
-		//currentDistance = (leftTicks + rightTicks) / 2;
-		translationPID.compute();
-	} else
-		pwmTranslation = 0;
-
-	if (rotationControlled) {
-		currentAngle = leftTicks - rightTicks;
-		rotationPID.compute();
-	} else
+//
+//	int32_t leftTicks = Counter::getLeftValue();
+//	int32_t rightTicks = Counter::getRightValue();
+//
+//	if (translationControlled) {
+//		currentDistance = leftTicks + rightTicks;
+//		//currentDistance = (leftTicks + rightTicks) / 2;
+//		translationPID.compute();
+//	} else
+//		pwmTranslation = 0;
+//
+//	if (rotationControlled) {
+//		currentAngle = leftTicks - rightTicks;
+//		rotationPID.compute();
+//	} else
+		pwmTranslation = 150 ;
 		pwmRotation = 0;
 	applyControl();
 }
