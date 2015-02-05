@@ -35,7 +35,7 @@ public class PathDingDing
 	 * @return un chemin optimise liant depart et arrivee
 	 * @throws Exception pas encore implemente
 	 */
-	public ArrayList<Vec2> computePath(Vec2 start, Vec2 end) throws Exception
+	public ArrayList<Vec2> computePath(Vec2 start, Vec2 end) throws PathNotFoundException
 	{
 		//le cas ou les points de depart et d'arrivee sont reliables en ligne droite est directement traite
 		ArrayList<Vec2> directPath =  new ArrayList<Vec2>();
@@ -44,7 +44,7 @@ public class PathDingDing
 		if(isPathCorrect(directPath))
 			return directPath;
 
-		//ajout du noeud de départ au graphe
+		//ajout du noeud de depart au graphe
 		mGraph.setStartNode(new Node(start.x, start.y));
 
 		//ajout du noeud de fin au graphe
@@ -54,7 +54,7 @@ public class PathDingDing
 		//calcul du chemin via computeGraph, convertion, et simplification.
 		ArrayList<Vec2> pathVec2 = new ArrayList<Vec2>();
 		ArrayList<Node> pathNode = computeGraph(mGraph);
-		for(int i = 0; i < pathNode.size(); i++)
+		for(int i = pathNode.size() - 1; i >= 0; i--)
 			pathVec2.add(pathNode.get(i).toVec2());
 		simplify(pathVec2);
 		//on detache le dernier noeud du graphe
@@ -67,7 +67,7 @@ public class PathDingDing
 	 * @param graph
 	 * @return
 	 */
-	private ArrayList<Node> computeGraph(Graph graph)
+	private ArrayList<Node> computeGraph(Graph graph) throws PathNotFoundException
 	{
 		//algo A star
 		
@@ -75,9 +75,9 @@ public class PathDingDing
 		ArrayList<Node> closedList = new ArrayList<Node>(); //liste fermee des points, triee par cout croissant
 		openList.add(graph.getStartNode());
 		graph.getStartNode().setHeuristicCost(graph.getEndNode());
-		//le noeud precedant le premier noeud est lui-même
+		//le noeud precedant le premier noeud est lui-mï¿½me
 		graph.getStartNode().setPrevious(graph.getStartNode());
-		//tant que la liste ouverte n'est pas vide ou que l'on n'est pas encore arrivé
+		//tant que la liste ouverte n'est pas vide ou que l'on n'est pas encore arrivï¿½
 		while(!openList.isEmpty() && openList.get(0) != graph.getEndNode())
 		{
 			//on supprime le point a l'heuristique le plus faible a la liste ouverte
@@ -121,7 +121,7 @@ public class PathDingDing
 		ArrayList<Node> path = new ArrayList<Node>();
 		//si on a vide la liste ouverte, c'est qu'aucun chemin ne peut etre trouve
 		if(openList.isEmpty())
-			System.out.println("aucun chemin trouve :(");
+			throw new PathNotFoundException();
 		//sinon, des chemins ont ete trouves, on determine le plus court
 		else
 		{

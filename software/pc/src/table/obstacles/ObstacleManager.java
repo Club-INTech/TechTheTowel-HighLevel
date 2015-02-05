@@ -116,7 +116,7 @@ public class ObstacleManager
       	
       	//ennemi
       	//TODO: deux ennemis
-      	mEnnemyRobot.add(new ObstacleCircular(new Vec2(0, 1000), 200 + robotRadius));
+      	mEnnemyRobot.add(new ObstacleCircular(new Vec2(0, 0), 200 + robotRadius));
     }    
 
     /**

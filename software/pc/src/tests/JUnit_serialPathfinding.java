@@ -17,6 +17,7 @@ import enums.ServiceNames;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import robot.Robot;
+import robot.RobotReal;
 import robot.cardsWrappers.ActuatorCardWrapper;
 import pathDingDing.PathDingDing;
 
@@ -41,13 +42,21 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 		actionneurs = (ActuatorCardWrapper)container.getService(ServiceNames.ACTUATOR_CARD_WRAPPER);
 
 
-		
-		state.robot.setPosition(new Vec2 (-1381,1000));
-		state.robot.setOrientation(0);
-		
+		if (state.robot.getSymmetry())
+		{
+			state.robot.setPosition(new Vec2 (-1381,1000));
+			state.robot.setOrientation(0); 
+			//si on est jaune on est en 0 
+		}
+		else
+		{
+			state.robot.setPosition(new Vec2 (1381,1000));
+			state.robot.setOrientation(Math.PI);
+			//sinon on est vert donc on est en PI
+		}
 		
         table = (Table)container.getService(ServiceNames.TABLE);
-        win = new Window(table);
+        win = new Window(table, (RobotReal)container.getService(ServiceNames.ROBOT_REAL));
         pf = new PathDingDing(table);
 		
 		state.robot.updateConfig();
@@ -108,17 +117,18 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 		{
 			log.debug("impossible de bouger", this);
 		}
-		robot.sleep(3000);
 		System.out.println("en position ("+robot.getPosition().x+", "+robot.getPosition().y+")");
 		while (true)
 		{
-			try 
+			try
 			{
 				path = pf.computePath(robot.getPosition(), win.getMouse().getLeftClickPosition());
 				log.debug("chemin : "+path.toString(),this);
 				path.remove(0);
+				System.out.println("----------------Nouveau chemin---------------");
+				for(int i = 0; i < path.size(); i++)
+					System.out.println("noeud : ("+path.get(i).x+", "+path.get(i).y+")");
 				robot.followPath(path, emptyHook);
-				robot.sleep(5000);
 			}
 			catch (PathNotFoundException e) 
 			{
@@ -127,9 +137,6 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 			catch (UnableToMoveException e) 
 			{
 				log.debug("chemin bloque", this);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 			log.debug("en position ("+robot.getPosition().x+", "+robot.getPosition().y+")", this);
 		}

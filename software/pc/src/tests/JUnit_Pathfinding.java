@@ -5,6 +5,7 @@ import org.junit.*;
 import pathDingDing.PathDingDing;
 import container.Container;
 import table.Table;
+import robot.RobotReal;
 import smartMath.*;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class JUnit_Pathfinding extends JUnit_Test
     {
         super.setUp();
         table = (Table)container.getService(ServiceNames.TABLE);
-        win = new Window(table);
+        win = new Window(table, (RobotReal)container.getService(ServiceNames.ROBOT_REAL));
         pf = new PathDingDing(table);
     }
     
