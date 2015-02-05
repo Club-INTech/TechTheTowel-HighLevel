@@ -531,14 +531,17 @@ public class Locomotion implements Service
 			// met a jour ou nous sommes sur la table
 			updatePositionAndOrientation();
 			
-			nAim=aim; //On actualise les information de nAim
-			if(symmetry)	//FIXME Hack by Théo : Pas normal de devoir passer par là ! 
-			{
-				nAim.y=aim.y;
-				nAim.x = -aim.x;
-			}
+			
+			
+			
+//			nAim=aim; //On actualise les information de nAim
+//			if(symmetry)	//FIXME Hack by Théo : Pas normal de devoir passer par là ! 
+//			{
+//				nAim.y=aim.y;
+//				nAim.x = -aim.x;
+//			}
 			// l'angle vers l point vise, sert a corriger la trajectoire en temps reel
-			double angle = Math.atan2(nAim.y-position.y, nAim.x-position.x);//FIXME souci en cas de jaune non ? aim.x est positif, position.x negatif
+			double angle = Math.atan2(aim.y-position.y, aim.x-position.x);//FIXME souci en cas de jaune non ? aim.x est positif, position.x negatif
 																		  //On se retrouve avec "angle" =0 (?) et "orientation" environ 0.4
 			
 			
@@ -546,6 +549,9 @@ public class Locomotion implements Service
 			if (	Math.abs(Geometry.minusAngle(angle, orientation , 2*Math.PI)) < inMotionCorrectionMaxAngle && 
 					aim.clone().minusNewVector(position).length() 				  > inMotionCorrectionMaxDistance )
 				mLocomotionCardWrapper.turn(angle);
+		
+			
+			
 			
 			
 			// vérifie qu'il n'y a pas de blocage mécanique (n'importe quoi faisant que les moteurs tournent sans que les codeuses tournent)
@@ -658,7 +664,7 @@ public class Locomotion implements Service
 			}
 				
 			// demande aux moteurs d'avancer le robot de la distance demand�e si elle est suffisante (que le robot ne fait pas de surplace)
-			if (distance > aimThreshold)
+			if (Math.pow(distance, 2) > 0.5*aimThreshold)
 				mLocomotionCardWrapper.moveLengthwise(distance);
 
 		} 

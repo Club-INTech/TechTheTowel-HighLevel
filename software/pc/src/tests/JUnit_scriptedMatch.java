@@ -260,7 +260,6 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		catch (PathNotFoundException e)
 		{
 			//TODO: le pathfinding ne trouve pas de chemin
-			
 		} 
 		catch (SerialFinallyException e) 
 		{
@@ -282,17 +281,34 @@ public class JUnit_scriptedMatch extends JUnit_Test
 			e.printStackTrace();
 		} 
 		catch (PathNotFoundException e)
-		{
-			//TODO: le pathfinding ne trouve pas de chemin
-			
+		{			
 		} 
 		catch (SerialFinallyException e) 
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
+				
 		try 
+		{			
+			/*Le robot n'en est pas encore capable mais ca va venir avec le bas niveau et les fonctions "bras au milieu" etc
+			/*	scriptmanager.getScript(ScriptNames.TAKE_TENNIS_BALL).goToThenExec(1, real_state, true, emptyHook );*/
+			
+			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(1, real_state, true, emptyHook );//On depose 1 verre dans notre zone
+		}
+		catch (UnableToMoveException | SerialConnexionException e) 
+		{
+			// TODO Main erreur critique :
+			//attention ce sont surement des erreurs dans le finally d'un script donc elle servent a proteger le meca !
+			//ou un robot ennemi devant. Donc beaucoup moins critique (ce serai bie de pouvoir differencer les deux)
+			e.printStackTrace();
+		} 
+		catch (SerialFinallyException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		try
 		{
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le plot 0");
 			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(0, real_state, true, emptyHook ); // On recupere le plot en face de l'escalier
@@ -311,15 +327,106 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		} 
 		catch (SerialFinallyException e) 
 		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		try 
+		{
+			scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(2, real_state, true, emptyHook ); // ON recupere le verre devant l'estrade
+		}
+		catch (UnableToMoveException | SerialConnexionException e) 
+		{
+			// TODO Main erreur critique :
+			//attention ce sont surement des erreurs dans le finally d'un script donc elle servent a proteger le meca !
+			//ou un robot ennemi devant. Donc beaucoup moins critique (ce serai bie de pouvoir differencer les deux)
+			e.printStackTrace();
+		} 
+		catch (PathNotFoundException e)
+		{
+			//TODO: le pathfinding ne trouve pas de chemin
+			
+		} 
+		catch (SerialFinallyException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		try 
+		{
+			real_state.robot.turn(Math.PI);		
+			real_state.robot.moveLengthwise(500);		//(le PF evitera ca)	
+			scriptmanager.getScript(ScriptNames.CLOSE_CLAP).goToThenExec(3, real_state, true, emptyHook ); // ON recupere le verre devant l'estrade
+		}
+		catch (UnableToMoveException | SerialConnexionException e) 
+		{
+			// TODO Main erreur critique :
+			//attention ce sont surement des erreurs dans le finally d'un script donc elle servent a proteger le meca !
+			//ou un robot ennemi devant. Donc beaucoup moins critique (ce serai bie de pouvoir differencer les deux)
+			e.printStackTrace();
+		} 
+		catch (PathNotFoundException e)
+		{
+			//TODO: le pathfinding ne trouve pas de chemin
+			
+		} 
+		catch (SerialFinallyException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		try 
+		{
+			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(2, real_state, true, emptyHook ); // On depose le verre chez les ennemis, en bas.
+		}
+		catch (UnableToMoveException | SerialConnexionException e) 
+		{
+			// TODO Main erreur critique :
+			//attention ce sont surement des erreurs dans le finally d'un script donc elle servent a proteger le meca !
+			//ou un robot ennemi devant. Donc beaucoup moins critique (ce serai bie de pouvoir differencer les deux)
+			e.printStackTrace();
+		} 
+		catch (SerialFinallyException e) 
+		{
 			e.printStackTrace();
 		}
 		
 		try 
 		{
 			real_state.robot.turn(0);		
-			real_state.robot.moveLengthwise(600);		
+			real_state.robot.moveLengthwise(500);	
 			real_state.robot.turn(Math.PI/2);		
-			real_state.robot.moveLengthwise(800);	//On est à gauche de l'escalier	
+			real_state.robot.moveLengthwise(1000);	//(le PF evitera ca)	
+			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(3, real_state, true, emptyHook ); // On depose le verre chez les ennemis, en bas.
+		}
+		catch (UnableToMoveException | SerialConnexionException e) 
+		{
+			// TODO Main erreur critique :
+			//attention ce sont surement des erreurs dans le finally d'un script donc elle servent a proteger le meca !
+			//ou un robot ennemi devant. Donc beaucoup moins critique (ce serai bie de pouvoir differencer les deux)
+			e.printStackTrace();
+		} 
+		catch (SerialFinallyException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		try 
+		{
+			real_state.robot.turn(0);		//On s'eloigne, le PF suffira ici.
+			real_state.robot.moveLengthwise(500);	
+			real_state.robot.turn(Math.PI/2);		
+			real_state.robot.moveLengthwise(500);	
+			
+			
+			real_state.robot.turn(Math.PI);		
+			real_state.robot.moveLengthwise(1800);
+			
+			real_state.robot.turn(-Math.PI/2);		
+			real_state.robot.moveLengthwise(400);	//On est à gauche de l'escalier	
 			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(56, real_state, true, emptyHook );//On recupere les 2 plots a droite de l'escalier
 		}
 		catch (UnableToMoveException | SerialConnexionException e) 
@@ -364,18 +471,13 @@ public class JUnit_scriptedMatch extends JUnit_Test
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 		try 
 		{
-			real_state.robot.turn(Math.PI);		//On s'eloigne, le PF suffira ici.
-			real_state.robot.moveLengthwise(600);		
-			real_state.robot.turn(-Math.PI/2);		
-			real_state.robot.moveLengthwise(800);	//On est à gauche de l'escalier	
-			
-			/*Le robot n'en est pas encore capable mais ca va venir avec le bas niveau et les fonctions "bras au milieu" etc
-			/*	scriptmanager.getScript(ScriptNames.TAKE_TENNIS_BALL).goToThenExec(1, real_state, true, emptyHook );*/
-			
-			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(1, real_state, true, emptyHook );//On depose 1 verre dans notre zone
+			real_state.robot.turn(0);		//On s'eloigne, le PF suffira ici.
+			real_state.robot.moveLengthwise(500);	
+			real_state.robot.turn(Math.PI/2);		
+			real_state.robot.moveLengthwise(800);	
+			scriptmanager.getScript(ScriptNames.FREE_STACK).goToThenExec(2, real_state, true, emptyHook ); // On libere la pile ans notre zone
 		}
 		catch (UnableToMoveException | SerialConnexionException e) 
 		{
@@ -389,70 +491,6 @@ public class JUnit_scriptedMatch extends JUnit_Test
 			e.printStackTrace();
 		}
 		
-		try 
-		{
-			real_state.robot.moveLengthwise(-1500);		
-			scriptmanager.getScript(ScriptNames.FREE_STACK).goToThenExec(1, real_state, true, emptyHook ); // On libere la pile ans notre zone
-		}
-		catch (UnableToMoveException | SerialConnexionException e) 
-		{
-			// TODO Main erreur critique :
-			//attention ce sont surement des erreurs dans le finally d'un script donc elle servent a proteger le meca !
-			//ou un robot ennemi devant. Donc beaucoup moins critique (ce serai bie de pouvoir differencer les deux)
-			e.printStackTrace();
-		} 
-		catch (SerialFinallyException e) 
-		{
-			e.printStackTrace();
-		}
-		
-		try 
-		{
-			scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(2, real_state, true, emptyHook ); // ON recupere le verre devant l'estrade
-		}
-		catch (UnableToMoveException | SerialConnexionException e) 
-		{
-			// TODO Main erreur critique :
-			//attention ce sont surement des erreurs dans le finally d'un script donc elle servent a proteger le meca !
-			//ou un robot ennemi devant. Donc beaucoup moins critique (ce serai bie de pouvoir differencer les deux)
-			e.printStackTrace();
-		} 
-		catch (PathNotFoundException e)
-		{
-			//TODO: le pathfinding ne trouve pas de chemin
-			
-		} 
-		catch (SerialFinallyException e) 
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		try 
-		{
-			scriptmanager.getScript(ScriptNames.CLOSE_CLAP).goToThenExec(3, real_state, true, emptyHook ); // On ferme le dernier clap
-		}
-		catch (UnableToMoveException e1) 
-		{
-			e1.printStackTrace();
-		}
-		
-
-		try 
-		{
-			scriptmanager.getScript(ScriptNames.FREE_STACK).goToThenExec(3, real_state, true, emptyHook ); // On depose le verre chez les ennemis, en bas.
-		}
-		catch (UnableToMoveException | SerialConnexionException e) 
-		{
-			// TODO Main erreur critique :
-			//attention ce sont surement des erreurs dans le finally d'un script donc elle servent a proteger le meca !
-			//ou un robot ennemi devant. Donc beaucoup moins critique (ce serai bie de pouvoir differencer les deux)
-			e.printStackTrace();
-		} 
-		catch (SerialFinallyException e) 
-		{
-			e.printStackTrace();
-		}
 		
 		System.out.println("match fini !");
 
