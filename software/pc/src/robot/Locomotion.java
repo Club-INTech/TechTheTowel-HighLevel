@@ -59,6 +59,10 @@ public class Locomotion implements Service
 	/** la distance maximum entre notre position et le point vise a laquelle on autorise le robot a corriger son orientation durant son mouvement */
 	private double inMotionCorrectionMaxDistance = 20;
 	
+	/** tolérance sur la position d'arrivée.
+	 *  L'exécution sera rendue a l'utilisateur de la classe Locomotion quand le robot sera plus proche de l'arrivée que cette distance */
+	private int aimThreshold = 200;
+	
 	/** la longueur du robot (ie la distance qui sépare son devant de son arrière)
 	 * Cette valeur est utilisée pour placer le disque devant le robot ou l'on va vérifier qu'il n'y a pas d'obstacle */
 	private int robotLengh; //TODO: cette variable n'a pas sa place ici. Elle n'est même pas initialisée ici
@@ -130,7 +134,8 @@ public class Locomotion implements Service
 	 * Recale le robot pour qu'il sache ou il est sur la table et dans quel sens il se trouve.
 	 * La méthode est de le faire pecuter contre les coins de la table, ce qui lui donne des repères.
 	 * TODO: réécrire, et documenter en fonction de la table de cette année.
-	 */
+	 */	
+	
 	public void readjust()
 	{
 		try
@@ -652,7 +657,8 @@ public class Locomotion implements Service
 				}
 			}
 				
-				// demande aux moteurs d'avancer le robot de la distance demand�e
+			// demande aux moteurs d'avancer le robot de la distance demand�e si elle est suffisante (que le robot ne fait pas de surplace)
+			if (distance > aimThreshold)
 				mLocomotionCardWrapper.moveLengthwise(distance);
 
 		} 
@@ -724,9 +730,6 @@ public class Locomotion implements Service
 		// TODO : faire une détection paramétrable différamment en translation et en rotation, plus un calcul premant en compte le temps de rafraichissement de la position du robot
 		// car on veut un seuil de vitesse (donc dépendant du temps dt de rafraichissement de l'asser) et non un seuil sur V*dt
 		int motionThreshold = 0;
-		
-		// tolérance sur la position d'arrivée. L'exécution sera rendue a l'utilisateur de la classe Locomotion quand le robot sera plus proche de l'arrivée que cette distance
-		int aimThreshold = 400;
 		
 		// demande ou l'on est et comment on est orienté a la carte d'asser
 		double[] newInfos = null;
