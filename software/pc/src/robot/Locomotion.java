@@ -72,6 +72,10 @@ public class Locomotion implements Service
 	/** Position de la table que le robot cherche a ateindre. Elle peut être modifiée au sein d'un même mouvement. */
 	private Vec2 aim = new Vec2();
 	
+	/**Sauvegarde de Aim*/
+	private Vec2 nAim = new Vec2();
+
+	
 	/** Le système de trajectoire courbe ou de "tourner en avançant" fait rêver des génération d'INTechiens,
 	 * mais ça a toujours fais perdre du temps pour un truc qui ne marche pas */
 	private boolean allowCurvedPath = false;
@@ -522,14 +526,21 @@ public class Locomotion implements Service
 			// met a jour ou nous sommes sur la table
 			updatePositionAndOrientation();
 			
-			// l'angle vers le point vise, sert a corriger la trajectoire en temps reel
-			double angle = Math.atan2(aim.y-position.y, aim.x-position.x);
+			if(symmetry)	//FIXME Hack by Théo : Pas normal de devoir passer par là ! 
+			{
+				nAim.y=aim.y;
+				nAim.x = -aim.x;
+			}
+			// l'angle vers l point vise, sert a corriger la trajectoire en temps reel
+			double angle = Math.atan2(nAim.y-position.y, nAim.x-position.x);//FIXME souci en cas de jaune non ? aim.x est positif, position.x negatif
+																		  //On se retrouve avec "angle" =0 (?) et "orientation" environ 0.4
 			
 			
 			//si l'angle de correction n'est pas trop grand on corrige la trajectoire (sinon on ne peut pas corriger donc on oublie)
 			if (	Math.abs(Geometry.minusAngle(angle, orientation , 2*Math.PI)) < inMotionCorrectionMaxAngle && 
 					aim.clone().minusNewVector(position).length() 				  > inMotionCorrectionMaxDistance )
 				mLocomotionCardWrapper.turn(angle);
+			
 			
 			// vérifie qu'il n'y a pas de blocage mécanique (n'importe quoi faisant que les moteurs tournent sans que les codeuses tournent)
 			// TODO: il y a double emploi entre isMovementFinished et checkRobotNotBlocked, les deux vérifient de deux facons différentes que le robot n'est pas mécaniquement bloqué. Il faut centraliser la vérification.
@@ -616,9 +627,7 @@ public class Locomotion implements Service
 		// On interdit la trajectoire courbe si on doit faire un virage trop grand (plus d'un quart de tour).
 		if(Math.abs(direction - orientation) > Math.PI/2)
 			allowCurvedPath = false;
-
-				
-					
+		
 		try
 		{
 			//si la trajectoire courbe est desactivee on attends que le tour soit termine
@@ -686,7 +695,7 @@ public class Locomotion implements Service
 				throw new BlockedException();
 
 			}
-			log.debug("reponse:"+out+", angle actuel:"+Geometry.modulo(newInfos[2],(2000*Math.PI))+", angle precedent:"+Geometry.modulo(oldInfos[2],(2000*Math.PI))+", angle vise"+Geometry.modulo(finalOrientation,(2000*Math.PI))+", difference:"+Geometry.minusAngle((Geometry.modulo(newInfos[2],(2000*Math.PI))), Geometry.modulo(finalOrientation,(2000*Math.PI)), 2000*Math.PI), this);
+			log.debug("reponse de isTurnFinished:"+out+", angle actuel:"+Geometry.modulo(newInfos[2],(2000*Math.PI))+", angle precedent:"+Geometry.modulo(oldInfos[2],(2000*Math.PI))+", angle vise"+Geometry.modulo(finalOrientation,(2000*Math.PI))+", difference:"+Geometry.minusAngle((Geometry.modulo(newInfos[2],(2000*Math.PI))), Geometry.modulo(finalOrientation,(2000*Math.PI)), 2000*Math.PI), this);
 			oldInfos = newInfos;
 		} 
 		catch (SerialConnexionException e)

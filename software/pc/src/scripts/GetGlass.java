@@ -179,7 +179,7 @@ public class GetGlass extends AbstractScript
 		}
 		else 
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
-		
+
 		stateToConsider.robot.sleep(200);
 		
 		//on verifie

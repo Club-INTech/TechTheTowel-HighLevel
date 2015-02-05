@@ -22,7 +22,7 @@ public class DropCarpet extends AbstractScript
 {
 	
 	/**distance de déplacement entre le point de depart et les marches (position pour poser les tapis) en mm */
-	private int distanceBetweenEntryAndStairs=200;
+	private int distanceBetweenEntryAndStairs=220;
 
 	/**
 	 * Constructeur (normalement appelé uniquement par le scriptManager) du script déposant les tapis
@@ -52,7 +52,7 @@ public class DropCarpet extends AbstractScript
 
 		
 		//verification de la position : on n'effectue l'action que si on est assez proche (ie pas d'obstacle)
-		if(Math.abs((stateToConsider.robot.getPosition().y-1340))<40) // position- position du centre parfait<marge d'erreur
+		if(Math.abs((stateToConsider.robot.getPosition().y-1340))<50) // position- position du centre parfait<marge d'erreur
 		{
 			//on depose le tapis gauche (si celui-ci n'est pas deja depose)
 			if (!stateToConsider.table.getIsLeftCarpetDropped())
@@ -69,7 +69,11 @@ public class DropCarpet extends AbstractScript
 				stateToConsider.table.setIsRightCarpetDropped(true);
 				stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, true);
 			}
-			System.out.println("en position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") après depose-tapis");
+			System.out.println("En position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") après depose-tapis");
+		}
+		else
+		{
+			System.out.println("Trop loin, on ne depose pas les tapis");
 		}
 		//on s'eloigne de l'escalier
 		stateToConsider.robot.moveLengthwise(distanceBetweenEntryAndStairs, hooksToConsider, false);

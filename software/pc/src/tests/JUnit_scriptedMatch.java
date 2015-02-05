@@ -33,12 +33,10 @@ import robot.cardsWrappers.SensorsCardWrapper;
 /// COTE JAUNE : Le robot ne prend meme pas la peine de prendre le plot après 
 /// L'ascenceur se ferme mal : le systeme d'anti-retour empeche l'ascenceur de bien se fermer, après deposage des plots ET meme au tout debut du match.
 /// Les tapis se tordent, mais sont bien posés 2/3 du temps.
-/// COTE VERT : Le robot ne ferme pas lees claps
 
 ///Reussites à 100% du temps : 
 /// Sortir
 /// Le verre 1
-/// COTE VERT : Les 3 claps
 /// Le deposage des plots
 /// COTE JAUNE : Les 2 plots+verre dans le coin
 
@@ -98,7 +96,6 @@ public class JUnit_scriptedMatch extends JUnit_Test
 			 real_state.robot.sleep(100);
 		}
 
-		
 		// maintenant que le jumper est retiré, le match a commencé
 		//ThreadTimer.matchStarted = true;
 	}
@@ -153,9 +150,8 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		
 		//debut du match
 		System.out.println("Debut du match");
-		System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+")");
+		System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après etre sorti");
 
-		
 		try 
 		{
 			scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(1, real_state, true, emptyHook );
@@ -197,8 +193,6 @@ public class JUnit_scriptedMatch extends JUnit_Test
 			e.printStackTrace();
 		}
 		
-		System.out.println("Tapis deposés");
-
 		//second script
 
 		try 
@@ -212,15 +206,14 @@ public class JUnit_scriptedMatch extends JUnit_Test
 			e1.printStackTrace();
 		}
 		
-		System.out.println("PLot 2 pris");
+		System.out.println("Plot 2 pris");
 
 		
 		/// TODO COTE JAUNE : Le robot part embrasser le mur au lieu de lancer le script "plots 3+4+ verre"
 		try 
 		{
-			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant les plots 3 et 4 eet verre 1");
-
 			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(34, real_state, true, emptyHook );
+			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après les plots 3 et 4 et verre 1");
 		} 
 		catch (UnableToMoveException | SerialConnexionException
 				| PathNotFoundException | SerialFinallyException e1) 
@@ -229,9 +222,8 @@ public class JUnit_scriptedMatch extends JUnit_Test
 			e1.printStackTrace();
 		}
 		
-		System.out.println("PLot 3, 4 et gobelet pris");
+		System.out.println("Plot 3, 4 et gobelet pris");
 		
-		/// TODO COTE VERT : Le robot ne ferme pas lees claps
 		try 
 		{
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant les claps 1 et 2");
@@ -328,7 +320,6 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		{
 			e1.printStackTrace();
 		}
-		//GoToThenExec de deposer verres
 		
 		System.out.println("match fini !");
 
