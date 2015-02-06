@@ -20,14 +20,15 @@ public class Window extends JFrame
 	private Panel mPanel;
 	private Mouse mMouse;
 	
-	public Window(Table table, RobotReal robot) throws Exception
+	//TODO : remettre le robot dans le constructeur
+	public Window(Table table/*, RobotReal robot*/) throws Exception
 	{
 		this.setVisible(true);
 		this.setTitle("table");
 	    this.setSize(600, 400);
 	    this.setLocationRelativeTo(null);
 	    
-	    mPanel = new Panel(table, robot);
+	    mPanel = new Panel(table/*, robot*/);
 	    this.setContentPane(mPanel);
 	    
 	    mMouse = new Mouse(mPanel);

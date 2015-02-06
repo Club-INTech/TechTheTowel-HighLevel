@@ -8,6 +8,7 @@ import enums.ServiceNames.ServiceType;
 import exceptions.ContainerException;
 import exceptions.serial.SerialManagerException;
 import utils.*;
+import pathDingDing.PathDingDing;
 import scripts.ScriptManager;
 import strategie.GameState;
 import table.Table;
@@ -159,7 +160,9 @@ public class Container
 																	(Locomotion)getService(ServiceNames.LOCOMOTION),
 																	(ActuatorCardWrapper)getService(ServiceNames.ACTUATOR_CARD_WRAPPER),
 																	(Config)getService(ServiceNames.CONFIG),
-																	(Log)getService(ServiceNames.LOG), (SensorsCardWrapper)getService(ServiceNames.SENSORS_CARD_WRAPPER)
+																	(Log)getService(ServiceNames.LOG),
+																	(PathDingDing)getService(ServiceNames.PATHDINGDING),
+																	(SensorsCardWrapper)getService(ServiceNames.SENSORS_CARD_WRAPPER)
 																);		
         else if(serviceRequested == ServiceNames.LOCOMOTION)
             instanciedServices[serviceRequested.ordinal()] = 	(Service)new Locomotion(
@@ -215,6 +218,10 @@ public class Container
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new CheckUp(
 																	(Log)getService(ServiceNames.LOG),
 																	(RobotReal)getService(ServiceNames.ROBOT_REAL)
+																);
+		else if(serviceRequested == ServiceNames.PATHDINGDING)
+			instanciedServices[serviceRequested.ordinal()] = 	(Service)new PathDingDing(
+																	(Table)getService(ServiceNames.TABLE)
 																);
 		
 		// si le service demandé n'est pas connu, alors on log une erreur.

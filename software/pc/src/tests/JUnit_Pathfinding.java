@@ -25,8 +25,8 @@ public class JUnit_Pathfinding extends JUnit_Test
     {
         super.setUp();
         table = (Table)container.getService(ServiceNames.TABLE);
-        win = new Window(table, (RobotReal)container.getService(ServiceNames.ROBOT_REAL));
-        pf = new PathDingDing(table);
+        win = new Window(table/*, (RobotReal)container.getService(ServiceNames.ROBOT_REAL)*/);
+        pf = (PathDingDing)container.getService(ServiceNames.PATHDINGDING);
     }
     
     //@Test

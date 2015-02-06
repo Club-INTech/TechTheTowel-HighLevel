@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class Area
 {
 	//coordonnees et dimensions
-	public int x; // centre de la zone
+	public int x; // gauche de la zone
 	public int y; // bas de la zone
 	public int width;
 	public int height;
@@ -57,6 +57,6 @@ public class Area
 	 */
 	public boolean isInArea(Node node)
 	{
-		return node.x <= x + width/2 && node.x >= x - width/2 && node.y <= y + height && node.y >= y;
+		return node.x <= x + width && node.x >= x && node.y <= y + height && node.y >= y;
 	}
 }

@@ -31,11 +31,11 @@ public class Panel extends JPanel
 	private Graph mGraph;
 	
 	
-	public Panel(Table table, RobotReal robot)
+	public Panel(Table table/*, RobotReal robot*/)
 	{
 		mPath = new ArrayList<Vec2>();
 		mTable = table;
-		mRobot = robot;
+		//mRobot = robot;
 		showGraph = false;
 	}
 	
@@ -104,8 +104,12 @@ public class Panel extends JPanel
 	    }
 	    
 	    g.setColor(Color.green);
-	    g.drawOval((mRobot.getPosition().x - 100 + 1500) * this.getWidth() / 3000, -(mRobot.getPosition().y + 100) * this.getHeight() / 2000 + this.getHeight(), (2 * 100) * this.getWidth() / 3000, (2 * 100) * this.getHeight() / 2000);
-	    System.out.println("Graphique : position du robot : ("+mRobot.getPosition().x+", "+mRobot.getPosition().y+")");
+	    //g.drawOval((mRobot.getPosition().x - 100 + 1500) * this.getWidth() / 3000, -(mRobot.getPosition().y + 100) * this.getHeight() / 2000 + this.getHeight(), (2 * 100) * this.getWidth() / 3000, (2 * 100) * this.getHeight() / 2000);
+	    //System.out.println("Graphique : position du robot : ("+mRobot.getPosition().x+", "+mRobot.getPosition().y+")");
+	    
+	    //debug : zones
+	    for(int i=0; i<mGraph.mAreas.size(); i++)
+	    	g.drawRect((mGraph.mAreas.get(i).x + 1500) * this.getWidth() / 3000, -(mGraph.mAreas.get(i).y + mGraph.mAreas.get(i).height) * this.getHeight() / 2000 + this.getHeight(), mGraph.mAreas.get(i).width * this.getWidth() / 3000, mGraph.mAreas.get(i).height * this.getHeight() / 2000);
 	}
 	
 	public void drawArrayList(ArrayList<Vec2> path)

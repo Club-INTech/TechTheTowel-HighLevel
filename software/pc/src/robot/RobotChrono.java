@@ -7,6 +7,7 @@ import smartMath.Vec2;
 import table.Table;
 import utils.Log;
 import utils.Config;
+import pathDingDing.PathDingDing;
 import enums.ActuatorOrder;
 import enums.SensorNames;
 import enums.Speed;
@@ -39,9 +40,9 @@ public class RobotChrono extends Robot
 	 * @param config fichier de configuration ou lire la config du match
 	 * @param log système de log a utiliser pour écrire
 	 */
-	public RobotChrono(Config config, Log log)
+	public RobotChrono(Config config, Log log, PathDingDing pathDingDing)
 	{
-		super(config, log);
+		super(config, log, pathDingDing);
 	}
 
 	/**
