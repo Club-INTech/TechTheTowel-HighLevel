@@ -24,7 +24,7 @@ public class OuvreBrasExe implements Executable
     	try 
     	{
     		
-    		System.out.println("2 Bras prets à lever");
+			System.out.println("en position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") au lancé du hook");
 			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, false);
 			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, false);
 			System.out.println("2 Bras Ouverts Haut");
