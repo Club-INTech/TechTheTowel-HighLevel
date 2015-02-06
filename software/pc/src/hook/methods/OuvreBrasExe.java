@@ -12,7 +12,6 @@ import hook.Executable;
 
 public class OuvreBrasExe implements Executable
 {
-    private Robot nRobot;//nouveau robot qu'on utilise
    
 	 public OuvreBrasExe()
      {
@@ -24,8 +23,10 @@ public class OuvreBrasExe implements Executable
     {
     	try 
     	{
-			nRobot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, false);
-			nRobot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, false);
+    		
+    		System.out.println("2 Bras prets à lever");
+			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, false);
 			System.out.println("2 Bras Ouverts Haut");
 		} 
     	catch (SerialConnexionException e) 

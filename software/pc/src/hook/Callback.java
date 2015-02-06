@@ -27,10 +27,11 @@ public class Callback
 	 * @param methode
 	 * @param unique
 	 */
-	public Callback(Executable methode, boolean unique)
+	public Callback(Executable methode, boolean unique, GameState<Robot> stateToConsider)
 	{
 		this.mExecutable = methode;
 		this.isUnique = unique;
+		this.stateToConsider = stateToConsider;
 	}
 	
 	/**

@@ -491,7 +491,6 @@ public class JUnit_scriptedMatch extends JUnit_Test
 			e.printStackTrace();
 		}
 		
-		
 		System.out.println("match fini !");
 
 		//Le match s'arrête

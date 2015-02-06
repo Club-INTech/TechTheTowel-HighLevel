@@ -109,10 +109,10 @@ public class JUnit_Hooks extends JUnit_Test
 			ArrayList<Hook> testHookList = new ArrayList<Hook> ();
 
 			// hook pour ouvrir le bras dès que le robot est en x, à une precision près
-			Hook openArmTestHook = hookFactory.newHookX(870,500);//TODO changer ?
+			Hook openArmTestHook = hookFactory.newHookXisGreater(1000,0);//TODO changer ?
 			
 			// ajoute un callback au hook de position qui ouvre le bras  bras
-			openArmTestHook.addCallback(	new Callback(new OuvreBrasExe(),true)	);
+			openArmTestHook.addCallback(	new Callback(new OuvreBrasExe(),true, real_state)	);
 			
 			// ajoute le hook a la liste a passer a la locomotion
 			testHookList.add(openArmTestHook);
