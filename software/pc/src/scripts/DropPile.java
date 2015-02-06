@@ -45,7 +45,10 @@ public class DropPile extends AbstractScript
 		if (version==1)
 		{
 			//TODO: la version actuelle pose la pile devant l'estrade (il faut la modifier pour qu'elle la pose dessus)
-			//on se tourne vers la plus belle (l'estrade)
+			//on se tourne vers la plus belle (l'estrade)  #^_^# 
+			
+			//Notice me Sempai  #'_'#
+			
 			stateToConsider.robot.turn(Math.PI*-0.5, hooksToConsider, false);
 			//on eleve notre membre (l'ascenseur)
 			//stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_STAGE, true);
@@ -53,6 +56,8 @@ public class DropPile extends AbstractScript
 			stateToConsider.robot.moveLengthwise(50, hooksToConsider, true);
 			
 			//on y place notre membre
+			//Sem....Pai...  =O
+			
 			//stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
 			//on ouvre notre coeur (le guide) un peu
@@ -62,6 +67,8 @@ public class DropPile extends AbstractScript
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_GUIDE, true);
 			
 			//puis beaucoup
+			//Ya... Yamete  ! #O_o#
+			
 			stateToConsider.robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, true);
 			stateToConsider.robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, true);
 			//on se vide (de nos plots)
@@ -75,6 +82,7 @@ public class DropPile extends AbstractScript
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_GUIDE, true);
 			
 			//puis beaucoup
+			//Yamete Kudasai !
 			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, false);
 			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
@@ -82,11 +90,41 @@ public class DropPile extends AbstractScript
 				
 			//on remet notre membre en position de deplacement
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+			
+			// THank... you, sempai #'.'#
 		}
 		else if (version==2)
 		{
-			// TODO: version 2
-		}
+			stateToConsider.robot.moveLengthwise(150, hooksToConsider, false);
+			
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+			//on ouvre le guide un peu
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
+			
+			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_GUIDE, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_GUIDE, true);
+			
+			//puis beaucoup
+			
+			stateToConsider.robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, true);
+			//on se vide de nos plots
+			stateToConsider.robot.storedPlotCount = 0;
+			
+			stateToConsider.robot.moveLengthwise(-150, hooksToConsider, false);
+			
+			//On referme doucement, un peu
+			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_GUIDE, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_GUIDE, true);
+			
+			//Puis on finit
+			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+				
+			//on remet l'ascenceur en position de deplacement
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+			}
 		else
 		{
 			// TODO: version ?
@@ -103,7 +141,7 @@ public class DropPile extends AbstractScript
 		}
 		else if (id==2)
 		{
-			return new Circle(1300,1000);
+			return new Circle(881,1000,0); // endroit de depart -50 cm en x
 		}
 		else
 		{

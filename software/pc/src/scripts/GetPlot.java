@@ -54,7 +54,6 @@ public class GetPlot extends AbstractScript
 	@Override
 	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
 	{
-
 		//version circulaire
 		if (versionToExecute == 0 || versionToExecute == 1 || versionToExecute == 2 || versionToExecute == 7)
 		{
@@ -73,7 +72,7 @@ public class GetPlot extends AbstractScript
 			{
 				isChoosenArmLeft=!isChoosenArmLeft;
 			}
-			
+						
 			//le robot est deja en face du plot puisqu'on a appele goToThenExec (qui met en face du centre du script) si un jour on autorise de lancer exec il faudra remettre ces lignes (et les debugger)
 			//stateToConsider.robot.turn(Math.atan2(	entryPosition(versionToExecute).center.y - stateToConsider.robot.getPosition().y,	// position voulue - position actuelle
 			//			 							entryPosition(versionToExecute).center.x - stateToConsider.robot.getPosition().x	// de meme
@@ -177,16 +176,50 @@ public class GetPlot extends AbstractScript
 		//TODO derniere version a treter
 		else if (versionToExecute == 56)
 		{
-			stateToConsider.robot.turn(Math.PI*-0.5);
+			stateToConsider.robot.turn(Math.PI*0.5);
 			
-			//si le plot 3 a deja ete mangé
-			if (stateToConsider.table.isPlotXEaten(5))
-			{
-				
+			if (!stateToConsider.table.isPlotXEaten(5))
+			{//plot 5 pas mangé
+				if(!stateToConsider.table.isPlotXEaten(6))
+				{
+					//plot 5 et 6 pas mangé, on mange les deux avec notre bras gauche (celui du coté de l'ascenceur)
+					try 
+					{
+						eatPlot(true, false, stateToConsider);
+					} 
+					catch (UnableToEatPlot e1) 
+					{
+						e1.printStackTrace();
+					}
+					
+					stateToConsider.robot.moveLengthwise(100); // On avance vers le suivant
+					
+					try 
+					{
+						eatPlot(true, false, stateToConsider);
+					} 
+					catch (UnableToEatPlot e) 
+					{
+						e.printStackTrace();
+					}
+				}
 			}
 			else
-			{
-				
+			{	//Plot 5 mangé
+				if(!stateToConsider.table.isPlotXEaten(6))
+				{
+					//plot 6 pas mangé, on ne mange que le 6
+					stateToConsider.robot.moveLengthwise(100);
+					
+					try 
+					{
+						eatPlot(true, false, stateToConsider);
+					} 
+					catch (UnableToEatPlot e) 
+					{
+						e.printStackTrace();
+					}
+				}
 			}
 		}
 		else
@@ -244,7 +277,7 @@ public class GetPlot extends AbstractScript
 		else if (id==34)
 			return new Circle (900,220,0);
 		else if (id==56)
-			return new Circle (650,1700,0);
+			return new Circle (850,1700,0); // Position devant le plot 5, on longeant l'escalier
 		else if (id==7)
 			return new Circle (1410,1800,180);
 		else 
