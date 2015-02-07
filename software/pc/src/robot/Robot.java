@@ -33,6 +33,9 @@ public abstract class Robot implements Service
 	
 	/**  endroit ou lire la configuration du robot. */
 	protected Config config;
+	
+	/**  pathfinding du robot */
+	protected PathDingDing pathDingDing;
 
 	/**  la table est symétrisée si on est équipe jaune. */
 	protected boolean symmetry;
@@ -59,10 +62,11 @@ public abstract class Robot implements Service
 	 * @param config : sur quel objet lire la configuration du match
 	 * @param log : la sortie de log à utiliser
 	 */
-	public Robot(Config config, Log log)
+	public Robot(Config config, Log log, PathDingDing pathDinDing)
 	{
 		this.config = config;
 		this.log = log;
+		this.pathDingDing = pathDingDing;
 		updateConfig();
 	}
 	
@@ -288,13 +292,9 @@ public abstract class Robot implements Service
      */
     public void moveToLocation(Vec2 aim, ArrayList<Hook> hooksToConsider, Table table) throws UnableToMoveException, PathNotFoundException
     {
-    	//TODO: remettre le pathDingDing et enlever les deux lignes en dessous
-		//ArrayList<Vec2> path = PathDingDing.computePath(getPosition(),aim,table);
+    	ArrayList<Vec2> path = pathDingDing.computePath(getPosition(),aim);
     	
-    	ArrayList<Vec2> path = new ArrayList<Vec2>();
-    	path.add(aim);
-    	
-    	
+    	//TODO : enlever le premier point?
 		followPath(path , hooksToConsider);
     }
     
@@ -311,11 +311,9 @@ public abstract class Robot implements Service
      */
     public void moveToCircle(Circle aim, ArrayList<Hook> hooksToConsider, Table table) throws PathNotFoundException, UnableToMoveException
     {
-    	//TODO: remettre le pathDingDing et enlever les deux lignes en dessous
-    	//ArrayList<Vec2> path = PathDingDing.computePath(getPosition(),aim.toVec2(),table);
+    	ArrayList<Vec2> path = pathDingDing.computePath(getPosition(),aim.toVec2());
     	
-    	ArrayList<Vec2> path = new ArrayList<Vec2>();
-    	path.add(aim.position);
+    	//TODO : enlever le premier point?
     	
     	//retire une distance egale au rayon du cercle au dernier point du chemin (le centre du cercle)
     	

@@ -6,6 +6,7 @@ import table.obstacles.*;
 
 import java.util.ArrayList;
 
+import container.Service;
 import exceptions.*;
 
 /**
@@ -13,7 +14,7 @@ import exceptions.*;
  * @author Etienne
  *
  */
-public class PathDingDing
+public class PathDingDing implements Service
 {
 	private Table mTable;
 	private Graph mGraph;
@@ -53,7 +54,17 @@ public class PathDingDing
 		
 		//calcul du chemin via computeGraph, convertion, et simplification.
 		ArrayList<Vec2> pathVec2 = new ArrayList<Vec2>();
-		ArrayList<Node> pathNode = computeGraph(mGraph);
+		ArrayList<Node> pathNode = new ArrayList<Node>();
+		try
+		{
+			pathNode = computeGraph(mGraph);
+		}
+		catch(PathNotFoundException e)
+		{
+			//on detache le dernier noeud du graphe
+			mGraph.unlinkNode(endNode);
+			throw new PathNotFoundException();
+		}
 		for(int i = pathNode.size() - 1; i >= 0; i--)
 			pathVec2.add(pathNode.get(i).toVec2());
 		simplify(pathVec2);
@@ -257,6 +268,13 @@ public class PathDingDing
 	public Graph getGraph()
 	{
 		return mGraph;
+	}
+	
+	/* (non-Javadoc)
+	 * @see container.Service#updateConfig()
+	 */
+	public void updateConfig()
+	{
 	}
 }
 

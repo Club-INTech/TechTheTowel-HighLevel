@@ -33,18 +33,18 @@ public class Mouse implements MouseListener
     	mHasClicked = true;
         if (e.getButton()==MouseEvent.BUTTON1)
         {
-        	mLeftClickPosition.x = (e.getX()/* - 8*/) * 3000 / mPanel.getWidth() - 1500;
-        	mLeftClickPosition.y = (-e.getY()/* + 31*/) * 2000 / mPanel.getHeight() + 2000;
+        	mLeftClickPosition.x = (e.getX() - 8) * 3000 / mPanel.getWidth() - 1500;
+        	mLeftClickPosition.y = (-e.getY() + 31) * 2000 / mPanel.getHeight() + 2000;
         }
         if (e.getButton()==MouseEvent.BUTTON2)
         {
-        	mMiddleClickPosition.x = (e.getX()/* - 8*/) * 3000 / mPanel.getWidth() - 1500;
-        	mMiddleClickPosition.y = (-e.getY()/* + 31*/) * 2000 / mPanel.getHeight() + 2000;
+        	mMiddleClickPosition.x = (e.getX() - 8) * 3000 / mPanel.getWidth() - 1500;
+        	mMiddleClickPosition.y = (-e.getY() + 31) * 2000 / mPanel.getHeight() + 2000;
         }
         if (e.getButton()==MouseEvent.BUTTON3)
         {
-        	mRightClickPosition.x = (e.getX()/* - 8*/) * 3000 / mPanel.getWidth() - 1500;
-        	mRightClickPosition.y = (-e.getY()/* + 31*/) * 2000 / mPanel.getHeight() + 2000;
+        	mRightClickPosition.x = (e.getX() - 8) * 3000 / mPanel.getWidth() - 1500;
+        	mRightClickPosition.y = (-e.getY() + 31) * 2000 / mPanel.getHeight() + 2000;
         }
     }
 
