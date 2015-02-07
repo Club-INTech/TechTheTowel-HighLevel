@@ -114,12 +114,14 @@ public class RobotChrono extends Robot
 					 );
 	}
 	
+	@SuppressWarnings("unused")
 	@Override
     public void followPath(ArrayList<Vec2> path, ArrayList<Hook> hooksToConsider) throws UnableToMoveException
 	{
 		// va sucessivement a tout les points
 		for(Vec2 point: path)
 		{
+			
 			//TODO on utilise pas moveToLocation
 			//moveToLocation vas au point en utilisant le pathfinding, followPath suit le chemin donne par moveToLocation
 			//il faut calculer le temps pour parcourir le chemin donne : TempsPourTourner + distance/vitesse
