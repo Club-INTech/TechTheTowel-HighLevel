@@ -85,6 +85,14 @@ public class Panel extends JPanel
 	    	g.drawOval((ennemyRobot.get(i).getPosition().x - ennemyRobot.get(i).getRadius() + 1500) * this.getWidth() / 3000, -(ennemyRobot.get(i).getPosition().y + ennemyRobot.get(i).getRadius()) * this.getHeight() / 2000 + this.getHeight(), (2 * ennemyRobot.get(i).getRadius()) * this.getWidth() / 3000, (2 * ennemyRobot.get(i).getRadius()) * this.getHeight() / 2000);
 	    }
 	    
+	    g.setColor(Color.green);
+	    //g.drawOval((mRobot.getPosition().x - 100 + 1500) * this.getWidth() / 3000, -(mRobot.getPosition().y + 100) * this.getHeight() / 2000 + this.getHeight(), (2 * 100) * this.getWidth() / 3000, (2 * 100) * this.getHeight() / 2000);
+	    //System.out.println("Graphique : position du robot : ("+mRobot.getPosition().x+", "+mRobot.getPosition().y+")");
+	    
+	    //debug : zones
+	    for(int i=0; i<mGraph.mAreas.size(); i++)
+	    	g.drawRect((mGraph.mAreas.get(i).x + 1500) * this.getWidth() / 3000, -(mGraph.mAreas.get(i).y + mGraph.mAreas.get(i).height) * this.getHeight() / 2000 + this.getHeight(), mGraph.mAreas.get(i).width * this.getWidth() / 3000, mGraph.mAreas.get(i).height * this.getHeight() / 2000);
+	    
 	    g.setColor(Color.blue);
 	    for(int i = 0; i+1 < mPath.size(); i++)
 	    {
@@ -102,14 +110,6 @@ public class Panel extends JPanel
 	    {
 	    	g.drawString(mPath.get(i).x + ", " + mPath.get(i).y, (mPath.get(i).x + 1500) * this.getWidth() / 3000, -mPath.get(i).y * this.getHeight() / 2000 + this.getHeight());
 	    }
-	    
-	    g.setColor(Color.green);
-	    //g.drawOval((mRobot.getPosition().x - 100 + 1500) * this.getWidth() / 3000, -(mRobot.getPosition().y + 100) * this.getHeight() / 2000 + this.getHeight(), (2 * 100) * this.getWidth() / 3000, (2 * 100) * this.getHeight() / 2000);
-	    //System.out.println("Graphique : position du robot : ("+mRobot.getPosition().x+", "+mRobot.getPosition().y+")");
-	    
-	    //debug : zones
-	    for(int i=0; i<mGraph.mAreas.size(); i++)
-	    	g.drawRect((mGraph.mAreas.get(i).x + 1500) * this.getWidth() / 3000, -(mGraph.mAreas.get(i).y + mGraph.mAreas.get(i).height) * this.getHeight() / 2000 + this.getHeight(), mGraph.mAreas.get(i).width * this.getWidth() / 3000, mGraph.mAreas.get(i).height * this.getHeight() / 2000);
 	}
 	
 	public void drawArrayList(ArrayList<Vec2> path)
