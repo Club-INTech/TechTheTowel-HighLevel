@@ -62,7 +62,7 @@ public abstract class Robot implements Service
 	 * @param config : sur quel objet lire la configuration du match
 	 * @param log : la sortie de log à utiliser
 	 */
-	public Robot(Config config, Log log, PathDingDing pathDinDing)
+	public Robot(Config config, Log log, PathDingDing pathDingDing)
 	{
 		this.config = config;
 		this.log = log;
@@ -313,14 +313,16 @@ public abstract class Robot implements Service
     {
     	ArrayList<Vec2> path = pathDingDing.computePath(getPosition(),aim.toVec2());
     	
-    	//TODO : enlever le premier point?
     	
     	//retire une distance egale au rayon du cercle au dernier point du chemin (le centre du cercle)
     	
+    	//on enleve le premier point (notre position)
+    	//TODO refaire ca propre dans PDD
+    	path.remove(0);
     	
     	//on retire le dernier point (le centre du cercle)
     	path.remove(path.size()-1);
-
+    	
     	//le point precedent dans le path
     	Vec2 precedentPathPoint = new Vec2();
     	if (path.size()==0)

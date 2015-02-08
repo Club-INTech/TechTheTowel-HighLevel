@@ -72,6 +72,8 @@ public class DropGlass extends AbstractScript
 			//On referme les 2 bras
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
+			
+			stateToConsider.robot.turn(Math.PI);//On se tourne dans le bon sens
 		}
 		else if (version==2)
 		{

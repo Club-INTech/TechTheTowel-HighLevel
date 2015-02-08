@@ -60,6 +60,7 @@ public class GetPlot extends AbstractScript
 			//si on a plus de place dans la pile on termine
 			if (stateToConsider.robot.storedPlotCount == 4)
 			{
+				System.out.println("Trop de plots !");
 				return;
 			}
 			
