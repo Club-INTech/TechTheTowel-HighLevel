@@ -43,6 +43,7 @@ public class Graph
 		mNodes.add(new Node(533 + robotRadius, 1420 - robotRadius));//noeud 6
 		mNodes.add(new Node(-533 - robotRadius, 1420 - robotRadius));//noeud 7
 		//noeuds additionnels
+		//TODO : rajouter des noeuds intelligemment
 		mNodes.add(new Node(-1100 + robotRadius, 1000));//noeud 0.5
 		mNodes.add(new Node(0, 100 + robotRadius));//noeud 2.5
 		mNodes.add(new Node(1100 - robotRadius, 1000));//noeud 4.5
