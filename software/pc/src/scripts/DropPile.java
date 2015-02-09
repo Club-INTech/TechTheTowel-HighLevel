@@ -50,6 +50,10 @@ public class DropPile extends AbstractScript
 			//Notice me Sempai  #'_'#
 			
 			stateToConsider.robot.turn(Math.PI*-0.5, hooksToConsider, false);
+			//On avance pour eviter le PathNotFoundd EXception
+			stateToConsider.robot.moveLengthwise(300, hooksToConsider, true);
+
+			
 			//on eleve notre membre (l'ascenseur)
 			//stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_STAGE, true);
 			//on se deplace vers elle
@@ -137,7 +141,7 @@ public class DropPile extends AbstractScript
 	{
 		if (id==1)
 		{
-			return new Circle(400,270);
+			return new Circle(400,570);
 		}
 		else if (id==2)
 		{
