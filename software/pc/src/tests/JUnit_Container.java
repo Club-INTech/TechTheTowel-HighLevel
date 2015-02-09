@@ -141,7 +141,7 @@ public class JUnit_Container extends JUnit_Test {
 	public void test_pathfinding() throws Exception
 	{
 		log.debug("JUnit_ContainerTest.test_pathfinding()", this);
-		container.getService(ServiceNames.PATHFINDING);
+		container.getService(ServiceNames.PATHDINGDING);
 	}
 
 	/**

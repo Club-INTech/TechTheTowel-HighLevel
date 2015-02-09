@@ -6,13 +6,13 @@ import java.util.ArrayList;
 
 import scripts.AbstractScript;
 import scripts.ScriptManager;
-import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import pathDingDing.PathDingDing;
 import enums.ActuatorOrder;
 import enums.ScriptNames;
 import enums.ServiceNames;
@@ -24,21 +24,8 @@ import robot.Robot;
 import robot.cardsWrappers.SensorsCardWrapper;
 
 /**
- * classe des matchs scriptes.
- * sert de bases pour nimporte quel test
+ * classe des matchs scriptes
  */
-
-///FIXME : soucis pour le moment :
-/// COTE JAUNE : Le robot part embrasser le mur au lieu de lancer le script "plots 3+4+ verre"
-/// COTE JAUNE : Le robot ne prend meme pas la peine de prendre le plot après 
-/// L'ascenceur se ferme mal : le systeme d'anti-retour empeche l'ascenceur de bien se fermer, après deposage des plots ET meme au tout debut du match.
-/// Les tapis se tordent, mais sont bien posés 2/3 du temps.
-
-///Reussites à 100% du temps : 
-/// Sortir
-/// Le verre 1
-/// Le deposage des plots
-/// COTE JAUNE : Les 2 plots+verre dans le coin
 
 
 public class JUnit_scriptedMatch extends JUnit_Test 
@@ -47,6 +34,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 	GameState<Robot> real_state;
 	ScriptManager scriptmanager;
 	SensorsCardWrapper  mSensorsCardWrapper;
+	PathDingDing pathDingDing;
 	
 	@SuppressWarnings("unchecked")
 	@Before
@@ -56,6 +44,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		real_state = (GameState<Robot>) container.getService(ServiceNames.GAME_STATE);
 		scriptmanager = (ScriptManager) container.getService(ServiceNames.SCRIPT_MANAGER);
 		mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
+        pathDingDing = (PathDingDing)container.getService(ServiceNames.PATHDINGDING);
 		emptyHook = new ArrayList<Hook> ();  
 
 		if (real_state.robot.getSymmetry())
@@ -119,7 +108,6 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
 		robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, false);
 		robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
-		
 	}
 
 	@Test
@@ -133,92 +121,62 @@ public class JUnit_scriptedMatch extends JUnit_Test
 	
 		try 
 		{
-			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
+			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE); // Sortie de la zone de depart
 			exitScript.execute(0, real_state, emptyHook, true );
 		} 
-		catch (SerialConnexionException  e) 
+		catch (UnableToMoveException | SerialConnexionException e) 
 		{
-			System.out.println("CRITICAL : Carte mal branchée. Match termine");
-			e.printStackTrace();
-			return;
-		}
-		catch (UnableToMoveException e) 
-		{
-			System.out.println("CRITICAL : Chemin bloque, enlevez votre main");
 			e.printStackTrace();
 		}
 		
 		//debut du match
 		System.out.println("Debut du match");
-		System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après etre sorti");
+		System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après etre sorti");//On s'attend  (881,1000)
 
 		try 
 		{
-			scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(1, real_state, true, emptyHook );
+			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le verre 1");
+			scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(1, real_state, true, emptyHook );//On prend le verre,  notre droite en sortant
+			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le verre 1");
 		} 
-		catch (SerialConnexionException  e) 
+		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException e) 
 		{
-			System.out.println("CRITICAL : Carte mal branchée. Match termine");
-			e.printStackTrace();
-			return;
-		}
-		catch (UnableToMoveException e) 
-		{
-			System.out.println("CRITICAL : Chemin bloque, enlevez votre main");
 			e.printStackTrace();
 		}
-		
-		//premier script
+				
 		try 
 		{
-			scriptmanager.getScript(ScriptNames.DROP_CARPET).goToThenExec(1, real_state, true, emptyHook );
-		}
-		catch (UnableToMoveException | SerialConnexionException e) 
-		{
-			// TODO Main erreur critique :
-			//attention ce sont surement des erreurs dans le finally d'un script donc elle servent a proteger le meca !
-			//ou un robot ennemi devant. Donc beaucoup moins critique (ce serai bie de pouvoir differencer les deux)
+			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après les tapis");
+			scriptmanager.getScript(ScriptNames.DROP_CARPET).goToThenExec(1, real_state, true, emptyHook ); // On depose les tapis
+			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition()+" après les tapis");
 
-			e.printStackTrace();
-		
-		} 
-		catch (PathNotFoundException e)
+		}
+		catch (UnableToMoveException | SerialConnexionException| PathNotFoundException | SerialFinallyException e) 
 		{
-			//TODO: le pathfinding ne trouve pas de chemin
-			e.printStackTrace();
-		} 
-		catch (SerialFinallyException e) 
-		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		//second script
-
 		try 
 		{
-			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(2, real_state, true, emptyHook );
+			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le plot 2");
+			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(2, real_state, true, emptyHook ); // On prend le plot a notre gauche, en sortant de la zone de depart
+			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le plot 2");
 		} 
-		catch (UnableToMoveException | SerialConnexionException
-				| PathNotFoundException | SerialFinallyException e1) 
+		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException e1) 
 		{
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
 		System.out.println("Plot 2 pris");
 
-		
-		/// TODO COTE JAUNE : Le robot part embrasser le mur au lieu de lancer le script "plots 3+4+ verre"
 		try 
 		{
-			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(34, real_state, true, emptyHook );
-			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après les plots 3 et 4 et verre 1");
+			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant les plots 3 et 4, et le verre 0");
+			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(34, real_state, true, emptyHook ); // On prend les 2 plots en bas de notre zonee de depart, et le verre
+			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après les plots 3 et 4 et verre 0");
 		} 
-		catch (UnableToMoveException | SerialConnexionException
-				| PathNotFoundException | SerialFinallyException e1) 
+		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException e1) 
 		{
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
@@ -229,96 +187,163 @@ public class JUnit_scriptedMatch extends JUnit_Test
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant les claps 1 et 2");
 
 			//ferme les 2 claps proches : 
-			scriptmanager.getScript(ScriptNames.CLOSE_CLAP).goToThenExec(-12, real_state, true, emptyHook);
+			scriptmanager.getScript(ScriptNames.CLOSE_CLAP).goToThenExec(-12, real_state, true, emptyHook); // ON ferme nos 2 claps, a l'envers
 		}
-		catch (UnableToMoveException e1) 
+		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException e) 
 		{
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} 
-		catch (SerialConnexionException e) 
-		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		System.out.println("Clap 1 et 2 Fermés");
 
-		/// TODO COTE JAUNE : Le robot ne prend meme pas la peine de prendre le plot après 
 		try 
 		{
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le plot 1");
-			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(1, real_state, true, emptyHook );
+			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(1, real_state, true, emptyHook ); // On prend le plot a cote de l'estrade
+			System.out.println("Plot 1 pris");
 		}
-		catch (UnableToMoveException | SerialConnexionException e) 
-		{
-			// TODO Main erreur critique :
-			//attention ce sont surement des erreurs dans le finally d'un script donc elle servent a proteger le meca !
-			//ou un robot ennemi devant. Donc beaucoup moins critique (ce serai bie de pouvoir differencer les deux)
-			e.printStackTrace();
-		} 
-		catch (PathNotFoundException e)
-		{
-			//TODO: le pathfinding ne trouve pas de chemin
-			
-		} 
-		catch (SerialFinallyException e) 
+		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException e) 
 		{
 			e.printStackTrace();
 		}
 		
-		System.out.println("PLot 1 pris");
+		System.out.println("Plot 1 pris");
+		
+		try 
+		{			
+			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant de deposer la pile sur l'estrade");
+			scriptmanager.getScript(ScriptNames.FREE_STACK).goToThenExec(1, real_state, true, emptyHook ); // On lache notree pile devnt (bientot sur l'estrade
+			real_state.robot.moveLengthwise(-300);		//On recule pour ne pas taper (le PF evitera ca)
+		}
+		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		System.out.println("Pile vidée");
+				
+		try 
+		{	
+			/*Le robot n'en est pas encore capable mais ca va venir avec le bas niveau et les fonctions "bras au milieu" etc
+			/*	scriptmanager.getScript(ScriptNames.TAKE_TENNIS_BALL).goToThenExec(1, real_state, true, emptyHook );*/
+			
+			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant de deposer le verre");
+			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(1, real_state, true, emptyHook );//On depose 1 verre dans notre zone
+			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après avoir deposé le verre");
+		}
+		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		System.out.println("Verre deposé");
+		
+		try
+		{
+			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le plot 0");
+			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(0, real_state, true, emptyHook ); // On recupere le plot en face de l'escalier
+		}
+		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException e) 
+		{
+			e.printStackTrace();
+		}
+
+		System.out.println("Plot 0 pris");
+		
+		try 
+		{
+			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le verre 2");
+			scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(2, real_state, true, emptyHook ); // ON recupere le verre devant l'estrade
+		}
+		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		System.out.println("Verre 2 pris");
+		
+		try 
+		{			
+			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le clap 3");
+			scriptmanager.getScript(ScriptNames.CLOSE_CLAP).goToThenExec(3, real_state, true, emptyHook ); // ON recupere le verre devant l'estrade
+		}
+		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		System.out.println("Clap 3 fermé");
 
 		try 
 		{
-			scriptmanager.getScript(ScriptNames.FREE_STACK).goToThenExec(1, real_state, true, emptyHook );
+			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le deposage en zone basse enemie");
+			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(2, real_state, true, emptyHook ); // On depose le verre chez les ennemis, en bas.
 		}
-		catch (UnableToMoveException | SerialConnexionException e) 
+		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException e) 
 		{
-			// TODO Main erreur critique :
-			//attention ce sont surement des erreurs dans le finally d'un script donc elle servent a proteger le meca !
-			//ou un robot ennemi devant. Donc beaucoup moins critique (ce serai bie de pouvoir differencer les deux)
 			e.printStackTrace();
-		} 
-		catch (PathNotFoundException e)
+		}
+		
+		try 
 		{
-			//TODO: le pathfinding ne trouve pas de chemin
+			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le deposage en zone haute enemie");	
+			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(3, real_state, true, emptyHook ); // On depose le verre chez les ennemis, en haut.
+		}
+		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		try 
+		{
+			/*
+			real_state.robot.turn(0);		//On s'eloigne, le PF suffira ici.
+			real_state.robot.moveLengthwise(500);	
+			real_state.robot.turn(Math.PI/2);		
+			real_state.robot.moveLengthwise(500);	
 			
-		} 
-		catch (SerialFinallyException e) 
+			
+			real_state.robot.turn(Math.PI);		
+			real_state.robot.moveLengthwise(1800);
+			
+			real_state.robot.turn(-Math.PI/2);		
+			real_state.robot.moveLengthwise(400);	//On est à gauche de l'escalier	*/
+			
+			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le plot 5 et 6");
+			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(56, real_state, true, emptyHook );//On recupere les 2 plots a droite de l'escalier
+		}
+		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException e) 
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		/*Le robot n'en est pas encore capable mais ca va venir avec le bas niveau et les fonctions "bras au milieu" etc
-		try 
-		{
-		    real_state.robot.moveToCircle(new Circle(800,1000,0), emptyHook, real_state.table); // PDD à appeler / On va vers notre emplacement de depart
-			scriptmanager.getScript(ScriptNames.TAKE_TENNIS_BALL).goToThenExec(1, real_state, true, emptyHook );
-		}
-		catch (UnableToMoveException e1) 
-		{
-			e1.printStackTrace();
-		}*/
+		// TODO  Balles de Pop Corn ?
 		
 		try 
 		{
-			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(1, real_state, true, emptyHook );
-		    real_state.robot.moveToCircle(new Circle(500,1000,0), emptyHook, real_state.table); // PDD à appeler / On va vers notre emplacement de depart
+			real_state.robot.turn(0);	
+			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le plot 7");
+			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(7, real_state, true, emptyHook );//On recupere le dernier plot
 		}
-		catch (UnableToMoveException e1) 
+		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException e) 
 		{
-			e1.printStackTrace();
+			e.printStackTrace();
 		}
 		
 		try 
 		{
-			scriptmanager.getScript(ScriptNames.CLOSE_CLAP).goToThenExec(3, real_state, true, emptyHook );
+			/*
+			real_state.robot.turn(0);		//On s'eloigne, le PF suffira ici.
+			real_state.robot.moveLengthwise(500);	
+			real_state.robot.turn(Math.PI/2);		
+			real_state.robot.moveLengthwise(800);	*/
+			
+			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le deposage de la pile dans notre zone");
+			scriptmanager.getScript(ScriptNames.FREE_STACK).goToThenExec(2, real_state, true, emptyHook ); // On libere la pile ans notre zone
 		}
-		catch (UnableToMoveException e1) 
+		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException e) 
 		{
-			e1.printStackTrace();
+			e.printStackTrace();
 		}
 		
 		System.out.println("match fini !");

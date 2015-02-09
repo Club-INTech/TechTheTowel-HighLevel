@@ -5,6 +5,7 @@ import robot.cardsWrappers.SensorsCardWrapper;
 import smartMath.Vec2;
 import utils.Log;
 import utils.Config;
+import pathDingDing.PathDingDing;
 import utils.Sleep;
 import hook.Hook;
 
@@ -30,9 +31,9 @@ public class RobotReal extends Robot
 	private Locomotion mLocomotion;
 
 	// Constructeur
-	public RobotReal( Locomotion deplacements, ActuatorCardWrapper mActuatorCardWrapper, Config config, Log log, SensorsCardWrapper mSensorsCardWrapper)
+	public RobotReal( Locomotion deplacements, ActuatorCardWrapper mActuatorCardWrapper, Config config, Log log, PathDingDing pathDingDing, SensorsCardWrapper mSensorsCardWrapper)
  	{
-		super(config, log);
+		super(config, log, pathDingDing);
 		this.mSensorsCardWrapper = mSensorsCardWrapper;
 		this.mActuatorCardWrapper = mActuatorCardWrapper;
 		this.mLocomotion = deplacements;

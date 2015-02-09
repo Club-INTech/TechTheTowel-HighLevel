@@ -16,7 +16,7 @@ public class Graph
 	private ArrayList<Node> mNodes;
 	private Node mStartNode;
 	private Node mEndNode;
-	private ArrayList<Area> mAreas;
+	public ArrayList<Area> mAreas; // TODO : private
 	private Table mTable;
 	
 	public Graph(Table table)
@@ -43,6 +43,7 @@ public class Graph
 		mNodes.add(new Node(533 + robotRadius, 1420 - robotRadius));//noeud 6
 		mNodes.add(new Node(-533 - robotRadius, 1420 - robotRadius));//noeud 7
 		//noeuds additionnels
+		//TODO : rajouter des noeuds intelligemment
 		mNodes.add(new Node(-1100 + robotRadius, 1000));//noeud 0.5
 		mNodes.add(new Node(0, 100 + robotRadius));//noeud 2.5
 		mNodes.add(new Node(1100 - robotRadius, 1000));//noeud 4.5
@@ -72,47 +73,47 @@ public class Graph
 						mNodes.get(i).addLink(mNodes.get(j));
 				}
 		
-		Area area = new Area(-1300 + robotRadius/2, 1222 + robotRadius, 400 - robotRadius/2, 800);//zone 0
+		Area area = new Area(-1100 + robotRadius, 1420 - robotRadius, 567 - 2*robotRadius, 510);//zone 0
 		area.attachNode(mNodes.get(0));
 		area.attachNode(mNodes.get(7));
 		mAreas.add(area);
 		
-		area = new Area(-1300, 0, 400, 800);//zone 1
-		area.attachNode(mNodes.get(1));
-		area.attachNode(mNodes.get(2));
-		mAreas.add(area);
-		
-		area = new Area(-700, 0, 800, 100);//zone 2
-		area.attachNode(mNodes.get(1));
-		area.attachNode(mNodes.get(2));
-		mAreas.add(area);
-		
-		area = new Area(700, 0, 800, 100);//zone 3
-		area.attachNode(mNodes.get(3));
-		area.attachNode(mNodes.get(4));
-		mAreas.add(area);
-		
-		area = new Area(1300, 0, 400, 800);//zone 4
-		area.attachNode(mNodes.get(3));
-		area.attachNode(mNodes.get(4));
-		mAreas.add(area);
-		
-		area = new Area(1300, 1222, 400, 800);//zone 5
-		area.attachNode(mNodes.get(5));
-		area.attachNode(mNodes.get(6));
-		mAreas.add(area);
-		
-		area = new Area(817, 1420, 568, 530);//zone 6
-		area.attachNode(mNodes.get(5));
-		area.attachNode(mNodes.get(6));
-		mAreas.add(area);
-		
-		area = new Area(-817, 1420, 568, 530);//zone 7
+		area = new Area(-1500 + robotRadius, 1222 + robotRadius, 400, 708 - 2*robotRadius);//zone 1
 		area.attachNode(mNodes.get(0));
 		area.attachNode(mNodes.get(7));
 		mAreas.add(area);
 		
-		area = new Area(0, 100, 2200, 1320);//zone 10
+		area = new Area(-1500 + robotRadius, 0 + robotRadius, 400, 778 - 2*robotRadius);//zone 2
+		area.attachNode(mNodes.get(1));
+		area.attachNode(mNodes.get(2));
+		mAreas.add(area);
+		
+		area = new Area(-1100 + robotRadius, 0 + robotRadius, 800 - 2*robotRadius, 100);//zone 3
+		area.attachNode(mNodes.get(1));
+		area.attachNode(mNodes.get(2));
+		mAreas.add(area);
+		
+		area = new Area(300 + robotRadius, 0 + robotRadius, 800 - 2*robotRadius, 100);//zone 4
+		area.attachNode(mNodes.get(3));
+		area.attachNode(mNodes.get(4));
+		mAreas.add(area);
+		
+		area = new Area(1100 - robotRadius, 0 + robotRadius, 400, 778 - 2*robotRadius);//zone 5
+		area.attachNode(mNodes.get(3));
+		area.attachNode(mNodes.get(4));
+		mAreas.add(area);
+		
+		area = new Area(1100 - robotRadius, 1222 + robotRadius, 400, 708 - 2*robotRadius);//zone 6
+		area.attachNode(mNodes.get(5));
+		area.attachNode(mNodes.get(6));
+		mAreas.add(area);
+		
+		area = new Area(533 + robotRadius, 1420 - robotRadius, 567 - 2*robotRadius, 510);//zone 7
+		area.attachNode(mNodes.get(5));
+		area.attachNode(mNodes.get(6));
+		mAreas.add(area);
+		
+		area = new Area(-1100 + robotRadius, 100 + robotRadius, 2200 - 2*robotRadius, 1320 - 2*robotRadius);//zone 10
 		area.attachNode(mNodes.get(0));
 		area.attachNode(mNodes.get(1));
 		area.attachNode(mNodes.get(2));

@@ -96,6 +96,8 @@ public class GetGlass extends AbstractScript
 	
 	public void takeGlass2 (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
 	{
+		stateToConsider.robot.turn(-Math.PI/2);//POur eviter le pathnotfound exception
+		stateToConsider.robot.moveLengthwise(200);
 		takeGlass(stateToConsider,hooksToConsider,false,true);
 		stateToConsider.table.glassXTaken(2);
 	}
@@ -121,7 +123,7 @@ public class GetGlass extends AbstractScript
 		else if (id==1)
 			return new Circle (590,1170,310);
 		else if (id==2)
-			return new Circle (0,350,310);
+			return new Circle (0,550,310);//POur eviter le pathnotfound exception
 		else if (id==3)
 			return new Circle (-590,1170,310);
 		else if (id==4)
@@ -180,7 +182,7 @@ public class GetGlass extends AbstractScript
 		else 
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
 
-		stateToConsider.robot.sleep(200);
+		stateToConsider.robot.sleep(500);
 		
 		//on verifie
 		//si non, et si second essai on retente

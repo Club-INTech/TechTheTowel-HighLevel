@@ -7,6 +7,7 @@ import smartMath.Vec2;
 import table.Table;
 import utils.Log;
 import utils.Config;
+import pathDingDing.PathDingDing;
 import enums.ActuatorOrder;
 import enums.SensorNames;
 import enums.Speed;
@@ -39,9 +40,9 @@ public class RobotChrono extends Robot
 	 * @param config fichier de configuration ou lire la config du match
 	 * @param log système de log a utiliser pour écrire
 	 */
-	public RobotChrono(Config config, Log log)
+	public RobotChrono(Config config, Log log, PathDingDing pathDingDing)
 	{
-		super(config, log);
+		super(config, log, pathDingDing);
 	}
 
 	/**
@@ -113,12 +114,14 @@ public class RobotChrono extends Robot
 					 );
 	}
 	
+	@SuppressWarnings("unused")
 	@Override
     public void followPath(ArrayList<Vec2> path, ArrayList<Hook> hooksToConsider) throws UnableToMoveException
 	{
 		// va sucessivement a tout les points
 		for(Vec2 point: path)
 		{
+			
 			//TODO on utilise pas moveToLocation
 			//moveToLocation vas au point en utilisant le pathfinding, followPath suit le chemin donne par moveToLocation
 			//il faut calculer le temps pour parcourir le chemin donne : TempsPourTourner + distance/vitesse

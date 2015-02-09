@@ -56,8 +56,8 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 		}
 		
         table = (Table)container.getService(ServiceNames.TABLE);
-        win = new Window(table, (RobotReal)container.getService(ServiceNames.ROBOT_REAL));
-        pf = new PathDingDing(table);
+        win = new Window(table/*, (RobotReal)container.getService(ServiceNames.ROBOT_REAL)*/);
+        pf = (PathDingDing)container.getService(ServiceNames.PATHDINGDING);
 		
 		state.robot.updateConfig();
 	}
