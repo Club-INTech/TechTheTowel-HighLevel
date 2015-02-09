@@ -9,7 +9,7 @@ import exceptions.serial.SerialConnexionException;
 
 /**
  * Classe simplifiant le dialogue avec les capteurs
- * @author PF, marsu
+ * @author PF, marsu, paul
  */
 
 public class SensorsCardWrapper implements Service
@@ -103,33 +103,64 @@ public class SensorsCardWrapper implements Service
     }
     
     /**
-     * 
+     * recupere la valeur d'un capteur et la parse dans le bon type
+     * si la reponse est sur une unique ligne on a juste l'objet et si la reponse est sur n lignes on a un array de taille n
      * @param sensor le capteur dont on veut recuperer la valeur
-     * @return la valeur du capteur
+     * @return la valeur du capteur, un objet ou un tableau d'objet
      * @throws SerialConnexionException si erreur de connexion avec le capteur
      */
     public Object getSensorValue (SensorNames sensor) throws SerialConnexionException
     {
     	log.debug("demande aux capteurs : \""+sensor.getSerialCommunication()+"\"", this);
-		Object sensorAnswer = sensorsCardSerial.communiquer(sensor.getSerialCommunication(),sensor.getAwnserLineAmount());
+		String[] sensorAnswer = sensorsCardSerial.communiquer(sensor.getSerialCommunication(),sensor.getAwnserLineAmount());
+		
 		
 		if (sensor.getDefaultValue().getClass() == Boolean.class)
 		{
-			return Boolean.parseBoolean(sensorAnswer.toString());
+			Boolean[] parsedAnswer = {};
+			if (sensor.getAwnserLineAmount()==1)
+			{
+				return (sensorAnswer[0].toString() != "0");
+			}
+				for (int i = 0; i<sensor.getAwnserLineAmount(); i++)
+				{
+					parsedAnswer[i] = (sensorAnswer[i].toString() != "0");
+				}
+				return parsedAnswer;
 		}
 		else if (sensor.getDefaultValue().getClass() == Integer.class)
 		{
-			return Integer.parseInt(sensorAnswer.toString());
+			Integer[] parsedAnswer = {};
+			if (sensor.getAwnserLineAmount()==1)
+			{
+				return Integer.parseInt(sensorAnswer[0].toString());
+			}
+				for (int i = 0; i<sensor.getAwnserLineAmount(); i++)
+				{
+					parsedAnswer[i] = Integer.parseInt(sensorAnswer[i].toString());
+				}
+				return parsedAnswer;
 		}
 		else if (sensor.getDefaultValue().getClass() == Float.class)
 		{
-			return Float.parseFloat(sensorAnswer.toString());
+			Float[] parsedAnswer = {};
+			if (sensor.getAwnserLineAmount()==1)
+			{
+				return Float.parseFloat(sensorAnswer[0].toString());
+			}
+				for (int i = 0; i<sensor.getAwnserLineAmount(); i++)
+				{
+					parsedAnswer[i] = Float.parseFloat(sensorAnswer[i].toString());
+				}
+				return parsedAnswer;
 		}
 		else
 		{
+			//ne pas ajouter le type Double, sinon on aura un overflow de la serie
 			log.critical("Le type de retour du capteur n'est pas pris en compte : modifiez SensorsCardWrapper.getSensorValue", this);
 			return false;
 		}
+		
 		
 		
 		
