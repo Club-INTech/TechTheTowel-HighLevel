@@ -73,7 +73,7 @@ public class TakeTennisBall extends AbstractScript
 	}
 	
 	@Override
-	public Circle entryPosition(int id) 
+	public Circle entryPosition(int id, int ray) 
 	{
 		if(id==1)
 				return new Circle(-881,1000,0); //debut-500

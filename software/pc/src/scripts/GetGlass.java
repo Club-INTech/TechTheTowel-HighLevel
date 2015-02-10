@@ -96,6 +96,8 @@ public class GetGlass extends AbstractScript
 	
 	public void takeGlass2 (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
 	{
+		stateToConsider.robot.turn(-Math.PI/2);//POur eviter le pathnotfound exception
+		stateToConsider.robot.moveLengthwise(stateToConsider.robot.robotRay);
 		takeGlass(stateToConsider,hooksToConsider,false,true);
 		stateToConsider.table.glassXTaken(2);
 	}
@@ -114,18 +116,18 @@ public class GetGlass extends AbstractScript
 
 	//positions des plots = positions d'entrée des scrpits, symetrie gerée plus haut
 	@Override
-	public Circle entryPosition(int id)
+	public Circle entryPosition(int id, int ray)
 	{
 		if (id==0)
 			return new Circle (1355,250,310);
 		else if (id==1)
 			return new Circle (590,1170,310);
 		else if (id==2)
-			return new Circle (0,350,310);
+			return new Circle (0,350+ray,310);//POur eviter le pathnotfound exception
 		else if (id==3)
 			return new Circle (-590,1170,310);
 		else if (id==4)
-			return new Circle (-1355,250,310);
+			return new Circle (-1355,250,310);// Dangereux :(-1045,250) passe mais le reste difficilement.
 		else 
 		{
 			log.debug("Probleme de numero de script de Verre", this);

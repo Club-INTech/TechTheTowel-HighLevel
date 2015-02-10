@@ -25,12 +25,9 @@ import utils.Log;
  */
 public class DropPile extends AbstractScript
 {
-	
-
 	public DropPile(HookFactory hookFactory, Config config, Log log) 
 	{
 		super(hookFactory, config, log);
-		
 		
 		// TODO: id n'est pas une variable temporaire du constructeur. C'est versions qui est un membre et qu'il faut initialiser ici
 		ArrayList<Integer> id = new ArrayList<Integer>();
@@ -40,7 +37,6 @@ public class DropPile extends AbstractScript
 
 	@Override
 	public void execute(int version, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider,boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException
-
 	{
 		if (version==1)
 		{
@@ -49,7 +45,9 @@ public class DropPile extends AbstractScript
 			
 			//Notice me Sempai  #'_'#
 			
-			stateToConsider.robot.turn(Math.PI*-0.5, hooksToConsider, false);
+			stateToConsider.robot.turn(Math.PI*-0.5, hooksToConsider, false);//On avance pour eviter le PathNotFoundd EXception
+			stateToConsider.robot.moveLengthwise(stateToConsider.robot.robotRay, hooksToConsider, true);
+
 			//on eleve notre membre (l'ascenseur)
 			//stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_STAGE, true);
 			//on se deplace vers elle
@@ -133,11 +131,11 @@ public class DropPile extends AbstractScript
 	
 	
 	@Override
-	public Circle entryPosition(int id) 
+	public Circle entryPosition(int id,int robotRay) 
 	{
 		if (id==1)
 		{
-			return new Circle(400,270);
+			return new Circle(200+robotRay,570);
 		}
 		else if (id==2)
 		{

@@ -65,7 +65,7 @@ public abstract class AbstractScript implements Service
 	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, boolean shouldRetryIfBlocked, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException
 	{
 		// va jusqu'au point d'entrée de la version demandée
-		actualState.robot.moveToCircle(entryPosition(versionToExecute), hooksToConsider, actualState.table);
+		actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.robotRay), hooksToConsider, actualState.table);
 		
 		// exécute la version demandée
 		execute(versionToExecute, actualState, hooksToConsider, shouldRetryIfBlocked);
@@ -97,9 +97,10 @@ public abstract class AbstractScript implements Service
 	 * Retourne la position d'entrée associée à la version.
 	 *
 	 * @param version version dont on veut le point d'entrée
+	 * @param la taille du robot
 	 * @return la position du point d'entrée
 	 */
-	public abstract Circle entryPosition(int version);
+	public abstract Circle entryPosition(int version, int ray);
 	
 	/**
 	 * Méthode toujours appelée à la fin du script via un finally. On des donc certain  que son exécution aura lieu.

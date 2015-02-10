@@ -55,6 +55,9 @@ public abstract class Robot implements Service
 	/** si le robot a un verre dans la zone droit (mis a jour et utilise par les scripts) */
 	public boolean isGlassStoredRight;
 	
+	/** Rayon du robot provenant du fichier de config */
+	public int robotRay;
+	
 	/**
 	 * Instancie le robot.
 	 * Appell� par le container
@@ -77,6 +80,7 @@ public abstract class Robot implements Service
 	public void updateConfig()
 	{
 		symmetry = config.getProperty("couleur").replaceAll(" ","").equals("jaune");
+        robotRay = Integer.parseInt(config.getProperty("rayon_robot"));
 	}
 
 	/**
@@ -87,12 +91,12 @@ public abstract class Robot implements Service
 	 */
 	public abstract void useActuator(ActuatorOrder order, boolean waitForCompletion) throws SerialConnexionException;
 	
-	
     /**
      * Fais attendre le robot.
      * C'est a utiliser au lieu d'attendre via Sleep.sleep, car dans robotChrono, au lieu d'attendre, on incrémente le chronomètre de la valeur coresspondante.
      * @param delay temps que le robot doit passer a attendre
      */
+	
     public abstract void sleep(long delay);
     
 	/**
@@ -100,6 +104,7 @@ public abstract class Robot implements Service
 	 *
 	 * @return la vitesse courrante
 	 */
+    
 	public Speed getSpeed()
 	{
 		return speed;

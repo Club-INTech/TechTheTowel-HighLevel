@@ -29,7 +29,7 @@ public class ExitBeginZone extends AbstractScript
 	}
 
 	@Override
-	public Circle entryPosition(int id)
+	public Circle entryPosition(int id, int ray)
 	{
 		// point de depart du match a modifier a chaque base roulante
 		return new Circle(1500-71-48,1000);
@@ -43,7 +43,6 @@ public class ExitBeginZone extends AbstractScript
 		{
 			//on met l'ascenseur en haut pour ne pas frotter
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
-			
 			stateToConsider.robot.moveLengthwise(distanceToExit, hooksToConsider, false);
 		}
 		catch (UnableToMoveException e)
