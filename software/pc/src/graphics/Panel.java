@@ -60,7 +60,7 @@ public class Panel extends JPanel
 	    	g.fillRect((rects.get(i).getPosition().x - (rects.get(i).getSizeX() / 2) + 1500) * this.getWidth() / 3000, -(rects.get(i).getPosition().y + rects.get(i).getSizeY()) * this.getHeight() / 2000 + this.getHeight(), rects.get(i).getSizeX() * this.getWidth() / 3000, rects.get(i).getSizeY() * this.getHeight() / 2000);
 	    }
 	    
-	    g.setColor(Color.orange);
+	    g.setColor(new Color(100, 60, 5));
 	    if(showGraph)
 	    {
 	    	//parcours des noeuds
@@ -78,12 +78,12 @@ public class Panel extends JPanel
 	    	g.drawOval((plots.get(i).getPosition().x - plots.get(i).getRadius() + 1500) * this.getWidth() / 3000, -(plots.get(i).getPosition().y + plots.get(i).getRadius()) * this.getHeight() / 2000 + this.getHeight(), (2 * plots.get(i).getRadius()) * this.getWidth() / 3000, (2 * plots.get(i).getRadius()) * this.getHeight() / 2000);
 	    }
 	    
+	    //le premier robot ennemi
 	    g.setColor(Color.red);
-	    ArrayList<ObstacleCircular> ennemyRobot = mTable.getObstacleManager().getEnnemyRobot();
-	    for(int i = 0; i < ennemyRobot.size(); i++)
-	    {
-	    	g.drawOval((ennemyRobot.get(i).getPosition().x - ennemyRobot.get(i).getRadius() + 1500) * this.getWidth() / 3000, -(ennemyRobot.get(i).getPosition().y + ennemyRobot.get(i).getRadius()) * this.getHeight() / 2000 + this.getHeight(), (2 * ennemyRobot.get(i).getRadius()) * this.getWidth() / 3000, (2 * ennemyRobot.get(i).getRadius()) * this.getHeight() / 2000);
-	    }
+	    g.drawOval((mTable.getObstacleManager().getEnnemyRobot1().getPosition().x - mTable.getObstacleManager().getEnnemyRobot1().getRadius() + 1500) * this.getWidth() / 3000,
+	    		-(mTable.getObstacleManager().getEnnemyRobot1().getPosition().y + mTable.getObstacleManager().getEnnemyRobot1().getRadius()) * this.getHeight() / 2000 + this.getHeight(),
+	    		(2 * mTable.getObstacleManager().getEnnemyRobot1().getRadius()) * this.getWidth() / 3000,
+	    		(2 * mTable.getObstacleManager().getEnnemyRobot1().getRadius()) * this.getHeight() / 2000);
 	    
 	    g.setColor(Color.green);
 	    //g.drawOval((mRobot.getPosition().x - 100 + 1500) * this.getWidth() / 3000, -(mRobot.getPosition().y + 100) * this.getHeight() / 2000 + this.getHeight(), (2 * 100) * this.getWidth() / 3000, (2 * 100) * this.getHeight() / 2000);

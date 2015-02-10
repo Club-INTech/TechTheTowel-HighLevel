@@ -3,19 +3,18 @@ package tests;
 import org.junit.*;
 
 import pathDingDing.PathDingDing;
-import container.Container;
 import table.Table;
-import robot.RobotReal;
 import smartMath.*;
+import enums.*;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
-import enums.ServiceNames;
 import exceptions.*;
 import graphics.Window;
 
 public class JUnit_Pathfinding extends JUnit_Test
-{
+{	
 	Window win;
 	Table table;
 	PathDingDing pf;
@@ -58,8 +57,8 @@ public class JUnit_Pathfinding extends JUnit_Test
     		{
 		    	try
 		    	{
-		    		table.getObstacleManager().setEnnemyRobotPosition(win.getMouse().getMiddleClickPosition(), 0);
-			    	win.getPanel().drawArrayList(pf.computePath(win.getMouse().getLeftClickPosition(), win.getMouse().getRightClickPosition()));
+		    		table.getObstacleManager().setEnnemyRobot1Position(win.getMouse().getMiddleClickPosition());
+			    	win.getPanel().drawArrayList(pf.computePath(win.getMouse().getLeftClickPosition(), win.getMouse().getRightClickPosition(), EnumSet.of(ObstacleGroups.GREEN_PLOTS, ObstacleGroups.ENNEMY_ROBOT1)));
 			    }
 		    	catch(PathNotFoundException e)
 		    	{
@@ -79,7 +78,7 @@ public class JUnit_Pathfinding extends JUnit_Test
     	{
     		if(win.getMouse().hasClicked())
     		{
-		    	table.getObstacleManager().setEnnemyRobotPosition(win.getMouse().getMiddleClickPosition(), 0);
+		    	table.getObstacleManager().setEnnemyRobot1Position(win.getMouse().getMiddleClickPosition());
 		    	ArrayList<Vec2> path = new ArrayList<Vec2>();
 		    	path.add(win.getMouse().getLeftClickPosition());
 		    	path.add(win.getMouse().getRightClickPosition());

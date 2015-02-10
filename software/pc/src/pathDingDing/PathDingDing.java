@@ -5,9 +5,11 @@ import table.Table;
 import table.obstacles.*;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
 import container.Service;
 import exceptions.*;
+import enums.ObstacleGroups;
 
 /**
  * Classe de calcul de chemins
@@ -18,6 +20,7 @@ public class PathDingDing implements Service
 {
 	private Table mTable;
 	private Graph mGraph;
+	private EnumSet<ObstacleGroups> mObstaclesToConsider;
 	
 	/**
 	 * constructeur
@@ -27,6 +30,7 @@ public class PathDingDing implements Service
 	{
 		mTable = table;
 		mGraph = new Graph(mTable);
+		mObstaclesToConsider = EnumSet.noneOf(ObstacleGroups.class);
 	}
 	
 	/**
@@ -38,6 +42,52 @@ public class PathDingDing implements Service
 	 */
 	public ArrayList<Vec2> computePath(Vec2 start, Vec2 end) throws PathNotFoundException
 	{
+		//le cas ou les points de depart et d'arrivee sont reliables en ligne droite est directement traite
+		ArrayList<Vec2> directPath =  new ArrayList<Vec2>();
+		directPath.add(start);
+		directPath.add(end);
+		if(isPathCorrect(directPath))
+			return directPath;
+
+		//ajout du noeud de depart au graphe
+		mGraph.setStartNode(new Node(start.x, start.y));
+
+		//ajout du noeud de fin au graphe
+		Node endNode = new Node(end.x, end.y);
+		mGraph.setEndNode(endNode);
+		
+		//calcul du chemin via computeGraph, convertion, et simplification.
+		ArrayList<Vec2> pathVec2 = new ArrayList<Vec2>();
+		ArrayList<Node> pathNode = new ArrayList<Node>();
+		try
+		{
+			pathNode = computeGraph(mGraph);
+		}
+		catch(PathNotFoundException e)
+		{
+			//on detache le dernier noeud du graphe
+			mGraph.unlinkNode(endNode);
+			throw new PathNotFoundException();
+		}
+		for(int i = pathNode.size() - 1; i >= 0; i--)
+			pathVec2.add(pathNode.get(i).toVec2());
+		simplify(pathVec2);
+		//on detache le dernier noeud du graphe
+		mGraph.unlinkNode(endNode);
+		return pathVec2;
+	}
+	
+	/**
+	 * methode a appeler, avec la liste des obstacles à considerer
+	 * @param start le point de depart
+	 * @param end le point d'arrivee
+	 * @return un chemin optimise liant depart et arrivee
+	 * @throws Exception pas encore implemente
+	 */
+	public ArrayList<Vec2> computePath(Vec2 start, Vec2 end, EnumSet<ObstacleGroups> obstaclesToConsider) throws PathNotFoundException
+	{
+		this.mObstaclesToConsider = obstaclesToConsider;
+		
 		//le cas ou les points de depart et d'arrivee sont reliables en ligne droite est directement traite
 		ArrayList<Vec2> directPath =  new ArrayList<Vec2>();
 		directPath.add(start);
@@ -86,9 +136,9 @@ public class PathDingDing implements Service
 		ArrayList<Node> closedList = new ArrayList<Node>(); //liste fermee des points, triee par cout croissant
 		openList.add(graph.getStartNode());
 		graph.getStartNode().setHeuristicCost(graph.getEndNode());
-		//le noeud precedant le premier noeud est lui-mï¿½me
+		//le noeud precedant le premier noeud est lui-meme
 		graph.getStartNode().setPrevious(graph.getStartNode());
-		//tant que la liste ouverte n'est pas vide ou que l'on n'est pas encore arrivï¿½
+		//tant que la liste ouverte n'est pas vide ou que l'on n'est pas encore arrive
 		while(!openList.isEmpty() && openList.get(0) != graph.getEndNode())
 		{
 			//on supprime le point a l'heuristique le plus faible a la liste ouverte
@@ -217,10 +267,19 @@ public class PathDingDing implements Service
 	{
 		//conversion des obstacles circulaires en cercles
 		ArrayList<Circle> circles = new ArrayList<Circle>();
-		circles.add(new Circle(mTable.getObstacleManager().getEnnemyRobot().get(0).getPosition(), mTable.getObstacleManager().getEnnemyRobot().get(0).getRadius()));
-		//parcours des plots
-		for(int i = 0; i < mTable.getObstacleManager().getPlots().size(); i++)
-			circles.add(new Circle(mTable.getObstacleManager().getPlots().get(i).getPosition(), mTable.getObstacleManager().getPlots().get(i).getRadius()));
+		if(mObstaclesToConsider.contains(ObstacleGroups.ENNEMY_ROBOT1))
+			circles.add(new Circle(mTable.getObstacleManager().getEnnemyRobot1().getPosition(), mTable.getObstacleManager().getEnnemyRobot1().getRadius()));
+		if(mObstaclesToConsider.contains(ObstacleGroups.ENNEMY_ROBOT2))
+			circles.add(new Circle(mTable.getObstacleManager().getEnnemyRobot2().getPosition(), mTable.getObstacleManager().getEnnemyRobot2().getRadius()));
+		
+		if(mObstaclesToConsider.contains(ObstacleGroups.YELLOW_PLOTS))
+			//parcours des plots jaunes
+			for(int i = 0; i < 8; i++)
+				circles.add(new Circle(mTable.getObstacleManager().getPlots().get(i).getPosition(), mTable.getObstacleManager().getPlots().get(i).getRadius()));
+		if(mObstaclesToConsider.contains(ObstacleGroups.GREEN_PLOTS))
+			//parcours des plots verts
+			for(int i = 8; i < 16; i++)
+				circles.add(new Circle(mTable.getObstacleManager().getPlots().get(i).getPosition(), mTable.getObstacleManager().getPlots().get(i).getRadius()));
 		
 		boolean intersects = false;
 		//parcours du chemin
