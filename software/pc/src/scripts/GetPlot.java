@@ -267,7 +267,7 @@ public class GetPlot extends AbstractScript
 	}
 
 	@Override
-	public Circle entryPosition(int id)
+	public Circle entryPosition(int id, int ray)
 	{
 		if (id==0)
 			return new Circle (200,600,180);
@@ -280,7 +280,7 @@ public class GetPlot extends AbstractScript
 		else if (id==56)
 			return new Circle (850,1700,0); // Position devant le plot 5, on longeant l'escalier
 		else if (id==7)
-			return new Circle (1410,1800,180);
+			return new Circle (1410,1800,180);//Point d'entrée dangereux mais (1280,1700) passe (On est à 166 du centre (1410,1800) )
 		else 
 			log.debug("out of bound : mauvais numero de script", this);
 			return new Circle (0,1000);

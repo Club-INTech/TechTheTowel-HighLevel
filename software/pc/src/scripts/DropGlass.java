@@ -77,6 +77,10 @@ public class DropGlass extends AbstractScript
 		}
 		else if (version==2)
 		{
+			// 950 -> 1200 en x pour eviter les PatNotFoundEXeception
+			stateToConsider.robot.turn(Math.PI);
+			stateToConsider.robot.moveLengthwise(250);
+			
 			stateToConsider.robot.turn((5/4)*Math.PI); // On se tourne aux 3/4 afin de pouvoir mettre l'un ou l'autre des verres
 
 			isThereGlassLeft=false;//histoire de changer mais lees capteurs feront le boulot
@@ -99,8 +103,13 @@ public class DropGlass extends AbstractScript
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
 		}
-		else
+		else if (version==3)
 		{
+			//-900 -> -1200 pour eviter la PathNotFound Exception
+			stateToConsider.robot.turn(Math.PI);
+			stateToConsider.robot.moveLengthwise(300, hooksToConsider, true);
+			
+			
 			stateToConsider.robot.turn(Math.PI*3/4); // On se tourne aux 3/4 afin de pouvoir mettre l'un ou l'autre des verres
 			isThereGlassLeft=false;//histoire de changer mais lees capteurs feront le boulot
 
@@ -128,7 +137,7 @@ public class DropGlass extends AbstractScript
 	}
 	
 	@Override
-	public Circle entryPosition(int id) 
+	public Circle entryPosition(int id, int ray) 
 	{
 		if (id==1)
 		{
@@ -136,11 +145,11 @@ public class DropGlass extends AbstractScript
 		}
 		else if (id==2)
 		{
-			return new Circle(-1200,1500,0); //milieu zone ennemi haute
+			return new Circle(-950,1500,0); //milieu zone ennemi haute
 		}
 		else if (id==3)
 		{
-			return new Circle(-1200,500,0); //milieu zone haute chez l'ennemi
+			return new Circle(-900,500,0); //milieu zone haute chez l'ennemi
 		}
 		else
 		{

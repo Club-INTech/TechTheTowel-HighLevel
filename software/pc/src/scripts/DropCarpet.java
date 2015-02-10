@@ -80,7 +80,7 @@ public class DropCarpet extends AbstractScript
 	}
 	
 	@Override
-	public Circle entryPosition(int id) 
+	public Circle entryPosition(int id, int ray) 
 	{
 		return new Circle(290,1300-distanceBetweenEntryAndStairs);
 	}

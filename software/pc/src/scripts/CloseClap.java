@@ -166,10 +166,16 @@ public class CloseClap extends AbstractScript
 		//pour ne pas frotter l'ascenceur
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
 		
-		//on commence en (-1050,231), on se retourne dans le bon sens
-		stateToConsider.robot.turn(0, hooksToConsider, false);
 		
-		//on ouvre notre bras puis on avance de 200mm pour se retrouver en (-850,231) 
+		//(-900,500)->(-1050,230), mis en place pour contrer le PathNotFound
+		stateToConsider.robot.turn(Math.PI, hooksToConsider, false);
+		stateToConsider.robot.moveLengthwise(150, hooksToConsider, false);
+		stateToConsider.robot.turn(-Math.PI/2, hooksToConsider, false);
+		stateToConsider.robot.moveLengthwise(500-230, hooksToConsider, false);
+
+		
+		stateToConsider.robot.turn(0, hooksToConsider, false);
+		//on ouvre notre bras puis on avance de 200mm pour se retrouver en 
 		if(!stateToConsider.robot.getSymmetry())
 		{
 			//Coté jaune
@@ -179,7 +185,7 @@ public class CloseClap extends AbstractScript
 		{
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
 		}			
-		stateToConsider.robot.moveLengthwise(200, hooksToConsider, false);
+		stateToConsider.robot.moveLengthwise(200, hooksToConsider, false);//(-850,231) 
 		stateToConsider.table.setIsClap3Closed(true);
 		
 		if(!stateToConsider.robot.getSymmetry())
@@ -451,14 +457,14 @@ public class CloseClap extends AbstractScript
 	
 	
 	@Override
-	public Circle entryPosition(int version)
+	public Circle entryPosition(int version, int ray)
 	{		
 		if (version == 1)
 			return new Circle(1290,230); //point d'entrée : bord de la table, robot devant le clap 1
 		else if(version == 2)
 			return new Circle(700,230); //point d'entrée : devant le clap 2
 		else if(version == 3)
-			return new Circle(-1050,230);//point d'entrée : devant le clap 3
+			return new Circle(-900,500);//point d'entrée : devant le clap 3
 		else if(version == 12)
 			return new Circle(1290,230); //point d'entrée : devant le clap 1
 		else if(version == 123)

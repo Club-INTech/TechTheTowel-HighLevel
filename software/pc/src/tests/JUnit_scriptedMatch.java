@@ -47,6 +47,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
         pathDingDing = (PathDingDing)container.getService(ServiceNames.PATHDINGDING);
 		emptyHook = new ArrayList<Hook> ();  
 
+		
 		if (real_state.robot.getSymmetry())
 		{
 			real_state.robot.setPosition(new Vec2 (-1381,1000));
@@ -185,9 +186,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		try 
 		{
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant les claps 1 et 2");
-
-			//ferme les 2 claps proches : 
-			scriptmanager.getScript(ScriptNames.CLOSE_CLAP).goToThenExec(-12, real_state, true, emptyHook); // ON ferme nos 2 claps, a l'envers
+			scriptmanager.getScript(ScriptNames.CLOSE_CLAP).goToThenExec(-12, real_state, true, emptyHook );
 		}
 		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException e) 
 		{
@@ -301,7 +300,6 @@ public class JUnit_scriptedMatch extends JUnit_Test
 			real_state.robot.moveLengthwise(500);	
 			real_state.robot.turn(Math.PI/2);		
 			real_state.robot.moveLengthwise(500);	
-			
 			
 			real_state.robot.turn(Math.PI);		
 			real_state.robot.moveLengthwise(1800);
