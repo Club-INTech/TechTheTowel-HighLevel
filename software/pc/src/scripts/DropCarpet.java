@@ -69,7 +69,7 @@ public class DropCarpet extends AbstractScript
 				stateToConsider.table.setIsRightCarpetDropped(true);
 				stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, true);
 			}
-			System.out.println("En position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") après depose-tapis");
+			System.out.println("En position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") après avoir deposé les tapis");
 		}
 		else
 		{
