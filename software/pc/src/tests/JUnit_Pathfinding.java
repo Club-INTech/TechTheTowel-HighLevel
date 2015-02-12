@@ -57,7 +57,7 @@ public class JUnit_Pathfinding extends JUnit_Test
     		{
 		    	try
 		    	{
-		    		table.getObstacleManager().setEnnemyRobot1Position(win.getMouse().getMiddleClickPosition());
+		    		//table.getObstacleManager().setEnnemyRobot1Position(win.getMouse().getMiddleClickPosition());
 			    	win.getPanel().drawArrayList(pf.computePath(win.getMouse().getLeftClickPosition(), win.getMouse().getRightClickPosition(), EnumSet.of(ObstacleGroups.GREEN_PLOTS, ObstacleGroups.ENNEMY_ROBOT1)));
 			    }
 		    	catch(PathNotFoundException e)
@@ -78,7 +78,7 @@ public class JUnit_Pathfinding extends JUnit_Test
     	{
     		if(win.getMouse().hasClicked())
     		{
-		    	table.getObstacleManager().setEnnemyRobot1Position(win.getMouse().getMiddleClickPosition());
+		    	//table.getObstacleManager().setEnnemyRobot1Position(win.getMouse().getMiddleClickPosition());
 		    	ArrayList<Vec2> path = new ArrayList<Vec2>();
 		    	path.add(win.getMouse().getLeftClickPosition());
 		    	path.add(win.getMouse().getRightClickPosition());

@@ -268,18 +268,17 @@ public class PathDingDing implements Service
 		//conversion des obstacles circulaires en cercles
 		ArrayList<Circle> circles = new ArrayList<Circle>();
 		if(mObstaclesToConsider.contains(ObstacleGroups.ENNEMY_ROBOT1))
-			circles.add(new Circle(mTable.getObstacleManager().getEnnemyRobot1().getPosition(), mTable.getObstacleManager().getEnnemyRobot1().getRadius()));
-		if(mObstaclesToConsider.contains(ObstacleGroups.ENNEMY_ROBOT2))
-			circles.add(new Circle(mTable.getObstacleManager().getEnnemyRobot2().getPosition(), mTable.getObstacleManager().getEnnemyRobot2().getRadius()));
+			for(int i = 0; i < mTable.getObstacleManager().getMobileObstacles().size(); i++)
+				circles.add(new Circle(mTable.getObstacleManager().getMobileObstacles().get(i).getPosition(), mTable.getObstacleManager().getMobileObstacles().get(i).getRadius()));
 		
 		if(mObstaclesToConsider.contains(ObstacleGroups.YELLOW_PLOTS))
 			//parcours des plots jaunes
 			for(int i = 0; i < 8; i++)
-				circles.add(new Circle(mTable.getObstacleManager().getPlots().get(i).getPosition(), mTable.getObstacleManager().getPlots().get(i).getRadius()));
+				circles.add(new Circle(mTable.getObstacleManager().getFixedObstacles().get(i).getPosition(), mTable.getObstacleManager().getFixedObstacles().get(i).getRadius()));
 		if(mObstaclesToConsider.contains(ObstacleGroups.GREEN_PLOTS))
 			//parcours des plots verts
 			for(int i = 8; i < 16; i++)
-				circles.add(new Circle(mTable.getObstacleManager().getPlots().get(i).getPosition(), mTable.getObstacleManager().getPlots().get(i).getRadius()));
+				circles.add(new Circle(mTable.getObstacleManager().getFixedObstacles().get(i).getPosition(), mTable.getObstacleManager().getFixedObstacles().get(i).getRadius()));
 		
 		boolean intersects = false;
 		//parcours du chemin

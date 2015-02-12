@@ -8,7 +8,7 @@ import smartMath.Vec2;
  *
  * @author pf, marsu
  */
-class ObstacleProximity extends ObstacleCircular
+public class ObstacleProximity extends ObstacleCircular
 {
 	
 	/**
