@@ -33,17 +33,17 @@ public class Table implements Service
 	/** endroit ou lire la configuration du robot */
 	private Config config;
 	
-	// TODO: doc
-	
+	//claps fermés ou non
 	private boolean isClap1Closed;
 	private boolean isClap2Closed;
 	private boolean isClap3Closed;
 
+	//tapis posés ou non
 	private boolean isLeftCarpetDropped;
 	private boolean isRightCarpetDropped;
 	
 	
-	//les huits plots (voir numerotation sur la table (la vraie)666)
+	//les huits plots (voir numerotation sur la table)
 	private boolean isPlot0Eaten;
 	private boolean isPlot1Eaten;
 	private boolean isPlot2Eaten;
@@ -53,7 +53,7 @@ public class Table implements Service
 	private boolean isPlot6Eaten;
 	private boolean isPlot7Eaten;
 	
-	//les 5 verres
+	//les 5 verres, pris ou non 
 	private boolean isGlass0Taken;
 	private boolean isGlass1Taken;
 	private boolean isGlass2Taken;
@@ -186,27 +186,6 @@ public class Table implements Service
 			return false;
 	}
 	
-	public boolean isGlassXTaken (int x)
-	{
-		if (x==0)
-			return isGlass0Taken;
-		else if (x==1)
-			return isGlass1Taken;
-		else if (x==2)
-			return isGlass2Taken;
-		else if (x==3)
-			return isGlass3Taken;
-		else if (x==4)
-			return isGlass4Taken;
-		else
-			log.debug("Probleme dans isGlassTaken",this);
-			return false;
-	}
-	
-	
-
-	
-	
 	/**
 	 * mange le plot x
 	 * @param x le numero du plot doit etre dans [0..7]
@@ -233,7 +212,10 @@ public class Table implements Service
 			log.debug("out of bound, plot counter",this);
 	}
 	
-	
+	/**
+	 * enleve le verre x de la table
+	 * @param x le numero du verre doit etre dans [0..4]
+	 */
 	public void removeGlassX (int x)
 	{
 		if (x==0)
@@ -250,6 +232,31 @@ public class Table implements Service
 			log.debug("Probleme dans isGlassTaken",this);
 	}
 	
+	/**
+	 * dis si le verre x a été pris
+	 * @param x le numero du verre doit etre dans [0..4]
+	 */
+	public boolean isGlassXTaken (int x)
+	{
+		if (x==0)
+			return isGlass0Taken;
+		else if (x==1)
+			return isGlass1Taken;
+		else if (x==2)
+			return isGlass2Taken;
+		else if (x==3)
+			return isGlass3Taken;
+		else if (x==4)
+			return isGlass4Taken;
+		else
+			log.debug("Probleme dans isGlassTaken",this);
+			return false;
+	}
+	
+	/**
+	 * le verre x a été laché, on met à jour la table
+	 * @param x le numero du verre doit etre dans [0..4]
+	 */
 	public void glassXDropped (int x)
 	{
 		if (x==0)
@@ -266,6 +273,10 @@ public class Table implements Service
 			log.debug("Probleme dans glassXDropped",this);
 	}
 	
+	/**
+	 * Un verre a été deposé dans la zone x, on  met à jour 
+	 * @param x le numero du verre doit etre dans [0..3]
+	 */
 	public void areaXFilled (int x)
 	{
 		if (x==1)
@@ -339,8 +350,7 @@ public class Table implements Service
 	@Override
 	public void updateConfig()
 	{
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated
 	}
 	
 	public Config getConfig()

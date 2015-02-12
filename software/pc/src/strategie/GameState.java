@@ -33,7 +33,7 @@ public class GameState<R extends Robot> implements Service
     public long timeEllapsed;
     
     /** points marqués depus le debut du match */
-    public int pointsObtenus;
+    public int obtainedPoints;
 
     /**
      * Instancie un nouvel état de jeu. (il ne représente pas forcément la réalité, il peut être fictif)
@@ -49,7 +49,7 @@ public class GameState<R extends Robot> implements Service
         this.robot = robot;
         
         // on n'a marqué aucun point en début de match
-        pointsObtenus = 0;
+        obtainedPoints = 0;
     }
 
     /* (non-Javadoc)
