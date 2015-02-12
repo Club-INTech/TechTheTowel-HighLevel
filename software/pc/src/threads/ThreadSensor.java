@@ -74,7 +74,7 @@ class ThreadSensor extends AbstractThread
 			int distance;
 			try 
 			{
-				distance = (int) mSensorsCardWrapper.getSensorValue(SensorNames.ULTRASOUND_SENSOR);
+				distance = (int) mSensorsCardWrapper.getSensorValue(SensorNames.ULTRASOUND_FRONT_SENSOR);
 			}
 			catch(SerialConnexionException e)
 			{

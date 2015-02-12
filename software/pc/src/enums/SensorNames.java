@@ -2,11 +2,11 @@ package enums;
 
 public enum SensorNames {
 	/** le capteur des machoires */
-	JAW_SENSOR("mp",100,true,1), //true on a attrape qqc //TODO: valeurs a modifier
+	JAW_SENSOR("mp",100,true,1), //true on a attrape qqch //TODO: valeurs a modifier
 	/** le capteur de la zone gauche */
-	LEFT_ZONE_SENSOR("bgp",100,true,1), //true = on a qqc dans la poche de gauche
+	LEFT_ZONE_SENSOR("bgp",100,true,1), //true = on a qqch dans la poche de gauche
 	/** le capteur de la zone droite */
-	RIGHT_ZONE_SENSOR("bdp",100,true,1), //true = on a qqc dans la poche de droite
+	RIGHT_ZONE_SENSOR("bdp",100,true,1), //true = on a qqch dans la poche de droite
 	/** les capteur ultrason avant, comme il y en a deux la reponse est un int[2] */
 	ULTRASOUND_FRONT_SENSOR("us_av",100,new int[]{3000,3000},2), //3000 mm correspond a la taille maximale, comme ça on ne detecte pas d'obstacle dans robotChrono
 	/** les capteurs ultrason arriere, comme il y en a deux la reponse est un int[2]  */

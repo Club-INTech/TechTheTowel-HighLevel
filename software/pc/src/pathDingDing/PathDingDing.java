@@ -267,7 +267,7 @@ public class PathDingDing implements Service
 	{
 		//conversion des obstacles circulaires en cercles
 		ArrayList<Circle> circles = new ArrayList<Circle>();
-		if(mObstaclesToConsider.contains(ObstacleGroups.ENNEMY_ROBOT1))
+		if(mObstaclesToConsider.contains(ObstacleGroups.ENNEMY_ROBOTS))
 			for(int i = 0; i < mTable.getObstacleManager().getMobileObstacles().size(); i++)
 				circles.add(new Circle(mTable.getObstacleManager().getMobileObstacles().get(i).getPosition(), mTable.getObstacleManager().getMobileObstacles().get(i).getRadius()));
 		

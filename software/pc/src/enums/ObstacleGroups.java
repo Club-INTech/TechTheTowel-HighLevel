@@ -7,8 +7,7 @@ package enums;
  */
 public enum ObstacleGroups
 {
-	ENNEMY_ROBOT1,
-	ENNEMY_ROBOT2,
+	ENNEMY_ROBOTS,
 	
 	YELLOW_PLOTS,
 	GREEN_PLOTS,
