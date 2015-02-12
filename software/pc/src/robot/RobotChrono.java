@@ -25,7 +25,6 @@ public class RobotChrono extends Robot
 	/** position du robot virtuel sur la table. Utile pour calculer le temps nécéssaire pour atteindre un autre point de la table */
 	protected Vec2 position = new Vec2();
 	
-
 	/** orientation du robot virtuel sur la table. Utile pour calculer le temps nécéssaire pour atteindre un autre point de la table */
 	protected double orientation;
 	

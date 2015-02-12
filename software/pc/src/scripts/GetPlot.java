@@ -60,7 +60,7 @@ public class GetPlot extends AbstractScript
 			//si on a plus de place dans la pile on termine
 			if (stateToConsider.robot.storedPlotCount == 4)
 			{
-				System.out.println("Trop de plots !");
+				System.out.println("Trop de plots !");//Why Can't I Hold All These Limes ?
 				return;
 			}
 			
@@ -78,7 +78,6 @@ public class GetPlot extends AbstractScript
 			//stateToConsider.robot.turn(Math.atan2(	entryPosition(versionToExecute).center.y - stateToConsider.robot.getPosition().y,	// position voulue - position actuelle
 			//			 							entryPosition(versionToExecute).center.x - stateToConsider.robot.getPosition().x	// de meme
 			//			 						 ));
-			
 			
 			//on mange le plot
 			try 
@@ -119,8 +118,7 @@ public class GetPlot extends AbstractScript
 					stateToConsider.robot.moveLengthwise(140, hooksToConsider);
 					stateToConsider.robot.isGlassStoredRight = true;
 				}
-				
-				stateToConsider.table.glassXTaken(0);
+				stateToConsider.table.removeGlassX(0);
 			}
 			else
 			{
@@ -174,7 +172,7 @@ public class GetPlot extends AbstractScript
 			stateToConsider.table.eatPlotX(3);
 			
 		}
-		//TODO derniere version a treter
+		//TODO derniere version a traiter
 		else if (versionToExecute == 56)
 		{
 			stateToConsider.robot.turn(Math.PI*0.5);
@@ -224,7 +222,6 @@ public class GetPlot extends AbstractScript
 			}
 		}
 		else
-		
 		
 		try 
 		{
@@ -359,18 +356,18 @@ public class GetPlot extends AbstractScript
 		}
 
 		if (sensorAnswer)
+		{
+			if (isSecondTry)
 			{
-				if (isSecondTry)
-				{
-					log.debug("impossible d'attraper le plot", this);	
-					throw new UnableToEatPlot();
-				}
-				else
-				{
-					eatPlot(true,!isArmChosenLeft, stateToConsider);
-					return;
-				}
+				log.debug("impossible d'attraper le plot", this);	
+				throw new UnableToEatPlot();
 			}
+			else
+			{
+				eatPlot(true,!isArmChosenLeft, stateToConsider);
+				return;
+			}
+		}
 		stateToConsider.robot.storedPlotCount++;
 		
 		//si on a encore de la place dans le guide alors on monte le plot
