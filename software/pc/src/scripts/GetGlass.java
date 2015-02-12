@@ -85,13 +85,13 @@ public class GetGlass extends AbstractScript
 	public void takeGlass0 (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
 	{
 		takeGlass(stateToConsider,hooksToConsider,false,false);
-		stateToConsider.table.glassXTaken(0);
+		stateToConsider.table.removeGlassX(0);
 	}
 	
 	public void takeGlass1 (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
 	{
 		takeGlass(stateToConsider,hooksToConsider,false,false);
-		stateToConsider.table.glassXTaken(1);
+		stateToConsider.table.removeGlassX(1);
 	}
 	
 	public void takeGlass2 (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
@@ -99,19 +99,19 @@ public class GetGlass extends AbstractScript
 		stateToConsider.robot.turn(-Math.PI/2);//POur eviter le pathnotfound exception
 		stateToConsider.robot.moveLengthwise(stateToConsider.robot.robotRay);
 		takeGlass(stateToConsider,hooksToConsider,false,true);
-		stateToConsider.table.glassXTaken(2);
+		stateToConsider.table.removeGlassX(2);
 	}
 	
 	public void takeGlass3 (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
 	{
 		takeGlass(stateToConsider,hooksToConsider, false,true);
-		stateToConsider.table.glassXTaken(3);
+		stateToConsider.table.removeGlassX(3);
 	}
 	
 	public void takeGlass4 (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
 	{
 		takeGlass(stateToConsider,hooksToConsider, false,false);
-		stateToConsider.table.glassXTaken(4);
+		stateToConsider.table.removeGlassX(4);
 	}
 
 	//positions des plots = positions d'entrée des scrpits, symetrie gerée plus haut

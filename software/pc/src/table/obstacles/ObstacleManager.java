@@ -30,6 +30,7 @@ public class ObstacleManager
     
     private ArrayList<Segment> mLines;
 	private ArrayList<ObstacleCircular> mPlots;
+	private ArrayList<ObstacleCircular> mGoblets;
 	private ObstacleCircular mEnnemyRobot1;
 	private ObstacleCircular mEnnemyRobot2;
 	private ArrayList<ObstacleRectangular> mRectangles;
@@ -48,6 +49,7 @@ public class ObstacleManager
         //creation des listes qui contiendrons les différents types d'obstacles
         mLines = new ArrayList<Segment>();
 		mPlots = new ArrayList<ObstacleCircular>();
+		mGoblets = new ArrayList<ObstacleCircular>();
 		mRectangles = new ArrayList<ObstacleRectangular>();
 		
         int robotRadius = Integer.parseInt(config.getProperty("rayon_robot"));
@@ -116,6 +118,13 @@ public class ObstacleManager
 	    mPlots.add(new ObstacleCircular(new Vec2(400, 250), 30 + robotRadius));
 	    mPlots.add(new ObstacleCircular(new Vec2(1410, 250), 30 + robotRadius));
 	    mPlots.add(new ObstacleCircular(new Vec2(1410, 150), 30 + robotRadius));
+	    
+	    // gobelets
+	    mGoblets.add(new ObstacleCircular(new Vec2(590, 1170), 30 + robotRadius));
+	    mGoblets.add(new ObstacleCircular(new Vec2(1250, 250), 30 + robotRadius));
+	    mGoblets.add(new ObstacleCircular(new Vec2(0, 350), 30 + robotRadius));
+	    mGoblets.add(new ObstacleCircular(new Vec2(-1250, 250), 30 + robotRadius));
+	    mGoblets.add(new ObstacleCircular(new Vec2(-590, 1170), 30 + robotRadius));
     }    
 
     /**

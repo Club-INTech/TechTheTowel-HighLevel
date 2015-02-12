@@ -13,7 +13,6 @@ public enum ObstacleGroups
 	YELLOW_PLOTS,
 	GREEN_PLOTS,
 	
-	YELLOW_GOBLETS,
-	GREEN_GOBLETS;
+	GOBLETS;
 }
 

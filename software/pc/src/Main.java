@@ -38,7 +38,7 @@ public class Main
 	static ArrayList<Hook> emptyHook;
 	static ScriptManager scriptmanager;
 	static SensorsCardWrapper mSensorsCardWrapper;
-	static boolean doitFaireDepartRapide;
+	static boolean mustStartQuickly;
 	
 	
 // dans la config de debut de match, toujours demander une entrée clavier assez longue (ex "oui" au lieu de "o", pour éviter les fautes de frappes. Une erreur a ce stade coûte cher.
@@ -60,7 +60,7 @@ public class Main
 		int maximumOfTrySerial=3;
 
 		System.out.println("=== Robot INTech 2015 : initialisation ===");
-        // si on veut exécuter un test unitaire sur la rapbe, recopier test.nomDeLaClasseDeTest
+        // si on veut exécuter un test unitaire sur la rasbe, recopier test.nomDeLaClasseDeTest
 		//JUnitCore.main(		"tests.JUnit_DeplacementsTest");  
 		
 		
@@ -217,10 +217,11 @@ public class Main
 		} 
 		catch (PathNotFoundException e)
 		{
-			//TODO: le pathfinding ne trouve pas de chemin
+			e.printStackTrace();
 			
-		} catch (SerialFinallyException e) {
-			// TODO Auto-generated catch block
+		} 
+		catch (SerialFinallyException e) 
+		{
 			e.printStackTrace();
 		}
 		
@@ -241,7 +242,7 @@ public class Main
 		} 
 		catch (PathNotFoundException e)
 		{
-			//TODO: le pathfinding ne trouve pas de chemin
+			e.printStackTrace();
 			
 		} catch (SerialFinallyException e) {
 			// TODO Auto-generated catch block
