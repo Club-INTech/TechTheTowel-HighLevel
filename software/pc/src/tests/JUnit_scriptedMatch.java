@@ -47,7 +47,6 @@ public class JUnit_scriptedMatch extends JUnit_Test
         pathDingDing = (PathDingDing)container.getService(ServiceNames.PATHDINGDING);
 		emptyHook = new ArrayList<Hook> ();  
 
-		
 		if (real_state.robot.getSymmetry())
 		{
 			real_state.robot.setPosition(new Vec2 (-1381,1000));

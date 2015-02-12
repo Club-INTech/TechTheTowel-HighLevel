@@ -691,6 +691,9 @@ public class Locomotion implements Service
 			// demande ou l'on est et comment on est orienté a la carte d'asser
 			double[] newInfos = mLocomotionCardWrapper.getCurrentPositionAndOrientation();
 
+			log.debug("reponse de isTurnFinished : angle actuel:"+Geometry.modulo(newInfos[2],(2000*Math.PI))+", angle precedent:"+Geometry.modulo(oldInfos[2],(2000*Math.PI))+", angle vise"+Geometry.modulo(finalOrientation,(2000*Math.PI))+", difference:"+Geometry.minusAngle((Geometry.modulo(newInfos[2],(2000*Math.PI))), Geometry.modulo(finalOrientation,(2000*Math.PI)), 2000*Math.PI), this);
+
+			
 			// le robot est-t-il arrivé ?
 			// le robot est arrivé si la différence entre l'orientation courante du robot et l'orientation voulue est suffisamment faible
 			//on fait un modulo 2000PI car les informations sont en miliRadiant
@@ -708,7 +711,8 @@ public class Locomotion implements Service
 				throw new BlockedException();
 
 			}
-			log.debug("reponse de isTurnFinished:"+out+", angle actuel:"+Geometry.modulo(newInfos[2],(2000*Math.PI))+", angle precedent:"+Geometry.modulo(oldInfos[2],(2000*Math.PI))+", angle vise"+Geometry.modulo(finalOrientation,(2000*Math.PI))+", difference:"+Geometry.minusAngle((Geometry.modulo(newInfos[2],(2000*Math.PI))), Geometry.modulo(finalOrientation,(2000*Math.PI)), 2000*Math.PI), this);
+			
+			log.debug("reponse de isTurnFinished:"+out,this);
 			oldInfos = newInfos;
 		} 
 		catch (SerialConnexionException e)
