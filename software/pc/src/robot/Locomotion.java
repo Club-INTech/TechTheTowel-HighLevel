@@ -680,7 +680,7 @@ public class Locomotion implements Service
 	 * V�rifie si le robot a fini de tourner. (On suppose que l'on a pr�c�demment demand� au robot de tourner)
 	 * @param finalOrientation on d�cr�te que le robot a fini de tourner lorsque son orientation �gale cette valeur (en miliRadian, valeur absolue) 
 	 * @return Faux si le robot tourne encore, vrai si arrivée au bon point, exception si blocage
-	 * @throws BlockedException si blocage mécanique du robot survient durant la rotation (pas de gestion des capteurs ici)
+	 * @throws BlockedException si blocage mécanique du robot survient durant la rotation (pas de gestion des capteurs ici), creation de l'exeption
 	 */
 	// TODO: pourquoi ne pas utiliser mLocomotionCardWrapper.isRobotMoving() ?
 	private boolean isTurnFinished(double finalOrientation) throws BlockedException
@@ -691,9 +691,15 @@ public class Locomotion implements Service
 			// demande ou l'on est et comment on est orienté a la carte d'asser
 			double[] newInfos = mLocomotionCardWrapper.getCurrentPositionAndOrientation();
 
-			log.debug("reponse de isTurnFinished : angle actuel:"+Geometry.modulo(newInfos[2],(2000*Math.PI))+", angle precedent:"+Geometry.modulo(oldInfos[2],(2000*Math.PI))+", angle vise"+Geometry.modulo(finalOrientation,(2000*Math.PI))+", difference:"+Geometry.minusAngle((Geometry.modulo(newInfos[2],(2000*Math.PI))), Geometry.modulo(finalOrientation,(2000*Math.PI)), 2000*Math.PI), this);
+			//pour pouvoir sauter une ligne
+			String newLine = System.getProperty("line.separator");
+			log.debug("reponse de isTurnFinished :" + newLine
+						+ "angle actuel:"+Geometry.modulo(newInfos[2],(2000*Math.PI)) + newLine
+						+ "angle precedent:"+Geometry.modulo(oldInfos[2],(2000*Math.PI)) + newLine
+						+ "angle vise"+Geometry.modulo(finalOrientation,(2000*Math.PI)) + newLine
+						+ "difference:"+Geometry.minusAngle((Geometry.modulo(newInfos[2],(2000*Math.PI))), Geometry.modulo(finalOrientation,(2000*Math.PI)), 2000*Math.PI) + newLine
+						+ "angle deplace :"+Geometry.minusAngle(Geometry.modulo(newInfos[2],(2000*Math.PI)) , (Geometry.modulo(oldInfos[2],(2000*Math.PI))) , 2000*Math.PI), this);
 
-			
 			// le robot est-t-il arrivé ?
 			// le robot est arrivé si la différence entre l'orientation courante du robot et l'orientation voulue est suffisamment faible
 			//on fait un modulo 2000PI car les informations sont en miliRadiant
@@ -709,7 +715,6 @@ public class Locomotion implements Service
 			else
 			{
 				throw new BlockedException();
-
 			}
 			
 			log.debug("reponse de isTurnFinished:"+out,this);
@@ -728,7 +733,7 @@ public class Locomotion implements Service
 	 * Vérifie si le robot a fini d'avancer. ( vérification d'un mouvement de translation uniquement)
 	 * Renvois Faux si le robot bouge encore, vrai si arrivée au bon point, exception si blocage
 	 * @returnFaux si le robot bouge encore, vrai si il est arrivée au bon point.
-	 * @throws BlockedException en cas de bloquange mécanique du robot l'empéchant d'aller plus loin
+	 * @throws BlockedException en cas de bloquange mécanique du robot l'empéchant d'aller plus loin. Creation de l'exeption
 	 */
 	//TODO: le if... else if.... else.... est redondant avec la fonction checkRobotNotBlocked qui est elle aussi appellée dans moveInDirectionEventWatcher.
 	
@@ -774,7 +779,7 @@ public class Locomotion implements Service
 
 		// si on ne bouge plus, et qu'on n'est pas arrivé, c'est que ca bloque
 		else
-			throw new BlockedException();
+			 throw new BlockedException();
 
 		oldInfos = newInfos;
 			

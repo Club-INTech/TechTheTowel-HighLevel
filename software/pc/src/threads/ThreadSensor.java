@@ -1,5 +1,7 @@
 package threads;
 
+import enums.SensorNames;
+import exceptions.serial.SerialConnexionException;
 import robot.cardsWrappers.SensorsCardWrapper;
 import table.Table;
 import utils.Sleep;
@@ -7,7 +9,7 @@ import utils.Sleep;
 /**
  * Thread qui ajoute en continu les obstacles détectés par les capteurs.
  *
- * @author pf, Krissprolls, marsu
+ * @author pf, Krissprolls, marsu, paul
  */
 
 class ThreadSensor extends AbstractThread
@@ -67,7 +69,19 @@ class ThreadSensor extends AbstractThread
 			}
 
 			// affiche la distance mesurée par l'ultrason
-			int distance = mSensorsCardWrapper.getSensedDistance();
+			//code precedant, a retirer si le code suivant marche
+			//int distance = mSensorsCardWrapper.getSensedDistance();
+			int distance;
+			try 
+			{
+				distance = (int) mSensorsCardWrapper.getSensorValue(SensorNames.ULTRASOUND_SENSOR);
+			}
+			catch(SerialConnexionException e)
+			{
+				log.critical("La carte capteurs ne répond pas !", this);
+				e.printStackTrace();
+				distance = 3000; // valeur considérée comme infinie
+			}
 			log.debug("Distance selon ultrason: "+distance, this);
 			if (distance > 0 && distance < 70)
 				log.debug("obstacle detecte a moins de 7 cm !", this);
