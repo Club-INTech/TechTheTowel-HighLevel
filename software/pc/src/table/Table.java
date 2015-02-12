@@ -234,7 +234,7 @@ public class Table implements Service
 	}
 	
 	
-	public void glassXTaken (int x)
+	public void removeGlassX (int x)
 	{
 		if (x==0)
 			isGlass0Taken=true;

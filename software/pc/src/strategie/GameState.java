@@ -55,6 +55,7 @@ public class GameState<R extends Robot> implements Service
     /* (non-Javadoc)
      * @see container.Service#updateConfig()
      */
+    
     @Override
     public void updateConfig()
     {
