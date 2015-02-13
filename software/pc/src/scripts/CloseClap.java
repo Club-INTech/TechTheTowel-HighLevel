@@ -102,7 +102,7 @@ public class CloseClap extends AbstractScript
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
 		}
 		stateToConsider.robot.moveLengthwise(250, hooksToConsider, false);
-		stateToConsider.table.setIsClap1Closed(true);
+		stateToConsider.table.clapXClosed(1);
 	
 		if(stateToConsider.robot.getSymmetry())
 		{
@@ -141,7 +141,7 @@ public class CloseClap extends AbstractScript
 		}	
 		
 		stateToConsider.robot.moveLengthwise(300, hooksToConsider, false);
-		stateToConsider.table.setIsClap2Closed(true);	
+		stateToConsider.table.clapXClosed(2);	
 		
 		if(stateToConsider.robot.getSymmetry())
 		{
@@ -186,7 +186,7 @@ public class CloseClap extends AbstractScript
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
 		}			
 		stateToConsider.robot.moveLengthwise(200, hooksToConsider, false);//(-850,231) 
-		stateToConsider.table.setIsClap3Closed(true);
+		stateToConsider.table.clapXClosed(3);
 		
 		if(!stateToConsider.robot.getSymmetry())
 		{
@@ -228,7 +228,7 @@ public class CloseClap extends AbstractScript
 		}
 		
 		stateToConsider.robot.moveLengthwise(300, hooksToConsider, false);
-		stateToConsider.table.setIsClap1Closed(true);
+		stateToConsider.table.clapXClosed(1);
 	
 		//On monte notre bras pour passer au dessus du clap ennemi notre bras et on avance de 350mm pour se retrouver en (700,231)
 		if(stateToConsider.robot.getSymmetry())
@@ -253,7 +253,7 @@ public class CloseClap extends AbstractScript
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
 		}		
 		stateToConsider.robot.moveLengthwise(300, hooksToConsider, false);
-		stateToConsider.table.setIsClap2Closed(true);
+		stateToConsider.table.clapXClosed(2);
 		
 		if(stateToConsider.robot.getSymmetry())
 		{
@@ -294,7 +294,7 @@ public class CloseClap extends AbstractScript
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
 		}
 		stateToConsider.robot.moveLengthwise(250, hooksToConsider, false);
-		stateToConsider.table.setIsClap1Closed(true);
+		stateToConsider.table.clapXClosed(1);
 	
 		//On monte notre bras pour passer au dessus du clap ennemi notre bras et on avance de 250mm pour se retrouver en (660,231)
 		if(stateToConsider.robot.getSymmetry())
@@ -319,7 +319,7 @@ public class CloseClap extends AbstractScript
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
 		}
 		stateToConsider.robot.moveLengthwise(220, hooksToConsider, false);
-		stateToConsider.table.setIsClap2Closed(true);	
+		stateToConsider.table.clapXClosed(2);	
 
 		//on baisse notre bras
 		stateToConsider.robot.turn(0.5*Math.PI, hooksToConsider, false);
@@ -353,7 +353,7 @@ public class CloseClap extends AbstractScript
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
 		}	
 		stateToConsider.robot.moveLengthwise(200, hooksToConsider, false);
-		stateToConsider.table.setIsClap3Closed(true);
+		stateToConsider.table.clapXClosed(3);
 		
 		if(!stateToConsider.robot.getSymmetry())
 		{
@@ -395,7 +395,7 @@ public class CloseClap extends AbstractScript
 		}
 		
 		stateToConsider.robot.moveLengthwise(-250, hooksToConsider, false);
-		stateToConsider.table.setIsClap1Closed(true);
+		stateToConsider.table.clapXClosed(1);
 	
 		if(!stateToConsider.robot.getSymmetry())
 		{
@@ -485,11 +485,11 @@ public class CloseClap extends AbstractScript
 	{
 		//On met à jour le nombre de points restants pour la version : à  0, on a tout fait
 		int score = 15;
-		if(stateToConsider.table.getIsClap1Closed() || version==2 || version==3)
+		if(stateToConsider.table.isClapXClosed(1) || version==2 || version==3)
 			score -= 5;
-		if(stateToConsider.table.getIsClap2Closed() || version == 1 || version == 3 || version == -1 )
+		if(stateToConsider.table.isClapXClosed(2) || version == 1 || version == 3 || version == -1 )
 			score -= 5;
-		if(stateToConsider.table.getIsClap3Closed() || version == 1 || version == 2 || version == 12 || version == -1 || version == -12)
+		if(stateToConsider.table.isClapXClosed(3) || version == 1 || version == 2 || version == 12 || version == -1 || version == -12)
 			score -= 5;
 		return score;
 	}

@@ -146,7 +146,7 @@ public class GetGlass extends AbstractScript
 		//		return 0;
 		//	}
 		//}
-		return 0;
+		return 0; //Ne rapporte pas concretement de points si le verre n'est pas posé, il n'y a que des points potentiels
 	}
 
 	@Override

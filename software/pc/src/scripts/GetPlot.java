@@ -286,7 +286,7 @@ public class GetPlot extends AbstractScript
 	@Override
 	public int remainingScoreOfVersion(int id_version, GameState<?> state) 
 	{
-		return 0;
+		return 0;//Ce script ne rapporte pas concretement de points tant que les plots ne sont pas posés
 	}
 
 	@Override

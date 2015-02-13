@@ -1,7 +1,17 @@
 package strategie;
 
+import hook.Hook;
+
+import java.util.ArrayList;
+
+import container.Container;
 import container.Service;
+import enums.ScriptNames;
+import enums.ServiceNames;
+import exceptions.ContainerException;
+import exceptions.serial.SerialManagerException;
 import robot.*;
+import scripts.ScriptManager;
 import table.Table;
 import utils.Log;
 import utils.Config;
@@ -32,12 +42,21 @@ public class Strategie implements Service
 	private GameState<RobotReal> gameStateRobotReal;
 	private GameState<RobotChrono> gameStateRobotChrono;
 	
+	/** Lesscripts realisés par le robot */
+	ScriptManager scriptmanager;
+	
 	/** Le nombre de points maximal que le robot est capable de faire en un temps infini */
 	int maxPointsPossible;
 	
 	/** Le temps maximum autorisé pour certaines actions : on ne fais pas tel ou tel script si un certain temps est passé*/
 	int maxTimeForTakingPlots=60;
 	int maxTimeForTakingGlass=70;
+	
+	/** Le container necessaire pour les services */
+	protected Container container;
+	
+	ArrayList<Hook> emptyHook;
+
 	
 	/**
      * Crée la strategie, l'IA decisionnelle
@@ -49,9 +68,18 @@ public class Strategie implements Service
         this.table = table;
         this.robotReal = robotReal;
         this.robotChrono = robotChrono;		
+        
+        
+		try 
+		{
+			scriptmanager = (ScriptManager)container.getService(ServiceNames.SCRIPT_MANAGER);
+		}
+		catch (ContainerException | SerialManagerException e) 
+		{
+			e.printStackTrace();
+		}
 	}
 
-	@Override
 	public void updateConfig() 
 	{
 		table.updateConfig();
@@ -77,7 +105,6 @@ public class Strategie implements Service
 		{
 			if( timeEllapsed > maxTimeForTakingGlass )
 			{
-				
 				
 			}
 		}

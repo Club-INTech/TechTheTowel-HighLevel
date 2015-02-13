@@ -44,28 +44,13 @@ public class Table implements Service
 	
 	
 	//les huits plots (voir numerotation sur la table)
-	private boolean isPlot0Eaten;
-	private boolean isPlot1Eaten;
-	private boolean isPlot2Eaten;
-	private boolean isPlot3Eaten;
-	private boolean isPlot4Eaten;
-	private boolean isPlot5Eaten;
-	private boolean isPlot6Eaten;
-	private boolean isPlot7Eaten;
+	private boolean isPLotXEaten[];
 	
 	//les 5 verres, pris ou non 
-	private boolean isGlass0Taken;
-	private boolean isGlass1Taken;
-	private boolean isGlass2Taken;
-	private boolean isGlass3Taken;
-	private boolean isGlass4Taken;
+	private boolean isGlassXTaken[];
 	
 	//les verres posés ou non
-	private boolean isGlass0Dropped;
-	private boolean isGlass1Dropped;
-	private boolean isGlass2Dropped;
-	private boolean isGlass3Dropped;
-	private boolean isGlass4Dropped;
+	private boolean isGlassXDropped[];
 
 	//Les emplacements où sont posés les verres (voir doc des zones dans DropGlasss : 
 	//1=Notre zone, 2=haut zone ennemi, 3=bas zone ennemi
@@ -101,63 +86,58 @@ public class Table implements Service
 		isRightCarpetDropped = false;
 		
 		//les plots
-		isPlot0Eaten = false;
-		isPlot1Eaten = false;
-		isPlot2Eaten = false;
-		isPlot3Eaten = false;
-		isPlot4Eaten = false;
-		isPlot5Eaten = false;
-		isPlot6Eaten = false;
-		isPlot7Eaten = false;
+		for (int i = 0; i< 8; i++)
+			isPLotXEaten[i]=false;
 		
 		//les verres
-		isGlass0Taken=false;
-		isGlass1Taken=false;
-		isGlass2Taken=false;
-		isGlass3Taken=false;
-		isGlass4Taken=false;
+		for (int i = 0; i< 5; i++)
+			isGlassXTaken[i]=false;
 		
 		//Les verres posés et leurs zones
-		isGlass0Dropped=false;
-		isGlass1Dropped=false;
-		isGlass2Dropped=false;
-		isGlass3Dropped=false;
-		isGlass4Dropped=false;
+		for (int i = 0; i< 5; i++)
+			isGlassXDropped[i]=false;
 		
 		//Les zones où sont posés les verres
 		isArea1FilledWithGlass=false;
 		isArea2FilledWithGlass=false;
 		isArea3FilledWithGlass=false;
 	}
+	
 	public ObstacleManager getObstacleManager()
 	{
 		return mObstacleManager;
 	}
 	
-	public boolean getIsClap1Closed() {
-		return isClap1Closed;
+	/** Fonction explicitant si le clap "numberOfClap" est fermé*/
+	public boolean isClapXClosed(int numberOfClap)
+	{
+		if( numberOfClap==1)
+			return isClap1Closed;
+		if( numberOfClap==2)
+			return isClap2Closed;
+		if( numberOfClap==3)
+			return isClap3Closed;
+		else
+		{
+			log.debug("Out of bound isClapXClosed", this);
+			return false;
+		}
 	}
 
-	public void setIsClap1Closed(boolean isClap1Closed) {
-		this.isClap1Closed = isClap1Closed;
-	}
-
-	public boolean getIsClap2Closed() {
-		return isClap2Closed;
-	}
-
-	public void setIsClap2Closed(boolean isClap2Closed) {
-		this.isClap2Closed = isClap2Closed;
-	}
-
-	public boolean getIsClap3Closed() {
-		return isClap3Closed;
-	}
-
-	public void setIsClap3Closed(boolean isClap3Closed) {
-		this.isClap3Closed = isClap3Closed;
-	}
 	
+	/** Fonction a appeler quand le clap x est fermé*/
+	public void clapXClosed(int numberOfClap)
+	{
+		if( numberOfClap==1)
+			isClap1Closed=true;
+		if( numberOfClap==2)
+			isClap2Closed=true;
+		if( numberOfClap==3)
+			isClap3Closed=true;
+		else
+			log.debug("Out of bound clapXClosed", this);
+	}
+		
 	/**
 	 * 
 	 * @param x le numero du plot
@@ -165,22 +145,8 @@ public class Table implements Service
 	 */
 	public boolean isPlotXEaten (int x)
 	{
-		if (x==0)
-			return isPlot0Eaten;
-		else if (x==1)
-			return isPlot1Eaten;
-		else if (x==2)
-			return isPlot2Eaten;
-		else if (x==3)
-			return isPlot3Eaten;
-		else if (x==4)
-			return isPlot4Eaten;
-		else if (x==5)
-			return isPlot5Eaten;
-		else if (x==6)
-			return isPlot6Eaten;
-		else if (x==7)
-			return isPlot7Eaten;
+		if (0<=x && x<=8)
+			return isPLotXEaten[x];
 		else
 			log.debug("out of bound, plot counter",this);
 			return false;
@@ -192,22 +158,8 @@ public class Table implements Service
 	 */
 	public void eatPlotX (int x)
 	{
-		if (x==0)
-			isPlot0Eaten=true;
-		else if (x==1)
-			isPlot1Eaten=true;
-		else if (x==2)
-			isPlot2Eaten=true;
-		else if (x==3)
-			isPlot3Eaten=true;
-		else if (x==4)
-			isPlot4Eaten=true;
-		else if (x==5)
-			isPlot5Eaten=true;
-		else if (x==6)
-			isPlot6Eaten=true;
-		else if (x==7)
-			isPlot7Eaten=true;
+		if (0<=x && x<=8)
+			isPLotXEaten[x]=true;
 		else
 			log.debug("out of bound, plot counter",this);
 	}
@@ -218,16 +170,8 @@ public class Table implements Service
 	 */
 	public void removeGlassX (int x)
 	{
-		if (x==0)
-			isGlass0Taken=true;
-		else if (x==1)
-			isGlass1Taken=true;
-		else if (x==2)
-			isGlass2Taken=true;
-		else if (x==3)
-			isGlass3Taken=true;
-		else if (x==4)
-			isGlass4Taken=true;
+		if (0<=x && x<=5)
+			isGlassXTaken[x]=true;
 		else
 			log.debug("Probleme dans isGlassTaken",this);
 	}
@@ -238,16 +182,8 @@ public class Table implements Service
 	 */
 	public boolean isGlassXTaken (int x)
 	{
-		if (x==0)
-			return isGlass0Taken;
-		else if (x==1)
-			return isGlass1Taken;
-		else if (x==2)
-			return isGlass2Taken;
-		else if (x==3)
-			return isGlass3Taken;
-		else if (x==4)
-			return isGlass4Taken;
+		if (0<=x && x<=5)
+			return isGlassXTaken[x];
 		else
 			log.debug("Probleme dans isGlassTaken",this);
 			return false;
@@ -259,16 +195,8 @@ public class Table implements Service
 	 */
 	public void glassXDropped (int x)
 	{
-		if (x==0)
-			isGlass0Dropped=true;
-		else if (x==1)
-			isGlass1Dropped=true;
-		else if (x==2)
-			isGlass2Dropped=true;
-		else if (x==3)
-			isGlass3Dropped=true;
-		else if (x==4)
-			isGlass4Dropped=true;
+		if (0<=x && x<=5)
+			isGlassXDropped[x]=true;
 		else
 			log.debug("Probleme dans glassXDropped",this);
 	}
