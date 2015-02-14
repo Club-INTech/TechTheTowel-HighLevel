@@ -24,6 +24,9 @@
 //#define TICK_TO_RADIAN 0.00012663 // TICK_TO_MM/256 : entre roues de 25.6cm
 #define TICK_TO_RADIAN 0.0014468
 
+#define NB_SPEED 4 //Nombre de vitesses différentes gérées par l'asservissement
+#define NB_CTE_ASSERV 4 //Nombre de variables constituant un asservissement : pwmMAX, kp, ki, kd
+
 class MotionControlSystem : public Singleton<MotionControlSystem> {
 private:
 	Motor leftMotor;
@@ -48,6 +51,8 @@ private:
 	float x;
 	float y;
 	bool moving;
+	float translationTunings[NB_SPEED][NB_CTE_ASSERV];
+	float rotationTunings[NB_SPEED][NB_CTE_ASSERV];
 
 	void applyControl();
 	bool isPhysicallyStopped();
@@ -64,7 +69,7 @@ public:
     }
 	int32_t currentDistance;
 	int32_t currentAngle;
-	void init();
+	void init(uint8_t maxPWMtranslation, uint8_t maxPWMrotation);
 
 	void control();
 	void updatePosition();
@@ -102,6 +107,15 @@ public:
 	uint8_t getMaxPWMrotation();
 	void setMaxPWMtranslation(uint8_t);
 	void setMaxPWMrotation(uint8_t);
+	/*
+	 * Règlage des constantes d'asservissement et du pwm
+	 * à partir du pwm donné en argument et de la base de
+	 * donnée de constantes compatibles qui associent
+	 * chaque pwm à des constanes d'asservissement.
+	 */
+	void setSmartTranslationTunings(uint8_t pwm);
+	void setSmartRotationTunings(uint8_t pwm);
+	int getBestTuningsInDatabase(uint8_t pwm, float[NB_SPEED][NB_CTE_ASSERV]);
 };
 
 #endif /* MOTION_CONTROL_H_ */

@@ -10,7 +10,7 @@ MotionControlSystem::MotionControlSystem() :
 				false) {
 }
 
-void MotionControlSystem::init() {
+void MotionControlSystem::init(uint8_t maxPWMtranslation, uint8_t maxPWMrotation) {
 	/**
 	 * Initialisation moteurs et encodeurs
 	 */
@@ -19,13 +19,38 @@ void MotionControlSystem::init() {
 	Counter();
 
 	/**
-	 * Réglage des PID
+	 * Renseignement de la base de données des constantes d'asservissement
+	 */
+	float database[][NB_CTE_ASSERV]=
+	{//		 PWM  Kp   Ki   Kd
+			{120, 0.2, 0. , 35.},//Translation
+			{100, 0.2, 0. , 65.},//Rotation
+			{ 0., 0. , 0. ,  0.},//Translation
+			{ 0., 0. , 0. ,  0.},//Rotation
+			{ 0., 0. , 0. ,  0.},//Translation
+			{ 0., 0. , 0. ,  0.},//Rotation
+			{ 0., 0. , 0. ,  0.},//Translation
+			{ 0., 0. , 0. ,  0.} //Rotation
+	};
+
+	for(int i=0; i<NB_SPEED; i++)
+	{
+		for(int j=0; j<NB_CTE_ASSERV; j++)
+		{
+			translationTunings[i][j] = database[2*i][j];
+			rotationTunings[i][j] = database[2*i+1][j];
+		}
+	}
+
+
+	/**
+	 * Réglage des PID en fonction des PWMmax donnés
 	 */
 
 	translationPID.setControllerDirection(PidDirection::DIRECT);
-	translationPID.setTunings(0.4, 0., 5);
+	MotionControlSystem::setSmartTranslationTunings(maxPWMtranslation);
 	rotationPID.setControllerDirection(PidDirection::DIRECT);
-	rotationPID.setTunings(0.08, 0., 7);
+	MotionControlSystem::setSmartRotationTunings(maxPWMrotation);
 
 	/**
 	 * Réglage du PWM maximum
@@ -276,3 +301,31 @@ uint8_t MotionControlSystem::getMaxPWMrotation(){
 	return rotationPID.getOutputLimit();
 }
 
+void MotionControlSystem::setSmartTranslationTunings(uint8_t pwm)
+{
+	translationPID.setOutputLimits(-pwm, pwm);
+	int i = getBestTuningsInDatabase(pwm, translationTunings);
+	translationPID.setTunings(translationTunings[i][1], translationTunings[i][2], translationTunings[i][3]);
+}
+
+void MotionControlSystem::setSmartRotationTunings(uint8_t pwm)
+{
+	rotationPID.setOutputLimits(-pwm, pwm);
+	int i = getBestTuningsInDatabase(pwm, rotationTunings);
+	rotationPID.setTunings(rotationTunings[i][1], rotationTunings[i][2], rotationTunings[i][3]);
+}
+
+int MotionControlSystem::getBestTuningsInDatabase(uint8_t pwm, float database[NB_SPEED][NB_CTE_ASSERV])
+{
+	float ecartMin = 255, indice;
+	for(int i=0; i<NB_CTE_ASSERV; i++)
+	{
+		float ecart = ABS(database[i][0] - float(pwm));
+		if(ecart < ecartMin)
+		{
+			ecartMin = ecart;
+			indice = i;
+		}
+	}
+	return indice;
+}
