@@ -61,6 +61,7 @@ public class Panel extends JPanel
 	    }
 	    
 	    g.setColor(new Color(100, 60, 5));
+	    
 	    if(showGraph)
 	    {
 	    	//parcours des noeuds
@@ -80,12 +81,12 @@ public class Panel extends JPanel
 	    
 	    //le premier robot ennemi
 	    g.setColor(Color.red);
-	    ArrayList<ObstacleProximity> plots = mTable.getObstacleManager().getMobileObstacles();
-	    for(int i = 0; i < mTable.getObstacleManager().getMobileObstacles().size(); i++)
-		    g.drawOval((mTable.getObstacleManager().getMobileObstacles().get(i).getPosition().x - mTable.getObstacleManager().getMobileObstacles().get(i).getRadius() + 1500) * this.getWidth() / 3000,
-		    		-(mTable.getObstacleManager().getMobileObstacles().get(i).getPosition().y + mTable.getObstacleManager().getMobileObstacles().get(i).getRadius()) * this.getHeight() / 2000 + this.getHeight(),
-		    		(2 * mTable.getObstacleManager().getMobileObstacles().get(i).getRadius()) * this.getWidth() / 3000,
-		    		(2 * mTable.getObstacleManager().getMobileObstacles().get(i).getRadius()) * this.getHeight() / 2000);
+	    ArrayList<ObstacleProximity> ennemyRobots = mTable.getObstacleManager().getMobileObstacles();
+	    for(int i = 0; i < ennemyRobots.size(); i++)
+		    g.drawOval((ennemyRobots.get(i).getPosition().x - ennemyRobots.get(i).getRadius() + 1500) * this.getWidth() / 3000,
+		    		-(ennemyRobots.get(i).getPosition().y + ennemyRobots.get(i).getRadius()) * this.getHeight() / 2000 + this.getHeight(),
+		    		(2 * ennemyRobots.get(i).getRadius()) * this.getWidth() / 3000,
+					(2 * ennemyRobots.get(i).getRadius()) * this.getHeight() / 2000);
 	    
 	    g.setColor(Color.green);
 	    //g.drawOval((mRobot.getPosition().x - 100 + 1500) * this.getWidth() / 3000, -(mRobot.getPosition().y + 100) * this.getHeight() / 2000 + this.getHeight(), (2 * 100) * this.getWidth() / 3000, (2 * 100) * this.getHeight() / 2000);

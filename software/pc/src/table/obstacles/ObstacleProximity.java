@@ -10,6 +10,8 @@ import smartMath.Vec2;
  */
 public class ObstacleProximity extends ObstacleCircular
 {
+	/** temps ou l'obstacle sera perime en ms */
+	private long mOutDatedTime;
 	
 	/**
 	 * Crée un nouvel obstacle détecté a proximité du robot.
@@ -23,6 +25,7 @@ public class ObstacleProximity extends ObstacleCircular
 	public ObstacleProximity (Vec2 position, int radius)
 	{
 		super(position,radius);
+		mOutDatedTime = System.currentTimeMillis() + 5000;
 	}
 	
 	/* (non-Javadoc)
@@ -31,5 +34,10 @@ public class ObstacleProximity extends ObstacleCircular
 	public ObstacleProximity clone()
 	{
 		return new ObstacleProximity(position.clone(), getRadius());
+	}
+	
+	public long getOutDatedTime()
+	{
+		return mOutDatedTime;
 	}
 }

@@ -266,6 +266,7 @@ public class PathDingDing implements Service
 	public boolean isPathCorrect(ArrayList<Vec2> path)
 	{
 		//conversion des obstacles circulaires en cercles
+		
 		ArrayList<Circle> circles = new ArrayList<Circle>();
 		if(mObstaclesToConsider.contains(ObstacleGroups.ENNEMY_ROBOTS))
 			for(int i = 0; i < mTable.getObstacleManager().getMobileObstacles().size(); i++)
@@ -278,6 +279,10 @@ public class PathDingDing implements Service
 		if(mObstaclesToConsider.contains(ObstacleGroups.GREEN_PLOTS))
 			//parcours des plots verts
 			for(int i = 8; i < 16; i++)
+				circles.add(new Circle(mTable.getObstacleManager().getFixedObstacles().get(i).getPosition(), mTable.getObstacleManager().getFixedObstacles().get(i).getRadius()));
+		if(mObstaclesToConsider.contains(ObstacleGroups.GOBLETS))
+			//parcours des gobelets
+			for(int i = 16; i < 21; i++)
 				circles.add(new Circle(mTable.getObstacleManager().getFixedObstacles().get(i).getPosition(), mTable.getObstacleManager().getFixedObstacles().get(i).getRadius()));
 		
 		boolean intersects = false;

@@ -35,7 +35,8 @@ public class ThreadTimer extends AbstractThread
 	public static long matchStartTimestamp;
 	
 	/** Durée en miliseconde d'un match. */
-	public static long matchDuration = 90000000;//90.000 = 90 sec
+	public static long matchDuration = 90000000;
+	//TODO : mettre 90 secondes au lieu de 90 000 secondes pour un vrai match
 	
 	/** Temps en ms qui s'écoule entre deux mise a jour de la liste des obstacle périmables. Lors de chaque mise a jour, les obstacles périmés sont détruits. */
 	public static int obstacleRefreshInterval = 500;

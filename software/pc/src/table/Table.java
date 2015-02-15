@@ -71,6 +71,11 @@ public class Table implements Service
 		this.log = log;
 		this.config = config;
 		this.mObstacleManager = new ObstacleManager(log, config);
+		
+		isPLotXEaten = new boolean[8];
+		isGlassXTaken = new boolean[5];
+		isGlassXDropped = new boolean[5];
+		
 		initialise();
 	}
 	

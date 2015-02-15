@@ -85,6 +85,7 @@ public class ObstacleManager
       	mLines.add(new Segment(new Vec2(1500 - robotRadius, 1930 - robotRadius), new Vec2(-1500 + robotRadius, 1930 - robotRadius)));
       	mLines.add(new Segment(new Vec2(-1500 + robotRadius, 1930 - robotRadius), new Vec2(-1500 + robotRadius, 0 + robotRadius)));
       	
+      	//obstacles rectangulaires
       	mRectangles.add(new ObstacleRectangular(new Vec2(-1300, 778),400,444));
       	mRectangles.add(new ObstacleRectangular(new Vec2(-1200, 1930),70,70));
       	mRectangles.add(new ObstacleRectangular(new Vec2(-900, 1930),70,70));
@@ -93,33 +94,33 @@ public class ObstacleManager
       	mRectangles.add(new ObstacleRectangular(new Vec2(900, 1930),70,70));
       	mRectangles.add(new ObstacleRectangular(new Vec2(1200, 1930),70,70));
       	mRectangles.add(new ObstacleRectangular(new Vec2(1300, 778),400,444));
-      	
-	    //obstacles plots jaunes
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-1410, 1800), 30 + robotRadius));
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-650, 1900), 30 + robotRadius));
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-650, 1800), 30 + robotRadius));
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-630, 645), 30 + robotRadius));
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-200, 600), 30 + robotRadius));
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-400, 250), 30 + robotRadius));
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-1410, 250), 30 + robotRadius));
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-1410, 150), 30 + robotRadius));
 
 	    // obstacles plots verts
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(1410, 1800), 30 + robotRadius));
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(650, 1900), 30 + robotRadius));
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(650, 1800), 30 + robotRadius));
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(630, 645), 30 + robotRadius));
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(200, 600), 30 + robotRadius));
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(400, 250), 30 + robotRadius));
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(1410, 250), 30 + robotRadius));
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(1410, 150), 30 + robotRadius));
-	    
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(200, 600), 30 + robotRadius)); // plot 0
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(400, 250), 30 + robotRadius)); // plot 1
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(630, 645), 30 + robotRadius)); // plot 2
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(1410, 150), 30 + robotRadius)); // plot 3
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(1410, 250), 30 + robotRadius)); // plot 4
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(650, 1800), 30 + robotRadius)); // plot 5
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(650, 1900), 30 + robotRadius)); // plot 6
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(1410, 1800), 30 + robotRadius)); // plot 7
+      	
+	    //obstacles plots jaunes
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-200, 600), 30 + robotRadius)); // plot 0
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-400, 250), 30 + robotRadius)); // plot 1
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-630, 645), 30 + robotRadius)); // plot 2
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-1410, 150), 30 + robotRadius)); // plot 3
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-1410, 250), 30 + robotRadius)); // plot 4
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-650, 1800), 30 + robotRadius)); // plot 5
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-650, 1900), 30 + robotRadius)); // plot 6
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-1410, 1800), 30 + robotRadius)); // plot 7
+
 	    // gobelets
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(590, 1170), 48 + robotRadius));
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(1250, 250), 48 + robotRadius));
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(0, 350), 48 + robotRadius));
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-1250, 250), 48 + robotRadius));
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-590, 1170), 48 + robotRadius));
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(1250, 250), 48 + robotRadius)); // gobelet 0
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(590, 1170), 48 + robotRadius)); // gobelet 1
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(0, 350), 48 + robotRadius)); // gobelet 2
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-590, 1170), 48 + robotRadius)); // gobelet 3
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-1250, 250), 48 + robotRadius)); // gobelet 4
     }    
 
     /**
@@ -164,7 +165,6 @@ public class ObstacleManager
      */
     public ArrayList<ObstacleCircular> getFixedObstacles()
     {
-    	// TODO renvoyer la liste des obstacles fixes
         return mFixedObstacles;
     }
     
@@ -199,8 +199,9 @@ public class ObstacleManager
      */
     public synchronized void removeOutdatedObstacles(long date)
     {
-    	// Et pouf !
-    	// TODO supprimer les obstacles qui sont périmés
+    	for(int i = 0; i < mMobileObstacles.size(); i++)
+    		if(mMobileObstacles.get(i).getOutDatedTime() > System.currentTimeMillis())
+    			mMobileObstacles.remove(i);
     }
 
     /**
