@@ -9,8 +9,11 @@ import container.Service;
 import enums.ScriptNames;
 import enums.ServiceNames;
 import exceptions.ContainerException;
+import exceptions.Locomotion.UnableToMoveException;
+import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialManagerException;
 import robot.*;
+import scripts.AbstractScript;
 import scripts.ScriptManager;
 import table.Table;
 import utils.Log;
@@ -38,12 +41,11 @@ public class Strategie implements Service
 	private RobotReal robotReal;
 	private RobotChrono robotChrono;
 	
-	/** Les differents gameState de chaque robot : */
-	private GameState<RobotReal> gameStateRobotReal;
-	private GameState<RobotChrono> gameStateRobotChrono;
+	/** Le gameState de chaque robot : */
+	private GameState<Robot> gameState;
 	
-	/** Lesscripts realisés par le robot */
-	ScriptManager scriptmanager;
+	/** Les scripts Manager des deux robots*/
+	ScriptManager scriptmanagerRobotReal,scriptmanagerRobotChrono;	
 	
 	/** Le nombre de points maximal que le robot est capable de faire en un temps infini */
 	int maxPointsPossible;
@@ -55,8 +57,8 @@ public class Strategie implements Service
 	/** Le container necessaire pour les services */
 	protected Container container;
 	
-	ArrayList<Hook> emptyHook;
-
+	/** Les hooks des deux robots*/
+	ArrayList<Hook> emptyHookRobotReal, emptyHookRobotChrono;
 	
 	/**
      * Crée la strategie, l'IA decisionnelle
@@ -69,10 +71,10 @@ public class Strategie implements Service
         this.robotReal = robotReal;
         this.robotChrono = robotChrono;		
         
-        
 		try 
 		{
-			scriptmanager = (ScriptManager)container.getService(ServiceNames.SCRIPT_MANAGER);
+			scriptmanagerRobotReal= scriptmanagerRobotChrono = (ScriptManager)container.getService(ServiceNames.SCRIPT_MANAGER);
+			
 		}
 		catch (ContainerException | SerialManagerException e) 
 		{
@@ -90,17 +92,18 @@ public class Strategie implements Service
 	public void IA()
 	{		
 		//tant qu'il reeste des points et que le match n'est pas fini, on prend des decisions :
-		while(( gameStateRobotReal.obtainedPoints <  maxPointsPossible ) &&
-			  ( gameStateRobotReal.timeEllapsed   <  Integer.parseInt(config.getProperty("temps_match")) )  )
+		while(( gameState.obtainedPoints <  maxPointsPossible ) &&
+			  ( gameState.timeEllapsed   <  Integer.parseInt(config.getProperty("temps_match")) )  )
 		{
-			takeDecision(gameStateRobotReal.timeEllapsed);
+			takeDecision(gameState.timeEllapsed);
 		}
 	}
 	
-	/** Fonction principale : prend une decision en prenantt tout en compte */
+	
+	/** Fonction principale : prend une decision en prenant tout en compte */
 	public void takeDecision(long timeEllapsed)
 	{
-		//Gestion 
+		//Gestion des decisions en fonction du temps
 		if( timeEllapsed > maxTimeForTakingPlots )
 		{
 			if( timeEllapsed > maxTimeForTakingGlass )
