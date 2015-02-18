@@ -52,7 +52,8 @@ public class DropCarpet extends AbstractScript
 
 		
 		//verification de la position : on n'effectue l'action que si on est assez proche (ie pas d'obstacle)
-		if(Math.abs((stateToConsider.robot.getPosition().y-1340))<50) // position- position du centre parfait<marge d'erreur
+		//if(Math.abs((stateToConsider.robot.getPosition().y-1340))<50) // position- position du centre parfait<marge d'erreur
+		
 		{
 			//on depose le tapis gauche (si celui-ci n'est pas deja depose)
 			if (!stateToConsider.table.getIsLeftCarpetDropped())
@@ -71,10 +72,7 @@ public class DropCarpet extends AbstractScript
 			}
 			System.out.println("En position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") après avoir deposé les tapis");
 		}
-		else
-		{
-			System.out.println("Trop loin, on ne depose pas les tapis");
-		}
+		
 		//on s'eloigne de l'escalier
 		stateToConsider.robot.moveLengthwise(distanceBetweenEntryAndStairs, hooksToConsider, false);
 	}
