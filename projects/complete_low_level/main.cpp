@@ -12,7 +12,7 @@ int main(void)
 	serial_ax.init(9600);
 
 	MotionControlSystem* motionControlSystem = &MotionControlSystem::Instance();
-	motionControlSystem->init(120, 100);
+	motionControlSystem->init(100, 100);
 	ActuatorsMgr actuatorsMgr;
 
 	bool translation = true;//permet de basculer entre les réglages Kp de translation et de rotation
@@ -125,11 +125,21 @@ int main(void)
 					serial.printfln("kp_trans = %f", kp);
 					motionControlSystem->setTranslationTunings(kp,ki,kd);
 					motionControlSystem->orderTranslation(300);
-					Delay(3000);
+					for(int t=0; t<12; t++)
+					{
+//						serial.printfln("Pwm trans : %d", motionControlSystem->getPWMTranslation());
+//						serial.printfln("Pwm rotation : %d", motionControlSystem->getPWMRotation());
+						Delay(250);
+					}
 					serial.printfln("%f\r\n%f", motionControlSystem->getX(), motionControlSystem->getY());
 					serial.printfln("%f", motionControlSystem->getAngleRadian());
 					motionControlSystem->orderTranslation(-300);
-					Delay(3000);
+					for(int t=0; t<12; t++)
+					{
+//						serial.printfln("Pwm trans : %d", motionControlSystem->getPWMTranslation());
+//						serial.printfln("Pwm rotation : %d", motionControlSystem->getPWMRotation());
+						Delay(250);
+					}
 					serial.printfln("%f\r\n%f", motionControlSystem->getX(), motionControlSystem->getY());
 					serial.printfln("%f", motionControlSystem->getAngleRadian());
 				}
@@ -139,7 +149,7 @@ int main(void)
 					serial.read(kp);
 					serial.printfln("kp_rot = %f", kp);
 					motionControlSystem->setRotationTunings(kp,ki,kd);
-					motionControlSystem->orderRotation(PI);
+					motionControlSystem->orderRotation(2*PI/3);
 					Delay(3000);
 					serial.printfln("%f\r\n%f", motionControlSystem->getX(), motionControlSystem->getY());
 					serial.printfln("%f", motionControlSystem->getAngleRadian());
@@ -174,7 +184,7 @@ int main(void)
 					serial.read(kd);
 					serial.printfln("kd_rot = %f", kd);
 					motionControlSystem->setRotationTunings(kp,ki,kd);
-					motionControlSystem->orderRotation(PI);
+					motionControlSystem->orderRotation(2*PI/3);
 					Delay(3000);
 					serial.printfln("%f\r\n%f", motionControlSystem->getX(), motionControlSystem->getY());
 					serial.printfln("%f", motionControlSystem->getAngleRadian());
@@ -261,6 +271,14 @@ int main(void)
 				serial.read(kd);
 				motionControlSystem->setRotationTunings(kp,ki,kd);
 				serial.printfln("kd_rot = %f", kd);
+			}
+			else if(!strcmp("track",order))
+			{
+				motionControlSystem->printTracking();
+			}
+			else if(!strcmp("clear",order))
+			{
+				motionControlSystem->clearTracking();
 			}
 
 
@@ -386,7 +404,7 @@ int main(void)
 extern "C" {
 //Interruption overflow TIMER4
 void TIM4_IRQHandler(void) { //2kHz = 0.0005s = 0.5ms
-	__IO static uint32_t i = 0;
+	__IO static uint32_t i = 0, j = 0;
 	static MotionControlSystem* motionControlSystem = &MotionControlSystem::Instance();
 
 	if (TIM_GetITStatus(TIM4, TIM_IT_Update) != RESET) {
@@ -402,7 +420,13 @@ void TIM4_IRQHandler(void) { //2kHz = 0.0005s = 0.5ms
 			i = 0;
 		}
 
+		if(j >= 200){ //100ms
+			motionControlSystem->track();
+			j=0;
+		}
+
 		i++;
+		j++;
 	}
 }
 }
