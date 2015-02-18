@@ -82,16 +82,40 @@ public class GetPlot extends AbstractScript
 			//on mange le plot
 			try 
 			{
+				if(versionToExecute==1)
+					stateToConsider.robot.turn(Math.PI);// On se tourne pour sauver le PF
 				eatPlot(false, isChoosenArmLeft, stateToConsider);
+
+				if(versionToExecute==7)
+				{
+					System.out.println("en position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") avant la rectification du PF");
+					stateToConsider.robot.turn(Math.PI);// On se tourne pour sauver le PF
+					stateToConsider.robot.moveLengthwise(300);
+					stateToConsider.robot.turn(-Math.PI/2);
+					stateToConsider.robot.moveLengthwise(300);
+					
+				}
 			} 
 			catch (UnableToEatPlot e) 
 			{
 				//on a pas reussi a manger, on le dit et on termine le script
 				log.debug("impossible de manger le plot n°"+versionToExecute+" mangeage echoue", this);
+				
+
+				if(versionToExecute==7)
+				{
+					System.out.println("en position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") avant la rectification du PF");
+					stateToConsider.robot.turn(Math.PI);// On se tourne pour sauver le PF
+					stateToConsider.robot.moveLengthwise(300);
+					stateToConsider.robot.turn(-Math.PI/2);
+					stateToConsider.robot.moveLengthwise(300);
+					
+				}
 				finalise(stateToConsider);
 				return;
 			}
 			stateToConsider.table.eatPlotX(versionToExecute);
+			
 		}
 		else if (versionToExecute == 34)
 		{
@@ -269,7 +293,7 @@ public class GetPlot extends AbstractScript
 		if (id==0)
 			return new Circle (200,600,180);
 		else if (id==1)
-			return new Circle (400,250,180);
+			return new Circle (400+180,250);//pose souci au PF, on avancera
 		else if (id==2)
 			return new Circle (630,645,180);
 		else if (id==34)

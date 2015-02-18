@@ -90,8 +90,8 @@ public class Strategie implements Service
 	}
 	
 	public void IA()
-	{		
-		//tant qu'il reeste des points et que le match n'est pas fini, on prend des decisions :
+	{
+		//tant qu'il reste des points et que le match n'est pas fini, on prend des decisions :
 		while(( gameState.obtainedPoints <  maxPointsPossible ) &&
 			  ( gameState.timeEllapsed   <  Integer.parseInt(config.getProperty("temps_match")) )  )
 		{

@@ -9,7 +9,9 @@ import scripts.ScriptManager;
 import smartMath.*;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
+import enums.ObstacleGroups;
 import enums.ScriptNames;
 import enums.ServiceNames;
 import exceptions.PathNotFoundException;
@@ -48,7 +50,7 @@ public class JUnit_Path extends JUnit_Test
     	try
     	{
     		//Test : computePath(new Vec2 [Point de depart] ,new Vec2[Point d'arrivée] )
-	    	win.getPanel().drawArrayList(pf.computePath(new Vec2 (-900,1000),new Vec2(-1045,250)));
+	    	win.getPanel().drawArrayList(pf.computePath(new Vec2 (1230, 1799),new Vec2(430,570) ));
 	    }
     	catch(PathNotFoundException e)
     	{

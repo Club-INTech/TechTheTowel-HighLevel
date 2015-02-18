@@ -196,7 +196,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		System.out.println("Clap 1 et 2 Fermés");
 
 		try 
-		{
+		{//TODO PathNotFound Exception
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le plot 1");
 			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(1, real_state, true, emptyHook ); // On prend le plot a cote de l'estrade
 			System.out.println("Plot 1 pris");
@@ -329,12 +329,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		}
 		
 		try 
-		{
-			/*
-			real_state.robot.turn(0);		//On s'eloigne, le PF suffira ici.
-			real_state.robot.moveLengthwise(500);	
-			real_state.robot.turn(Math.PI/2);		
-			real_state.robot.moveLengthwise(800);	*/
+		{//TODO PathNotFound Exception
 			
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le deposage de la pile dans notre zone");
 			scriptmanager.getScript(ScriptNames.FREE_STACK).goToThenExec(2, real_state, true, emptyHook ); // On libere la pile ans notre zone
