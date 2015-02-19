@@ -15,7 +15,7 @@ int main(void)
 	motionControlSystem->init(100, 100);
 	ActuatorsMgr actuatorsMgr;
 
-	bool translation = true;//permet de basculer entre les réglages Kp de translation et de rotation
+	bool translation = true;//permet de basculer entre les réglages de cte d'asserv en translation et en rotation
 
 	while(1)
 	{
@@ -25,7 +25,7 @@ int main(void)
 
 			if(!strcmp("?",order))
 			{
-				serial.printfln("je suis une liaison serie !");
+				serial.printfln("0");
 			}
 			else if(!strcmp("!",order))
 			{
