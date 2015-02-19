@@ -140,7 +140,10 @@ public abstract class Robot implements Service
     // TODO: ne pas utiliser cette méthode. il faut utiliser moveLengthwiseTowardWall pour foncer dans un mur.
     // à mettre en privé
     public abstract void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException;
-    
+
+    // TODO: documenter
+    protected abstract void followPath(ArrayList<Vec2> chemin, ArrayList<Hook> hooks, DirectionStrategy direction) throws UnableToMoveException;
+
 
 	/**
 	 * Fais suivre un chemin au robot décrit par une liste de point.
@@ -187,22 +190,6 @@ public abstract class Robot implements Service
 	 * @return l'orientation en radiants courante du robot sur la table
 	 */
     public abstract double getOrientation();
-    
-	/**
-	 * Donne la position du robot sur la table.
-	 * Cette méthode est rapide mais peu précise: elle ne déclenche pas d'appel a la série pour obtenir une position a jour.
-	 * La position revoyée est celle mémorisée lors de sa dernière mise a jour (la date de la dernière mise a jour est inconnue).
-	 * @return la dernière position mémorisée du robot sur la table
-	 */
-    public abstract Vec2 getPositionFast();
-    
-	/**
-	 * Donne l'orientation du robot sur la table.
-	 * Cette méthode est rapide mais peu précise: elle ne déclenche pas d'appel a la série pour obtenir une orientation a jour.
-	 * L'orientation revoyée est celle mémorisée lors de sa dernière mise a jour (la date de la dernière mise a jour est inconnue).
-	 * @return la dernière orientation mémorisée du robot sur la table
-	 */
-    public abstract double getOrientationFast();
     
 	/**
 	 * Fait tourner le robot (méthode bloquante)
