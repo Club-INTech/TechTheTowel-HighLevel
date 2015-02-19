@@ -183,13 +183,24 @@ public class ObstacleManager
 	}
     
     /**
-     * Ajoute un obstacle sur la table a la position spécifiée
+     * Ajoute un obstacle sur la table a la position spécifiée (de type obstacleProximity)
      *
      * @param position position ou ajouter l'obstacle
      */
     public synchronized void addObstacle(final Vec2 position)
     {
-    	// TODO ajouter un obstacle quand demandé
+    	//TODO : mettre un rayon plus adapte (30 par defaut)
+    	mMobileObstacles.add(new ObstacleProximity(position, 30));
+    }
+    
+    /**
+     * Ajoute un obstacle sur la table a la position spécifiée, du rayon specifie (de type obstacleProximity)
+     *
+     * @param position position ou ajouter l'obstacle
+     * @param radius rayon de l'obstacle a ajouter     */
+    public synchronized void addObstacle(final Vec2 position, final int radius)
+    {
+    	mMobileObstacles.add(new ObstacleProximity(position, radius));
     }
 
     /**
@@ -213,8 +224,19 @@ public class ObstacleManager
      */
     public boolean isDiscObstructed(final Vec2 discCenter, int radius)
     {
-    	//TODO vérifier si le disque est obstrué
-    	return false;
+    	//TODO vérifier si le disque est obstrué dans le cas d'un rectangle
+    	boolean isDiscObstructed = false;
+    	for(int i=0; i<mMobileObstacles.size(); i++)
+    	{
+    		if ((radius+mMobileObstacles.get(i).radius)*(radius+mMobileObstacles.get(i).radius)<(discCenter.x-mMobileObstacles.get(i).position.x)*(discCenter.x-mMobileObstacles.get(i).position.x)+(discCenter.y-mMobileObstacles.get(i).position.y)*(discCenter.y-mMobileObstacles.get(i).position.y))
+    			isDiscObstructed=true;
+    	}
+    	for(int i=0; i<mFixedObstacles.size(); i++)
+    	{
+    		if ((radius+mFixedObstacles.get(i).radius)*(radius+mFixedObstacles.get(i).radius)<(discCenter.x-mFixedObstacles.get(i).position.x)*(discCenter.x-mFixedObstacles.get(i).position.x)+(discCenter.y-mFixedObstacles.get(i).position.y)*(discCenter.y-mFixedObstacles.get(i).position.y))
+    			isDiscObstructed=true;
+    	}
+    	return isDiscObstructed;
     }   
 
     /**
@@ -254,6 +276,7 @@ public class ObstacleManager
     
     /**
      * Vérifie si le position spécifié est dans l'obstacle spécifié ou non
+     * Attention : l'obstacle doit etre issu des classes ObstacleCircular ou ObstacleRectangular
      *
      * @param pos la position a vérifier
      * @param obstacle l'obstacle a considérer
@@ -261,9 +284,18 @@ public class ObstacleManager
      */
     public synchronized boolean isPositionInObstacle(Vec2 pos, Obstacle obstacle)
     {
-    	//TODO: vérifier si la position actuelle est ou non dans l'obstacle
-    	return true;
-
+    	if(obstacle instanceof ObstacleCircular)
+    	{
+    		ObstacleCircular obstacleCircular = (ObstacleCircular)obstacle;
+    		return (pos.x-obstacleCircular.position.x)*(pos.x-obstacleCircular.position.x)+(pos.y-obstacleCircular.position.y)*(pos.y-obstacleCircular.position.y)<obstacleCircular.radius*obstacleCircular.radius;
+    	}
+    	if(obstacle instanceof ObstacleRectangular)
+    	{
+    		ObstacleRectangular obstacleRectangular = (ObstacleRectangular)obstacle;
+	    	return pos.x<(obstacleRectangular.position.x-(obstacleRectangular.sizeX/2)) || pos.x>(obstacleRectangular.position.x+(obstacleRectangular.sizeX/2)) || pos.y<(obstacleRectangular.position.y-(obstacleRectangular.sizeY/2)) || pos.y>(obstacleRectangular.position.y+(obstacleRectangular.sizeY/2));
+    	}
+    	else
+    		throw new IllegalArgumentException();
     }
     
     /**
@@ -274,9 +306,13 @@ public class ObstacleManager
      */
     public synchronized boolean isObstructed(Vec2 position)
     {
-    	//TODO : vérifier si la position est dans un obstacle ou non
-    	boolean IDontKnow = false;
-        return IDontKnow;
-    	
+    	boolean isObstructed = false;
+    	for(int i=0; i<mMobileObstacles.size(); i++)
+    		isObstructed=isPositionInObstacle(position, mMobileObstacles.get(i));
+    	for(int i=0; i<mFixedObstacles.size(); i++)
+    		isObstructed=isPositionInObstacle(position, mFixedObstacles.get(i));
+    	for(int i=0; i<mRectangles.size(); i++)
+    		isObstructed=isPositionInObstacle(position, mRectangles.get(i));
+        return isObstructed;
     }
 }
