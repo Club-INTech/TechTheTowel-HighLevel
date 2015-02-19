@@ -29,7 +29,7 @@ int main(void)
 			}
 			else if(!strcmp("!",order))
 			{
-				serial.printfln("%lf", 3.15402151024021654);
+				serial.printfln("Abwabwa.");
 			}
 			else if(!strcmp("oxy",order))
 			{
@@ -279,6 +279,7 @@ int main(void)
 			else if(!strcmp("clear",order))
 			{
 				motionControlSystem->clearTracking();
+				serial.printfln("Tracking array cleared");
 			}
 
 

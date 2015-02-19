@@ -26,8 +26,8 @@ void MotionControlSystem::init(int16_t maxPWMtranslation, int16_t maxPWMrotation
 			{120,   2., 0., 700},//Rotation
 			{100, 0.2, 0. , 90.},//Translation
 			{150, 2.5, 0. , 600},//Rotation
-			{ 0., 0. , 0. ,  0.},//Translation
-			{ 0 , 0  , 0. ,  0.},//Rotation
+			{  0,  0 , 0. ,   0},//Translation
+			{100,  3 , 0. ,1200},//Rotation
 			{ 0., 0. , 0. ,  0.},//Translation
 			{ 0., 0. , 0. ,  0.} //Rotation
 	};
@@ -227,7 +227,11 @@ void MotionControlSystem::track(){
 void MotionControlSystem::printTracking(){
 	for(int i=0; i<TRACKER_SIZE; i++)
 	{
-		serial.printfln("x=%f | y=%f | o=%f | pwmT=%f | pwmR=%f", this->trackArray[i][0], this->trackArray[i][1], this->trackArray[i][2], this->trackArray[i][3], this->trackArray[i][4]);
+		if(this->trackArray[i][3] != 0 || this->trackArray[i][4] != 0)
+		{
+			serial.printfln("x=%f | y=%f | o=%f", this->trackArray[i][0], this->trackArray[i][1], this->trackArray[i][2]);
+			serial.printfln("pwmT=%f | pwmR=%f", this->trackArray[i][3], this->trackArray[i][4]);
+		}
 	}
 }
 
