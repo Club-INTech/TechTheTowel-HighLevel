@@ -135,7 +135,7 @@ public class DropPile extends AbstractScript
 	{
 		if (id==1)
 		{
-			return new Circle(200+robotRay,570);
+			return new Circle(200+230,570);
 		}
 		else if (id==2)
 		{

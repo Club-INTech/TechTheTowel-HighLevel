@@ -1,6 +1,7 @@
 package robot;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
 import pathDingDing.PathDingDing;
 import hook.Hook;
@@ -9,6 +10,7 @@ import smartMath.Vec2;
 import table.Table;
 import container.Service;
 import enums.ActuatorOrder;
+import enums.ObstacleGroups;
 import enums.SensorNames;
 import enums.Speed;
 import exceptions.PathNotFoundException;
@@ -316,7 +318,7 @@ public abstract class Robot implements Service
      */
     public void moveToCircle(Circle aim, ArrayList<Hook> hooksToConsider, Table table) throws PathNotFoundException, UnableToMoveException
     {
-    	ArrayList<Vec2> path = pathDingDing.computePath(getPosition(),aim.toVec2());
+    	ArrayList<Vec2> path = pathDingDing.computePath(getPosition(),aim.toVec2(),EnumSet.noneOf(ObstacleGroups.class)); // TODO ATTENTION a changer 
     	
     	
     	//retire une distance egale au rayon du cercle au dernier point du chemin (le centre du cercle)

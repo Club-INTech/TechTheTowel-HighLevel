@@ -23,6 +23,12 @@ class ThreadSensor extends AbstractThread
 	private int sensorFrequency = 5;
 	
 	/**
+	 * distance en mm entre les capteur ultrasond et le guide en plastique, 
+	 * on ne peut rien detecter de plus petit que cette distance donc toutes les informations de distance en dessous de cette valeur ne seron pas traités
+	 */
+	int distanceBetweenGuideAndUltrasound = 20;
+	
+	/**
 	 * Crée un nouveau thread de capteurs
 	 *
 	 * @param table La table a l'intérieure de laquelle le thread doit croire évoluer
@@ -61,7 +67,7 @@ class ThreadSensor extends AbstractThread
 		log.debug("Activation des capteurs", this);
 		while(!ThreadTimer.matchEnded)
 		{
-			// ons 'arrète si le ThreadManager le demande
+			// on s'arrete si le ThreadManager le demande
 			if(stopThreads)
 			{
 				log.debug("Stoppage du thread capteurs", this);
@@ -69,22 +75,47 @@ class ThreadSensor extends AbstractThread
 			}
 
 			// affiche la distance mesurée par l'ultrason
-			//code precedant, a retirer si le code suivant marche
+			//code precedant, a retirer si le code suivant ne marche pas
 			//int distance = mSensorsCardWrapper.getSensedDistance();
-			int distance;
+			int[] distanceFront;
 			try 
 			{
-				distance = (int) mSensorsCardWrapper.getSensorValue(SensorNames.ULTRASOUND_FRONT_SENSOR);
+				distanceFront = (int[]) mSensorsCardWrapper.getSensorValue(SensorNames.ULTRASOUND_FRONT_SENSOR);
+				
+				//on met tout les capteurs qui detectent un objet DANS le robot a 3000
+				for (int i=0; i<distanceFront.length; i++)
+					if (distanceFront[i]<distanceBetweenGuideAndUltrasound) 
+						distanceFront[i]=3000;
+				
 			}
 			catch(SerialConnexionException e)
 			{
 				log.critical("La carte capteurs ne répond pas !", this);
 				e.printStackTrace();
-				distance = 3000; // valeur considérée comme infinie
+				distanceFront = (int[]) SensorNames.ULTRASOUND_FRONT_SENSOR.getDefaultValue(); // valeur considérée comme infinie
 			}
-			log.debug("Distance selon ultrason: "+distance, this);
-			if (distance > 0 && distance < 70)
+			
+			int[] distanceBack;
+			
+			try 
+			{
+				distanceBack = (int[]) mSensorsCardWrapper.getSensorValue(SensorNames.ULTRASOUND_BACK_SENSOR);
+			}
+			catch (SerialConnexionException e)
+			{
+				log.critical("La carte capteurs ne répond pas !", this);
+				e.printStackTrace();
+				distanceBack = (int[]) SensorNames.ULTRASOUND_BACK_SENSOR.getDefaultValue(); //distance consideree comme infinie
+			}
+			
+			//FIXME: ajouter les obstacles quand l'obstacleManager sera pret
+			
+			log.debug("Distance selon ultrason avant: "+distanceFront+"; ultrason arriere: "+distanceBack, this);
+			if (distanceFront[1] > 0 && distanceFront[1] < 70 || distanceFront[0] > 0 && distanceFront[0] < 70)
 				log.debug("obstacle detecte a moins de 7 cm !", this);
+			
+			
+			
 			
 			Sleep.sleep((long)(1000./sensorFrequency));
 			
