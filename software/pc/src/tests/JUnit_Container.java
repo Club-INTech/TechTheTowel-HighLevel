@@ -202,31 +202,7 @@ public class JUnit_Container extends JUnit_Test {
 	public void test_serieAsservissement() throws Exception
 	{
 		log.debug("JUnit_ContainerTest.test_serieAsservissement()", this);
-		container.getService(ServiceNames.LOCOMOTION_CARD);
-	}
-
-	/**
-	 * Test_serie capteurs actionneurs.
-	 *
-	 * @throws Exception the exception
-	 */
-	@Test
-	public void test_serieCapteursActionneurs() throws Exception
-	{
-		log.debug("JUnit_ContainerTest.test_serieCapteursActionneurs()", this);
-		container.getService(ServiceNames.SERIE_CAPTEURS_ACTIONNEURS);
-	}
-
-	/**
-	 * Test_serie laser.
-	 *
-	 * @throws Exception the exception
-	 */
-	@Test
-	public void test_serieLaser() throws Exception
-	{
-		log.debug("JUnit_ContainerTest.test_serieLaser()", this);
-		container.getService(ServiceNames.LASER_CARD);
+		container.getService(ServiceNames.STM_CARD);
 	}
 
 	/**

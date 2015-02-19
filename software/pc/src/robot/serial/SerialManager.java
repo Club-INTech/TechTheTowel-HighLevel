@@ -30,26 +30,13 @@ public class SerialManager
 	/** Series a instancier : celle pour la carte d'asser */
 	public SerialConnexion serieAsservissement = null;
 
-	/** Series a instancier : celle pour la carte capteur/actonneurs */
-	public SerialConnexion serieCapteursActionneurs = null;
-	
-	/** Series a instancier : celle pour la carte laser */
-	public SerialConnexion serieLaser = null;
-
 	/** Liste contenant les connexion séries avec les cartes */
 	private SerialConnexion[] series = new SerialConnexion[3];
 
 	//Pour chaque carte, on connait a l'avance son nom, son ping et son baudrate
 	/** Carte d'assservissement, paramétré a l'avance par son nom, son id et son baudrate */
-	private CardSpecification locomotionCard = new CardSpecification(ServiceNames.LOCOMOTION_CARD, 0, 9600);
-
-	/** Carte capteurs/actionneurs, paramétré a l'avance par son nom, son id et son baudrate */
-	private CardSpecification sensorsAcuatorsCard = new CardSpecification(ServiceNames.SERIE_CAPTEURS_ACTIONNEURS, 3, 9600);
+	private CardSpecification STM_Card = new CardSpecification(ServiceNames.STM_CARD, 0, 115200);
 	
-	/** Carte Laser, paramétré a l'avance par son nom, son id et son baudrate */
-	@SuppressWarnings("unused")
-	private CardSpecification laserCard = new CardSpecification(ServiceNames.LASER_CARD, 4, 57600);
-
 	/** On stock les cartes dans une liste */
 	private ArrayList <CardSpecification> cards = new ArrayList <CardSpecification>();
 
@@ -70,9 +57,7 @@ public class SerialManager
 	{
 		this.log = log;
 
-		cards.add(this.locomotionCard);
-		cards.add(this.sensorsAcuatorsCard);
-//		cards.add(this.carteLaser);
+		cards.add(this.STM_Card);
 
 		Iterator<CardSpecification> e = cards.iterator();
 		while (e.hasNext())
@@ -82,29 +67,17 @@ public class SerialManager
 				this.baudrate.add(baud);
 		}
 
-		this.serieAsservissement = new SerialConnexion(log, this.locomotionCard.name);
-		this.serieCapteursActionneurs = new SerialConnexion(log, this.sensorsAcuatorsCard.name);
-//		this.serieLaser = new Serial(log, this.carteLaser.name);
+		this.serieAsservissement = new SerialConnexion(log, this.STM_Card.name);
 
 		try
 		{
-			this.series[this.locomotionCard.name.getSerialIndex()] = this.serieAsservissement;
+			this.series[this.STM_Card.name.getSerialIndex()] = this.serieAsservissement;
 		} 
 		catch (ServiceTypeException e1)
 		{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		try
-		{
-			this.series[this.sensorsAcuatorsCard.name.getSerialIndex()] = this.serieCapteursActionneurs;
-		}
-		catch (ServiceTypeException e1)
-		{
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-//		this.series.put(this.carteLaser.name, this.serieLaser);
 
 		checkSerial();
 		createSerial();
@@ -192,14 +165,6 @@ public class SerialManager
 			if(serial.id == 0 && pings[serial.id] != null)
 			{
 				this.serieAsservissement.initialize(pings[serial.id], serial.baudrate);
-			}
-			else if(serial.id == 3 && pings[serial.id] != null)
-			{
-				this.serieCapteursActionneurs.initialize(pings[serial.id], serial.baudrate);
-			}	
-			else if(serial.id == 4 && pings[serial.id] != null)
-			{
-				this.serieLaser.initialize(pings[serial.id], serial.baudrate);
 			}
 
 			if (pings[serial.id] == null)
