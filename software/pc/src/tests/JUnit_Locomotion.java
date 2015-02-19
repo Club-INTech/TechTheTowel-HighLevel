@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import enums.ServiceNames;
 import exceptions.Locomotion.UnableToMoveException;
+import robot.DirectionStrategy;
 import robot.Locomotion;
 import smartMath.Vec2;
 
@@ -76,7 +77,7 @@ public class JUnit_Locomotion extends JUnit_Test
 		{
 			try 
 			{
-				mLocomotion.followPath(path, null);
+				mLocomotion.followPath(path, null, DirectionStrategy.FASTEST);
 				position = mLocomotion.getPosition();
 				log.debug("en position : x="+position.x+"; y="+position.y, this);
 			} 
