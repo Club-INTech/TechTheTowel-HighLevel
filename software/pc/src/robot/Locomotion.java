@@ -149,6 +149,7 @@ public class Locomotion implements Service
         aim.x = (int) (position.x + distance*Math.cos(orientation));
         aim.y = (int) (position.y + distance*Math.sin(orientation));        
 
+
         // l'appel à cette méthode sous-entend que le robot ne tourne pas
         // il va donc en avant si la distance est positive, en arrière si elle est négative
         // si on est à 90°, on privilégie la marche avant
@@ -214,7 +215,6 @@ public class Locomotion implements Service
 	        boolean direction = delta.dot(orientationVec) >= 0;
 	        
 	        moveToPointException(aim, hooks, direction, mur, turnOnly);
-
     	}
     }
     
@@ -364,10 +364,12 @@ public class Locomotion implements Service
         {
             aim.x = -aim.x;
             givenPosition.x = -givenPosition.x;
+
         }
         Vec2 delta = aim.clone();
         
         updateCurrentPositionAndOrientation();
+
 
         delta.minus(givenPosition);
 //        log.debug("Distance directe: "+delta.length()+", differenceDistance: "+differenceDistance, this);
