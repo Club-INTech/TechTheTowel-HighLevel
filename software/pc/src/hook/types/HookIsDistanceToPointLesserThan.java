@@ -7,6 +7,12 @@ import strategie.GameState;
 import utils.Config;
 import utils.Log;
 
+/**
+ * Declenchement si le robot est dans un cercle
+ * @author theo
+ *
+ */
+
 public class HookIsDistanceToPointLesserThan extends Hook
 {
 	//Rayon du cercle de declenchement du hook
@@ -32,7 +38,7 @@ public class HookIsDistanceToPointLesserThan extends Hook
 	public boolean evaluate()
 	{
 		if(Math.abs(  Math.pow(center.x - mState.robot.getPosition().x , 2)  +  
-					  Math.pow(center.y - mState.robot.getPosition().y , 2 )   ) <  Math.pow( (mRay+mTolerancy/2) , 2 ) )
+					  Math.pow(center.y - mState.robot.getPosition().y , 2 )   ) <  Math.pow( (mRay+mTolerancy/2) , 2 ) ) // verification de la distance au point
 		{
 			System.out.println("en position ("+mState.robot.getPosition().x+", "+mState.robot.getPosition().y+") au triger du Hook");
             return trigger();
