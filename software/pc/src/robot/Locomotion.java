@@ -476,7 +476,7 @@ public class Locomotion implements Service
     private void updateCurrentPositionAndOrientation()
     {
         try {
-            double[] infos = deplacements.getCurrentPositionAndOrientation();
+            float[] infos = deplacements.getCurrentPositionAndOrientation();
             position.x = (int)infos[0];
             position.y = (int)infos[1];
             orientation = infos[2]/1000; // car getCurrentPositionAndOrientation renvoie des milliradians
