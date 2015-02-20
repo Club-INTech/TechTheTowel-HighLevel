@@ -317,6 +317,14 @@ float MotionControlSystem::getY(){
 	return y;
 }
 
+void MotionControlSystem::setX(float newX){
+	this->x = newX;
+}
+
+void MotionControlSystem::setY(float newY){
+	this->y = newY;
+}
+
 float MotionControlSystem::getBalance(){
 	return balance;
 }

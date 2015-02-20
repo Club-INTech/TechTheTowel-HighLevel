@@ -23,6 +23,8 @@ int main(void)
 			char order[200];
 			serial.read(order);
 
+			serial.printfln("_");//Acquittement
+
 			if(!strcmp("?",order))
 			{
 				serial.printfln("0");
@@ -33,8 +35,58 @@ int main(void)
 			}
 			else if(!strcmp("oxy",order))
 			{
-				serial.printfln("%f\r\n%f", motionControlSystem->getX(), motionControlSystem->getY());
+				serial.printfln("x=%f\r\ny=%f", motionControlSystem->getX(), motionControlSystem->getY());
+				serial.printfln("o=%f", motionControlSystem->getAngleRadian());
+			}
+			else if(!strcmp("?xyo",order))
+			{
+				serial.printfln("%f", motionControlSystem->getX());
+				serial.printfln("%f", motionControlSystem->getY());
 				serial.printfln("%f", motionControlSystem->getAngleRadian());
+			}
+			else if(!strcmp("us_av",order))
+			{
+				serial.printfln("%d", 3000);//Distance mesurée par l'ultrason avant gauche, en mm
+				serial.printfln("%d", 3000);//Distance mesurée par l'ultrason avant droit, en mm
+			}
+			else if(!strcmp("us_ar",order))
+			{
+				serial.printfln("%d", 3000);//Distance mesurée par l'ultrason arrière gauche, en mm
+				serial.printfln("%d", 3000);//Distance mesurée par l'ultrason arrière droit, en mm
+			}
+			else if(!strcmp("ct0",order))
+			{
+				motionControlSystem->enableTranslationControl(false);
+			}
+			else if(!strcmp("ct1",order))
+			{
+				motionControlSystem->enableTranslationControl(true);
+			}
+			else if(!strcmp("cr0",order))
+			{
+				motionControlSystem->enableRotationControl(false);
+			}
+			else if(!strcmp("cr1",order))
+			{
+				motionControlSystem->enableRotationControl(true);
+			}
+			else if(!strcmp("cx",order))
+			{
+				float x;
+				serial.read(x);
+				motionControlSystem->setX(x);
+			}
+			else if(!strcmp("cy",order))
+			{
+				float y;
+				serial.read(y);
+				motionControlSystem->setY(y);
+			}
+			else if(!strcmp("co",order))
+			{
+				float o;
+				serial.read(o);
+				motionControlSystem->setOriginalAngle(o);
 			}
 			else if(!strcmp("ticks", order))
 			{

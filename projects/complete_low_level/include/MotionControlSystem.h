@@ -112,6 +112,8 @@ public:
 	void setOriginalAngle(float);
 	float getX();
 	float getY();
+	void setX(float);
+	void setY(float);
 	float getBalance();
 	void setBalance(float newBalance);
 	int16_t getMaxPWMtranslation();
