@@ -36,6 +36,8 @@ public class JUnit_Locomotion extends JUnit_Test
 		 */
 	}
 
+	
+	
 	/* (non-Javadoc)
 	 * @see tests.JUnit_Test#setUp()
 	 */
@@ -48,6 +50,13 @@ public class JUnit_Locomotion extends JUnit_Test
 		mLocomotion.setPosition(new Vec2(1500-71-48, 1000));
 		mLocomotion.setOrientation(Math.PI);
 	}
+
+	@Test
+	public void testMoveLengthwise() throws Exception
+	{
+		mLocomotion.moveLengthwise(100,  new ArrayList<Hook>(), false);
+	}
+
 	
 	@Test
 	public void testMoveLengthwise() throws Exception

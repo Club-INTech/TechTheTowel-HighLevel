@@ -97,6 +97,7 @@ public class Locomotion implements Service
     /**
      * TODO a quoi ça sert ?
      */
+
     private boolean directionPrecedente;
     
     public Locomotion(Log log, Config config, Table table, LocomotionCardWrapper deplacements)
@@ -129,11 +130,13 @@ public class Locomotion implements Service
     	 * on vise une position eloignee mais on ne s'y deplacera pas, le robot ne fera que tourner
     	 */
     	Vec2 aim = new Vec2(
+
         (int) (position.x + 1000*Math.cos(angle)),
         (int) (position.y + 1000*Math.sin(angle))
         );
 
 		moveToPointException(aim, position, hooks, true, false, true);
+
     }
     
     /**
@@ -165,6 +168,7 @@ public class Locomotion implements Service
             aim.y = aimNoSymetry.y;
         }
 
+
         // l'appel à cette méthode sous-entend que le robot ne tourne pas
         // il va donc en avant si la distance est positive, en arrière si elle est négative
         // si on est à 90°, on privilégie la marche avant
@@ -191,7 +195,9 @@ public class Locomotion implements Service
             Vec2 aim = path.get(i);
 			moveToPointForwardBackward(aim, position, hooks, /*on suppose q'on ne se prends pas de mur (sinon la pathDingDing est a revoir)*/false, directionstrategy, /*on veut avancer*/false);
         }
+		
     }
+
 
     /**
      * Bloquant. Gère la marche arrière automatique selon la stratégie demandée.
@@ -210,6 +216,8 @@ public class Locomotion implements Service
     	{
     		directionPrecedente = false;
             moveToPointException(aim, givenPosition, hooks, false, mur, turnOnly);
+
+
     	}
     	else if(strategy == DirectionStrategy.FORCE_FORWARD_MOTION)
     	{
@@ -231,6 +239,7 @@ public class Locomotion implements Service
 	        directionPrecedente = delta.dot(orientationVec) > 0;
 	        
 	        moveToPointException(aim, givenPosition, hooks, directionPrecedente, mur, turnOnly);
+
     	}
     }
     
@@ -309,11 +318,13 @@ public class Locomotion implements Service
             		catch(UnexpectedObstacleOnPathException e2)
             		{}
             	}
+
                 if(!doItAgain)
                     throw new UnableToMoveException();
 			}
 
         } while(doItAgain); // on recommence tant qu'il le faut
+
 
     // Tout s'est bien passé
     }
@@ -333,6 +344,7 @@ public class Locomotion implements Service
     {
     	
         moveToPointSymmetry(aim, givenPosition, isMovementForward, turnOnly, false);
+
         do
         {
             updateCurrentPositionAndOrientation();
@@ -349,9 +361,11 @@ public class Locomotion implements Service
 
 //            TODO pas de delay ?
 //            Sleep.sleep(feedbackLoopDelay);
+
         } while(!isMotionEnded());
         
     }
+
 
     /**
      * donne une consigne d'un nouvel angle a atteindre (pour corriger la trajectoire en cours de mouvement)
@@ -383,9 +397,11 @@ public class Locomotion implements Service
         {
             delta.x = -delta.x;
             givenPosition.x = -givenPosition.x;
+
         }
         
         updateCurrentPositionAndOrientation();
+
 
         delta.minus(givenPosition);
 //        log.debug("Distance directe: "+delta.length()+", differenceDistance: "+differenceDistance, this);
@@ -400,6 +416,7 @@ public class Locomotion implements Service
             angle += Math.PI;
         }
         
+
         moveToPointSerialOrder(aim, givenPosition, angle, distance, false, turnOnly, isCorrection);
     }
     
@@ -461,7 +478,7 @@ public class Locomotion implements Service
             	// on attend la fin du mouvement
                 while(!isMotionEnded()) 
                     Sleep.sleep(feedbackLoopDelay);
-            
+
 /*            // TODO: passer en hook
             ObstacleRectangular obstacle = new ObstacleRectangular(position, consigne);
         	if(obstacle.isCollidingObstacleFixe())
@@ -470,6 +487,7 @@ public class Locomotion implements Service
         		throw new WallCollisionDetectedException();
         	}
 */
+
             if(!turnOnly)
             	deplacements.moveLengthwise(distance);
         } catch (SerialConnexionException e) {

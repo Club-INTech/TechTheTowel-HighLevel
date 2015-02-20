@@ -438,14 +438,14 @@ public class LocomotionCardWrapper implements Service
 	 * @return un tableau de 3 cases: [x, y, orientation]
 	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
 	 */
-	public double[] getCurrentPositionAndOrientation() throws SerialConnexionException
+	public float[] getCurrentPositionAndOrientation() throws SerialConnexionException
 	{
 		// on demande a la carte des information a jour
 		// on envois "?infos" et on lis double (dans l'ordre : abscisse, ordonnée, orientation)
 		String[] infosBuffer = locomotionCardSerial.communiquer("?xyo", 3);
-		double[] parsedInfos = new double[3];
+		float[] parsedInfos = new float[3];
 		for(int i = 0; i < 3; i++)
-		    parsedInfos[i] = Double.parseDouble(infosBuffer[i]);
+		    parsedInfos[i] = Float.parseFloat(infosBuffer[i]);
 
 		return parsedInfos;
 	}
