@@ -114,9 +114,6 @@ class ThreadSensor extends AbstractThread
 			if (distanceFront[1] > 0 && distanceFront[1] < 70 || distanceFront[0] > 0 && distanceFront[0] < 70)
 				log.debug("obstacle detecte a moins de 7 cm !", this);
 			
-			
-			
-			
 			Sleep.sleep((long)(1000./sensorFrequency));
 			
 		}

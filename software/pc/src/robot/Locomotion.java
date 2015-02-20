@@ -258,7 +258,7 @@ public class Locomotion implements Service
 	 */
 	public void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
 	{
-		// demande une position et une oriantation a jour du robot
+		// demande une position et une orientation a jour du robot
 		updatePositionAndOrientation();
 
 		
@@ -848,7 +848,7 @@ public class Locomotion implements Service
 		// la demi longeur
 		int distanceBetweenDiscCenterAndRobotCenter = robotLengh/2 + obstacleDetectionDiscRadius;
 		
-		// calcule la position du centre du cercle 
+		// calcule la position du centre du cercle
 		Vec2 discCenter = new Vec2(	(int)(sign * distanceBetweenDiscCenterAndRobotCenter * Math.cos(orientation)),
 									(int)(sign * distanceBetweenDiscCenterAndRobotCenter * Math.sin(orientation))	); // Ce calcul donne la position relative du centre du disque par rapport au centre du robot
 		discCenter.plus(position);	// converti les coordonnées relative au centre du robot en coordonnées absolues sur la table
@@ -859,7 +859,6 @@ public class Locomotion implements Service
 			log.warning("Obstacle sur notre chemin ! Nous somme en :" +position + ", et on détecte un obstacle dans un rayon de " + obstacleDetectionDiscRadius + "mm autour du point " + discCenter, this);
 			throw new UnexpectedObstacleOnPathException();
 		}
-
 	}
 
 	/**

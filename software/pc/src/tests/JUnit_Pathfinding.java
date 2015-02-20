@@ -36,7 +36,7 @@ public class JUnit_Pathfinding extends JUnit_Test
     	{
 	    	try
 	    	{
-				path = pf.computePath(new Vec2((int)((Math.random() - 0.5) * 3000), (int)(Math.random() * 2000)), new Vec2((int)((Math.random() - 0.5) * 3000), (int)(Math.random() * 2000)));
+				path = pf.computePath(new Vec2((int)((Math.random() - 0.5) * 3000), (int)(Math.random() * 2000)), new Vec2((int)((Math.random() - 0.5) * 3000), (int)(Math.random() * 2000)), EnumSet.noneOf(ObstacleGroups.class));
 				win.getPanel().drawArrayList(path);
 				//Thread.sleep(10);
 	    	}
