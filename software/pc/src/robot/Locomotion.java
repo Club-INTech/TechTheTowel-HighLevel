@@ -30,16 +30,60 @@ import exceptions.serial.SerialConnexionException;
 public class Locomotion implements Service
 {
 
+	/**
+	 * le log si on a des erreurs
+	 */
     private Log log;
+    /**
+     * la config ...
+     */
     private Config config;
+    /**
+     * la table sur laquelle evolue le robot
+     */
     private Table table;
-    private int largeur_robot;
-    private int distance_detection;
-    private Vec2 position = new Vec2();  // la position réelle du robot, pas la version qu'ont les robots
-    
-    private double orientation; // l'orientation réelle du robot, pas la version qu'ont les robots
+    /**
+     * la carte de deplacement utilisee
+     */
     private LocomotionCardWrapper deplacements;
-    private boolean symetrie;
+    /**
+     * la largeur du robot (taille dans la direction où le robot n'avance pas)
+     */
+    private int robotWidth;
+    
+    /**
+     * rayon du cercle place devant le robot qui sert pour la detection
+     * 
+     *la zone de détection d'obstacle est un disque comme suit:
+     *     			          o  o
+     *    			+----+ o        o		 Sens de déplacement du robot: ====>
+     *    robot ->	|    |o          o
+     *    			|    |o          o  <- Zone de vérification (ce disque est tangent au robot)
+     *    			+----+ o        o 
+     *   			          o  o
+     */
+    private int detectionDistance;
+    
+    /**
+     * position réelle du robot (symetrisee)
+     * non connue par les classes de plus haut niveau
+     */
+    private Vec2 position = new Vec2();
+    
+    /**
+     * orientation réelle du robot (symetrisee)
+     * non connue par les classes de plus haut niveau
+     */
+    private double orientation;
+    
+    /**
+     * vrai si on est a gauche de la table (x<0 et jaune)
+     * faux sinon
+     */
+    private boolean symetry;
+    /**
+     * 
+     */
     private int sleep_boucle_acquittement = 10;
     private int distance_degagement_robot = 50;
     private double angle_degagement_robot;
@@ -99,7 +143,7 @@ public class Locomotion implements Service
         consigneNonInversee.y = (int) (position.y + distance*Math.sin(orientation));        
 
         // En fait, ici on prend en compte que la symétrie va inverser la consigne...
-        if(symetrie)
+        if(symetry)
         {
         	consigne.x = -consigneNonInversee.x;
             consigne.y = consigneNonInversee.y;
@@ -163,7 +207,7 @@ public class Locomotion implements Service
     	{
     		// Calcul du moyen le plus rapide
 	        Vec2 delta = consigne.clone();
-	        if(symetrie)
+	        if(symetry)
 	            delta.x *= -1;
 	        delta.minus(position);
 	        // Le coeff 1000 vient du fait que Vec2 est constitué d'entiers
@@ -310,7 +354,7 @@ public class Locomotion implements Service
     private void vaAuPointGestionSymetrie(Vec2 consigne, Vec2 intermediaire, boolean marcheAvant, boolean seulementAngle, boolean correction) throws BlockedException
     {
         Vec2 delta = consigne.clone();
-        if(symetrie)
+        if(symetry)
         {
             delta.x = -delta.x;
             intermediaire.x = -intermediaire.x;
@@ -457,10 +501,10 @@ public class Locomotion implements Service
         if(devant)
             signe = 1;
         
-        int rayon_detection = largeur_robot/2 + distance_detection;
+        int rayon_detection = robotWidth/2 + detectionDistance;
         Vec2 centre_detection = new Vec2((int)(signe * rayon_detection * Math.cos(orientation)), (int)(signe * rayon_detection * Math.sin(orientation)));
         centre_detection.plus(position);
-        if(table.getObstacleManager().isDiscObstructed(centre_detection, distance_detection))
+        if(table.getObstacleManager().isDiscObstructed(centre_detection, detectionDistance))
         {
             log.warning("Ennemi détecté en : " + centre_detection, this);
             throw new UnexpectedObstacleOnPathException();
@@ -490,11 +534,11 @@ public class Locomotion implements Service
     @Override
     public void updateConfig()
     {
-    	distance_detection = Integer.parseInt(config.getProperty("distance_detection"));
+    	detectionDistance = Integer.parseInt(config.getProperty("distance_detection"));
         distance_degagement_robot = Integer.parseInt(config.getProperty("distance_degagement_robot"));
         sleep_boucle_acquittement = Integer.parseInt(config.getProperty("sleep_boucle_acquittement"));
         angle_degagement_robot = Double.parseDouble(config.getProperty("angle_degagement_robot"));
-		symetrie = config.getProperty("couleur").replaceAll(" ","").equals("jaune");
+		symetry = config.getProperty("couleur").replaceAll(" ","").equals("jaune");
     }
 
     /**
@@ -520,7 +564,7 @@ public class Locomotion implements Service
     public void setPosition(Vec2 position)
     {
         this.position = position.clone();
-        if(symetrie)
+        if(symetry)
         	this.position.x = -this.position.x;
 		try {
 			deplacements.setX(this.position.x);
@@ -539,7 +583,7 @@ public class Locomotion implements Service
     public void setOrientation(double orientation)
     {
         this.orientation = orientation;
-        if(symetrie)
+        if(symetry)
         	this.orientation = Math.PI-this.orientation;
         try {
     		deplacements.setOrientation(this.orientation);
@@ -552,7 +596,7 @@ public class Locomotion implements Service
     {
         updateCurrentPositionAndOrientation();
         Vec2 out = position.clone();
-        if(symetrie)
+        if(symetry)
         	out.x = -out.x;
         return out;
     }
@@ -560,7 +604,7 @@ public class Locomotion implements Service
     public double getOrientation()
     {
         updateCurrentPositionAndOrientation();
-        if(symetrie)
+        if(symetry)
         	return Math.PI-orientation;
         else
         	return orientation;
