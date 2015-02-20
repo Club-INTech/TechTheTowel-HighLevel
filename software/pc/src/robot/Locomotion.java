@@ -67,6 +67,7 @@ public class Locomotion implements Service
     /**
      * position réelle du robot (symetrisee)
      * non connue par les classes de plus haut niveau
+     * TODO quand est-elle mise a jour ?
      */
     private Vec2 position = new Vec2();
     
@@ -82,12 +83,20 @@ public class Locomotion implements Service
      */
     private boolean symetry;
     /**
-     * 
+     * temps d'attente entre deux boucles d'acquitement
      */
-    private int sleep_boucle_acquittement = 10;
-    private int distance_degagement_robot = 50;
-    private double angle_degagement_robot;
-    
+    private int feedbackLoopDelay = 10;
+    /**
+     * la distance dont le robot vas avancer pour se degager en cas de bloquage mecanique
+     */
+    private int distanceToDisengage = 50;
+    /**
+     * l'angle dont le robot vas tourner pour se degager en cas de blouage mecanique
+     */
+    private double angleToDisengage;
+    /**
+     * TODO a quoi ça sert ?
+     */
     private boolean directionPrecedente;
     
     public Locomotion(Log log, Config config, Table table, LocomotionCardWrapper deplacements)
@@ -109,165 +118,171 @@ public class Locomotion implements Service
      * Fait tourner le robot (méthode bloquante)
      * Une manière de tourner qui réutilise le reste du code, car tourner
      * n'en devient plus qu'un cas particulier (celui où... on n'avance pas)
-     * @param angle
-     * @param hooks
-     * @throws UnableToMoveException
-     * @throws FinMatchException
-     * @throws ScriptHookException
+     * @param angle l'angle vise (en absolut)
+     * @param hooks les potentiels hooks a prendre en compte (ne pas mettre null !)
+     * @throws UnableToMoveException si le robot a un bloquage mecanique
      */
     public void turn(double angle, ArrayList<Hook> hooks) throws UnableToMoveException
     {
-    	Vec2 consigne = new Vec2(
+    	/*
+    	 * clacul de la position visee 
+    	 * on vise une position eloignee mais on ne s'y deplacera pas, le robot ne fera que tourner
+    	 */
+    	Vec2 aim = new Vec2(
         (int) (position.x + 1000*Math.cos(angle)),
         (int) (position.y + 1000*Math.sin(angle))
         );
 
-		vaAuPointGestionExceptions(consigne, position, hooks, true, false, true);
+		vaAuPointGestionExceptions(aim, position, hooks, true, false, true);
     }
     
     /**
      * Fait avancer le robot de "distance" (en mm).
-     * @param distance
-     * @param hooks
-     * @param insiste
-     * @throws UnableToMoveException
-     * @throws FinMatchException 
-     * @throws ScriptHookException 
+     * @param distance la distance dont le robot doit se deplacer
+     * @param hooks les potetniels hooks a prendre en compte (ne pas mettre null !)
+     * @param wall vrai si on supppose qu'on vas se cogner dans un mur (et qu'il ne faut pas pousser dessus)
+     * @throws UnableToMoveException si le robot a un bloquage mecanique
      */
-    public void moveLengthwise(int distance, ArrayList<Hook> hooks, boolean mur) throws UnableToMoveException
+    public void moveLengthwise(int distance, ArrayList<Hook> hooks, boolean wall) throws UnableToMoveException
     {
         log.debug("Avancer de "+Integer.toString(distance), this);
         
-        Vec2 consigne = new Vec2(), consigneNonInversee = new Vec2(); 
-        consigneNonInversee.x = (int) (position.x + distance*Math.cos(orientation));
-        consigneNonInversee.y = (int) (position.y + distance*Math.sin(orientation));        
+        //on calcul la position visee que l'on symetrisera ensuite (TODO peut se symplifier)
+        Vec2 aim = new Vec2(), aimNoSymetry = new Vec2(); 
+        aimNoSymetry.x = (int) (position.x + distance*Math.cos(orientation));
+        aimNoSymetry.y = (int) (position.y + distance*Math.sin(orientation));        
 
         // En fait, ici on prend en compte que la symétrie va inverser la consigne...
         if(symetry)
         {
-        	consigne.x = -consigneNonInversee.x;
-            consigne.y = consigneNonInversee.y;
+        	aim.x = -aimNoSymetry.x;
+            aim.y = aimNoSymetry.y;
         }
         else
         {
-        	consigne.x = consigneNonInversee.x;
-            consigne.y = consigneNonInversee.y;
+        	aim.x = aimNoSymetry.x;
+            aim.y = aimNoSymetry.y;
         }
 
         // l'appel à cette méthode sous-entend que le robot ne tourne pas
         // il va donc en avant si la distance est positive, en arrière si elle est négative
         // si on est à 90°, on privilégie la marche avant
-		vaAuPointGestionExceptions(consigne, position, hooks, distance >= 0, mur, false);
+		vaAuPointGestionExceptions(aim, position, hooks, distance >= 0, wall, false);
     }
         
     /**
-     * Suit un chemin. Crée les hooks de trajectoire courbe si besoin est.
-     * @param chemin
-     * @param hooks
-     * @param insiste
-     * @throws UnableToMoveException
-     * @throws FinMatchException 
-     * @throws ScriptHookException 
+     * Suit un chemin en ligne brisee
+     * @param path le chemin a suivre (un arraylist de Vec2 qui sont les point de rotation du robot)
+     * @param hooks les potentiels hooks a prendre en compte (ne pas mettre null !)
+     * @param directionstrategy ce que la strategie choisit comme optimal (en avant, en arriere, au plus rapide)
+     * @throws UnableToMoveException si le robot a un bloquage mecanique
      */
-    public void followPath(ArrayList<Vec2> chemin, ArrayList<Hook> hooks, DirectionStrategy directionstrategy) throws UnableToMoveException
+    public void followPath(ArrayList<Vec2> path, ArrayList<Hook> hooks, DirectionStrategy directionstrategy) throws UnableToMoveException
     {
+    	//si un singe a mit null pour les hooks on le gere
     	if(hooks == null)
     		hooks = new ArrayList<Hook>();
-    	int size = chemin.size();
+    	
+    	//un simple for (on vas au point 0 puis au point 1 etc.)
+    	int size = path.size();
     	for(int i = 0; i < size; i++)
         {
-            Vec2 consigne = chemin.get(i);
-			vaAuPointGestionMarcheArriere(consigne, position, hooks, false, directionstrategy, false);
+            Vec2 aim = path.get(i);
+			vaAuPointGestionMarcheArriere(aim, position, hooks, /*on suppose q'on ne se prends pas de mur (sinon la pathDingDing est a revoir)*/false, directionstrategy, /*on veut avancer*/false);
         }
     }
 
     /**
      * Bloquant. Gère la marche arrière automatique selon la stratégie demandée.
-     * @param hooks
-     * @param insiste
-     * @throws UnableToMoveException
-     * @throws FinMatchException 
-     * @throws ScriptHookException 
-     * @throws ChangeDirectionException 
+     * @param aim le point visé sur la table (consigne donné par plus haut niveau donc non symetrise)
+     * @param givenPosition la position de depart du deplacement //TODO relique de trajectoire courbe a suprimer ?
+     * @param hooks les potentiels hooks a prendre en compte (ne pas mettre null !)
+     * @param mur vrai si on suppose qu'on vas se cogner dans un mur (et qu'on veut s'arreter des qu'on cogne)
+     * @param strategy ce que la strategie choisit comme optimal (en avant, en arriere, au plus rapide)
+     * @param turnOnly vrai si on veut uniquement tourner (et pas avancer)
+     * @throws UnableToMoveException si le robot a un bloquage mecanique
      */
-    private void vaAuPointGestionMarcheArriere(Vec2 consigne, Vec2 intermediaire, ArrayList<Hook> hooks, boolean mur, DirectionStrategy strategy, boolean seulementAngle) throws UnableToMoveException
+    private void vaAuPointGestionMarcheArriere(Vec2 aim, Vec2 givenPosition, ArrayList<Hook> hooks, boolean mur, DirectionStrategy strategy, boolean turnOnly) throws UnableToMoveException
     {
-    	// Si on est en trajectoire courbe, on continue comme la fois précédente
+    	// on avance en fonction de ce que nous dit la strategie
     	if(strategy == DirectionStrategy.FORCE_BACK_MOTION)
     	{
     		directionPrecedente = false;
-            vaAuPointGestionExceptions(consigne, intermediaire, hooks, false, mur, seulementAngle);
+            vaAuPointGestionExceptions(aim, givenPosition, hooks, false, mur, turnOnly);
     	}
     	else if(strategy == DirectionStrategy.FORCE_FORWARD_MOTION)
     	{
     		directionPrecedente = true;
-            vaAuPointGestionExceptions(consigne, intermediaire, hooks, true, mur, seulementAngle);
+            vaAuPointGestionExceptions(aim, givenPosition, hooks, true, mur, turnOnly);
     	}
     	else //if(strategy == DirectionStrategy.FASTEST)
     	{
-    		// Calcul du moyen le plus rapide
-	        Vec2 delta = consigne.clone();
+    		// Calcul du moyen le plus rapide (on se sert d'un calcul de produit scalaire)
+	        Vec2 delta = aim.clone();
+	        //TODO pourquoi delta est symetrise ici ?
 	        if(symetry)
 	            delta.x *= -1;
 	        delta.minus(position);
 	        // Le coeff 1000 vient du fait que Vec2 est constitué d'entiers
 	        Vec2 orientationVec = new Vec2((int)(1000*Math.cos(orientation)), (int)(1000*Math.sin(orientation)));
-	
-	        directionPrecedente = delta.dot(orientationVec) > 0;
+	        
 	        // On regarde le produit scalaire; si c'est positif, alors on est dans le bon sens, et inversement
-	        vaAuPointGestionExceptions(consigne, intermediaire, hooks, directionPrecedente, mur, seulementAngle);
+	        directionPrecedente = delta.dot(orientationVec) > 0;
+	        
+	        vaAuPointGestionExceptions(aim, givenPosition, hooks, directionPrecedente, mur, turnOnly);
     	}
     }
     
     /**
+     * bloquant
      * Gère les exceptions, c'est-à-dire les rencontres avec l'ennemi et les câlins avec un mur.
-     * @param hooks
-     * @param trajectoire_courbe
-     * @param marche_arriere
-     * @param insiste
-     * @throws UnableToMoveException 
-     * @throws FinMatchException 
-     * @throws ScriptHookException 
-     * @throws ChangeDirectionException 
+     * @param aim la position visee sur la table (consigne donné par plus haut niveau donc non symetrise)
+     * @param givenPosition la position de depart du deplacement //TODO relique de trajectoire courbe a suprimer ?
+     * @param hooks les potentiels hooks a prendre en compte (ne pas mettre null !)
+     * @param isMovementForward vrai si on vas en avant et faux si on vas en arriere
+     * @param wall vrai si on suppose qu'on vas se cogner dans un mur (et qu'on veut s'arreter des qu'on cogne)
+     * @param turnOnly vrai si on veut uniquement tourner (et pas avancer)
+     * @throws UnableToMoveException si le robot a un bloquage mecanique
      */
-    private void vaAuPointGestionExceptions(Vec2 consigne, Vec2 intermediaire, ArrayList<Hook> hooks, boolean marcheAvant, boolean mur, boolean seulementAngle) throws UnableToMoveException
+    private void vaAuPointGestionExceptions(Vec2 aim, Vec2 givenPosition, ArrayList<Hook> hooks, boolean isMovementForward, boolean wall, boolean turnOnly) throws UnableToMoveException
     {
-        int attente_ennemi_max = 600; // combien de temps attendre que l'ennemi parte avant d'abandonner
-        int nb_iterations_deblocage = 2; // combien de fois on réessayer si on se prend un mur
-        boolean recommence;
+        int maxTimeToWaitForEnemyToLeave = 600; // combien de temps attendre que l'ennemi parte avant d'abandonner
+        int unexpectedWallImpactCounter = 2; // combien de fois on réessayer si on se prend un mur (si wall est a true alors les impacts sont attendus donc on s'en fout)
+        boolean doItAgain;
         do {
-            recommence = false;
+        	//si on a pas d'erreur on ne recommence pas
+            doItAgain = false;
             try
             {
-                vaAuPointGestionHookCorrectionEtDetection(consigne, intermediaire, hooks, marcheAvant, seulementAngle);
+                vaAuPointGestionHookCorrectionEtDetection(aim, givenPosition, hooks, isMovementForward, turnOnly);
             } catch (BlockedException e)
             {
-                nb_iterations_deblocage--;
+                unexpectedWallImpactCounter--;
                 immobilise();
                 /*
                  * En cas de blocage, on recule (si on allait tout droit) ou on avance.
                  */
                 // Si on s'attendait à un mur, c'est juste normal de se le prendre.
-                if(!mur)
+                if(!wall)
                 {
                     try
                     {
                         log.warning("On n'arrive plus à avancer. On se dégage", this);
-                        if(seulementAngle)
+                        if(turnOnly)
                         {
                         	// TODO: les appels à déplacements sont non bloquants, il faut rajouter des sleeps
                         	// on alterne rotation à gauche et à droite
-                        	if((nb_iterations_deblocage & 1) == 0)
-                        		deplacements.turn(orientation+angle_degagement_robot);
+                        	if((unexpectedWallImpactCounter & 1) == 0)
+                        		deplacements.turn(orientation+angleToDisengage);
                         	else
-                        		deplacements.turn(orientation-angle_degagement_robot);
+                        		deplacements.turn(orientation-angleToDisengage);
                         }
-                        else if(marcheAvant)
-                            deplacements.moveLengthwise(distance_degagement_robot);
+                        else if(isMovementForward)
+                            deplacements.moveLengthwise(distanceToDisengage);
                         else
-                            deplacements.moveLengthwise(-distance_degagement_robot);
+                            deplacements.moveLengthwise(-distanceToDisengage);
                         while(!isMotionEnded());
-                    	recommence = true; // si on est arrivé ici c'est qu'aucune exception n'a été levée
+                    	doItAgain = true; // si on est arrivé ici c'est qu'aucune exception n'a été levée
                     } catch (SerialConnexionException e1)
                     {
                         e1.printStackTrace();
@@ -275,118 +290,131 @@ public class Locomotion implements Service
                     	immobilise();
                         log.critical("On n'arrive pas à se dégager.", this);
 					}
-                    if(!recommence)
+                    if(!doItAgain)
                         throw new UnableToMoveException();
                 }
             } catch (UnexpectedObstacleOnPathException e)
             {
             	immobilise();
-            	long dateAvant = System.currentTimeMillis();
+            	long detectionTime = System.currentTimeMillis();
                 log.critical("Détection d'un ennemi! Abandon du mouvement.", this);
-            	while(System.currentTimeMillis() - dateAvant < attente_ennemi_max)
+            	while(System.currentTimeMillis() - detectionTime < maxTimeToWaitForEnemyToLeave)
             	{
             		try {
-            			detectEnemy(marcheAvant);
-            			recommence = true; // si aucune détection
+            			detectEnemy(isMovementForward);
+            			doItAgain = true; // si aucune détection
             			break;
             		}
             		catch(UnexpectedObstacleOnPathException e2)
             		{}
             	}
-                if(!recommence)
+                if(!doItAgain)
                     throw new UnableToMoveException();
 			}
 
-        } while(recommence); // on recommence tant qu'il le faut
+        } while(doItAgain); // on recommence tant qu'il le faut
 
     // Tout s'est bien passé
     }
     
     /**
-     * Bloquant. Gère les hooks, la correction de trajectoire et la détection.
-     * @param point
-     * @param hooks
-     * @param trajectoire_courbe
-     * @throws BlockedException 
-     * @throws UnexpectedObstacleOnPathException 
-     * @throws FinMatchException 
-     * @throws ScriptHookException 
-     * @throws WallCollisionDetectedException 
-     * @throws ChangeDirectionException 
+     * Bloquant. 
+     * Gère les hooks, la correction de trajectoire et la détection.
+     * @param aim la position visee sur la table (consigne donné par plus haut niveau donc non symetrise)
+     * @param givenPosition la position de depart du deplacement //TODO relique de trajectoire courbe a suprimer ?
+     * @param hooks les potentiels hooks a prendre en compte (ne pas mettre null !)
+     * @param isMovementForward vrai si on vas en avant et faux si on vas en arriere
+     * @param turnOnly vrai si on veut uniquement tourner (et pas avancer)
+     * @throws BlockedException si le robot a un bloquage mecanique
+     * @throws UnexpectedObstacleOnPathException si le robot rencontre un obstacle innatendu sur son chemin (par les capteurs)
      */
-    private void vaAuPointGestionHookCorrectionEtDetection(Vec2 consigne, Vec2 intermediaire, ArrayList<Hook> hooks, boolean marcheAvant, boolean seulementAngle) throws UnexpectedObstacleOnPathException, BlockedException
+    private void vaAuPointGestionHookCorrectionEtDetection(Vec2 aim, Vec2 givenPosition, ArrayList<Hook> hooks, boolean isMovementForward, boolean turnOnly) throws UnexpectedObstacleOnPathException, BlockedException
     {
-        // le fait de faire de nombreux appels permet de corriger la trajectoire
-        vaAuPointGestionSymetrie(consigne, intermediaire, marcheAvant, seulementAngle, false);
+    	
+        vaAuPointGestionSymetrie(aim, givenPosition, isMovementForward, turnOnly, false);
         do
         {
             updateCurrentPositionAndOrientation();
             
             // en cas de détection d'ennemi, une exception est levée
-            detectEnemy(marcheAvant);
+            detectEnemy(isMovementForward);
 
+            //on evalue les hooks (non null !)
             for(Hook hook : hooks)
                 hook.evaluate();
+            
+            // le fait de faire de nombreux appels permet de corriger la trajectoire
+            correctAngle(aim, isMovementForward);
 
-            corrigeAngle(consigne, marcheAvant);
-
-
-//            Sleep.sleep(sleep_boucle_acquittement);
+//            TODO pas de delay ?
+//            Sleep.sleep(feedbackLoopDelay);
         } while(!isMotionEnded());
         
     }
 
-    private void corrigeAngle(Vec2 consigne, boolean marcheAvant) throws BlockedException
+    /**
+     * donne une consigne d'un nouvel angle a atteindre (pour corriger la trajectoire en cours de mouvement)
+     * @param aim la point vise (non symetrisee)
+     * @param isMovementForward vrai si on vas en avant et faux si on vas en arriere
+     * @throws BlockedException si le robot a un bloquage mecanique
+     */
+    private void correctAngle(Vec2 aim, boolean isMovementForward) throws BlockedException
     {
-    	vaAuPointGestionSymetrie(consigne, position, marcheAvant, true, true);
+    	//envoi de la consigne avec turnOnly a true et a isCorrection a true (c'est bien une correction et on ne veut que tourner)
+    	vaAuPointGestionSymetrie(aim, position, isMovementForward, true, true);
     }
 
     /**
-     * Non bloquant. Gère la symétrie et la marche arrière.
-     * @param point
-     * @param sans_lever_exception
-     * @param trajectoire_courbe
-     * @param marche_arriere
-     * @throws BlockedException 
-     * @throws FinMatchException 
-     * @throws WallCollisionDetectedException 
+     * Non bloquant. 
+     * Gère la symétrie et la marche arrière. (si on est en marche arriere le aim doit etre modifié pour que la consigne vers le bas niveau soit bonne)
+     * @param aim la position visee sur la table (consigne donné par plus haut niveau donc non symetrise)
+     * @param givenPosition la position de depart du deplacement //TODO relique de trajectoire courbe a suprimer ?
+     * @param isMovementForward vrai si on vas en avant et faux si on vas en arriere
+     * @param turnOnly vrai si on veut uniquement tourner (et pas avancer)
+     * @param isCorrection vrai si la consigne est une correction et pas un ordre de deplacement
+     * @throws BlockedException si le robot rencontre un obstacle innatendu sur son chemin (par les capteurs)
      */
-    private void vaAuPointGestionSymetrie(Vec2 consigne, Vec2 intermediaire, boolean marcheAvant, boolean seulementAngle, boolean correction) throws BlockedException
+    private void vaAuPointGestionSymetrie(Vec2 aim, Vec2 givenPosition, boolean isMovementForward, boolean turnOnly, boolean isCorrection) throws BlockedException
     {
-        Vec2 delta = consigne.clone();
+    	//ici on gere la symetrie des x
+        Vec2 delta = aim.clone();
         if(symetry)
         {
             delta.x = -delta.x;
-            intermediaire.x = -intermediaire.x;
+            givenPosition.x = -givenPosition.x;
         }
         
         updateCurrentPositionAndOrientation();
 
-        delta.minus(intermediaire);
+        delta.minus(givenPosition);
 //        log.debug("Distance directe: "+delta.length()+", differenceDistance: "+differenceDistance, this);
+        //calcul de la nouvelle distance et du nouvel angle
         double distance = delta.length();
-        
         double angle =  Math.atan2(delta.y, delta.x);
-        // on suit ce que demande le boolean marcheAvant, en se retournant si besoin
-        if(marcheAvant && distance < 0 || (!marcheAvant && distance > 0))
+        
+        // si on a besoin de se retourner pour suivre la consigne de isMovementForward on le fait ici
+        if(isMovementForward && distance < 0 || (!isMovementForward && distance > 0))
         {
             distance *= -1;
             angle += Math.PI;
         }
         
-        vaAuPointGestionCourbe(consigne, intermediaire, angle, distance, false, seulementAngle, correction);
+        vaAuPointGestionCourbe(aim, givenPosition, angle, distance, false, turnOnly, isCorrection);
     }
     
-    /**
-     * Non bloquant. Avance, de manière courbe ou non.
-     * @param angle
-     * @param distance
-     * @param trajectoire_courbe
-     * @throws BlockedException 
-     * @throws FinMatchException 
-     * @throws WallCollisionDetectedException 
+    /**FIXME j'en suis là !!!
+     * 
+     * Non bloquant. Avance, envoi a la serie
+     * @param symmetrisedAim la position visee sur la table (symetrise)
+     * @param givenPosition la position de depart du deplacement //TODO relique de trajectoire courbe a suprimer ?
+     * @param angle l'angle dont il faut tourner (ordre pour la serie)
+     * @param distance la distance dont il faut avancer (ordre pour la serie)
+     * @param trajectoire_courbe TODO heu.... a suprimer ?
+     * @param turnOnly vrai si on veut uniquement tourner (et pas avancer)
+     * @param isCorrection vrai si la consigne est une correction et pas un ordre de deplacement
+     * @throws BlockedException si le robot rencontre un obstacle innatendu sur son chemin (par les capteurs)
      */
-    private void vaAuPointGestionCourbe(Vec2 consigne, Vec2 intermediaire, double angle, double distance, boolean trajectoire_courbe, boolean seulementAngle, boolean correction) throws BlockedException
+    private void vaAuPointGestionCourbe(Vec2 symmetrisedAim, Vec2 givenPosition, double angle, double distance, boolean trajectoire_courbe, boolean turnOnly, boolean isCorrection) throws BlockedException
     {
 		double delta = (orientation-angle) % (2*Math.PI);
 		if(delta > Math.PI)
@@ -404,7 +432,7 @@ public class Locomotion implements Service
 		 * dépasse un peu la consigne, la correction le ferait se retourner ce qui
 		 * n'est pas le résultat demandé)
 		 */
-		if(correction)
+		if(isCorrection)
 		{
 			// 5 cm
 			double deltaAngle = Math.abs((orientation-angle) % (2*Math.PI));
@@ -412,7 +440,7 @@ public class Locomotion implements Service
 				deltaAngle -= 2*Math.PI;
 			else if(deltaAngle < -Math.PI)
 				deltaAngle += 2*Math.PI;
-			if(intermediaire.squaredDistance(consigne) > 2500 && Math.abs(deltaAngle) < Math.PI/2)
+			if(givenPosition.squaredDistance(symmetrisedAim) > 2500 && Math.abs(deltaAngle) < Math.PI/2)
 //			if(delta < 3*Math.PI/180)
 				trajectoire_courbe = true;
 			else
@@ -423,7 +451,7 @@ public class Locomotion implements Service
             deplacements.turn(angle);
             if(!trajectoire_courbe) // sans virage : la première rotation est bloquante
                 while(!isMotionEnded()) // on attend la fin du mouvement
-                    Sleep.sleep(sleep_boucle_acquittement);
+                    Sleep.sleep(feedbackLoopDelay);
             
 /*            // TODO: passer en hook
             ObstacleRectangular obstacle = new ObstacleRectangular(position, consigne);
@@ -433,7 +461,7 @@ public class Locomotion implements Service
         		throw new WallCollisionDetectedException();
         	}
 */
-            if(!seulementAngle)
+            if(!turnOnly)
             	deplacements.moveLengthwise(distance);
         } catch (SerialConnexionException e) {
             e.printStackTrace();
@@ -535,9 +563,9 @@ public class Locomotion implements Service
     public void updateConfig()
     {
     	detectionDistance = Integer.parseInt(config.getProperty("distance_detection"));
-        distance_degagement_robot = Integer.parseInt(config.getProperty("distance_degagement_robot"));
-        sleep_boucle_acquittement = Integer.parseInt(config.getProperty("sleep_boucle_acquittement"));
-        angle_degagement_robot = Double.parseDouble(config.getProperty("angle_degagement_robot"));
+        distanceToDisengage = Integer.parseInt(config.getProperty("distance_degagement_robot"));
+        feedbackLoopDelay = Integer.parseInt(config.getProperty("sleep_boucle_acquittement"));
+        angleToDisengage = Double.parseDouble(config.getProperty("angle_degagement_robot"));
 		symetry = config.getProperty("couleur").replaceAll(" ","").equals("jaune");
     }
 
@@ -592,6 +620,10 @@ public class Locomotion implements Service
         }
     }
 
+    /**
+     * 
+     * @return la position du robot en debut de match
+     */
     public Vec2 getPosition()
     {
         updateCurrentPositionAndOrientation();
@@ -601,6 +633,10 @@ public class Locomotion implements Service
         return out;
     }
 
+    /**
+     * 
+     * @return l'orientation du robot en debut de match
+     */
     public double getOrientation()
     {
         updateCurrentPositionAndOrientation();

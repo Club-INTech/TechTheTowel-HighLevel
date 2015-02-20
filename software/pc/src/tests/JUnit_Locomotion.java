@@ -1,6 +1,8 @@
 package tests;
 
 
+import hook.Hook;
+
 import java.util.ArrayList;
 
 import org.junit.Before;
@@ -45,6 +47,16 @@ public class JUnit_Locomotion extends JUnit_Test
 		mLocomotion = (Locomotion)container.getService(ServiceNames.LOCOMOTION);
 		mLocomotion.setPosition(new Vec2(1500-71-48, 1000));
 		mLocomotion.setOrientation(Math.PI);
+	}
+	
+	@Test
+	public void testMoveLengthwise() throws Exception
+	{
+		try {
+			mLocomotion.moveLengthwise(100, new ArrayList<Hook>(), false);
+		} catch (UnableToMoveException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**

@@ -71,7 +71,7 @@ public class Vec2
 	
 	// dot product
 	/**
-	 * Dot.
+	 * le produit scalaire
 	 *
 	 * @param other the other
 	 * @return the int
