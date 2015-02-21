@@ -144,12 +144,11 @@ public class Locomotion implements Service
     {
         log.debug("Avancer de "+Integer.toString(distance), this);
         
-        //on calcul la position visee que l'on symetrisera ensuite (TODO peut se simplifier)
         Vec2 aim = new Vec2(); 
         aim.x = (int) (position.x + distance*Math.cos(orientation));
         aim.y = (int) (position.y + distance*Math.sin(orientation));        
-
-
+        log.debug("Position: "+position, this);
+        log.debug("aim: "+aim, this);
         // l'appel à cette méthode sous-entend que le robot ne tourne pas
         // il va donc en avant si la distance est positive, en arrière si elle est négative
         // si on est à 90°, on privilégie la marche avant
@@ -204,9 +203,6 @@ public class Locomotion implements Service
     	{
     		// Calcul du moyen le plus rapide (on se sert d'un calcul de produit scalaire)
 	        Vec2 delta = aim.clone();
-	        //TODO pourquoi delta est symetrise ici ?
-	        if(symetry)
-	            delta.x *= -1;
 	        delta.minus(position);
 	        // Le coeff 1000 vient du fait que Vec2 est constitué d'entiers
 	        Vec2 orientationVec = new Vec2((int)(1000*Math.cos(orientation)), (int)(1000*Math.sin(orientation)));
@@ -359,23 +355,24 @@ public class Locomotion implements Service
      */
     private void moveToPointSymmetry(Vec2 aim, boolean isMovementForward, boolean turnOnly, boolean isCorrection) throws BlockedException
     {
-        Vec2 givenPosition = position.clone();
-        if(symetry)
-        {
-            aim.x = -aim.x;
-            givenPosition.x = -givenPosition.x;
-
-        }
-        Vec2 delta = aim.clone();
-        
         updateCurrentPositionAndOrientation();
 
-
+        Vec2 givenPosition = position.clone();
+        Vec2 aimSymmetrized = aim.clone();
+        if(symetry)
+        {
+        	aimSymmetrized.x = -aimSymmetrized.x;
+            givenPosition.x = -givenPosition.x;
+        }
+        Vec2 delta = aimSymmetrized.clone();
         delta.minus(givenPosition);
+        log.debug("delta: "+delta, this);
 //        log.debug("Distance directe: "+delta.length()+", differenceDistance: "+differenceDistance, this);
         //calcul de la nouvelle distance et du nouvel angle
         double distance = delta.length();
         double angle =  Math.atan2(delta.y, delta.x);
+//        if(symetry)
+//        	angle = Math.PI - angle;
         
         // si on a besoin de se retourner pour suivre la consigne de isMovementForward on le fait ici
         if(isMovementForward && distance < 0 || (!isMovementForward && distance > 0))
@@ -383,9 +380,9 @@ public class Locomotion implements Service
             distance *= -1;
             angle += Math.PI;
         }
-        
 
-        moveToPointSerialOrder(aim, givenPosition, angle, distance, turnOnly, isCorrection);
+        log.debug("angle: "+angle+", distance: "+distance, this);
+        moveToPointSerialOrder(aimSymmetrized, givenPosition, angle, distance, turnOnly, isCorrection);
     }
     
     /**
@@ -404,15 +401,12 @@ public class Locomotion implements Service
     {
     	boolean trajectoire_courbe = false;
 
-		// Ce code fait juste un modulo 2*pi, avec un résultat entre -PI et +PI
-		double delta = (orientation-angle) % (2*Math.PI);
+    	// Ce code fait juste un modulo 2*pi, avec un résultat entre -PI et +PI
+		double delta = (angle-orientation) % (2*Math.PI);
 		if(delta > Math.PI)
 			delta -= 2*Math.PI;
 		else if(delta < -Math.PI)
 			delta += 2*Math.PI;
-		delta = Math.abs(delta);
-		if(delta > Math.PI)
-			delta = 2*Math.PI - delta;
 		
 		/**
 		 * Si on fait une correction, il faut vérifier la distance à la consigne et la correction
@@ -422,11 +416,12 @@ public class Locomotion implements Service
 		 */
 		if(isCorrection)
 		{
+			log.debug("Ignoré!", this);
 			//Si la distance est grande et l'angle petit, alors on fait la correction en angle
-			if(givenPosition.squaredDistance(symmetrisedAim) > 2500 && Math.abs(delta) < Math.PI/2)
+//			if(givenPosition.squaredDistance(symmetrisedAim) > 2500 && Math.abs(delta) < Math.PI/2)
 				//on active la correction (on attendra pas d'avoir fini de tourner (le robot) pour reprendre le programme)
-				trajectoire_courbe = true;
-			else
+//				trajectoire_courbe = true;
+//			else
 				return;
 		}
         try
@@ -527,8 +522,12 @@ public class Locomotion implements Service
         try {
             float[] infos = deplacements.getCurrentPositionAndOrientation();
             position.x = (int)infos[0];
+            if(symetry)
+            	position.x = -position.x;
             position.y = (int)infos[1];
             orientation = infos[2]/1000; // car getCurrentPositionAndOrientation renvoie des milliradians
+            if(symetry)
+            	orientation = Math.PI - orientation;
         }
         catch(SerialConnexionException e)
         {
@@ -591,7 +590,7 @@ public class Locomotion implements Service
         if(symetry)
         	this.orientation = Math.PI-this.orientation;
         try {
-    		deplacements.setOrientation(this.orientation);
+    		deplacements.setOrientation(orientation);
         } catch (SerialConnexionException e) {
             e.printStackTrace();
         }

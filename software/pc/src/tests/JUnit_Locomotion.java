@@ -47,23 +47,23 @@ public class JUnit_Locomotion extends JUnit_Test
 		super.setUp();
 		log.debug("JUnit_DeplacementsTest.setUp()", this);
 		mLocomotion = (Locomotion)container.getService(ServiceNames.LOCOMOTION);
+		config.set("couleur", "vert");
+		mLocomotion.updateConfig();
 		mLocomotion.setPosition(new Vec2(0, 1000));
 		mLocomotion.setOrientation(Math.PI);
 		mLocomotion.setTranslationnalSpeed(170);
 		mLocomotion.setRotationnalSpeed(160);
-		config.set("couleur", "jaune");
-		mLocomotion.updateConfig();
 	}
 
 	@Test
 	public void testMoveLengthwise() throws Exception
 	{
 		mLocomotion.moveLengthwise(100,  new ArrayList<Hook>(), false);
-/*		mLocomotion.moveLengthwise(-100,  new ArrayList<Hook>(), false);
+		mLocomotion.moveLengthwise(-100,  new ArrayList<Hook>(), false);
 		mLocomotion.turn(Math.PI/2, new ArrayList<Hook>());
 		mLocomotion.turn(-Math.PI/2, new ArrayList<Hook>());
-		mLocomotion.turn(0, new ArrayList<Hook>());*/
-	}
+		mLocomotion.turn(0, new ArrayList<Hook>());
+	}	
 
 	/**
 	 * Test_tourner.

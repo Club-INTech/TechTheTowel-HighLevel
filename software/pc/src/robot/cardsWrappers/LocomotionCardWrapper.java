@@ -192,7 +192,6 @@ public class LocomotionCardWrapper implements Service
 	{
 		// tronque l'angle que l'on envoit a la série pour éviter les overflows
 		float anggleTruncated = (float)angle;
-		
 		String chaines[] = {"t", Float.toString(anggleTruncated)};
 		locomotionCardSerial.communiquer(chaines, 0);		
 	}
