@@ -147,8 +147,6 @@ public class Locomotion implements Service
         Vec2 aim = new Vec2(); 
         aim.x = (int) (position.x + distance*Math.cos(orientation));
         aim.y = (int) (position.y + distance*Math.sin(orientation));        
-        log.debug("Position: "+position, this);
-        log.debug("aim: "+aim, this);
         // l'appel à cette méthode sous-entend que le robot ne tourne pas
         // il va donc en avant si la distance est positive, en arrière si elle est négative
         // si on est à 90°, on privilégie la marche avant
@@ -366,7 +364,6 @@ public class Locomotion implements Service
         }
         Vec2 delta = aimSymmetrized.clone();
         delta.minus(givenPosition);
-        log.debug("delta: "+delta, this);
 //        log.debug("Distance directe: "+delta.length()+", differenceDistance: "+differenceDistance, this);
         //calcul de la nouvelle distance et du nouvel angle
         double distance = delta.length();
@@ -381,7 +378,6 @@ public class Locomotion implements Service
             angle += Math.PI;
         }
 
-        log.debug("angle: "+angle+", distance: "+distance, this);
         moveToPointSerialOrder(aimSymmetrized, givenPosition, angle, distance, turnOnly, isCorrection);
     }
     
@@ -416,12 +412,11 @@ public class Locomotion implements Service
 		 */
 		if(isCorrection)
 		{
-			log.debug("Ignoré!", this);
 			//Si la distance est grande et l'angle petit, alors on fait la correction en angle
-//			if(givenPosition.squaredDistance(symmetrisedAim) > 2500 && Math.abs(delta) < Math.PI/2)
+			if(givenPosition.squaredDistance(symmetrisedAim) > 2500 && Math.abs(delta) < Math.PI/2)
 				//on active la correction (on attendra pas d'avoir fini de tourner (le robot) pour reprendre le programme)
-//				trajectoire_courbe = true;
-//			else
+				trajectoire_courbe = true;
+			else
 				return;
 		}
         try
