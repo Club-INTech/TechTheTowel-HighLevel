@@ -489,7 +489,8 @@ void TIM4_IRQHandler(void) { //2kHz = 0.0005s = 0.5ms
 		motionControlSystem->control();
 		motionControlSystem->updatePosition();
 
-		if (i >= 10) { //50ms
+		if (i >= 10) { //5ms
+			//Gestion de l'arrêt
 			motionControlSystem->manageStop();
 			i = 0;
 		}
