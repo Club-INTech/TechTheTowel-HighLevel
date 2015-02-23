@@ -2,6 +2,7 @@
 #include "MotionControlSystem.h"
 #include "delay.h"
 #include "include/ActuatorsMgr.hpp"
+#include "SensorMgr.h"
 
 int main(void)
 {
