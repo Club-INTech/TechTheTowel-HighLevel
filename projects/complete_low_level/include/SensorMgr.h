@@ -8,9 +8,11 @@
 #include "stm32f4xx_exti.h"
 #include "stm32f4xx_syscfg.h"
 #include "misc.h"
+#include "capteur_srf05.hpp"
+#include "Singleton.hpp"
 
 
-class SensorMgr
+class SensorMgr : public Singleton<SensorMgr>
 {
 public:
 	SensorMgr();
@@ -31,6 +33,10 @@ public:
 	void rightBackUSInterrupt();
 
 private:
+	CapteurSRF leftFrontUS;
+	CapteurSRF rightFrontUS;
+	CapteurSRF leftBackUS;
+	CapteurSRF rightBackUS;
 
 
 };

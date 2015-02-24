@@ -1,20 +1,21 @@
 #include "Uart.hpp"
 #include "MotionControlSystem.h"
 #include "delay.h"
-#include "include/ActuatorsMgr.hpp"
+#include "ActuatorsMgr.hpp"
 #include "SensorMgr.h"
 
 int main(void)
 {
-	Delay_Init();
 	Uart<1> serial;
 	Uart<2> serial_ax;
 	serial.init(115200);
 	serial_ax.init(9600);
+	Delay_Init();
 
 	MotionControlSystem* motionControlSystem = &MotionControlSystem::Instance();
 	motionControlSystem->init(100, 100);
 	ActuatorsMgr actuatorsMgr;
+	SensorMgr* sensorMgr = &SensorMgr::Instance();
 
 	bool translation = true;//permet de basculer entre les réglages de cte d'asserv en translation et en rotation
 
@@ -33,6 +34,8 @@ int main(void)
 			else if(!strcmp("!",order))
 			{
 				serial.printfln("Abwabwa.");
+				Delay_us(1000000);
+				serial.printfln("MegaBwabwa");
 			}
 			else if(!strcmp("f",order))//Indiquer l'état du mouvement du robot
 			{
@@ -52,7 +55,7 @@ int main(void)
 			}
 			else if(!strcmp("us_av",order))
 			{
-				serial.printfln("%d", 3000);//Distance mesurée par l'ultrason avant gauche, en mm
+				serial.printfln("%d", sensorMgr->getLeftFrontValue());//Distance mesurée par l'ultrason avant gauche, en mm
 				serial.printfln("%d", 3000);//Distance mesurée par l'ultrason avant droit, en mm
 			}
 			else if(!strcmp("us_ar",order))
@@ -479,8 +482,9 @@ int main(void)
 extern "C" {
 //Interruption overflow TIMER4
 void TIM4_IRQHandler(void) { //2kHz = 0.0005s = 0.5ms
-	__IO static uint32_t i = 0, j = 0;
+	__IO static uint32_t i = 0, j = 0, k = 0;
 	static MotionControlSystem* motionControlSystem = &MotionControlSystem::Instance();
+	static SensorMgr* sensorMgr = &SensorMgr::Instance();
 
 	if (TIM_GetITStatus(TIM4, TIM_IT_Update) != RESET) {
 		//Remise à 0 manuelle du flag d'interruption nécessaire
@@ -501,8 +505,28 @@ void TIM4_IRQHandler(void) { //2kHz = 0.0005s = 0.5ms
 			j=0;
 		}
 
+		if(k >= 100){
+			sensorMgr->refresh();
+			k=0;
+		}
+
 		i++;
 		j++;
+		k++;
 	}
 }
+
+//Interruptions des ultrasons
+void EXTI9_5_IRQHandler(void) {
+	static SensorMgr* sensorMgr = &SensorMgr::Instance();
+
+    /* Make sure that interrupt flag is set */
+    if (EXTI_GetITStatus(EXTI_Line6) != RESET) {
+        sensorMgr->leftFrontUSInterrupt();
+
+        /* Clear interrupt flag */
+        EXTI_ClearITPendingBit(EXTI_Line6);
+    }
+}
+
 }

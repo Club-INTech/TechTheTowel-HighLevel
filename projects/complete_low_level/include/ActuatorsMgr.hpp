@@ -43,8 +43,6 @@ private:
 	AX<serial_ax>* tapisGauche;
 	AX<serial_ax>* clapDroit;
 	AX<serial_ax>* clapGauche;
-	AX<serial_ax>* bouffeBillesGauche;
-	AX<serial_ax>* bouffeBillesDroit;
 
 public:
 	ActuatorsMgr()
@@ -59,8 +57,22 @@ public:
 		tapisGauche = new AX<serial_ax>(7,1,1023);
 		clapDroit = new AX<serial_ax>(8,1,1023);
 		clapGauche = new AX<serial_ax>(9,1,1023);
-		bouffeBillesGauche = new AX<serial_ax>(10,1,1023);
-		bouffeBillesDroit = new AX<serial_ax>(11,1,1023);
+	}
+
+	~ActuatorsMgr()
+	{
+		delete(machoireDroite);
+		delete(machoireGauche);
+		delete(brasDroit);
+		delete(brasGauche);
+		delete(clapDroit);
+		delete(clapGauche);
+		delete(guideDroit);
+		delete(guideGauche);
+		delete(tapisDroit);
+		delete(tapisGauche);
+		delete(clapDroit);
+		delete(clapGauche);
 	}
 
 	void omd() {
