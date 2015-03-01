@@ -28476,7 +28476,7 @@ Es handelt sich hierbei um AK500 in horizontaler Ausführung.&lt;p&gt;
 <label x="116.84" y="7.62" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="CAPTEUR_A1" class="0">
+<net name="CAPTEUR_A1_US" class="0">
 <segment>
 <pinref part="JP2" gate="A" pin="3"/>
 <wire x1="274.32" y1="48.26" x2="281.94" y2="48.26" width="0.1524" layer="91"/>
@@ -28500,7 +28500,7 @@ Es handelt sich hierbei um AK500 in horizontaler Ausführung.&lt;p&gt;
 <label x="30.48" y="45.72" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="CAPTEUR_A3" class="0">
+<net name="CAPTEUR_A3_US" class="0">
 <segment>
 <pinref part="JP3" gate="A" pin="3"/>
 <wire x1="274.32" y1="7.62" x2="281.94" y2="7.62" width="0.1524" layer="91"/>
@@ -28524,7 +28524,7 @@ Es handelt sich hierbei um AK500 in horizontaler Ausführung.&lt;p&gt;
 <label x="-20.32" y="40.64" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="CAPTEUR_A4" class="0">
+<net name="CAPTEUR_A4_US" class="0">
 <segment>
 <pinref part="JP4" gate="A" pin="3"/>
 <wire x1="274.32" y1="-12.7" x2="281.94" y2="-12.7" width="0.1524" layer="91"/>
@@ -28536,7 +28536,7 @@ Es handelt sich hierbei um AK500 in horizontaler Ausführung.&lt;p&gt;
 <label x="-20.32" y="43.18" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="CAPTEUR_A6" class="0">
+<net name="CAPTEUR_A6_US" class="0">
 <segment>
 <pinref part="JP6" gate="A" pin="3"/>
 <wire x1="304.8" y1="27.94" x2="312.42" y2="27.94" width="0.1524" layer="91"/>

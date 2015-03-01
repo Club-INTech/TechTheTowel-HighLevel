@@ -3225,7 +3225,7 @@ design rules under a new name.</description>
 <wire x1="147.32" y1="12.7" x2="140.97" y2="6.35" width="0.8128" layer="16"/>
 <wire x1="140.97" y1="6.35" x2="140.97" y2="5.08" width="0.8128" layer="16"/>
 </signal>
-<signal name="CAPTEUR_A1">
+<signal name="CAPTEUR_A1_US">
 <contactref element="JP2" pad="3"/>
 <contactref element="U$1" pad="P$18"/>
 <wire x1="182.88" y1="64.77" x2="187.325" y2="60.325" width="0.8128" layer="16"/>
@@ -3241,7 +3241,7 @@ design rules under a new name.</description>
 <wire x1="218.44" y1="61.595" x2="220.98" y2="64.135" width="0.8128" layer="16"/>
 <wire x1="220.98" y1="64.135" x2="220.98" y2="76.2" width="0.8128" layer="16"/>
 </signal>
-<signal name="CAPTEUR_A3">
+<signal name="CAPTEUR_A3_US">
 <contactref element="JP3" pad="3"/>
 <contactref element="U$1" pad="P$15"/>
 <wire x1="185.42" y1="67.31" x2="185.42" y2="68.58" width="0.8128" layer="16"/>
@@ -3256,14 +3256,14 @@ design rules under a new name.</description>
 <wire x1="180.34" y1="67.31" x2="180.34" y2="71.12" width="0.8128" layer="16"/>
 <wire x1="180.34" y1="71.12" x2="185.42" y2="76.2" width="0.8128" layer="16"/>
 </signal>
-<signal name="CAPTEUR_A4">
+<signal name="CAPTEUR_A4_US">
 <contactref element="JP4" pad="3"/>
 <contactref element="U$1" pad="P$17"/>
 <wire x1="182.88" y1="67.31" x2="182.88" y2="68.58" width="0.8128" layer="16"/>
 <wire x1="182.88" y1="68.58" x2="190.5" y2="76.2" width="0.8128" layer="16"/>
 <wire x1="190.5" y1="76.2" x2="193.04" y2="76.2" width="0.8128" layer="16"/>
 </signal>
-<signal name="CAPTEUR_A6">
+<signal name="CAPTEUR_A6_US">
 <contactref element="JP6" pad="3"/>
 <contactref element="U$1" pad="P$21"/>
 <wire x1="177.8" y1="67.31" x2="177.8" y2="76.2" width="0.8128" layer="16"/>
