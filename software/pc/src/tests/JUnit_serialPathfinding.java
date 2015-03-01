@@ -4,6 +4,7 @@ import graphics.Window;
 import hook.Hook;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.Random;
 
 import smartMath.Vec2;
@@ -13,6 +14,7 @@ import table.Table;
 import org.junit.Before;
 import org.junit.Test;
 
+import enums.ObstacleGroups;
 import enums.ServiceNames;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -70,7 +72,7 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 		{
 			state.robot.moveLengthwise(1000);
 		}
-		catch (UnableToMoveException e) 
+		catch (UnableToMoveException e)
 		{
 			log.debug("impossible de bouger", this);
 		}
@@ -83,7 +85,7 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 			try 
 			{
 				//TOTO : adapter au nouveau pf
-				path = pf.computePath(robot.getPosition(), new Vec2(randX,randY));
+				path = pf.computePath(robot.getPosition(), new Vec2(randX,randY), EnumSet.noneOf(ObstacleGroups.class));
 				log.debug("chemin : "+path.toString(),this);
 				path.remove(0);
 				robot.followPath(path, emptyHook);
@@ -122,7 +124,7 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 		{
 			try
 			{
-				path = pf.computePath(robot.getPosition(), win.getMouse().getLeftClickPosition());
+				path = pf.computePath(robot.getPosition(), win.getMouse().getLeftClickPosition(), EnumSet.noneOf(ObstacleGroups.class));
 				log.debug("chemin : "+path.toString(),this);
 				path.remove(0);
 				System.out.println("----------------Nouveau chemin---------------");

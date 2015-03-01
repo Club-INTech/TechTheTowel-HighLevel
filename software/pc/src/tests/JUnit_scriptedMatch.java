@@ -28,7 +28,6 @@ import robot.cardsWrappers.SensorsCardWrapper;
  * classe des matchs scriptes
  */
 
-
 public class JUnit_scriptedMatch extends JUnit_Test 
 {
 	ArrayList<Hook> emptyHook;

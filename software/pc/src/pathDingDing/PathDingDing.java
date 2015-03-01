@@ -29,52 +29,8 @@ public class PathDingDing implements Service
 	public PathDingDing(Table table)
 	{
 		mTable = table;
-		mGraph = new Graph(mTable);
 		mObstaclesToConsider = EnumSet.noneOf(ObstacleGroups.class);
-	}
-	
-	/**
-	 * methode a appeler
-	 * @param start le point de depart
-	 * @param end le point d'arrivee
-	 * @return un chemin optimise liant depart et arrivee
-	 * @throws Exception pas encore implemente
-	 */
-	public ArrayList<Vec2> computePath(Vec2 start, Vec2 end) throws PathNotFoundException
-	{
-		//le cas ou les points de depart et d'arrivee sont reliables en ligne droite est directement traite
-		ArrayList<Vec2> directPath =  new ArrayList<Vec2>();
-		directPath.add(start);
-		directPath.add(end);
-		if(isPathCorrect(directPath))
-			return directPath;
-
-		//ajout du noeud de depart au graphe
-		mGraph.setStartNode(new Node(start.x, start.y));
-
-		//ajout du noeud de fin au graphe
-		Node endNode = new Node(end.x, end.y);
-		mGraph.setEndNode(endNode);
-		
-		//calcul du chemin via computeGraph, convertion, et simplification.
-		ArrayList<Vec2> pathVec2 = new ArrayList<Vec2>();
-		ArrayList<Node> pathNode = new ArrayList<Node>();
-		try
-		{
-			pathNode = computeGraph(mGraph);
-		}
-		catch(PathNotFoundException e)
-		{
-			//on detache le dernier noeud du graphe
-			mGraph.unlinkNode(endNode);
-			throw new PathNotFoundException();
-		}
-		for(int i = pathNode.size() - 1; i >= 0; i--)
-			pathVec2.add(pathNode.get(i).toVec2());
-		simplify(pathVec2);
-		//on detache le dernier noeud du graphe
-		mGraph.unlinkNode(endNode);
-		return pathVec2;
+		mGraph = new Graph(mTable, mObstaclesToConsider);
 	}
 	
 	/**
@@ -87,6 +43,7 @@ public class PathDingDing implements Service
 	public ArrayList<Vec2> computePath(Vec2 start, Vec2 end, EnumSet<ObstacleGroups> obstaclesToConsider) throws PathNotFoundException
 	{
 		this.mObstaclesToConsider = obstaclesToConsider;
+		mGraph.setObstaclesToConsider(mObstaclesToConsider);
 		
 		//le cas ou les points de depart et d'arrivee sont reliables en ligne droite est directement traite
 		ArrayList<Vec2> directPath =  new ArrayList<Vec2>();
@@ -94,17 +51,27 @@ public class PathDingDing implements Service
 		directPath.add(end);
 		if(isPathCorrect(directPath))
 			return directPath;
-
-		//ajout du noeud de depart au graphe
-		mGraph.setStartNode(new Node(start.x, start.y));
+		
+		ArrayList<Node> pathNode = new ArrayList<Node>();
+		ArrayList<Vec2> pathVec2 = new ArrayList<Vec2>();
+		
+		Node startNode = new Node(start.x, start.y);
+		//si le noeud de depart n'est pas sur la table, on le lie au point le plus proche
+		if(!mGraph.isOnTable(startNode))
+		{
+			pathVec2.add(start);
+			Node closestNode = mGraph.closestNode(startNode.toVec2());
+			mGraph.setStartNode(new Node(closestNode.x, closestNode.y));
+		}
+		else
+			//ajout du noeud de depart au graphe
+			mGraph.setStartNode(startNode);
 
 		//ajout du noeud de fin au graphe
 		Node endNode = new Node(end.x, end.y);
 		mGraph.setEndNode(endNode);
 		
 		//calcul du chemin via computeGraph, convertion, et simplification.
-		ArrayList<Vec2> pathVec2 = new ArrayList<Vec2>();
-		ArrayList<Node> pathNode = new ArrayList<Node>();
 		try
 		{
 			pathNode = computeGraph(mGraph);
@@ -115,6 +82,7 @@ public class PathDingDing implements Service
 			mGraph.unlinkNode(endNode);
 			throw new PathNotFoundException();
 		}
+		//recopie de pathNode dans pathVec2, avec inversion du sens
 		for(int i = pathNode.size() - 1; i >= 0; i--)
 			pathVec2.add(pathNode.get(i).toVec2());
 		simplify(pathVec2);
@@ -265,6 +233,14 @@ public class PathDingDing implements Service
 	 */
 	public boolean isPathCorrect(ArrayList<Vec2> path)
 	{
+		//si un des points est en dehors de la table, on retourne directement false
+		boolean pathOnTable = true;
+		for(int i = 0; i < path.size(); i++)
+			if(!mGraph.isOnTable((new Node(path.get(i).x, path.get(i).y))))
+				pathOnTable = false;
+		if(!pathOnTable)
+			return false;
+			
 		//conversion des obstacles circulaires en cercles
 		
 		ArrayList<Circle> circles = new ArrayList<Circle>();

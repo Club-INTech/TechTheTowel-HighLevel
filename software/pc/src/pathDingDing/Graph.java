@@ -5,6 +5,9 @@ import table.Table;
 import table.obstacles.*;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
+
+import enums.ObstacleGroups;
 
 /**
  * graphe definissant les liens entre les noeuds
@@ -16,14 +19,16 @@ public class Graph
 	private ArrayList<Node> mNodes;
 	private Node mStartNode;
 	private Node mEndNode;
-	public ArrayList<Area> mAreas; // TODO : private
+	public ArrayList<Area> mAreas; // TODO : private (utilise par graphics)
 	private Table mTable;
+	private EnumSet<ObstacleGroups> mObstaclesToConsider;
 	
-	public Graph(Table table)
+	public Graph(Table table, EnumSet<ObstacleGroups> obstaclesToConsider)
 	{
 		mNodes = new ArrayList<Node>();
 		mAreas = new ArrayList<Area>();
 		mTable = table;
+		mObstaclesToConsider = obstaclesToConsider;
 		buildGraph();
 	}
 	
@@ -134,6 +139,11 @@ public class Graph
 		mAreas.add(area);
 	}
 	
+	public void setObstaclesToConsider(EnumSet<ObstacleGroups> obstaclesToConsider)
+	{
+		mObstaclesToConsider = obstaclesToConsider;
+	}
+	
 	public ArrayList<Node> getNodes()
 	{
 		return mNodes;
@@ -155,17 +165,11 @@ public class Graph
 		mStartNode = startNode;
 		//on parcourt les zones pour trouver celle dans laquelle le noeud
 		for(int i = 0; i < mAreas.size(); i++)
-		{
 			//si on en trouve une zone dans laquelle il est
 			if(mAreas.get(i).isInArea(startNode))
-			{
 				//on le rattache a tous les points de la zone
 				for(int j = 0; j < mAreas.get(i).attachedNodesNumber(); j++)
-				{
 					mStartNode.addLink(mAreas.get(i).getAttachedNode(j));
-				}
-			}
-		}
 	}
 	
 	//specifie le point d'arrivee et le lie au graphe en fonction de sa zone
@@ -217,5 +221,63 @@ public class Graph
 	public ArrayList<Area> getAreas()
 	{
 		return mAreas;
+	}
+	
+	public boolean isOnTable(Node node)
+	{
+		//conversion des obstacles circulaires en cercles
+		
+		ArrayList<Circle> circles = new ArrayList<Circle>();
+		if(mObstaclesToConsider.contains(ObstacleGroups.ENNEMY_ROBOTS))
+			for(int i = 0; i < mTable.getObstacleManager().getMobileObstacles().size(); i++)
+				circles.add(new Circle(mTable.getObstacleManager().getMobileObstacles().get(i).getPosition(), mTable.getObstacleManager().getMobileObstacles().get(i).getRadius()));
+		
+		if(mObstaclesToConsider.contains(ObstacleGroups.YELLOW_PLOTS))
+			//parcours des plots jaunes
+			for(int i = 0; i < 8; i++)
+				circles.add(new Circle(mTable.getObstacleManager().getFixedObstacles().get(i).getPosition(), mTable.getObstacleManager().getFixedObstacles().get(i).getRadius()));
+		if(mObstaclesToConsider.contains(ObstacleGroups.GREEN_PLOTS))
+			//parcours des plots verts
+			for(int i = 8; i < 16; i++)
+				circles.add(new Circle(mTable.getObstacleManager().getFixedObstacles().get(i).getPosition(), mTable.getObstacleManager().getFixedObstacles().get(i).getRadius()));
+		if(mObstaclesToConsider.contains(ObstacleGroups.GOBLETS))
+			//parcours des gobelets
+			for(int i = 16; i < 21; i++)
+				circles.add(new Circle(mTable.getObstacleManager().getFixedObstacles().get(i).getPosition(), mTable.getObstacleManager().getFixedObstacles().get(i).getRadius()));
+		
+		//si le noeud est dans un cercle, on retourne directement false
+		for(int i = 0; i < circles.size(); i++)
+			if((circles.get(i).position.x - node.x)*(circles.get(i).position.x - node.x) + (circles.get(i).position.y - node.y)*(circles.get(i).position.y - node.y) < circles.get(i).radius*circles.get(i).radius)
+				return false;
+		
+		boolean isOnTable = false;
+		//on parcourt les zones pour trouver celle dans laquelle le noeud
+		for(int i = 0; i < mAreas.size(); i++)
+		{
+			//si on en trouve une zone dans laquelle il est
+			if(mAreas.get(i).isInArea(node))
+			{
+				isOnTable = true;
+			}
+		}
+		return isOnTable;
+	}
+	
+	//retourne le noeud correct (pas dans un obstacle) le plus proche de la position
+	//cree un bug si TOUS les noeuds sont occupes par des obstacles
+	public Node closestNode(Vec2 position)
+	{
+		int minSquaredDistance = 13000000;
+		Node closestNode = new Node(0, 0);
+		for(int i = 0; i < mNodes.size(); i++)
+		{
+			int distanceToNode = (mNodes.get(i).x - position.x)*(mNodes.get(i).x - position.x) + (mNodes.get(i).y - position.y)*(mNodes.get(i).y - position.y);
+			if(distanceToNode < minSquaredDistance && isOnTable(mNodes.get(i)))
+			{
+				minSquaredDistance = distanceToNode;
+				closestNode = mNodes.get(i);
+			}
+		}
+		return closestNode;
 	}
 }

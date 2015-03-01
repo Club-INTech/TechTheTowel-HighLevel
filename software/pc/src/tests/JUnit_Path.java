@@ -50,7 +50,7 @@ public class JUnit_Path extends JUnit_Test
     	try
     	{
     		//Test : computePath(new Vec2 [Point de depart] ,new Vec2[Point d'arrivée] )
-	    	win.getPanel().drawArrayList(pf.computePath(new Vec2 (1230, 1799),new Vec2(430,570) ));
+	    	win.getPanel().drawArrayList(pf.computePath(new Vec2 (1230, 1799),new Vec2(430,570), EnumSet.noneOf(ObstacleGroups.class)));
 	    }
     	catch(PathNotFoundException e)
     	{
