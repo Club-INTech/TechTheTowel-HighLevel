@@ -68,8 +68,8 @@ void MotionControlSystem::init(int16_t maxPWMtranslation, int16_t maxPWMrotation
 	NVIC_InitTypeDef NVIC_InitStructure;
 	//Configuration et activation de l'interruption
 	NVIC_InitStructure.NVIC_IRQChannel = TIM4_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 255;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 255;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 16;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 

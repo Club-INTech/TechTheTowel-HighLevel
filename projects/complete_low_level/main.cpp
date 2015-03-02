@@ -4,23 +4,31 @@
 #include "ActuatorsMgr.hpp"
 #include "SensorMgr.h"
 
+volatile bool sensorToRefresh = false;
+
 int main(void)
 {
+	Delay_Init();
 	Uart<1> serial;
 	Uart<2> serial_ax;
 	serial.init(115200);
 	serial_ax.init(9600);
-	Delay_Init();
 
 	MotionControlSystem* motionControlSystem = &MotionControlSystem::Instance();
 	motionControlSystem->init(100, 100);
-	ActuatorsMgr actuatorsMgr;
+	ActuatorsMgr* actuatorsMgr = &ActuatorsMgr::Instance();
 	SensorMgr* sensorMgr = &SensorMgr::Instance();
+
 
 	bool translation = true;//permet de basculer entre les réglages de cte d'asserv en translation et en rotation
 
 	while(1)
 	{
+		if(sensorToRefresh)
+		{
+			sensorMgr->refresh();
+			sensorToRefresh = false;
+		}
 		if (serial.available()) {
 			char order[200];
 			serial.read(order);
@@ -137,7 +145,7 @@ int main(void)
 			}
 			else if (!strcmp("broad",order))
 			{
-				actuatorsMgr.broad();
+				actuatorsMgr->broad();
 			}
 			else if (!strcmp("at", order))	// Commute l'asservissement en translation
 			{
@@ -364,116 +372,116 @@ int main(void)
 			/* ACTIONNEURS */
 			else if(!strcmp("obd",order))
 			{
-				actuatorsMgr.obd();
+				actuatorsMgr->obd();
 			}
 			else if(!strcmp("fbd",order))
 			{
-				actuatorsMgr.fbd();
+				actuatorsMgr->fbd();
 			}
 			else if(!strcmp("obg",order))
 			{
-				actuatorsMgr.obg();
+				actuatorsMgr->obg();
 			}
 			else if(!strcmp("fbg",order))
 			{
-				actuatorsMgr.fbg();
+				actuatorsMgr->fbg();
 			}
 			else if(!strcmp("obdl",order))
 			{
-				actuatorsMgr.obdl();
+				actuatorsMgr->obdl();
 			}
 			else if(!strcmp("fbdl",order))
 			{
-				actuatorsMgr.fbdl();
+				actuatorsMgr->fbdl();
 			}
 			else if(!strcmp("obgl",order))
 			{
-				actuatorsMgr.obgl();
+				actuatorsMgr->obgl();
 			}
 			else if(!strcmp("fbgl",order))
 			{
-				actuatorsMgr.fbgl();
+				actuatorsMgr->fbgl();
 			}
 			else if(!strcmp("omd",order))
 			{
-				actuatorsMgr.omd();
+				actuatorsMgr->omd();
 			}
 			else if(!strcmp("fmd",order))
 			{
-				actuatorsMgr.fmd();
+				actuatorsMgr->fmd();
 			}
 			else if(!strcmp("omg",order))
 			{
-				actuatorsMgr.omg();
+				actuatorsMgr->omg();
 			}
 			else if(!strcmp("fmg",order))
 			{
-				actuatorsMgr.fmg();
+				actuatorsMgr->fmg();
 			}
 			else if(!strcmp("om",order))
 			{
-				actuatorsMgr.omg();
-				actuatorsMgr.omd();
+				actuatorsMgr->omg();
+				actuatorsMgr->omd();
 			}
 			else if(!strcmp("fm",order))
 			{
-				actuatorsMgr.fmg();
-				actuatorsMgr.fmd();
+				actuatorsMgr->fmg();
+				actuatorsMgr->fmd();
 			}
 			else if(!strcmp("ah",order))
 			{
-				actuatorsMgr.ah();
+				actuatorsMgr->ah();
 			}
 			else if(!strcmp("ab",order))
 			{
-				actuatorsMgr.ab();
+				actuatorsMgr->ab();
 			}
 			else if(!strcmp("as",order))
 			{
-				actuatorsMgr.as();
+				actuatorsMgr->as();
 			}
 			else if(!strcmp("ae",order))
 			{
-				actuatorsMgr.ae();
+				actuatorsMgr->ae();
 			}
 			else if(!strcmp("ogd",order))
 			{
-				actuatorsMgr.ogd();
+				actuatorsMgr->ogd();
 			}
 			else if(!strcmp("fgd",order))
 			{
-				actuatorsMgr.fgd();
+				actuatorsMgr->fgd();
 			}
 			else if(!strcmp("gdi",order))
 			{
-				actuatorsMgr.gdi();
+				actuatorsMgr->gdi();
 			}
 			else if(!strcmp("ogg",order))
 			{
-				actuatorsMgr.ogg();
+				actuatorsMgr->ogg();
 			}
 			else if(!strcmp("fgg",order))
 			{
-				actuatorsMgr.fgg();
+				actuatorsMgr->fgg();
 			}
 			else if(!strcmp("ggi",order))
 			{
-				actuatorsMgr.ggi();
+				actuatorsMgr->ggi();
 			}
 			else if(!strcmp("go",order))
 			{
-				actuatorsMgr.ogg();
-				actuatorsMgr.ogd();
+				actuatorsMgr->ogg();
+				actuatorsMgr->ogd();
 			}
 			else if(!strcmp("gf",order))
 			{
-				actuatorsMgr.fgg();
-				actuatorsMgr.fgd();
+				actuatorsMgr->fgg();
+				actuatorsMgr->fgd();
 			}
 			else if(!strcmp("gi",order))
 			{
-				actuatorsMgr.ggi();
-				actuatorsMgr.gdi();
+				actuatorsMgr->ggi();
+				actuatorsMgr->gdi();
 			}
 		}
 	}
@@ -490,7 +498,7 @@ void TIM4_IRQHandler(void) { //2kHz = 0.0005s = 0.5ms
 		//Remise à 0 manuelle du flag d'interruption nécessaire
 		TIM_ClearITPendingBit(TIM4, TIM_IT_Update);
 
-		//Asservissement et mise à jour de la position
+		//Asservissement et mise à jour de la positionQ
 		motionControlSystem->control();
 		motionControlSystem->updatePosition();
 
@@ -505,8 +513,9 @@ void TIM4_IRQHandler(void) { //2kHz = 0.0005s = 0.5ms
 			j=0;
 		}
 
-		if(k >= 100){
-			sensorMgr->refresh();
+		if(k >= 1000){
+			//sensorMgr->refresh();
+			sensorToRefresh = true;
 			k=0;
 		}
 
@@ -516,10 +525,12 @@ void TIM4_IRQHandler(void) { //2kHz = 0.0005s = 0.5ms
 	}
 }
 
-//Interruptions des ultrasons
+
 void EXTI9_5_IRQHandler(void) {
 	static SensorMgr* sensorMgr = &SensorMgr::Instance();
+	static ActuatorsMgr* actuatorsMgr = &ActuatorsMgr::Instance();
 
+	//Interruptions des ultrasons
     /* Make sure that interrupt flag is set */
     if (EXTI_GetITStatus(EXTI_Line6) != RESET) {
         sensorMgr->leftFrontUSInterrupt();
@@ -527,6 +538,29 @@ void EXTI9_5_IRQHandler(void) {
         /* Clear interrupt flag */
         EXTI_ClearITPendingBit(EXTI_Line6);
     }
+
+    //Interruption du contacteur BAS de l'ascenseur
+    if (EXTI_GetITStatus(EXTI_Line5) != RESET)
+    {
+    	actuatorsMgr->refreshElevatorState();
+
+    	EXTI_ClearITPendingBit(EXTI_Line5);
+    }
 }
+
+void EXTI15_10_IRQHandler(void)
+{
+	static ActuatorsMgr* actuatorsMgr = &ActuatorsMgr::Instance();
+
+	//Interruption du contacteur HAUT de l'ascenseur
+	if (EXTI_GetITStatus(EXTI_Line13) != RESET)
+	{
+		actuatorsMgr->refreshElevatorState();
+
+		EXTI_ClearITPendingBit(EXTI_Line13);
+	}
+}
+
+
 
 }

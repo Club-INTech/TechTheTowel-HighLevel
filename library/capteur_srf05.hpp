@@ -4,10 +4,12 @@
 #include <stdint.h>
 #include "delay.h"
 #include "ring_buffer.hpp"
+#include "Uart.hpp"
 
 #define NB_VALEURS_MEDIANE_SRF  4
 
 typedef ring_buffer<uint16_t, NB_VALEURS_MEDIANE_SRF> ringBufferSRF;
+extern Uart<1> serial;
 
 /** @file libintech/capteur_srf05.hpp
  *  @brief Ce fichier crée une classe capteur_srf05 pour pouvoir utiliser simplement les capteurs SRF05.
@@ -105,9 +107,12 @@ public:
 			uint32_t temps_impulsion;
 			ancienBit=bit;
 				//Enregistrement de la dernière distance calculée, mais sans l'envoyer (l'envoi se fait par la méthode value)
-			temps_impulsion = Micros() - origineTimer;
+			uint32_t current_time;
+			current_time = Micros();
+			temps_impulsion = current_time - origineTimer;
 			ringBufferValeurs.append( 10*temps_impulsion/58 );
 			derniereDistance=mediane(ringBufferValeurs);
+			//serial.printfln("%d", 10*temps_impulsion/58);
 		}
 	}
 
