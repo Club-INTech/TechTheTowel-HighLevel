@@ -145,13 +145,12 @@ public class LocomotionCardWrapper implements Service
 	/** 
 	 * Regarde si le robot bouge effectivement.
 	 * Provoque un appel série pour avoir des information a jour. Cette méthode est demande donc un peu de temps. 
-	 * @return vrai si le robot bouge, faux si le robot est immobile
+	 * @return 
 	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
 	 */
-	public boolean isRobotMoving() throws SerialConnexionException
-	{
-		refreshFeedbackLoopStatistics();
-		
+	boolean isRobotMoving() throws SerialConnexionException
+	{	
+		/*refreshFeedbackLoopStatistics();
 		// petits alias sur les infos de l'asservissement
 		int rotationnalError = feedbackLoopStatistics.get("erreur_rotation");
 		int translationnalError = feedbackLoopStatistics.get("erreur_translation");
@@ -166,10 +165,27 @@ public class LocomotionCardWrapper implements Service
 		boolean translationStopped = Math.abs(translationnalError) <= 60;
 		translationStopped = true;
 		boolean isImmobile = Math.abs(derivedRotationnalError) <= 20 && Math.abs(derivedTranslationnalError) <= 20;
+				
+		return !(rotationStopped && translationStopped && isImmobile);*/
 		
 		
+		boolean[] infos=isRobotStillMovingAndItIsNormal();
 		
-		return !(rotationStopped && translationStopped && isImmobile);
+		if(infos[0])//le robot bouge toujours
+		{
+			if(!infos[1])//et c'est normal
+			{
+				System.out.println("On bouge toujours et c'est normal");
+				return infos[0];
+			}
+			else
+			{
+				System.out.println("On bouge toujours MAIS C'EST PAS normal");//TODO gerer ce cas
+			}
+		}
+		
+		return infos[0];
+
 	}
 	
 	/** 
@@ -456,6 +472,33 @@ public class LocomotionCardWrapper implements Service
 	public void closeLocomotion()
 	{
 		locomotionCardSerial.close();
+	}
+	
+	/**
+	 * Recupere des informations du robot : s'il bouge et si c'est anormal
+	 */
+	public boolean isRobotStillMoving() throws SerialConnexionException
+	{
+		// on envois "f" et on lit si le robot bouge toujours PUIS si c'est normal
+		String[] infosBuffer = locomotionCardSerial.communiquer("f", 2);;
+		return Boolean.parseBoolean(infosBuffer[0]);
+	}
+	
+	public boolean isNormalThatRobotStillMoving() throws SerialConnexionException
+	{
+		// on envois "f" et on lit si le robot bouge toujours PUIS si c'est normal
+		String[] infosBuffer = locomotionCardSerial.communiquer("f", 2);;
+		return Boolean.parseBoolean(infosBuffer[1]);
+	}
+	
+	public boolean[] isRobotStillMovingAndItIsNormal() throws SerialConnexionException
+	{
+		// on envois "f" et on lit si le robot bouge toujours PUIS si c'est normal
+		String[] infosBuffer = locomotionCardSerial.communiquer("f", 2);
+		boolean[] infosRetrieved = null;
+		for(int i = 0; i < 2; i++)
+			infosRetrieved[i] = Boolean.parseBoolean(infosBuffer[i]);
+		return infosRetrieved;
 	}
 	
 }

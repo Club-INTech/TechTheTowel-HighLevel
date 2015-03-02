@@ -803,7 +803,7 @@ public class Locomotion implements Service
 		// met a jour: 	l'écart entre la position actuelle et la position sur laquelle on est asservi
 		//				la variation de l'écart a la position sur laquelle on est asservi
 		//				la puissance demandée par les moteurs 	
-		try 
+		/*try 
 		{
 			mLocomotionCardWrapper.refreshFeedbackLoopStatistics();
 		} 
@@ -814,10 +814,13 @@ public class Locomotion implements Service
 		}
 		
 		// lève une exeption de blocage si le robot patine (ie force sur ses moteurs sans bouger) 
-		mLocomotionCardWrapper.raiseExeptionIfBlocked();
+		mLocomotionCardWrapper.raiseExeptionIfBlocked();*/
 
 		// renvois true si le robot est immobile, false si encore en mouvement
-		return !mLocomotionCardWrapper.isRobotMoving();
+		
+		//verifie si le robot bouge toujour
+		boolean[] infos=mLocomotionCardWrapper.isRobotStillMovingAndItIsNormal();
+		return !infos[0];
 	}
 
 	/**
