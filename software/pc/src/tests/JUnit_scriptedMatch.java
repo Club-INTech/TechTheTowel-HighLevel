@@ -98,14 +98,19 @@ public class JUnit_scriptedMatch extends JUnit_Test
 	{
 		robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, false);
 		robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, true);
+		
 		robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
 		robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
+		
 		robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, false);
 		robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, false);
+		
 		robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
 		robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
+		
 		robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
 		robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
+		
 		robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, false);
 		robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
 	}
@@ -135,7 +140,6 @@ public class JUnit_scriptedMatch extends JUnit_Test
 
 		try 
 		{
-			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le verre 1");
 			scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(1, real_state, true, emptyHook );//On prend le verre,  notre droite en sortant
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le verre 1");
 		} 

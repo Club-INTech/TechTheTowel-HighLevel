@@ -450,19 +450,33 @@ public class Locomotion implements Service
     {
     	// TODO: débugger!
         // récupérations des informations d'acquittement
-        try {
+        try 
+        {
         	
         	// met a jour: 	l'écart entre la position actuelle et la position sur laquelle on est asservi
         	//				la variation de l'écart a la position sur laquelle on est asservi
         	//				la puissance demandée par les moteurs 	
-            deplacements.refreshFeedbackLoopStatistics();
+            //deplacements.refreshFeedbackLoopStatistics();
             
             // lève une exeption de blocage si le robot patine (ie force sur ses moteurs sans bouger) 
-            deplacements.raiseExeptionIfBlocked();
+            //deplacements.raiseExeptionIfBlocked();
             
             // robot arrivé?
-            return !deplacements.isRobotMoving();
-
+        	
+        	boolean[] infos=deplacements.isRobotMovingAndAbnormal();
+        	
+        	if(infos[0])//le robot bouge toujours
+        	{
+        		if(infos[1])//anormal!
+        		{
+                    log.warning("On bouge et ce n'est pas normal", this);
+                    return !infos[0];// TODO gerer ca
+        		}
+        		else
+        			return !infos[0];// ON n'est pas arrivés et c'est normal
+        	}
+        	else
+        		return !infos[0];// On est arrivés.
         } 
         catch (SerialConnexionException e) 
         {

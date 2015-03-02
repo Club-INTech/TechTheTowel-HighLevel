@@ -457,4 +457,18 @@ public class LocomotionCardWrapper implements Service
 		locomotionCardSerial.close();
 	}
 	
+	/**
+	 *  Verifie si le robot est arrivé et si c'est anormal
+	 */
+	public boolean[] isRobotMovingAndAbnormal() throws SerialConnexionException
+	{
+		// on demande a la carte des information a jour
+		// on envois "f" et on lis double (dans l'ordre : bouge, est anormal)
+		String[] infosBuffer = locomotionCardSerial.communiquer("f", 2);
+		boolean[] parsedInfos = new boolean[2];
+		for(int i = 0; i < 2; i++)
+		    parsedInfos[i] = Boolean.parseBoolean(infosBuffer[i]);
+		return parsedInfos;
+	}
+	
 }
