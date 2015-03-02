@@ -473,7 +473,10 @@ public class Locomotion implements Service
                     return !infos[0];// TODO gerer ca
         		}
         		else
+        		{
+                    log.warning("On bouge et c'est normal", this);
         			return !infos[0];// ON n'est pas arrivés et c'est normal
+             	}
         	}
         	else
         		return !infos[0];// On est arrivés.
