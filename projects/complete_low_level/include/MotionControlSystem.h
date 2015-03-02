@@ -46,9 +46,6 @@ private:
 	int32_t rotationSetpoint;
 	int32_t translationSetpoint;
 
-	//Angle et distance en tick au dernier refresh
-
-
 	int16_t pwmRotation;
 	int16_t pwmTranslation;
 	int16_t maxPWMtranslation;
@@ -65,6 +62,16 @@ private:
 
 	void applyControl();
 	bool isPhysicallyStopped(int);//Indique si le robot est immobile, avec une certaine tolérance passée en argument, exprimmée en ticks*[fréquence d'asservissement]
+
+
+	/*
+	 * Constantes de réglage de la détection de blocage physique
+	 */
+	unsigned int delayToStop;//En ms
+	int toleranceInTick;//Nombre de ticks de tolérance pour considérer qu'on est arrivé à destination
+	int pwmMinToMove;//PWM minimal en dessous duquel le robot ne bougera pas
+	int minSpeed;//Vitesse en dessous de laquelle on considère la vitesse comme nulle (en tick*[freq d'asserv])
+
 
 public:
 

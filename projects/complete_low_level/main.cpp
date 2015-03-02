@@ -362,126 +362,163 @@ int main(void)
 				motionControlSystem->clearTracking();
 				serial.printfln("Tracking array cleared");
 			}
-			else if(!strcmp("mov",order))
-			{
-				serial.printfln("%d", motionControlSystem->isMoving());
-			}
+
 
 
 
 			/* ACTIONNEURS */
 			else if(!strcmp("obd",order))
 			{
-				actuatorsMgr->obd();
+				actuatorsMgr->obd();//		Ouvrir bras droit
 			}
 			else if(!strcmp("fbd",order))
 			{
-				actuatorsMgr->fbd();
+				actuatorsMgr->fbd();//		Fermer bras droit
 			}
 			else if(!strcmp("obg",order))
 			{
-				actuatorsMgr->obg();
+				actuatorsMgr->obg();//		Ouvrir bras gauche
 			}
 			else if(!strcmp("fbg",order))
 			{
-				actuatorsMgr->fbg();
+				actuatorsMgr->fbg();//		Fermer bras gauche
 			}
 			else if(!strcmp("obdl",order))
 			{
-				actuatorsMgr->obdl();
+				actuatorsMgr->obdl();//		Ouvrir bras droit lentement
 			}
 			else if(!strcmp("fbdl",order))
 			{
-				actuatorsMgr->fbdl();
+				actuatorsMgr->fbdl();//		Fermer bras droit lentement
 			}
 			else if(!strcmp("obgl",order))
 			{
-				actuatorsMgr->obgl();
+				actuatorsMgr->obgl();//		Ouvrir bras gauche lentement
 			}
 			else if(!strcmp("fbgl",order))
 			{
-				actuatorsMgr->fbgl();
+				actuatorsMgr->fbgl();//		Fermer bras gauche lentement
 			}
 			else if(!strcmp("omd",order))
 			{
-				actuatorsMgr->omd();
+				actuatorsMgr->omd();//		Ouvrir machoire droite
 			}
 			else if(!strcmp("fmd",order))
 			{
-				actuatorsMgr->fmd();
+				actuatorsMgr->fmd();//		Fermer machoire droite
 			}
 			else if(!strcmp("omg",order))
 			{
-				actuatorsMgr->omg();
+				actuatorsMgr->omg();//		Ouvrir machoire gauche
 			}
 			else if(!strcmp("fmg",order))
 			{
-				actuatorsMgr->fmg();
+				actuatorsMgr->fmg();//		Fermer machoire gauche
 			}
 			else if(!strcmp("om",order))
-			{
+			{//								Ouvrir les deux machoires
 				actuatorsMgr->omg();
 				actuatorsMgr->omd();
 			}
 			else if(!strcmp("fm",order))
-			{
+			{//								Fermer les deux machoires
 				actuatorsMgr->fmg();
 				actuatorsMgr->fmd();
 			}
 			else if(!strcmp("ah",order))
 			{
-				actuatorsMgr->ah();
+				actuatorsMgr->ah();//		Ascenseur en position haute
 			}
 			else if(!strcmp("ab",order))
 			{
-				actuatorsMgr->ab();
+				actuatorsMgr->ab();//		Ascenseur en position basse
 			}
 			else if(!strcmp("as",order))
 			{
-				actuatorsMgr->as();
+				actuatorsMgr->as();//		Ascenseur au niveau du sol
 			}
 			else if(!strcmp("ae",order))
 			{
-				actuatorsMgr->ae();
+				actuatorsMgr->ae();//		Ascenseur au niveau de l'estrade
 			}
 			else if(!strcmp("ogd",order))
 			{
-				actuatorsMgr->ogd();
+				actuatorsMgr->ogd();//		Ouvrir guide droit
 			}
 			else if(!strcmp("fgd",order))
 			{
-				actuatorsMgr->fgd();
+				actuatorsMgr->fgd();//		Fermer guide droit
 			}
 			else if(!strcmp("gdi",order))
 			{
-				actuatorsMgr->gdi();
+				actuatorsMgr->gdi();//		Guide droit en position intermédiaire
 			}
 			else if(!strcmp("ogg",order))
 			{
-				actuatorsMgr->ogg();
+				actuatorsMgr->ogg();//		Ouvrir guide gauche
 			}
 			else if(!strcmp("fgg",order))
 			{
-				actuatorsMgr->fgg();
+				actuatorsMgr->fgg();//		Fermer guide gauche
 			}
 			else if(!strcmp("ggi",order))
 			{
-				actuatorsMgr->ggi();
+				actuatorsMgr->ggi();//		Guide gauche en position intermédiaire
 			}
 			else if(!strcmp("go",order))
-			{
+			{//								Ouvrir le guide
 				actuatorsMgr->ogg();
 				actuatorsMgr->ogd();
 			}
 			else if(!strcmp("gf",order))
-			{
+			{//								Fermer le guide
 				actuatorsMgr->fgg();
 				actuatorsMgr->fgd();
 			}
 			else if(!strcmp("gi",order))
-			{
+			{//								Guide en position intermédiaire
 				actuatorsMgr->ggi();
 				actuatorsMgr->gdi();
+			}
+			else if(!strcmp("ptd",order))
+			{
+				actuatorsMgr->ptd();//		Poser tapis droit
+			}
+			else if(!strcmp("rtd",order))
+			{
+				actuatorsMgr->rtd();//		Ranger tapis droit
+			}
+			else if(!strcmp("ptg",order))
+			{
+				actuatorsMgr->ptg();//		Poser tapis gauche
+			}
+			else if(!strcmp("rtg",order))
+			{
+				actuatorsMgr->rtg();//		Ranger tapis gauche
+			}
+			else if(!strcmp("cdh",order))
+			{
+				actuatorsMgr->cdh();//		Clap droit en haut
+			}
+			else if(!strcmp("cdm",order))
+			{
+				actuatorsMgr->cdm();//		Clap droit au milieu
+			}
+			else if(!strcmp("cdb",order))
+			{
+				actuatorsMgr->cdb();//		Clap droit en bas
+			}
+			else if(!strcmp("cgh",order))
+			{
+				actuatorsMgr->cgh();//		Clap gauche en haut
+			}
+			else if(!strcmp("cgm",order))
+			{
+				actuatorsMgr->cgm();//		Clap gauche au milieu
+			}
+			else if(!strcmp("cgb",order))
+			{
+				actuatorsMgr->cgb();//		Clap gauche en bas
 			}
 		}
 	}

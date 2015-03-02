@@ -7,6 +7,11 @@ MotionControlSystem::MotionControlSystem() :
 				&currentAngle, &pwmRotation, &rotationSetpoint), originalAngle(
 				0.0), rotationSetpoint(0), translationSetpoint(0), x(0.0), y(0.0), moving(
 				false), moveAbnormal(false) {
+
+	delayToStop = 500;
+	toleranceInTick = 100;
+	pwmMinToMove = 60;
+	minSpeed = 1;
 }
 
 void MotionControlSystem::init(int16_t maxPWMtranslation, int16_t maxPWMrotation) {
@@ -170,7 +175,7 @@ void MotionControlSystem::manageStop()
 {
 	static uint32_t time = 0;
 
-	if (isPhysicallyStopped(1) && moving)
+	if (isPhysicallyStopped(minSpeed) && moving)
 	{
 
 		if (time == 0)
@@ -179,23 +184,23 @@ void MotionControlSystem::manageStop()
 		}
 		else
 		{
-			if ((Millis() - time) >= 500)
+			if ((Millis() - time) >= delayToStop)
 			{ //Si arrêté plus de 500ms
-				if (ABS(translationPID.getError()) <= 100 && ABS(rotationPID.getError()) <= 100)
+				if (ABS(translationPID.getError()) <= toleranceInTick && ABS(rotationPID.getError()) <= toleranceInTick)
 				{ //Stopé pour cause de fin de mouvement
-					serial.printfln("fin de mouvement, err = %d", translationPID.getError());
+					//serial.printfln("fin de mouvement, err = %d", translationPID.getError());
 					stop();
 					moveAbnormal = false;
 				}
-				else if (ABS(pwmRotation) >= 60 || ABS(pwmTranslation) >= 60)
+				else if (ABS(pwmRotation) >= pwmMinToMove || ABS(pwmTranslation) >= pwmMinToMove)
 				{ //Stoppé pour blocage
-					serial.printfln("bloque !");
+					//serial.printfln("bloque !");
 					stop();
 					moveAbnormal = true;
 				}
 				else
 				{//Stoppé par les frottements du robot sur la table
-					serial.printfln("frottements");
+					//serial.printfln("frottements");
 					stop();
 				}
 			}

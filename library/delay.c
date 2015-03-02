@@ -34,9 +34,9 @@ void SysTick_Handler(void) {
 }
 
 uint32_t Millis(){
-	return timestamp;
+	return timestamp/1000;
 }
 
 uint32_t Micros(){
-	return timestamp/1000;
+	return timestamp;
 }

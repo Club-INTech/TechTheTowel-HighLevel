@@ -10,6 +10,8 @@
 #include "stm32f4xx_syscfg.h"
 #include "misc.h"
 
+extern Uart<1> serial;
+
 #define bgOuvert 300
 #define bgFerme 98
 #define bdOuvert 5
