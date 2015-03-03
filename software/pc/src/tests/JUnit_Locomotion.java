@@ -81,7 +81,7 @@ public class JUnit_Locomotion extends JUnit_Test
 		log.debug("en position : x="+position.x+"; y="+position.y, this);
 		try 
 		{
-			mLocomotion.moveLengthwise(-2000,null, false);
+			mLocomotion.moveLengthwise(2000,null, false);
 		} 
 		catch (UnableToMoveException e) 
 		{
@@ -95,7 +95,7 @@ public class JUnit_Locomotion extends JUnit_Test
 		{
 			try 
 			{
-				mLocomotion.followPath(path, null, DirectionStrategy.FASTEST);
+				mLocomotion.followPath(path, null, DirectionStrategy.FORCE_FORWARD_MOTION);
 				position = mLocomotion.getPosition();
 				log.debug("en position : x="+position.x+"; y="+position.y, this);
 			} 
