@@ -376,7 +376,7 @@ public class Locomotion implements Service
 //        log.debug("Distance directe: "+delta.length()+", differenceDistance: "+differenceDistance, this);
         //calcul de la nouvelle distance et du nouvel angle
         double distance = delta.length();
-        double angle =  Math.atan2(delta.y, delta.x);
+        double angle =  Math.atan2(delta.y, delta.x);//Angle en absolu 
 //        if(symetry)
 //        	angle = Math.PI - angle;
         
@@ -386,6 +386,9 @@ public class Locomotion implements Service
             distance *= -1;
             angle += Math.PI;
         }
+        
+        // On passe l'angle d'absolu à relatif : getOrientation se gere de la symetrie
+       
 
         moveToPointSerialOrder(aimSymmetrized, givenPosition, angle, distance, turnOnly, isCorrection);
     }
@@ -430,7 +433,7 @@ public class Locomotion implements Service
 		}
         try
         {
-            deplacements.turn(angle);
+            deplacements.turn(angle);//angle est en absolu ici
             // sans virage : la première rotation est bloquante
             if(!trajectoire_courbe) 
             	// on attend la fin du mouvement
@@ -439,7 +442,9 @@ public class Locomotion implements Service
 
             if(!turnOnly)
             	deplacements.moveLengthwise(distance);
-        } catch (SerialConnexionException e) {
+        } 
+        catch (SerialConnexionException e)
+        {
             e.printStackTrace();
         }
     }
@@ -470,10 +475,10 @@ public class Locomotion implements Service
                     throw new BlockedException ();
         		}
         		else
-        			return infos[0];//On est arrivés
+        			return !infos[0];//On est arrivés
         	}
         	else
-        		return infos[0];//toujours pas arrive
+        		return !infos[0];//toujours pas arrive
         } 
         catch (SerialConnexionException e) 
         {
@@ -532,7 +537,7 @@ public class Locomotion implements Service
             if(symetry)
             	position.x = -position.x;
             position.y = (int)infos[1];
-            orientation = infos[2]/1000; // car getCurrentPositionAndOrientation renvoie des milliradians
+            orientation = infos[2]; // car getCurrentPositionAndOrientation renvoie des radians
             if(symetry)
             	orientation = Math.PI - orientation;
         }
