@@ -290,7 +290,7 @@ public class LocomotionCardWrapper implements Service
 	public float[] getCurrentPositionAndOrientation() throws SerialConnexionException
 	{
 		// on demande a la carte des information a jour
-		// on envois "?infos" et on lis double (dans l'ordre : abscisse, ordonnée, orientation)
+		// on envois "?xyo" et on lis double (dans l'ordre : abscisse, ordonnée, orientation)
 		String[] infosBuffer = locomotionCardSerial.communiquer("?xyo", 3);
 		float[] parsedInfos = new float[3];
 		for(int i = 0; i < 3; i++)
@@ -309,6 +309,7 @@ public class LocomotionCardWrapper implements Service
 	
 	/**
 	 *  Verifie si le robot est arrivé et si c'est anormal
+	 *  @return fghjklmù
 	 */
 	public boolean[] isRobotMovingAndAbnormal() throws SerialConnexionException
 	{

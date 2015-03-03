@@ -56,6 +56,13 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	 * TIME_OUT d'attente de r�ception d'un message
 	 */
 	private static final int TIME_OUT = 2000;
+	
+	/**
+	 *  Temps d'attente pour la pauvre serie saturée en ms
+	 */
+	
+	private int timeBetweenFeedback = 2000;
+	
 
 	/**
 	 * Construit une connexion s�rie
@@ -170,7 +177,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 					// affiche dans la console ce qu'on envois sur la série -> On cache ca, pour eviter le xy0? en permanence, mais ca peux etre interessant de le garder.
 					//ne jamais push un code avec cette ligne decommentee
 
-					//log.debug("Envois serie : '" + m  + "'", this);
+					log.debug("Envoi serie : '" + m  + "'", this);
 					m += "\r";
 					output.write(m.getBytes());
 					int nb_tests = 0;
@@ -179,12 +186,11 @@ public class SerialConnexion implements SerialPortEventListener, Service
 					while (acquittement != '_')
 					{
 						nb_tests++;
-						String resposeFromCard = input.readLine();
-
-						// affiche dans la console ce qu'on envois sur la série
-						//log.debug("Reception serie : '" + resposeFromCard  + "'", this); 
-						//TODO attention : a remettre, juste enlevé pour les debugs / tests
 						
+						// affiche dans la console ce qu'on envoie sur la série
+						String resposeFromCard = input.readLine();
+						log.debug("Reception acquitement : '" + resposeFromCard  + "'", this); 
+						//TODO attention : a remettre, juste enlevé pour les debugs / tests
 						
 						acquittement = resposeFromCard.charAt(0);
 						if (acquittement != '_')
@@ -210,7 +216,11 @@ public class SerialConnexion implements SerialPortEventListener, Service
 			{
 				for (int i = 0 ; i < nb_lignes_reponse; i++)
 				{
-					inputLines[i] = input.readLine();
+					inputLines[i] = input.readLine();		
+					
+					log.debug("Ligne "+i+": '"+inputLines[i]+"'",this); 
+					if(inputLines[i].equals(null) || inputLines[i].replaceAll(" ", "").equals("")|| inputLines[i].replaceAll(" ", "").equals("-"))
+						log.debug("='(",this); 
 				}
 			}
 			catch (Exception e)

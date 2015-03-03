@@ -218,11 +218,11 @@ public class Locomotion implements Service
      * @param aim la position visee sur la table (consigne donné par plus haut niveau donc non symetrise)
      * @param hooks les potentiels hooks a prendre en compte (ne pas mettre null !)
      * @param isMovementForward vrai si on vas en avant et faux si on vas en arriere
-     * @param wall vrai si on suppose qu'on vas se cogner dans un mur (et qu'on veut s'arreter des qu'on cogne)
+     * @param headingToWall vrai si on suppose qu'on vas se cogner dans un mur (et qu'on veut s'arreter des qu'on cogne)
      * @param turnOnly vrai si on veut uniquement tourner (et pas avancer)
      * @throws UnableToMoveException si le robot a un bloquage mecanique
      */
-    private void moveToPointException(Vec2 aim, ArrayList<Hook> hooks, boolean isMovementForward, boolean wall, boolean turnOnly) throws UnableToMoveException
+    private void moveToPointException(Vec2 aim, ArrayList<Hook> hooks, boolean isMovementForward, boolean headingToWall, boolean turnOnly) throws UnableToMoveException
     {
         int maxTimeToWaitForEnemyToLeave = 600; // combien de temps attendre que l'ennemi parte avant d'abandonner
         int unexpectedWallImpactCounter = 2; // combien de fois on réessayer si on se prend un mur (si wall est a true alors les impacts sont attendus donc on s'en fout)
@@ -244,7 +244,7 @@ public class Locomotion implements Service
                  * En cas de blocage, on recule (si on allait tout droit) ou on avance.
                  */
                 // Si on s'attendait à un mur, c'est juste normal de se le prendre.
-                if(!wall)
+                if(!headingToWall)
                 {
                     try
                     {
@@ -300,10 +300,13 @@ public class Locomotion implements Service
                     throw new UnableToMoveException();
 			}
 
-        } while(doItAgain); // on recommence tant qu'il le faut
+        } 
+        while(doItAgain);     
+; // on recommence tant qu'il le faut
 
 
     // Tout s'est bien passé
+
     }
     
     /**
@@ -321,23 +324,27 @@ public class Locomotion implements Service
         moveToPointSymmetry(aim, isMovementForward, turnOnly, false);
         do
         {
+            Sleep.sleep(feedbackLoopDelay);
+        
             updateCurrentPositionAndOrientation();
             log.debug("en position : x="+position.x+"; y="+position.y+" dans la boucle d'acquitement", this);
             
             // en cas de détection d'ennemi, une exception est levée
             detectEnemy(isMovementForward);
+            log.debug("pas d'ennemi detecte", this);
 
             //on evalue les hooks (non null !)
             if(hooks != null)
 	            for(Hook hook : hooks)
 	                hook.evaluate();
+            log.debug("logs tous evalues", this);
             
             // le fait de faire de nombreux appels permet de corriger la trajectoire
-            correctAngle(aim, isMovementForward);
+//            correctAngle(aim, isMovementForward);
+//            log.debug("angle corrige", this);
 
         } 
         while(!isMotionEnded());
-        
     }
 
 
@@ -464,6 +471,7 @@ public class Locomotion implements Service
      */
     private boolean isMotionEnded() throws BlockedException
     {
+    	log.debug("test mouvement", this);
         try 
         {
         	// récupérations des informations d'acquittement
@@ -484,7 +492,8 @@ public class Locomotion implements Service
         		}
         	}
         	else
-        	{
+        	{    
+        		log.debug("pas arrivés", this);
         		return !infos[0];//toujours pas arrive
         	}
         } 
