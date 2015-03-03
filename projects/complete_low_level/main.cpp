@@ -418,11 +418,13 @@ int main(void)
 			else if(!strcmp("om",order))
 			{//								Ouvrir les deux machoires
 				actuatorsMgr->omg();
+				Delay(8);
 				actuatorsMgr->omd();
 			}
 			else if(!strcmp("fm",order))
 			{//								Fermer les deux machoires
 				actuatorsMgr->fmg();
+				Delay(8);
 				actuatorsMgr->fmd();
 			}
 			else if(!strcmp("ah",order))
@@ -535,7 +537,7 @@ void TIM4_IRQHandler(void) { //2kHz = 0.0005s = 0.5ms
 		//Remise à 0 manuelle du flag d'interruption nécessaire
 		TIM_ClearITPendingBit(TIM4, TIM_IT_Update);
 
-		//Asservissement et mise à jour de la positionQ
+		//Asservissement et mise à jour de la position
 		motionControlSystem->control();
 		motionControlSystem->updatePosition();
 
@@ -550,8 +552,8 @@ void TIM4_IRQHandler(void) { //2kHz = 0.0005s = 0.5ms
 			j=0;
 		}
 
-		if(k >= 1000){
-			//sensorMgr->refresh();
+		if(k >= 200){
+//			sensorMgr->refresh();
 			sensorToRefresh = true;
 			k=0;
 		}

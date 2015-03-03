@@ -8,7 +8,7 @@
 
 #define NB_VALEURS_MEDIANE_SRF  4
 
-typedef ring_buffer<uint16_t, NB_VALEURS_MEDIANE_SRF> ringBufferSRF;
+typedef ring_buffer<uint32_t, NB_VALEURS_MEDIANE_SRF> ringBufferSRF;
 extern Uart<1> serial;
 
 /** @file libintech/capteur_srf05.hpp
@@ -111,8 +111,8 @@ public:
 			current_time = Micros();
 			temps_impulsion = current_time - origineTimer;
 			ringBufferValeurs.append( 10*temps_impulsion/58 );
-			derniereDistance=mediane(ringBufferValeurs);
-			//serial.printfln("%d", 10*temps_impulsion/58);
+			derniereDistance = mediane(ringBufferValeurs);
+			serial.printf("");//No hack here, follow your path...
 		}
 	}
 
@@ -122,7 +122,7 @@ private:
 	EXTI_InitTypeDef EXTI_sensor;//Variable permettant de régler le vecteur d'interruptions associé au capteur
 	GPIO_TypeDef* GPIOx;//Port de la pin du capteur
 	ringBufferSRF ringBufferValeurs;
-	uint16_t derniereDistance;		//contient la dernière distance acquise, prête à être envoyée
+	volatile uint32_t derniereDistance;		//contient la dernière distance acquise, prête à être envoyée
 	uint32_t origineTimer;			//origine de temps afin de mesurer une durée
 
 };

@@ -57,7 +57,7 @@ uint32_t regression_lin(T x1, T x2, T y1, T y2, T2 x) {
 }
 
 template<typename T, uint16_t BUFFER_SIZE>
-uint16_t mediane(ring_buffer<T, BUFFER_SIZE> & buff) {
+T mediane(ring_buffer<T, BUFFER_SIZE> & buff) {
     bubble_sort(buff);
     return buff.data()[buff.current()];
 }

@@ -100,9 +100,9 @@ SensorMgr::SensorMgr():
 
 void SensorMgr::refresh()
 {
-	TIM_ITConfig(TIM4, TIM_IT_Update, DISABLE);
+	//TIM_ITConfig(TIM4, TIM_IT_Update, DISABLE);
 	leftFrontUS.refresh();
-	TIM_ITConfig(TIM4, TIM_IT_Update, ENABLE);
+	//TIM_ITConfig(TIM4, TIM_IT_Update, ENABLE);
 }
 
 void SensorMgr::leftFrontUSInterrupt()
