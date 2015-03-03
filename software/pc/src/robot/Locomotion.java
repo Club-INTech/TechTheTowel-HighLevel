@@ -233,8 +233,11 @@ public class Locomotion implements Service
             try
             {
                 moveToPointCorrectAngleAndDetectEnnemy(aim, hooks, isMovementForward, turnOnly);
-            } catch (BlockedException e)
+            }
+            catch (BlockedException e)
             {
+    			e.printStackTrace();
+
                 unexpectedWallImpactCounter--;
                 immobilise();
                 /*
@@ -261,18 +264,22 @@ public class Locomotion implements Service
                             deplacements.moveLengthwise(-distanceToDisengage);
                         while(!isMotionEnded());
                     	doItAgain = true; // si on est arrivé ici c'est qu'aucune exception n'a été levée
-                    } catch (SerialConnexionException e1)
+                    } 
+                    catch (SerialConnexionException e1)
                     {
                         e1.printStackTrace();
-                    } catch (BlockedException e1) {
+                    } 
+                    catch (BlockedException e1) {
                     	immobilise();
                         log.critical("On n'arrive pas à se dégager.", this);
 					}
                     if(!doItAgain)
                         throw new UnableToMoveException();
                 }
-            } catch (UnexpectedObstacleOnPathException e)
+            }
+            catch (UnexpectedObstacleOnPathException e)
             {
+    			e.printStackTrace();
             	immobilise();
             	long detectionTime = System.currentTimeMillis();
                 log.critical("Détection d'un ennemi! Abandon du mouvement.", this);
@@ -284,7 +291,9 @@ public class Locomotion implements Service
             			break;
             		}
             		catch(UnexpectedObstacleOnPathException e2)
-            		{}
+            		{
+            			e2.printStackTrace();
+            		}
             	}
 
                 if(!doItAgain)
@@ -494,6 +503,7 @@ public class Locomotion implements Service
 			detectEnemy(true);
 			return false;
 		} catch (UnexpectedObstacleOnPathException e) {
+			e.printStackTrace();
 			return true;
 		}
     }
