@@ -36,7 +36,6 @@ public class JUnit_scriptedMatch extends JUnit_Test
 	SensorsCardWrapper  mSensorsCardWrapper;
 	PathDingDing pathDingDing;
 	
-	@SuppressWarnings("unchecked")
 	@Before
 	public void setUp() throws Exception
 	{
@@ -298,18 +297,6 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		
 		try 
 		{
-			/*
-			real_state.robot.turn(0);		//On s'eloigne, le PF suffira ici.
-			real_state.robot.moveLengthwise(500);	
-			real_state.robot.turn(Math.PI/2);		
-			real_state.robot.moveLengthwise(500);	
-			
-			real_state.robot.turn(Math.PI);		
-			real_state.robot.moveLengthwise(1800);
-			
-			real_state.robot.turn(-Math.PI/2);		
-			real_state.robot.moveLengthwise(400);	//On est à gauche de l'escalier	*/
-			
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le plot 5 et 6");
 			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(56, real_state, true, emptyHook );//On recupere les 2 plots a droite de l'escalier
 		}
@@ -332,7 +319,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		}
 		
 		try 
-		{//TODO PathNotFound Exception
+		{
 			
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le deposage de la pile dans notre zone");
 			scriptmanager.getScript(ScriptNames.FREE_STACK).goToThenExec(2, real_state, true, emptyHook ); // On libere la pile ans notre zone

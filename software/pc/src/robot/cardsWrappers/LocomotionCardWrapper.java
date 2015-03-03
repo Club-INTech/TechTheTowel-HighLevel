@@ -317,7 +317,14 @@ public class LocomotionCardWrapper implements Service
 		String[] infosBuffer = locomotionCardSerial.communiquer("f", 2);
 		boolean[] parsedInfos = new boolean[2];
 		for(int i = 0; i < 2; i++)
-		    parsedInfos[i] = Boolean.parseBoolean(infosBuffer[i]);
+		{
+			if( infosBuffer[i].equals("0") )
+			   parsedInfos[i] = false;
+			else if ( infosBuffer[i].equals("1") )
+				 parsedInfos[i]=true;
+			else
+				log.debug("Probleme de lecture de f", this);
+		}
 		return parsedInfos;
 	}
 	

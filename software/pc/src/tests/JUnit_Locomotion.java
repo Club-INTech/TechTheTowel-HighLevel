@@ -58,11 +58,12 @@ public class JUnit_Locomotion extends JUnit_Test
 	@Test
 	public void testMoveLengthwise() throws Exception
 	{
-		mLocomotion.moveLengthwise(100,  new ArrayList<Hook>(), false);
-		mLocomotion.moveLengthwise(-100,  new ArrayList<Hook>(), false);
-		mLocomotion.turn(Math.PI/2, new ArrayList<Hook>());
-		mLocomotion.turn(-Math.PI/2, new ArrayList<Hook>());
-		mLocomotion.turn(0, new ArrayList<Hook>());
+		mLocomotion.moveLengthwise(300,  new ArrayList<Hook>(), false);
+		Vec2 position = mLocomotion.getPosition();
+		log.debug("en position : x="+position.x+"; y="+position.y, this);
+		mLocomotion.moveLengthwise(-300,  new ArrayList<Hook>(), false);
+		position = mLocomotion.getPosition();
+		log.debug("en position : x="+position.x+"; y="+position.y, this);
 	}	
 
 	/**
@@ -70,7 +71,7 @@ public class JUnit_Locomotion extends JUnit_Test
 	 * ATTENTION NE FONCTIONNE QUE DU COTE VERT !
 	 * @throws Exception the exception
 	 */
-	@Test
+	/*@Test
 	public void test()
 	{
 		ArrayList<Vec2> path = new ArrayList<Vec2>();
@@ -81,11 +82,10 @@ public class JUnit_Locomotion extends JUnit_Test
 		log.debug("en position : x="+position.x+"; y="+position.y, this);
 		try 
 		{
-			mLocomotion.moveLengthwise(2000,null, false);
+			mLocomotion.moveLengthwise(500,null, false);
 		} 
 		catch (UnableToMoveException e) 
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		position = mLocomotion.getPosition();
@@ -105,6 +105,6 @@ public class JUnit_Locomotion extends JUnit_Test
 				e.printStackTrace();
 			}
 		}
-	}
+	}*/
 	
 }

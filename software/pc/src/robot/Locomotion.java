@@ -263,7 +263,7 @@ public class Locomotion implements Service
                         else
                             deplacements.moveLengthwise(-distanceToDisengage);
                         while(!isMotionEnded());
-                    	doItAgain = true; // si on est arrivé ici c'est qu'aucune exception n'a été levée
+                    		doItAgain = true; // si on est arrivé ici c'est qu'aucune exception n'a été levée
                     } 
                     catch (SerialConnexionException e1)
                     {
@@ -319,22 +319,24 @@ public class Locomotion implements Service
     private void moveToPointCorrectAngleAndDetectEnnemy(Vec2 aim, ArrayList<Hook> hooks, boolean isMovementForward, boolean turnOnly) throws UnexpectedObstacleOnPathException, BlockedException
     { 
         moveToPointSymmetry(aim, isMovementForward, turnOnly, false);
-
         do
         {
             updateCurrentPositionAndOrientation();
+            log.debug("en position : x="+position.x+"; y="+position.y+" dans la boucle d'acquitement", this);
             
             // en cas de détection d'ennemi, une exception est levée
             detectEnemy(isMovementForward);
 
             //on evalue les hooks (non null !)
-            for(Hook hook : hooks)
-                hook.evaluate();
+            if(hooks != null)
+	            for(Hook hook : hooks)
+	                hook.evaluate();
             
             // le fait de faire de nombreux appels permet de corriger la trajectoire
             correctAngle(aim, isMovementForward);
 
-        } while(!isMotionEnded());
+        } 
+        while(!isMotionEnded());
         
     }
 
@@ -466,7 +468,8 @@ public class Locomotion implements Service
         {
         	// récupérations des informations d'acquittement
         	boolean[] infos=deplacements.isRobotMovingAndAbnormal();
-        	
+        	// 0-false : le robot ne bouge pas
+   
         	if(!infos[0])//si le robot ne bouge plus
         	{
         		if(infos[1])//si le robot patine
@@ -475,10 +478,15 @@ public class Locomotion implements Service
                     throw new BlockedException ();
         		}
         		else
+        		{
+            		log.debug("Arrivés a destination", this);
         			return !infos[0];//On est arrivés
+        		}
         	}
         	else
+        	{
         		return !infos[0];//toujours pas arrive
+        	}
         } 
         catch (SerialConnexionException e) 
         {
