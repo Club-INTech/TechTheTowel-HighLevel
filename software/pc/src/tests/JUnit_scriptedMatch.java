@@ -150,7 +150,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 				
 		try 
 		{
-			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après les tapis");
+			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant les tapis");
 			scriptmanager.getScript(ScriptNames.DROP_CARPET).goToThenExec(1, real_state, true, emptyHook ); // On depose les tapis
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition()+" après les tapis");
 
