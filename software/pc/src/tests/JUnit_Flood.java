@@ -35,8 +35,6 @@ public class JUnit_Flood extends JUnit_Test
 		mLocomotion.updateConfig();
 		mLocomotion.setPosition(new Vec2(-123, 456));
 		mLocomotion.setOrientation(Math.PI);
-		mLocomotion.setTranslationnalSpeed(170);
-		mLocomotion.setRotationnalSpeed(160);
 	}
 
 	@Test
@@ -46,7 +44,7 @@ public class JUnit_Flood extends JUnit_Test
 		while(true)
 		{
 			log.debug(compt++, this);
-			mLocomotion.getPosition();
+			log.debug(mLocomotion.getPosition().x+" :: "+mLocomotion.getPosition().y, this);;
 		}
 	}	
 	

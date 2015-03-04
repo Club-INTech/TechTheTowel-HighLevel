@@ -63,19 +63,16 @@ public class Main
         // si on veut exécuter un test unitaire sur la rasbe, recopier test.nomDeLaClasseDeTest
 		//JUnitCore.main(		"tests.JUnit_DeplacementsTest");  
 		
-		
 		// Système d'injection de dépendances
 		//tant que le nombre d'essai n'est pas trop grand on recommence
 		while (numberOfTryContainer<maximumOfTryContainer || numberOfTrySerial<maximumOfTrySerial)
 		{
 			try 
 			{
-	
 				container = new Container();
 				container.getService(ServiceNames.LOG);
 				config = (Config) container.getService(ServiceNames.CONFIG);
-				                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
-				
+				                
 				//Début des paramétrages
 				configColor();
 			
@@ -87,7 +84,6 @@ public class Main
 			    emptyHook = new ArrayList<Hook>(); //TODO la veritable liste des hooks pour le match
 			    
 	
-			
 			} 
 			catch (ContainerException e) 
 			//on gere les exceptions du container, en cas de probleme on a pas d'aure solution que de reessayer, mais si c'est vraiment impossible il faut debugger

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import robot.cardsWrappers.LocomotionCardWrapper;
 import smartMath.Vec2;
+import sun.security.util.Length;
 import table.Table;
 import utils.Config;
 import utils.Log;
@@ -93,6 +94,19 @@ public class Locomotion implements Service
      * l'angle dont le robot vas tourner pour se degager en cas de blouage mecanique
      */
     private double angleToDisengage;
+    
+    /**
+     * 	La distance maximale pour une correction rotationelle 
+     * 	La correction ne sera effectuée que si le robot est loin de son point d'arrivée.
+     */
+    private int maxLengthCorrectionThreeshold = 50;
+    
+    /**
+     * 	L'orientation maximale pour une correction rotationelle 
+     * 	La correction ne sera effectuée que si le robot est assez eloigné de son orientation souhaitée.
+     */
+    private double maxRotationCorrectionThreeshold = 0.05;
+    
     
     public Locomotion(Log log, Config config, Table table, LocomotionCardWrapper deplacements)
     {
@@ -338,11 +352,13 @@ public class Locomotion implements Service
 	            for(Hook hook : hooks)
 	                hook.evaluate();
             log.debug("logs tous evalues", this);
-            
+                        
             // le fait de faire de nombreux appels permet de corriger la trajectoire
-//            correctAngle(aim, isMovementForward);
-//            log.debug("angle corrige", this);
-
+            correctAngle(aim, isMovementForward);
+            
+            if(orientation!=getOrientation())
+                log.debug("Angle corrigé", this);
+            
         } 
         while(!isMotionEnded());
     }
@@ -398,8 +414,14 @@ public class Locomotion implements Service
         
         // On passe l'angle d'absolu à relatif : getOrientation se gere de la symetrie
        
-
-        moveToPointSerialOrder(aimSymmetrized, givenPosition, angle, distance, turnOnly, isCorrection);
+        // on annule la correction si on est trop proche de la destination
+        if(isCorrection) 
+           if(aimSymmetrized.clone().minusNewVector( givenPosition ).length() <  maxLengthCorrectionThreeshold )
+	        	moveToPointSerialOrder(aimSymmetrized, givenPosition, angle, distance, turnOnly, isCorrection);
+	        else 
+	        	return;// Si on est trop proche, on ne fais rien.
+        else 
+        	moveToPointSerialOrder(aimSymmetrized, givenPosition, angle, distance, turnOnly, isCorrection);
     }
     
     /**
@@ -434,15 +456,21 @@ public class Locomotion implements Service
 		if(isCorrection)
 		{
 			//Si la distance est grande et l'angle petit, alors on fait la correction en angle
-			if(givenPosition.squaredDistance(symmetrisedAim) > 2500 && Math.abs(delta) < Math.PI/2)
+			if(givenPosition.squaredDistance(symmetrisedAim) > Math.pow(maxLengthCorrectionThreeshold,2) && Math.abs(delta) < Math.PI/4)
 				//on active la correction (on attendra pas d'avoir fini de tourner (le robot) pour reprendre le programme)
 				trajectoire_courbe = true;
 			else
 				return;
+			
 		}
         try
         {
-            deplacements.turn(angle);//angle est en absolu ici
+        	if(isCorrection && Math.abs(delta) > maxRotationCorrectionThreeshold)
+				deplacements.turn(angle);  // Si on est trop proche de l'orientation voulue, on ne tourne pas
+        	else if(!isCorrection)
+        		deplacements.turn(angle);// Si ca n'est pas  une correction
+        	
+        	
             // sans virage : la première rotation est bloquante
             if(!trajectoire_courbe) 
             	// on attend la fin du mouvement
@@ -471,13 +499,13 @@ public class Locomotion implements Service
      */
     private boolean isMotionEnded() throws BlockedException
     {
-    	log.debug("test mouvement", this);
         try 
         {
         	// récupérations des informations d'acquittement
         	boolean[] infos=deplacements.isRobotMovingAndAbnormal();
         	// 0-false : le robot ne bouge pas
-   
+        	
+        	log.debug("Test deplacement : reponse "+ infos[0] +" :: "+ infos[1], this);
         	if(!infos[0])//si le robot ne bouge plus
         	{
         		if(infos[1])//si le robot patine

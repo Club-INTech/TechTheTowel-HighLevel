@@ -49,13 +49,12 @@ public class JUnit_Locomotion extends JUnit_Test
 		mLocomotion = (Locomotion)container.getService(ServiceNames.LOCOMOTION);
 		config.set("couleur", "vert");
 		mLocomotion.updateConfig();
-		mLocomotion.setPosition(new Vec2(0, 1000));
+		mLocomotion.setPosition(new Vec2 (1381,1000));
 		mLocomotion.setOrientation(Math.PI);
 		mLocomotion.setTranslationnalSpeed(170);
 		mLocomotion.setRotationnalSpeed(160);
 	}
 
-	@Test
 	public void testMoveLengthwise() throws Exception
 	{
 		mLocomotion.moveLengthwise(300,  new ArrayList<Hook>(), false);
@@ -71,7 +70,7 @@ public class JUnit_Locomotion extends JUnit_Test
 	 * ATTENTION NE FONCTIONNE QUE DU COTE VERT !
 	 * @throws Exception the exception
 	 */
-	/*@Test
+	@Test
 	public void test()
 	{
 		ArrayList<Vec2> path = new ArrayList<Vec2>();
@@ -82,7 +81,7 @@ public class JUnit_Locomotion extends JUnit_Test
 		log.debug("en position : x="+position.x+"; y="+position.y, this);
 		try 
 		{
-			mLocomotion.moveLengthwise(500,null, false);
+			mLocomotion.moveLengthwise(2000,null, false);
 		} 
 		catch (UnableToMoveException e) 
 		{
@@ -97,7 +96,7 @@ public class JUnit_Locomotion extends JUnit_Test
 			{
 				mLocomotion.followPath(path, null, DirectionStrategy.FORCE_FORWARD_MOTION);
 				position = mLocomotion.getPosition();
-				log.debug("en position : x="+position.x+"; y="+position.y, this);
+				log.debug("en position : x="+position.x+"; y="+position.y+" après le followpath", this);
 			} 
 			catch (UnableToMoveException e) 
 			{
@@ -105,6 +104,6 @@ public class JUnit_Locomotion extends JUnit_Test
 				e.printStackTrace();
 			}
 		}
-	}*/
+	}
 	
 }
