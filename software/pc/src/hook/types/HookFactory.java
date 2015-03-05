@@ -8,10 +8,9 @@ import strategie.GameState;
 import utils.Log;
 import utils.Config;
 
-// TODO: Auto-generated Javadoc
 /**
  * Service fabriquant des hooks à la demande.
- * @author pf, marsu
+ * @author pf, marsu, théo
  *
  */
 public class HookFactory implements Service
@@ -214,13 +213,32 @@ public class HookFactory implements Service
 	 * L'idée principale est de declecher le hook quand le robot rentre dans un cercle
 	 * 
 	 * @param ray, distance minimum de declenchement du hook
-	 * @param point, centre du cercle de declencementt du hook
+	 * @param point, centre du cercle de declencement du hook
 	 * @param tolerancy le hook sera déclenché si le robot est dans [point, ray+tolerency/2]
+	 * @return le hook
 	 */
     public Hook newHookIsDistanceToPointLesserThan(float ray, Vec2 point, float tolerancy)
     {
     	return new HookIsDistanceToPointLesserThan(config, log, realState, ray, point, tolerancy);
     }
 
+    /* ======================================================================
+   	 * 							Hooks de position et orientation
+   	 * ======================================================================
+   	 */
+    
+    /**
+     * 
+     * @param point : point de declenchement du hook
+     * @param orientation : orientation de decle,chement du hook 
+     * @param tolerancyPoint : tolerance sur la distance au point : ne se declenche que si le robot est proche du point
+     * @param tolerancyOrientation : tolerance sur l'orientation du robot, le hook ne se declence que si la difference entre l'orrientation actuelle et l'orientation voulue est inferieure à cette toelrance
+     * @return le hook
+     */
+    
+    public Hook newHookIsPositionAndOrientationCorrect(Vec2 point, float orientation, float tolerancyPoint, float tolerancyOrientation) 
+    {
+    	return new HookIsPositionAndOrientationCorrect(config, log, realState, point, orientation , tolerancyPoint, tolerancyOrientation);
+    }
 
 }

@@ -258,7 +258,7 @@ public class Locomotion implements Service
 	 */
 	public void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
 	{
-		// demande une position et une oriantation a jour du robot
+		// demande une position et une orientation a jour du robot
 		updatePositionAndOrientation();
 
 		
@@ -834,7 +834,7 @@ public class Locomotion implements Service
 		//    			+----+ o        o		 Sens de déplacement du robot: ====>
 		//   robot ->	|    |o          o
 		//    			|    |o          o  <- Zone de vérification (ce disque est tangent au robot)
-		//    			+----+ o        o 
+		//    			+----+ o        o
 		//    			          o  o
 		
 
@@ -848,18 +848,17 @@ public class Locomotion implements Service
 		// la demi longeur
 		int distanceBetweenDiscCenterAndRobotCenter = robotLengh/2 + obstacleDetectionDiscRadius;
 		
-		// calcule la position du centre du cercle 
+		// calcule la position du centre du cercle
 		Vec2 discCenter = new Vec2(	(int)(sign * distanceBetweenDiscCenterAndRobotCenter * Math.cos(orientation)),
 									(int)(sign * distanceBetweenDiscCenterAndRobotCenter * Math.sin(orientation))	); // Ce calcul donne la position relative du centre du disque par rapport au centre du robot
 		discCenter.plus(position);	// converti les coordonnées relative au centre du robot en coordonnées absolues sur la table
 		
-		// fais remonter un problème s'il y a un obstacle dans ce disque.
+		// fait remonter un probleme s'il y a un obstacle dans ce disque.
 		if(table.getObstacleManager().isDiscObstructed(discCenter, obstacleDetectionDiscRadius))
 		{
 			log.warning("Obstacle sur notre chemin ! Nous somme en :" +position + ", et on détecte un obstacle dans un rayon de " + obstacleDetectionDiscRadius + "mm autour du point " + discCenter, this);
 			throw new UnexpectedObstacleOnPathException();
 		}
-
 	}
 
 	/**
@@ -882,7 +881,7 @@ public class Locomotion implements Service
 		// Stoque les informations extraites de la carte d'asservissement dans les attributs de cette instance de Locomotion.
 		position.x = (int)infos[0];
 		position.y = (int)infos[1];
-		orientation = infos[2]/1000; // cette division par 1000 converti les miliradiants renvoyés par le Wrapper de la carte d'asservissement en radiants pour cette classe
+		orientation = infos[2]/1000; // cette division par 1000 convertit les milliradiants renvoyés par le Wrapper de la carte d'asservissement en radiants pour cette classe
 	}
 
 	

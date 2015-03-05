@@ -66,10 +66,6 @@ public class Container
 		{
 			if(serialmanager.serieAsservissement != null)
 				serialmanager.serieAsservissement.close();
-			if(serialmanager.serieCapteursActionneurs != null)
-				serialmanager.serieCapteursActionneurs.close();
-			if(serialmanager.serieLaser != null)
-				serialmanager.serieLaser.close();
 		}
 		
 		// ferme le log
@@ -135,19 +131,19 @@ public class Container
 		else if(serviceRequested == ServiceNames.LOCOMOTION_CARD_WRAPPER)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new LocomotionCardWrapper(
 																	(Log)getService(ServiceNames.LOG),
-																	(SerialConnexion)getService(ServiceNames.LOCOMOTION_CARD)
+																	(SerialConnexion)getService(ServiceNames.STM_CARD)
 																);
 		else if(serviceRequested == ServiceNames.SENSORS_CARD_WRAPPER)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new SensorsCardWrapper(
 																	(Config)getService(ServiceNames.CONFIG),
 																	(Log)getService(ServiceNames.LOG),
-																	(SerialConnexion)getService(ServiceNames.SERIE_CAPTEURS_ACTIONNEURS)
+																	(SerialConnexion)getService(ServiceNames.STM_CARD)
 																);
 		else if(serviceRequested == ServiceNames.ACTUATOR_CARD_WRAPPER)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new ActuatorCardWrapper(
 																	(Config)getService(ServiceNames.CONFIG),
 															 		(Log)getService(ServiceNames.LOG),
-															 		(SerialConnexion)getService(ServiceNames.SERIE_CAPTEURS_ACTIONNEURS));
+															 		(SerialConnexion)getService(ServiceNames.STM_CARD));
 		else if(serviceRequested == ServiceNames.HOOK_FACTORY)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new HookFactory(
 																	(Config)getService(ServiceNames.CONFIG),
@@ -194,6 +190,7 @@ public class Container
 		else if(serviceRequested == ServiceNames.THREAD_SENSOR)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)threadmanager.getThreadSensors(
 																	(Table)getService(ServiceNames.TABLE),
+																	(RobotReal)getService(ServiceNames.ROBOT_REAL),
 																	(SensorsCardWrapper)getService(ServiceNames.SENSORS_CARD_WRAPPER)
 																);
 		else if(serviceRequested == ServiceNames.THREAD_LASER)
@@ -206,7 +203,7 @@ public class Container
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new LaserCardWrapper(
 																	(Config)getService(ServiceNames.CONFIG),
 																	(Log)getService(ServiceNames.LOG),
-																	(SerialConnexion)getService(ServiceNames.LASER_CARD),
+																	(SerialConnexion)getService(ServiceNames.STM_CARD),
 																	(RobotReal)getService(ServiceNames.ROBOT_REAL)
 																);
 		else if(serviceRequested == ServiceNames.LASER_FILTRATION)
