@@ -67,7 +67,7 @@ public class ThreadManager
 	}
 
 	/**
-	 * Renvois le thread capteurs.
+	 * Renvoie le thread capteurs.
 	 * L'instancie si c'est la première fois qu'on le demande.
 	 * 
 	 * @param table La table a l'intérieure de laquelle le thread doit croire évoluer

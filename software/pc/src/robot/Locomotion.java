@@ -834,7 +834,7 @@ public class Locomotion implements Service
 		//    			+----+ o        o		 Sens de déplacement du robot: ====>
 		//   robot ->	|    |o          o
 		//    			|    |o          o  <- Zone de vérification (ce disque est tangent au robot)
-		//    			+----+ o        o 
+		//    			+----+ o        o
 		//    			          o  o
 		
 
@@ -881,7 +881,7 @@ public class Locomotion implements Service
 		// Stoque les informations extraites de la carte d'asservissement dans les attributs de cette instance de Locomotion.
 		position.x = (int)infos[0];
 		position.y = (int)infos[1];
-		orientation = infos[2]/1000; // cette division par 1000 converti les miliradiants renvoyés par le Wrapper de la carte d'asservissement en radiants pour cette classe
+		orientation = infos[2]/1000; // cette division par 1000 convertit les milliradiants renvoyés par le Wrapper de la carte d'asservissement en radiants pour cette classe
 	}
 
 	

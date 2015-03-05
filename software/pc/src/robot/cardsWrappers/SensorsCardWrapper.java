@@ -160,10 +160,5 @@ public class SensorsCardWrapper implements Service
 			log.critical("Le type de retour du capteur n'est pas pris en compte : modifiez SensorsCardWrapper.getSensorValue", this);
 			return false;
 		}
-		
-		
-		
-		
     }
-     
 }
