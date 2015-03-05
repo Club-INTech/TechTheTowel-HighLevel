@@ -9,6 +9,7 @@ import robot.cardsWrappers.ActuatorCardWrapper;
 import robot.cardsWrappers.LocomotionCardWrapper;
 import robot.cardsWrappers.SensorsCardWrapper;
 import table.Table;
+import robot.RobotReal;
 import utils.Log;
 import utils.Config;
 
@@ -73,11 +74,11 @@ public class ThreadManager
 	 * @param sensorsCardWrapper La carte capteurs avec laquelle le thread va parler
 	 * @return le thread capteurs
 	 */
-	public AbstractThread getThreadSensors( Table table, SensorsCardWrapper sensorsCardWrapper)
+	public AbstractThread getThreadSensors( Table table, RobotReal robot, SensorsCardWrapper sensorsCardWrapper)
 	{
 		AbstractThread thread = instanciedThreads.get("threadCapteurs");
 		if(thread == null)
-			instanciedThreads.put("threadCapteurs", new ThreadSensor( table, sensorsCardWrapper));
+			instanciedThreads.put("threadCapteurs", new ThreadSensor( table, robot, sensorsCardWrapper));
 		return instanciedThreads.get("threadCapteurs");
 	}
 

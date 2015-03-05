@@ -4,7 +4,9 @@ import enums.SensorNames;
 import exceptions.serial.SerialConnexionException;
 import robot.cardsWrappers.SensorsCardWrapper;
 import table.Table;
+import robot.RobotReal;
 import utils.Sleep;
+import smartMath.Vec2;
 
 /**
  * Thread qui ajoute en continu les obstacles détectés par les capteurs.
@@ -14,6 +16,11 @@ import utils.Sleep;
 
 class ThreadSensor extends AbstractThread
 {
+	/** La table */
+	private Table mTable;
+	
+	/** Le robot */
+	private RobotReal mRobot;
 
 	/** La carte capteurs avec laquelle on doit communiquer */
 	private SensorsCardWrapper mSensorsCardWrapper;
@@ -34,11 +41,13 @@ class ThreadSensor extends AbstractThread
 	 * @param table La table a l'intérieure de laquelle le thread doit croire évoluer
 	 * @param sensorsCardWrapper La carte capteurs avec laquelle le thread va parler
 	 */
-	ThreadSensor (Table table, SensorsCardWrapper sensorsCardWrapper)
+	ThreadSensor (Table table, RobotReal robot, SensorsCardWrapper sensorsCardWrapper)
 	{
 		super(config, log);
 		this.mSensorsCardWrapper = sensorsCardWrapper;
 		Thread.currentThread().setPriority(2);
+		mTable = table;
+		mRobot = robot;
 	}
 	
 	/* (non-Javadoc)
@@ -108,7 +117,12 @@ class ThreadSensor extends AbstractThread
 				distanceBack = (int[]) SensorNames.ULTRASOUND_BACK_SENSOR.getDefaultValue(); //distance consideree comme infinie
 			}
 			
-			//FIXME: ajouter les obstacles quand l'obstacleManager sera pret
+			//FIXME : tester!!!!!
+			//ajout d'obstacles mobiles dans l'obstacleManager
+			for (int i=0; i<distanceFront.length; i++)
+				mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x + (int)(distanceFront[i]*Math.cos(mRobot.getOrientation())), mRobot.getPosition().y + (int)(distanceFront[i]*Math.sin(mRobot.getOrientation()))));
+			for (int i=0; i<distanceBack.length; i++)
+				mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x - (int)(distanceBack[i]*Math.cos(mRobot.getOrientation())), mRobot.getPosition().y - (int)(distanceBack[i]*Math.sin(mRobot.getOrientation()))));
 			
 			log.debug("Distance selon ultrason avant: "+distanceFront+"; ultrason arriere: "+distanceBack, this);
 			if (distanceFront[1] > 0 && distanceFront[1] < 70 || distanceFront[0] > 0 && distanceFront[0] < 70)

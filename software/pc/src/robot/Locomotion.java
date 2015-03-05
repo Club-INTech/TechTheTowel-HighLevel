@@ -853,7 +853,7 @@ public class Locomotion implements Service
 									(int)(sign * distanceBetweenDiscCenterAndRobotCenter * Math.sin(orientation))	); // Ce calcul donne la position relative du centre du disque par rapport au centre du robot
 		discCenter.plus(position);	// converti les coordonnées relative au centre du robot en coordonnées absolues sur la table
 		
-		// fais remonter un problème s'il y a un obstacle dans ce disque.
+		// fait remonter un probleme s'il y a un obstacle dans ce disque.
 		if(table.getObstacleManager().isDiscObstructed(discCenter, obstacleDetectionDiscRadius))
 		{
 			log.warning("Obstacle sur notre chemin ! Nous somme en :" +position + ", et on détecte un obstacle dans un rayon de " + obstacleDetectionDiscRadius + "mm autour du point " + discCenter, this);
