@@ -112,7 +112,7 @@ public:
 			temps_impulsion = current_time - origineTimer;
 			ringBufferValeurs.append( 10*temps_impulsion/58 );
 			derniereDistance = mediane(ringBufferValeurs);
-			serial.printf("");//No hack here, follow your path...
+			//serial.printf("");//No hack here, follow your path...
 		}
 	}
 
@@ -123,8 +123,7 @@ private:
 	GPIO_TypeDef* GPIOx;//Port de la pin du capteur
 	ringBufferSRF ringBufferValeurs;
 	volatile uint32_t derniereDistance;		//contient la dernière distance acquise, prête à être envoyée
-	uint32_t origineTimer;			//origine de temps afin de mesurer une durée
-
+	volatile uint32_t origineTimer;			//origine de temps afin de mesurer une durée
 };
 
 #endif

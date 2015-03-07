@@ -4,6 +4,7 @@
 #include "ActuatorsMgr.hpp"
 #include "SensorMgr.h"
 
+
 volatile bool sensorToRefresh = false;
 
 int main(void)
@@ -57,6 +58,7 @@ int main(void)
 			}
 			else if(!strcmp("?xyo",order))
 			{
+				motionControlSystem->track();
 				serial.printfln("%f", motionControlSystem->getX());
 				serial.printfln("%f", motionControlSystem->getY());
 				serial.printfln("%f", motionControlSystem->getAngleRadian());
@@ -548,7 +550,7 @@ void TIM4_IRQHandler(void) { //2kHz = 0.0005s = 0.5ms
 		}
 
 		if(j >= 200){ //100ms
-			motionControlSystem->track();
+			//motionControlSystem->track();
 			j=0;
 		}
 

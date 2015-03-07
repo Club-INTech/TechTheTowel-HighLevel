@@ -1,17 +1,38 @@
 #include "MotionControlSystem.h"
 
-MotionControlSystem::MotionControlSystem() :
-		leftMotor(Side::LEFT), rightMotor(Side::RIGHT), translationControlled(
-				true), rotationControlled(true), translationPID(
-				&currentDistance, &pwmTranslation, &translationSetpoint), rotationPID(
-				&currentAngle, &pwmRotation, &rotationSetpoint), originalAngle(
-				0.0), rotationSetpoint(0), translationSetpoint(0), x(0.0), y(0.0), moving(
-				false), moveAbnormal(false) {
+MotionControlSystem::MotionControlSystem(): leftMotor(Side::LEFT), rightMotor(Side::RIGHT),
+	translationPID(&currentDistance, &pwmTranslation, &translationSetpoint),
+	rotationPID(&currentAngle, &pwmRotation, &rotationSetpoint)
+{
+	translationControlled = true;
+	rotationControlled = true;
+	originalAngle = 0.0;
+	rotationSetpoint = 0;
+	translationSetpoint = 0;
+	x = 0;
+	y = 0;
+	moving = false;
+	moveAbnormal = false;
 
 	delayToStop = 500;
 	toleranceInTick = 100;
-	pwmMinToMove = 60;
+	pwmMinToMove = 0;//60
 	minSpeed = 1;
+}
+
+MotionControlSystem::MotionControlSystem(const MotionControlSystem&): leftMotor(Side::LEFT), rightMotor(Side::RIGHT),
+	translationPID(&currentDistance, &pwmTranslation, &translationSetpoint),
+	rotationPID(&currentAngle, &pwmRotation, &rotationSetpoint)
+{
+	translationControlled = true;
+	rotationControlled = true;
+	originalAngle = 0.0;
+	rotationSetpoint = 0;
+	translationSetpoint = 0;
+	x = 0;
+	y = 0;
+	moving = false;
+	moveAbnormal = false;
 }
 
 void MotionControlSystem::init(int16_t maxPWMtranslation, int16_t maxPWMrotation) {
@@ -95,27 +116,27 @@ void MotionControlSystem::init(int16_t maxPWMtranslation, int16_t maxPWMrotation
 	enable(true);
 }
 
-int MotionControlSystem::getPWMTranslation() {
+int MotionControlSystem::getPWMTranslation() const{
 	return pwmTranslation;
 }
 
-int MotionControlSystem::getPWMRotation() {
+int MotionControlSystem::getPWMRotation() const{
 	return pwmRotation;
 }
 
-int MotionControlSystem::getTranslationGoal() {
+int MotionControlSystem::getTranslationGoal() const{
 	return translationSetpoint;
 }
 
-int MotionControlSystem::getRotationGoal() {
+int MotionControlSystem::getRotationGoal() const{
 	return rotationSetpoint;
 }
 
-int MotionControlSystem::getLeftEncoder() {
+int MotionControlSystem::getLeftEncoder() const{
 	return Counter::getLeftValue();
 }
 
-int MotionControlSystem::getRightEncoder() {
+int MotionControlSystem::getRightEncoder() const{
 	return Counter::getRightValue();
 }
 
@@ -242,8 +263,8 @@ void MotionControlSystem::track(){
 	this->trackArray[i][0] = x;
 	this->trackArray[i][1] = y;
 	this->trackArray[i][2] = getAngleRadian();
-	this->trackArray[i][3] = pwmTranslation;
-	this->trackArray[i][4] = pwmRotation;
+	this->trackArray[i][3] = float(translationSetpoint);
+	this->trackArray[i][4] = float(rotationSetpoint);
 	i = (i+1)%(TRACKER_SIZE);
 }
 
@@ -332,11 +353,11 @@ void MotionControlSystem::setOriginalAngle(float angle) {
 	originalAngle = angle - (getAngleRadian() - originalAngle);
 }
 
-float MotionControlSystem::getX(){
+float MotionControlSystem::getX() const{
 	return x;
 }
 
-float MotionControlSystem::getY(){
+float MotionControlSystem::getY() const{
 	return y;
 }
 
@@ -348,7 +369,7 @@ void MotionControlSystem::setY(float newY){
 	this->y = newY;
 }
 
-float MotionControlSystem::getBalance(){
+float MotionControlSystem::getBalance() const{
 	return balance;
 }
 
@@ -364,11 +385,11 @@ void MotionControlSystem::setMaxPWMrotation(int16_t PWM){
 	this->maxPWMrotation = PWM;
 }
 
-int16_t MotionControlSystem::getMaxPWMtranslation(){
+int16_t MotionControlSystem::getMaxPWMtranslation() const{
 	return this->maxPWMtranslation;
 }
 
-int16_t MotionControlSystem::getMaxPWMrotation(){
+int16_t MotionControlSystem::getMaxPWMrotation() const{
 	return this->maxPWMrotation;
 }
 
@@ -384,9 +405,9 @@ void MotionControlSystem::setSmartRotationTunings()
 	rotationPID.setTunings(rotationTunings[i][1], rotationTunings[i][2], rotationTunings[i][3]);
 }
 
-int MotionControlSystem::getBestTuningsInDatabase(int16_t pwm, float database[NB_SPEED][NB_CTE_ASSERV])
+int MotionControlSystem::getBestTuningsInDatabase(int16_t pwm, float database[NB_SPEED][NB_CTE_ASSERV]) const
 {
-	float ecartMin = 255, indice;
+	float ecartMin = 255, indice = 0;
 	for(int i=0; i<NB_CTE_ASSERV; i++)
 	{
 		float ecart = ABS(database[i][0] - float(pwm));
@@ -399,10 +420,10 @@ int MotionControlSystem::getBestTuningsInDatabase(int16_t pwm, float database[NB
 	return indice;
 }
 
-bool MotionControlSystem::isMoving(){
+bool MotionControlSystem::isMoving() const{
 	return moving;
 }
 
-bool MotionControlSystem::isMoveAbnormal(){
+bool MotionControlSystem::isMoveAbnormal() const{
 	return moveAbnormal;
 }
