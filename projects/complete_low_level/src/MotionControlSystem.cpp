@@ -158,8 +158,31 @@ void MotionControlSystem::enableRotationControl(bool enabled) {
 
 void MotionControlSystem::control() {
 
+	/*
+	 * Comptage des ticks de la roue droite
+	 * Cette codeuse est connectée à un timer 16bit
+	 * on subit donc un overflow/underflow de la valeur des ticks tous les 7 mètres environ
+	 * ceci est corrigé de manière à pouvoir parcourir des distances grandes sans devenir fou en chemin (^_^)
+	 */
+	static int32_t lastRawRightTicks = 0;	//On garde en mémoire le nombre de ticks obtenu au précédent appel
+	static int rightOverflow = 0;			//On garde en mémoire le nombre de fois que l'on a overflow (négatif pour les underflow)
+
+	int32_t rawRightTicks = Counter::getRightValue();	//Nombre de ticks avant tout traitement
+
+	if (lastRawRightTicks - rawRightTicks > 32768)		//Détection d'un overflow
+		rightOverflow++;
+	else if(lastRawRightTicks - rawRightTicks < -32768)	//Détection d'un underflow
+		rightOverflow--;
+
+	lastRawRightTicks = rawRightTicks;
+
+	int32_t rightTicks = rawRightTicks + rightOverflow*65535;	//On calcul le nombre réel de ticks
+
+	/*
+	 * Comptage des ticks de la roue gauche
+	 * ici on est sur un timer 32bit, pas de problème d'overflow sauf si on tente de parcourir plus de 446km...
+	 */
 	int32_t leftTicks = Counter::getLeftValue();
-	int32_t rightTicks = Counter::getRightValue();
 
 	if (translationControlled) {
 		currentDistance = (leftTicks + rightTicks) / 2;
@@ -260,9 +283,9 @@ void MotionControlSystem::applyControl() {
 
 void MotionControlSystem::track(){
 	static int i = 0;//Curseur du tableau
-	this->trackArray[i][0] = x;
-	this->trackArray[i][1] = y;
-	this->trackArray[i][2] = getAngleRadian();
+	this->trackArray[i][0] = float(currentDistance);
+	this->trackArray[i][1] = float(currentAngle);
+	this->trackArray[i][2] = float(Counter::getRightValue());
 	this->trackArray[i][3] = float(translationSetpoint);
 	this->trackArray[i][4] = float(rotationSetpoint);
 	i = (i+1)%(TRACKER_SIZE);
@@ -271,10 +294,10 @@ void MotionControlSystem::track(){
 void MotionControlSystem::printTracking(){
 	for(int i=0; i<TRACKER_SIZE; i++)
 	{
-		if(this->trackArray[i][3] != 0 || this->trackArray[i][4] != 0)
+		if(this->trackArray[i][0] != 0 || this->trackArray[i][1] != 0)
 		{
-			serial.printfln("x=%f | y=%f | o=%f", this->trackArray[i][0], this->trackArray[i][1], this->trackArray[i][2]);
-			serial.printfln("pwmT=%f | pwmR=%f", this->trackArray[i][3], this->trackArray[i][4]);
+			serial.printfln("cDist=%f | cAngl=%f | tick=%f", this->trackArray[i][0], this->trackArray[i][1], this->trackArray[i][2]);
+			serial.printfln("TsetPt=%f | RsetPt=%f", this->trackArray[i][3], this->trackArray[i][4]);
 		}
 	}
 }

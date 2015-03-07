@@ -11,10 +11,10 @@
 typedef ring_buffer<uint32_t, NB_VALEURS_MEDIANE_SRF> ringBufferSRF;
 extern Uart<1> serial;
 
-/** @file libintech/capteur_srf05.hpp
+/** @file library/capteur_srf05.hpp
  *  @brief Ce fichier crée une classe capteur_srf05 pour pouvoir utiliser simplement les capteurs SRF05.
- *  @author Thibaut ~MissFrance~
- *  @date 05 mai 2012
+ *  @author Sylvain (adaptation du travail de Thibaut ~MissFrance~)
+ *  @date 23 février 2015
  */
 
 //Angle du cône de vision: 38°
@@ -53,7 +53,7 @@ public:
 		this->EXTI_sensor = EXTI_sensor;
 	}
 
-	uint16_t value()
+	uint16_t value() const
 	{
 		return derniereDistance;
 	}

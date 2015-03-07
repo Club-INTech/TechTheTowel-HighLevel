@@ -533,7 +533,7 @@ extern "C" {
 void TIM4_IRQHandler(void) { //2kHz = 0.0005s = 0.5ms
 	__IO static uint32_t i = 0, j = 0, k = 0;
 	static MotionControlSystem* motionControlSystem = &MotionControlSystem::Instance();
-	static SensorMgr* sensorMgr = &SensorMgr::Instance();
+	//static SensorMgr* sensorMgr = &SensorMgr::Instance();
 
 	if (TIM_GetITStatus(TIM4, TIM_IT_Update) != RESET) {
 		//Remise à 0 manuelle du flag d'interruption nécessaire
@@ -549,10 +549,10 @@ void TIM4_IRQHandler(void) { //2kHz = 0.0005s = 0.5ms
 			i = 0;
 		}
 
-		if(j >= 200){ //100ms
-			//motionControlSystem->track();
-			j=0;
-		}
+//		if(j >= 200){ //100ms
+//			motionControlSystem->track();
+//			j=0;
+//		}
 
 		if(k >= 200){
 //			sensorMgr->refresh();

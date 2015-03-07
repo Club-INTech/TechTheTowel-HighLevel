@@ -156,7 +156,7 @@ void SensorMgr::leftFrontUSInterrupt()
 	leftFrontUS.interruption();
 }
 
-int SensorMgr::getLeftFrontValue()
+int SensorMgr::getLeftFrontValue() const
 {
 	return leftFrontUS.value();
 }

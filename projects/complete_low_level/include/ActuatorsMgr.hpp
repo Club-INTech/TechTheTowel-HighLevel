@@ -63,7 +63,7 @@ private:
 	};
 
 	EtatAscenseur etatAscenseur;
-	EtatAscenseur consigneAscenseur;
+	volatile EtatAscenseur consigneAscenseur;
 
 public:
 	ActuatorsMgr()
