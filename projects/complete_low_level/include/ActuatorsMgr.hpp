@@ -139,7 +139,7 @@ public:
 		GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN;
 		GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
 		GPIO_InitStruct.GPIO_Pin = GPIO_Pin_13;
-		GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP;
+		GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
 		GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;
 		GPIO_Init(GPIOC, &GPIO_InitStruct);
 
@@ -184,7 +184,7 @@ public:
 		GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN;
 		GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
 		GPIO_InitStruct.GPIO_Pin = GPIO_Pin_5;
-		GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP;
+		GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
 		GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;
 		GPIO_Init(GPIOE, &GPIO_InitStruct);
 
@@ -237,7 +237,8 @@ public:
 		//Capteur Bas  : PE5
 		//Moteur-PWM   : PC8
 		//Moteur-Sens  : PD14
-		bool captHautON = !GPIO_ReadInputDataBit(GPIOC, GPIO_PinSource13),
+
+		uint8_t captHautON = !GPIO_ReadInputDataBit(GPIOC, GPIO_PinSource13),
 		captBasON = GPIO_ReadInputDataBit(GPIOE, GPIO_PinSource5),
 		moteurON = GPIO_ReadOutputDataBit(GPIOC, GPIO_PinSource8),
 		moteurMonte = GPIO_ReadOutputDataBit(GPIOD, GPIO_PinSource14);
@@ -257,10 +258,17 @@ public:
 			etatAscenseur = Estrade;
 
 
+//		serial.printfln("captHautON=%u", captHautON);
+//		serial.printfln("captBasON=%u", captBasON);
+//		serial.printfln("moteurON=%u", moteurON);
+//		serial.printfln("moteurMonte=%u", moteurMonte);
+//		serial.printfln("");
+
 		//Déplacement de l'ascenseur selon la consigne
 		if(consigneAscenseur == etatAscenseur)
 		{
 			GPIO_ResetBits(GPIOC, GPIO_PinSource8);//Arrêt du moteur
+//			serial.printfln("I'm happy");
 		}
 		else if(consigneAscenseur == Haut)
 		{

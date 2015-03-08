@@ -66,12 +66,12 @@ int main(void)
 			else if(!strcmp("us_av",order))
 			{
 				serial.printfln("%d", sensorMgr->getLeftFrontValue());//Distance mesurée par l'ultrason avant gauche, en mm
-				serial.printfln("%d", 3000);//Distance mesurée par l'ultrason avant droit, en mm
+				serial.printfln("%d", sensorMgr->getRightFrontValue());//Distance mesurée par l'ultrason avant droit, en mm
 			}
 			else if(!strcmp("us_ar",order))
 			{
-				serial.printfln("%d", 3000);//Distance mesurée par l'ultrason arrière gauche, en mm
-				serial.printfln("%d", 3000);//Distance mesurée par l'ultrason arrière droit, en mm
+				serial.printfln("%d", sensorMgr->getLeftBackValue());//Distance mesurée par l'ultrason arrière gauche, en mm
+				serial.printfln("%d", sensorMgr->getRightBackValue());//Distance mesurée par l'ultrason arrière droit, en mm
 			}
 			else if(!strcmp("ct0",order))
 			{
@@ -567,18 +567,56 @@ void TIM4_IRQHandler(void) { //2kHz = 0.0005s = 0.5ms
 }
 
 
-void EXTI9_5_IRQHandler(void) {
+void EXTI4_IRGHandler(void)
+{
+	static SensorMgr* sensorMgr = &SensorMgr::Instance();
+
+	//Interruption de l'ultrason Avant Gauche
+	if (EXTI_GetITStatus(EXTI_Line4) != RESET)
+	{
+		sensorMgr->leftFrontUSInterrupt();
+
+		/* Clear interrupt flag */
+		EXTI_ClearITPendingBit(EXTI_Line4);
+	}
+}
+
+
+void EXTI1_IRGHandler(void)
+{
+	static SensorMgr* sensorMgr = &SensorMgr::Instance();
+
+	//Interruption de l'ultrason Arrière Gauche
+	if (EXTI_GetITStatus(EXTI_Line1) != RESET)
+	{
+		sensorMgr->leftBackUSInterrupt();
+
+		/* Clear interrupt flag */
+		EXTI_ClearITPendingBit(EXTI_Line1);
+	}
+}
+
+
+void EXTI9_5_IRQHandler(void)
+{
 	static SensorMgr* sensorMgr = &SensorMgr::Instance();
 	static ActuatorsMgr* actuatorsMgr = &ActuatorsMgr::Instance();
 
-	//Interruptions des ultrasons
-    /* Make sure that interrupt flag is set */
+	//Interruptions de l'ultrason Avant Droit
     if (EXTI_GetITStatus(EXTI_Line6) != RESET) {
-        sensorMgr->leftFrontUSInterrupt();
+        sensorMgr->rightFrontUSInterrupt();
 
         /* Clear interrupt flag */
         EXTI_ClearITPendingBit(EXTI_Line6);
     }
+
+    //Interruptions de l'ultrason Arrière Droit
+	if (EXTI_GetITStatus(EXTI_Line7) != RESET) {
+		sensorMgr->rightBackUSInterrupt();
+
+		/* Clear interrupt flag */
+		EXTI_ClearITPendingBit(EXTI_Line7);
+	}
 
     //Interruption du contacteur BAS de l'ascenseur
     if (EXTI_GetITStatus(EXTI_Line5) != RESET)
@@ -588,6 +626,7 @@ void EXTI9_5_IRQHandler(void) {
     	EXTI_ClearITPendingBit(EXTI_Line5);
     }
 }
+
 
 void EXTI15_10_IRQHandler(void)
 {
@@ -601,7 +640,6 @@ void EXTI15_10_IRQHandler(void)
 		EXTI_ClearITPendingBit(EXTI_Line13);
 	}
 }
-
 
 
 }

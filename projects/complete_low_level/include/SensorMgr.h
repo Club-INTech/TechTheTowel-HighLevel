@@ -37,8 +37,6 @@ private:
 	CapteurSRF rightFrontUS;
 	CapteurSRF leftBackUS;
 	CapteurSRF rightBackUS;
-
-
 };
 
 

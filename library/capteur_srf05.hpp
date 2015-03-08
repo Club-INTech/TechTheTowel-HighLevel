@@ -53,7 +53,7 @@ public:
 		this->EXTI_sensor = EXTI_sensor;
 	}
 
-	uint16_t value() const
+	uint32_t value() const
 	{
 		return derniereDistance;
 	}
@@ -112,7 +112,7 @@ public:
 			temps_impulsion = current_time - origineTimer;
 			ringBufferValeurs.append( 10*temps_impulsion/58 );
 			derniereDistance = mediane(ringBufferValeurs);
-			//serial.printf("");//No hack here, follow your path...
+			serial.printf("");//No hack here, follow your path...
 		}
 	}
 
