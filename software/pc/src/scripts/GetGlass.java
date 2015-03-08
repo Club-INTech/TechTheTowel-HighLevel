@@ -37,7 +37,6 @@ public class GetGlass extends AbstractScript
 	@Override
 	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
 	{
-		//TODO le script en lui meme
 		//on se tourne vers le goblet
 		//on choisit le bras disponible (ici on montre avec le bras gauche)
 		//si aucun bras disponible (logiquement l'IA ne devrai pas lancer le script (erreur ?)) on arrete le script
@@ -150,9 +149,18 @@ public class GetGlass extends AbstractScript
 	}
 
 	@Override
-	protected void finalise(GameState<?> state) 
+	protected void finalise(GameState<?> stateToConsider) 
 	{
-		// TODO fermer (ouvrir ?) le bras gauche et droit 
+		try 
+		{
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);
+		} 
+		catch (SerialConnexionException e)
+		{
+			e.printStackTrace();
+		}
+		
 	}
 	
 	//attrape le plot (ouvre / avance / ferme )
