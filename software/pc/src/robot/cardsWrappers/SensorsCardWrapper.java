@@ -6,6 +6,7 @@ import utils.Config;
 import container.Service;
 import enums.SensorNames;
 import exceptions.serial.SerialConnexionException;
+import java.util.Arrays;
 
 /**
  * Classe simplifiant le dialogue avec les capteurs
@@ -114,7 +115,7 @@ public class SensorsCardWrapper implements Service
     	log.debug("demande aux capteurs : \""+sensor.getSerialCommunication()+"\"", this);
 		String[] sensorAnswer = sensorsCardSerial.communiquer(sensor.getSerialCommunication(),sensor.getAwnserLineAmount());
 		
-		
+		int var[] = new int[2]; //TODO : virer ça!
 		if (sensor.getDefaultValue().getClass() == Boolean.class)
 		{
 			Boolean[] parsedAnswer = {};
@@ -130,27 +131,42 @@ public class SensorsCardWrapper implements Service
 		}
 		else if (sensor.getDefaultValue().getClass() == Integer.class)
 		{
+			//TODO : modifier (pour un seul entier)
 			Integer[] parsedAnswer = {};
 			if (sensor.getAwnserLineAmount()==1)
 			{
 				return Integer.parseInt(sensorAnswer[0].toString());
 			}
-				for (int i = 0; i<sensor.getAwnserLineAmount(); i++)
-				{
-					parsedAnswer[i] = Integer.parseInt(sensorAnswer[i].toString());
-				}
-				return parsedAnswer;
+			for (int i = 0; i<sensor.getAwnserLineAmount(); i++)
+			{
+				parsedAnswer[i] = Integer.parseInt(sensorAnswer[i].toString());
+			}
+			return parsedAnswer;
+		}
+		else if (sensor.getDefaultValue().getClass() == var.getClass())
+		{
+			//FIXME : utiliser une arraylist
+			int[] parsedAnswer = {0, 0};
+			if (sensor.getAwnserLineAmount()==1)
+			{
+				return Integer.parseInt(sensorAnswer[0].toString());
+			}
+			for (int i = 0; i<sensor.getAwnserLineAmount(); i++)
+			{
+				parsedAnswer[i] = Integer.parseInt(sensorAnswer[i].toString());
+			}
+			return parsedAnswer;
 		}
 		else if (sensor.getDefaultValue().getClass() == Float.class)
 		{
 			Float[] parsedAnswer = {};
 			if (sensor.getAwnserLineAmount()==1)
 			{
-				return Float.parseFloat(sensorAnswer[0].toString());
+				return Float.parseFloat(sensorAnswer[0]);
 			}
 				for (int i = 0; i<sensor.getAwnserLineAmount(); i++)
 				{
-					parsedAnswer[i] = Float.parseFloat(sensorAnswer[i].toString());
+					parsedAnswer[i] = Float.parseFloat(sensorAnswer[i]);
 				}
 				return parsedAnswer;
 		}

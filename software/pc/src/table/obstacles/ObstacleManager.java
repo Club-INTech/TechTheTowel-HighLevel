@@ -202,6 +202,7 @@ public class ObstacleManager
     public synchronized void addObstacle(final Vec2 position, final int radius)
     {
     	//TODO tester si il est utile d'ajouter l'obstacle
+    	log.debug("obstacle ajouté en (" + position.x + ", " + position.y + ")", this);
     	mMobileObstacles.add(new ObstacleProximity(position, radius));
     }
 

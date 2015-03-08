@@ -65,7 +65,7 @@ public class ThreadTimer extends AbstractThread
 	{
 		log.debug("Lancement du thread timer", this);
 
-		// allume les capteurs
+		// on eteind les capteurs
 		config.set("capteurs_on", "false");
 		mSensorsCardWrapper.updateConfig();	
 		
