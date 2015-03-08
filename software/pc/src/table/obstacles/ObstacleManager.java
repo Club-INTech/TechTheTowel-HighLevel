@@ -31,6 +31,8 @@ public class ObstacleManager
     
     private ArrayList<Segment> mLines;
 	private ArrayList<ObstacleRectangular> mRectangles;
+
+	private int defaultObstacleRadius;
   
     /**
      * Instancie un nouveau gestionnaire d'obstacle.
@@ -50,13 +52,13 @@ public class ObstacleManager
 		mRectangles = new ArrayList<ObstacleRectangular>();
 		
         int robotRadius = Integer.parseInt(config.getProperty("rayon_robot"));
+        defaultObstacleRadius = Integer.parseInt(config.getProperty("rayon_ennemi"));
         
         //par defaut
         //mEnnemyRobot1 = new ObstacleCircular(new Vec2(0, 0), 200 + robotRadius);
       	//mEnnemyRobot2 = new ObstacleCircular(new Vec2(0, 0), 200 + robotRadius);
 		
-		// TODO: a quoi coresspondent des numeros ?
-        // reponse : a ceux de la doc /pc/config/obstacles
+        // les numeros sont ceux de la doc sur /pc/config/obstacles
 		
 		//obstacles 1, 2, 3
       	mLines.add(new Segment(new Vec2(-1500, 778 - robotRadius), new Vec2(-1100 + robotRadius, 778 - robotRadius)));
@@ -130,7 +132,7 @@ public class ObstacleManager
      */
     public void copy(ObstacleManager other)
     {
-    	//TODO: méthode de copie de ObstacleManager 
+    	//TODO innutilise
     }
 
     /**
@@ -141,7 +143,7 @@ public class ObstacleManager
      */
     public boolean equals(ObstacleManager other)
     {
-    	//TODO : a garder a jour
+    	//TODO innutilise
     	boolean IDontKnow = false;
         return IDontKnow;
     }
@@ -189,9 +191,9 @@ public class ObstacleManager
      */
     public synchronized void addObstacle(final Vec2 position)
     {
-    	//TODO : mettre un rayon plus adapte (30 par defaut)
-    	mMobileObstacles.add(new ObstacleProximity(position, 30));
+    	addObstacle (position,defaultObstacleRadius);
     }
+
     
     /**
      * Ajoute un obstacle sur la table a la position spécifiée, du rayon specifie (de type obstacleProximity)
@@ -200,6 +202,7 @@ public class ObstacleManager
      * @param radius rayon de l'obstacle a ajouter     */
     public synchronized void addObstacle(final Vec2 position, final int radius)
     {
+    	//TODO tester si il est utile d'ajouter l'obstacle
     	mMobileObstacles.add(new ObstacleProximity(position, radius));
     }
 
@@ -241,8 +244,10 @@ public class ObstacleManager
      */
     public synchronized void setEnnemyNewLocation(int ennemyID, final Vec2 position)
     {
-    	//TODO changer la position de l'ennemi demandé
+    	//TODO innutilise
+    	//changer la position de l'ennemi demandé
     	//cela sera utilise par la strategie, la methode sera ecrite si besoin
+    	mMobileObstacles.get(ennemyID).setPosition(position);
     }
     
     /**
@@ -253,9 +258,10 @@ public class ObstacleManager
      */
     public Vec2 getEnnemyLocation(int ennemyID)
     {
-    	//TODO donner la position de l'ennemi demandé
+    	//TODO innutilise
+    	//donner la position de l'ennemi demandé
     	//cela sera utilise par la strategie, la methode sera ecrite si besoin
-        return  new Vec2();
+        return  mMobileObstacles.get(ennemyID).position;
     }
     
     
