@@ -228,9 +228,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 				log.critical("Ne peut pas parler à la carte " + this.name, this);
 				throw new SerialConnexionException();
 			}
-			
 			return inputLines;
-		
 		}
 	}
 

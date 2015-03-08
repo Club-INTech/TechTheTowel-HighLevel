@@ -342,7 +342,7 @@ public class Locomotion implements Service
         
             updateCurrentPositionAndOrientation();
             log.debug("en position : x="+position.x+"; y="+position.y+" dans la boucle d'acquitement", this);
-            
+
             // en cas de détection d'ennemi, une exception est levée
             detectEnemy(isMovementForward);
             log.debug("pas d'ennemi detecte", this);
@@ -355,10 +355,7 @@ public class Locomotion implements Service
                         
             // le fait de faire de nombreux appels permet de corriger la trajectoire
             correctAngle(aim, isMovementForward);
-            
-            if(orientation!=getOrientation())
-                log.debug("Angle corrigé", this);
-            
+                       
         } 
         while(!isMotionEnded());
     }
@@ -466,7 +463,10 @@ public class Locomotion implements Service
         try
         {
         	if(isCorrection && Math.abs(delta) > maxRotationCorrectionThreeshold)
-				deplacements.turn(angle);  // Si on est trop proche de l'orientation voulue, on ne tourne pas
+        	{
+				deplacements.turn(angle);  // On ne tourne que si on est assez loin de l'orientation voulue
+                log.debug("Angle corrigé", this);
+        	}
         	else if(!isCorrection)
         		deplacements.turn(angle);// Si ca n'est pas  une correction
         	

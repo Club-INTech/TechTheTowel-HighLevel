@@ -102,7 +102,8 @@ public class LocomotionCardWrapper implements Service
 	 */
 	public void setX(int x) throws SerialConnexionException
 	{
-		String chaines[] = {"cx", Integer.toString(x)};
+		float floatX=(float)x; //On transtype car la serie veut des Floats <3
+		String chaines[] = {"cx", Float.toString(floatX)};
 		locomotionCardSerial.communiquer(chaines, 0);
 	}
 
@@ -113,7 +114,8 @@ public class LocomotionCardWrapper implements Service
 	 */
 	public void setY(int y) throws SerialConnexionException
 	{
-		String chaines[] = {"cy", Integer.toString(y)};
+		float floatY=(float)y;//On transtype car la serie veut des Floats 
+		String chaines[] = {"cy", Float.toString(floatY)};
 		locomotionCardSerial.communiquer(chaines, 0);	
 	}
 	
@@ -125,7 +127,8 @@ public class LocomotionCardWrapper implements Service
 	 */
 	public void setOrientation(double orientation) throws SerialConnexionException
 	{
-		String chaines[] = {"co", Double.toString(orientation)};
+		float floatOrientation =(float) orientation; //On transtype car la serie veut des Floats (T_T)
+		String chaines[] = {"co", Float.toString(floatOrientation)};
 		locomotionCardSerial.communiquer(chaines, 0);
 	}
 	

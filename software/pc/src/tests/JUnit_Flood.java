@@ -31,10 +31,9 @@ public class JUnit_Flood extends JUnit_Test
 		super.setUp();
 		log.debug("JUnit_DeplacementsTest.setUp()", this);
 		mLocomotion = (Locomotion)container.getService(ServiceNames.LOCOMOTION);
-		config.set("couleur", "vert");
 		mLocomotion.updateConfig();
 		mLocomotion.setPosition(new Vec2(-123, 456));
-		mLocomotion.setOrientation(Math.PI);
+		mLocomotion.setOrientation( Math.PI);
 	}
 
 	@Test
@@ -44,7 +43,8 @@ public class JUnit_Flood extends JUnit_Test
 		while(true)
 		{
 			log.debug(compt++, this);
-			log.debug(mLocomotion.getPosition().x+" :: "+mLocomotion.getPosition().y, this);;
+			Vec2 pos=mLocomotion.getPosition();
+			log.debug(pos.x+" :/  ^_^  /: "+pos.y, this);
 		}
 	}	
 	
