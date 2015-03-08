@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.Assert;
 
+import enums.SensorNames;
 import enums.ServiceNames;
 import robot.cardsWrappers.SensorsCardWrapper;
 
@@ -43,23 +44,23 @@ public class JUnit_Sensors extends JUnit_Test
 		log.debug("JUnit_CapteursTest.desactivation_capteur()", this);
 
 		// Avec capteurs
-		log.debug(capteurs.getSensedDistance(), this);
+		log.debug(((int[])capteurs.getSensorValue(SensorNames.ULTRASOUND_FRONT_SENSOR))[1], this);
 	//	Assert.assertTrue(capteurs.mesurer_infrarouge() != 3000);
-		Assert.assertTrue(capteurs.getSensedDistance() != 3000);
+		Assert.assertTrue(((int[])capteurs.getSensorValue(SensorNames.ULTRASOUND_FRONT_SENSOR))[1] != 3000);
 
 		// Sans capteurs
 		config.set("capteurs_on", "false");
 		capteurs.updateConfig();
-		log.debug(capteurs.getSensedDistance(), this);
+		log.debug(((int[])capteurs.getSensorValue(SensorNames.ULTRASOUND_FRONT_SENSOR))[1], this);
 	//	Assert.assertTrue(capteurs.mesurer_infrarouge() == 3000);
-		Assert.assertTrue(capteurs.getSensedDistance() == 3000);
+		Assert.assertTrue(((int[])capteurs.getSensorValue(SensorNames.ULTRASOUND_FRONT_SENSOR))[1] == 3000);
 
 		// Et re avec
 		config.set("capteurs_on", "true");
 		capteurs.updateConfig();
-		log.debug(capteurs.getSensedDistance(), this);
+		Assert.assertTrue(((int[])capteurs.getSensorValue(SensorNames.ULTRASOUND_FRONT_SENSOR))[1] != 3000);
 	//	Assert.assertTrue(capteurs.mesurer_infrarouge() != 3000);
-		Assert.assertTrue(capteurs.getSensedDistance() != 3000);
+		Assert.assertTrue(((int[])capteurs.getSensorValue(SensorNames.ULTRASOUND_FRONT_SENSOR))[1] != 3000);
 
 	}
 
