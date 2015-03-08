@@ -81,6 +81,8 @@ public class Main
 				container.getService(ServiceNames.LOG);
 				config = (Config) container.getService(ServiceNames.CONFIG);
 			
+				configColor();
+				
 				// initialise les singletons
 				real_state = (GameState<Robot>) container.getService(ServiceNames.GAME_STATE);
 			    scriptmanager = (ScriptManager) container.getService(ServiceNames.SCRIPT_MANAGER);
@@ -492,5 +494,34 @@ public class Main
 		}
 	}
 
+	/**
+	 * Demande si la couleur est verte au jaune
+	 * @throws Exception
+	 */
+	static void configColor()
+	{
+
+		String couleur = "";
+		while(!couleur.contains("jaune") && !couleur.contains("vert"))
+		{
+			System.out.println("Rentrez \"vert\" ou \"jaune\" : ");
+			BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in)); 
+			 
+			try 
+			{
+				couleur = keyboard.readLine();
+			}
+			catch (IOException e) 
+			{
+				System.out.println("Eurreur IO: le clavier est il bien branché ?");
+			} 
+			if(couleur.contains("jaune"))
+				config.set("couleur","jaune");
+			else if(couleur.contains("vert"))
+				config.set("couleur", "vert");
+			
+		}
+		
+	}
 	
 }
