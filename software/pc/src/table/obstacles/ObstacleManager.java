@@ -52,7 +52,7 @@ public class ObstacleManager
 		mRectangles = new ArrayList<ObstacleRectangular>();
 		
         int robotRadius = Integer.parseInt(config.getProperty("rayon_robot"));
-        defaultObstacleRadius = Integer.parseInt(config.getProperty("rayon_ennemi"));
+        defaultObstacleRadius = Integer.parseInt(config.getProperty("rayon_robot_adverse"));
         
         //par defaut
         //mEnnemyRobot1 = new ObstacleCircular(new Vec2(0, 0), 200 + robotRadius);
