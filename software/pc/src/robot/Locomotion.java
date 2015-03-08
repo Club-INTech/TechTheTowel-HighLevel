@@ -341,7 +341,6 @@ public class Locomotion implements Service
             Sleep.sleep(feedbackLoopDelay);
         
             updateCurrentPositionAndOrientation();
-            log.debug("en position : x="+position.x+"; y="+position.y+" dans la boucle d'acquitement", this);
 
             // en cas de détection d'ennemi, une exception est levée
             detectEnemy(isMovementForward);
@@ -733,5 +732,5 @@ public class Locomotion implements Service
 	{
 		deplacements.closeLocomotion();
 	}
-
+	
 }
