@@ -12,7 +12,6 @@ import strategie.GameState;
 import org.junit.Before;
 import org.junit.Test;
 
-import container.Container;
 import pathDingDing.PathDingDing;
 import enums.ActuatorOrder;
 import enums.ScriptNames;
@@ -36,6 +35,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 	SensorsCardWrapper  mSensorsCardWrapper;
 	PathDingDing pathDingDing;
 	
+	@SuppressWarnings("unchecked")
 	@Before
 	public void setUp() throws Exception
 	{

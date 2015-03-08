@@ -55,8 +55,11 @@ public class Table implements Service
 	//Les emplacements où sont posés les verres (voir doc des zones dans DropGlasss : 
 	//1=Notre zone, 2=haut zone ennemi, 3=bas zone ennemi
 	
+	@SuppressWarnings("unused")
 	private boolean isArea1FilledWithGlass;
+	@SuppressWarnings("unused")
 	private boolean isArea2FilledWithGlass;
+	@SuppressWarnings("unused")
 	private boolean isArea3FilledWithGlass;
 	
 	

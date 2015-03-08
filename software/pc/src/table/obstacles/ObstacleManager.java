@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import smartMath.*;
 import utils.Log;
 import utils.Config;
-import enums.ObstacleGroups;
 
 /**
  * Traite tout ce qui concerne la gestion des obstacles sur la table.

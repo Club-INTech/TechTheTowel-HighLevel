@@ -1,17 +1,11 @@
 package tests;
 
 
-import hook.Hook;
-
-import java.util.ArrayList;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import enums.ServiceNames;
-import exceptions.Locomotion.UnableToMoveException;
-import robot.DirectionStrategy;
 import robot.Locomotion;
 import smartMath.Vec2;
 

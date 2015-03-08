@@ -1,16 +1,13 @@
 package tests;
 
 import hook.Callback;
-import hook.Executable;
 import hook.Hook;
 import hook.methods.OpenLeftArmExe;
 import hook.types.HookFactory;
 
 import java.util.ArrayList;
 
-import scripts.AbstractScript;
 import scripts.ScriptManager;
-import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
 

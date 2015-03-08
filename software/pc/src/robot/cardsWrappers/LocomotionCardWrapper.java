@@ -18,7 +18,6 @@ public class LocomotionCardWrapper implements Service
 	/**
 	 *  pour écrire dans le log en cas de problème
 	 */
-	@SuppressWarnings("unused")
 	private Log log;
 
 	/**

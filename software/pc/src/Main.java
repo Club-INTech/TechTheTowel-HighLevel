@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 import robot.Robot;
 import robot.cardsWrappers.SensorsCardWrapper;
-import scripts.AbstractScript;
 import scripts.ScriptManager;
 import smartMath.Vec2;
 import strategie.GameState;

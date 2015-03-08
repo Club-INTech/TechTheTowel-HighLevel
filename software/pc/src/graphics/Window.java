@@ -3,7 +3,6 @@ package graphics;
 import javax.swing.JFrame;
 
 import table.Table;
-import robot.*;
 import graphics.Mouse;
 
 /**

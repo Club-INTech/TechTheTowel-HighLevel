@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 import robot.cardsWrappers.LocomotionCardWrapper;
 import smartMath.Vec2;
-import sun.security.util.Length;
 import table.Table;
 import utils.Config;
 import utils.Log;

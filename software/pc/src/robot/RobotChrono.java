@@ -116,10 +116,14 @@ public class RobotChrono extends Robot
     protected void followPath(ArrayList<Vec2> path, ArrayList<Hook> hooks, DirectionStrategy direction) throws UnableToMoveException
     {
 		// va sucessivement a tout les points
-		for(Vec2 point: path)
-		{
-			// TODO
-		}
+		for(int i = 0; i < path.size(); i++)
+        {
+			//TODO mettre les bonnes valeures !!!
+            @SuppressWarnings("unused")
+			Vec2 aim = path.get(i);
+            turn (0);
+            moveLengthwise(0);
+        }
     	
     }
 

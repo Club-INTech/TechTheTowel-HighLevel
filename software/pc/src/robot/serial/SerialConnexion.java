@@ -57,12 +57,6 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	 */
 	private static final int TIME_OUT = 2000;
 	
-	/**
-	 *  Temps d'attente pour la pauvre serie saturée en ms
-	 */
-	
-	private int timeBetweenFeedback = 2000;
-	
 
 	/**
 	 * Construit une connexion s�rie

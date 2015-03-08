@@ -2,8 +2,6 @@ package pathDingDing;
 
 import smartMath.*;
 import table.Table;
-import table.obstacles.*;
-import utils.Log;
 
 import java.util.ArrayList;
 import java.util.EnumSet;

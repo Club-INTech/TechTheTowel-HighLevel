@@ -6,14 +6,10 @@ import java.util.ArrayList;
 
 import container.Container;
 import container.Service;
-import enums.ScriptNames;
 import enums.ServiceNames;
 import exceptions.ContainerException;
-import exceptions.Locomotion.UnableToMoveException;
-import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialManagerException;
 import robot.*;
-import scripts.AbstractScript;
 import scripts.ScriptManager;
 import table.Table;
 import utils.Log;
@@ -28,6 +24,7 @@ import utils.Config;
 public class Strategie implements Service
 {
 	/** système de log sur lequel écrire*/
+	@SuppressWarnings("unused")
 	private Log log;
 	
 	/** Endroit où on peut lire la configuration du robot */
