@@ -216,7 +216,7 @@ public class ObstacleManager
     }
 
     /**
-     * Renvoie true si un obstacle chevauche un disque.
+     * Renvoie true si un obstacle chevauche un disque. (uniquement un obstacle detecte par les capteurs)
      *
      * @param discCenter le centre du disque a vérifier
      * @param radius le rayon du disque
@@ -224,7 +224,6 @@ public class ObstacleManager
      */
     public boolean isDiscObstructed(final Vec2 discCenter, int radius)
     {
-    	//TODO vérifier si le disque est obstrué dans le cas d'un rectangle
     	boolean isDiscObstructed = false;
     	for(int i=0; i<mMobileObstacles.size(); i++)
     	{
@@ -243,17 +242,19 @@ public class ObstacleManager
     public synchronized void setEnnemyNewLocation(int ennemyID, final Vec2 position)
     {
     	//TODO changer la position de l'ennemi demandé
+    	//cela sera utilise par la strategie, la methode sera ecrite si besoin
     }
     
     /**
-     * Utilis� par le thread de stratégie.
-     * renvois la position du robot ennemi voulu sur la table.
+     * Utilis� par le thread de stratégie. (pas implemente : NE PAS UTILISER!!!)
+     * renvoie la position du robot ennemi voulu sur la table.
      *
      * @return la position de l'ennemi spécifié
      */
     public Vec2 getEnnemyLocation(int ennemyID)
     {
     	//TODO donner la position de l'ennemi demandé
+    	//cela sera utilise par la strategie, la methode sera ecrite si besoin
         return  new Vec2();
     }
     
@@ -271,7 +272,8 @@ public class ObstacleManager
     
     /**
      * Vérifie si le position spécifié est dans l'obstacle spécifié ou non
-     * Attention : l'obstacle doit etre issu des classes ObstacleCircular ou ObstacleRectangular
+     * Attention : l'obstacle doit etre issu des classes ObstacleCircular ou ObstacleRectangular sous peine d'exception
+     * Attention : verifie si le point (et non le robot) est dans l'obstacle.
      *
      * @param pos la position a vérifier
      * @param obstacle l'obstacle a considérer
@@ -294,7 +296,7 @@ public class ObstacleManager
     }
     
     /**
-	 * Vérifie si la position donnée est dégagée ou si elle est dans l'un des obstacles sur la table
+	 * Vérifie si la position donnée est dégagée ou si elle est dans l'un des obstacles sur la table (tous les obstacles)
      *
      * @param position la position a vérifier
      * @return true, si la position est dans un obstacle

@@ -190,6 +190,7 @@ public class Container
 		else if(serviceRequested == ServiceNames.THREAD_SENSOR)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)threadmanager.getThreadSensors(
 																	(Table)getService(ServiceNames.TABLE),
+																	(RobotReal)getService(ServiceNames.ROBOT_REAL),
 																	(SensorsCardWrapper)getService(ServiceNames.SENSORS_CARD_WRAPPER)
 																);
 		else if(serviceRequested == ServiceNames.THREAD_LASER)

@@ -539,6 +539,7 @@ public class Locomotion implements Service
 			return false;
 		}
 		catch (UnexpectedObstacleOnPathException e)
+
 		{
 			e.printStackTrace();
 			return true;
