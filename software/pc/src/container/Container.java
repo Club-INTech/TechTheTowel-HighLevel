@@ -248,7 +248,7 @@ public class Container
 	{
 		// TODO: faire une gestion propre des exceptions
 		try {
-			getService(ServiceNames.THREAD_LASER);
+			//getService(ServiceNames.THREAD_LASER);
 		} catch (Exception e) {	
 			e.printStackTrace();
 		}

@@ -3,6 +3,7 @@ package pathDingDing;
 import smartMath.*;
 import table.Table;
 import table.obstacles.*;
+import utils.Log;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -34,7 +35,7 @@ public class PathDingDing implements Service
 	}
 	
 	/**
-	 * methode a appeler, avec la liste des obstacles à considerer
+	 * methode a appeler, avec la liste des obstacles ï¿½ considerer
 	 * @param start le point de depart
 	 * @param end le point d'arrivee
 	 * @return un chemin optimise liant depart et arrivee
@@ -269,13 +270,17 @@ public class PathDingDing implements Service
 			for(int j = 0; j < mTable.getObstacleManager().getLines().size(); j++)
 				//si les deux segments de coupent
 				if(intersects(mTable.getObstacleManager().getLines().get(j), new Segment(path.get(i), path.get(i+1))))
+				{
+					System.out.println("intersection PathDingDing avec l'obstacle " +j);
 					intersects = true;
+				}
 			//test de collision avec chaque cercle
 			for(int j = 0; j < circles.size(); j++)
 			{
 				//si le segment et le cercle se coupent
 				if(intersects(new Segment(path.get(i), path.get(i+1)), circles.get(j)))
 				{
+					System.out.println("intersection PathDingDing avec l'obstacle circulaire " +j);
 					intersects = true;
 				}
 			}

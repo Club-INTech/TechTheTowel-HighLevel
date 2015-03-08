@@ -231,11 +231,6 @@ public class ObstacleManager
     		if ((radius+mMobileObstacles.get(i).radius)*(radius+mMobileObstacles.get(i).radius)<(discCenter.x-mMobileObstacles.get(i).position.x)*(discCenter.x-mMobileObstacles.get(i).position.x)+(discCenter.y-mMobileObstacles.get(i).position.y)*(discCenter.y-mMobileObstacles.get(i).position.y))
     			isDiscObstructed=true;
     	}
-    	for(int i=0; i<mFixedObstacles.size(); i++)
-    	{
-    		if ((radius+mFixedObstacles.get(i).radius)*(radius+mFixedObstacles.get(i).radius)<(discCenter.x-mFixedObstacles.get(i).position.x)*(discCenter.x-mFixedObstacles.get(i).position.x)+(discCenter.y-mFixedObstacles.get(i).position.y)*(discCenter.y-mFixedObstacles.get(i).position.y))
-    			isDiscObstructed=true;
-    	}
     	return isDiscObstructed;
     }   
 

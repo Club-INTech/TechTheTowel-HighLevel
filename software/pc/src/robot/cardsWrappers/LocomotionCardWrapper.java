@@ -1,11 +1,9 @@
 package robot.cardsWrappers;
 
-import java.util.Hashtable;
 
 import robot.serial.SerialConnexion;
 import utils.*;
 import container.Service;
-import exceptions.Locomotion.BlockedException;
 import exceptions.serial.SerialConnexionException;
 
 /**
@@ -20,36 +18,14 @@ public class LocomotionCardWrapper implements Service
 	/**
 	 *  pour écrire dans le log en cas de problème
 	 */
+	@SuppressWarnings("unused")
 	private Log log;
 
 	/**
 	 * connexion série avec la carte d'asservissement
 	 */
 	private SerialConnexion locomotionCardSerial;
-
-	/**
-	 * Stockage des informations courrantes de l'asservissement. 
-	 * Dès la fin du constructeur, les clefs sont: 
-	 *  - PWMmoteurGauche
-	 *  - PWMmoteurDroit
-	 *  - erreur_rotation
-	 *  - erreur_translation
-	 *  - derivee_erreur_rotation
-	 *  - derivee_erreur_translation
-	 */
-	private Hashtable<String, Integer> feedbackLoopStatistics;
 		
-	/**
-	 *  en cas de bloquage, date a laquelle le blocage a commencé
-	 */
-	private long blockageStartTimestamp;
-	
-	/**
-	 *  utilisé par raiseExeptionIfBlocked, pour savoir si lors du dernier appel de raiseExeptionIfBlocked, la robot était déja bloqué (auquel cas il ne faut plus considérer que c'est le début du bloquage)
-	 */
-    private boolean wasBlockedAtPreviousCall = false;
-    
-
 	/**
 	 *  nombre de miliseconde de tolérance entre la détection d'un patinage et la levée de l'exeption. Trop basse il y aura des faux positifs, trop haute on va forcer dans les murs pendant longtemps
 	 */
@@ -63,129 +39,23 @@ public class LocomotionCardWrapper implements Service
 	public LocomotionCardWrapper(Log log, SerialConnexion serial)
 	{
 		this.log = log;
-		this.locomotionCardSerial = serial;
-		
-		feedbackLoopStatistics = new Hashtable<String, Integer>();
-		feedbackLoopStatistics.put("PWMmoteurGauche", 0);
-		feedbackLoopStatistics.put("PWMmoteurDroit", 0);
-		feedbackLoopStatistics.put("erreur_rotation", 0);
-		feedbackLoopStatistics.put("erreur_translation", 0);
-		feedbackLoopStatistics.put("derivee_erreur_rotation", 0);
-		feedbackLoopStatistics.put("derivee_erreur_translation", 0);
-		feedbackLoopStatistics.put("inverse_erreur_translation_integrale", 100);
-		
+		this.locomotionCardSerial = serial;		
 	}
 	
 	public void updateConfig()
 	{
 	}	
 	
-	/**
-	 * lève BlockedException si le robot bloque (c'est-à-dire que les moteurs forcent mais que le robot ne bouge pas).
-	 * @throws BlockedException si le robot est mécaniquement bloqué contre un obstacle qui l'empèche d'avancer plus loin
-	 */
-	public void raiseExeptionIfBlocked() throws BlockedException
-	{
-		
-		// demande des information sur l'asservissement du robot
-		int pwmLeftMotor = feedbackLoopStatistics.get("PWMmoteurGauche");
-		int pwmRightMotor = feedbackLoopStatistics.get("PWMmoteurDroit");
-		int derivatedRotationnalError = feedbackLoopStatistics.get("derivee_erreur_rotation");
-		int derivatedTranslationnalError = feedbackLoopStatistics.get("derivee_erreur_translation");
-		
-		// on décrète que les moteurs forcent si la puissance qu'ils demandent est trop grande
-		boolean areMotorsActive = Math.abs(pwmLeftMotor) > 40 || Math.abs(pwmRightMotor) > 40;
-		
-		// on décrète que le robot est immobile si l'écart entre la position demandée et la position actuelle est (casi) constant
-		//TODO: pourquoi ne pas utiliser isRobotMoving() ?
-		boolean isRobotImmobile = Math.abs(derivatedRotationnalError) <= 10 && Math.abs(derivatedTranslationnalError) <= 10;
-
-		// si on patine
-		if(isRobotImmobile && areMotorsActive)
-		{
-			// si on patinais déja auparavant, on fait remonter le patinage au code de haut niveau (via BlocageExeption)
-			if(wasBlockedAtPreviousCall)
-			{
-                // la durée de tolérance au patinage est fixée ici (200ms)
-				// mais cette fonction n'étant appellée qu'a une fréquance de l'ordre du Hertz ( la faute a une saturation de la série)
-				// le robot mettera plus de temps a réagir ( le temps de réaction est égal au temps qui sépare 2 appels successifs de cette fonction)
-				if((System.currentTimeMillis() - blockageStartTimestamp) > blockedTolerancy)
-				{
-					log.warning("raiseExeptionIfBlocked : le robot a dû s'arrêter suite à un patinage. (levage de BlockedException)", this);
-					try
-					{
-						immobilise();
-					} 
-					catch (SerialConnexionException e)
-					{
-						log.critical("raiseExeptionIfBlocked : Impossible d'immobiliser le robot: la carte d'asser ne répond plus.", this);
-						e.printStackTrace();
-					}
-					
-					throw new BlockedException("l'écart a la consigne ne bouge pas alors que les moteurs sont en marche");
-				}
-			}
-
-			// si on détecte pour la première fois le patinage, on continue de forcer
-			else
-			{
-				blockageStartTimestamp = System.currentTimeMillis();
-				wasBlockedAtPreviousCall  = true;
-			}
-		}
-		// si tout va bien
-		else
-		{
-			wasBlockedAtPreviousCall = false;
-			blockageStartTimestamp = System.currentTimeMillis();
-		}
-
-	}
-
 	/** 
 	 * Regarde si le robot bouge effectivement.
 	 * Provoque un appel série pour avoir des information a jour. Cette méthode est demande donc un peu de temps. 
 	 * @return 
 	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
 	 */
-	boolean isRobotMoving() throws SerialConnexionException
-	{	
-		/*refreshFeedbackLoopStatistics();
-		// petits alias sur les infos de l'asservissement
-		int rotationnalError = feedbackLoopStatistics.get("erreur_rotation");
-		int translationnalError = feedbackLoopStatistics.get("erreur_translation");
-		int derivedRotationnalError = feedbackLoopStatistics.get("derivee_erreur_rotation");
-		int derivedTranslationnalError = feedbackLoopStatistics.get("derivee_erreur_translation");
-		
-		// TODO:VALEURS A REVOIR
-		// Décide si on considère le robot immobile ou non.
-		//FIXME: a quoi sert rotationStopped et translationStopped
-		boolean rotationStopped = Math.abs(rotationnalError) <= 60;
-		rotationStopped = true;
-		boolean translationStopped = Math.abs(translationnalError) <= 60;
-		translationStopped = true;
-		boolean isImmobile = Math.abs(derivedRotationnalError) <= 20 && Math.abs(derivedTranslationnalError) <= 20;
-				
-		return !(rotationStopped && translationStopped && isImmobile);*/
-		
-		
-		boolean[] infos=isRobotStillMovingAndItIsNormal();
-		
-		if(infos[0])//le robot bouge toujours
-		{
-			if(!infos[1])//et c'est normal
-			{
-				System.out.println("On bouge toujours et c'est normal");
-				return infos[0];
-			}
-			else
-			{
-				System.out.println("On bouge toujours MAIS C'EST PAS normal");//TODO gerer ce cas
-			}
-		}
-		
-		return infos[0];
 
+	public boolean isRobotMoving() throws SerialConnexionException
+	{
+	        return isRobotMovingAndAbnormal()[0];       	
 	}
 	
 	/** 
@@ -200,7 +70,7 @@ public class LocomotionCardWrapper implements Service
 	}
 
 	/** 
-	 * Fait tourner le robot. Méthode non bloquante
+	 * Fait tourner le robot de maniere absolue. Méthode non bloquante
 	 * @param angle
 	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
 	 */
@@ -208,7 +78,6 @@ public class LocomotionCardWrapper implements Service
 	{
 		// tronque l'angle que l'on envoit a la série pour éviter les overflows
 		float anggleTruncated = (float)angle;
-		
 		String chaines[] = {"t", Float.toString(anggleTruncated)};
 		locomotionCardSerial.communiquer(chaines, 0);		
 	}
@@ -234,7 +103,8 @@ public class LocomotionCardWrapper implements Service
 	 */
 	public void setX(int x) throws SerialConnexionException
 	{
-		String chaines[] = {"cx", Integer.toString(x)};
+		float floatX=(float)x; //On transtype car la serie veut des Floats <3
+		String chaines[] = {"cx", Float.toString(floatX)};
 		locomotionCardSerial.communiquer(chaines, 0);
 	}
 
@@ -245,7 +115,8 @@ public class LocomotionCardWrapper implements Service
 	 */
 	public void setY(int y) throws SerialConnexionException
 	{
-		String chaines[] = {"cy", Integer.toString(y)};
+		float floatY=(float)y;//On transtype car la serie veut des Floats 
+		String chaines[] = {"cy", Float.toString(floatY)};
 		locomotionCardSerial.communiquer(chaines, 0);	
 	}
 	
@@ -257,7 +128,8 @@ public class LocomotionCardWrapper implements Service
 	 */
 	public void setOrientation(double orientation) throws SerialConnexionException
 	{
-		String chaines[] = {"co", Double.toString(orientation)};
+		float floatOrientation =(float) orientation; //On transtype car la serie veut des Floats (T_T)
+		String chaines[] = {"co", Float.toString(floatOrientation)};
 		locomotionCardSerial.communiquer(chaines, 0);
 	}
 	
@@ -412,56 +284,21 @@ public class LocomotionCardWrapper implements Service
 		locomotionCardSerial.communiquer(chaines, 0);
 	}
 
-	/**
-	 * Met à jour PWMmoteurGauche, PWMmoteurDroit, erreur_rotation, erreur_translation, derivee_erreur_rotation, derivee_erreur_translation
-	 * les nouvelles valeurs sont stokées dans feedbackLoopStatistics (feedbackLoopStatistics est une map privée de la classe)
-	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
-	 */
-	public void refreshFeedbackLoopStatistics() throws SerialConnexionException
-	{
-		// on demande a la carte des information a jour
-		// on envois "?infos" et on lis 4 int (dans l'ordre : PWM droit, PWM gauche, erreurRotation, erreurTranslation)
-		String[] infosBuffer = locomotionCardSerial.communiquer("?infos", 4);
-		int[] parsedInfos = new int[4];
-		for(int i = 0; i < 4; i++)
-			parsedInfos[i] = Integer.parseInt(infosBuffer[i]);
-		
-		// calcul des dérivées des erreurs en translation et en rotation :
-		// on fait la différence entre la valeur actuelle de l'erreur et le valeur précédemment mesurée.
-		// on divise par un dt unitaire (non mentionné dans l'expression)
-		int derivedRotationnalError = parsedInfos[2] - feedbackLoopStatistics.get("erreur_rotation");
-		int derivedTranslationnalError = parsedInfos[3] - feedbackLoopStatistics.get("erreur_translation");
-		
-		
-		// on stocke la puissance consommée par les moteurs
-        feedbackLoopStatistics.put("PWMmoteurGauche", parsedInfos[0]);
-        feedbackLoopStatistics.put("PWMmoteurDroit", parsedInfos[1]);
-        
-        // l'erreur de translation mesurée par les codeuses
-        feedbackLoopStatistics.put("erreur_rotation", parsedInfos[2]);
-        feedbackLoopStatistics.put("erreur_translation", parsedInfos[3]);
-        
-        // stocke les dérivées des erreurs, calculés 10 lignes plus haut
-        feedbackLoopStatistics.put("derivee_erreur_rotation", derivedRotationnalError);
-        feedbackLoopStatistics.put("derivee_erreur_translation", derivedTranslationnalError);
-
-        
-	}
 
 	/**
 	 * Demande a la carte d'asservissement la position et l'orientation courrante du robot sur la table.
-	 * Renvoie x, y et orientation du robot (x en mm, y en mm, et orientation en miliradiants) 
+	 * Renvoie x, y et orientation du robot (x en mm, y en mm, et orientation en radiants) 
 	 * @return un tableau de 3 cases: [x, y, orientation]
 	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
 	 */
-	public double[] getCurrentPositionAndOrientation() throws SerialConnexionException
+	public float[] getCurrentPositionAndOrientation() throws SerialConnexionException
 	{
 		// on demande a la carte des information a jour
-		// on envois "?infos" et on lis double (dans l'ordre : abscisse, ordonnée, orientation)
+		// on envois "?xyo" et on lis double (dans l'ordre : abscisse, ordonnée, orientation)
 		String[] infosBuffer = locomotionCardSerial.communiquer("?xyo", 3);
-		double[] parsedInfos = new double[3];
+		float[] parsedInfos = new float[3];
 		for(int i = 0; i < 3; i++)
-		    parsedInfos[i] = Double.parseDouble(infosBuffer[i]);
+		    parsedInfos[i] = Float.parseFloat(infosBuffer[i]);
 
 		return parsedInfos;
 	}
@@ -475,30 +312,25 @@ public class LocomotionCardWrapper implements Service
 	}
 	
 	/**
-	 * Recupere des informations du robot : s'il bouge et si c'est anormal
+	 *  Verifie si le robot est arrivé et si c'est anormal
+	 *  @return fghjklmù
 	 */
-	public boolean isRobotStillMoving() throws SerialConnexionException
+	public boolean[] isRobotMovingAndAbnormal() throws SerialConnexionException
 	{
-		// on envois "f" et on lit si le robot bouge toujours PUIS si c'est normal
-		String[] infosBuffer = locomotionCardSerial.communiquer("f", 2);;
-		return Boolean.parseBoolean(infosBuffer[0]);
-	}
-	
-	public boolean isNormalThatRobotStillMoving() throws SerialConnexionException
-	{
-		// on envois "f" et on lit si le robot bouge toujours PUIS si c'est normal
-		String[] infosBuffer = locomotionCardSerial.communiquer("f", 2);;
-		return Boolean.parseBoolean(infosBuffer[1]);
-	}
-	
-	public boolean[] isRobotStillMovingAndItIsNormal() throws SerialConnexionException
-	{
-		// on envois "f" et on lit si le robot bouge toujours PUIS si c'est normal
+		// on demande a la carte des information a jour
+		// on envois "f" et on lis double (dans l'ordre : bouge, est anormal)
 		String[] infosBuffer = locomotionCardSerial.communiquer("f", 2);
-		boolean[] infosRetrieved = null;
+		boolean[] parsedInfos = new boolean[2];
 		for(int i = 0; i < 2; i++)
-			infosRetrieved[i] = Boolean.parseBoolean(infosBuffer[i]);
-		return infosRetrieved;
+		{
+			if( infosBuffer[i].equals("0") )
+			   parsedInfos[i] = false;
+			else if ( infosBuffer[i].equals("1") )
+				 parsedInfos[i]=true;
+			else
+				log.debug("Probleme de lecture de f", this);
+		}
+		return parsedInfos;
 	}
 	
 }
