@@ -11,6 +11,7 @@ import utils.Config;
 import utils.Log;
 import utils.Sleep;
 import container.Service;
+import enums.UnableToMoveReason;
 import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.Locomotion.UnexpectedObstacleOnPathException;
@@ -287,7 +288,7 @@ public class Locomotion implements Service
                         log.critical("On n'arrive pas à se dégager.", this);
 					}
                     if(!doItAgain)
-                        throw new UnableToMoveException();
+                        throw new UnableToMoveException(aim, UnableToMoveReason.UNEXPECTED_WALL);
                 }
             }
             catch (UnexpectedObstacleOnPathException e)
@@ -310,7 +311,7 @@ public class Locomotion implements Service
             	}
 
                 if(!doItAgain)
-                    throw new UnableToMoveException();
+                    throw new UnableToMoveException(aim, UnableToMoveReason.UNEXPECTED_OBSTACLE);
 			}
 
         } 
