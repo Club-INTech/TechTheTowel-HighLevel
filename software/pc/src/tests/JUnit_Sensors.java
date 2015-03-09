@@ -59,7 +59,7 @@ public class JUnit_Sensors extends JUnit_Test
 	 *
 	 * @throws Exception the exception
 	 */
-	//@Test
+//	@Test
 	public void desactivation_capteur() throws Exception
 	{
 		log.debug("JUnit_CapteursTest.desactivation_capteur()", this);
@@ -90,7 +90,7 @@ public class JUnit_Sensors extends JUnit_Test
 	{
 		log.debug("Test d'évitement", this);
 
-		mLocomotion.moveLengthwise(1000,  new ArrayList<Hook>(), false);
+		mLocomotion.moveLengthwise(500,  new ArrayList<Hook>(), false);
 	}
 
 /*    @Test

@@ -120,7 +120,6 @@ class ThreadSensor extends AbstractThread
 				distanceBack = (int[]) SensorNames.ULTRASOUND_BACK_SENSOR.getDefaultValue(); //distance consideree comme infinie
 			}
 			
-			log.debug("Nous sommes dans le thread sensor!!!", this);
 			
 			//ajout d'obstacles mobiles dans l'obstacleManager
 			//TODO : ajouter l'obstacle plus loin (au bord du cercle)
@@ -131,7 +130,7 @@ class ThreadSensor extends AbstractThread
 				if(distanceBack[i]!=0)
 					mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x - (int)(distanceBack[i]*Math.cos(mRobot.getOrientation())), mRobot.getPosition().y - (int)(distanceBack[i]*Math.sin(mRobot.getOrientation()))));
 			
-			log.debug("Distance selon ultrason avant: "+distanceFront+"; ultrason arriere: "+distanceBack, this);
+			log.debug("Distance selon ultrasons avant: "+distanceFront[0]+";"+distanceFront[1]+" //  ultrason arriere: "+distanceBack[0]+";"+distanceBack[1], this);
 			if (distanceFront[1] > 0 && distanceFront[1] < 70 || distanceFront[0] > 0 && distanceFront[0] < 70)
 				log.debug("obstacle detecte a moins de 7 cm !", this);
 			
