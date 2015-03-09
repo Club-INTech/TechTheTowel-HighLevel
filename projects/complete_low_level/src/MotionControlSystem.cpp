@@ -184,29 +184,33 @@ void MotionControlSystem::control() {
 	 */
 	int32_t leftTicks = Counter::getLeftValue();
 
-	if (translationControlled) {
-		currentDistance = (leftTicks + rightTicks) / 2;
-		translationPID.compute();
 
+	currentDistance = (leftTicks + rightTicks) / 2;
+	translationPID.compute();
+
+	if (translationControlled)
+	{
 		if(pwmTranslation > maxPWMtranslation)
 			pwmTranslation = maxPWMtranslation;
 		if(pwmTranslation < -maxPWMtranslation)
 			pwmTranslation = -maxPWMtranslation;
-
-	} else
+	}
+	else
 		pwmTranslation = 0;
 
-	if (rotationControlled) {
-		currentAngle = (rightTicks - leftTicks) / 2;
-		rotationPID.compute();
+	currentAngle = (rightTicks - leftTicks) / 2;
+	rotationPID.compute();
 
+	if (rotationControlled)
+	{
 		if(pwmRotation > maxPWMrotation)
 			pwmRotation = maxPWMrotation;
 		if(pwmRotation < -maxPWMrotation)
 			pwmRotation = -maxPWMrotation;
-
-	} else
+	}
+	else
 		pwmRotation = 0;
+
 	applyControl();
 }
 

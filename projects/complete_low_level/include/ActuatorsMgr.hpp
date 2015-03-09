@@ -54,12 +54,12 @@ private:
 
 	enum EtatAscenseur
 	{
-		Haut,		//Position extrème haute (dépassement de l'anti-retour, pour monter un plot)
-		Milieu,		//Quelque part entre 'Estrade' et 'Haut' (très peu précis)
-		Estrade,	//A plus de 22mm du sol (et pas beaucoup plus haut)
-		SousEstrade,
-		Bas,		//Ne touche ni le sol ni les plots supérieurs (position pour rouler)
-		Sol			//Position extrème basse (touche le sol)
+		Haut = 5,		//Position extrème haute (dépassement de l'anti-retour, pour monter un plot)
+		Milieu = 4,		//Quelque part entre 'Estrade' et 'Haut' (très peu précis)
+		Estrade = 3,	//A plus de 22mm du sol (et pas beaucoup plus haut)
+		SousEstrade = 2,
+		Bas = 1,		//Ne touche ni le sol ni les plots supérieurs (position pour rouler)
+		Sol = 0			//Position extrème basse (touche le sol)
 	};
 
 	EtatAscenseur etatAscenseur;
@@ -233,15 +233,19 @@ public:
 
 	void refreshElevatorState()
 	{
+//		serial.printfln("In the Abwabwa");
+//		Delay_us(1000);
+//		serial.printfln("OutBwabwa");
+
 		//Capteur Haut : PC13
 		//Capteur Bas  : PE5
 		//Moteur-PWM   : PC8
 		//Moteur-Sens  : PD14
 
-		uint8_t captHautON = !GPIO_ReadInputDataBit(GPIOC, GPIO_PinSource13),
-		captBasON = GPIO_ReadInputDataBit(GPIOE, GPIO_PinSource5),
-		moteurON = GPIO_ReadOutputDataBit(GPIOC, GPIO_PinSource8),
-		moteurMonte = GPIO_ReadOutputDataBit(GPIOD, GPIO_PinSource14);
+		uint8_t captHautON = !GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13),
+		captBasON = GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_5),
+		moteurON = GPIO_ReadOutputDataBit(GPIOC, GPIO_Pin_8),
+		moteurMonte = GPIO_ReadOutputDataBit(GPIOD, GPIO_Pin_14);
 
 		//Mise à jour de la position à partir des capteurs
 		if(captHautON)//Si le contact du haut est appuyé
@@ -258,58 +262,71 @@ public:
 			etatAscenseur = Estrade;
 
 
-//		serial.printfln("captHautON=%u", captHautON);
-//		serial.printfln("captBasON=%u", captBasON);
-//		serial.printfln("moteurON=%u", moteurON);
-//		serial.printfln("moteurMonte=%u", moteurMonte);
-//		serial.printfln("");
+
 
 		//Déplacement de l'ascenseur selon la consigne
+
 		if(consigneAscenseur == etatAscenseur)
 		{
-			GPIO_ResetBits(GPIOC, GPIO_PinSource8);//Arrêt du moteur
-//			serial.printfln("I'm happy");
+			GPIO_ResetBits(GPIOC, GPIO_Pin_8);//Arrêt du moteur
+		}
+		else if(consigneAscenseur > etatAscenseur)
+		{
+			GPIO_SetBits(GPIOD, GPIO_Pin_14);//Sens de l'ascenseur = Monter
+			GPIO_SetBits(GPIOC, GPIO_Pin_8);//Mise en marche du moteur
+		}
+		else
+		{
+			GPIO_ResetBits(GPIOD, GPIO_Pin_14);//Sens de l'ascenseur = Descendre
+			GPIO_SetBits(GPIOC, GPIO_Pin_8);//Mise en marche du moteur
+		}
+
+		/*
+		if(consigneAscenseur == etatAscenseur)
+		{
+			GPIO_ResetBits(GPIOC, GPIO_Pin_8);//Arrêt du moteur
 		}
 		else if(consigneAscenseur == Haut)
 		{
-			GPIO_SetBits(GPIOD, GPIO_PinSource14);//Sens de l'ascenseur = Monter
-			GPIO_SetBits(GPIOC, GPIO_PinSource8);//Mise en marche du moteur
+			GPIO_SetBits(GPIOD, GPIO_Pin_14);//Sens de l'ascenseur = Monter
+			GPIO_SetBits(GPIOC, GPIO_Pin_8);//Mise en marche du moteur
 		}
 		else if(consigneAscenseur == Sol)
 		{
-			GPIO_ResetBits(GPIOD, GPIO_PinSource14);//Sens de l'ascenseur = Descendre
-			GPIO_SetBits(GPIOC, GPIO_PinSource8);//Mise en marche du moteur
+			GPIO_ResetBits(GPIOD, GPIO_Pin_14);//Sens de l'ascenseur = Descendre
+			GPIO_SetBits(GPIOC, GPIO_Pin_8);//Mise en marche du moteur
 		}
 		else if(consigneAscenseur == Bas && etatAscenseur == Sol)
 		{
-			GPIO_SetBits(GPIOD, GPIO_PinSource14);//Sens de l'ascenseur = Monter
-			GPIO_SetBits(GPIOC, GPIO_PinSource8);//Mise en marche du moteur
+			GPIO_SetBits(GPIOD, GPIO_Pin_14);//Sens de l'ascenseur = Monter
+			GPIO_SetBits(GPIOC, GPIO_Pin_8);//Mise en marche du moteur
 		}
 		else if(consigneAscenseur == Bas)
 		{
-			GPIO_ResetBits(GPIOD, GPIO_PinSource14);//Sens de l'ascenseur = Descendre
-			GPIO_SetBits(GPIOC, GPIO_PinSource8);//Mise en marche du moteur
+			GPIO_ResetBits(GPIOD, GPIO_Pin_14);//Sens de l'ascenseur = Descendre
+			GPIO_SetBits(GPIOC, GPIO_Pin_8);//Mise en marche du moteur
 		}
 		else if(consigneAscenseur == Estrade && (etatAscenseur == Bas || etatAscenseur == Sol || etatAscenseur == SousEstrade))
 		{
-			GPIO_SetBits(GPIOD, GPIO_PinSource14);//Sens de l'ascenseur = Monter
-			GPIO_SetBits(GPIOC, GPIO_PinSource8);//Mise en marche du moteur
+			GPIO_SetBits(GPIOD, GPIO_Pin_14);//Sens de l'ascenseur = Monter
+			GPIO_SetBits(GPIOC, GPIO_Pin_8);//Mise en marche du moteur
 		}
 		else if(consigneAscenseur == Estrade)
 		{
-			GPIO_ResetBits(GPIOD, GPIO_PinSource14);//Sens de l'ascenseur = Descendre
-			GPIO_SetBits(GPIOC, GPIO_PinSource8);//Mise en marche du moteur
+			GPIO_ResetBits(GPIOD, GPIO_Pin_14);//Sens de l'ascenseur = Descendre
+			GPIO_SetBits(GPIOC, GPIO_Pin_8);//Mise en marche du moteur
 		}
 		else if(consigneAscenseur == Milieu && etatAscenseur == Haut)
 		{
-			GPIO_ResetBits(GPIOD, GPIO_PinSource14);//Sens de l'ascenseur = Descendre
-			GPIO_SetBits(GPIOC, GPIO_PinSource8);//Mise en marche du moteur
+			GPIO_ResetBits(GPIOD, GPIO_Pin_14);//Sens de l'ascenseur = Descendre
+			GPIO_SetBits(GPIOC, GPIO_Pin_8);//Mise en marche du moteur
 		}
 		else if(consigneAscenseur == Milieu)
 		{
-			GPIO_SetBits(GPIOD, GPIO_PinSource14);//Sens de l'ascenseur = Monter
-			GPIO_SetBits(GPIOC, GPIO_PinSource8);//Mise en marche du moteur
+			GPIO_SetBits(GPIOD, GPIO_Pin_14);//Sens de l'ascenseur = Monter
+			GPIO_SetBits(GPIOC, GPIO_Pin_8);//Mise en marche du moteur
 		}
+		*/
 	}
 
 	void omd() {

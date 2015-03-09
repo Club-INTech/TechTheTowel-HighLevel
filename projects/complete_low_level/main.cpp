@@ -51,6 +51,10 @@ int main(void)
 				serial.printfln("%d", motionControlSystem->isMoving());//Robot en mouvement ou pas ?
 				serial.printfln("%d", motionControlSystem->isMoveAbnormal());//Cet état du mouvement est il anormal ?
 			}
+			else if(!strcmp("j",order))//Indiquer l'état du jumper (0: en place; 1: dehors)
+			{
+				serial.printfln("%d", sensorMgr->isJumperOut());
+			}
 			else if(!strcmp("oxy",order))
 			{
 				serial.printfln("x=%f\r\ny=%f", motionControlSystem->getX(), motionControlSystem->getY());
@@ -144,6 +148,10 @@ int main(void)
 				serial.read(delta_angle);
 				serial.printfln("_");
 				motionControlSystem->orderRotation(angle_actuel + delta_angle);
+			}
+			else if(!strcmp("stop",order))
+			{
+				motionControlSystem->stop();
 			}
 			else if (!strcmp("broad",order))
 			{
@@ -567,7 +575,7 @@ void TIM4_IRQHandler(void) { //2kHz = 0.0005s = 0.5ms
 }
 
 
-void EXTI4_IRGHandler(void)
+void EXTI4_IRQHandler(void)
 {
 	static SensorMgr* sensorMgr = &SensorMgr::Instance();
 
@@ -582,7 +590,7 @@ void EXTI4_IRGHandler(void)
 }
 
 
-void EXTI1_IRGHandler(void)
+void EXTI1_IRQHandler(void)
 {
 	static SensorMgr* sensorMgr = &SensorMgr::Instance();
 

@@ -24,6 +24,7 @@ public:
 	bool isPlotInside() const;
 	bool isLeftGlassInside() const;
 	bool isRightGlassInside() const;
+	bool isJumperOut() const;
 
 	void refresh();
 

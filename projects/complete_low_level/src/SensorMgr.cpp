@@ -55,6 +55,16 @@ SensorMgr::SensorMgr():
 	GPIO_Init(GPIOC, &GPIO_InitStruct);
 
 
+	//Jumper (PC9)
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);//Active l'horloge du port C
+
+	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_9;
+	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN;
+	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;
+	GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+
+
 
 
 /*     ________________________________
@@ -310,7 +320,7 @@ int SensorMgr::getLeftBackValue() const{
 
 
 /*
- * Fonctions de récupération de l'état des capteurs de contact
+ * Fonctions de récupération de l'état des capteurs de contact et du jumper
  */
 
 bool SensorMgr::isPlotInside() const{
@@ -323,4 +333,8 @@ bool SensorMgr::isRightGlassInside() const{
 
 bool SensorMgr::isLeftGlassInside() const{
 	return GPIO_ReadInputDataBit(GPIOD, GPIO_PinSource11);
+}
+
+bool SensorMgr::isJumperOut() const{
+	return GPIO_ReadInputDataBit(GPIOC, GPIO_PinSource9);
 }
