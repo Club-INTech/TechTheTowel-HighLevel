@@ -56,6 +56,11 @@ public class ObstacleCircular extends Obstacle
 		return radius;
 	}
 	
+	public Vec2 getPosition()
+	{
+		return position;
+	}
+	
 	/**
 	 * Convertit l'obstacle en cercle.
 	 * 
