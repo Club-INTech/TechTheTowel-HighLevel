@@ -175,7 +175,7 @@ public class Locomotion implements Service
      */
     public void followPath(ArrayList<Vec2> path, ArrayList<Hook> hooks, DirectionStrategy directionstrategy) throws UnableToMoveException
     {
-    	//si un singe a mit null pour les hooks on le gere
+    	//si un singe a mie de pain null pour les hooks on le gere
     	if(hooks == null)
     		hooks = new ArrayList<Hook>();
     	
