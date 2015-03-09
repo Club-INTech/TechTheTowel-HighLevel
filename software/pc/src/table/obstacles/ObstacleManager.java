@@ -202,8 +202,8 @@ public class ObstacleManager
     public synchronized void addObstacle(final Vec2 position, final int radius)
     {
     	//TODO tester si il est utile d'ajouter l'obstacle
-    	log.debug("obstacle ajouté en (" + position.x + ", " + position.y + ")", this);
     	mMobileObstacles.add(new ObstacleProximity(position, radius));
+    	log.debug("obstacle ajouté en (" + position.x + ", " + position.y + ") de rayon "+radius, this);
     }
 
     /**
@@ -230,7 +230,9 @@ public class ObstacleManager
     	boolean isDiscObstructed = false;
     	for(int i=0; i<mMobileObstacles.size(); i++)
     	{
-    		if ((radius+mMobileObstacles.get(i).radius)*(radius+mMobileObstacles.get(i).radius)>(discCenter.x-mMobileObstacles.get(i).getPosition().x)*(discCenter.x-mMobileObstacles.get(i).getPosition().x)+(discCenter.y-mMobileObstacles.get(i).getPosition().y)*(discCenter.y-mMobileObstacles.get(i).getPosition().y))
+    		if ((radius+mMobileObstacles.get(i).radius)*(radius+mMobileObstacles.get(i).radius)
+    			>  (discCenter.x-mMobileObstacles.get(i).position.x)*(discCenter.x-mMobileObstacles.get(i).position.x)
+    			+  (discCenter.y-mMobileObstacles.get(i).position.y)*(discCenter.y-mMobileObstacles.get(i).position.y))
     			isDiscObstructed=true;
     	}
     	return isDiscObstructed;

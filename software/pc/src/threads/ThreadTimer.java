@@ -127,7 +127,7 @@ public class ThreadTimer extends AbstractThread
 	private void onMatchEnded()
 	{
 
-		log.debug("Fin du Match !", this);
+		log.debug("Fin du Match car fin des 90s !", this);
 
 		// Le match est fini, immobilisation du robot
 		matchEnded = true;

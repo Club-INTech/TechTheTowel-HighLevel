@@ -503,7 +503,8 @@ public class Locomotion implements Service
         	boolean[] infos=deplacements.isRobotMovingAndAbnormal();
         	// 0-false : le robot ne bouge pas
         	
-        	log.debug("Test deplacement : reponse "+ infos[0] +" :: "+ infos[1], this);
+        	//log.debug("Test deplacement : reponse "+ infos[0] +" :: "+ infos[1], this);
+        	
         	if(!infos[0])//si le robot ne bouge plus
         	{
         		if(infos[1])//si le robot patine
@@ -519,8 +520,7 @@ public class Locomotion implements Service
         	}
         	else
         	{    
-        		log.debug("pas arrivés", this);
-        		return !infos[0];//toujours pas arrive
+        		return !infos[0];//toujours pas arrivé
         	}
         } 
         catch (SerialConnexionException e) 
