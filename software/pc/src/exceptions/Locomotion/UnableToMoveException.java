@@ -15,12 +15,12 @@ public class UnableToMoveException extends Exception
 	/**
 	 * La position où on voulais aller au moment de l'exception
 	 */
-	Vec2 aim;
+	public Vec2 aim;
 	
 	/**
 	 * La raison de l'exception
 	 */
-	UnableToMoveReason reason;
+	public UnableToMoveReason reason;
 	
 	/**
 	 * 

@@ -35,6 +35,8 @@ class ThreadSensor extends AbstractThread
 	 */
 	int distanceBetweenGuideAndUltrasound = 20;
 	
+	int maxSensorRange;
+	
 	/**
 	 * Crée un nouveau thread de capteurs
 	 *
@@ -58,6 +60,7 @@ class ThreadSensor extends AbstractThread
 	{
 		log.debug("Lancement du thread de capteurs", this);
 		updateConfig();
+		maxSensorRange = Integer.parseInt(config.getProperty("horizon_capteurs"));
 		
 		
 		// boucle d'attente de début de match
@@ -94,17 +97,17 @@ class ThreadSensor extends AbstractThread
 			{
 				distanceFront = (int[]) mSensorsCardWrapper.getSensorValue(SensorNames.ULTRASOUND_FRONT_SENSOR);
 				
-				//on met tout les capteurs qui detectent un objet DANS le robot a 3000
+				//on met tout les capteurs qui detectent un objet DANS le robot ou à plus de maxSensorRange a 0
 				for (int i=0; i<distanceFront.length; i++)
-					if (distanceFront[i]<distanceBetweenGuideAndUltrasound) 
-						distanceFront[i]=3000;
+					if (distanceFront[i]<distanceBetweenGuideAndUltrasound || distanceFront[i] > maxSensorRange) 
+						distanceFront[i]=0;
 				
 			}
 			catch(SerialConnexionException e)
 			{
 				log.critical("La carte capteurs ne répond pas !", this);
 				e.printStackTrace();
-				distanceFront = (int[]) SensorNames.ULTRASOUND_FRONT_SENSOR.getDefaultValue(); // valeur considérée comme infinie
+				distanceFront = (int[]) SensorNames.ULTRASOUND_FRONT_SENSOR.getDefaultValue();
 			}
 			
 			int[] distanceBack;
@@ -112,12 +115,16 @@ class ThreadSensor extends AbstractThread
 			try 
 			{
 				distanceBack = (int[]) mSensorsCardWrapper.getSensorValue(SensorNames.ULTRASOUND_BACK_SENSOR);
+				//on met tout les capteurs qui detectent un objet à plus de maxSensorRange a 0
+				for (int i=0; i<distanceBack.length; i++)
+					if (distanceBack[i]<distanceBetweenGuideAndUltrasound || distanceBack[i] > maxSensorRange) 
+						distanceBack[i]=0;
 			}
 			catch (SerialConnexionException e)
 			{
 				log.critical("La carte capteurs ne répond pas !", this);
 				e.printStackTrace();
-				distanceBack = (int[]) SensorNames.ULTRASOUND_BACK_SENSOR.getDefaultValue(); //distance consideree comme infinie
+				distanceBack = (int[]) SensorNames.ULTRASOUND_BACK_SENSOR.getDefaultValue();
 			}
 			
 			

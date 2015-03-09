@@ -39,7 +39,7 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 	public void setUp() throws Exception
 	{
 		super.setUp();
-		state = ((GameState<Robot>)container.getService(ServiceNames.GAME_STATE));
+		state = (GameState<Robot>)container.getService(ServiceNames.GAME_STATE);
 		actionneurs = (ActuatorCardWrapper)container.getService(ServiceNames.ACTUATOR_CARD_WRAPPER);
 
 
