@@ -230,9 +230,8 @@ public class ObstacleManager
     	boolean isDiscObstructed = false;
     	for(int i=0; i<mMobileObstacles.size(); i++)
     	{
-    		if ((radius+mMobileObstacles.get(i).radius)*(radius+mMobileObstacles.get(i).radius)
-    			>  (discCenter.x-mMobileObstacles.get(i).position.x)*(discCenter.x-mMobileObstacles.get(i).position.x)
-    			+  (discCenter.y-mMobileObstacles.get(i).position.y)*(discCenter.y-mMobileObstacles.get(i).position.y))
+    		if ((radius+mMobileObstacles.get(i).radius)*(radius+mMobileObstacles.get(i).radius)>(discCenter.x-mMobileObstacles.get(i).getPosition().x)*(discCenter.x-mMobileObstacles.get(i).getPosition().x)+(discCenter.y-mMobileObstacles.get(i).getPosition().y)*(discCenter.y-mMobileObstacles.get(i).getPosition().y))
+
     			isDiscObstructed=true;
     	}
     	return isDiscObstructed;
