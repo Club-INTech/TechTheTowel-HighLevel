@@ -13,6 +13,7 @@ import enums.ActuatorOrder;
 import enums.ObstacleGroups;
 import enums.SensorNames;
 import enums.Speed;
+import enums.UnableToMoveReason;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
@@ -284,13 +285,24 @@ public abstract class Robot implements Service
      * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
      * @throws PathNotFoundException lorsque le pathdingding ne trouve pas de chemin 
      */
-    public void moveToLocation(Vec2 aim, ArrayList<Hook> hooksToConsider, Table table) throws UnableToMoveException, PathNotFoundException
+    public void moveToLocation(Vec2 aim, ArrayList<Hook> hooksToConsider, Table table) throws  PathNotFoundException, UnableToMoveException
     {
     	//TODO : preciser les obstacles a eviter
     	ArrayList<Vec2> path = pathDingDing.computePath(getPosition(),aim, EnumSet.noneOf(ObstacleGroups.class));
     	
-    	//TODO : enlever le premier point?
-		followPath(path , hooksToConsider);
+		try 
+		{
+			followPath(path , hooksToConsider);
+		} 
+		catch (UnableToMoveException e) 
+		{
+			//si le chemin est bloque par un robot ennemi on appel a nouveau le pathdingding pour qu'il calcul un autre chemin
+			if (e.reason.compareTo(UnableToMoveReason.OBSTACLE_DETECTED)==0)
+			{
+				ArrayList<Vec2> newPath = pathDingDing.computePath(getPosition(),aim, EnumSet.noneOf(ObstacleGroups.class));
+				followPath(newPath , hooksToConsider);
+			}
+		}
     }
     
     /**
@@ -343,9 +355,20 @@ public abstract class Robot implements Service
     	 */
     	path.add(movementVector.dotFloat( (movementVector.length()-aim.radius)/movementVector.length() ).plusNewVector(precedentPathPoint));
 
-    	followPath(path , hooksToConsider);
+    	try 
+    	{
+			followPath(path , hooksToConsider);
+		} 
+    	catch (UnableToMoveException e) 
+    	{
+    		//si le chemin est bloque par un robot ennemi on recalcule le chemin par un autre appel au pathdingding
+			if (e.reason.compareTo(UnableToMoveReason.OBSTACLE_DETECTED)==0)
+			{
+				moveToCircle(new Circle(e.aim, 0), hooksToConsider, table);
+			}
+		}
     }
-    
+
 	/**
 	 * Active l'asservissement en rotation du robot.
 	 */

@@ -2,7 +2,7 @@ package enums;
 
 public enum UnableToMoveReason {
 	
-	UNEXPECTED_OBSTACLE,
-	UNEXPECTED_WALL,
+	OBSTACLE_DETECTED,
+	PHYSICALLY_BLOCKED,
 	
 }
