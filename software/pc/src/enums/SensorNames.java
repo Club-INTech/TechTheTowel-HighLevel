@@ -8,9 +8,9 @@ public enum SensorNames {
 	/** le capteur de la zone droite */
 	RIGHT_ZONE_SENSOR("bdp",100,true,1), //true = on a qqch dans la poche de droite
 	/** les capteur ultrason avant, comme il y en a deux la reponse est un int[2] */
-	ULTRASOUND_FRONT_SENSOR("us_av",100,new int[]{3000,3000},2), //3000 mm correspond a la taille maximale, comme ça on ne detecte pas d'obstacle dans robotChrono
+	ULTRASOUND_FRONT_SENSOR("us_av",100,new int[]{0,0},2),
 	/** les capteurs ultrason arriere, comme il y en a deux la reponse est un int[2]  */
-	ULTRASOUND_BACK_SENSOR("us_ar",100,new int[]{3000,3000},2)
+	ULTRASOUND_BACK_SENSOR("us_ar",100,new int[]{0,0},2)
 	;
 
 	/**la duree moyenne que fait perdre une autre valeur que la valeur par default*/

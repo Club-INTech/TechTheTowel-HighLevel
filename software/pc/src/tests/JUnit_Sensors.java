@@ -11,8 +11,11 @@ import org.junit.Assert;
 import enums.SensorNames;
 import enums.ServiceNames;
 import robot.Locomotion;
+import robot.Robot;
 import robot.cardsWrappers.SensorsCardWrapper;
 import smartMath.Vec2;
+import strategie.GameState;
+import table.Table;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -29,12 +32,15 @@ public class JUnit_Sensors extends JUnit_Test
 	
 	private Locomotion mLocomotion;
 	
+	GameState<Robot> state;
+	
 	/* (non-Javadoc)
 	 * @see tests.JUnit_Test#setUp()
 	 */
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
+		state = (GameState<Robot>)container.getService(ServiceNames.GAME_STATE);
 		
 		log.debug("JUnit_ActionneursTest.setUp()", this);
 		capteurs = (SensorsCardWrapper)container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
@@ -90,7 +96,7 @@ public class JUnit_Sensors extends JUnit_Test
 	{
 		log.debug("Test d'évitement", this);
 
-		mLocomotion.moveLengthwise(1000,  new ArrayList<Hook>(), false);
+		state.robot.moveToLocation(new Vec2(-1250, 1700),  new ArrayList<Hook>(), (Table)container.getService(ServiceNames.TABLE));
 	}
 
 /*    @Test
