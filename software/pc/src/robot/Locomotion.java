@@ -11,6 +11,7 @@ import utils.Config;
 import utils.Log;
 import utils.Sleep;
 import container.Service;
+import enums.UnableToMoveReason;
 import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.Locomotion.UnexpectedObstacleOnPathException;
@@ -69,6 +70,11 @@ public class Locomotion implements Service
      * qui commence toujours à droite de la table
      */
     private Vec2 position = new Vec2();
+    
+    /**
+     * la position visee au final par le deplacement
+     */
+    private Vec2 finalAim = new Vec2();
     
     /**
      * orientation réelle du robot (symetrisee)
@@ -133,7 +139,7 @@ public class Locomotion implements Service
     public void turn(double angle, ArrayList<Hook> hooks) throws UnableToMoveException
     {
     	/*
-    	 * clacul de la position visee 
+    	 * calcul de la position visee 
     	 * on vise une position eloignee mais on ne s'y deplacera pas, le robot ne fera que tourner
     	 */
     	Vec2 aim = new Vec2(
@@ -141,6 +147,7 @@ public class Locomotion implements Service
         (int) (position.x + 1000*Math.cos(angle)),
         (int) (position.y + 1000*Math.sin(angle))
         );
+    	finalAim = aim;
 
 		moveToPointException(aim, hooks, true, false, true);
 
@@ -159,7 +166,8 @@ public class Locomotion implements Service
         
         Vec2 aim = new Vec2(); 
         aim.x = (int) (position.x + distance*Math.cos(orientation));
-        aim.y = (int) (position.y + distance*Math.sin(orientation));        
+        aim.y = (int) (position.y + distance*Math.sin(orientation));      
+        finalAim = aim;
         // l'appel à cette méthode sous-entend que le robot ne tourne pas
         // il va donc en avant si la distance est positive, en arrière si elle est négative
         // si on est à 90°, on privilégie la marche avant
@@ -181,6 +189,7 @@ public class Locomotion implements Service
     	
     	//un simple for (on vas au point 0 puis au point 1 etc.)
     	int size = path.size();
+    	finalAim = path.get(size-1);
     	for(int i = 0; i < size; i++)
         {
             Vec2 aim = path.get(i);
@@ -287,7 +296,7 @@ public class Locomotion implements Service
                         log.critical("On n'arrive pas à se dégager.", this);
 					}
                     if(!doItAgain)
-                        throw new UnableToMoveException();
+                        throw new UnableToMoveException(finalAim, UnableToMoveReason.PHYSICALLY_BLOCKED);
                 }
             }
             catch (UnexpectedObstacleOnPathException e)
@@ -310,7 +319,7 @@ public class Locomotion implements Service
             	}
 
                 if(!doItAgain)
-                    throw new UnableToMoveException();
+                    throw new UnableToMoveException(finalAim, UnableToMoveReason.OBSTACLE_DETECTED);
 			}
 
         } 
