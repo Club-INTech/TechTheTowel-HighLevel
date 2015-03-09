@@ -29,6 +29,13 @@ public class LocomotionCardWrapper implements Service
 	 *  nombre de miliseconde de tolérance entre la détection d'un patinage et la levée de l'exeption. Trop basse il y aura des faux positifs, trop haute on va forcer dans les murs pendant longtemps
 	 */
 	int blockedTolerancy = 200;//TODO: mettre dans le fichier de config
+	
+	/**
+	 * 
+	 * Temps d'attentee entre deux envois à la serie en ms
+	 */
+	
+	private int delayBetweenSend = 100; 
 
 	/**
 	 * Construit la surchouche de la carte d'asservissement
@@ -87,12 +94,15 @@ public class LocomotionCardWrapper implements Service
 	 */
 	public void immobilise() throws SerialConnexionException
 	{
-		// Je bourrine, tu bourrines, il bourrine, ...
         disableTranslationnalFeedbackLoop();
         disableRotationnalFeedbackLoop();
-		locomotionCardSerial.communiquer("stop", 0);
+        while(isRobotMoving())
+        	Sleep.sleep(delayBetweenSend); // On attend d'etre arreté
+        locomotionCardSerial.communiquer("stop", 0);// On s'asservit sur la position actuelle
+        
         enableTranslationnalFeedbackLoop();
         enableRotationnalFeedbackLoop();
+        
 	}
 	
 	/**

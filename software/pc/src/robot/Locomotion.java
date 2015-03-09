@@ -241,7 +241,8 @@ public class Locomotion implements Service
         int maxTimeToWaitForEnemyToLeave = 600; // combien de temps attendre que l'ennemi parte avant d'abandonner
         int unexpectedWallImpactCounter = 2; // combien de fois on réessayer si on se prend un mur (si wall est a true alors les impacts sont attendus donc on s'en fout)
         boolean doItAgain;
-        do {
+        do 
+        {
         	//si on a pas d'erreur on ne recommence pas
             doItAgain = false;
             try
@@ -315,8 +316,9 @@ public class Locomotion implements Service
 			}
 
         } 
-        while(doItAgain);     
-; // on recommence tant qu'il le faut
+        while(doItAgain)
+        	;     
+        ; // on recommence tant qu'il le faut
 
 
     // Tout s'est bien passé
