@@ -205,20 +205,29 @@ public class ObstacleManager
      * @param radius rayon de l'obstacle a ajouter     */
     public synchronized void addObstacle(final Vec2 position, final int radius)
     {
-    	//TODO tester si il est utile d'ajouter l'obstacle
-    	for(int i=0; i<mMobileObstacles.size(); i++)
+    	if(mMobileObstacles.size() == 0) // s'il n'y a pas deja d'obstacles, on les ajoute
     	{
-    		if(mMobileObstacles.get(i).position.equals( position ) && 
-    		   mMobileObstacles.get(i).radius	==		radius)
-    		{
-    			isAlreadyExistant=true; // On verifie chaque obstacle, si l'obstacle entrant existe deja ou pas
-    			break;
-    		}
-    	}
-    	if(!isAlreadyExistant)
     		mMobileObstacles.add(new ObstacleProximity(position, radius));
+    		log.debug("Obstacle ajouté en "+position.x+";"+position.y, this);
+    	}
+    	else // sinon, on teste s'ils n'existent pas deja
+    	{
+    		for(int i=0; i<mMobileObstacles.size(); i++)
+	    	{
+	    		if(mMobileObstacles.get(i).getPosition().equals( position ) && 
+	    		   mMobileObstacles.get(i).getRadius()	==		radius)
+	    		{
+	    			isAlreadyExistant=true; // On verifie chaque obstacle, si l'obstacle entrant existe deja ou pas
+	    			break;
+	    		}
+	    	}
+	    	if(!isAlreadyExistant)
+	    	{
+	    		mMobileObstacles.add(new ObstacleProximity(position, radius));
+	    		log.debug("Obstacle ajouté en "+position.x+";"+position.y, this);
     	
-    	log.debug("Obstacle ajouté en "+position.x+";"+position.y, this);
+	    	}
+    	}
     }
 
     /**
