@@ -304,7 +304,7 @@ public abstract class Robot implements Service
 			//si le chemin est bloque par un robot ennemi on appel a nouveau le pathdingding pour qu'il calcul un autre chemin
 			if (e.reason.compareTo(UnableToMoveReason.OBSTACLE_DETECTED)==0)
 			{
-				log.debug("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!trololo!!!!!!!!!!!!!!", this);
+				log.critical("!!!!!!!!!!!!! "+e+" !!!!!!!!!!!!!" , this);
 				ArrayList<Vec2> newPath = pathDingDing.computePath(getPosition(),aim, EnumSet.noneOf(ObstacleGroups.class));
 				followPath(newPath , hooksToConsider);
 			}
@@ -372,6 +372,7 @@ public abstract class Robot implements Service
 			{
 				ArrayList<Vec2> newPath = pathDingDing.computePath(getPosition(),e.aim, EnumSet.noneOf(ObstacleGroups.class));
 				followPath(newPath , hooksToConsider);
+				log.critical("!!!!!!!!!!!!! "+e+" !!!!!!!!!!!!!" , this);
 			}
 		}
     }

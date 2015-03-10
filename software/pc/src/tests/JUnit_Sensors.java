@@ -17,6 +17,7 @@ import exceptions.serial.SerialManagerException;
 import robot.Locomotion;
 import robot.Robot;
 import robot.cardsWrappers.SensorsCardWrapper;
+import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
@@ -99,21 +100,23 @@ public class JUnit_Sensors extends JUnit_Test
 	public void testEvitement() throws PathNotFoundException, ContainerException, SerialManagerException
 	{
 		log.debug("Test d'évitement", this);
-		try {
+		try 
+		{
 			state.robot.moveLengthwise(500);
-		} catch (UnableToMoveException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		} 
+		catch (UnableToMoveException e1)
+		{
+			log.critical("!!!!!!!!!!!!! "+e1+" !!!!!!!!!!!!!" , this);
 		}
 		while(true)
 		{
 			try
 			{
-				state.robot.moveToLocation(new Vec2(-500, 1000),  new ArrayList<Hook>(), (Table)container.getService(ServiceNames.TABLE));
+				state.robot.moveToCircle(new Circle(new Vec2(-600, 1000),0),  new ArrayList<Hook>(), (Table)container.getService(ServiceNames.TABLE));
 			}
 			catch (UnableToMoveException e) 
 			{
-				log.critical(e, this);
+				log.critical("!!!!!!!!!!!!! "+e+" !!!!!!!!!!!!!" , this);
 			}	
 		}
 	}

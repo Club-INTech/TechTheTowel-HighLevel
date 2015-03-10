@@ -326,7 +326,10 @@ public class Locomotion implements Service
             	}
 
                 if(!doItAgain)
+                {
+                    log.critical("UNABLE TO MOVE dans MoveToPointException, visant "+finalAim.x+" :: "+finalAim.y, this);
                     throw new UnableToMoveException(finalAim, UnableToMoveReason.OBSTACLE_DETECTED);
+                }
 			}
 
         } 
