@@ -11,7 +11,6 @@ import org.junit.Test;
 import enums.ServiceNames;
 import robot.*;
 import smartMath.Vec2;
-// TODO: Auto-generated Javadoc
 import table.Table;
 import pathDingDing.PathDingDing;
 

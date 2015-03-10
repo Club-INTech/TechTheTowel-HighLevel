@@ -98,7 +98,6 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 			{
 				log.debug("chemin bloque", this);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			log.debug("en position ("+robot.getPosition().x+", "+robot.getPosition().y+")", this);

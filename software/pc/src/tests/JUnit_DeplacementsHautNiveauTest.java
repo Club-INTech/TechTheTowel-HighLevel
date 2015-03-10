@@ -15,7 +15,6 @@ import smartMath.Vec2;
 import strategie.GameState;
 import utils.Sleep;
 
-// TODO: Auto-generated Javadoc
 /**
  * Teste les fonctions de déplacement de haut niveau.
  *

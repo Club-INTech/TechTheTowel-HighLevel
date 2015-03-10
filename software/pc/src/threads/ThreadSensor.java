@@ -129,8 +129,7 @@ class ThreadSensor extends AbstractThread
 			
 			
 			//ajout d'obstacles mobiles dans l'obstacleManager
-			//TODO : recuperer le rayon du robot adverse via la config
-			int radius = 230;
+			int radius = Integer.parseInt(config.getProperty("rayon_robot_adverse"));
 			for (int i=0; i<distanceFront.length; i++)
 				if(distanceFront[i]!=0)
 					mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x + (int)((distanceFront[i]+radius)*Math.cos(mRobot.getOrientation())), mRobot.getPosition().y + (int)((distanceFront[i]+radius)*Math.sin(mRobot.getOrientation()))));

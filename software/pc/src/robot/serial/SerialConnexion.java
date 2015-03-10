@@ -184,7 +184,6 @@ public class SerialConnexion implements SerialPortEventListener, Service
 						// affiche dans la console ce qu'on envoie sur la série
 						String resposeFromCard = input.readLine();
 						//log.debug("Reception acquitement : '" + resposeFromCard  + "'", this); 
-						//TODO attention : a remettre, juste enlevé pour les debugs / tests
 						
 						acquittement = resposeFromCard.charAt(0);
 						if (acquittement != '_')
@@ -280,8 +279,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 			catch (Exception e)
 			{
 				
-				//TODO: n'afficher que les infos intéressantes.
-				// TODO: fair ca sur tout les printStackTrace du  projet
+				//TODO: n'afficher que les infos intéressantes et faire ca sur tout les printStackTrace du  projet
 				e.printStackTrace();
 				log.critical(e.getMessage(),this);
 			}

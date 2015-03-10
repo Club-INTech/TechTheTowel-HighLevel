@@ -9,7 +9,6 @@ import smartMath.Vec2;
 import table.Table;
 import utils.Sleep;
 
-// TODO: Auto-generated Javadoc
 /**
  * Thread de gestion de la balise laser.
  *

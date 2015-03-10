@@ -17,7 +17,6 @@ import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
 
-// TODO: Auto-generated Javadoc
 /**
  * Test des capteurs : les obstacles doivent être détectés
  * TODO : comprendre l'utilité du test desactivation_capteur et faux_test.

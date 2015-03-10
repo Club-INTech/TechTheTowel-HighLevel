@@ -9,7 +9,6 @@ import enums.Speed;
 import robot.RobotReal;
 import smartMath.Vec2;
 
-// TODO: Auto-generated Javadoc
 /**
  * Vérifie que le robot est bien branché.
  * @author pf, marsu

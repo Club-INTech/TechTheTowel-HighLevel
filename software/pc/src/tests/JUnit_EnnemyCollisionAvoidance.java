@@ -8,8 +8,6 @@ import enums.ServiceNames;
 import robot.*;
 import smartMath.Vec2;
 import table.Table;
-
-// TODO: Auto-generated Javadoc
 /**
  * Tests unitaires pour la détection d'ennemi.
  *

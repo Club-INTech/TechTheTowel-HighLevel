@@ -16,7 +16,7 @@ import utils.*;
  * 			|-1500,0           		 0,0       				1500,0|
  *          -------------------------------------------------------
  *          
- *          TODO : migrer la liste d'obstacles vers l'obstacle manager
+ *  
  */
 
 /**

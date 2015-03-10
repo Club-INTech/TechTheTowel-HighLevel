@@ -92,7 +92,6 @@ public abstract class AbstractScript implements Service
 	 */
 	public abstract int remainingScoreOfVersion(int version, final GameState<?> state);
 
-	// TODO: faire des zones de départ non ponctuelles (des cercles par exemple)
 	/**
 	 * Retourne la position d'entrée associée à la version.
 	 *

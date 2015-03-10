@@ -98,17 +98,14 @@ public class JUnit_DropGlass extends JUnit_Test {
 		} 
 		catch (SerialConnexionException e) 
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 		catch (PathNotFoundException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 		catch (SerialFinallyException e) 
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

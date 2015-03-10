@@ -20,7 +20,6 @@ import exceptions.serial.SerialConnexionException;
 import utils.Log;
 import utils.Config;
 
-// TODO: Auto-generated Javadoc
 // TODO ajouter les capteurs au robot.
 /**
  *  Classe abstraite du robot, dont héritent RobotVrai et RobotChrono
@@ -142,7 +141,13 @@ public abstract class Robot implements Service
     // à mettre en privé
     public abstract void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException;
 
-    // TODO: documenter
+    /**
+     * Suit un chemin decrit par une liste de points
+     * @param path le chemin a suivre, sous forme d'une liste de points 
+     * @param hooks les  hooks a prendre en compte, à declencher suivant leurs conditions respectives
+     * @param directionstrategy ce que la strategie choisit comme optimal (en avant, en arriere, au plus rapide)
+     * @throws UnableToMoveException si le robot a un bloquage mecanique, ou un obstacle vu par un capteur
+     */
     protected abstract void followPath(ArrayList<Vec2> chemin, ArrayList<Hook> hooks, DirectionStrategy direction) throws UnableToMoveException;
 
 

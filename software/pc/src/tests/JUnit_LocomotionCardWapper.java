@@ -9,7 +9,6 @@ import enums.ServiceNames;
 import robot.cardsWrappers.*;
 import utils.Sleep;
 
-// TODO: Auto-generated Javadoc
 /**
  * Tests unitaires pour Deplacements.
  *

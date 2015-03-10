@@ -10,7 +10,6 @@ import smartMath.Vec2;
 import table.Table;
 import threads.ThreadTimer;
 
-// TODO: Auto-generated Javadoc
 /**
  * Tests unitaires des threads.
  *

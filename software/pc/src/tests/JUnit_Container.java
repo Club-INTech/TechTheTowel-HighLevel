@@ -4,7 +4,6 @@ import org.junit.Test;
 
 import enums.ServiceNames;
 
-// TODO: Auto-generated Javadoc
 /**
  * Tests unitaires pour le container
  * Sert surtout à vérifier l'absence de dépendances circulaires, et d'éventuelles fautes de frappe...
