@@ -6,7 +6,6 @@ import utils.Config;
 import container.Service;
 import enums.SensorNames;
 import exceptions.serial.SerialConnexionException;
-import java.util.Arrays;
 
 /**
  * Classe simplifiant le dialogue avec les capteurs
@@ -115,10 +114,13 @@ public class SensorsCardWrapper implements Service
     	log.debug("demande aux capteurs : \""+sensor.getSerialCommunication()+"\"", this);
 		String[] sensorAnswer = sensorsCardSerial.communiquer(sensor.getSerialCommunication(),sensor.getAwnserLineAmount());
 		
-		int var[] = new int[2]; //TODO : virer ça!
 		if (sensor.getDefaultValue().getClass() == Boolean.class)
 		{
-			Boolean[] parsedAnswer = {};
+			return (sensorAnswer[0].toString() != "0");
+		}
+		else if (sensor.getDefaultValue().getClass() == boolean[].class)
+		{
+			boolean[] parsedAnswer = new boolean[sensor.getAwnserLineAmount()];
 			if (sensor.getAwnserLineAmount()==1)
 			{
 				return (sensorAnswer[0].toString() != "0");
@@ -131,22 +133,11 @@ public class SensorsCardWrapper implements Service
 		}
 		else if (sensor.getDefaultValue().getClass() == Integer.class)
 		{
-			//TODO : modifier (pour un seul entier)
-			Integer[] parsedAnswer = {};
-			if (sensor.getAwnserLineAmount()==1)
-			{
-				return Integer.parseInt(sensorAnswer[0].toString());
-			}
-			for (int i = 0; i<sensor.getAwnserLineAmount(); i++)
-			{
-				parsedAnswer[i] = Integer.parseInt(sensorAnswer[i].toString());
-			}
-			return parsedAnswer;
+			return Integer.parseInt(sensorAnswer[0].toString());
 		}
-		else if (sensor.getDefaultValue().getClass() == var.getClass())
+		else if (sensor.getDefaultValue().getClass() == int[].class)
 		{
-			//FIXME : utiliser une arraylist
-			int[] parsedAnswer = {0, 0};
+			int[] parsedAnswer = new int[sensor.getAwnserLineAmount()];
 			if (sensor.getAwnserLineAmount()==1)
 			{
 				return Integer.parseInt(sensorAnswer[0].toString());
@@ -159,7 +150,11 @@ public class SensorsCardWrapper implements Service
 		}
 		else if (sensor.getDefaultValue().getClass() == Float.class)
 		{
-			Float[] parsedAnswer = {};
+			return Float.parseFloat(sensorAnswer[0]);
+		}
+		else if (sensor.getDefaultValue().getClass() == float[].class)
+		{
+			float[] parsedAnswer = new float[sensor.getAwnserLineAmount()];
 			if (sensor.getAwnserLineAmount()==1)
 			{
 				return Float.parseFloat(sensorAnswer[0]);
