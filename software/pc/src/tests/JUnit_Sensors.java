@@ -96,7 +96,9 @@ public class JUnit_Sensors extends JUnit_Test
 		log.debug("Test d'évitement", this);
 		state.robot.moveLengthwise(500);
 		while(true)
+		{
 			state.robot.moveToLocation(new Vec2(-500, 1000),  new ArrayList<Hook>(), (Table)container.getService(ServiceNames.TABLE));
+		}
 	}
 
 /*    @Test

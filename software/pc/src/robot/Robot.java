@@ -293,7 +293,7 @@ public abstract class Robot implements Service
     public void moveToLocation(Vec2 aim, ArrayList<Hook> hooksToConsider, Table table) throws  PathNotFoundException, UnableToMoveException
     {
     	//TODO : preciser les obstacles a eviter
-    	ArrayList<Vec2> path = pathDingDing.computePath(getPosition(),aim, EnumSet.noneOf(ObstacleGroups.class));
+    	ArrayList<Vec2> path = pathDingDing.computePath(getPosition(),aim, EnumSet.of(ObstacleGroups.ENNEMY_ROBOTS));
     	
 		try 
 		{
@@ -324,7 +324,7 @@ public abstract class Robot implements Service
     public void moveToCircle(Circle aim, ArrayList<Hook> hooksToConsider, Table table) throws PathNotFoundException, UnableToMoveException
     {
     	//TODO : preciser les obstacles a eviter
-    	ArrayList<Vec2> path = pathDingDing.computePath(getPosition(),aim.toVec2(),EnumSet.noneOf(ObstacleGroups.class)); // TODO ATTENTION a changer 
+    	ArrayList<Vec2> path = pathDingDing.computePath(getPosition(),aim.toVec2(),EnumSet.of(ObstacleGroups.ENNEMY_ROBOTS)); // TODO ATTENTION a changer 
     	
     	
     	//retire une distance egale au rayon du cercle au dernier point du chemin (le centre du cercle)
