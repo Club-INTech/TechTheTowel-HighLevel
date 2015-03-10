@@ -17,7 +17,6 @@ import utils.Config;
 public class ObstacleManager
 {
 	/** système de log sur lequel écrire. */
-    @SuppressWarnings("unused")
     private Log log;
 
 	/** endroit ou lire la configuration du robot */

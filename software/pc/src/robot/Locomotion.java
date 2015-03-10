@@ -122,9 +122,15 @@ public class Locomotion implements Service
         updateConfig();
     }
     
+    /**
+     * recale le robot qui a perdu sa position acuelle, rentre dans les murs ou les obstacles fixes
+     */
     public void readjust()
     {
     	// TODO
+    	//se delacer vers le mur suppose le plus proche en abscisse
+    	//des qu'on rentre dedans on met a jour netre position
+    	//on fait la meme chose avec l'autre coordonnee
     }
 
     

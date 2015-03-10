@@ -58,7 +58,7 @@ public enum ActuatorOrder
 	ARM_LEFT_OPEN_SLOW("obgl"),
 	ARM_RIGHT_CLOSE_SLOW("fbdl"),
 	ARM_LEFT_CLOSE_SLOW("fbgl");
-
+	//FIXME demander a sylvain de rajouter une option pour ouvrir et fermer les deux bras en meme temps ? (pour la balle de tennis)
 
 	/**
 	 *  chaine de caractère envoyé au travers de la liaison série

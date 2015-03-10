@@ -56,7 +56,7 @@ public class TakeTennisBall extends AbstractScript
 		
 		//On la recupere
 		stateToConsider.robot.sleep(1000);
-		stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);//FIXME faire une option bras au milieu : |_|  |_\  /_\  
+		stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
 		stateToConsider.robot.sleep(5000);
 		stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN_SLOW, true);
 		stateToConsider.robot.sleep(5000);
