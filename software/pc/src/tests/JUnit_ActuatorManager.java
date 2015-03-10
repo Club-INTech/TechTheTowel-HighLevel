@@ -1,36 +1,88 @@
+
 package tests;
 
-import org.junit.Assert;
+import hook.Hook;
+
+import java.util.ArrayList;
+
+import scripts.AbstractScript;
+import scripts.ScriptManager;
+import smartMath.Vec2;
+import strategie.GameState;
+
 import org.junit.Before;
 import org.junit.Test;
 
+import pathDingDing.PathDingDing;
 import enums.ActuatorOrder;
+import enums.ScriptNames;
 import enums.ServiceNames;
-import robot.RobotReal;
-import robot.cardsWrappers.ActuatorCardWrapper;
+import exceptions.PathNotFoundException;
+import exceptions.Locomotion.UnableToMoveException;
+import exceptions.serial.SerialConnexionException;
+import exceptions.serial.SerialFinallyException;
+import robot.Robot;
+import robot.cardsWrappers.SensorsCardWrapper;
 
 /**
- * The Class JUnit_ActuatorManager.
+ * classe des matchs scriptes
  */
-public class JUnit_ActuatorManager extends JUnit_Test {
 
-	/** The actionneurs. */
-	ActuatorCardWrapper actionneurs;
+public class JUnit_ActuatorManager extends JUnit_Test 
+{
+	ArrayList<Hook> emptyHook;
+	GameState<Robot> real_state;
+	ScriptManager scriptmanager;
+	SensorsCardWrapper  mSensorsCardWrapper;
+	PathDingDing pathDingDing;
+	Robot mRobot;
 	
-	/** The robot */
-	RobotReal robot;
-	
-	/* (non-Javadoc)
-	 * @see tests.JUnit_Test#setUp()
-	 */
+	@SuppressWarnings("unchecked")
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() throws Exception
+	{
 		super.setUp();
-		log.debug("JUnit_ActionneursTest.setUp()", this);
+		real_state = (GameState<Robot>) container.getService(ServiceNames.GAME_STATE);
+		scriptmanager = (ScriptManager) container.getService(ServiceNames.SCRIPT_MANAGER);
+		mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
+        pathDingDing = (PathDingDing)container.getService(ServiceNames.PATHDINGDING);
+		emptyHook = new ArrayList<Hook> ();  
+
+		if (real_state.robot.getSymmetry())
+		{
+			real_state.robot.setPosition(new Vec2 (-1381,1000));
+			real_state.robot.setOrientation(0); 
+			//si on est jaune on est en 0 
+		}
+		else
+		{
+			real_state.robot.setPosition(new Vec2 (1381,1000));
+			real_state.robot.setOrientation(Math.PI);
+			//sinon on est vert donc on est en PI
+		}
 		
-		actionneurs = (ActuatorCardWrapper)container.getService(ServiceNames.ACTUATOR_CARD_WRAPPER);
-        robot = (RobotReal) container.getService(ServiceNames.ROBOT_REAL);
+		real_state.robot.updateConfig();
+		mRobot=real_state.robot;	
 	}
+	
+	public void waitMatchBegin()
+	{
+
+		System.out.println("Robot pret pour le match, attente du retrait du jumper");
+		
+		// attends que le jumper soit retiré du robot
+		
+		boolean jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
+		while(jumperWasAbsent || !mSensorsCardWrapper.isJumperAbsent())
+		{
+			jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
+			 real_state.robot.sleep(100);
+		}
+
+		// maintenant que le jumper est retiré, le match a commencé
+		//ThreadTimer.matchStarted = true;
+	}
+
 	
 	/**
 	 * Test des machoires du robot
@@ -39,27 +91,22 @@ public class JUnit_ActuatorManager extends JUnit_Test {
 	 * @throws Exception the exception
 	 */
 	@Test
-	public boolean testJawRight() throws Exception
+	public void testJawRight() throws Exception
 	{
-		robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW_RIGHT, true);
-		robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW_RIGHT, true);
-
-		return true;
+		mRobot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW_RIGHT, true);
+		mRobot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW_RIGHT, true);
 	}	
 	@Test
-	public boolean testJawLeft() throws Exception
+	public void testJawLeft() throws Exception
 	{
-		robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW_LEFT, true);
-		robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW_LEFT, true);
-
-		return true;
+		mRobot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW_LEFT, true);
+		mRobot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW_LEFT, true);
 	}
 	@Test
-	public boolean testJawTogether() throws Exception
+	public void testJawTogether() throws Exception
 	{
-		robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
-		robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, false);
-		return true;
+		mRobot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
+		mRobot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, false);
 	}
 	
 	
@@ -70,21 +117,19 @@ public class JUnit_ActuatorManager extends JUnit_Test {
 	 * @throws Exception the exception
 	 */
 	@Test
-	public boolean testClapRight() throws Exception
+	public void testClapRight() throws Exception
 	{
-		robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, true);
-		robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
-		robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
-		return true;
+		mRobot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, true);
+		mRobot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
+		mRobot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
 	}
 	@Test
-	public boolean testClapLeft() throws Exception
+	public void testClapLeft() throws Exception
 	{
-
-		robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, true);
-		robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
-		robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
-		return true;
+	
+		mRobot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, true);
+		mRobot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
+		mRobot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
 	}
 	
 	
@@ -95,19 +140,17 @@ public class JUnit_ActuatorManager extends JUnit_Test {
 	 * @throws Exception the exception
 	 */
 	@Test
-	public boolean testCarpetRight() throws Exception
+	public void testCarpetRight() throws Exception
 	{	
-		robot.useActuator(ActuatorOrder.RIGHT_CARPET_DROP, true);
-		robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
-		return true;
+		mRobot.useActuator(ActuatorOrder.RIGHT_CARPET_DROP, true);
+		mRobot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
 	}
 	
 	@Test
-	public boolean testCarpetLeft() throws Exception
+	public void testCarpetLeft() throws Exception
 	{
-		robot.useActuator(ActuatorOrder.LEFT_CARPET_DROP, true);
-		robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
-		return true;
+		mRobot.useActuator(ActuatorOrder.LEFT_CARPET_DROP, true);
+		mRobot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
 	}
 	
 	
@@ -119,13 +162,12 @@ public class JUnit_ActuatorManager extends JUnit_Test {
 	 * @throws Exception the exception
 	 */
 	@Test
-	public boolean testElevator() throws Exception
+	public void testElevator() throws Exception
 	{	
-		robot.useActuator(ActuatorOrder.ELEVATOR_HIGH, true);
-		robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
-		robot.useActuator(ActuatorOrder.ELEVATOR_STAGE, true);
-		robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
-		return true;
+		mRobot.useActuator(ActuatorOrder.ELEVATOR_HIGH, true);
+		mRobot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+		mRobot.useActuator(ActuatorOrder.ELEVATOR_STAGE, true);
+		mRobot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
 	}
 	
 	
@@ -136,23 +178,20 @@ public class JUnit_ActuatorManager extends JUnit_Test {
 	 * @throws Exception the exception
 	 */
 	@Test
-	public boolean testArmRight() throws Exception
+	public void testArmRight() throws Exception
 	{	
-		robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
-		robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN_SLOW, true);
-		robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
-		robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, false);
-
-		return true;
+		mRobot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
+		mRobot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN_SLOW, true);
+		mRobot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
+		mRobot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, false);
 	}
 	@Test
-	public boolean testArmLeft() throws Exception
+	public void testArmLeft() throws Exception
 	{
-		robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
-		robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
-		robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
-		robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, false);
-		return true;
+		mRobot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
+		mRobot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
+		mRobot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
+		mRobot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, false);
 	}
 	
 	
@@ -162,24 +201,22 @@ public class JUnit_ActuatorManager extends JUnit_Test {
 	 * @return true, if successful
 	 * @throws Exception the exception
 	 */
-	
+		
 	@Test
-	public boolean testGuideLeft() throws Exception
+	public void testGuideLeft() throws Exception
 	{	
 
-		robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, false);
-		robot.useActuator(ActuatorOrder.MID_LEFT_GUIDE, true);
-		robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, false);
-		return true;
+		mRobot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, false);
+		mRobot.useActuator(ActuatorOrder.MID_LEFT_GUIDE, true);
+		mRobot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, false);
 	}	
 	@Test
-	public boolean testGuideRight() throws Exception
+	public void testGuideRight() throws Exception
 	{	
 
-		robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, true);
-		robot.useActuator(ActuatorOrder.MID_RIGHT_GUIDE, false);
-		robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, false);
-		return true;
+		mRobot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, true);
+		mRobot.useActuator(ActuatorOrder.MID_RIGHT_GUIDE, false);
+		mRobot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, false);
 	}
 	
 }
