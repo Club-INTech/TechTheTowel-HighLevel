@@ -34,8 +34,8 @@ public class ThreadTimer extends AbstractThread
 	/** Date de début du match. */
 	public static long matchStartTimestamp;
 	
-	/** Durée en miliseconde d'un match. */
-	public static long matchDuration = 90000;
+	/** Durée en miliseconde d'un match recupéré de la config */
+	public static long matchDuration = Integer.parseInt(config.getProperty("temps_match").replaceAll(" ","") ) *1000;
 	
 	/** Temps en ms qui s'écoule entre deux mise a jour de la liste des obstacle périmables. Lors de chaque mise a jour, les obstacles périmés sont détruits. */
 	public static int obstacleRefreshInterval = 500;

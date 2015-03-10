@@ -31,6 +31,11 @@ public class ObstacleManager
 	private ArrayList<ObstacleRectangular> mRectangles;
 
 	private int defaultObstacleRadius;
+	
+	/**
+	 * Booleen explicitant si l'obstacle existe deja
+	 */
+	private boolean isAlreadyExistant=false;
   
     /**
      * Instancie un nouveau gestionnaire d'obstacle.
@@ -201,8 +206,19 @@ public class ObstacleManager
     public synchronized void addObstacle(final Vec2 position, final int radius)
     {
     	//TODO tester si il est utile d'ajouter l'obstacle
-    	mMobileObstacles.add(new ObstacleProximity(position, radius));
-    	log.debug("obstacle ajouté en (" + position.x + ", " + position.y + ") de rayon "+radius, this);
+    	for(int i=0; i<mMobileObstacles.size(); i++)
+    	{
+    		if(mMobileObstacles.get(i).position.equals( position ) && 
+    		   mMobileObstacles.get(i).radius	==		radius)
+    		{
+    			isAlreadyExistant=true; // On verifie chaque obstacle, si l'obstacle entrant existe deja ou pas
+    			break;
+    		}
+    	}
+    	if(!isAlreadyExistant)
+    		mMobileObstacles.add(new ObstacleProximity(position, radius));
+    	
+    	log.debug("Obstacle ajouté en "+position.x+";"+position.y, this);
     }
 
     /**

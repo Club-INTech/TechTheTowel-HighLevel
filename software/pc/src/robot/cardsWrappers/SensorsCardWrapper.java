@@ -111,7 +111,7 @@ public class SensorsCardWrapper implements Service
      */
     public Object getSensorValue(SensorNames sensor) throws SerialConnexionException
     {
-    	log.debug("demande aux capteurs : \""+sensor.getSerialCommunication()+"\"", this);
+    	//log.debug("demande aux capteurs : \""+sensor.getSerialCommunication()+"\"", this);
 		String[] sensorAnswer = sensorsCardSerial.communiquer(sensor.getSerialCommunication(),sensor.getAwnserLineAmount());
 		
 		if (sensor.getDefaultValue().getClass() == Boolean.class)

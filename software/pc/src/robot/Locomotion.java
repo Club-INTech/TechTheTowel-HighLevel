@@ -196,6 +196,7 @@ public class Locomotion implements Service
     	//un simple for (on vas au point 0 puis au point 1 etc.)
     	int size = path.size();
     	finalAim = path.get(size-1);
+    	path.remove(0);
     	for(int i = 0; i < size; i++)
         {
             Vec2 aim = path.get(i);
@@ -312,7 +313,7 @@ public class Locomotion implements Service
             	immobilise();
             	long detectionTime = System.currentTimeMillis();
                 log.critical("Détection d'un ennemi! Abandon du mouvement.", this);
-            	while(System.currentTimeMillis() - detectionTime < maxTimeToWaitForEnemyToLeave)
+            	while(System.currentTimeMillis() - detectionTime < maxTimeToWaitForEnemyToLeave)//TODO virer ?
             	{
             		try {
             			detectEnemy(isMovementForward);
