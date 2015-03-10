@@ -20,6 +20,7 @@ int main(void)
 	ActuatorsMgr* actuatorsMgr = &ActuatorsMgr::Instance();
 	SensorMgr* sensorMgr = &SensorMgr::Instance();
 
+	char order[64];//Permet le stockage du message reçu par la liaison série
 
 	bool translation = true;//permet de basculer entre les réglages de cte d'asserv en translation et en rotation
 
@@ -31,88 +32,131 @@ int main(void)
 			sensorToRefresh = false;
 		}
 		if (serial.available()) {
-			char order[200];
 			serial.read(order);
-
 			serial.printfln("_");//Acquittement
 
-			if(!strcmp("?",order))
+			if(!strcmp("?",order))				//Ping
 			{
 				serial.printfln("0");
 			}
-			else if(!strcmp("!",order))
-			{
-				serial.printfln("Abwabwa.");
-				Delay_us(1000000);
-				serial.printfln("MegaBwabwa");
-			}
-			else if(!strcmp("f",order))//Indiquer l'état du mouvement du robot
+			else if(!strcmp("f",order))			//Indiquer l'état du mouvement du robot
 			{
 				serial.printfln("%d", motionControlSystem->isMoving());//Robot en mouvement ou pas ?
 				serial.printfln("%d", motionControlSystem->isMoveAbnormal());//Cet état du mouvement est il anormal ?
 			}
-			else if(!strcmp("j",order))//Indiquer l'état du jumper (0: en place; 1: dehors)
-			{
-				serial.printfln("%d", sensorMgr->isJumperOut());
-			}
-			else if(!strcmp("oxy",order))
-			{
-				serial.printfln("x=%f\r\ny=%f", motionControlSystem->getX(), motionControlSystem->getY());
-				serial.printfln("o=%f", motionControlSystem->getAngleRadian());
-			}
-			else if(!strcmp("?xyo",order))
+			else if(!strcmp("?xyo",order))		//Indiquer la position du robot (en mm et radians)
 			{
 				motionControlSystem->track();
 				serial.printfln("%f", motionControlSystem->getX());
 				serial.printfln("%f", motionControlSystem->getY());
 				serial.printfln("%f", motionControlSystem->getAngleRadian());
 			}
-			else if(!strcmp("us_av",order))
+			else if(!strcmp("d", order))		//Ordre de déplacement rectiligne (en mm)
+			{
+				int deplacement = 0;
+				serial.read(deplacement);
+				serial.printfln("_");//Acquittement
+				motionControlSystem->orderTranslation(deplacement);
+			}
+			else if(!strcmp("t", order))		//Ordre de rotation via un angle absolu (en radians)
+			{
+				float angle = motionControlSystem->getAngleRadian();
+				serial.read(angle);
+				serial.printfln("_");//Acquittement
+				motionControlSystem->orderRotation(angle);
+			}
+			else if(!strcmp("t3", order))		//Ordre de rotation via un angle relatif (en radians)
+			{
+				float angle_actuel = motionControlSystem->getAngleRadian(), delta_angle = 0;
+				serial.read(delta_angle);
+				serial.printfln("_");
+				motionControlSystem->orderRotation(angle_actuel + delta_angle);
+			}
+			else if(!strcmp("stop",order))		//Ordre d'arrêt (asservissement à la position actuelle)
+			{
+				motionControlSystem->stop();
+			}
+			else if(!strcmp("us_av",order))		//Indiquer les distances mesurées par les capteurs avant
 			{
 				serial.printfln("%d", sensorMgr->getLeftFrontValue());//Distance mesurée par l'ultrason avant gauche, en mm
 				serial.printfln("%d", sensorMgr->getRightFrontValue());//Distance mesurée par l'ultrason avant droit, en mm
 			}
-			else if(!strcmp("us_ar",order))
+			else if(!strcmp("us_ar",order))		//Indiquer les distances mesurées par les capteurs arrière
 			{
 				serial.printfln("%d", sensorMgr->getLeftBackValue());//Distance mesurée par l'ultrason arrière gauche, en mm
 				serial.printfln("%d", sensorMgr->getRightBackValue());//Distance mesurée par l'ultrason arrière droit, en mm
 			}
-			else if(!strcmp("ct0",order))
+			else if(!strcmp("j",order))			//Indiquer l'état du jumper (0='en place'; 1='dehors')
+			{
+				serial.printfln("%d", sensorMgr->isJumperOut());
+			}
+			else if(!strcmp("ccg",order))		//Indiquer l'état du contacteur du porte-gobelet gauche
+			{
+				serial.printfln("%d", sensorMgr->isLeftGlassInside());
+			}
+			else if(!strcmp("ccd",order))		//Indiquer l'état du contacteur du porte-gobelet droit
+			{
+				serial.printfln("%d", sensorMgr->isRightGlassInside());
+			}
+			else if(!strcmp("ccm",order))		//Indiquer l'état du contacteur intérieur du monte-plot
+			{
+				serial.printfln("%d", sensorMgr->isPlotInside());
+			}
+			else if(!strcmp("ct0",order))		//Désactiver l'asservissement en translation
 			{
 				motionControlSystem->enableTranslationControl(false);
 			}
-			else if(!strcmp("ct1",order))
+			else if(!strcmp("ct1",order))		//Activer l'asservissement en translation
 			{
 				motionControlSystem->enableTranslationControl(true);
 			}
-			else if(!strcmp("cr0",order))
+			else if(!strcmp("cr0",order))		//Désactiver l'asservissement en rotation
 			{
 				motionControlSystem->enableRotationControl(false);
 			}
-			else if(!strcmp("cr1",order))
+			else if(!strcmp("cr1",order))		//Activer l'asservissement en rotation
 			{
 				motionControlSystem->enableRotationControl(true);
 			}
-			else if(!strcmp("cx",order))
+			else if(!strcmp("cx",order))		//Régler la composante x de la position (en mm)
 			{
 				float x;
 				serial.read(x);
 				serial.printfln("_");//Acquittement
 				motionControlSystem->setX(x);
 			}
-			else if(!strcmp("cy",order))
+			else if(!strcmp("cy",order))		//Régler la composante y de la position (en mm)
 			{
 				float y;
 				serial.read(y);
 				serial.printfln("_");//Acquittement
 				motionControlSystem->setY(y);
 			}
-			else if(!strcmp("co",order))
+			else if(!strcmp("co",order))		//Régler l'orientation du robot (en radians)
 			{
 				float o;
 				serial.read(o);
 				serial.printfln("_");//Acquittement
 				motionControlSystem->setOriginalAngle(o);
+			}
+
+
+
+
+
+/*			 __________________
+ * 		   *|                  |*
+ *		   *|COMMANDES DE DEBUG|*
+ *		   *|__________________|*
+ */
+			else if(!strcmp("!",order))//Test quelconque
+			{
+
+			}
+			else if(!strcmp("oxy",order))
+			{
+				serial.printfln("x=%f\r\ny=%f", motionControlSystem->getX(), motionControlSystem->getY());
+				serial.printfln("o=%f", motionControlSystem->getAngleRadian());
 			}
 			else if(!strcmp("ticks", order))
 			{
@@ -125,33 +169,6 @@ int main(void)
 			{
 				serial.printfln("Valeurs des codeuses : %d a gauche", motionControlSystem->getLeftEncoder());
 				serial.printfln("Valeurs des codeuses : %d a droite", motionControlSystem->getRightEncoder());
-			}
-			else if(!strcmp("d", order))
-			{
-				int deplacement = 0;
-				serial.read(deplacement);
-				serial.printfln("_");//Acquittement
-				//serial.printfln("On avance de %d mm", deplacement);
-				motionControlSystem->orderTranslation(deplacement);
-			}
-			else if(!strcmp("t", order))
-			{
-				float angle = motionControlSystem->getAngleRadian();
-				serial.read(angle);
-				serial.printfln("_");//Acquittement
-				//serial.printfln("On tourne a %f radian", angle);
-				motionControlSystem->orderRotation(angle);
-			}
-			else if(!strcmp("t3", order))//Tourner en relatif
-			{
-				float angle_actuel = motionControlSystem->getAngleRadian(), delta_angle = 0;
-				serial.read(delta_angle);
-				serial.printfln("_");
-				motionControlSystem->orderRotation(angle_actuel + delta_angle);
-			}
-			else if(!strcmp("stop",order))
-			{
-				motionControlSystem->stop();
 			}
 			else if (!strcmp("broad",order))
 			{
@@ -376,7 +393,12 @@ int main(void)
 
 
 
-			/* ACTIONNEURS */
+
+/*			 ___________
+ * 		   *|           |*
+ *		   *|ACTIONNEURS|*
+ *		   *|___________|*
+ */
 			else if(!strcmp("obd",order))
 			{
 				actuatorsMgr->obd();//		Ouvrir bras droit
