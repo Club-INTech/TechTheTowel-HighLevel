@@ -268,19 +268,13 @@ public class PathDingDing implements Service
 			for(int j = 0; j < mTable.getObstacleManager().getLines().size(); j++)
 				//si les deux segments de coupent
 				if(intersects(mTable.getObstacleManager().getLines().get(j), new Segment(path.get(i), path.get(i+1))))
-				{
-					System.out.println("intersection PathDingDing avec l'obstacle " +j);
 					intersects = true;
-				}
 			//test de collision avec chaque cercle
 			for(int j = 0; j < circles.size(); j++)
 			{
 				//si le segment et le cercle se coupent
 				if(intersects(new Segment(path.get(i), path.get(i+1)), circles.get(j)))
-				{
-					System.out.println("intersection PathDingDing avec l'obstacle circulaire " +j);
 					intersects = true;
-				}
 			}
 		}
 		return !intersects;
