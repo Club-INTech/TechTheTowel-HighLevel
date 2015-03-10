@@ -10,6 +10,10 @@ import org.junit.Assert;
 
 import enums.SensorNames;
 import enums.ServiceNames;
+import exceptions.ContainerException;
+import exceptions.PathNotFoundException;
+import exceptions.Locomotion.UnableToMoveException;
+import exceptions.serial.SerialManagerException;
 import robot.Locomotion;
 import robot.Robot;
 import robot.cardsWrappers.SensorsCardWrapper;
@@ -37,7 +41,8 @@ public class JUnit_Sensors extends JUnit_Test
 	 * @see tests.JUnit_Test#setUp()
 	 */
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() throws Exception 
+	{
 		super.setUp();
 		state = (GameState<Robot>)container.getService(ServiceNames.GAME_STATE);
 		
@@ -91,13 +96,26 @@ public class JUnit_Sensors extends JUnit_Test
 	}
 	
 	@Test
-	public void testEvitement() throws Exception
+	public void testEvitement()
 	{
 		log.debug("Test d'évitement", this);
-		state.robot.moveLengthwise(500);
-		while(true)
-			state.robot.moveToLocation(new Vec2(-500, 1000),  new ArrayList<Hook>(), (Table)container.getService(ServiceNames.TABLE));
+		try {
+			state.robot.moveLengthwise(500);
+		} catch (UnableToMoveException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+			try
+			{
+				state.robot.moveToLocation(new Vec2(-500, 1000),  new ArrayList<Hook>(), (Table)container.getService(ServiceNames.TABLE));
+			}
+			catch (UnableToMoveException | PathNotFoundException | ContainerException | SerialManagerException e) 
+			{
+				e.printStackTrace();
+			}	
 	}
+		
 
 /*    @Test
     public void faux_test() throws Exception
