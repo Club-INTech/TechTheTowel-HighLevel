@@ -194,10 +194,9 @@ public class Locomotion implements Service
     		hooks = new ArrayList<Hook>();
     	
     	//un simple for (on vas au point 0 puis au point 1 etc.)
-    	int size = path.size();
-    	finalAim = path.get(size-1);
+    	finalAim = path.get(path.size()-1);
     	path.remove(0);
-    	for(int i = 0; i < size; i++)
+    	for(int i = 0; i < path.size(); i++)
         {
             Vec2 aim = path.get(i);
 			moveToPointForwardBackward(aim, hooks, /*on suppose q'on ne se prends pas de mur (sinon la pathDingDing est a revoir)*/false, directionstrategy, /*on veut avancer*/false);

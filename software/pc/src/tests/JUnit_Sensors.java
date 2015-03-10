@@ -96,7 +96,7 @@ public class JUnit_Sensors extends JUnit_Test
 	}
 	
 	@Test
-	public void testEvitement()
+	public void testEvitement() throws PathNotFoundException, ContainerException, SerialManagerException
 	{
 		log.debug("Test d'évitement", this);
 		try {
@@ -105,15 +105,17 @@ public class JUnit_Sensors extends JUnit_Test
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
+		while(true)
+		{
 			try
 			{
 				state.robot.moveToLocation(new Vec2(-500, 1000),  new ArrayList<Hook>(), (Table)container.getService(ServiceNames.TABLE));
 			}
-			catch (UnableToMoveException | PathNotFoundException | ContainerException | SerialManagerException e) 
+			catch (UnableToMoveException e) 
 			{
-				e.printStackTrace();
+				log.critical(e, this);
 			}	
+		}
 	}
 		
 

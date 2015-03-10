@@ -205,29 +205,8 @@ public class ObstacleManager
      * @param radius rayon de l'obstacle a ajouter     */
     public synchronized void addObstacle(final Vec2 position, final int radius)
     {
-    	if(mMobileObstacles.size() == 0) // s'il n'y a pas deja d'obstacles, on les ajoute
-    	{
-    		mMobileObstacles.add(new ObstacleProximity(position, radius));
-    		log.debug("Obstacle ajouté en "+position.x+";"+position.y, this);
-    	}
-    	else // sinon, on teste s'ils n'existent pas deja
-    	{
-    		for(int i=0; i<mMobileObstacles.size(); i++)
-	    	{
-	    		if(mMobileObstacles.get(i).getPosition().equals( position ) && 
-	    		   mMobileObstacles.get(i).getRadius()	==		radius)
-	    		{
-	    			isAlreadyExistant=true; // On verifie chaque obstacle, si l'obstacle entrant existe deja ou pas
-	    			break;
-	    		}
-	    	}
-	    	if(!isAlreadyExistant)
-	    	{
-	    		mMobileObstacles.add(new ObstacleProximity(position, radius));
-	    		log.debug("Obstacle ajouté en "+position.x+";"+position.y, this);
-    	
-	    	}
-    	}
+	    mMobileObstacles.add(new ObstacleProximity(position, radius));
+	    log.debug("Obstacle ajouté en "+position.x+";"+position.y, this);
     }
 
     /**
@@ -257,7 +236,6 @@ public class ObstacleManager
     		if ((radius+mMobileObstacles.get(i).radius)*(radius+mMobileObstacles.get(i).radius)
     			 > (discCenter.x-mMobileObstacles.get(i).getPosition().x)*(discCenter.x-mMobileObstacles.get(i).getPosition().x)
     			 + (discCenter.y-mMobileObstacles.get(i).getPosition().y)*(discCenter.y-mMobileObstacles.get(i).getPosition().y))
-
     			isDiscObstructed=true;
     	}
     	return isDiscObstructed;
