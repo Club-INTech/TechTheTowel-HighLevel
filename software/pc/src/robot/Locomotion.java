@@ -197,7 +197,6 @@ public class Locomotion implements Service
     	
     	//un simple for (on vas au point 0 puis au point 1 etc.)
     	finalAim = path.get(path.size()-1);
-    	path.remove(0);
     	for(int i = 0; i < path.size(); i++)
         {
             Vec2 aim = path.get(i);
@@ -317,7 +316,7 @@ public class Locomotion implements Service
             {
                 log.critical("Catch de "+e+" dans moveToPointException", this);
 
-            	immobilise();
+            	immobilise();//FIXME  : le robot s'arrete en permanence 
             	long detectionTime = System.currentTimeMillis();
                 log.critical("Détection d'un ennemi! Abandon du mouvement.", this);
             	while(System.currentTimeMillis() - detectionTime < maxTimeToWaitForEnemyToLeave)//TODO virer ?
@@ -336,7 +335,7 @@ public class Locomotion implements Service
 
                 if(!doItAgain)
                 {
-                    log.critical("UnableToMoveException dans MoveToPointException, visant "+finalAim.x+" :: "+finalAim.y+" cause detection d'obstacle", this);
+                    log.critical("UnableToMoveException dans MoveToPointException, visant "+finalAim.x+" :: "+finalAim.y+" cause : detection d'obstacle", this);
                     throw new UnableToMoveException(finalAim, UnableToMoveReason.OBSTACLE_DETECTED);
                 }
 			}
@@ -362,7 +361,8 @@ public class Locomotion implements Service
      * @throws UnexpectedObstacleOnPathException si le robot rencontre un obstacle innatendu sur son chemin (par les capteurs)
      */
     private void moveToPointCorrectAngleAndDetectEnnemy(Vec2 aim, ArrayList<Hook> hooks, boolean isMovementForward, boolean turnOnly) throws UnexpectedObstacleOnPathException, BlockedException
-    { 
+    {         	
+    	double time=System.currentTimeMillis();
         moveToPointSymmetry(aim, isMovementForward, turnOnly, false);
         do
         { 	
@@ -383,6 +383,8 @@ public class Locomotion implements Service
             // le fait de faire de nombreux appels permet de corriger la trajectoire
             correctAngle(aim, isMovementForward);
             
+            log.critical("Temps pour finir la boucle d'asservissement "+(System.currentTimeMillis()-time), this);
+            time=System.currentTimeMillis();
         } 
         while(!isMotionEnded());
     }
@@ -466,7 +468,6 @@ public class Locomotion implements Service
      */
     private void moveToPointSerialOrder(Vec2 symmetrisedAim, Vec2 givenPosition, double angle, double distance, boolean turnOnly, boolean isCorrection) throws BlockedException
     {
-        
     	boolean trajectoire_courbe = false;
 
     	// Ce code fait juste un modulo 2*pi, avec un résultat entre -PI et +PI
@@ -503,7 +504,6 @@ public class Locomotion implements Service
         	else if(!isCorrection)
         		deplacements.turn(angle);// Si ca n'est pas  une correction
         	
-        	double time=System.currentTimeMillis();
 
             // sans virage : la première rotation est bloquante
             if(!trajectoire_courbe) 
@@ -511,8 +511,6 @@ public class Locomotion implements Service
                 while(!isMotionEnded()) 
                     Sleep.sleep(feedbackLoopDelay);
             
-            log.critical("Temps avant moveLenghtwise "+(System.currentTimeMillis()-time), this);
-
             if(!turnOnly)
             	deplacements.moveLengthwise(distance);
             
@@ -580,7 +578,6 @@ public class Locomotion implements Service
 
 		{
             log.critical("Catch de "+e+" dans isEnemyHere", this);
-
 			return true;
 		}
     }
@@ -605,7 +602,7 @@ public class Locomotion implements Service
         
         if(table.getObstacleManager().isDiscObstructed(detectionCenter, detectionDistance))
         {
-            log.warning("Ennemi détecté en : " + detectionCenter +" lancement de UnexpectedObstacleOnPathException dans detectEnemy", this);
+            log.warning("Ennemi détecté en : " + detectionCenter +" ; lancement de UnexpectedObstacleOnPathException dans detectEnemy", this);
             throw new UnexpectedObstacleOnPathException();
         }
 
@@ -650,7 +647,7 @@ public class Locomotion implements Service
      */
     public void immobilise()
     {
-        log.debug("Arrêt du robot en "+position, this);
+        log.warning("Arrêt du robot en "+position, this);
         try 
         {
             deplacements.immobilise();
@@ -672,10 +669,13 @@ public class Locomotion implements Service
         this.position = position.clone();
         if(symetry)
         	this.position.x = -this.position.x;
-		try {
+		try 
+		{
 			deplacements.setX(this.position.x);
 	        deplacements.setY(this.position.y);
-		} catch (SerialConnexionException e) {
+		} 
+		catch (SerialConnexionException e) 
+		{
             log.critical("Catch de "+e+" dans setPosition", this);
 		}
 		Sleep.sleep(300);

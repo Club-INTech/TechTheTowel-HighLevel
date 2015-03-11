@@ -106,7 +106,7 @@ public class JUnit_Sensors extends JUnit_Test
 		} 
 		catch (UnableToMoveException e1)
 		{
-			log.critical("!!!!!!!!!!!!! "+e1+" !!!!!!!!!!!!!" , this);
+			log.critical("!!!!! Catch de"+e1+" dans testEvitement !!!!!" , this);
 		}
 		while(true)
 		{
@@ -116,7 +116,7 @@ public class JUnit_Sensors extends JUnit_Test
 			}
 			catch (UnableToMoveException e) 
 			{
-				log.critical("!!!!!!!!!!!!! "+e+" !!!!!!!!!!!!!" , this);
+				log.critical("!!!!!! Catch de"+e+" dans testEvitement !!!!!!" , this);
 			}	
 		}
 	}

@@ -301,12 +301,13 @@ public abstract class Robot implements Service
 		} 
 		catch (UnableToMoveException e) 
 		{
+			log.critical("Catch de "+e+" dans moveToLocation, pret à calculer un nouveau path" , this);
+
 			//si le chemin est bloque par un robot ennemi on appel a nouveau le pathdingding pour qu'il calcul un autre chemin
 			if (e.reason.compareTo(UnableToMoveReason.OBSTACLE_DETECTED)==0)
 			{
-				log.critical("!!!!!!!!!!!!! "+e+" !!!!!!!!!!!!!" , this);
 				ArrayList<Vec2> newPath = pathDingDing.computePath(getPosition(),aim, EnumSet.noneOf(ObstacleGroups.class));
-				log.critical("Nouveau Chemin : "+ newPath.get(0)+","+newPath.get(1),this);
+				log.debug("Nouveau path : "+ newPath,this);
 				followPath(newPath , hooksToConsider);
 			}
 		}
@@ -368,12 +369,14 @@ public abstract class Robot implements Service
 		} 
     	catch (UnableToMoveException e) 
     	{
+			log.critical("Catch de"+e+" dans moveToCircle , pret à calculer un nouveau path" , this);
+
     		//si le chemin est bloque par un robot ennemi on recalcule le chemin par un autre appel au pathdingding
 			if (e.reason.compareTo(UnableToMoveReason.OBSTACLE_DETECTED)==0)
 			{
 				ArrayList<Vec2> newPath = pathDingDing.computePath(getPosition(),e.aim, EnumSet.noneOf(ObstacleGroups.class));
+				log.debug("Nouveau path calculé"+newPath , this);
 				followPath(newPath , hooksToConsider);
-				log.critical("!!!!!!!!!!!!! "+e+" !!!!!!!!!!!!!" , this);
 			}
 		}
     }
