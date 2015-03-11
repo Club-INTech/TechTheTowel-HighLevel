@@ -306,6 +306,7 @@ public abstract class Robot implements Service
 			{
 				log.critical("!!!!!!!!!!!!! "+e+" !!!!!!!!!!!!!" , this);
 				ArrayList<Vec2> newPath = pathDingDing.computePath(getPosition(),aim, EnumSet.noneOf(ObstacleGroups.class));
+				log.critical("Nouveau Chemin : "+ newPath.get(0)+","+newPath.get(1),this);
 				followPath(newPath , hooksToConsider);
 			}
 		}
