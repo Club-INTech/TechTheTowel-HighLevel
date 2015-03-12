@@ -182,6 +182,7 @@ public class Container
 		else if(serviceRequested == ServiceNames.THREAD_TIMER)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)threadmanager.getThreadTimer(
 																	(Table)getService(ServiceNames.TABLE),
+																	(RobotReal)getService(ServiceNames.ROBOT_REAL),
 																	(SensorsCardWrapper)getService(ServiceNames.SENSORS_CARD_WRAPPER),
 																	(LocomotionCardWrapper)getService(ServiceNames.LOCOMOTION_CARD_WRAPPER),
 	                                                                (ActuatorCardWrapper)getService(ServiceNames.ACTUATOR_CARD_WRAPPER)

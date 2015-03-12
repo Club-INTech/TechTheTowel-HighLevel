@@ -18,7 +18,7 @@ import enums.ObstacleGroups;
 import enums.ServiceNames;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
-import robot.Robot;
+import robot.*;
 import robot.cardsWrappers.ActuatorCardWrapper;
 import pathDingDing.PathDingDing;
 
@@ -57,7 +57,7 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 		}
 		
         table = (Table)container.getService(ServiceNames.TABLE);
-        win = new Window(table/*, (RobotReal)container.getService(ServiceNames.ROBOT_REAL)*/);
+        win = new Window(table, (RobotReal)container.getService(ServiceNames.ROBOT_REAL));
         pf = (PathDingDing)container.getService(ServiceNames.PATHDINGDING);
 		
 		state.robot.updateConfig();

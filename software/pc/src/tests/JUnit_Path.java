@@ -29,7 +29,7 @@ public class JUnit_Path extends JUnit_Test
         super.setUp();
         table = (Table)container.getService(ServiceNames.TABLE);
         pf = (PathDingDing)container.getService(ServiceNames.PATHDINGDING);
-        win = new Window(table);
+        //win = new Window(table);
     }
     
     
