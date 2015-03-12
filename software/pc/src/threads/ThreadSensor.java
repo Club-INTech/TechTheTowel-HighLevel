@@ -132,10 +132,12 @@ class ThreadSensor extends AbstractThread
 			int radius = Integer.parseInt(config.getProperty("rayon_robot_adverse"));
 			for (int i=0; i<distanceFront.length; i++)
 				if(distanceFront[i]!=0)
-					mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x + (int)((distanceFront[i]+radius)*Math.cos(mRobot.getOrientation())), mRobot.getPosition().y + (int)((distanceFront[i]+radius)*Math.sin(mRobot.getOrientation()))));
+					mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x + (int)((distanceFront[i]+radius)*Math.cos(mRobot.getOrientation())), 
+																	 mRobot.getPosition().y + (int)((distanceFront[i]+radius)*Math.sin(mRobot.getOrientation()))));
 			for (int i=0; i<distanceBack.length; i++)
 				if(distanceBack[i]!=0)
-					mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x - (int)((distanceBack[i]+radius)*Math.cos(mRobot.getOrientation())), mRobot.getPosition().y - (int)((distanceBack[i]+radius)*Math.sin(mRobot.getOrientation()))));
+					mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x - (int)((distanceBack[i]+radius)*Math.cos(mRobot.getOrientation())), 
+																	 mRobot.getPosition().y - (int)((distanceBack[i]+radius)*Math.sin(mRobot.getOrientation()))));
 			
 			//log.debug("Distance selon ultrasons avant: "+distanceFront[0]+";"+distanceFront[1]+" //  ultrason arriere: "+distanceBack[0]+";"+distanceBack[1], this);
 			

@@ -73,7 +73,8 @@ public class LocomotionCardWrapper implements Service
 	 */
 	public void moveLengthwise(double distance) throws SerialConnexionException
 	{
-		String chaines[] = {"d", Double.toString(distance)};
+		float distanceTruncated = (float)distance;
+		String chaines[] = {"d", Float.toString(distanceTruncated)};
 		locomotionCardSerial.communiquer(chaines, 0);
 	}
 
@@ -85,8 +86,8 @@ public class LocomotionCardWrapper implements Service
 	public void turn(double angle) throws SerialConnexionException
 	{
 		// tronque l'angle que l'on envoit a la série pour éviter les overflows
-		float anggleTruncated = (float)angle;
-		String chaines[] = {"t", Float.toString(anggleTruncated)};
+		float angleTruncated = (float)angle;
+		String chaines[] = {"t", Float.toString(angleTruncated)};
 		locomotionCardSerial.communiquer(chaines, 0);		
 	}
 	
@@ -229,8 +230,8 @@ public class LocomotionCardWrapper implements Service
 			kd = 3.0;
 		}
 		
-		// envois a la carte d'asservissement les nouvelles valeurs des correcteurs et le nouveau maximum des pwm
-		String chaines[] = {"ctv", Double.toString(kp), Double.toString(kd), Integer.toString(pwmMax)};
+		// envois a la carte d'asservissement les nouvelles valeurs des correcteurs et le nouveau maximum des pwm en float
+		String chaines[] = {"ctv", Float.toString((float)kp), Float.toString((float)kd), Integer.toString(pwmMax)};
 		locomotionCardSerial.communiquer(chaines, 0);			
 	}
 
@@ -267,7 +268,7 @@ public class LocomotionCardWrapper implements Service
 		}
 
 		// envois a la carte d'asservissement les nouvelles valeurs des correcteurs et le nouveau maximum des pwm
-		String chaines[] = {"crv", Double.toString(kp), Double.toString(kd), Integer.toString(pwmMax)};
+		String chaines[] = {"crv", Float.toString((float)kp), Float.toString((float)kd), Integer.toString(pwmMax)};
 		locomotionCardSerial.communiquer(chaines, 0);
 	}
 	
@@ -280,7 +281,7 @@ public class LocomotionCardWrapper implements Service
 	 */
 	public void changeTranslationnalFeedbackParameters(double kp, double kd, int pwm_max) throws SerialConnexionException
 	{
-		String chaines[] = {"ctv", Double.toString(kp), Double.toString(kd), Integer.toString(pwm_max)};
+		String chaines[] = {"ctv", Float.toString((float)kp), Float.toString((float)kd), Float.toString((float)pwm_max)};
 		locomotionCardSerial.communiquer(chaines, 0);
 	}
 
@@ -293,7 +294,7 @@ public class LocomotionCardWrapper implements Service
 	 */
 	public void changeRotationnalFeedbackParameters(double kp, double kd, int pwm_max) throws SerialConnexionException
 	{
-		String chaines[] = {"crv", Double.toString(kp), Double.toString(kd), Integer.toString(pwm_max)};
+		String chaines[] = {"crv", Float.toString((float)kp), Float.toString((float)kd), Integer.toString(pwm_max)};
 		locomotionCardSerial.communiquer(chaines, 0);
 	}
 

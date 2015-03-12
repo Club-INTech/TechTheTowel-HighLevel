@@ -202,6 +202,7 @@ public class Locomotion implements Service
             Vec2 aim = path.get(i);
 			moveToPointForwardBackward(aim, hooks, /*on suppose q'on ne se prends pas de mur (sinon la pathDingDing est a revoir)*/false, directionstrategy, /*on veut avancer*/false);
         }
+    	
 		
     }
 
@@ -312,9 +313,9 @@ public class Locomotion implements Service
                     }
                 }
             }
-            catch (UnexpectedObstacleOnPathException e)
+            catch (UnexpectedObstacleOnPathException unexpectedObstacle)
             {
-                log.critical("Catch de "+e+" dans moveToPointException", this);
+                log.critical("Catch de "+unexpectedObstacle+" dans moveToPointException", this); 
 
             	immobilise();//FIXME  : le robot s'arrete en permanence 
             	long detectionTime = System.currentTimeMillis();
