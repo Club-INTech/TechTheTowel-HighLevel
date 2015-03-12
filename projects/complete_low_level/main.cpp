@@ -31,7 +31,10 @@ int main(void)
 			sensorMgr->refresh();
 			sensorToRefresh = false;
 		}
-		if (serial.available()) {
+
+		uint8_t tailleBuffer = serial.available();
+
+		if (tailleBuffer && tailleBuffer < RX_BUFFER_SIZE - 1) {
 			serial.read(order);
 			serial.printfln("_");//Acquittement
 
@@ -380,16 +383,22 @@ int main(void)
 				motionControlSystem->setRotationTunings(kp,ki,kd);
 				serial.printfln("kd_rot = %f", kd);
 			}
-			else if(!strcmp("track",order))
+			else if(!strcmp("trackOXY",order))
 			{
-				motionControlSystem->printTracking();
+				motionControlSystem->printTrackingOXY();
 			}
-			else if(!strcmp("clear",order))
+			else if(!strcmp("trackAll",order))
 			{
-				motionControlSystem->clearTracking();
-				serial.printfln("Tracking array cleared");
+				motionControlSystem->printTrackingAll();
 			}
-
+			else if(!strcmp("trackLocomotion",order))
+			{
+				motionControlSystem->printTrackingLocomotion();
+			}
+			else if(!strcmp("trackSerie",order))
+			{
+				motionControlSystem->printTrackingSerie();
+			}
 
 
 
@@ -502,16 +511,19 @@ int main(void)
 			else if(!strcmp("go",order))
 			{//								Ouvrir le guide
 				actuatorsMgr->ogg();
+				Delay(8);
 				actuatorsMgr->ogd();
 			}
 			else if(!strcmp("gf",order))
 			{//								Fermer le guide
 				actuatorsMgr->fgg();
+				Delay(8);
 				actuatorsMgr->fgd();
 			}
 			else if(!strcmp("gi",order))
 			{//								Guide en position intermédiaire
 				actuatorsMgr->ggi();
+				Delay(8);
 				actuatorsMgr->gdi();
 			}
 			else if(!strcmp("ptd",order))
@@ -555,6 +567,15 @@ int main(void)
 				actuatorsMgr->cgb();//		Clap gauche en bas
 			}
 		}
+		else if(tailleBuffer == RX_BUFFER_SIZE - 1)
+		{
+			serial.printfln("CRITICAL OVERFLOW !");
+			motionControlSystem->enableTranslationControl(false);
+			motionControlSystem->enableRotationControl(false);
+			actuatorsMgr->cdm();
+			while(true)
+				;
+		}
 	}
 }
 
@@ -564,6 +585,7 @@ void TIM4_IRQHandler(void) { //2kHz = 0.0005s = 0.5ms
 	__IO static uint32_t i = 0, j = 0, k = 0;
 	static MotionControlSystem* motionControlSystem = &MotionControlSystem::Instance();
 	//static SensorMgr* sensorMgr = &SensorMgr::Instance();
+	static ActuatorsMgr* actuatorsMgr = &ActuatorsMgr::Instance();
 
 	if (TIM_GetITStatus(TIM4, TIM_IT_Update) != RESET) {
 		//Remise à 0 manuelle du flag d'interruption nécessaire
@@ -576,6 +598,7 @@ void TIM4_IRQHandler(void) { //2kHz = 0.0005s = 0.5ms
 		if (i >= 10) { //5ms
 			//Gestion de l'arrêt
 			motionControlSystem->manageStop();
+			actuatorsMgr->refreshElevatorState();
 			i = 0;
 		}
 
@@ -649,27 +672,27 @@ void EXTI9_5_IRQHandler(void)
 	}
 
     //Interruption du contacteur BAS de l'ascenseur
-    if (EXTI_GetITStatus(EXTI_Line5) != RESET)
-    {
-    	actuatorsMgr->refreshElevatorState();
-
-    	EXTI_ClearITPendingBit(EXTI_Line5);
-    }
+//    if (EXTI_GetITStatus(EXTI_Line5) != RESET)
+//    {
+//    	actuatorsMgr->refreshElevatorState();
+//
+//    	EXTI_ClearITPendingBit(EXTI_Line5);
+//    }
 }
 
 
-void EXTI15_10_IRQHandler(void)
-{
-	static ActuatorsMgr* actuatorsMgr = &ActuatorsMgr::Instance();
-
-	//Interruption du contacteur HAUT de l'ascenseur
-	if (EXTI_GetITStatus(EXTI_Line13) != RESET)
-	{
-		actuatorsMgr->refreshElevatorState();
-
-		EXTI_ClearITPendingBit(EXTI_Line13);
-	}
-}
+//void EXTI15_10_IRQHandler(void)
+//{
+//	static ActuatorsMgr* actuatorsMgr = &ActuatorsMgr::Instance();
+//
+//	//Interruption du contacteur HAUT de l'ascenseur
+//	if (EXTI_GetITStatus(EXTI_Line13) != RESET)
+//	{
+//		actuatorsMgr->refreshElevatorState();
+//
+//		EXTI_ClearITPendingBit(EXTI_Line13);
+//	}
+//}
 
 
 }

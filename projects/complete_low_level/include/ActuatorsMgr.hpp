@@ -54,16 +54,18 @@ private:
 
 	enum EtatAscenseur
 	{
-		Haut = 5,		//Position extrème haute (dépassement de l'anti-retour, pour monter un plot)
-		Milieu = 4,		//Quelque part entre 'Estrade' et 'Haut' (très peu précis)
-		Estrade = 3,	//A plus de 22mm du sol (et pas beaucoup plus haut)
-		SousEstrade = 2,
-		Bas = 1,		//Ne touche ni le sol ni les plots supérieurs (position pour rouler)
-		Sol = 0			//Position extrème basse (touche le sol)
+		Haut = 6,			//Position extrème haute (dépassement de l'anti-retour, pour monter un plot)
+		Milieu = 5,			//Quelque part entre 'Estrade' et 'Haut' (très peu précis)
+		Estrade = 4,		//A plus de 22mm du sol (et pas beaucoup plus haut)
+		SousEstrade = 3,
+		Bas = 2,			//Ne touche ni le sol ni les plots supérieurs (position pour rouler)
+		Sol = 1,			//Position extrème basse (touche le sol)
+		SousSol = 0			//Position de blocage contre le sol (le moteur force, il faut détecter cet état pour en sortir au plus vite)
 	};
 
-	EtatAscenseur etatAscenseur;
+	volatile EtatAscenseur etatAscenseur;
 	volatile EtatAscenseur consigneAscenseur;
+	unsigned int const timeoutElevator = 200;//Durée maximale d'allumage du moteur de l'ascenseur
 
 public:
 	ActuatorsMgr()
@@ -117,24 +119,24 @@ public:
 
 
 
-
-	/*     ________________________________
-		 *|								   |*
-		 *|Initialisation des interruptions|*
-		 *|________________________________|*
-	*/
-
-
-		/*
-		 * Capteur haut de l'ascenseur : PC13
-		 */
-
+//
+//	/*     ________________________________
+//		 *|								   |*
+//		 *|Initialisation des interruptions|*
+//		 *|________________________________|*
+//	*/
+//
+//
+//		/*
+//		 * Capteur haut de l'ascenseur : PC13
+//		 */
+//
 		/* Activation de l'horloge du port GPIOC */
 		RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
-
-		/* Activation de l'horloge du SYSCFG */
-		RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
-
+//
+//		/* Activation de l'horloge du SYSCFG */
+//		RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
+//
 		/*Réglages de la pin*/
 		GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN;
 		GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
@@ -142,44 +144,44 @@ public:
 		GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
 		GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;
 		GPIO_Init(GPIOC, &GPIO_InitStruct);
-
-		/* Tell system that you will use PC13 for EXTI_Line13 */
-		SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOC, EXTI_PinSource13);
-
-		/* PC13 is connected to EXTI_Line13 */
-		EXTI_InitStruct.EXTI_Line = EXTI_Line13;
-		/* Enable interrupt */
-		EXTI_InitStruct.EXTI_LineCmd = ENABLE;
-		/* Interrupt mode */
-		EXTI_InitStruct.EXTI_Mode = EXTI_Mode_Interrupt;
-		/* Triggers on rising and falling edge */
-		EXTI_InitStruct.EXTI_Trigger = EXTI_Trigger_Rising_Falling;
-		/* Add to EXTI */
-		EXTI_Init(&EXTI_InitStruct);
-
-		/* Add IRQ vector to NVIC */
-		/* PC13 is connected to EXTI_Line13, which has EXTI15_10_IRQn vector */
-		NVIC_InitStruct.NVIC_IRQChannel = EXTI15_10_IRQn;
-		/* Set priority */
-		NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 0;
-		/* Set sub priority */
-		NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
-		/* Enable interrupt */
-		NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
-		/* Add to NVIC */
-		NVIC_Init(&NVIC_InitStruct);
-
-
-		/*
-		 * Capteur bas de l'ascenseur : PE5
-		 */
-
+//
+//		/* Tell system that you will use PC13 for EXTI_Line13 */
+//		SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOC, EXTI_PinSource13);
+//
+//		/* PC13 is connected to EXTI_Line13 */
+//		EXTI_InitStruct.EXTI_Line = EXTI_Line13;
+//		/* Enable interrupt */
+//		EXTI_InitStruct.EXTI_LineCmd = ENABLE;
+//		/* Interrupt mode */
+//		EXTI_InitStruct.EXTI_Mode = EXTI_Mode_Interrupt;
+//		/* Triggers on rising and falling edge */
+//		EXTI_InitStruct.EXTI_Trigger = EXTI_Trigger_Rising_Falling;
+//		/* Add to EXTI */
+//		EXTI_Init(&EXTI_InitStruct);
+//
+//		/* Add IRQ vector to NVIC */
+//		/* PC13 is connected to EXTI_Line13, which has EXTI15_10_IRQn vector */
+//		NVIC_InitStruct.NVIC_IRQChannel = EXTI15_10_IRQn;
+//		/* Set priority */
+//		NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 0;
+//		/* Set sub priority */
+//		NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
+//		/* Enable interrupt */
+//		NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
+//		/* Add to NVIC */
+//		NVIC_Init(&NVIC_InitStruct);
+//
+//
+//		/*
+//		 * Capteur bas de l'ascenseur : PE5
+//		 */
+//
 		/* Activation de l'horloge du port GPIOE */
 		RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE, ENABLE);
-
-		/* Activation de l'horloge du SYSCFG */
-		RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
-
+//
+//		/* Activation de l'horloge du SYSCFG */
+//		RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
+//
 		/*Réglages de la pin*/
 		GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN;
 		GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
@@ -187,32 +189,32 @@ public:
 		GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
 		GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;
 		GPIO_Init(GPIOE, &GPIO_InitStruct);
-
-		/* Tell system that you will use PE5 for EXTI_Line5 */
-		SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOE, EXTI_PinSource5);
-
-		/* PE5 is connected to EXTI_Line5 */
-		EXTI_InitStruct.EXTI_Line = EXTI_Line5;
-		/* Enable interrupt */
-		EXTI_InitStruct.EXTI_LineCmd = ENABLE;
-		/* Interrupt mode */
-		EXTI_InitStruct.EXTI_Mode = EXTI_Mode_Interrupt;
-		/* Triggers on rising and falling edge */
-		EXTI_InitStruct.EXTI_Trigger = EXTI_Trigger_Rising_Falling;
-		/* Add to EXTI */
-		EXTI_Init(&EXTI_InitStruct);
-
-		/* Add IRQ vector to NVIC */
-		/* PE5 is connected to EXTI_Line5, which has EXTI5_IRQn vector */
-		NVIC_InitStruct.NVIC_IRQChannel = EXTI9_5_IRQn;
-		/* Set priority */
-		NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 0;
-		/* Set sub priority */
-		NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
-		/* Enable interrupt */
-		NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
-		/* Add to NVIC */
-		NVIC_Init(&NVIC_InitStruct);
+//
+//		/* Tell system that you will use PE5 for EXTI_Line5 */
+//		SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOE, EXTI_PinSource5);
+//
+//		/* PE5 is connected to EXTI_Line5 */
+//		EXTI_InitStruct.EXTI_Line = EXTI_Line5;
+//		/* Enable interrupt */
+//		EXTI_InitStruct.EXTI_LineCmd = ENABLE;
+//		/* Interrupt mode */
+//		EXTI_InitStruct.EXTI_Mode = EXTI_Mode_Interrupt;
+//		/* Triggers on rising and falling edge */
+//		EXTI_InitStruct.EXTI_Trigger = EXTI_Trigger_Rising_Falling;
+//		/* Add to EXTI */
+//		EXTI_Init(&EXTI_InitStruct);
+//
+//		/* Add IRQ vector to NVIC */
+//		/* PE5 is connected to EXTI_Line5, which has EXTI5_IRQn vector */
+//		NVIC_InitStruct.NVIC_IRQChannel = EXTI9_5_IRQn;
+//		/* Set priority */
+//		NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 0;
+//		/* Set sub priority */
+//		NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
+//		/* Enable interrupt */
+//		NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
+//		/* Add to NVIC */
+//		NVIC_Init(&NVIC_InitStruct);
 	}
 
 	~ActuatorsMgr()
@@ -233,9 +235,6 @@ public:
 
 	void refreshElevatorState()
 	{
-//		serial.printfln("In the Abwabwa");
-//		Delay_us(1000);
-//		serial.printfln("OutBwabwa");
 
 		//Capteur Haut : PC13
 		//Capteur Bas  : PE5
@@ -247,26 +246,54 @@ public:
 		moteurON = GPIO_ReadOutputDataBit(GPIOC, GPIO_Pin_8),
 		moteurMonte = GPIO_ReadOutputDataBit(GPIOD, GPIO_Pin_14);
 
+
+
 		//Mise à jour de la position à partir des capteurs
 		if(captHautON)//Si le contact du haut est appuyé
+		{
 			etatAscenseur = Haut;
+			//serial.printfln("Haut");
+		}
 		else if(!captHautON && etatAscenseur == Haut)//Si le contact haut est relaché alors qu'on était en haut
+		{
 			etatAscenseur = Milieu;
+			//serial.printfln("Milieu");
+		}
 		else if(captBasON && (etatAscenseur == Milieu || etatAscenseur == Estrade))//Contact bas appuyé alors qu'on était au milieu
+		{
 			etatAscenseur = SousEstrade;
-		else if(!captBasON && (etatAscenseur == Estrade || etatAscenseur == Bas || etatAscenseur == SousEstrade) && (!moteurMonte || !moteurON))
+			//serial.printfln("SousEstrade");
+		}
+		else if((!captBasON && (etatAscenseur == Bas || etatAscenseur == SousEstrade)) && (!moteurMonte || !moteurON))
+		{
 			etatAscenseur = Sol;
-		else if(captBasON && etatAscenseur == Sol)
+			//serial.printfln("Sol");
+		}
+		else if(captBasON && etatAscenseur == Sol && moteurMonte)
+		{
 			etatAscenseur = Bas;
+			//serial.printfln("Bas");
+		}
+		else if(captBasON && etatAscenseur == Sol && (!moteurMonte || !moteurON))
+		{
+			etatAscenseur = SousSol;
+			//serial.printfln("Bas");
+		}
 		else if(!captBasON && (etatAscenseur == SousEstrade || etatAscenseur == Bas) && moteurMonte)
+		{
 			etatAscenseur = Estrade;
-
+			//serial.printfln("Estrade");
+		}
+		else if(!captBasON && etatAscenseur == SousSol)
+		{
+			etatAscenseur = Sol;
+		}
 
 
 
 		//Déplacement de l'ascenseur selon la consigne
 
-		if(consigneAscenseur == etatAscenseur)
+		if(consigneAscenseur == etatAscenseur || (consigneAscenseur == Sol && etatAscenseur == SousSol))
 		{
 			GPIO_ResetBits(GPIOC, GPIO_Pin_8);//Arrêt du moteur
 		}
@@ -281,52 +308,90 @@ public:
 			GPIO_SetBits(GPIOC, GPIO_Pin_8);//Mise en marche du moteur
 		}
 
-		/*
-		if(consigneAscenseur == etatAscenseur)
-		{
-			GPIO_ResetBits(GPIOC, GPIO_Pin_8);//Arrêt du moteur
-		}
-		else if(consigneAscenseur == Haut)
-		{
-			GPIO_SetBits(GPIOD, GPIO_Pin_14);//Sens de l'ascenseur = Monter
-			GPIO_SetBits(GPIOC, GPIO_Pin_8);//Mise en marche du moteur
-		}
-		else if(consigneAscenseur == Sol)
-		{
-			GPIO_ResetBits(GPIOD, GPIO_Pin_14);//Sens de l'ascenseur = Descendre
-			GPIO_SetBits(GPIOC, GPIO_Pin_8);//Mise en marche du moteur
-		}
-		else if(consigneAscenseur == Bas && etatAscenseur == Sol)
-		{
-			GPIO_SetBits(GPIOD, GPIO_Pin_14);//Sens de l'ascenseur = Monter
-			GPIO_SetBits(GPIOC, GPIO_Pin_8);//Mise en marche du moteur
-		}
-		else if(consigneAscenseur == Bas)
-		{
-			GPIO_ResetBits(GPIOD, GPIO_Pin_14);//Sens de l'ascenseur = Descendre
-			GPIO_SetBits(GPIOC, GPIO_Pin_8);//Mise en marche du moteur
-		}
-		else if(consigneAscenseur == Estrade && (etatAscenseur == Bas || etatAscenseur == Sol || etatAscenseur == SousEstrade))
-		{
-			GPIO_SetBits(GPIOD, GPIO_Pin_14);//Sens de l'ascenseur = Monter
-			GPIO_SetBits(GPIOC, GPIO_Pin_8);//Mise en marche du moteur
-		}
-		else if(consigneAscenseur == Estrade)
-		{
-			GPIO_ResetBits(GPIOD, GPIO_Pin_14);//Sens de l'ascenseur = Descendre
-			GPIO_SetBits(GPIOC, GPIO_Pin_8);//Mise en marche du moteur
-		}
-		else if(consigneAscenseur == Milieu && etatAscenseur == Haut)
-		{
-			GPIO_ResetBits(GPIOD, GPIO_Pin_14);//Sens de l'ascenseur = Descendre
-			GPIO_SetBits(GPIOC, GPIO_Pin_8);//Mise en marche du moteur
-		}
-		else if(consigneAscenseur == Milieu)
-		{
-			GPIO_SetBits(GPIOD, GPIO_Pin_14);//Sens de l'ascenseur = Monter
-			GPIO_SetBits(GPIOC, GPIO_Pin_8);//Mise en marche du moteur
-		}
-		*/
+
+//		if(consigneAscenseur == etatAscenseur)
+//		{
+//			GPIO_ResetBits(GPIOC, GPIO_Pin_8);//Arrêt du moteur
+//		}
+//		else if(consigneAscenseur == Haut)
+//		{
+//			GPIO_SetBits(GPIOD, GPIO_Pin_14);//Sens de l'ascenseur = Monter
+//			GPIO_SetBits(GPIOC, GPIO_Pin_8);//Mise en marche du moteur
+//		}
+//		else if(consigneAscenseur == Sol)
+//		{
+//			GPIO_ResetBits(GPIOD, GPIO_Pin_14);//Sens de l'ascenseur = Descendre
+//			GPIO_SetBits(GPIOC, GPIO_Pin_8);//Mise en marche du moteur
+//		}
+//		else if(consigneAscenseur == Bas && etatAscenseur == Sol)
+//		{
+//			GPIO_SetBits(GPIOD, GPIO_Pin_14);//Sens de l'ascenseur = Monter
+//			GPIO_SetBits(GPIOC, GPIO_Pin_8);//Mise en marche du moteur
+//		}
+//		else if(consigneAscenseur == Bas)
+//		{
+//			GPIO_ResetBits(GPIOD, GPIO_Pin_14);//Sens de l'ascenseur = Descendre
+//			GPIO_SetBits(GPIOC, GPIO_Pin_8);//Mise en marche du moteur
+//		}
+//		else if(consigneAscenseur == Estrade && (etatAscenseur == Bas || etatAscenseur == Sol || etatAscenseur == SousEstrade))
+//		{
+//			GPIO_SetBits(GPIOD, GPIO_Pin_14);//Sens de l'ascenseur = Monter
+//			GPIO_SetBits(GPIOC, GPIO_Pin_8);//Mise en marche du moteur
+//		}
+//		else if(consigneAscenseur == Estrade)
+//		{
+//			GPIO_ResetBits(GPIOD, GPIO_Pin_14);//Sens de l'ascenseur = Descendre
+//			GPIO_SetBits(GPIOC, GPIO_Pin_8);//Mise en marche du moteur
+//		}
+//		else if(consigneAscenseur == Milieu && etatAscenseur == Haut)
+//		{
+//			GPIO_ResetBits(GPIOD, GPIO_Pin_14);//Sens de l'ascenseur = Descendre
+//			GPIO_SetBits(GPIOC, GPIO_Pin_8);//Mise en marche du moteur
+//		}
+//		else if(consigneAscenseur == Milieu)
+//		{
+//			GPIO_SetBits(GPIOD, GPIO_Pin_14);//Sens de l'ascenseur = Monter
+//			GPIO_SetBits(GPIOC, GPIO_Pin_8);//Mise en marche du moteur
+//		}
+
+
+
+//		serial.printf("Consigne ascenseur = ");
+//		if(consigneAscenseur == Haut)
+//			serial.printfln("HAUT");
+//		else if(consigneAscenseur == Milieu)
+//			serial.printfln("MILIEU");
+//		else if(consigneAscenseur == Bas)
+//			serial.printfln("BAS");
+//		else if(consigneAscenseur == Sol)
+//			serial.printfln("SOL");
+//		else if(consigneAscenseur == Estrade)
+//			serial.printfln("ESTRADE");
+//		else if(etatAscenseur == SousEstrade)
+//			serial.printfln("SOUS ESTRADE");
+//		serial.printf("\n");
+//
+//		serial.printfln("Monte=%d", moteurMonte);
+//		serial.printfln("true=%d", (!moteurMonte || !moteurON));
+//		serial.printf("Etat ascenseur = ");
+//		if(etatAscenseur == Haut)
+//			serial.printfln("HAUT");
+//		else if(etatAscenseur == Milieu)
+//			serial.printfln("MILIEU");
+//		else if(etatAscenseur == Bas)
+//			serial.printfln("BAS");
+//		else if(etatAscenseur == Sol)
+//			serial.printfln("SOL");
+//		else if(etatAscenseur == Estrade)
+//			serial.printfln("ESTRADE");
+//		else if(etatAscenseur == SousEstrade)
+//			serial.printfln("SOUS ESTRADE");
+//		else if(etatAscenseur == SousSol)
+//			serial.printfln("SOUS SOL");
+//		serial.printf("\n");
+//		serial.printf("\n");
+
+
 	}
 
 	void omd() {
@@ -415,15 +480,19 @@ public:
 	}
 	void ah() {
 		consigneAscenseur = Haut;
+		//refreshElevatorState();
 	}
 	void ab() {
 		consigneAscenseur = Bas;
+		//refreshElevatorState();
 	}
 	void as() {
 		consigneAscenseur = Sol;
+		//refreshElevatorState();
 	}
 	void ae() {
 		consigneAscenseur = Estrade;
+		//refreshElevatorState();
 	}
 
 	void broad(){

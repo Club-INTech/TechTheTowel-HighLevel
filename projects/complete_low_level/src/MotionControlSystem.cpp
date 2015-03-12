@@ -287,35 +287,64 @@ void MotionControlSystem::applyControl() {
 
 void MotionControlSystem::track(){
 	static int i = 0;//Curseur du tableau
-	this->trackArray[i][0] = float(currentDistance);
-	this->trackArray[i][1] = float(currentAngle);
-	this->trackArray[i][2] = float(Counter::getRightValue());
-	this->trackArray[i][3] = float(translationSetpoint);
-	this->trackArray[i][4] = float(rotationSetpoint);
+
+	this->trackArray[i].translationCourante = currentDistance;
+	this->trackArray[i].rotationCourante = currentAngle;
+	this->trackArray[i].pwmTranslation = pwmTranslation;
+	this->trackArray[i].pwmRotation = pwmRotation;
+	this->trackArray[i].consigneTranslation = translationSetpoint;
+	this->trackArray[i].consigneRotation = rotationSetpoint;
+	this->trackArray[i].x = x;
+	this->trackArray[i].y = y;
+	this->trackArray[i].angle = getAngleRadian();
+	this->trackArray[i].asservTranslation = translationControlled;
+	this->trackArray[i].asservRotation = rotationControlled;
+	this->trackArray[i].tailleBufferReception = serial.available();
+
 	i = (i+1)%(TRACKER_SIZE);
 }
 
-void MotionControlSystem::printTracking(){
+void MotionControlSystem::printTrackingOXY()
+{
 	for(int i=0; i<TRACKER_SIZE; i++)
 	{
-		if(this->trackArray[i][0] != 0 || this->trackArray[i][1] != 0)
-		{
-			serial.printfln("cDist=%f | cAngl=%f | tick=%f", this->trackArray[i][0], this->trackArray[i][1], this->trackArray[i][2]);
-			serial.printfln("TsetPt=%f | RsetPt=%f", this->trackArray[i][3], this->trackArray[i][4]);
-		}
+		serial.printfln("x=%f | y=%f | o=%f", this->trackArray[i].x, this->trackArray[i].y, this->trackArray[i].angle);
 	}
 }
 
-void MotionControlSystem::clearTracking(){
+void MotionControlSystem::printTrackingAll()
+{
 	for(int i=0; i<TRACKER_SIZE; i++)
 	{
-		this->trackArray[i][0] = 0;
-		this->trackArray[i][1] = 0;
-		this->trackArray[i][2] = 0;
-		this->trackArray[i][3] = 0;
-		this->trackArray[i][4] = 0;
+		serial.printfln("x=%f | y=%f | o=%f | cons_T=%d | cons_R=%d | curr_T=%d | curr_R=%d | asservT=%d | asservR=%d | pwmT=%d | pwmR=%d | tBuff=%d",
+				trackArray[i].x, trackArray[i].y, trackArray[i].angle, trackArray[i].consigneTranslation, trackArray[i].consigneRotation
+				, trackArray[i].translationCourante, trackArray[i].rotationCourante, trackArray[i].asservTranslation, trackArray[i].asservRotation
+				, trackArray[i].pwmTranslation, trackArray[i].pwmRotation, trackArray[i].tailleBufferReception);
 	}
 }
+
+void MotionControlSystem::printTrackingLocomotion()
+{
+	for(int i=0; i<TRACKER_SIZE; i++)
+	{
+		serial.printfln("cons_T=%d | cons_R=%d | curr_T=%d | curr_R=%d | asservT=%d | asservR=%d | pwmT=%d | pwmR=%d",
+					trackArray[i].consigneTranslation, trackArray[i].consigneRotation,
+					trackArray[i].translationCourante, trackArray[i].rotationCourante,
+					trackArray[i].asservTranslation, trackArray[i].asservRotation
+					, trackArray[i].pwmTranslation, trackArray[i].pwmRotation);
+	}
+}
+
+void MotionControlSystem::printTrackingSerie()
+{
+	for(int i=0; i<TRACKER_SIZE; i++)
+	{
+		serial.printfln("tBuff=%d", trackArray[i].tailleBufferReception);
+	}
+}
+
+
+
 
 /**
  * Ordres

@@ -64,7 +64,29 @@ private:
 	float translationTunings[NB_SPEED][NB_CTE_ASSERV];
 	float rotationTunings[NB_SPEED][NB_CTE_ASSERV];
 
-	float trackArray[TRACKER_SIZE][5];
+
+	/*
+	 * Dispositif d'enregistrement de l'état du système pour permettre le débug
+	 * La valeur de TRACKER_SIZE dépend de la valeur de DEBUG.
+	 */
+
+	struct trackerType
+	{
+		float x;
+		float y;
+		float angle;
+		int consigneTranslation;
+		int consigneRotation;
+		int translationCourante;
+		int rotationCourante;
+		bool asservTranslation;
+		bool asservRotation;
+		uint8_t pwmTranslation;
+		uint8_t pwmRotation;
+		uint8_t tailleBufferReception;
+	};
+
+	trackerType trackArray[TRACKER_SIZE];
 
 	void applyControl();
 	bool isPhysicallyStopped(int);//Indique si le robot est immobile, avec une certaine tolérance passée en argument, exprimmée en ticks*[fréquence d'asservissement]
@@ -91,9 +113,12 @@ public:
 	void control();
 	void updatePosition();
 	void manageStop();
-	void track();///Stock les valeurs de position et de pwm dans un tableau
-	void printTracking();///Affiche le tableau de positions et pwm enregistées
-	void clearTracking();///Vider le tableau des positions et pwm
+
+	void track();///Stock les valeurs de débug
+	void printTrackingOXY();///Affiche les x,y,angle du tableau de tracking
+	void printTrackingAll();///Affiche l'intégralité du tableau de tracking
+	void printTrackingLocomotion();
+	void printTrackingSerie();
 
 	int getPWMTranslation() const;
 	int getPWMRotation() const;
