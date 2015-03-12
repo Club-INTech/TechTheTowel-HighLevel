@@ -37,6 +37,36 @@ class ThreadSensor extends AbstractThread
 	
 	int maxSensorRange;
 	
+	/** 	Les angles des capteurs :
+	 * 
+	 * 		
+	 * 			
+	 * 			1		2
+	 * 			\\ ____//
+	 * 			|		|
+	 * 			|       |
+	 * 			|_______|	
+	 * 			//	    \\
+	 * 			1		2
+	 * 
+	 * 
+	 * Calcul de l'angle :
+	 * 
+	 * 		\angle|
+	 * 		 \    |
+	 * 		  \   |
+	 * 		   \  |
+	 * 			\o|		o : capteur
+	 * 
+	 */
+	
+	float angleSensorFrontLeft=0;
+	float angleSensorFrontRight=0;
+	float angleSensorBackLeft=0;
+	float angleSensorBackRight=0;
+	
+
+	
 	/**
 	 * Crée un nouveau thread de capteurs
 	 *
@@ -130,16 +160,41 @@ class ThreadSensor extends AbstractThread
 			
 			//ajout d'obstacles mobiles dans l'obstacleManager
 			int radius = Integer.parseInt(config.getProperty("rayon_robot_adverse"));
+			
+			// Analyse des capteurs avant, avec gestion dees angles TODO verifier les angles
 			for (int i=0; i<distanceFront.length; i++)
 				if(distanceFront[i]!=0)
-					mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x + (int)((distanceFront[i]+radius)*Math.cos(mRobot.getOrientation())), 
-																	 mRobot.getPosition().y + (int)((distanceFront[i]+radius)*Math.sin(mRobot.getOrientation()))));
+				{
+					if(i==0) //Capteur de coté droit
+					{
+						mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x + (int)((distanceFront[i]+radius)*Math.cos(mRobot.getOrientation() + angleSensorFrontRight)), 
+																		 mRobot.getPosition().y + (int)((distanceFront[i]+radius)*Math.sin(mRobot.getOrientation() + angleSensorFrontRight))));
+					}
+					else if(i==1) // Capteur de coté gauche
+					{
+						mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x + (int)((distanceFront[i]+radius)*Math.cos(mRobot.getOrientation() - angleSensorFrontLeft)), 
+																		 mRobot.getPosition().y + (int)((distanceFront[i]+radius)*Math.sin(mRobot.getOrientation() - angleSensorFrontLeft))));
+					}
+				}
+			
+			// Analyse des capteurs arrieres, avec gestion des angles
 			for (int i=0; i<distanceBack.length; i++)
 				if(distanceBack[i]!=0)
-					mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x - (int)((distanceBack[i]+radius)*Math.cos(mRobot.getOrientation())), 
-																	 mRobot.getPosition().y - (int)((distanceBack[i]+radius)*Math.sin(mRobot.getOrientation()))));
-			
-			//log.debug("Distance selon ultrasons avant: "+distanceFront[0]+";"+distanceFront[1]+" //  ultrason arriere: "+distanceBack[0]+";"+distanceBack[1], this);
+				{
+					if(i==0) //Capteur de coté droit (en regardant le dos du robot)
+					{
+						mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x - (int)((distanceBack[i]+radius)*Math.cos(mRobot.getOrientation() - angleSensorBackRight)), 
+																		 mRobot.getPosition().y - (int)((distanceBack[i]+radius)*Math.sin(mRobot.getOrientation() - angleSensorBackRight))));
+					}
+					else if(i==1) // Capteur de coté gauche (en regardant le dos du robot)
+					{
+						mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x - (int)((distanceBack[i]+radius)*Math.cos(mRobot.getOrientation() + angleSensorBackLeft )), 
+																		 mRobot.getPosition().y - (int)((distanceBack[i]+radius)*Math.sin(mRobot.getOrientation() + angleSensorBackLeft ))));
+					}
+				}
+				
+			log.debug("Distance selon ultrasons avant:   "+distanceFront[0]+";"+distanceFront[1], this); 
+			log.debug("Distance selon ultrasons arriere: "+distanceBack[0]+";"+distanceBack[1], this);
 			
 			if (distanceFront[1] > 0 && distanceFront[1] < 70 || distanceFront[0] > 0 && distanceFront[0] < 70)
 				log.debug("obstacle detecte a moins de 7 cm !", this);
