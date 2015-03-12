@@ -157,9 +157,35 @@ public class Locomotion implements Service
         );
     	finalAim = aim;
 
-		moveToPointException(aim, hooks, true, false, true);
+		moveToPointException(aim, hooks, true, false, true, false);
 
     }
+    /**
+     * Fait tourner le robot (méthode bloquante)
+     * Une manière de tourner qui réutilise le reste du code, car tourner
+     * n'en devient plus qu'un cas particulier (celui où... on n'avance pas)
+     * @param isTurnRelative vrai si l'angle vise est en relatif et pa sen absolut
+     * @param angle l'angle vise (en absolut)
+     * @param hooks les potentiels hooks a prendre en compte (ne pas mettre null !)
+     * @throws UnableToMoveException si le robot a un bloquage mecanique
+     */
+    public void turn(double angle, ArrayList<Hook> hooks, boolean isTurnRelative) throws UnableToMoveException
+    {
+    	/*
+    	 * calcul de la position visee 
+    	 * on vise une position eloignee mais on ne s'y deplacera pas, le robot ne fera que tourner
+    	 */
+    	Vec2 aim = new Vec2(
+
+        (int) (position.x + 1000*Math.cos(angle)),
+        (int) (position.y + 1000*Math.sin(angle))
+        );
+    	finalAim = aim;
+
+		moveToPointException(aim, hooks, true, false, true, isTurnRelative);
+
+    }
+    
     
     /**
      * Fait avancer le robot de "distance" (en mm).
@@ -179,7 +205,7 @@ public class Locomotion implements Service
         // l'appel à cette méthode sous-entend que le robot ne tourne pas
         // il va donc en avant si la distance est positive, en arrière si elle est négative
         // si on est à 90°, on privilégie la marche avant
-		moveToPointException(aim, hooks, distance >= 0, wall, false);
+		moveToPointException(aim, hooks, distance >= 0, wall, false, false);
     }
         
     /**
@@ -221,11 +247,11 @@ public class Locomotion implements Service
     	// on avance en fonction de ce que nous dit la strategie
     	if(strategy == DirectionStrategy.FORCE_BACK_MOTION)
     	{
-            moveToPointException(aim, hooks, false, mur, turnOnly);
+            moveToPointException(aim, hooks, false, mur, turnOnly, false);
     	}
     	else if(strategy == DirectionStrategy.FORCE_FORWARD_MOTION)
     	{
-            moveToPointException(aim, hooks, true, mur, turnOnly);
+            moveToPointException(aim, hooks, true, mur, turnOnly, false);
     	}
     	else //if(strategy == DirectionStrategy.FASTEST)
     	{
@@ -238,7 +264,7 @@ public class Locomotion implements Service
 	        // On regarde le produit scalaire; si c'est positif, alors on est dans le bon sens, et inversement
 	        boolean direction = delta.dot(orientationVec) >= 0;
 	        
-	        moveToPointException(aim, hooks, direction, mur, turnOnly);
+	        moveToPointException(aim, hooks, direction, mur, turnOnly, false);
     	}
     }
     
@@ -249,10 +275,11 @@ public class Locomotion implements Service
      * @param hooks les potentiels hooks a prendre en compte (ne pas mettre null !)
      * @param isMovementForward vrai si on vas en avant et faux si on vas en arriere
      * @param headingToWall vrai si on suppose qu'on vas se cogner dans un mur (et qu'on veut s'arreter des qu'on cogne)
+     * @param isTurnRelative vrai si l'angle vise est relatif et pas absolut
      * @param turnOnly vrai si on veut uniquement tourner (et pas avancer)
      * @throws UnableToMoveException si le robot a un bloquage mecanique
      */
-    private void moveToPointException(Vec2 aim, ArrayList<Hook> hooks, boolean isMovementForward, boolean headingToWall, boolean turnOnly) throws UnableToMoveException
+    private void moveToPointException(Vec2 aim, ArrayList<Hook> hooks, boolean isMovementForward, boolean headingToWall, boolean turnOnly, boolean isTurnRelative) throws UnableToMoveException
     {
         int maxTimeToWaitForEnemyToLeave = 600; // combien de temps attendre que l'ennemi parte avant d'abandonner
         int unexpectedWallImpactCounter = 2; // combien de fois on réessayer si on se prend un mur (si wall est a true alors les impacts sont attendus donc on s'en fout)
@@ -263,7 +290,7 @@ public class Locomotion implements Service
             doItAgain = false;
             try
             {
-                moveToPointCorrectAngleAndDetectEnnemy(aim, hooks, isMovementForward, turnOnly);
+                moveToPointCorrectAngleAndDetectEnnemy(aim, hooks, isMovementForward, turnOnly, isTurnRelative);
             }
             catch (BlockedException e)
             {
@@ -359,13 +386,14 @@ public class Locomotion implements Service
      * @param hooks les potentiels hooks a prendre en compte (ne pas mettre null !)
      * @param isMovementForward vrai si on vas en avant et faux si on vas en arriere
      * @param turnOnly vrai si on veut uniquement tourner (et pas avancer)
+     * @param isTurnRelative vrai si l'angle est relatif et pas absolut
      * @throws BlockedException si le robot a un bloquage mecanique
      * @throws UnexpectedObstacleOnPathException si le robot rencontre un obstacle innatendu sur son chemin (par les capteurs)
      */
-    private void moveToPointCorrectAngleAndDetectEnnemy(Vec2 aim, ArrayList<Hook> hooks, boolean isMovementForward, boolean turnOnly) throws UnexpectedObstacleOnPathException, BlockedException
+    private void moveToPointCorrectAngleAndDetectEnnemy(Vec2 aim, ArrayList<Hook> hooks, boolean isMovementForward, boolean turnOnly, boolean isTurnRelative) throws UnexpectedObstacleOnPathException, BlockedException
     {         	
     	double time=System.currentTimeMillis();
-        moveToPointSymmetry(aim, isMovementForward, turnOnly, false);
+        moveToPointSymmetry(aim, isMovementForward, turnOnly, false, isTurnRelative);
         do
         { 	
         	// en cas de détection d'ennemi, une exception est levée
@@ -402,7 +430,7 @@ public class Locomotion implements Service
     private void correctAngle(Vec2 aim, boolean isMovementForward) throws BlockedException
     {
     	//envoi de la consigne avec turnOnly a true et a isCorrection a true (c'est bien une correction et on ne veut que tourner)
-    	moveToPointSymmetry(aim, isMovementForward, true, true);
+    	moveToPointSymmetry(aim, isMovementForward, true, true, false);
     }
 
     /**
@@ -412,9 +440,10 @@ public class Locomotion implements Service
      * @param isMovementForward vrai si on vas en avant et faux si on vas en arriere
      * @param turnOnly vrai si on veut uniquement tourner (et pas avancer)
      * @param isCorrection vrai si la consigne est une correction et pas un ordre de deplacement
+     * @param isTurnRelative vrai si l'angle est relatif et pas absolut
      * @throws BlockedException si le robot rencontre un obstacle innatendu sur son chemin (par les capteurs)
      */
-    private void moveToPointSymmetry(Vec2 aim, boolean isMovementForward, boolean turnOnly, boolean isCorrection) throws BlockedException
+    private void moveToPointSymmetry(Vec2 aim, boolean isMovementForward, boolean turnOnly, boolean isCorrection, boolean isTurnRelative) throws BlockedException
     {
 
         updateCurrentPositionAndOrientation();
@@ -447,11 +476,11 @@ public class Locomotion implements Service
         // on annule la correction si on est trop proche de la destination
         if(isCorrection) 
            if(aimSymmetrized.clone().minusNewVector( givenPosition ).length() <  maxLengthCorrectionThreeshold )
-	        	moveToPointSerialOrder(aimSymmetrized, givenPosition, angle, distance, turnOnly, isCorrection);
+	        	moveToPointSerialOrder(aimSymmetrized, givenPosition, angle, distance, turnOnly, isCorrection,isTurnRelative);
 	        else 
 	        	return;// Si on est trop proche, on ne fais rien.
         else 
-        	moveToPointSerialOrder(aimSymmetrized, givenPosition, angle, distance, turnOnly, isCorrection);
+        	moveToPointSerialOrder(aimSymmetrized, givenPosition, angle, distance, turnOnly, isCorrection,isTurnRelative);
         
 
     }
@@ -468,7 +497,7 @@ public class Locomotion implements Service
      * @param isCorrection vrai si la consigne est une correction et pas un ordre de deplacement
      * @throws BlockedException si le robot rencontre un obstacle innatendu sur son chemin (par les capteurs)
      */
-    private void moveToPointSerialOrder(Vec2 symmetrisedAim, Vec2 givenPosition, double angle, double distance, boolean turnOnly, boolean isCorrection) throws BlockedException
+    private void moveToPointSerialOrder(Vec2 symmetrisedAim, Vec2 givenPosition, double angle, double distance, boolean turnOnly, boolean isCorrection, boolean isTurnRelative) throws BlockedException
     {
     	boolean trajectoire_courbe = false;
 
@@ -500,11 +529,27 @@ public class Locomotion implements Service
         {
         	if(isCorrection && Math.abs(delta) > maxRotationCorrectionThreeshold)
         	{
-				deplacements.turn(angle);  // On ne tourne que si on est assez loin de l'orientation voulue
+        		if (isTurnRelative)
+        		{
+        			deplacements.turn(angle);  // On ne tourne que si on est assez loin de l'orientation voulue
+        		}
+        		else
+        		{
+        			deplacements.turnRelative(angle);
+        		}
                 log.debug("Angle corrigé", this);
         	}
-        	else if(!isCorrection)
-        		deplacements.turn(angle);// Si ca n'est pas  une correction
+        	else if(!isCorrection)// Si ca n'est pas  une correction
+        	{
+        		if (isTurnRelative)
+        		{
+        			deplacements.turn(angle);
+        		}
+        		else
+        		{
+        			deplacements.turnRelative(angle);
+        		}
+        	}
         	
 
             // sans virage : la première rotation est bloquante

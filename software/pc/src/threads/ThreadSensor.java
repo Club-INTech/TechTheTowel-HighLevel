@@ -60,10 +60,16 @@ class ThreadSensor extends AbstractThread
 	 * 
 	 */
 	
-	double angleSensorFrontLeft=0;
-	double angleSensorFrontRight=10 *2*(Math.PI) / 360;
-	double angleSensorBackLeft=0;
-	double angleSensorBackRight=0;
+	double leftFrontSensorAngle=0;
+	double rightFrontSensorAngle=10 *2*(Math.PI) / 360;
+	double leftBackSensorAngle=0;
+	double rightBackSensorAngle=0;
+	
+	// position des capteurs relativement au centre du robot, en mm
+	Vec2 rightFrontSensorPosition = new Vec2(15, 5);
+	Vec2 leftFrontSensorPosition = new Vec2(-15, 5);
+	Vec2 rightBackSensorPosition = new Vec2(15, -5);
+	Vec2 leftBackSensorPosition = new Vec2(-15, -5);
 	
 
 	
@@ -167,13 +173,13 @@ class ThreadSensor extends AbstractThread
 				{
 					if(i==1) //Capteur de coté droit
 					{
-						mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x + (int)((distanceFront[i]+radius)*Math.cos(mRobot.getOrientation() + angleSensorFrontRight)), 
-																		 mRobot.getPosition().y + (int)((distanceFront[i]+radius)*Math.sin(mRobot.getOrientation() + angleSensorFrontRight))));
+						mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x + (int)(rightFrontSensorPosition.x*Math.cos(mRobot.getOrientation()) - rightFrontSensorPosition.y*Math.sin(mRobot.getOrientation())) + (int)((distanceFront[i]+radius)*Math.cos(mRobot.getOrientation() + rightFrontSensorAngle)), 
+																		 mRobot.getPosition().y + (int)(rightFrontSensorPosition.x*Math.sin(mRobot.getOrientation()) + rightFrontSensorPosition.y*Math.cos(mRobot.getOrientation())) + (int)((distanceFront[i]+radius)*Math.sin(mRobot.getOrientation() + rightFrontSensorAngle))));
 					}
 					else if(i==0) // Capteur de coté gauche
 					{
-						mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x + (int)((distanceFront[i]+radius)*Math.cos(mRobot.getOrientation() - angleSensorFrontLeft)), 
-																		 mRobot.getPosition().y + (int)((distanceFront[i]+radius)*Math.sin(mRobot.getOrientation() - angleSensorFrontLeft))));
+						mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x + (int)(leftFrontSensorPosition.x*Math.cos(mRobot.getOrientation()) - leftFrontSensorPosition.y*Math.sin(mRobot.getOrientation())) + (int)((distanceFront[i]+radius)*Math.cos(mRobot.getOrientation() - leftFrontSensorAngle)), 
+																		 mRobot.getPosition().y + (int)(leftFrontSensorPosition.x*Math.sin(mRobot.getOrientation()) + leftFrontSensorPosition.y*Math.cos(mRobot.getOrientation())) + (int)((distanceFront[i]+radius)*Math.sin(mRobot.getOrientation() - leftFrontSensorAngle))));
 					}
 				}
 			
@@ -183,13 +189,13 @@ class ThreadSensor extends AbstractThread
 				{
 					if(i==1) //Capteur de coté droit (en regardant le dos du robot)
 					{
-						mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x - (int)((distanceBack[i]+radius)*Math.cos(mRobot.getOrientation() - angleSensorBackRight)), 
-																		 mRobot.getPosition().y - (int)((distanceBack[i]+radius)*Math.sin(mRobot.getOrientation() - angleSensorBackRight))));
+						mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x + (int)(rightBackSensorPosition.x*Math.cos(mRobot.getOrientation()) - rightBackSensorPosition.y*Math.sin(mRobot.getOrientation())) - (int)((distanceBack[i]+radius)*Math.cos(mRobot.getOrientation() - rightBackSensorAngle)), 
+																		 mRobot.getPosition().y + (int)(rightBackSensorPosition.x*Math.sin(mRobot.getOrientation()) + rightBackSensorPosition.y*Math.cos(mRobot.getOrientation())) - (int)((distanceBack[i]+radius)*Math.sin(mRobot.getOrientation() - rightBackSensorAngle))));
 					}
 					else if(i==0) // Capteur de coté gauche (en regardant le dos du robot)
 					{
-						mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x - (int)((distanceBack[i]+radius)*Math.cos(mRobot.getOrientation() + angleSensorBackLeft )), 
-																		 mRobot.getPosition().y - (int)((distanceBack[i]+radius)*Math.sin(mRobot.getOrientation() + angleSensorBackLeft ))));
+						mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x + (int)(leftBackSensorPosition.x*Math.cos(mRobot.getOrientation()) - leftBackSensorPosition.y*Math.sin(mRobot.getOrientation())) - (int)((distanceBack[i]+radius)*Math.cos(mRobot.getOrientation() + leftBackSensorAngle )), 
+																		 mRobot.getPosition().y + (int)(leftBackSensorPosition.x*Math.sin(mRobot.getOrientation()) + leftBackSensorPosition.y*Math.cos(mRobot.getOrientation())) - (int)((distanceBack[i]+radius)*Math.sin(mRobot.getOrientation() + leftBackSensorAngle ))));
 					}
 				}
 				

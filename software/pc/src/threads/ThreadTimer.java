@@ -6,6 +6,9 @@ import robot.cardsWrappers.SensorsCardWrapper;
 import table.Table;
 import utils.Sleep;
 
+import graphics.*;
+import robot.RobotReal;
+
 /**
  * Thread qui s'occupe de la gestion du temps: début du match et immobilisation du robot en fin de match
  * demande aussi périodiquement a la table qu'on lui fournit de retirer les obstacles périmés
@@ -18,6 +21,9 @@ public class ThreadTimer extends AbstractThread
 {
 	/** La table sur laquelle le thread doit croire évoluer */
 	private Table table;
+	
+	//TODO : le robot, à supprimer eventuellement
+	private RobotReal robot;
 
 	/** La carte capteurs avec laquelle on doit communiquer */
 	private SensorsCardWrapper mSensorsCardWrapper;
@@ -39,15 +45,19 @@ public class ThreadTimer extends AbstractThread
 	
 	/** Temps en ms qui s'écoule entre deux mise a jour de la liste des obstacle périmables. Lors de chaque mise a jour, les obstacles périmés sont détruits. */
 	public static int obstacleRefreshInterval = 500;
-		
+	
+	//TODO : interface graphique à enlever eventuellement (necessaire pour les tests)
+	public Window mWindow;
+	
 	/**
 	 * Crée le thread timer.
+	 * TODO : enlever le robot eventuellement
 	 *
 	 * @param table La table sur laquelle le thread doit croire évoluer
 	 * @param sensorsCardWrapper La carte capteurs avec laquelle on doit communiquer
 	 * @param locomotionCardWrapper La carte d'asservissement avec laquelle on doit communiquer
 	 */
-	ThreadTimer(Table table, SensorsCardWrapper sensorsCardWrapper, LocomotionCardWrapper locomotionCardWrapper)
+	ThreadTimer(Table table, RobotReal robot, SensorsCardWrapper sensorsCardWrapper, LocomotionCardWrapper locomotionCardWrapper)
 	{
 		this.table = table;
 		this.mSensorsCardWrapper = sensorsCardWrapper;
@@ -55,6 +65,9 @@ public class ThreadTimer extends AbstractThread
 		
 		updateConfig();
 		Thread.currentThread().setPriority(1);
+		
+		//TODO : interface graphique à enlever (necessaire pour les tests)
+		mWindow = new Window(table, robot);
 	}
 
 	/* (non-Javadoc)
@@ -102,7 +115,11 @@ public class ThreadTimer extends AbstractThread
 			
 
 			// On retire périodiquement les obstacles périmés
-			table.getObstacleManager().removeOutdatedObstacles(System.currentTimeMillis());
+			table.getObstacleManager().removeOutdatedObstacles();
+			
+			//on rafraichit l'interface graphique, TODO : à enlever
+			log.debug("rafraichissement de l'interface graphique", this);
+			mWindow.getPanel().repaint();
 			
 			try
 			{

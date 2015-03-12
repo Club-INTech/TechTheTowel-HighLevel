@@ -214,11 +214,11 @@ public class ObstacleManager
      *
      * @param date La date de péremption a partir de laquelle on garde les obstacles.
      */
-    public synchronized void removeOutdatedObstacles(long date)
+    public synchronized void removeOutdatedObstacles()
     {
     	for(int i = 0; i < mMobileObstacles.size(); i++)
-    		if(mMobileObstacles.get(i).getOutDatedTime() > System.currentTimeMillis())
-    			mMobileObstacles.remove(i);
+    		if(mMobileObstacles.get(i).getOutDatedTime() < System.currentTimeMillis())
+    			mMobileObstacles.remove(i--);
     }
 
     /**

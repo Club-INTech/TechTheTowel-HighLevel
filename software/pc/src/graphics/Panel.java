@@ -25,17 +25,16 @@ public class Panel extends JPanel
 	
 	private ArrayList<Vec2> mPath;
 	private Table mTable;
-	@SuppressWarnings("unused")
 	private Robot mRobot;
 	private boolean showGraph;
 	private Graph mGraph;
 	
 	
-	public Panel(Table table/*, RobotReal robot*/)
+	public Panel(Table table, RobotReal robot)
 	{
 		mPath = new ArrayList<Vec2>();
 		mTable = table;
-		//mRobot = robot;
+		mRobot = robot;
 		showGraph = false;
 	}
 	
@@ -79,7 +78,7 @@ public class Panel extends JPanel
 	    	g.drawOval((mobileObstacles.get(i).getPosition().x - mobileObstacles.get(i).getRadius() + 1500) * this.getWidth() / 3000, -(mobileObstacles.get(i).getPosition().y + mobileObstacles.get(i).getRadius()) * this.getHeight() / 2000 + this.getHeight(), (2 * mobileObstacles.get(i).getRadius()) * this.getWidth() / 3000, (2 * mobileObstacles.get(i).getRadius()) * this.getHeight() / 2000);
 	    }
 	    
-	    //le premier robot ennemi
+	    //les robots ennemis
 	    g.setColor(Color.red);
 	    ArrayList<ObstacleProximity> ennemyRobots = mTable.getObstacleManager().getMobileObstacles();
 	    for(int i = 0; i < ennemyRobots.size(); i++)
@@ -89,12 +88,12 @@ public class Panel extends JPanel
 					(2 * ennemyRobots.get(i).getRadius()) * this.getHeight() / 2000);
 	    
 	    g.setColor(Color.green);
-	    //g.drawOval((mRobot.getPosition().x - 100 + 1500) * this.getWidth() / 3000, -(mRobot.getPosition().y + 100) * this.getHeight() / 2000 + this.getHeight(), (2 * 100) * this.getWidth() / 3000, (2 * 100) * this.getHeight() / 2000);
-	    //System.out.println("Graphique : position du robot : ("+mRobot.getPosition().x+", "+mRobot.getPosition().y+")");
+	    g.drawOval((mRobot.getPosition().x - 100 + 1500) * this.getWidth() / 3000, -(mRobot.getPosition().y + 100) * this.getHeight() / 2000 + this.getHeight(), (2 * 100) * this.getWidth() / 3000, (2 * 100) * this.getHeight() / 2000);
 	    
 	    //debug : zones
-	    for(int i=0; i<mGraph.mAreas.size(); i++)
-	    	g.drawRect((mGraph.mAreas.get(i).x + 1500) * this.getWidth() / 3000, -(mGraph.mAreas.get(i).y + mGraph.mAreas.get(i).height) * this.getHeight() / 2000 + this.getHeight(), mGraph.mAreas.get(i).width * this.getWidth() / 3000, mGraph.mAreas.get(i).height * this.getHeight() / 2000);
+	    if(showGraph)
+	    	for(int i=0; i<mGraph.mAreas.size(); i++)
+	    		g.drawRect((mGraph.mAreas.get(i).x + 1500) * this.getWidth() / 3000, -(mGraph.mAreas.get(i).y + mGraph.mAreas.get(i).height) * this.getHeight() / 2000 + this.getHeight(), mGraph.mAreas.get(i).width * this.getWidth() / 3000, mGraph.mAreas.get(i).height * this.getHeight() / 2000);
 	    
 	    g.setColor(Color.blue);
 	    for(int i = 0; i+1 < mPath.size(); i++)

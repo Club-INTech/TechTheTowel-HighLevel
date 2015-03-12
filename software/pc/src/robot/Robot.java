@@ -124,6 +124,17 @@ public abstract class Robot implements Service
 	 * @param angle : valeur absolue en radiant de l'orientation que le robot doit avoir après cet appel
 	 * @param hooksToConsider hooks a considérer lors de ce déplacement. Le hook n'est déclenché que s'il est dans cette liste et que sa condition d'activation est remplie
 	 * @param expectsWallImpact true si le robot doit s'attendre a percuter un mur au cours de la rotation. false si les alentours du robot sont sensés être dégagés.
+	 * @param isTurnRelative vrai si l'angle est relatif et pas absolut
+	 * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
+	 */
+    public abstract void turn(double angle, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact, boolean isTurnRelative) throws UnableToMoveException;
+    
+    /**
+	 * Fait tourner le robot (méthode bloquante).
+	 *
+	 * @param angle : valeur absolue en radiant de l'orientation que le robot doit avoir après cet appel
+	 * @param hooksToConsider hooks a considérer lors de ce déplacement. Le hook n'est déclenché que s'il est dans cette liste et que sa condition d'activation est remplie
+	 * @param expectsWallImpact true si le robot doit s'attendre a percuter un mur au cours de la rotation. false si les alentours du robot sont sensés être dégagés.
 	 * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
 	 */
     public abstract void turn(double angle, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException;
@@ -206,7 +217,7 @@ public abstract class Robot implements Service
 	 */
 	public void turnRelative(double angle) throws UnableToMoveException
 	{
-		turn(getOrientation() + angle, null, false);
+		turn(angle, null, false, true);
 	}
 	
 	/**
@@ -218,7 +229,7 @@ public abstract class Robot implements Service
 	 */
     public void turn(double angle) throws UnableToMoveException
     {
-        turn(angle, null, false);
+        turn(angle, null, false, false);
     }
 
 	/**
@@ -234,9 +245,9 @@ public abstract class Robot implements Service
     	
     	// Fais la symétrie deux fois (symétrie de symétrie, c'est l'identité)
         if(symmetry)
-            turn(Math.PI-angle, null, false);
+            turn(Math.PI-angle, null, false, false);
         else
-            turn(angle, null, false);
+            turn(angle, null, false, false);
     }
 
 	/**
