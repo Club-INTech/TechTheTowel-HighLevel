@@ -3,6 +3,7 @@ package tests;
 import hook.Hook;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -31,7 +32,6 @@ public class JUnit_College extends JUnit_Test {
 	public void setUp() throws Exception 
 	{
 		super.setUp();
-		super.setUp();
 		real_state = (GameState<Robot>) container.getService(ServiceNames.GAME_STATE);
 		scriptmanager = (ScriptManager) container.getService(ServiceNames.SCRIPT_MANAGER);
 		emptyHook = new ArrayList<Hook> ();  
@@ -41,8 +41,17 @@ public class JUnit_College extends JUnit_Test {
 
 	}
 
+	/**
+	 * 
+	 * le robot avance de distance-50;
+	 * tourne a droite et recule de 220 (voir script depose tapis);
+	 * depose les tapis, avance de 220;
+	 * ouvre les deux bras, tourne en 0, ferme les deux bras;
+	 * (avance de distance-50, ouvre les machoires, avance de 50, mange le plot et le remonte) *4;
+	 * ouvre le guide et la machoire et recule de distance; 
+	 */
 	@Test
-	public void test() throws UnableToMoveException, SerialConnexionException 
+	public void demonstration() throws UnableToMoveException, SerialConnexionException 
 	{
 		robot.moveLengthwise(distanceBetweenPlots-50);
 		scriptmanager.getScript(ScriptNames.DROP_CARPET).execute(0, real_state, emptyHook, true);
@@ -94,6 +103,49 @@ public class JUnit_College extends JUnit_Test {
 		robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, true);
 		robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
 		robot.moveLengthwise(-distanceBetweenPlots);
+	}
+	
+	@Test
+	public void jeuPourGamins() throws UnableToMoveException
+	{
+		String scanned = "";
+		@SuppressWarnings("resource")
+		Scanner scan = new Scanner(System.in);
+		while (!scanned.contains("exit"))
+		{
+			scanned = scan.nextLine();
+			if (scanned.compareTo("")!=0)
+			{
+				char[] arrayScanned = scanned.toCharArray();
+				//echo local
+				System.out.println(scanned);
+				for (int i = 0 ; i<arrayScanned.length ; i++)
+				{
+					char key = arrayScanned[i];
+					if (key == 'q')
+					{
+						System.out.println("on tourne a gauche");
+						robot.turnRelative(-Math.PI/2);
+						
+					}
+					else if (key == 'd')
+					{
+						System.out.println("on tourne a droite");
+						robot.turnRelative(Math.PI/2);
+					}
+					else if (key == 'z')
+					{
+						System.out.println("on avance");
+						robot.moveLengthwise(50);
+					}
+					else if (key == 's')
+					{
+						System.out.println("on recule");
+						robot.moveLengthwise(-50);
+					}
+				}
+			}
+		}
 	}
 
 }

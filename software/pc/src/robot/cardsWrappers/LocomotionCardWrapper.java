@@ -90,6 +90,13 @@ public class LocomotionCardWrapper implements Service
 		String chaines[] = {"t", Float.toString(angleTruncated)};
 		locomotionCardSerial.communiquer(chaines, 0);		
 	}
+	public void turnRelative(double angle) throws SerialConnexionException
+	{
+		// tronque l'angle que l'on envoit a la série pour éviter les overflows
+				float angleTruncated = (float)angle;
+				String chaines[] = {"t3", Float.toString(angleTruncated)};
+				locomotionCardSerial.communiquer(chaines, 0);
+	}
 	
 	/**
 	 * Arrête le robot
@@ -346,5 +353,6 @@ public class LocomotionCardWrapper implements Service
 		}
 		return parsedInfos;
 	}
+
 	
 }

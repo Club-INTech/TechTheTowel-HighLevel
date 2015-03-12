@@ -99,9 +99,15 @@ public class RobotReal extends Robot
 	 * ATTENTION, la valeur "mur" est ignorée
 	 */
     @Override
+    public void turn(double angle, ArrayList<Hook> hooks, boolean mur, boolean isTurnRelative) throws UnableToMoveException
+    {
+        mLocomotion.turn(angle, hooks, isTurnRelative);
+    }
+    
+    @Override
     public void turn(double angle, ArrayList<Hook> hooks, boolean mur) throws UnableToMoveException
     {
-        mLocomotion.turn(angle, hooks);
+        mLocomotion.turn(angle, hooks, false);
     }
     
     @Override
