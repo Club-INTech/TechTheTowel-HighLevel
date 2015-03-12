@@ -60,10 +60,10 @@ class ThreadSensor extends AbstractThread
 	 * 
 	 */
 	
-	float angleSensorFrontLeft=0;
-	float angleSensorFrontRight=0;
-	float angleSensorBackLeft=0;
-	float angleSensorBackRight=0;
+	double angleSensorFrontLeft=0;
+	double angleSensorFrontRight=10 *2*(Math.PI) / 360;
+	double angleSensorBackLeft=0;
+	double angleSensorBackRight=0;
 	
 
 	

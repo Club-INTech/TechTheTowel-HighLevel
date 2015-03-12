@@ -326,6 +326,7 @@ public class Locomotion implements Service
             		{
             			detectEnemy(isMovementForward);
             			doItAgain = true; // si aucune détection
+                        log.critical("abwa", this);
             			break;
             		}
             		catch(UnexpectedObstacleOnPathException e2)
@@ -576,12 +577,12 @@ public class Locomotion implements Service
     
     public boolean isEnemyHere()
     {
-		try {
+		try 
+		{
 			detectEnemy(true);
 			return false;
 		}
 		catch (UnexpectedObstacleOnPathException e)
-
 		{
             log.critical("Catch de "+e+" dans isEnemyHere", this);
 			return true;
