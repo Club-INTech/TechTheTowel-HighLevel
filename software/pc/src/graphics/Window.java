@@ -4,6 +4,7 @@ import javax.swing.JFrame;
 
 import table.Table;
 import graphics.Mouse;
+import robot.RobotReal;
 
 /**
  * interface graphique de debugage
@@ -19,15 +20,14 @@ public class Window extends JFrame
 	private Panel mPanel;
 	private Mouse mMouse;
 	
-	//TODO : remettre le robot dans le constructeur
-	public Window(Table table/*, RobotReal robot*/) throws Exception
+	public Window(Table table, RobotReal robot)
 	{
 		this.setVisible(true);
 		this.setTitle("table");
 	    this.setSize(600, 400);
 	    this.setLocationRelativeTo(null);
 	    
-	    mPanel = new Panel(table/*, robot*/);
+	    mPanel = new Panel(table, robot);
 	    this.setContentPane(mPanel);
 	    
 	    mMouse = new Mouse(mPanel);
