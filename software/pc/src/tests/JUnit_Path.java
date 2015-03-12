@@ -4,15 +4,12 @@ import org.junit.*;
 
 import pathDingDing.PathDingDing;
 import table.Table;
-import scripts.AbstractScript;
 import scripts.ScriptManager;
 import smartMath.*;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
 
 import enums.ObstacleGroups;
-import enums.ScriptNames;
 import enums.ServiceNames;
 import exceptions.PathNotFoundException;
 import graphics.Window;
@@ -38,13 +35,7 @@ public class JUnit_Path extends JUnit_Test
     
 	@Test
     public void test() throws Exception
-    {
-    	ArrayList<Vec2> path = new ArrayList<Vec2>();
-    	
-    	int compt=0;//Compteur pour savoir quel point d'entrée ne marche pas
-
-    		
-    	
+    {  		
     	win.getPanel().drawGraph(pf.getGraph());
     	
     	try

@@ -75,7 +75,6 @@ public class SerialManager
 		} 
 		catch (ServiceTypeException e1)
 		{
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
@@ -235,7 +234,6 @@ public class SerialManager
 		}
 		catch (ServiceTypeException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return serieAsservissement;

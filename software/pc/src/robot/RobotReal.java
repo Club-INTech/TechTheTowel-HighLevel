@@ -44,8 +44,8 @@ public class RobotReal extends Robot
     public void copy(RobotChrono rc)
     {
     	// TODO: vérifier que la copie est faite sur tout ce qu'il y a besoin
-        getPositionFast().copy(rc.position);
-        rc.orientation = getOrientationFast();
+        getPosition().copy(rc.position);
+        rc.orientation = getOrientation();
     }
     
 
@@ -95,16 +95,25 @@ public class RobotReal extends Robot
 		mLocomotion.moveLengthwise(distance, hooksToConsider, expectsWallImpact);
 	}	
 
+	/**
+	 * ATTENTION, la valeur "mur" est ignorée
+	 */
     @Override
     public void turn(double angle, ArrayList<Hook> hooks, boolean mur) throws UnableToMoveException
     {
-        mLocomotion.turn(angle, hooks, mur);
+        mLocomotion.turn(angle, hooks);
     }
     
     @Override
     public void followPath(ArrayList<Vec2> chemin, ArrayList<Hook> hooks) throws UnableToMoveException
     {
-        mLocomotion.followPath(chemin, hooks);
+        mLocomotion.followPath(chemin, hooks, DirectionStrategy.getDefaultStrategy());
+    }
+
+    @Override
+    protected void followPath(ArrayList<Vec2> chemin, ArrayList<Hook> hooks, DirectionStrategy direction) throws UnableToMoveException
+    {
+        mLocomotion.followPath(chemin, hooks, direction);
     }
 
     @Override
@@ -118,7 +127,7 @@ public class RobotReal extends Robot
 	{
 		try
 		{
-			mLocomotion.getLocomotionCardWrapper().disableRotationnalFeedbackLoop();
+			mLocomotion.enableRotationnalFeedbackLoop();
 		}
 		catch (SerialConnexionException e)
 		{
@@ -131,7 +140,7 @@ public class RobotReal extends Robot
 	{
 		try
 		{
-			mLocomotion.getLocomotionCardWrapper().enableRotationnalFeedbackLoop();
+			mLocomotion.disableRotationnalFeedbackLoop();
 		}
 		catch (SerialConnexionException e)
 		{
@@ -153,12 +162,6 @@ public class RobotReal extends Robot
 	{
 	    return mLocomotion.getPosition();
 	}
-    
-	@Override
-	public Vec2 getPositionFast()
-	{
-		return mLocomotion.getPositionFast();
-	}
 	
 	@Override
 	public void setOrientation(double orientation)
@@ -173,16 +176,14 @@ public class RobotReal extends Robot
     }
 
 	@Override
-	public double getOrientationFast()
-	{
-		return mLocomotion.getOrientationFast();
-	}
-
-	@Override
 	public void setLocomotionSpeed(Speed vitesse)
 	{
-        mLocomotion.setTranslationnalSpeed(vitesse.PWMTranslation);
-        mLocomotion.setRotationnalSpeed(vitesse.PWMRotation);
+        try {
+			mLocomotion.setTranslationnalSpeed(vitesse.PWMTranslation);
+	        mLocomotion.setRotationnalSpeed(vitesse.PWMRotation);
+		} catch (SerialConnexionException e) {
+			e.printStackTrace();
+		}
 	}
 
 	

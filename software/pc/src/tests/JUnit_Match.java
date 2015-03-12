@@ -19,17 +19,30 @@ import strategie.GameState;
 
 
 /**
- * TODO: doc
+ * Premier test d'un match réel : sert à tester un script, un deplacement, un hook...
  * @author paul, theo
  *
  */
 public class JUnit_Match extends JUnit_Test 
 {
-	
-	// TODO: doc
+	/**
+	 * La liste de hooks : pour l'instant vides, à remplir
+	 */
 	ArrayList<Hook> emptyHook;
+	
+	/**
+	 * L'etat de la table
+	 */
 	GameState<Robot> real_state;
+	
+	/**
+	 * Le gestionnaire des scripts, instanciant et fournissant les scripts
+	 */
 	ScriptManager scriptmanager;
+	
+	/**
+	 * Le dialoguqe avec la carte Capteurs
+	 */
 	SensorsCardWrapper  mSensorsCardWrapper;
 		
 	

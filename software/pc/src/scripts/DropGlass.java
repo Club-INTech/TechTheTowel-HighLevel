@@ -173,7 +173,6 @@ public class DropGlass extends AbstractScript
 		}
 		catch (SerialConnexionException e1) 
 		{
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		try 
@@ -182,7 +181,6 @@ public class DropGlass extends AbstractScript
 		} 
 		catch (SerialConnexionException e) 
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

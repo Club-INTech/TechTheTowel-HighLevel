@@ -2,7 +2,6 @@ package smartMath;
 
 import exceptions.MatrixException;
 import Jama.Matrix;
-// TODO: Auto-generated Javadoc
 
 /**
  * Classe de calcul matriciel.
@@ -301,17 +300,13 @@ public class Matrn
 	}
 	
 	/**
-	 * Identiter.
-	 * 
-	 *
+	 *  Crée une matrice identité de taille n x n
+	 * 	 
 	 * @param n un entier 
 	 * @return la matrice identité
 	 */
-	static public Matrn identiter(int n)
+	static public Matrn identity(int n)
 	{
-		// TODO : doc
-		//nom de la méthode on français, mais ça explique qu'on construit une matice identité de taille n
-		
 		Matrn ident= new Matrn(n,n,0);
 		for(int i = 0; i <n; i++)
 		{

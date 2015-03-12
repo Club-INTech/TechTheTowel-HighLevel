@@ -9,7 +9,6 @@ import enums.Speed;
 import robot.RobotReal;
 import smartMath.Vec2;
 
-// TODO: Auto-generated Javadoc
 /**
  * Vérifie que le robot est bien branché.
  * @author pf, marsu
@@ -32,7 +31,7 @@ public class JUnit_javaToRobotLink  extends JUnit_Test
 		config.set("couleur", "jaune");
 		
 		robotvrai = (RobotReal)container.getService(ServiceNames.ROBOT_REAL);
-		robotvrai.setPosition(new Vec2(1251, 1695));	// TODO : cette position doit être la position de départ du robot 
+		robotvrai.setPosition(new Vec2(1381,1000));
 		//On démarre avec la cale !!!!
 		robotvrai.setOrientation((float)(-Math.PI/2));
 		robotvrai.setLocomotionSpeed(Speed.BETWEEN_SCRIPTS);

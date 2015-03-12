@@ -470,9 +470,9 @@ public class CloseClap extends AbstractScript
 		else if(version == 123)
 			return new Circle(1290,230); //point d'entrée : devant le clap 1
 		else if(version == -1)
-			return new Circle(1240,230); //point d'entrée : devant le clap 1 //FIXME point d'entrée à changer
+			return new Circle(1240,230); //point d'entrée : devant le clap 1 //TODO point d'entrée à changer
 		else if(version == -12)
-			return new Circle(1240,230); //point d'entrée : devant le clap 1 //FIXME point d'entrée à changer
+			return new Circle(1240,230); //point d'entrée : devant le clap 1 //TODO point d'entrée à changer
 		else
 		{
 			log.debug("Probleme d'entrée de position", this);

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import smartMath.*;
 import utils.Log;
 import utils.Config;
-import enums.ObstacleGroups;
 
 /**
  * Traite tout ce qui concerne la gestion des obstacles sur la table.
@@ -18,7 +17,6 @@ import enums.ObstacleGroups;
 public class ObstacleManager
 {
 	/** système de log sur lequel écrire. */
-    @SuppressWarnings("unused")
     private Log log;
 
 	/** endroit ou lire la configuration du robot */
@@ -31,6 +29,13 @@ public class ObstacleManager
     
     private ArrayList<Segment> mLines;
 	private ArrayList<ObstacleRectangular> mRectangles;
+
+	private int defaultObstacleRadius;
+	
+	/**
+	 * Booleen explicitant si l'obstacle existe deja
+	 */
+	private boolean isAlreadyExistant=false;
   
     /**
      * Instancie un nouveau gestionnaire d'obstacle.
@@ -50,13 +55,13 @@ public class ObstacleManager
 		mRectangles = new ArrayList<ObstacleRectangular>();
 		
         int robotRadius = Integer.parseInt(config.getProperty("rayon_robot"));
+        defaultObstacleRadius = Integer.parseInt(config.getProperty("rayon_robot_adverse"));
         
         //par defaut
         //mEnnemyRobot1 = new ObstacleCircular(new Vec2(0, 0), 200 + robotRadius);
       	//mEnnemyRobot2 = new ObstacleCircular(new Vec2(0, 0), 200 + robotRadius);
 		
-		// TODO: a quoi coresspondent des numeros ?
-        // reponse : a ceux de la doc /pc/config/obstacles
+        // les numeros sont ceux de la doc sur /pc/config/obstacles
 		
 		//obstacles 1, 2, 3
       	mLines.add(new Segment(new Vec2(-1500, 778 - robotRadius), new Vec2(-1100 + robotRadius, 778 - robotRadius)));
@@ -130,7 +135,7 @@ public class ObstacleManager
      */
     public void copy(ObstacleManager other)
     {
-    	//TODO: méthode de copie de ObstacleManager 
+    	//TODO innutilise
     }
 
     /**
@@ -141,7 +146,7 @@ public class ObstacleManager
      */
     public boolean equals(ObstacleManager other)
     {
-    	//TODO : a garder a jour
+    	//TODO innutilise
     	boolean IDontKnow = false;
         return IDontKnow;
     }
@@ -189,9 +194,9 @@ public class ObstacleManager
      */
     public synchronized void addObstacle(final Vec2 position)
     {
-    	//TODO : mettre un rayon plus adapte (30 par defaut)
-    	mMobileObstacles.add(new ObstacleProximity(position, 30));
+    	addObstacle (position,defaultObstacleRadius);
     }
+
     
     /**
      * Ajoute un obstacle sur la table a la position spécifiée, du rayon specifie (de type obstacleProximity)
@@ -200,7 +205,8 @@ public class ObstacleManager
      * @param radius rayon de l'obstacle a ajouter     */
     public synchronized void addObstacle(final Vec2 position, final int radius)
     {
-    	mMobileObstacles.add(new ObstacleProximity(position, radius));
+	    mMobileObstacles.add(new ObstacleProximity(position, radius));
+	    log.debug("Obstacle ajouté en "+position.x+";"+position.y, this);
     }
 
     /**
@@ -216,7 +222,7 @@ public class ObstacleManager
     }
 
     /**
-     * Renvoie true si un obstacle chevauche un disque.
+     * Renvoie true si un obstacle chevauche un disque. (uniquement un obstacle detecte par les capteurs)
      *
      * @param discCenter le centre du disque a vérifier
      * @param radius le rayon du disque
@@ -224,16 +230,12 @@ public class ObstacleManager
      */
     public boolean isDiscObstructed(final Vec2 discCenter, int radius)
     {
-    	//TODO vérifier si le disque est obstrué dans le cas d'un rectangle
     	boolean isDiscObstructed = false;
     	for(int i=0; i<mMobileObstacles.size(); i++)
     	{
-    		if ((radius+mMobileObstacles.get(i).radius)*(radius+mMobileObstacles.get(i).radius)<(discCenter.x-mMobileObstacles.get(i).position.x)*(discCenter.x-mMobileObstacles.get(i).position.x)+(discCenter.y-mMobileObstacles.get(i).position.y)*(discCenter.y-mMobileObstacles.get(i).position.y))
-    			isDiscObstructed=true;
-    	}
-    	for(int i=0; i<mFixedObstacles.size(); i++)
-    	{
-    		if ((radius+mFixedObstacles.get(i).radius)*(radius+mFixedObstacles.get(i).radius)<(discCenter.x-mFixedObstacles.get(i).position.x)*(discCenter.x-mFixedObstacles.get(i).position.x)+(discCenter.y-mFixedObstacles.get(i).position.y)*(discCenter.y-mFixedObstacles.get(i).position.y))
+    		if ((radius+mMobileObstacles.get(i).radius)*(radius+mMobileObstacles.get(i).radius)
+    			 > (discCenter.x-mMobileObstacles.get(i).getPosition().x)*(discCenter.x-mMobileObstacles.get(i).getPosition().x)
+    			 + (discCenter.y-mMobileObstacles.get(i).getPosition().y)*(discCenter.y-mMobileObstacles.get(i).getPosition().y))
     			isDiscObstructed=true;
     	}
     	return isDiscObstructed;
@@ -247,19 +249,24 @@ public class ObstacleManager
      */
     public synchronized void setEnnemyNewLocation(int ennemyID, final Vec2 position)
     {
-    	//TODO changer la position de l'ennemi demandé
+    	//TODO innutilise
+    	//changer la position de l'ennemi demandé
+    	//cela sera utilise par la strategie, la methode sera ecrite si besoin
+    	mMobileObstacles.get(ennemyID).setPosition(position);
     }
     
     /**
-     * Utilis� par le thread de stratégie.
-     * renvois la position du robot ennemi voulu sur la table.
+     * Utilis� par le thread de stratégie. (pas implemente : NE PAS UTILISER!!!)
+     * renvoie la position du robot ennemi voulu sur la table.
      *
      * @return la position de l'ennemi spécifié
      */
     public Vec2 getEnnemyLocation(int ennemyID)
     {
-    	//TODO donner la position de l'ennemi demandé
-        return  new Vec2();
+    	//TODO innutilise
+    	//donner la position de l'ennemi demandé
+    	//cela sera utilise par la strategie, la methode sera ecrite si besoin
+        return  mMobileObstacles.get(ennemyID).position;
     }
     
     
@@ -276,7 +283,8 @@ public class ObstacleManager
     
     /**
      * Vérifie si le position spécifié est dans l'obstacle spécifié ou non
-     * Attention : l'obstacle doit etre issu des classes ObstacleCircular ou ObstacleRectangular
+     * Attention : l'obstacle doit etre issu des classes ObstacleCircular ou ObstacleRectangular sous peine d'exception
+     * Attention : verifie si le point (et non le robot) est dans l'obstacle.
      *
      * @param pos la position a vérifier
      * @param obstacle l'obstacle a considérer
@@ -299,7 +307,7 @@ public class ObstacleManager
     }
     
     /**
-	 * Vérifie si la position donnée est dégagée ou si elle est dans l'un des obstacles sur la table
+	 * Vérifie si la position donnée est dégagée ou si elle est dans l'un des obstacles sur la table (tous les obstacles)
      *
      * @param position la position a vérifier
      * @return true, si la position est dans un obstacle

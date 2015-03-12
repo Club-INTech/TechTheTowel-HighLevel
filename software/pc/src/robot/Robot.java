@@ -13,13 +13,13 @@ import enums.ActuatorOrder;
 import enums.ObstacleGroups;
 import enums.SensorNames;
 import enums.Speed;
+import enums.UnableToMoveReason;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import utils.Log;
 import utils.Config;
 
-// TODO: Auto-generated Javadoc
 // TODO ajouter les capteurs au robot.
 /**
  *  Classe abstraite du robot, dont héritent RobotVrai et RobotChrono
@@ -140,7 +140,16 @@ public abstract class Robot implements Service
     // TODO: ne pas utiliser cette méthode. il faut utiliser moveLengthwiseTowardWall pour foncer dans un mur.
     // à mettre en privé
     public abstract void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException;
-    
+
+    /**
+     * Suit un chemin decrit par une liste de points
+     * @param path le chemin a suivre, sous forme d'une liste de points 
+     * @param hooks les  hooks a prendre en compte, à declencher suivant leurs conditions respectives
+     * @param directionstrategy ce que la strategie choisit comme optimal (en avant, en arriere, au plus rapide)
+     * @throws UnableToMoveException si le robot a un bloquage mecanique, ou un obstacle vu par un capteur
+     */
+    protected abstract void followPath(ArrayList<Vec2> chemin, ArrayList<Hook> hooks, DirectionStrategy direction) throws UnableToMoveException;
+
 
 	/**
 	 * Fais suivre un chemin au robot décrit par une liste de point.
@@ -187,22 +196,6 @@ public abstract class Robot implements Service
 	 * @return l'orientation en radiants courante du robot sur la table
 	 */
     public abstract double getOrientation();
-    
-	/**
-	 * Donne la position du robot sur la table.
-	 * Cette méthode est rapide mais peu précise: elle ne déclenche pas d'appel a la série pour obtenir une position a jour.
-	 * La position revoyée est celle mémorisée lors de sa dernière mise a jour (la date de la dernière mise a jour est inconnue).
-	 * @return la dernière position mémorisée du robot sur la table
-	 */
-    public abstract Vec2 getPositionFast();
-    
-	/**
-	 * Donne l'orientation du robot sur la table.
-	 * Cette méthode est rapide mais peu précise: elle ne déclenche pas d'appel a la série pour obtenir une orientation a jour.
-	 * L'orientation revoyée est celle mémorisée lors de sa dernière mise a jour (la date de la dernière mise a jour est inconnue).
-	 * @return la dernière orientation mémorisée du robot sur la table
-	 */
-    public abstract double getOrientationFast();
     
 	/**
 	 * Fait tourner le robot (méthode bloquante)
@@ -297,13 +290,27 @@ public abstract class Robot implements Service
      * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
      * @throws PathNotFoundException lorsque le pathdingding ne trouve pas de chemin 
      */
-    public void moveToLocation(Vec2 aim, ArrayList<Hook> hooksToConsider, Table table) throws UnableToMoveException, PathNotFoundException
+    public void moveToLocation(Vec2 aim, ArrayList<Hook> hooksToConsider, Table table) throws  PathNotFoundException, UnableToMoveException
     {
     	//TODO : preciser les obstacles a eviter
-    	ArrayList<Vec2> path = pathDingDing.computePath(getPosition(),aim, EnumSet.noneOf(ObstacleGroups.class));
+    	ArrayList<Vec2> path = pathDingDing.computePath(getPosition(),aim, EnumSet.of(ObstacleGroups.ENNEMY_ROBOTS));
     	
-    	//TODO : enlever le premier point?
-		followPath(path , hooksToConsider);
+		try 
+		{
+			followPath(path , hooksToConsider);
+		} 
+		catch (UnableToMoveException e) 
+		{
+			log.critical("Catch de "+e+" dans moveToLocation, pret à calculer un nouveau path" , this);
+
+			//si le chemin est bloque par un robot ennemi on appel a nouveau le pathdingding pour qu'il calcul un autre chemin
+			if (e.reason.compareTo(UnableToMoveReason.OBSTACLE_DETECTED)==0)
+			{
+				ArrayList<Vec2> newPath = pathDingDing.computePath(getPosition(),aim, EnumSet.noneOf(ObstacleGroups.class));
+				log.debug("Nouveau path : "+ newPath,this);
+				followPath(newPath , hooksToConsider);
+			}
+		}
     }
     
     /**
@@ -320,7 +327,7 @@ public abstract class Robot implements Service
     public void moveToCircle(Circle aim, ArrayList<Hook> hooksToConsider, Table table) throws PathNotFoundException, UnableToMoveException
     {
     	//TODO : preciser les obstacles a eviter
-    	ArrayList<Vec2> path = pathDingDing.computePath(getPosition(),aim.toVec2(),EnumSet.noneOf(ObstacleGroups.class)); // TODO ATTENTION a changer 
+    	ArrayList<Vec2> path = pathDingDing.computePath(getPosition(),aim.toVec2(),EnumSet.of(ObstacleGroups.ENNEMY_ROBOTS)); // TODO ATTENTION a changer 
     	
     	
     	//retire une distance egale au rayon du cercle au dernier point du chemin (le centre du cercle)
@@ -356,9 +363,24 @@ public abstract class Robot implements Service
     	 */
     	path.add(movementVector.dotFloat( (movementVector.length()-aim.radius)/movementVector.length() ).plusNewVector(precedentPathPoint));
 
-    	followPath(path , hooksToConsider);
+    	try 
+    	{
+			followPath(path , hooksToConsider);
+		} 
+    	catch (UnableToMoveException e) 
+    	{
+			log.critical("Catch de"+e+" dans moveToCircle , pret à calculer un nouveau path" , this);
+
+    		//si le chemin est bloque par un robot ennemi on recalcule le chemin par un autre appel au pathdingding
+			if (e.reason.compareTo(UnableToMoveReason.OBSTACLE_DETECTED)==0)
+			{
+				ArrayList<Vec2> newPath = pathDingDing.computePath(getPosition(),e.aim, EnumSet.noneOf(ObstacleGroups.class));
+				log.debug("Nouveau path calculé"+newPath , this);
+				followPath(newPath , hooksToConsider);
+			}
+		}
     }
-    
+
 	/**
 	 * Active l'asservissement en rotation du robot.
 	 */

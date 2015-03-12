@@ -4,7 +4,9 @@ import enums.SensorNames;
 import exceptions.serial.SerialConnexionException;
 import robot.cardsWrappers.SensorsCardWrapper;
 import table.Table;
+import robot.RobotReal;
 import utils.Sleep;
+import smartMath.Vec2;
 
 /**
  * Thread qui ajoute en continu les obstacles détectés par les capteurs.
@@ -14,6 +16,11 @@ import utils.Sleep;
 
 class ThreadSensor extends AbstractThread
 {
+	/** La table */
+	private Table mTable;
+	
+	/** Le robot */
+	private RobotReal mRobot;
 
 	/** La carte capteurs avec laquelle on doit communiquer */
 	private SensorsCardWrapper mSensorsCardWrapper;
@@ -28,17 +35,21 @@ class ThreadSensor extends AbstractThread
 	 */
 	int distanceBetweenGuideAndUltrasound = 20;
 	
+	int maxSensorRange;
+	
 	/**
 	 * Crée un nouveau thread de capteurs
 	 *
 	 * @param table La table a l'intérieure de laquelle le thread doit croire évoluer
 	 * @param sensorsCardWrapper La carte capteurs avec laquelle le thread va parler
 	 */
-	ThreadSensor (Table table, SensorsCardWrapper sensorsCardWrapper)
+	ThreadSensor (Table table, RobotReal robot, SensorsCardWrapper sensorsCardWrapper)
 	{
 		super(config, log);
 		this.mSensorsCardWrapper = sensorsCardWrapper;
 		Thread.currentThread().setPriority(2);
+		mTable = table;
+		mRobot = robot;
 	}
 	
 	/* (non-Javadoc)
@@ -49,9 +60,12 @@ class ThreadSensor extends AbstractThread
 	{
 		log.debug("Lancement du thread de capteurs", this);
 		updateConfig();
+		maxSensorRange = Integer.parseInt(config.getProperty("horizon_capteurs"));
 		
 		
 		// boucle d'attente de début de match
+		//TODO : decommenter
+		/*
 		while(!ThreadTimer.matchStarted)
 		{
 			if(stopThreads)
@@ -61,6 +75,7 @@ class ThreadSensor extends AbstractThread
 			}
 			Sleep.sleep(50);
 		}
+		*/
 		
 		
 		// boucle principale, celle qui dure tout le match
@@ -82,17 +97,17 @@ class ThreadSensor extends AbstractThread
 			{
 				distanceFront = (int[]) mSensorsCardWrapper.getSensorValue(SensorNames.ULTRASOUND_FRONT_SENSOR);
 				
-				//on met tout les capteurs qui detectent un objet DANS le robot a 3000
+				//on met tout les capteurs qui detectent un objet DANS le robot ou à plus de maxSensorRange a 0
 				for (int i=0; i<distanceFront.length; i++)
-					if (distanceFront[i]<distanceBetweenGuideAndUltrasound) 
-						distanceFront[i]=3000;
+					if (distanceFront[i]<distanceBetweenGuideAndUltrasound || distanceFront[i] > maxSensorRange) 
+						distanceFront[i]=0;
 				
 			}
 			catch(SerialConnexionException e)
 			{
 				log.critical("La carte capteurs ne répond pas !", this);
 				e.printStackTrace();
-				distanceFront = (int[]) SensorNames.ULTRASOUND_FRONT_SENSOR.getDefaultValue(); // valeur considérée comme infinie
+				distanceFront = (int[]) SensorNames.ULTRASOUND_FRONT_SENSOR.getDefaultValue();
 			}
 			
 			int[] distanceBack;
@@ -100,17 +115,30 @@ class ThreadSensor extends AbstractThread
 			try 
 			{
 				distanceBack = (int[]) mSensorsCardWrapper.getSensorValue(SensorNames.ULTRASOUND_BACK_SENSOR);
+				//on met tout les capteurs qui detectent un objet à plus de maxSensorRange a 0
+				for (int i=0; i<distanceBack.length; i++)
+					if (distanceBack[i]<distanceBetweenGuideAndUltrasound || distanceBack[i] > maxSensorRange) 
+						distanceBack[i]=0;
 			}
 			catch (SerialConnexionException e)
 			{
 				log.critical("La carte capteurs ne répond pas !", this);
 				e.printStackTrace();
-				distanceBack = (int[]) SensorNames.ULTRASOUND_BACK_SENSOR.getDefaultValue(); //distance consideree comme infinie
+				distanceBack = (int[]) SensorNames.ULTRASOUND_BACK_SENSOR.getDefaultValue();
 			}
 			
-			//FIXME: ajouter les obstacles quand l'obstacleManager sera pret
 			
-			log.debug("Distance selon ultrason avant: "+distanceFront+"; ultrason arriere: "+distanceBack, this);
+			//ajout d'obstacles mobiles dans l'obstacleManager
+			int radius = Integer.parseInt(config.getProperty("rayon_robot_adverse"));
+			for (int i=0; i<distanceFront.length; i++)
+				if(distanceFront[i]!=0)
+					mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x + (int)((distanceFront[i]+radius)*Math.cos(mRobot.getOrientation())), mRobot.getPosition().y + (int)((distanceFront[i]+radius)*Math.sin(mRobot.getOrientation()))));
+			for (int i=0; i<distanceBack.length; i++)
+				if(distanceBack[i]!=0)
+					mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x - (int)((distanceBack[i]+radius)*Math.cos(mRobot.getOrientation())), mRobot.getPosition().y - (int)((distanceBack[i]+radius)*Math.sin(mRobot.getOrientation()))));
+			
+			//log.debug("Distance selon ultrasons avant: "+distanceFront[0]+";"+distanceFront[1]+" //  ultrason arriere: "+distanceBack[0]+";"+distanceBack[1], this);
+			
 			if (distanceFront[1] > 0 && distanceFront[1] < 70 || distanceFront[0] > 0 && distanceFront[0] < 70)
 				log.debug("obstacle detecte a moins de 7 cm !", this);
 			

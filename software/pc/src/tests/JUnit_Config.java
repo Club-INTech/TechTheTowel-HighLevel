@@ -3,7 +3,6 @@ package tests;
 import org.junit.Test;
 import org.junit.Assert;
 
-// TODO: Auto-generated Javadoc
 /**
  * Tests unitaires pour la configuration... juste épique.
  * @author pf

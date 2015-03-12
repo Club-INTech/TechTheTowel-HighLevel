@@ -13,7 +13,6 @@ import table.Table;
 import utils.Sleep;
 
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class JUnit_Laser.
  */

@@ -1,16 +1,13 @@
 package tests;
 
 import hook.Callback;
-import hook.Executable;
 import hook.Hook;
-import hook.methods.OuvreBrasExe;
+import hook.methods.OpenLeftArmExe;
 import hook.types.HookFactory;
 
 import java.util.ArrayList;
 
-import scripts.AbstractScript;
 import scripts.ScriptManager;
-import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
 
@@ -116,7 +113,7 @@ public class JUnit_Hooks extends JUnit_Test
 			Hook openArmTestHook = hookFactory.newHookIsDistanceToPointLesserThan(100,center, 20);
 			
 			// ajoute un callback au hook de position qui ouvre le bras  bras
-			openArmTestHook.addCallback(	new Callback(new OuvreBrasExe(),true, real_state)	);
+			openArmTestHook.addCallback(	new Callback(new OpenLeftArmExe(),true, real_state)	);
 			
 			// ajoute le hook a la liste a passer a la locomotion
 			testHookList.add(openArmTestHook);

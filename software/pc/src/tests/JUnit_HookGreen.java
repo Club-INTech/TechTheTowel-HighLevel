@@ -11,7 +11,6 @@ import enums.Speed;
 import robot.RobotReal;
 import smartMath.Vec2;
 
-// TODO: Auto-generated Javadoc
 /**
  * Tests unitaires des hooks (en rouge: avec symétrie).
  *

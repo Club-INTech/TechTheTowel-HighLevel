@@ -35,6 +35,7 @@ public class Log implements Service
 	
 	/** Vrai s'il faut sauvegarder les logs dans un fichier. */
 	private boolean saveLogs = false;
+
 	
 	/**
 	 * Instancie un nouvveau service de log

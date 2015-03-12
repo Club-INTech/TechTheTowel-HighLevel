@@ -7,7 +7,6 @@ import enums.ServiceNames;
 import robot.RobotReal;
 
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class JUnit_RobotReal.
  */

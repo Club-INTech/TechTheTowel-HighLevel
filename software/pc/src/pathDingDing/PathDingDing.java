@@ -2,7 +2,6 @@ package pathDingDing;
 
 import smartMath.*;
 import table.Table;
-import table.obstacles.*;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -34,7 +33,7 @@ public class PathDingDing implements Service
 	}
 	
 	/**
-	 * methode a appeler, avec la liste des obstacles à considerer
+	 * methode a appeler, avec la liste des obstacles ï¿½ considerer
 	 * @param start le point de depart
 	 * @param end le point d'arrivee
 	 * @return un chemin optimise liant depart et arrivee
@@ -275,9 +274,7 @@ public class PathDingDing implements Service
 			{
 				//si le segment et le cercle se coupent
 				if(intersects(new Segment(path.get(i), path.get(i+1)), circles.get(j)))
-				{
 					intersects = true;
-				}
 			}
 		}
 		return !intersects;

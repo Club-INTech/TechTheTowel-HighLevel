@@ -34,9 +34,8 @@ public class ThreadTimer extends AbstractThread
 	/** Date de début du match. */
 	public static long matchStartTimestamp;
 	
-	/** Durée en miliseconde d'un match. */
-	public static long matchDuration = 90000000;
-	//TODO : mettre 90 secondes au lieu de 90 000 secondes pour un vrai match
+	/** Durée en miliseconde d'un match recupéré de la config */
+	public static long matchDuration = Integer.parseInt(config.getProperty("temps_match").replaceAll(" ","") ) *1000;
 	
 	/** Temps en ms qui s'écoule entre deux mise a jour de la liste des obstacle périmables. Lors de chaque mise a jour, les obstacles périmés sont détruits. */
 	public static int obstacleRefreshInterval = 500;
@@ -66,7 +65,7 @@ public class ThreadTimer extends AbstractThread
 	{
 		log.debug("Lancement du thread timer", this);
 
-		// allume les capteurs
+		// on eteind les capteurs
 		config.set("capteurs_on", "false");
 		mSensorsCardWrapper.updateConfig();	
 		
@@ -128,7 +127,7 @@ public class ThreadTimer extends AbstractThread
 	private void onMatchEnded()
 	{
 
-		log.debug("Fin du Match !", this);
+		log.debug("Fin du Match car fin des 90s !", this);
 
 		// Le match est fini, immobilisation du robot
 		matchEnded = true;
@@ -171,7 +170,8 @@ public class ThreadTimer extends AbstractThread
 	public void updateConfig()
 	{
 		// facteur 1000 car temps_match est en secondes et duree_match en ms
-		try {
+		try
+		{
 			matchDuration = 1000*Long.parseLong(config.getProperty("temps_match"));
 		}
 		catch(Exception e)

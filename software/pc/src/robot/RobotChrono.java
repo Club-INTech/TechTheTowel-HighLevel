@@ -113,6 +113,20 @@ public class RobotChrono extends Robot
 					 );
 	}
 	
+    protected void followPath(ArrayList<Vec2> path, ArrayList<Hook> hooks, DirectionStrategy direction) throws UnableToMoveException
+    {
+		// va sucessivement a tout les points
+		for(int i = 0; i < path.size(); i++)
+        {
+			//TODO mettre les bonnes valeures !!!
+            @SuppressWarnings("unused")
+			Vec2 aim = path.get(i);
+            turn (0);
+            moveLengthwise(0);
+        }
+    	
+    }
+
 	@SuppressWarnings("unused")
 	@Override
     public void followPath(ArrayList<Vec2> path, ArrayList<Hook> hooksToConsider) throws UnableToMoveException
@@ -243,18 +257,6 @@ public class RobotChrono extends Robot
 		
         return orientation;
     }
-
-	@Override
-	public Vec2 getPositionFast()
-	{
-        return position.clone();
-	}
-
-	@Override
-	public double getOrientationFast()
-	{
-        return orientation;
-	}
 
 	@Override
 	public Object getSensorValue(SensorNames sensor) 

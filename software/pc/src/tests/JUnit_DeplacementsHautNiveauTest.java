@@ -8,13 +8,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import enums.ServiceNames;
+import robot.DirectionStrategy;
 import robot.Locomotion;
 import robot.RobotReal;
 import smartMath.Vec2;
 import strategie.GameState;
 import utils.Sleep;
 
-// TODO: Auto-generated Javadoc
 /**
  * Teste les fonctions de déplacement de haut niveau.
  *
@@ -49,20 +49,6 @@ public class JUnit_DeplacementsHautNiveauTest extends JUnit_Test
         real_state = (GameState<RobotReal>) container.getService(ServiceNames.GAME_STATE);
         robot.setPosition(new Vec2(1000, 900));
         robot.setOrientation(Math.PI/2);
-        Vec2 consigne = new Vec2(700, 1400);
-        robot.setAim(consigne);
-    }
-    
-    /**
-     * Test_va_au_point_courbe.
-     *
-     * @throws Exception the exception
-     */
-    @Test
-    public void test_va_au_point_courbe() throws Exception
-    {
-//        robot.va_au_point_courbe((float) Math.PI, 500, false);
-        robot.moveInDirection((float) (Math.PI/4), 500, true);
     }
 
     /**
@@ -164,7 +150,7 @@ public class JUnit_DeplacementsHautNiveauTest extends JUnit_Test
             chemin.add(new Vec2(-1000, 1200));
             chemin.add(new Vec2(0, 500));
             chemin.add(new Vec2(1000, 1200));
-            robot.followPath(chemin, null);
+            robot.followPath(chemin, null, DirectionStrategy.FASTEST);
         }
     }
 

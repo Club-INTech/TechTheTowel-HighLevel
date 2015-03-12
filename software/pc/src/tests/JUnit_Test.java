@@ -8,7 +8,6 @@ import utils.Config;
 import container.Container;
 import enums.ServiceNames;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class JUnit_Test.
  */

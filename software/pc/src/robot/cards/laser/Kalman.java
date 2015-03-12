@@ -31,7 +31,7 @@ class Kalman {
 			this.h = h;
 			this.r = r;
 			this.q = q;
-			this.ident = Matrn.identiter(this.x.size[0]);
+			this.ident = Matrn.identity(this.x.size[0]);
 			
 		}
 	

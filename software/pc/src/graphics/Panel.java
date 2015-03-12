@@ -11,7 +11,6 @@ import table.Table;
 import smartMath.*;
 import pathDingDing.*;
 import robot.*;
-
 import table.obstacles.*;
 
 /**
@@ -26,6 +25,7 @@ public class Panel extends JPanel
 	
 	private ArrayList<Vec2> mPath;
 	private Table mTable;
+	@SuppressWarnings("unused")
 	private Robot mRobot;
 	private boolean showGraph;
 	private Graph mGraph;

@@ -150,7 +150,6 @@ public class Container
 																	(Log)getService(ServiceNames.LOG),
 																	(GameState<RobotReal>)getService(ServiceNames.GAME_STATE)
 																);
-		//FIXME: robo real modifie je suis pas sur de moi
 		else if(serviceRequested == ServiceNames.ROBOT_REAL)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new RobotReal(
 																	(Locomotion)getService(ServiceNames.LOCOMOTION),
@@ -190,6 +189,7 @@ public class Container
 		else if(serviceRequested == ServiceNames.THREAD_SENSOR)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)threadmanager.getThreadSensors(
 																	(Table)getService(ServiceNames.TABLE),
+																	(RobotReal)getService(ServiceNames.ROBOT_REAL),
 																	(SensorsCardWrapper)getService(ServiceNames.SENSORS_CARD_WRAPPER)
 																);
 		else if(serviceRequested == ServiceNames.THREAD_LASER)
@@ -248,7 +248,7 @@ public class Container
 	{
 		// TODO: faire une gestion propre des exceptions
 		try {
-			getService(ServiceNames.THREAD_LASER);
+			//getService(ServiceNames.THREAD_LASER);
 		} catch (Exception e) {	
 			e.printStackTrace();
 		}

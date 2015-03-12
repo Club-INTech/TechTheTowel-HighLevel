@@ -1,6 +1,8 @@
 package tests;
 
 
+import hook.Hook;
+
 import java.util.ArrayList;
 
 import org.junit.Before;
@@ -9,6 +11,7 @@ import org.junit.Test;
 
 import enums.ServiceNames;
 import exceptions.Locomotion.UnableToMoveException;
+import robot.DirectionStrategy;
 import robot.Locomotion;
 import smartMath.Vec2;
 
@@ -33,6 +36,8 @@ public class JUnit_Locomotion extends JUnit_Test
 		 */
 	}
 
+	
+	
 	/* (non-Javadoc)
 	 * @see tests.JUnit_Test#setUp()
 	 */
@@ -42,10 +47,24 @@ public class JUnit_Locomotion extends JUnit_Test
 		super.setUp();
 		log.debug("JUnit_DeplacementsTest.setUp()", this);
 		mLocomotion = (Locomotion)container.getService(ServiceNames.LOCOMOTION);
-		mLocomotion.setPosition(new Vec2(1500-71-48, 1000));
+		config.set("couleur", "vert");
+		mLocomotion.updateConfig();
+		mLocomotion.setPosition(new Vec2 (1381,1000));
 		mLocomotion.setOrientation(Math.PI);
+		mLocomotion.setTranslationnalSpeed(170);
+		mLocomotion.setRotationnalSpeed(160);
 	}
-	
+
+	public void testMoveLengthwise() throws Exception
+	{
+		mLocomotion.moveLengthwise(300,  new ArrayList<Hook>(), false);
+		Vec2 position = mLocomotion.getPosition();
+		log.debug("en position : x="+position.x+"; y="+position.y, this);
+		mLocomotion.moveLengthwise(-300,  new ArrayList<Hook>(), false);
+		position = mLocomotion.getPosition();
+		log.debug("en position : x="+position.x+"; y="+position.y, this);
+	}	
+
 	/**
 	 * Test_tourner.
 	 * ATTENTION NE FONCTIONNE QUE DU COTE VERT !
@@ -62,11 +81,10 @@ public class JUnit_Locomotion extends JUnit_Test
 		log.debug("en position : x="+position.x+"; y="+position.y, this);
 		try 
 		{
-			mLocomotion.moveLengthwise(-2000,null, false);
+			mLocomotion.moveLengthwise(2000,null, false);
 		} 
 		catch (UnableToMoveException e) 
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		position = mLocomotion.getPosition();
@@ -76,9 +94,9 @@ public class JUnit_Locomotion extends JUnit_Test
 		{
 			try 
 			{
-				mLocomotion.followPath(path, null);
+				mLocomotion.followPath(path, null, DirectionStrategy.FORCE_FORWARD_MOTION);
 				position = mLocomotion.getPosition();
-				log.debug("en position : x="+position.x+"; y="+position.y, this);
+				log.debug("en position : x="+position.x+"; y="+position.y+" après le followpath", this);
 			} 
 			catch (UnableToMoveException e) 
 			{

@@ -14,7 +14,6 @@ import scripts.ScriptManager;
 import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
-import table.Table;
 import enums.ScriptNames;
 import enums.ServiceNames;
 import exceptions.PathNotFoundException;
@@ -99,17 +98,14 @@ public class JUnit_DropGlass extends JUnit_Test {
 		} 
 		catch (SerialConnexionException e) 
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 		catch (PathNotFoundException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 		catch (SerialFinallyException e) 
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

@@ -19,7 +19,6 @@ import enums.ServiceNames;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import robot.Robot;
-import robot.RobotReal;
 import robot.cardsWrappers.ActuatorCardWrapper;
 import pathDingDing.PathDingDing;
 
@@ -40,7 +39,7 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 	public void setUp() throws Exception
 	{
 		super.setUp();
-		state = ((GameState<Robot>)container.getService(ServiceNames.GAME_STATE));
+		state = (GameState<Robot>)container.getService(ServiceNames.GAME_STATE);
 		actionneurs = (ActuatorCardWrapper)container.getService(ServiceNames.ACTUATOR_CARD_WRAPPER);
 
 
@@ -99,7 +98,6 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 			{
 				log.debug("chemin bloque", this);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			log.debug("en position ("+robot.getPosition().x+", "+robot.getPosition().y+")", this);

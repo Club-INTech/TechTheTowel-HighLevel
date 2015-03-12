@@ -1,13 +1,11 @@
 package pathDingDing;
 
 import smartMath.*;
-import table.Table;
-import table.obstacles.*;
 
 import java.util.ArrayList;
 
 /**
- * noeud composant le graphe, composé de sa position, et des noeuds auquel il est rattache.
+ * noeud composant le graphe, composï¿½ de sa position, et des noeuds auquel il est rattache.
  * @author Etienne
  *
  */

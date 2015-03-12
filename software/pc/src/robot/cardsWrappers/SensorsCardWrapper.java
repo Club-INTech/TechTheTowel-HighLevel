@@ -111,13 +111,16 @@ public class SensorsCardWrapper implements Service
      */
     public Object getSensorValue(SensorNames sensor) throws SerialConnexionException
     {
-    	log.debug("demande aux capteurs : \""+sensor.getSerialCommunication()+"\"", this);
+    	//log.debug("demande aux capteurs : \""+sensor.getSerialCommunication()+"\"", this);
 		String[] sensorAnswer = sensorsCardSerial.communiquer(sensor.getSerialCommunication(),sensor.getAwnserLineAmount());
-		
 		
 		if (sensor.getDefaultValue().getClass() == Boolean.class)
 		{
-			Boolean[] parsedAnswer = {};
+			return (sensorAnswer[0].toString() != "0");
+		}
+		else if (sensor.getDefaultValue().getClass() == boolean[].class)
+		{
+			boolean[] parsedAnswer = new boolean[sensor.getAwnserLineAmount()];
 			if (sensor.getAwnserLineAmount()==1)
 			{
 				return (sensorAnswer[0].toString() != "0");
@@ -130,27 +133,35 @@ public class SensorsCardWrapper implements Service
 		}
 		else if (sensor.getDefaultValue().getClass() == Integer.class)
 		{
-			Integer[] parsedAnswer = {};
+			return Integer.parseInt(sensorAnswer[0].toString());
+		}
+		else if (sensor.getDefaultValue().getClass() == int[].class)
+		{
+			int[] parsedAnswer = new int[sensor.getAwnserLineAmount()];
 			if (sensor.getAwnserLineAmount()==1)
 			{
 				return Integer.parseInt(sensorAnswer[0].toString());
 			}
-				for (int i = 0; i<sensor.getAwnserLineAmount(); i++)
-				{
-					parsedAnswer[i] = Integer.parseInt(sensorAnswer[i].toString());
-				}
-				return parsedAnswer;
+			for (int i = 0; i<sensor.getAwnserLineAmount(); i++)
+			{
+				parsedAnswer[i] = Integer.parseInt(sensorAnswer[i].toString());
+			}
+			return parsedAnswer;
 		}
 		else if (sensor.getDefaultValue().getClass() == Float.class)
 		{
-			Float[] parsedAnswer = {};
+			return Float.parseFloat(sensorAnswer[0]);
+		}
+		else if (sensor.getDefaultValue().getClass() == float[].class)
+		{
+			float[] parsedAnswer = new float[sensor.getAwnserLineAmount()];
 			if (sensor.getAwnserLineAmount()==1)
 			{
-				return Float.parseFloat(sensorAnswer[0].toString());
+				return Float.parseFloat(sensorAnswer[0]);
 			}
 				for (int i = 0; i<sensor.getAwnserLineAmount(); i++)
 				{
-					parsedAnswer[i] = Float.parseFloat(sensorAnswer[i].toString());
+					parsedAnswer[i] = Float.parseFloat(sensorAnswer[i]);
 				}
 				return parsedAnswer;
 		}
@@ -160,10 +171,5 @@ public class SensorsCardWrapper implements Service
 			log.critical("Le type de retour du capteur n'est pas pris en compte : modifiez SensorsCardWrapper.getSensorValue", this);
 			return false;
 		}
-		
-		
-		
-		
     }
-     
 }
