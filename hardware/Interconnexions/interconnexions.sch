@@ -28356,7 +28356,7 @@ Es handelt sich hierbei um AK500 in horizontaler Ausführung.&lt;p&gt;
 <label x="285.75" y="-64.77" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="CAPTEUR_1" class="0">
+<net name="CAPTEUR_4" class="0">
 <segment>
 <pinref part="JP13" gate="A" pin="3"/>
 <wire x1="414.02" y1="48.26" x2="421.64" y2="48.26" width="0.1524" layer="91"/>
@@ -28368,7 +28368,7 @@ Es handelt sich hierbei um AK500 in horizontaler Ausführung.&lt;p&gt;
 <label x="116.84" y="27.94" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="CAPTEUR_2" class="0">
+<net name="CAPTEUR_3" class="0">
 <segment>
 <pinref part="JP14" gate="A" pin="3"/>
 <wire x1="414.02" y1="27.94" x2="421.64" y2="27.94" width="0.1524" layer="91"/>
@@ -28380,7 +28380,7 @@ Es handelt sich hierbei um AK500 in horizontaler Ausführung.&lt;p&gt;
 <label x="116.84" y="22.86" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="CAPTEUR_3" class="0">
+<net name="CAPTEUR_2" class="0">
 <segment>
 <pinref part="JP15" gate="A" pin="3"/>
 <wire x1="414.02" y1="7.62" x2="421.64" y2="7.62" width="0.1524" layer="91"/>
@@ -28392,7 +28392,7 @@ Es handelt sich hierbei um AK500 in horizontaler Ausführung.&lt;p&gt;
 <label x="116.84" y="20.32" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="CAPTEUR_4" class="0">
+<net name="CAPTEUR_1" class="0">
 <segment>
 <pinref part="JP16" gate="A" pin="3"/>
 <wire x1="414.02" y1="-12.7" x2="421.64" y2="-12.7" width="0.1524" layer="91"/>
@@ -28476,7 +28476,7 @@ Es handelt sich hierbei um AK500 in horizontaler Ausführung.&lt;p&gt;
 <label x="116.84" y="7.62" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="CAPTEUR_A1_US" class="0">
+<net name="CAPTEUR_US_AV_D" class="0">
 <segment>
 <pinref part="JP2" gate="A" pin="3"/>
 <wire x1="274.32" y1="48.26" x2="281.94" y2="48.26" width="0.1524" layer="91"/>
@@ -28488,7 +28488,7 @@ Es handelt sich hierbei um AK500 in horizontaler Ausführung.&lt;p&gt;
 <label x="30.48" y="43.18" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="CAPTEUR_A2" class="0">
+<net name="CAPTEUR_US_AV_G" class="0">
 <segment>
 <pinref part="JP1" gate="A" pin="3"/>
 <wire x1="274.32" y1="27.94" x2="281.94" y2="27.94" width="0.1524" layer="91"/>
@@ -28500,7 +28500,7 @@ Es handelt sich hierbei um AK500 in horizontaler Ausführung.&lt;p&gt;
 <label x="30.48" y="45.72" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="CAPTEUR_A3_US" class="0">
+<net name="CAPTEUR_A2" class="0">
 <segment>
 <pinref part="JP3" gate="A" pin="3"/>
 <wire x1="274.32" y1="7.62" x2="281.94" y2="7.62" width="0.1524" layer="91"/>
@@ -28512,7 +28512,7 @@ Es handelt sich hierbei um AK500 in horizontaler Ausführung.&lt;p&gt;
 <label x="-20.32" y="45.72" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="CAPTEUR_A5" class="0">
+<net name="CAPTEUR_A1" class="0">
 <segment>
 <pinref part="JP5" gate="A" pin="3"/>
 <wire x1="304.8" y1="48.26" x2="312.42" y2="48.26" width="0.1524" layer="91"/>
@@ -28524,7 +28524,7 @@ Es handelt sich hierbei um AK500 in horizontaler Ausführung.&lt;p&gt;
 <label x="-20.32" y="40.64" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="CAPTEUR_A4_US" class="0">
+<net name="CAPTEUR_US_AR_D" class="0">
 <segment>
 <pinref part="JP4" gate="A" pin="3"/>
 <wire x1="274.32" y1="-12.7" x2="281.94" y2="-12.7" width="0.1524" layer="91"/>
@@ -28533,10 +28533,10 @@ Es handelt sich hierbei um AK500 in horizontaler Ausführung.&lt;p&gt;
 <segment>
 <pinref part="U$1" gate="G$1" pin="PA7"/>
 <wire x1="-5.08" y1="43.18" x2="-10.16" y2="43.18" width="0.1524" layer="91"/>
-<label x="-20.32" y="43.18" size="1.778" layer="95"/>
+<label x="-27.94" y="43.18" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="CAPTEUR_A6_US" class="0">
+<net name="CAPTEUR_US_AR_G" class="0">
 <segment>
 <pinref part="JP6" gate="A" pin="3"/>
 <wire x1="304.8" y1="27.94" x2="312.42" y2="27.94" width="0.1524" layer="91"/>
@@ -28545,7 +28545,7 @@ Es handelt sich hierbei um AK500 in horizontaler Ausführung.&lt;p&gt;
 <segment>
 <pinref part="U$1" gate="G$1" pin="PB1"/>
 <wire x1="-5.08" y1="38.1" x2="-10.16" y2="38.1" width="0.1524" layer="91"/>
-<label x="-20.32" y="38.1" size="1.778" layer="95"/>
+<label x="-27.94" y="38.1" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="+15V" class="0">

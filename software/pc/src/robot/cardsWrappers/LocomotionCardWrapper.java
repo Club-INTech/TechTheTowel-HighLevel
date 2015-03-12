@@ -36,6 +36,8 @@ public class LocomotionCardWrapper implements Service
 	 */
 	
 	private int delayBetweenSend = 100; 
+	
+	public int compteur=1;
 
 	/**
 	 * Construit la surchouche de la carte d'asservissement
@@ -94,6 +96,9 @@ public class LocomotionCardWrapper implements Service
 	 */
 	public void immobilise() throws SerialConnexionException
 	{
+		log.critical("Immobilisation du robot pour la "+compteur+" ieme fois !", locomotionCardSerial);
+		compteur++;
+		
         disableTranslationnalFeedbackLoop();
         disableRotationnalFeedbackLoop();
         while(isRobotMoving())
@@ -102,7 +107,6 @@ public class LocomotionCardWrapper implements Service
         
         enableTranslationnalFeedbackLoop();
         enableRotationnalFeedbackLoop();
-        
 	}
 	
 	/**

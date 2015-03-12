@@ -173,10 +173,11 @@ public class SerialConnexion implements SerialPortEventListener, Service
 
 					//log.debug("Envoi serie : '" + m  + "'", this);
 					m += "\r";
+					
 					output.write(m.getBytes());
 					int nb_tests = 0;
 					char acquittement = ' ';
-	
+
 					while (acquittement != '_')
 					{
 						nb_tests++;
