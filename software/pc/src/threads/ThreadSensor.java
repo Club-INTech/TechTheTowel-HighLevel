@@ -165,12 +165,12 @@ class ThreadSensor extends AbstractThread
 			for (int i=0; i<distanceFront.length; i++)
 				if(distanceFront[i]!=0)
 				{
-					if(i==0) //Capteur de coté droit
+					if(i==1) //Capteur de coté droit
 					{
 						mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x + (int)((distanceFront[i]+radius)*Math.cos(mRobot.getOrientation() + angleSensorFrontRight)), 
 																		 mRobot.getPosition().y + (int)((distanceFront[i]+radius)*Math.sin(mRobot.getOrientation() + angleSensorFrontRight))));
 					}
-					else if(i==1) // Capteur de coté gauche
+					else if(i==0) // Capteur de coté gauche
 					{
 						mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x + (int)((distanceFront[i]+radius)*Math.cos(mRobot.getOrientation() - angleSensorFrontLeft)), 
 																		 mRobot.getPosition().y + (int)((distanceFront[i]+radius)*Math.sin(mRobot.getOrientation() - angleSensorFrontLeft))));
@@ -181,12 +181,12 @@ class ThreadSensor extends AbstractThread
 			for (int i=0; i<distanceBack.length; i++)
 				if(distanceBack[i]!=0)
 				{
-					if(i==0) //Capteur de coté droit (en regardant le dos du robot)
+					if(i==1) //Capteur de coté droit (en regardant le dos du robot)
 					{
 						mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x - (int)((distanceBack[i]+radius)*Math.cos(mRobot.getOrientation() - angleSensorBackRight)), 
 																		 mRobot.getPosition().y - (int)((distanceBack[i]+radius)*Math.sin(mRobot.getOrientation() - angleSensorBackRight))));
 					}
-					else if(i==1) // Capteur de coté gauche (en regardant le dos du robot)
+					else if(i==0) // Capteur de coté gauche (en regardant le dos du robot)
 					{
 						mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x - (int)((distanceBack[i]+radius)*Math.cos(mRobot.getOrientation() + angleSensorBackLeft )), 
 																		 mRobot.getPosition().y - (int)((distanceBack[i]+radius)*Math.sin(mRobot.getOrientation() + angleSensorBackLeft ))));

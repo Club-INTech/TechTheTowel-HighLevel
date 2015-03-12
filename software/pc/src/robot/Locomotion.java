@@ -267,7 +267,7 @@ public class Locomotion implements Service
             }
             catch (BlockedException e)
             {
-                log.critical("Catch de "+e+" dans moveToPointException, au plus haut", this);
+                log.critical("Haut : Catch de "+e+" dans moveToPointException", this);
 
                 unexpectedWallImpactCounter--;
                 immobilise();
@@ -298,7 +298,7 @@ public class Locomotion implements Service
                     } 
                     catch (SerialConnexionException e1)
                     {
-                        log.critical("Catch de "+e1+" dans moveToPointException", this);
+                        log.critical("On ne fait rien après ceci: Catch de "+e1+" dans moveToPointException", this);
                     } 
                     catch (BlockedException e1)
                     {
@@ -308,14 +308,15 @@ public class Locomotion implements Service
 					}
                     if(!doItAgain)
                     {
-                        log.critical("UnableToMoveException dans MoveToPointException, visant "+finalAim.x+" :: "+finalAim.y+" cause physique", this);
+                        log.critical("Lancement de UnableToMoveException dans MoveToPointException, visant "+finalAim.x+" :: "+finalAim.y+" cause physique", this);
                         throw new UnableToMoveException(finalAim, UnableToMoveReason.PHYSICALLY_BLOCKED);
                     }
                 }
             }
+            
             catch (UnexpectedObstacleOnPathException unexpectedObstacle)
             {
-                log.critical("Catch de "+unexpectedObstacle+" dans moveToPointException", this); 
+                log.critical("Haut: Catch de "+unexpectedObstacle+" dans moveToPointException", this); 
 
             	immobilise();//FIXME  : le robot s'arrete en permanence 
             	long detectionTime = System.currentTimeMillis();
@@ -326,7 +327,6 @@ public class Locomotion implements Service
             		{
             			detectEnemy(isMovementForward);
             			doItAgain = true; // si aucune détection
-                        log.critical("abwa", this);
             			break;
             		}
             		catch(UnexpectedObstacleOnPathException e2)
@@ -372,10 +372,6 @@ public class Locomotion implements Service
             detectEnemy(isMovementForward);
             
             updateCurrentPositionAndOrientation();
-
-           
-
-            log.debug("pas d'ennemi detecte", this);
 
             //on evalue les hooks (non null !)
             if(hooks != null)
@@ -429,7 +425,6 @@ public class Locomotion implements Service
         if(symetry)
         {
         	aimSymmetrized.x = -aimSymmetrized.x;
-            givenPosition.x = -givenPosition.x;
         }
         Vec2 delta = aimSymmetrized.clone();
         delta.minus(givenPosition);
@@ -554,7 +549,7 @@ public class Locomotion implements Service
         	{
         		if(infos[1])//si le robot patine
         		{
-                    log.warning("Robot bloqué", this);
+                    log.critical("Robot bloqué, lancement de BlockedException dans isMotionEnded", this);
                     throw new BlockedException ();
         		}
         		else
@@ -609,9 +604,14 @@ public class Locomotion implements Service
         
         if(table.getObstacleManager().isDiscObstructed(detectionCenter, detectionDistance))
         {
-            log.warning("Ennemi détecté en : " + detectionCenter +" ; lancement de UnexpectedObstacleOnPathException dans detectEnemy", this);
+            log.warning("Ennemi détecté en : " + detectionCenter, this);
+            log.warning( "Lancement de UnexpectedObstacleOnPathException dans detectEnemy", this);
             throw new UnexpectedObstacleOnPathException();
         }
+        else 
+        {
+			log.debug("Pas d'ennemi detecté", this);
+		}
 
     }
 

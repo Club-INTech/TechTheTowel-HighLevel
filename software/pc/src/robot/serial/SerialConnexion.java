@@ -94,7 +94,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 		}
 		catch (NoSuchPortException e2)
 		{
-			e2.printStackTrace();
+			log.critical("Catch de "+e2+" dans initialize",this);
 		}
 
 		// Ouverture du port s�rie
@@ -104,7 +104,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 		} 
 		catch (PortInUseException e1)
 		{
-			e1.printStackTrace();
+			log.critical("Catch de "+e1+" dans initialize",this);
 		}
 		try
 		{
@@ -121,7 +121,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 		}
 		catch (Exception e)
 		{
-			System.err.println(e.toString());
+			log.critical("Catch de "+e+" dans initialize",this);
 		}
 		
 		// permet d'avoir un readLine non bloquant
@@ -131,7 +131,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 		} 
 		catch (UnsupportedCommOperationException e)
 		{
-			e.printStackTrace();
+			log.critical("Catch de "+e+" dans initialize",this);
 		}
 	}
 
@@ -201,8 +201,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 			}
 			catch (Exception e)
 			{
-				e.printStackTrace();
-				log.critical("Ne peut pas parler à la carte " + this.name, this);
+				log.critical("Ne peut pas parler à la carte " + this.name + " lancement de "+e, this);
 				throw new SerialConnexionException();
 			}
 	
@@ -219,7 +218,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 			}
 			catch (Exception e)
 			{
-				log.critical("Ne peut pas parler à la carte " + this.name, this);
+				log.critical("Ne peut pas parler à la carte " + this.name + " lancement de "+e, this);
 				throw new SerialConnexionException();
 			}
 			return inputLines;
@@ -279,10 +278,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 			}
 			catch (Exception e)
 			{
-				
-				//TODO: n'afficher que les infos intéressantes et faire ca sur tout les printStackTrace du  projet
-				e.printStackTrace();
-				log.critical(e.getMessage(),this);
+				log.critical("Catch de "+e+" dans ping",this);
 			}
 			return ping;
 		}
