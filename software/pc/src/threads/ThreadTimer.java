@@ -46,7 +46,7 @@ public class ThreadTimer extends AbstractThread
 	/** Temps en ms qui s'écoule entre deux mise a jour de la liste des obstacle périmables. Lors de chaque mise a jour, les obstacles périmés sont détruits. */
 	public static int obstacleRefreshInterval = 500;
 	
-	//TODO : interface graphique à enlever (necessaire pour les tests)
+	//TODO : interface graphique à enlever eventuellement (necessaire pour les tests)
 	public Window mWindow;
 	
 	/**
@@ -115,7 +115,7 @@ public class ThreadTimer extends AbstractThread
 			
 
 			// On retire périodiquement les obstacles périmés
-			table.getObstacleManager().removeOutdatedObstacles(System.currentTimeMillis());
+			table.getObstacleManager().removeOutdatedObstacles();
 			
 			//on rafraichit l'interface graphique, TODO : à enlever
 			log.debug("rafraichissement de l'interface graphique", this);
