@@ -367,11 +367,12 @@ public class Locomotion implements Service
         moveToPointSymmetry(aim, isMovementForward, turnOnly, false);
         do
         { 	
-            Sleep.sleep(feedbackLoopDelay);
+        	// en cas de détection d'ennemi, une exception est levée
+            detectEnemy(isMovementForward);
+            
             updateCurrentPositionAndOrientation();
 
-            // en cas de détection d'ennemi, une exception est levée
-            detectEnemy(isMovementForward);
+           
 
             log.debug("pas d'ennemi detecte", this);
 
@@ -386,6 +387,10 @@ public class Locomotion implements Service
             
             log.critical("Temps pour finir la boucle d'asservissement "+(System.currentTimeMillis()-time), this);
             time=System.currentTimeMillis();
+            
+            // On sleep pour eviter le spam de la serie
+            Sleep.sleep(feedbackLoopDelay);
+
         } 
         while(!isMotionEnded());
     }
