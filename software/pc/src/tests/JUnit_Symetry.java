@@ -36,18 +36,9 @@ public class JUnit_Symetry extends JUnit_Test
         pathDingDing = (PathDingDing)container.getService(ServiceNames.PATHDINGDING);
 		emptyHook = new ArrayList<Hook> ();  
 
-		if (real_state.robot.getSymmetry())
-		{
-			real_state.robot.setPosition(new Vec2 (-1381,1000));
-			real_state.robot.setOrientation(0); 
-			//si on est jaune on est en 0 
-		}
-		else
-		{
-			real_state.robot.setPosition(new Vec2 (1381,1000));
-			real_state.robot.setOrientation(Math.PI);
-			//sinon on est vert donc on est en PI
-		}
+		// La position est setée qu'on soit jaune ou vert
+		real_state.robot.setPosition(new Vec2 (1381,1000));
+		real_state.robot.setOrientation(Math.PI); 
 		
 		real_state.robot.updateConfig();	
 	}
@@ -58,8 +49,13 @@ public class JUnit_Symetry extends JUnit_Test
 	{
 		try 
 		{
+			
 			real_state.robot.moveLengthwise(500);
 			real_state.robot.turn(Math.PI /2);
+			real_state.robot.moveLengthwise(-100);
+			real_state.robot.turn(0);
+
+
 			//real_state.robot.moveToLocation(new Vec2(100,1000), emptyHook, null);
 		}
 		catch (Exception e)
