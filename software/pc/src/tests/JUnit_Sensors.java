@@ -97,7 +97,7 @@ public class JUnit_Sensors extends JUnit_Test
 	}
 	
 	@Test
-	public void testEvitement() throws PathNotFoundException, ContainerException, SerialManagerException
+	public void testEvitement()
 	{
 		log.debug("Test d'évitement", this);
 		try 
@@ -114,7 +114,7 @@ public class JUnit_Sensors extends JUnit_Test
 			{
 				state.robot.moveToCircle(new Circle(new Vec2(-600, 1000),0),  new ArrayList<Hook>(), (Table)container.getService(ServiceNames.TABLE));
 			}
-			catch (UnableToMoveException e) 
+			catch (UnableToMoveException | PathNotFoundException | ContainerException | SerialManagerException e) 
 			{
 				log.critical("!!!!!! Catch de"+e+" dans testEvitement !!!!!!" , this);
 			}	
