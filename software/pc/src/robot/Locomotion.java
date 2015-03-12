@@ -146,9 +146,9 @@ public class Locomotion implements Service
      */
     public void turn(double angle, ArrayList<Hook> hooks) throws UnableToMoveException
     {
-    	/*
-    	 * calcul de la position visee 
-    	 * on vise une position eloignee mais on ne s'y deplacera pas, le robot ne fera que tourner
+    	/**
+    	 * calcul de la position visee du haut niveau
+    	 *   on vise une position eloignee mais on ne s'y deplacera pas, le robot ne fera que tourner
     	 */
     	Vec2 aim = new Vec2(
 
@@ -171,8 +171,8 @@ public class Locomotion implements Service
      */
     public void turn(double angle, ArrayList<Hook> hooks, boolean isTurnRelative) throws UnableToMoveException
     {
-    	/*
-    	 * calcul de la position visee 
+    	/**
+    	 * calcul de la position visee du haut niveau
     	 * on vise une position eloignee mais on ne s'y deplacera pas, le robot ne fera que tourner
     	 */
     	Vec2 aim = new Vec2(
@@ -198,6 +198,9 @@ public class Locomotion implements Service
     {
         log.debug("Avancer de "+Integer.toString(distance), this);
         
+        /**
+         * aim est la visée du haut niveau, qui commence toujours à droite
+         */
         Vec2 aim = new Vec2(); 
         aim.x = (int) (position.x + distance*Math.cos(orientation));
         aim.y = (int) (position.y + distance*Math.sin(orientation));      
@@ -449,11 +452,12 @@ public class Locomotion implements Service
         updateCurrentPositionAndOrientation();
 
 
-        Vec2 givenPosition = position.clone();
-        Vec2 aimSymmetrized = aim.clone();
+        Vec2 givenPosition = position.clone();//Position est la position du bas niveau
+        Vec2 aimSymmetrized = aim.clone();    // aim est celle du haut
         if(symetry)
         {
-        	aimSymmetrized.x = -aimSymmetrized.x;
+        	givenPosition.x=-givenPosition.x;
+        	aimSymmetrized.x= -aimSymmetrized.x;
         }
         Vec2 delta = aimSymmetrized.clone();
         delta.minus(givenPosition);
@@ -461,8 +465,8 @@ public class Locomotion implements Service
         //calcul de la nouvelle distance et du nouvel angle
         double distance = delta.length();
         double angle =  Math.atan2(delta.y, delta.x);//Angle en absolu 
-//        if(symetry)
-//        	angle = Math.PI - angle;
+        //if(symetry)
+        //	angle = Math.PI- angle;
         
         // si on a besoin de se retourner pour suivre la consigne de isMovementForward on le fait ici
         if(isMovementForward && distance < 0 || (!isMovementForward && distance > 0))
@@ -529,7 +533,7 @@ public class Locomotion implements Service
         {
         	if(isCorrection && Math.abs(delta) > maxRotationCorrectionThreeshold)
         	{
-        		if (isTurnRelative)
+        		if (!isTurnRelative)
         		{
         			deplacements.turn(angle);  // On ne tourne que si on est assez loin de l'orientation voulue
         		}
@@ -541,7 +545,7 @@ public class Locomotion implements Service
         	}
         	else if(!isCorrection)// Si ca n'est pas  une correction
         	{
-        		if (isTurnRelative)
+        		if (!isTurnRelative)
         		{
         			deplacements.turn(angle);
         		}
@@ -665,13 +669,12 @@ public class Locomotion implements Service
      * @throws FinMatchException 
      * @throws SerialConnexionException
      */
+    
     private void updateCurrentPositionAndOrientation()
     {
         try {
             float[] infos = deplacements.getCurrentPositionAndOrientation();
             position.x = (int)infos[0];
-            if(symetry)
-            	position.x = -position.x;
             position.y = (int)infos[1];
             orientation = infos[2]; // car getCurrentPositionAndOrientation renvoie des radians
             if(symetry)
