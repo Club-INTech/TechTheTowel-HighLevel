@@ -10,7 +10,9 @@
 #include "misc.h"
 #include "capteur_srf05.hpp"
 #include "Singleton.hpp"
+#include <Uart.hpp>
 
+extern Uart<1> serial;
 
 class SensorMgr : public Singleton<SensorMgr>
 {
@@ -38,6 +40,10 @@ private:
 	CapteurSRF rightFrontUS;
 	CapteurSRF leftBackUS;
 	CapteurSRF rightBackUS;
+
+	unsigned int refreshDelay;
+	unsigned int currentTime;
+	unsigned int lastRefreshTime;
 };
 
 

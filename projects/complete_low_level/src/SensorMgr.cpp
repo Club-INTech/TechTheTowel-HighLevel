@@ -21,6 +21,9 @@ SensorMgr::SensorMgr():
 	leftBackUS(),
 	rightBackUS()
 {
+	lastRefreshTime = 0;
+	refreshDelay = 10;//(ms)
+
 	/* Set variables used */
 	GPIO_InitTypeDef GPIO_InitStruct;
 	EXTI_InitTypeDef EXTI_InitStruct;
@@ -37,11 +40,13 @@ SensorMgr::SensorMgr():
 
 	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_9;
 	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN;
+	GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;
 	GPIO_Init(GPIOD, &GPIO_InitStruct);
 
 	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_11;
 	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN;
+	GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;
 	GPIO_Init(GPIOD, &GPIO_InitStruct);
 
@@ -51,6 +56,7 @@ SensorMgr::SensorMgr():
 
 	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_15;
 	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN;
+	GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;
 	GPIO_Init(GPIOC, &GPIO_InitStruct);
 
@@ -60,6 +66,7 @@ SensorMgr::SensorMgr():
 
 	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_9;
 	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN;
+	GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;
 	GPIO_Init(GPIOC, &GPIO_InitStruct);
 
@@ -269,11 +276,25 @@ SensorMgr::SensorMgr():
 /*
  * Fonction de mise à jour des capteurs à ultrason
  */
-void SensorMgr::refresh(){
-	rightFrontUS.refresh();
-	leftFrontUS.refresh();
-	rightBackUS.refresh();
-	leftBackUS.refresh();
+void SensorMgr::refresh()
+{
+	static uint8_t capteur = 0;
+	currentTime = Millis();
+
+	if(currentTime - lastRefreshTime >= refreshDelay)
+	{
+		if(capteur == 0)
+			rightFrontUS.refresh();
+		else if(capteur == 1)
+			leftFrontUS.refresh();
+		else if(capteur == 2)
+			rightBackUS.refresh();
+		else if(capteur == 3)
+			leftBackUS.refresh();
+
+		capteur = (capteur+1)%4;
+		lastRefreshTime = currentTime;
+	}
 }
 
 
@@ -282,10 +303,12 @@ void SensorMgr::refresh(){
  */
 
 void SensorMgr::rightFrontUSInterrupt(){
+	//serial.printfln("Avant-Droit:");
 	rightFrontUS.interruption();
 }
 
 void SensorMgr::leftFrontUSInterrupt(){
+	//serial.printfln("Avant-Gauche:");
 	leftFrontUS.interruption();
 }
 
@@ -324,17 +347,17 @@ int SensorMgr::getLeftBackValue() const{
  */
 
 bool SensorMgr::isPlotInside() const{
-	return GPIO_ReadInputDataBit(GPIOC, GPIO_PinSource15);
+	return GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_15);
 }
 
 bool SensorMgr::isRightGlassInside() const{
-	return GPIO_ReadInputDataBit(GPIOD, GPIO_PinSource9);
+	return GPIO_ReadInputDataBit(GPIOD, GPIO_Pin_9);
 }
 
 bool SensorMgr::isLeftGlassInside() const{
-	return GPIO_ReadInputDataBit(GPIOD, GPIO_PinSource11);
+	return GPIO_ReadInputDataBit(GPIOD, GPIO_Pin_11);
 }
 
 bool SensorMgr::isJumperOut() const{
-	return GPIO_ReadInputDataBit(GPIOC, GPIO_PinSource9);
+	return !GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_9);
 }

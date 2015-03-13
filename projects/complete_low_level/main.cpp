@@ -5,7 +5,6 @@
 #include "SensorMgr.h"
 
 
-volatile bool sensorToRefresh = false;
 
 int main(void)
 {
@@ -26,11 +25,7 @@ int main(void)
 
 	while(1)
 	{
-		if(sensorToRefresh)
-		{
-			sensorMgr->refresh();
-			sensorToRefresh = false;
-		}
+		sensorMgr->refresh();
 
 		uint8_t tailleBuffer = serial.available();
 
@@ -582,9 +577,8 @@ int main(void)
 extern "C" {
 //Interruption overflow TIMER4
 void TIM4_IRQHandler(void) { //2kHz = 0.0005s = 0.5ms
-	__IO static uint32_t i = 0, j = 0, k = 0;
+	__IO static uint32_t i = 0, j = 0;
 	static MotionControlSystem* motionControlSystem = &MotionControlSystem::Instance();
-	//static SensorMgr* sensorMgr = &SensorMgr::Instance();
 	static ActuatorsMgr* actuatorsMgr = &ActuatorsMgr::Instance();
 
 	if (TIM_GetITStatus(TIM4, TIM_IT_Update) != RESET) {
@@ -607,15 +601,8 @@ void TIM4_IRQHandler(void) { //2kHz = 0.0005s = 0.5ms
 //			j=0;
 //		}
 
-		if(k >= 200){
-//			sensorMgr->refresh();
-			sensorToRefresh = true;
-			k=0;
-		}
-
 		i++;
 		j++;
-		k++;
 	}
 }
 
@@ -653,7 +640,6 @@ void EXTI1_IRQHandler(void)
 void EXTI9_5_IRQHandler(void)
 {
 	static SensorMgr* sensorMgr = &SensorMgr::Instance();
-	static ActuatorsMgr* actuatorsMgr = &ActuatorsMgr::Instance();
 
 	//Interruptions de l'ultrason Avant Droit
     if (EXTI_GetITStatus(EXTI_Line6) != RESET) {
@@ -670,29 +656,6 @@ void EXTI9_5_IRQHandler(void)
 		/* Clear interrupt flag */
 		EXTI_ClearITPendingBit(EXTI_Line7);
 	}
-
-    //Interruption du contacteur BAS de l'ascenseur
-//    if (EXTI_GetITStatus(EXTI_Line5) != RESET)
-//    {
-//    	actuatorsMgr->refreshElevatorState();
-//
-//    	EXTI_ClearITPendingBit(EXTI_Line5);
-//    }
 }
-
-
-//void EXTI15_10_IRQHandler(void)
-//{
-//	static ActuatorsMgr* actuatorsMgr = &ActuatorsMgr::Instance();
-//
-//	//Interruption du contacteur HAUT de l'ascenseur
-//	if (EXTI_GetITStatus(EXTI_Line13) != RESET)
-//	{
-//		actuatorsMgr->refreshElevatorState();
-//
-//		EXTI_ClearITPendingBit(EXTI_Line13);
-//	}
-//}
-
 
 }

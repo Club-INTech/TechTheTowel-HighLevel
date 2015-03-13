@@ -65,7 +65,6 @@ private:
 
 	volatile EtatAscenseur etatAscenseur;
 	volatile EtatAscenseur consigneAscenseur;
-	unsigned int const timeoutElevator = 200;//Durée maximale d'allumage du moteur de l'ascenseur
 
 public:
 	ActuatorsMgr()
@@ -87,8 +86,6 @@ public:
 		/* Set variables used */
 		GPIO_InitTypeDef GPIO_InitStruct;
 		GPIO_StructInit(&GPIO_InitStruct); //Remplit avec les valeurs par défaut
-		EXTI_InitTypeDef EXTI_InitStruct;
-		NVIC_InitTypeDef NVIC_InitStruct;
 
 
 		/*
@@ -118,25 +115,13 @@ public:
 
 
 
+		/*
+		 * Capteur haut de l'ascenseur : PC13
+		 */
 
-//
-//	/*     ________________________________
-//		 *|								   |*
-//		 *|Initialisation des interruptions|*
-//		 *|________________________________|*
-//	*/
-//
-//
-//		/*
-//		 * Capteur haut de l'ascenseur : PC13
-//		 */
-//
 		/* Activation de l'horloge du port GPIOC */
 		RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
-//
-//		/* Activation de l'horloge du SYSCFG */
-//		RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
-//
+
 		/*Réglages de la pin*/
 		GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN;
 		GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
@@ -144,44 +129,15 @@ public:
 		GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
 		GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;
 		GPIO_Init(GPIOC, &GPIO_InitStruct);
-//
-//		/* Tell system that you will use PC13 for EXTI_Line13 */
-//		SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOC, EXTI_PinSource13);
-//
-//		/* PC13 is connected to EXTI_Line13 */
-//		EXTI_InitStruct.EXTI_Line = EXTI_Line13;
-//		/* Enable interrupt */
-//		EXTI_InitStruct.EXTI_LineCmd = ENABLE;
-//		/* Interrupt mode */
-//		EXTI_InitStruct.EXTI_Mode = EXTI_Mode_Interrupt;
-//		/* Triggers on rising and falling edge */
-//		EXTI_InitStruct.EXTI_Trigger = EXTI_Trigger_Rising_Falling;
-//		/* Add to EXTI */
-//		EXTI_Init(&EXTI_InitStruct);
-//
-//		/* Add IRQ vector to NVIC */
-//		/* PC13 is connected to EXTI_Line13, which has EXTI15_10_IRQn vector */
-//		NVIC_InitStruct.NVIC_IRQChannel = EXTI15_10_IRQn;
-//		/* Set priority */
-//		NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 0;
-//		/* Set sub priority */
-//		NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
-//		/* Enable interrupt */
-//		NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
-//		/* Add to NVIC */
-//		NVIC_Init(&NVIC_InitStruct);
-//
-//
-//		/*
-//		 * Capteur bas de l'ascenseur : PE5
-//		 */
-//
+
+
+		/*
+		 * Capteur bas de l'ascenseur : PE5
+		 */
+
 		/* Activation de l'horloge du port GPIOE */
 		RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE, ENABLE);
-//
-//		/* Activation de l'horloge du SYSCFG */
-//		RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
-//
+
 		/*Réglages de la pin*/
 		GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN;
 		GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
@@ -189,32 +145,7 @@ public:
 		GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
 		GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;
 		GPIO_Init(GPIOE, &GPIO_InitStruct);
-//
-//		/* Tell system that you will use PE5 for EXTI_Line5 */
-//		SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOE, EXTI_PinSource5);
-//
-//		/* PE5 is connected to EXTI_Line5 */
-//		EXTI_InitStruct.EXTI_Line = EXTI_Line5;
-//		/* Enable interrupt */
-//		EXTI_InitStruct.EXTI_LineCmd = ENABLE;
-//		/* Interrupt mode */
-//		EXTI_InitStruct.EXTI_Mode = EXTI_Mode_Interrupt;
-//		/* Triggers on rising and falling edge */
-//		EXTI_InitStruct.EXTI_Trigger = EXTI_Trigger_Rising_Falling;
-//		/* Add to EXTI */
-//		EXTI_Init(&EXTI_InitStruct);
-//
-//		/* Add IRQ vector to NVIC */
-//		/* PE5 is connected to EXTI_Line5, which has EXTI5_IRQn vector */
-//		NVIC_InitStruct.NVIC_IRQChannel = EXTI9_5_IRQn;
-//		/* Set priority */
-//		NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 0;
-//		/* Set sub priority */
-//		NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
-//		/* Enable interrupt */
-//		NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
-//		/* Add to NVIC */
-//		NVIC_Init(&NVIC_InitStruct);
+
 	}
 
 	~ActuatorsMgr()
