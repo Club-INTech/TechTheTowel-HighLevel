@@ -146,6 +146,8 @@ public class Locomotion implements Service
      */
     public void turn(double angle, ArrayList<Hook> hooks) throws UnableToMoveException
     {
+		updateCurrentPositionAndOrientation();
+
     	/**
     	 * calcul de la position visee du haut niveau
     	 *   on vise une position eloignee mais on ne s'y deplacera pas, le robot ne fera que tourner
@@ -171,6 +173,8 @@ public class Locomotion implements Service
      */
     public void turn(double angle, ArrayList<Hook> hooks, boolean isTurnRelative) throws UnableToMoveException
     {
+		updateCurrentPositionAndOrientation();
+
     	/**
     	 * calcul de la position visee du haut niveau
     	 * on vise une position eloignee mais on ne s'y deplacera pas, le robot ne fera que tourner
@@ -195,13 +199,16 @@ public class Locomotion implements Service
      * @throws UnableToMoveException si le robot a un bloquage mecanique
      */
     public void moveLengthwise(int distance, ArrayList<Hook> hooks, boolean wall) throws UnableToMoveException
-    {
+    {    
+		updateCurrentPositionAndOrientation();
+
         log.debug("Avancer de "+Integer.toString(distance), this);
         
         /**
          * aim est la visée du haut niveau, qui commence toujours à droite
          */
         Vec2 aim = new Vec2(); 
+        
         aim.x = (int) (position.x + distance*Math.cos(orientation));
         aim.y = (int) (position.y + distance*Math.sin(orientation));      
         finalAim = aim;
@@ -220,6 +227,8 @@ public class Locomotion implements Service
      */
     public void followPath(ArrayList<Vec2> path, ArrayList<Hook> hooks, DirectionStrategy directionstrategy) throws UnableToMoveException
     {
+		updateCurrentPositionAndOrientation();
+
     	//si un singe a mie de pain null pour les hooks on le gere
     	if(hooks == null)
     		hooks = new ArrayList<Hook>();
@@ -247,6 +256,8 @@ public class Locomotion implements Service
      */
     private void moveToPointForwardBackward(Vec2 aim, ArrayList<Hook> hooks, boolean mur, DirectionStrategy strategy, boolean turnOnly) throws UnableToMoveException
     {
+		updateCurrentPositionAndOrientation();
+
     	// on avance en fonction de ce que nous dit la strategie
     	if(strategy == DirectionStrategy.FORCE_BACK_MOTION)
     	{
@@ -448,25 +459,31 @@ public class Locomotion implements Service
      */
     private void moveToPointSymmetry(Vec2 aim, boolean isMovementForward, boolean turnOnly, boolean isCorrection, boolean isTurnRelative) throws BlockedException
     {
-
         updateCurrentPositionAndOrientation();
-
-
-        Vec2 givenPosition = position.clone();//Position est la position du bas niveau
-        Vec2 aimSymmetrized = aim.clone();    // aim est celle du haut
-        if(symetry)
+        
+        // position donnée par le bas niveau avec un traitement dans UpdateCurrentPositionAndOrientation
+        Vec2 givenPosition = position.clone();
+        
+        // Le point qu'on vise, donné par le haut niveau donc comme si on etais vert
+        Vec2 aimSymmetrized = aim.clone();   
+        
+        if(symetry) // miroir des positions
         {
         	givenPosition.x=-givenPosition.x;
-        	aimSymmetrized.x= -aimSymmetrized.x;
+        	aimSymmetrized.x = -aimSymmetrized.x;
         }
         Vec2 delta = aimSymmetrized.clone();
+        
         delta.minus(givenPosition);
-//        log.debug("Distance directe: "+delta.length()+", differenceDistance: "+differenceDistance, this);
+        
         //calcul de la nouvelle distance et du nouvel angle
         double distance = delta.length();
-        double angle =  Math.atan2(delta.y, delta.x);//Angle en absolu 
-        //if(symetry)
-        //	angle = Math.PI- angle;
+        double angle =  Math.atan2(-delta.y, delta.x);//Angle en absolu 
+        
+       // if(symetry) // miroir de l'angle
+        {
+      //  	angle = angle-Math.PI;
+        }
         
         // si on a besoin de se retourner pour suivre la consigne de isMovementForward on le fait ici
         if(isMovementForward && distance < 0 || (!isMovementForward && distance > 0))
@@ -641,6 +658,7 @@ public class Locomotion implements Service
      */
     private void detectEnemy(boolean front) throws UnexpectedObstacleOnPathException
     {
+
         int signe = -1;
         if(front)
             signe = 1;
@@ -675,6 +693,8 @@ public class Locomotion implements Service
         try {
             float[] infos = deplacements.getCurrentPositionAndOrientation();
             position.x = (int)infos[0];
+            if(symetry)
+            	position.x = -position.x;
             position.y = (int)infos[1];
             orientation = infos[2]; // car getCurrentPositionAndOrientation renvoie des radians
             if(symetry)

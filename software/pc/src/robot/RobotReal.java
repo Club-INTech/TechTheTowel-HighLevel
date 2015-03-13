@@ -91,7 +91,7 @@ public class RobotReal extends Robot
 	 */
 	@Override
     public void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
-	{
+	{	
 		mLocomotion.moveLengthwise(distance, hooksToConsider, expectsWallImpact);
 	}	
 
