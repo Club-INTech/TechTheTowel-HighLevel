@@ -175,13 +175,17 @@ public class ObstacleManager
     
     /**
      * 
-     * @return la liste des lignes formant les bords des obstacles
+     * @return la liste des lignes formant les bords des obstacles sous forme de segments
      */
 	public ArrayList<Segment> getLines()
 	{
 		return mLines;
 	}
 	
+	/**
+	 * 
+	 * @return la liste des rectangles formant les obstacles rectangulaires
+	 */
 	public ArrayList<ObstacleRectangular> getRectangles()
 	{
 		return mRectangles;
