@@ -478,8 +478,11 @@ public class Locomotion implements Service
         
         //calcul de la nouvelle distance et du nouvel angle
         double distance = delta.length();
-        double angle =  Math.atan2(-delta.y, delta.x);//Angle en absolu 
-        
+        double angle;
+        if(symetry)
+        	  angle=Math.atan2(-delta.y, delta.x);//Angle en absolu 
+        else 
+        	  angle =  Math.atan2(delta.y, delta.x);//Angle en absolu 
        // if(symetry) // miroir de l'angle
         {
       //  	angle = angle-Math.PI;
