@@ -35,7 +35,7 @@ class ThreadSensor extends AbstractThread
 	 */
 	int distanceBetweenGuideAndUltrasound = 20;
 	
-	int maxSensorRange;
+	double maxSensorRange;
 	
 	/** 	Les angles des capteurs :
 	 * 
@@ -70,6 +70,11 @@ class ThreadSensor extends AbstractThread
 	Vec2 leftFrontSensorPosition = new Vec2(-15, 5);
 	Vec2 rightBackSensorPosition = new Vec2(15, -5);
 	Vec2 leftBackSensorPosition = new Vec2(-15, -5);
+
+	/**
+	 * taille du rayon d'un obstacle
+	 */
+	private int radius;
 	
 
 	
@@ -96,7 +101,6 @@ class ThreadSensor extends AbstractThread
 	{
 		log.debug("Lancement du thread de capteurs", this);
 		updateConfig();
-		maxSensorRange = Integer.parseInt(config.getProperty("horizon_capteurs"));
 		
 		
 		// boucle d'attente de début de match
@@ -125,80 +129,21 @@ class ThreadSensor extends AbstractThread
 				return;
 			}
 
-			// affiche la distance mesurée par l'ultrason
-			//code precedant, a retirer si le code suivant ne marche pas
-			//int distance = mSensorsCardWrapper.getSensedDistance();
-			int[] distanceFront;
-			try 
-			{
-				distanceFront = (int[]) mSensorsCardWrapper.getSensorValue(SensorNames.ULTRASOUND_FRONT_SENSOR);
-				
-				//on met tout les capteurs qui detectent un objet DANS le robot ou à plus de maxSensorRange a 0
-				for (int i=0; i<distanceFront.length; i++)
-					if (distanceFront[i]<distanceBetweenGuideAndUltrasound || distanceFront[i] > maxSensorRange) 
-						distanceFront[i]=0;
-				
-			}
-			catch(SerialConnexionException e)
-			{
-				log.critical("La carte capteurs ne répond pas !", this);
-				e.printStackTrace();
-				distanceFront = (int[]) SensorNames.ULTRASOUND_FRONT_SENSOR.getDefaultValue();
-			}
-			
-			int[] distanceBack;
-			
-			try 
-			{
-				distanceBack = (int[]) mSensorsCardWrapper.getSensorValue(SensorNames.ULTRASOUND_BACK_SENSOR);
-				//on met tout les capteurs qui detectent un objet à plus de maxSensorRange a 0
-				for (int i=0; i<distanceBack.length; i++)
-					if (distanceBack[i]<distanceBetweenGuideAndUltrasound || distanceBack[i] > maxSensorRange) 
-						distanceBack[i]=0;
-			}
-			catch (SerialConnexionException e)
-			{
-				log.critical("La carte capteurs ne répond pas !", this);
-				e.printStackTrace();
-				distanceBack = (int[]) SensorNames.ULTRASOUND_BACK_SENSOR.getDefaultValue();
-			}
+			/* recupere la distance mesurée par l'ultrason
+			 * on met la distance detecte, a l'avant et a l'arriere, dans deux variables int[] de taille deux
+			 * si la carte ne repond pas on revoie la valeur par default
+			 */
+			int[] distanceFront = getDistanceFront();
+			int[] distanceBack = getDistanceBack();
 			
 			
 			//ajout d'obstacles mobiles dans l'obstacleManager
-			int radius = Integer.parseInt(config.getProperty("rayon_robot_adverse"));
-			
 			// Analyse des capteurs avant, avec gestion dees angles TODO verifier les angles
-			for (int i=0; i<distanceFront.length; i++)
-				if(distanceFront[i]!=0)
-				{
-					if(i==0) //Capteur de coté droit
-					{
-						mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x + (int)(rightFrontSensorPosition.x*Math.cos(mRobot.getOrientation()) - rightFrontSensorPosition.y*Math.sin(mRobot.getOrientation())) + (int)((distanceFront[i]+radius)*Math.cos(mRobot.getOrientation() + rightFrontSensorAngle)), 
-																		 mRobot.getPosition().y + (int)(rightFrontSensorPosition.x*Math.sin(mRobot.getOrientation()) + rightFrontSensorPosition.y*Math.cos(mRobot.getOrientation())) + (int)((distanceFront[i]+radius)*Math.sin(mRobot.getOrientation() + rightFrontSensorAngle))));
-					}
-					else if(i==1) // Capteur de coté gauche
-					{
-						mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x + (int)(leftFrontSensorPosition.x*Math.cos(mRobot.getOrientation()) - leftFrontSensorPosition.y*Math.sin(mRobot.getOrientation())) + (int)((distanceFront[i]+radius)*Math.cos(mRobot.getOrientation() - leftFrontSensorAngle)), 
-																		 mRobot.getPosition().y + (int)(leftFrontSensorPosition.x*Math.sin(mRobot.getOrientation()) + leftFrontSensorPosition.y*Math.cos(mRobot.getOrientation())) + (int)((distanceFront[i]+radius)*Math.sin(mRobot.getOrientation() - leftFrontSensorAngle))));
-					}
-				}
-			
+			addObstacleFront(distanceFront);
 			// Analyse des capteurs arrieres, avec gestion des angles
-			for (int i=0; i<distanceBack.length; i++)
-				if(distanceBack[i]!=0)
-				{
-					if(i==0) //Capteur de coté droit (en regardant le dos du robot)
-					{
-						mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x + (int)(rightBackSensorPosition.x*Math.cos(mRobot.getOrientation()) - rightBackSensorPosition.y*Math.sin(mRobot.getOrientation())) - (int)((distanceBack[i]+radius)*Math.cos(mRobot.getOrientation() - rightBackSensorAngle)), 
-																		 mRobot.getPosition().y + (int)(rightBackSensorPosition.x*Math.sin(mRobot.getOrientation()) + rightBackSensorPosition.y*Math.cos(mRobot.getOrientation())) - (int)((distanceBack[i]+radius)*Math.sin(mRobot.getOrientation() - rightBackSensorAngle))));
-					}
-					else if(i==1) // Capteur de coté gauche (en regardant le dos du robot)
-					{
-						mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x + (int)(leftBackSensorPosition.x*Math.cos(mRobot.getOrientation()) - leftBackSensorPosition.y*Math.sin(mRobot.getOrientation())) - (int)((distanceBack[i]+radius)*Math.cos(mRobot.getOrientation() + leftBackSensorAngle )), 
-																		 mRobot.getPosition().y + (int)(leftBackSensorPosition.x*Math.sin(mRobot.getOrientation()) + leftBackSensorPosition.y*Math.cos(mRobot.getOrientation())) - (int)((distanceBack[i]+radius)*Math.sin(mRobot.getOrientation() + leftBackSensorAngle ))));
-					}
-				}
-				
+			addObstacleBack(distanceBack);
+			
+			
 			log.debug("Distance selon ultrasons avant:   "+distanceFront[0]+";"+distanceFront[1], this); 
 			log.debug("Distance selon ultrasons arriere: "+distanceBack[0]+";"+distanceBack[1], this);
 			
@@ -211,13 +156,118 @@ class ThreadSensor extends AbstractThread
         log.debug("Fin du thread de capteurs", this);
 		
 	}
-	
+	/**
+	 * ajoute les obstacles avant a l'obstacleManager FIXME debug primordial
+	 * @param distanceFront l'int[] recupere par la serie pour les capteurs avants
+	 * a modifier si ajout ou supression de capteurs
+	 */
+	private void addObstacleFront(int[] distanceFront) 
+	{
+		if ((0<distanceFront[0] && distanceFront[0]<maxSensorRange) && (0<distanceFront[1] && distanceFront[1]<maxSensorRange)) // les deux capteurs detectent, on est dans la zone de double detection et on peut placer precesement l'obstacle
+		{
+			//debrouillez vous, faites le calcul (le systeme c'est {x²+y²=distanceBack[0]² ;(L-x)²+y²= distanceBack[1]²})
+			int L = Integer.parseInt(config.getProperty("largeur_robot"));
+			mTable.getObstacleManager().addObstacle(new Vec2((int)(mRobot.getPosition().x + Math.pow(distanceFront[0],2)-Math.pow(distanceFront[1],2))/(2 * L),
+																   mRobot.getPosition().y + (int)(Integer.parseInt(config.getProperty("longueur_robot"))/2 + Math.pow(Math.pow(Math.pow(L,2)+Math.pow(distanceFront[0],2)+Math.pow(distanceFront[1],2), 2)/(4 * Math.pow(L, 2)), 0.5))));
+		}
+		else if (0<distanceFront[0] && distanceFront[0]<maxSensorRange)// Capteur du cote gauche
+		{
+			mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x + (int)(rightFrontSensorPosition.x*Math.cos(mRobot.getOrientation()) - rightFrontSensorPosition.y*Math.sin(mRobot.getOrientation())) + (int)((distanceFront[0]+radius)*Math.cos(mRobot.getOrientation() + rightFrontSensorAngle)), 
+															 mRobot.getPosition().y + (int)(rightFrontSensorPosition.x*Math.sin(mRobot.getOrientation()) + rightFrontSensorPosition.y*Math.cos(mRobot.getOrientation())) + (int)((distanceFront[0]+radius)*Math.sin(mRobot.getOrientation() + rightFrontSensorAngle))));
+		}
+		else if (0<distanceFront[1] && distanceFront[1]<maxSensorRange)// Capteur de coté droit
+		{
+			mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x + (int)(leftFrontSensorPosition.x*Math.cos(mRobot.getOrientation()) - leftFrontSensorPosition.y*Math.sin(mRobot.getOrientation())) + (int)((distanceFront[1]+radius)*Math.cos(mRobot.getOrientation() - leftFrontSensorAngle)), 
+															 mRobot.getPosition().y + (int)(leftFrontSensorPosition.x*Math.sin(mRobot.getOrientation()) + leftFrontSensorPosition.y*Math.cos(mRobot.getOrientation())) + (int)((distanceFront[1]+radius)*Math.sin(mRobot.getOrientation() - leftFrontSensorAngle))));
+		}
+	}
+
+	/**
+	 * ajoute les obstacles arrieres a l'obstacleManager FIXME debug primordial
+	 * @param distanceBack l'int[] recuperé par la serie pour les capteurs arrieres
+	 * a modifier si ajout ou supression de capteurs
+	 */
+	private void addObstacleBack(int[] distanceBack) 
+	{
+		if ((0<distanceBack[0] && distanceBack[0]<maxSensorRange) && (0<distanceBack[1] && distanceBack[1]<maxSensorRange)) // les deux capteurs detectent, on est dans la zone de double detection et on peut placer precesement l'obstacle
+		{
+			//debrouillez vous, faites le calcul (le systeme c'est {x²+y²=distanceBack[0]² ;(L-x)²+y²= distanceBack[1]²})
+			int L = Integer.parseInt(config.getProperty("largeur_robot"));
+			mTable.getObstacleManager().addObstacle(new Vec2((int)(mRobot.getPosition().x + Math.pow(distanceBack[0],2)-Math.pow(distanceBack[1],2))/(2 * L),
+																   mRobot.getPosition().y + (int)(Integer.parseInt(config.getProperty("longueur_robot"))/2 + Math.pow(Math.pow(Math.pow(L,2)+Math.pow(distanceBack[0],2)+Math.pow(distanceBack[1],2), 2)/(4 * Math.pow(L, 2)), 0.5))));
+		}
+		else if (0<distanceBack[0] && distanceBack[0]<maxSensorRange)// Capteur du cote gauche
+		{
+			mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x + (int)(rightBackSensorPosition.x*Math.cos(mRobot.getOrientation()) - rightBackSensorPosition.y*Math.sin(mRobot.getOrientation())) - (int)((distanceBack[0]+radius)*Math.cos(mRobot.getOrientation() - rightBackSensorAngle)), 
+															 mRobot.getPosition().y + (int)(rightBackSensorPosition.x*Math.sin(mRobot.getOrientation()) + rightBackSensorPosition.y*Math.cos(mRobot.getOrientation())) - (int)((distanceBack[0]+radius)*Math.sin(mRobot.getOrientation() - rightBackSensorAngle))));
+		}
+		else if (0<distanceBack[1] && distanceBack[1]<maxSensorRange)// Capteur de coté droit
+		{
+			mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x + (int)(leftBackSensorPosition.x*Math.cos(mRobot.getOrientation()) - leftBackSensorPosition.y*Math.sin(mRobot.getOrientation())) - (int)((distanceBack[1]+radius)*Math.cos(mRobot.getOrientation() + leftBackSensorAngle )), 
+															 mRobot.getPosition().y + (int)(leftBackSensorPosition.x*Math.sin(mRobot.getOrientation()) + leftBackSensorPosition.y*Math.cos(mRobot.getOrientation())) - (int)((distanceBack[1]+radius)*Math.sin(mRobot.getOrientation() + leftBackSensorAngle ))));
+		}
+	}
+
+
+	/**
+	 * 
+	 * @return la distance selon les ultrasons arrieres, [gauche, droite]
+	 */
+	private int[] getDistanceBack() 
+	{
+		int[] distanceBack;
+		try 
+		{
+			distanceBack = (int[]) mSensorsCardWrapper.getSensorValue(SensorNames.ULTRASOUND_BACK_SENSOR);
+			//on met tout les capteurs qui detectent un objet à plus de maxSensorRange a 0
+			for (int i=0; i<distanceBack.length; i++)
+				if (distanceBack[i]<distanceBetweenGuideAndUltrasound || distanceBack[i] > maxSensorRange) 
+					distanceBack[i]=0;
+		}
+		catch (SerialConnexionException e)
+		{
+			log.critical("La carte capteurs ne répond pas !", this);
+			e.printStackTrace();
+			distanceBack = (int[]) SensorNames.ULTRASOUND_BACK_SENSOR.getDefaultValue();
+		}
+		return distanceBack;
+	}
+
+	/**
+	 * 
+	 * @return la distance selon les ultrasonsavants, [gauche, droite]
+	 */
+	private int[] getDistanceFront() 
+	{
+		int[] distanceFront;
+		try 
+		{
+			distanceFront = (int[]) mSensorsCardWrapper.getSensorValue(SensorNames.ULTRASOUND_FRONT_SENSOR);
+			
+			//on met tout les capteurs qui detectent un objet DANS le robot ou à plus de maxSensorRange a 0
+			for (int i=0; i<distanceFront.length; i++)
+				if (distanceFront[i]<distanceBetweenGuideAndUltrasound || distanceFront[i] > maxSensorRange) 
+					distanceFront[i]=0;
+			
+		}
+		catch(SerialConnexionException e)
+		{
+			log.critical("La carte capteurs ne répond pas !", this);
+			e.printStackTrace();
+			distanceFront = (int[]) SensorNames.ULTRASOUND_FRONT_SENSOR.getDefaultValue();
+		}
+		return distanceFront;
+	}
+
 	/* (non-Javadoc)
 	 * @see threads.AbstractThread#updateConfig()
 	 */
 	public void updateConfig()
 	{
 			sensorFrequency = Integer.parseInt(config.getProperty("capteurs_frequence"));
+			radius = Integer.parseInt(config.getProperty("rayon_robot_adverse"));
+			//plus que cette distance (environ 50cm) on est beaucoup moins precis sur la position adverse (donc on ne l'ecrit pas !)
+			maxSensorRange = Integer.parseInt(config.getProperty("largeur_robot")) / Math.sin(Integer.parseInt(config.getProperty("angle_capteur")));
 	}
 	
 }
