@@ -143,7 +143,6 @@ class ThreadSensor extends AbstractThread
 			// Analyse des capteurs arrieres, avec gestion des angles
 			addObstacleBack(distanceBack);
 			
-			
 			log.debug("Distance selon ultrasons avant:   "+distanceFront[0]+";"+distanceFront[1], this); 
 			log.debug("Distance selon ultrasons arriere: "+distanceBack[0]+";"+distanceBack[1], this);
 			
