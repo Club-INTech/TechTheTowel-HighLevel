@@ -1,5 +1,7 @@
 package threads;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
 import enums.SensorNames;
 import exceptions.serial.SerialConnexionException;
 import robot.cardsWrappers.SensorsCardWrapper;
@@ -105,6 +107,14 @@ class ThreadSensor extends AbstractThread
 	int robotLenght;
 	
 	/**
+	 * Positions des robots à ajouter
+	 */
+	Vec2 positionEnnemi_1;
+	Vec2 positionEnnemi_2;
+
+	
+	
+	/**
 	 * Crée un nouveau thread de capteurs
 	 *
 	 * @param table La table a l'intérieure de laquelle le thread doit croire évoluer
@@ -200,16 +210,43 @@ class ThreadSensor extends AbstractThread
 	
 		 // les deux capteurs detectent, on est dans la zone de double detection et on peut placer precisement l'obstacle
 		// Plus precisement : si On a chaque capteur detectant quelquechose dans l'intervalle 
-		if ((minSensorRange<distanceFront[0] && distanceFront[0]<maxSensorRange) && (minSensorRange<distanceFront[1] && distanceFront[1]<maxSensorRange))
+		
+		//0 gauche / 1 à droite
+		if ((minSensorRange<distanceFront[0] && distanceFront[0]<maxSensorRange) && (minSensorRange<distanceFront[1] && distanceFront[1]<maxSensorRange) )
 		{
 			//debrouillez vous, faites le calcul (le systeme c'est {x²+y²=distanceBack[0]² ;(L-x)²+y²= distanceBack[1]²})
 			
-			mTable.getObstacleManager().addObstacle(new Vec2(
-					(int)(mRobot.getPosition().x + 
-						  Math.pow(distanceFront[0],2)-Math.pow(distanceFront[1],2))/(2 * distanceBetweenFrontSensors),
-					
-						  mRobot.getPosition().y +
-						  (int)(distanceBetweenFrontSensors/2 + Math.pow(Math.pow(Math.pow(distanceBetweenFrontSensors,2)+Math.pow(distanceFront[0],2)+Math.pow(distanceFront[1],2), 2)/(4 * Math.pow(distanceBetweenFrontSensors, 2)), 0.5))));
+
+			if(Math.abs(distanceFront[1]-distanceFront[0]) > distanceBetweenFrontSensors)
+			{// Si on voit 2 ennemis distincts
+				
+				// droite
+				positionEnnemi_1.x = (int) ((float)Math.sin(20*Math.PI/180+mRobot.getOrientation())*distanceFront[1]+distanceBetweenFrontSensors/2+rightFrontSensorPosition.x);
+				positionEnnemi_1.y = (int) ((float)Math.cos(20*Math.PI/180+mRobot.getOrientation())*distanceFront[1]+rightFrontSensorPosition.y);
+				
+				//gauche
+				positionEnnemi_2.x = (int)Math.sin(20*Math.PI/180+mRobot.getOrientation())*distanceFront[0]-distanceBetweenFrontSensors/2+leftFrontSensorPosition.x;
+				positionEnnemi_2.y = (int)Math.cos(20*Math.PI/180+mRobot.getOrientation())*distanceFront[0]+leftFrontSensorPosition.y;
+			
+				System.out.println("position ennemi gauche = ("+positionEnnemi_2.x+","+positionEnnemi_2.y+")");
+				System.out.println("position ennemi droit  = ("+positionEnnemi_1.x+","+positionEnnemi_1.y+")");
+
+			}
+			else  // sinon, on voit un seul et meme ennemi
+			{			
+				positionEnnemi_1.x = (int) ( mRobot.getPosition().x + (distanceBetweenFrontSensors/2+(Math.pow(distanceFront[0],2)-Math.pow(distanceFront[1],2))/(2 * distanceBetweenFrontSensors)));
+				positionEnnemi_1.y = (int) (rightFrontSensorPosition.y + Math.sqrt(Math.pow(distanceFront[0],2)-Math.pow(positionEnnemi_1.x, 2)));
+			
+				positionEnnemi_2.x=0;
+				positionEnnemi_2.y=0;
+				
+				System.out.println("position ennemi = ("+positionEnnemi_1.x+","+positionEnnemi_1.y+")");
+			}			
+			
+			
+			mTable.getObstacleManager().addObstacle(positionEnnemi_1);
+			if(! positionEnnemi_2.equals(new Vec2 (0,0) ) )
+				mTable.getObstacleManager().addObstacle(positionEnnemi_2);;
 
 		}
 		
