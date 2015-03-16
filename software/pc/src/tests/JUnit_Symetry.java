@@ -54,8 +54,6 @@ public class JUnit_Symetry extends JUnit_Test
 			real_state.robot.turn(Math.PI);
 			real_state.robot.turn(-Math.PI/2);
 			real_state.robot.turn(0);
-
-
 		}
 		catch (Exception e)
 		{

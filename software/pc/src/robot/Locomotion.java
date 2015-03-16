@@ -483,7 +483,7 @@ public class Locomotion implements Service
         if(symetry)
         	  angle=Math.atan2(-delta.y, delta.x);//Angle en absolu 
         else 
-        	  angle =  Math.atan2(delta.y, delta.x);//Angle en absolu 
+        	  angle =Math.atan2(delta.y, delta.x);//Angle en absolu 
 
         
         // si on a besoin de se retourner pour suivre la consigne de isMovementForward on le fait ici

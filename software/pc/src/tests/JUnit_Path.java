@@ -46,7 +46,6 @@ public class JUnit_Path extends JUnit_Test
     	catch(PathNotFoundException e)
     	{
     		log.debug("pas de chemin trouve", this);
-    		System.out.println("Mauvais chemin");
     	}
     	
     }
