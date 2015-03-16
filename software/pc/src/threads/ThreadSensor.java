@@ -42,7 +42,7 @@ class ThreadSensor extends AbstractThread
 	 * distance en mm entre le sdeux capterus arrieres
 	 */
 	int distanceBetweenBackSensors = 17;
-	
+
 	/**
 	 * Distance maximale fiable pour les capteurs : au dela, valeurs abberentes
 	 */
@@ -232,9 +232,9 @@ class ThreadSensor extends AbstractThread
 		if ((0<distanceBack[0] && distanceBack[0]<maxSensorRange) && (0<distanceBack[1] && distanceBack[1]<maxSensorRange)) // les deux capteurs detectent, on est dans la zone de double detection et on peut placer precesement l'obstacle
 		{
 			//debrouillez vous, faites le calcul (le systeme c'est {x²+y²=distanceBack[0]² ;(L-x)²+y²= distanceBack[1]²})
-			int L = distanceBetweenBackSensors;//17cm entre les capteurs
-			mTable.getObstacleManager().addObstacle(new Vec2((int)(mRobot.getPosition().x + Math.pow(distanceBack[0],2)-Math.pow(distanceBack[1],2))/(2 * L),
-																   mRobot.getPosition().y + (int)(Integer.parseInt(config.getProperty("longueur_robot"))/2 + Math.pow(Math.pow(Math.pow(L,2)+Math.pow(distanceBack[0],2)+Math.pow(distanceBack[1],2), 2)/(4 * Math.pow(L, 2)), 0.5))));
+			
+			mTable.getObstacleManager().addObstacle(new Vec2((int)(mRobot.getPosition().x + Math.pow(distanceBack[0],2)-Math.pow(distanceBack[1],2))/(2 * distanceBetweenBackSensors),
+																   mRobot.getPosition().y + (int)(Integer.parseInt(config.getProperty("longueur_robot"))/2 + Math.pow(Math.pow(Math.pow(distanceBetweenBackSensors,2)+Math.pow(distanceBack[0],2)+Math.pow(distanceBack[1],2), 2)/(4 * Math.pow(distanceBetweenBackSensors, 2)), 0.5))));
 		}
 		else if (0<distanceBack[0] && distanceBack[0]<maxSensorRange)// Capteur du cote gauche
 		{
@@ -310,7 +310,6 @@ class ThreadSensor extends AbstractThread
 			maxSensorRange = Integer.parseInt(config.getProperty("largeur_robot")) / Math.sin(Integer.parseInt(config.getProperty("angle_capteur")));
 			robotWidth = Integer.parseInt(config.getProperty("largeur_robot"));
 			robotLenght = Integer.parseInt(config.getProperty("longueur_robot"));
-
 	}
 	
 }
