@@ -103,7 +103,9 @@ public class JUnit_College extends JUnit_Test {
 		robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
 		robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
 
-		
+		robot.useActuator(ActuatorOrder.MID_LEFT_GUIDE, true);
+		robot.useActuator(ActuatorOrder.MID_RIGHT_GUIDE, true);
+
 		robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, true);
 		robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, true);
 		robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
