@@ -96,7 +96,7 @@ public class JUnit_Sensors extends JUnit_Test
 
 	}
 	
-	@Test
+	//@Test
 	public void testEvitement()
 	{
 		log.debug("Test d'évitement", this);
@@ -120,6 +120,32 @@ public class JUnit_Sensors extends JUnit_Test
 			}	
 		}
 	}
+	
+	@Test
+	public void testCapteurFixe()
+	{
+		log.debug("Test d'évitement", this);
+		try 
+		{
+			state.robot.moveLengthwise(500);
+		} 
+		catch (UnableToMoveException e1)
+		{
+			log.critical("!!!!! Catch de"+e1+" dans testEvitement !!!!!" , this);
+		}
+		while(true)
+		{
+			try
+			{
+				state.robot.moveToCircle(new Circle( state.robot.getPosition(),0 ) ,  new ArrayList<Hook>(), (Table)container.getService(ServiceNames.TABLE));
+			}
+			catch (UnableToMoveException | PathNotFoundException | ContainerException | SerialManagerException e) 
+			{
+				log.critical("!!!!!! Catch de"+e+" dans testEvitement !!!!!!" , this);
+			}	
+		}
+	}
+
 		
 
 /*    @Test

@@ -42,10 +42,18 @@ class ThreadSensor extends AbstractThread
 	 * distance en mm entre le sdeux capterus arrieres
 	 */
 	int distanceBetweenBackSensors = 17;
-	
+
+	/**
+	 * Distance maximale fiable pour les capteurs : au dela, valeurs abberentes
+	 */
 	double maxSensorRange;
 	
-	/** 	Les angles des capteurs :
+	/**
+	 * Distance minimale à laquelle on peut see fier aux capteurs : ne pas detecter notre propre root par exemple
+	 */
+	double minSensorRange = 70;
+	
+	/** Les angles des capteurs :
 	 * 
 	 * 		
 	 * 			
@@ -60,18 +68,20 @@ class ThreadSensor extends AbstractThread
 	 * 
 	 * Calcul de l'angle :
 	 * 
-	 * 		\angle|
-	 * 		 \    |
-	 * 		  \   |
-	 * 		   \  |
-	 * 			\o|		o : capteur
+	 * 		\angle|		 |angle/
+	 * 		 \    |		 |	  /
+	 * 		  \   |		 |	 /
+	 * 		   \  |		 |	/
+	 * 			\o|		 |o/
+	 * 				Robot		o : capteur
 	 * 
 	 */
 	
-	double leftFrontSensorAngle=0;
-	double rightFrontSensorAngle=10 *2*(Math.PI) / 360;
-	double leftBackSensorAngle=0;
-	double rightBackSensorAngle=0;
+	//Angles en degrés, transformés en radians
+	double leftFrontSensorAngle=20		*2*(Math.PI) / 360;
+	double rightFrontSensorAngle=20 	*2*(Math.PI) / 360;
+	double leftBackSensorAngle=0		*2*(Math.PI) / 360;
+	double rightBackSensorAngle=0		*2*(Math.PI) / 360;
 	
 	// position des capteurs relativement au centre du robot, en mm
 	Vec2 rightFrontSensorPosition = new Vec2(15, 5);
@@ -84,7 +94,15 @@ class ThreadSensor extends AbstractThread
 	 */
 	private int radius;
 	
-
+	/**
+	 * Largeur du robot recuperée sur la config
+	 */
+	int robotWidth;
+	
+	/**
+	 * 	Longueur du robot recuperée sur la config
+	 */
+	int robotLenght;
 	
 	/**
 	 * Crée un nouveau thread de capteurs
@@ -170,19 +188,35 @@ class ThreadSensor extends AbstractThread
 	 */
 	private void addObstacleFront(int[] distanceFront) 
 	{
-		if ((0<distanceFront[0] && distanceFront[0]<maxSensorRange) && (0<distanceFront[1] && distanceFront[1]<maxSensorRange)) // les deux capteurs detectent, on est dans la zone de double detection et on peut placer precesement l'obstacle
+		/** Zones de detection : 0;1;2 capteurs dans leurs zones respectives
+		 * 
+		 * 		______ ___
+		 * 		|	  |\1/\	
+		 * 		|	  |0X2 )
+		 *  	|_____|/1\/
+		 *  		   ---
+		 */
+		
+	
+		 // les deux capteurs detectent, on est dans la zone de double detection et on peut placer precisement l'obstacle
+		// Plus precisement : si On a chaque capteur detectant quelquechose dans l'intervalle 
+		if ((minSensorRange<distanceFront[0] && distanceFront[0]<maxSensorRange) && (minSensorRange<distanceFront[1] && distanceFront[1]<maxSensorRange))
 		{
 			//debrouillez vous, faites le calcul (le systeme c'est {x²+y²=distanceBack[0]² ;(L-x)²+y²= distanceBack[1]²})
-			int L = distanceBetweenFrontSensors;//26cm entre les capteurs
-			mTable.getObstacleManager().addObstacle(new Vec2((int)(mRobot.getPosition().x + Math.pow(distanceFront[0],2)-Math.pow(distanceFront[1],2))/(2 * L),
-																   mRobot.getPosition().y + (int)(Integer.parseInt(config.getProperty("longueur_robot"))/2 + Math.pow(Math.pow(Math.pow(L,2)+Math.pow(distanceFront[0],2)+Math.pow(distanceFront[1],2), 2)/(4 * Math.pow(L, 2)), 0.5))));
+			
+			mTable.getObstacleManager().addObstacle(new Vec2((int)(mRobot.getPosition().x + Math.pow(distanceFront[0],2)-Math.pow(distanceFront[1],2))/(2 * distanceBetweenFrontSensors),
+																   mRobot.getPosition().y + (int)(robotLenght/2 + Math.pow(Math.pow(Math.pow(distanceBetweenFrontSensors,2)+Math.pow(distanceFront[0],2)+Math.pow(distanceFront[1],2), 2)/(4 * Math.pow(distanceBetweenFrontSensors, 2)), 0.5))));
+
+
 		}
-		else if (0<distanceFront[0] && distanceFront[0]<maxSensorRange)// Capteur du cote gauche
+		
+		// Sinon, on est dans les zones de simple detection
+		else if (minSensorRange<distanceFront[0] && distanceFront[0]<maxSensorRange)// Capteur du cote gauche
 		{
 			mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x + (int)(rightFrontSensorPosition.x*Math.cos(mRobot.getOrientation()) - rightFrontSensorPosition.y*Math.sin(mRobot.getOrientation())) + (int)((distanceFront[0]+radius)*Math.cos(mRobot.getOrientation() + rightFrontSensorAngle)), 
 															 mRobot.getPosition().y + (int)(rightFrontSensorPosition.x*Math.sin(mRobot.getOrientation()) + rightFrontSensorPosition.y*Math.cos(mRobot.getOrientation())) + (int)((distanceFront[0]+radius)*Math.sin(mRobot.getOrientation() + rightFrontSensorAngle))));
 		}
-		else if (0<distanceFront[1] && distanceFront[1]<maxSensorRange)// Capteur de coté droit
+		else if (minSensorRange<distanceFront[1] && distanceFront[1]<maxSensorRange)// Capteur de coté droit
 		{
 			mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x + (int)(leftFrontSensorPosition.x*Math.cos(mRobot.getOrientation()) - leftFrontSensorPosition.y*Math.sin(mRobot.getOrientation())) + (int)((distanceFront[1]+radius)*Math.cos(mRobot.getOrientation() - leftFrontSensorAngle)), 
 															 mRobot.getPosition().y + (int)(leftFrontSensorPosition.x*Math.sin(mRobot.getOrientation()) + leftFrontSensorPosition.y*Math.cos(mRobot.getOrientation())) + (int)((distanceFront[1]+radius)*Math.sin(mRobot.getOrientation() - leftFrontSensorAngle))));
@@ -199,9 +233,10 @@ class ThreadSensor extends AbstractThread
 		if ((0<distanceBack[0] && distanceBack[0]<maxSensorRange) && (0<distanceBack[1] && distanceBack[1]<maxSensorRange)) // les deux capteurs detectent, on est dans la zone de double detection et on peut placer precesement l'obstacle
 		{
 			//debrouillez vous, faites le calcul (le systeme c'est {x²+y²=distanceBack[0]² ;(L-x)²+y²= distanceBack[1]²})
-			int L = distanceBetweenBackSensors;//17cm entre les capteurs
-			mTable.getObstacleManager().addObstacle(new Vec2((int)(mRobot.getPosition().x + Math.pow(distanceBack[0],2)-Math.pow(distanceBack[1],2))/(2 * L),
-																   mRobot.getPosition().y + (int)(Integer.parseInt(config.getProperty("longueur_robot"))/2 + Math.pow(Math.pow(Math.pow(L,2)+Math.pow(distanceBack[0],2)+Math.pow(distanceBack[1],2), 2)/(4 * Math.pow(L, 2)), 0.5))));
+			
+			mTable.getObstacleManager().addObstacle(new Vec2((int)(mRobot.getPosition().x + Math.pow(distanceBack[0],2)-Math.pow(distanceBack[1],2))/(2 * distanceBetweenBackSensors),
+																   mRobot.getPosition().y + (int)(robotLenght/2 + Math.pow(Math.pow(Math.pow(distanceBetweenBackSensors,2)+Math.pow(distanceBack[0],2)+Math.pow(distanceBack[1],2), 2)/(4 * Math.pow(distanceBetweenBackSensors, 2)), 0.5))));
+
 		}
 		else if (0<distanceBack[0] && distanceBack[0]<maxSensorRange)// Capteur du cote gauche
 		{
@@ -275,6 +310,8 @@ class ThreadSensor extends AbstractThread
 			radius = Integer.parseInt(config.getProperty("rayon_robot_adverse"));
 			//plus que cette distance (environ 50cm) on est beaucoup moins precis sur la position adverse (donc on ne l'ecrit pas !)
 			maxSensorRange = Integer.parseInt(config.getProperty("largeur_robot")) / Math.sin(Integer.parseInt(config.getProperty("angle_capteur")));
+			robotWidth = Integer.parseInt(config.getProperty("largeur_robot"));
+			robotLenght = Integer.parseInt(config.getProperty("longueur_robot"));
 	}
 	
 }
