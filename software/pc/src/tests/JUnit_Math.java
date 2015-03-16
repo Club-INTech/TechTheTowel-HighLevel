@@ -36,7 +36,13 @@ public class JUnit_Math extends JUnit_Test {
 		float positionEnnemi2_Y=0;
 		float positionRobotX=0;
 		float positionRobotY=0;
+		float longueurRobot = 0;
 		float orientationRobot=0;
+		float positionCapteur1_X = positionRobotX - 150;
+		float positionCapteur1_Y = positionRobotY + (longueurRobot/2);
+		float positionCapteur2_X = positionRobotX + 150;
+		float positionCapteur2_Y = positionRobotY + (longueurRobot/2);
+		
 		Random rand = new Random();
 		boolean goOn=true;
 		
@@ -47,19 +53,19 @@ public class JUnit_Math extends JUnit_Test {
 			
 			if(Math.abs(lectureCapteurDroit-lectureCapteurGauche) > distanceBetweenCaptors)
 			{
-				positionEnnemi1_X = (float)Math.sin(20*Math.PI/180+orientationRobot)*lectureCapteurDroit+distanceBetweenCaptors/2+positionRobotX;
-				positionEnnemi1_Y = (float)Math.cos(20*Math.PI/180+orientationRobot)*lectureCapteurDroit+positionRobotY;
+				positionEnnemi1_X = (float)Math.sin(20*Math.PI/180+orientationRobot)*lectureCapteurDroit+distanceBetweenCaptors/2+positionCapteur1_X;
+				positionEnnemi1_Y = (float)Math.cos(20*Math.PI/180+orientationRobot)*lectureCapteurDroit+positionCapteur1_Y;
 				
-				positionEnnemi2_X = (float)Math.sin(20*Math.PI/180+orientationRobot)*lectureCapteurGauche-distanceBetweenCaptors/2+positionRobotX;
-				positionEnnemi2_Y = (float)Math.cos(20*Math.PI/180+orientationRobot)*lectureCapteurGauche+positionRobotY;
+				positionEnnemi2_X = (float)Math.sin(20*Math.PI/180+orientationRobot)*lectureCapteurGauche-distanceBetweenCaptors/2+positionCapteur2_X;
+				positionEnnemi2_Y = (float)Math.cos(20*Math.PI/180+orientationRobot)*lectureCapteurGauche+positionCapteur2_Y;
 			
 				System.out.println("position ennemi droit = ("+positionEnnemi1_X+","+positionEnnemi1_Y+")");
 				System.out.println("position ennemi gauche = ("+positionEnnemi2_X+","+positionEnnemi2_Y+")");
 			}
 			else 
 			{			
-				positionEnnemi1_X = (float) (distanceBetweenCaptors/2+(Math.pow(lectureCapteurGauche,2)-Math.pow(lectureCapteurDroit,2))/(2 * distanceBetweenCaptors));
-				positionEnnemi1_Y=(float) (Math.sqrt(Math.pow(lectureCapteurGauche,2)-Math.pow(positionEnnemi1_X, 2)));
+				positionEnnemi1_X = (float) ( positionRobotX + (distanceBetweenCaptors/2+(Math.pow(lectureCapteurGauche,2)-Math.pow(lectureCapteurDroit,2))/(2 * distanceBetweenCaptors)));
+				positionEnnemi1_Y=(float) (positionCapteur1_Y + Math.sqrt(Math.pow(lectureCapteurGauche,2)-Math.pow(positionEnnemi1_X, 2)));
 			
 				System.out.println("position ennemi 1 = ("+positionEnnemi1_X+","+positionEnnemi1_Y+")");
 			}
