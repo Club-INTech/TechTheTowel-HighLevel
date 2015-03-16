@@ -674,6 +674,7 @@ public class Locomotion implements Service
         feedbackLoopDelay = Integer.parseInt(config.getProperty("sleep_boucle_acquittement"));
         angleToDisengage = Double.parseDouble(config.getProperty("angle_degagement_robot"));
 		symetry = config.getProperty("couleur").replaceAll(" ","").equals("jaune");
+		robotLength = Integer.parseInt(config.getProperty("longueur_robot").replaceAll(" ",""));
     }
 
     /**

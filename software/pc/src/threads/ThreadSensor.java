@@ -1,7 +1,5 @@
 package threads;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
-
 import enums.SensorNames;
 import exceptions.serial.SerialConnexionException;
 import robot.cardsWrappers.SensorsCardWrapper;
