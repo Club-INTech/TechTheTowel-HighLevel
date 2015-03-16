@@ -190,7 +190,7 @@ class ThreadSensor extends AbstractThread
 		
 	}
 	/**
-	 * ajoute les obstacles avant a l'obstacleManager FIXME debug primordial
+	 * ajoute les obstacles avant a l'obstacleManager TODO a tester
 	 * @param distanceFront l'int[] recupere par la serie pour les capteurs avants
 	 * a modifier si ajout ou supression de capteurs
 	 */

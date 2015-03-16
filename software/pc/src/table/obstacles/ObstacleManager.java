@@ -210,11 +210,32 @@ public class ObstacleManager
      * @param radius rayon de l'obstacle a ajouter     */
     public synchronized void addObstacle(final Vec2 position, final int radius)
     {
-	    mMobileObstacles.add(new ObstacleProximity(position, radius));
+    	//si la position est dans la table on continue les tests
+    	if (position.x>-1500 && position.x<1500 && position.y>0 && position.y<2000)
+    		if(!isInsideFixedObstacle(position))
+    			mMobileObstacles.add(new ObstacleProximity(position, radius));
 	    log.debug("Obstacle ajouté en "+position.x+";"+position.y, this);
     }
-    
     /**
+     * FIXME a tester
+     * regarde si une position donne n'est pas a l'interieur d'un obstacle fixe
+     * @param position la position a tester
+     * @return vrai si l'obstacle intercepte un obstacle au moins faux sinon
+     */
+    private boolean isInsideFixedObstacle(Vec2 position) 
+    {
+    	boolean answer = false;
+		for (int i=0;answer || i<mFixedObstacles.size() ; i++)
+			answer = mFixedObstacles.get(i).position.distance(position)>mFixedObstacles.get(i).radius;
+		for (int i=0;answer || i<mRectangles.size(); i++)
+			answer = (mRectangles.get(i).positon.x-(mRectangles.get(i).sizeX/2)>position.x )
+			      || (mRectangles.get(i).positon.x+(mRectangles.get(i).sizeX/2)<position.x )
+			      || (mRectangles.get(i).positon.y>position.y )
+			      || (mRectangles.get(i).positon.y+(mRectangles.get(i).sizeY)>position.y );
+		return answer;
+	}
+
+	/**
      * 
      */
     public synchronized void removeNonDetectedObstacles(Vec2 robotPosition, Vec2 detectionPoint)

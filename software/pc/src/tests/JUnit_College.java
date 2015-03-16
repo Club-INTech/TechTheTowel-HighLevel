@@ -141,12 +141,12 @@ public class JUnit_College extends JUnit_Test {
 					else if (key == 'z')
 					{
 						System.out.println("on avance");
-						robot.moveLengthwise(50);
+						robot.moveLengthwise(100);
 					}
 					else if (key == 's')
 					{
 						System.out.println("on recule");
-						robot.moveLengthwise(-50);
+						robot.moveLengthwise(-100);
 					}
 				}
 			}
