@@ -34,6 +34,14 @@ class ThreadSensor extends AbstractThread
 	 * on ne peut rien detecter de plus petit que cette distance donc toutes les informations de distance en dessous de cette valeur ne seron pas traités
 	 */
 	int distanceBetweenGuideAndUltrasound = 20;
+	/**
+	 * distance en mm entre les deux capteurs avants
+	 */
+	int distanceBetweenFrontSensors = 26;
+	/**
+	 * distance en mm entre le sdeux capterus arrieres
+	 */
+	int distanceBetweenBackSensors = 17;
 	
 	double maxSensorRange;
 	
@@ -165,7 +173,7 @@ class ThreadSensor extends AbstractThread
 		if ((0<distanceFront[0] && distanceFront[0]<maxSensorRange) && (0<distanceFront[1] && distanceFront[1]<maxSensorRange)) // les deux capteurs detectent, on est dans la zone de double detection et on peut placer precesement l'obstacle
 		{
 			//debrouillez vous, faites le calcul (le systeme c'est {x²+y²=distanceBack[0]² ;(L-x)²+y²= distanceBack[1]²})
-			int L = Integer.parseInt(config.getProperty("largeur_robot"));
+			int L = distanceBetweenFrontSensors;//26cm entre les capteurs
 			mTable.getObstacleManager().addObstacle(new Vec2((int)(mRobot.getPosition().x + Math.pow(distanceFront[0],2)-Math.pow(distanceFront[1],2))/(2 * L),
 																   mRobot.getPosition().y + (int)(Integer.parseInt(config.getProperty("longueur_robot"))/2 + Math.pow(Math.pow(Math.pow(L,2)+Math.pow(distanceFront[0],2)+Math.pow(distanceFront[1],2), 2)/(4 * Math.pow(L, 2)), 0.5))));
 		}
@@ -191,7 +199,7 @@ class ThreadSensor extends AbstractThread
 		if ((0<distanceBack[0] && distanceBack[0]<maxSensorRange) && (0<distanceBack[1] && distanceBack[1]<maxSensorRange)) // les deux capteurs detectent, on est dans la zone de double detection et on peut placer precesement l'obstacle
 		{
 			//debrouillez vous, faites le calcul (le systeme c'est {x²+y²=distanceBack[0]² ;(L-x)²+y²= distanceBack[1]²})
-			int L = Integer.parseInt(config.getProperty("largeur_robot"));
+			int L = distanceBetweenBackSensors;//17cm entre les capteurs
 			mTable.getObstacleManager().addObstacle(new Vec2((int)(mRobot.getPosition().x + Math.pow(distanceBack[0],2)-Math.pow(distanceBack[1],2))/(2 * L),
 																   mRobot.getPosition().y + (int)(Integer.parseInt(config.getProperty("longueur_robot"))/2 + Math.pow(Math.pow(Math.pow(L,2)+Math.pow(distanceBack[0],2)+Math.pow(distanceBack[1],2), 2)/(4 * Math.pow(L, 2)), 0.5))));
 		}
