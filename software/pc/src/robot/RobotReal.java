@@ -56,6 +56,9 @@ public class RobotReal extends Robot
 		
 		if(waitForCompletion)
 			Sleep.sleep(order.getDuration());
+		else 
+			Sleep.sleep(100); // On attend 25 ms pour Sylvain T_T
+		
 	}
 	
 	@Override

@@ -51,9 +51,11 @@ public class JUnit_College extends JUnit_Test {
 	 * (avance de distance-50, ouvre les machoires, avance de 50, mange le plot et le remonte) *4;
 	 * ouvre le guide et la machoire et recule de distance; 
 	 */
-	//@Test
+	@Test
 	public void demonstration() throws UnableToMoveException, SerialConnexionException 
 	{
+		matchSetUp(robot);
+		
 		robot.moveLengthwise(distanceBetweenPlots+200);
 		scriptmanager.getScript(ScriptNames.DROP_CARPET).execute(0, real_state, emptyHook, true);
 		
@@ -64,9 +66,10 @@ public class JUnit_College extends JUnit_Test {
 		robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, true);
 		
 		robot.moveLengthwise(distanceBetweenPlots-200);
+		robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
 		robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
 		robot.moveLengthwise(50);
-		robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
+		robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);
 		robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 		robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
 		robot.useActuator(ActuatorOrder.ELEVATOR_HIGH, true);
@@ -75,7 +78,7 @@ public class JUnit_College extends JUnit_Test {
 		robot.moveLengthwise(distanceBetweenPlots-50);
 		robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
 		robot.moveLengthwise(50);
-		robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN_SLOW, true);
+		robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);
 		robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 		robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
 		robot.useActuator(ActuatorOrder.ELEVATOR_HIGH, true);
@@ -84,7 +87,7 @@ public class JUnit_College extends JUnit_Test {
 		robot.moveLengthwise(distanceBetweenPlots-50);
 		robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
 		robot.moveLengthwise(50);
-		robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
+		robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);
 		robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 		robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
 		robot.useActuator(ActuatorOrder.ELEVATOR_HIGH, true);
@@ -93,20 +96,21 @@ public class JUnit_College extends JUnit_Test {
 		robot.moveLengthwise(distanceBetweenPlots-50);
 		robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
 		robot.moveLengthwise(50);
-		robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN_SLOW, true);
+		robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);
 		robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 		robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
-		robot.useActuator(ActuatorOrder.ELEVATOR_HIGH, true);
-		robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, false);
 		
+		robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+		robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
+
 		
-		robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, false);
+		robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, true);
 		robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, true);
 		robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
 		robot.moveLengthwise(-distanceBetweenPlots);
 	}
 	
-	@Test
+	//@Test
 	public void jeuPourGamins() throws UnableToMoveException
 	{
 		String scanned = "";
@@ -147,6 +151,35 @@ public class JUnit_College extends JUnit_Test {
 				}
 			}
 		}
+	}
+	
+	public void matchSetUp(Robot robot) throws SerialConnexionException
+	{
+		robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+
+
+		robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW_LEFT, true);
+		robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW_RIGHT, false);
+		
+		robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, false);
+		robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, false);
+		
+		robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
+		robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
+		
+		robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, false);
+		robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, false);
+		
+		robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, true);
+		robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, true);
+		
+		robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, true);
+		robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, true);
+		
+		robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW_LEFT, true);
+		robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW_RIGHT, true);
+
+		robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
 	}
 
 }

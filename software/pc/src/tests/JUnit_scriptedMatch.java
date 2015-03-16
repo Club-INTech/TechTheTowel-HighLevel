@@ -46,18 +46,10 @@ public class JUnit_scriptedMatch extends JUnit_Test
         pathDingDing = (PathDingDing)container.getService(ServiceNames.PATHDINGDING);
 		emptyHook = new ArrayList<Hook> ();  
 
-		if (real_state.robot.getSymmetry())
-		{
-			real_state.robot.setPosition(new Vec2 (-1381,1000));
-			real_state.robot.setOrientation(0); 
-			//si on est jaune on est en 0 
-		}
-		else
-		{
+		
 			real_state.robot.setPosition(new Vec2 (1381,1000));
 			real_state.robot.setOrientation(Math.PI);
-			//sinon on est vert donc on est en PI
-		}
+		
 		
 		real_state.robot.updateConfig();
 		try 
@@ -103,8 +95,8 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
 		robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
 		
-		robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, false);
-		robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, false);
+		robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
+		robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);
 		
 		robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
 		robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);

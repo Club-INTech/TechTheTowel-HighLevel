@@ -37,8 +37,7 @@ public class JUnit_Flood extends JUnit_Test
 		while(true)
 		{
 			log.debug(compt++, this);
-			Vec2 pos=mLocomotion.getPosition();
-			log.debug(pos.x+" :/  ^_^  /: "+pos.y, this);
+			mLocomotion.getPosition();
 		}
 	}	
 	
