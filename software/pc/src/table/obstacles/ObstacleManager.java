@@ -2,6 +2,7 @@ package table.obstacles;
 
 import java.util.ArrayList;
 
+import pathDingDing.PathDingDing;
 import smartMath.*;
 import utils.Log;
 import utils.Config;
@@ -211,6 +212,16 @@ public class ObstacleManager
     {
 	    mMobileObstacles.add(new ObstacleProximity(position, radius));
 	    log.debug("Obstacle ajouté en "+position.x+";"+position.y, this);
+    }
+    
+    /**
+     * 
+     */
+    public synchronized void removeNonDetectedObstacles(Vec2 robotPosition, Vec2 detectionPoint)
+    {
+    	for(int i = 0; i < mMobileObstacles.size(); i++)
+    		if(PathDingDing.intersects(new Segment(robotPosition, detectionPoint), new Circle(mMobileObstacles.get(i).position, mMobileObstacles.get(i).radius)))
+    			mMobileObstacles.remove(i--);
     }
 
     /**
