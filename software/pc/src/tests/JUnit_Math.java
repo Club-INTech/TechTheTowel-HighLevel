@@ -36,11 +36,11 @@ public class JUnit_Math extends JUnit_Test {
 		float positionEnnemi2_Y=0;
 		float positionRobotX=0;
 		float positionRobotY=0;
-		float longueurRobot = 0;
+		float longueurRobot = 120;
 		float orientationRobot=0;
-		float positionCapteur1_X = positionRobotX - 150;
+		float positionCapteur1_X = positionRobotX - 140;
 		float positionCapteur1_Y = positionRobotY + (longueurRobot/2);
-		float positionCapteur2_X = positionRobotX + 150;
+		float positionCapteur2_X = positionRobotX + 140;
 		float positionCapteur2_Y = positionRobotY + (longueurRobot/2);
 		
 		Random rand = new Random();
