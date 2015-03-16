@@ -207,6 +207,7 @@ class ThreadSensor extends AbstractThread
 			mTable.getObstacleManager().addObstacle(new Vec2((int)(mRobot.getPosition().x + Math.pow(distanceFront[0],2)-Math.pow(distanceFront[1],2))/(2 * distanceBetweenFrontSensors),
 																   mRobot.getPosition().y + (int)(robotLenght/2 + Math.pow(Math.pow(Math.pow(distanceBetweenFrontSensors,2)+Math.pow(distanceFront[0],2)+Math.pow(distanceFront[1],2), 2)/(4 * Math.pow(distanceBetweenFrontSensors, 2)), 0.5))));
 
+
 		}
 		
 		// Sinon, on est dans les zones de simple detection
@@ -235,6 +236,7 @@ class ThreadSensor extends AbstractThread
 			
 			mTable.getObstacleManager().addObstacle(new Vec2((int)(mRobot.getPosition().x + Math.pow(distanceBack[0],2)-Math.pow(distanceBack[1],2))/(2 * distanceBetweenBackSensors),
 																   mRobot.getPosition().y + (int)(robotLenght/2 + Math.pow(Math.pow(Math.pow(distanceBetweenBackSensors,2)+Math.pow(distanceBack[0],2)+Math.pow(distanceBack[1],2), 2)/(4 * Math.pow(distanceBetweenBackSensors, 2)), 0.5))));
+
 		}
 		else if (0<distanceBack[0] && distanceBack[0]<maxSensorRange)// Capteur du cote gauche
 		{
