@@ -28,7 +28,7 @@ public class Panel extends JPanel
 	private Robot mRobot;
 	private boolean showGraph;
 	private Graph mGraph;
-	
+	private boolean isRobotPresent = true;
 	
 	public Panel(Table table, RobotReal robot)
 	{
@@ -36,6 +36,14 @@ public class Panel extends JPanel
 		mTable = table;
 		mRobot = robot;
 		showGraph = false;
+	}
+	
+	public Panel(Table table)
+	{
+		mPath = new ArrayList<Vec2>();
+		mTable = table;
+		showGraph = false;
+		isRobotPresent = false;
 	}
 	
 	public void paintComponent(Graphics g)
@@ -69,7 +77,7 @@ public class Panel extends JPanel
 	    }
 	    
 	    
-	    //  Les noeuds du PathDingDing
+	    //  Le graphe du pathdingding
 	    g.setColor(new Color(100, 60, 5));
 	    if(showGraph)
 	    {
@@ -81,13 +89,12 @@ public class Panel extends JPanel
 	    }
 	    
 	    
-	    // TODO mobileObstacle = fixedObstacle ?
-	    // Les obstacles mobiles : plots /verres...
+	    // Les obstacles fixes : plots, gobelets
 	    g.setColor(Color.white);
-	    ArrayList<ObstacleCircular> mobileObstacles = mTable.getObstacleManager().getFixedObstacles();
-	    for(int i = 0; i < mobileObstacles.size(); i++)
+	    ArrayList<ObstacleCircular> fixedObstacles = mTable.getObstacleManager().getFixedObstacles();
+	    for(int i = 0; i < fixedObstacles.size(); i++)
 	    {
-	    	g.drawOval((mobileObstacles.get(i).getPosition().x - mobileObstacles.get(i).getRadius() + 1500) * this.getWidth() / 3000, -(mobileObstacles.get(i).getPosition().y + mobileObstacles.get(i).getRadius()) * this.getHeight() / 2000 + this.getHeight(), (2 * mobileObstacles.get(i).getRadius()) * this.getWidth() / 3000, (2 * mobileObstacles.get(i).getRadius()) * this.getHeight() / 2000);
+	    	g.drawOval((fixedObstacles.get(i).getPosition().x - fixedObstacles.get(i).getRadius() + 1500) * this.getWidth() / 3000, -(fixedObstacles.get(i).getPosition().y + fixedObstacles.get(i).getRadius()) * this.getHeight() / 2000 + this.getHeight(), (2 * fixedObstacles.get(i).getRadius()) * this.getWidth() / 3000, (2 * fixedObstacles.get(i).getRadius()) * this.getHeight() / 2000);
 	    }
 	    
 	    //les robots ennemis
@@ -99,13 +106,17 @@ public class Panel extends JPanel
 		    		(2 * ennemyRobots.get(i).getRadius()) * this.getWidth() / 3000,
 					(2 * ennemyRobots.get(i).getRadius()) * this.getHeight() / 2000);
 	    
-	    // Notre robot
-	    g.setColor(Color.green);
-	    g.drawOval( (mRobot.getPosition().x - 100 + 1500) * this.getWidth() / 3000,
-	    		   -(mRobot.getPosition().y + 100) * this.getHeight() / 2000 + this.getHeight(), 
-	    		    (2 * 100) * this.getWidth() / 3000,
-	    		    (2 * 100) * this.getHeight() / 2000);
+		// Notre robot
+	    if(isRobotPresent)
+	    {
+		    g.setColor(Color.green);
+		    g.drawOval( (mRobot.getPosition().x - 100 + 1500) * this.getWidth() / 3000,
+		    		   -(mRobot.getPosition().y + 100) * this.getHeight() / 2000 + this.getHeight(), 
+		    		    (2 * 100) * this.getWidth() / 3000,
+		    		    (2 * 100) * this.getHeight() / 2000);
+	    }
 	    
+	    g.setColor(Color.green);
 	    //debug : zones
 	    if(showGraph)
 	    	for(int i=0; i<mGraph.mAreas.size(); i++)
@@ -116,8 +127,7 @@ public class Panel extends JPanel
 	    				   mGraph.mAreas.get(i).height * this.getHeight() / 2000);
 	    	}
 	    
-	    // TODO kékéceca ?
-	    // Hypothese : dessin du path suivi
+	    // un chemin
 	    g.setColor(Color.blue);
 	    for(int i = 0; i+1 < mPath.size(); i++)
 	    {
@@ -127,7 +137,7 @@ public class Panel extends JPanel
 	    			    -mPath.get(i+1).y * this.getHeight() / 2000 + this.getHeight() );
 	    }
 	    
-	    // TODO c'est quoi cet ovale rempli ?
+	    // les points du chemin
 	    g.setColor(Color.cyan);
 	    for(int i = 0; i < mPath.size(); i++)
 	    {
@@ -137,7 +147,7 @@ public class Panel extends JPanel
 	    			     6);
 	    }
 	    
-	    // Ecriture du path parcouru
+	    // les coordonnées des points du chemin
 	    g.setColor(Color.magenta);
 	    for(int i = 0; i < mPath.size(); i++)
 	    {
@@ -147,12 +157,14 @@ public class Panel extends JPanel
 	    }
 	}
 	
+	//permet d'afficher un chemin
 	public void drawArrayList(ArrayList<Vec2> path)
 	{
 		mPath = path;
 		repaint();
 	}
 	
+	//permet d'afficher le graphe du pathdingding
 	public void drawGraph(Graph graph)
 	{
 		mGraph = graph;
