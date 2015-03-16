@@ -27,24 +27,53 @@ public class JUnit_Math extends JUnit_Test {
 	@Test
 	public void testPositionEnnemi()
 	{
-		int positionCapteurGauche = 0;
-		int positionCapteurDroit = 0;
-		int L = 17;
-		Vec2 positionEnnemi = new Vec2 (1,1);
+		int lectureCapteurGauche = 0;
+		int lectureCapteurDroit = 0;
+		float distanceBetweenCaptors = 170;
+		float positionEnnemi1_X=0;
+		float positionEnnemi1_Y=0;
+		float positionEnnemi2_X=0;
+		float positionEnnemi2_Y=0;
+		float positionRobotX=0;
+		float positionRobotY=0;
+		float orientationRobot=0;
 		Random rand = new Random();
+		boolean goOn=true;
 		
-		
-		while (positionEnnemi.x != (int)Double.NaN || positionEnnemi.y != (int)Double.NaN)
+		while(goOn)
 		{
-			positionCapteurGauche = rand.nextInt();
-			positionCapteurDroit = rand.nextInt();
+			lectureCapteurGauche = rand.nextInt(500-90)+90;
+			lectureCapteurDroit  = rand.nextInt(500-90)+90;
 			
-			positionEnnemi = new Vec2(
-					(int)(Math.pow(positionCapteurGauche,2)-Math.pow(positionCapteurDroit,2))/(2 * L),
-					(int)((int)((L)/2 + Math.pow(Math.pow(Math.pow(L,2)+Math.pow(positionCapteurGauche,2)+Math.pow(positionCapteurDroit,2), 2)/(4 * Math.pow(L, 2)), 0.5)))); 
-			System.out.println("capteur gauche :"+positionCapteurGauche);
-			System.out.println("capteur droit :"+positionCapteurDroit);
-			System.out.println("position ennemi = ("+positionEnnemi.x+","+positionEnnemi.y+")");
+			if(Math.abs(lectureCapteurDroit-lectureCapteurGauche) > distanceBetweenCaptors)
+			{
+				positionEnnemi1_X = (float)Math.sin(20*Math.PI/180+orientationRobot)*lectureCapteurDroit+distanceBetweenCaptors/2+positionRobotX;
+				positionEnnemi1_Y = (float)Math.cos(20*Math.PI/180+orientationRobot)*lectureCapteurDroit+positionRobotY;
+				
+				positionEnnemi2_X = (float)Math.sin(20*Math.PI/180+orientationRobot)*lectureCapteurGauche-distanceBetweenCaptors/2+positionRobotX;
+				positionEnnemi2_Y = (float)Math.cos(20*Math.PI/180+orientationRobot)*lectureCapteurGauche+positionRobotY;
+			
+				System.out.println("position ennemi droit = ("+positionEnnemi1_X+","+positionEnnemi1_Y+")");
+				System.out.println("position ennemi gauche = ("+positionEnnemi2_X+","+positionEnnemi2_Y+")");
+			}
+			else 
+			{			
+				positionEnnemi1_X = (float) (distanceBetweenCaptors/2+(Math.pow(lectureCapteurGauche,2)-Math.pow(lectureCapteurDroit,2))/(2 * distanceBetweenCaptors));
+				positionEnnemi1_Y=(float) (Math.sqrt(Math.pow(lectureCapteurGauche,2)-Math.pow(positionEnnemi1_X, 2)));
+			
+				System.out.println("position ennemi 1 = ("+positionEnnemi1_X+","+positionEnnemi1_Y+")");
+			}
+			
+			if(positionEnnemi1_Y==Double.NaN || positionEnnemi2_Y==Double.NaN )
+				goOn=false;
+			
+			System.out.println("capteur droit :"+lectureCapteurDroit);
+			System.out.println("capteur gauche :"+lectureCapteurGauche);
+
+
+			if(positionEnnemi1_X > 2000 || positionEnnemi1_Y > 2000 || positionEnnemi1_X < -2000 || positionEnnemi1_Y < -2000 ||
+			   positionEnnemi2_X > 2000 || positionEnnemi2_Y > 2000 || positionEnnemi2_X < -2000 || positionEnnemi2_Y < -2000)
+				goOn=false;
 		}
 	}
 	
@@ -83,7 +112,8 @@ public class JUnit_Math extends JUnit_Test {
 	 *
 	 * @throws Exception the exception
 	 */
-//	@Test public void test_matrn_constructor() throws Exception
+//	@Test
+	public void test_matrn_constructor() throws Exception
 	{
 		log.debug("JUnit_MathTest.test_matrn_constructor()", this);
 		y = new Matrn(2);

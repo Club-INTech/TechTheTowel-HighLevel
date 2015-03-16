@@ -37,11 +37,11 @@ class ThreadSensor extends AbstractThread
 	/**
 	 * distance en mm entre les deux capteurs avants
 	 */
-	int distanceBetweenFrontSensors = 26;
+	int distanceBetweenFrontSensors = 260;
 	/**
-	 * distance en mm entre le sdeux capterus arrieres
+	 * distance en mm entre le deux capterus arrieres
 	 */
-	int distanceBetweenBackSensors = 17;
+	int distanceBetweenBackSensors = 170;
 
 	/**
 	 * Distance maximale fiable pour les capteurs : au dela, valeurs abberentes
@@ -204,9 +204,12 @@ class ThreadSensor extends AbstractThread
 		{
 			//debrouillez vous, faites le calcul (le systeme c'est {x²+y²=distanceBack[0]² ;(L-x)²+y²= distanceBack[1]²})
 			
-			mTable.getObstacleManager().addObstacle(new Vec2((int)(mRobot.getPosition().x + Math.pow(distanceFront[0],2)-Math.pow(distanceFront[1],2))/(2 * distanceBetweenFrontSensors),
-																   mRobot.getPosition().y + (int)(robotLenght/2 + Math.pow(Math.pow(Math.pow(distanceBetweenFrontSensors,2)+Math.pow(distanceFront[0],2)+Math.pow(distanceFront[1],2), 2)/(4 * Math.pow(distanceBetweenFrontSensors, 2)), 0.5))));
-
+			mTable.getObstacleManager().addObstacle(new Vec2(
+					(int)(mRobot.getPosition().x + 
+						  Math.pow(distanceFront[0],2)-Math.pow(distanceFront[1],2))/(2 * distanceBetweenFrontSensors),
+					
+						  mRobot.getPosition().y +
+						  (int)(distanceBetweenFrontSensors/2 + Math.pow(Math.pow(Math.pow(distanceBetweenFrontSensors,2)+Math.pow(distanceFront[0],2)+Math.pow(distanceFront[1],2), 2)/(4 * Math.pow(distanceBetweenFrontSensors, 2)), 0.5))));
 
 		}
 		
