@@ -20,7 +20,7 @@ import exceptions.serial.SerialConnexionException;
 public class JUnit_College extends JUnit_Test {
 
 	
-	int distanceBetweenPlots = 300;
+	int distanceBetweenPlots = 350;
 
 	private GameState<Robot> real_state;
 	private Robot robot;
@@ -37,6 +37,7 @@ public class JUnit_College extends JUnit_Test {
 		emptyHook = new ArrayList<Hook> ();  
 		robot = real_state.robot;
 		
+		config.set("couleur", "vert");
 		robot.updateConfig();
 
 	}
@@ -50,10 +51,10 @@ public class JUnit_College extends JUnit_Test {
 	 * (avance de distance-50, ouvre les machoires, avance de 50, mange le plot et le remonte) *4;
 	 * ouvre le guide et la machoire et recule de distance; 
 	 */
-	@Test
+	//@Test
 	public void demonstration() throws UnableToMoveException, SerialConnexionException 
 	{
-		robot.moveLengthwise(distanceBetweenPlots-50);
+		robot.moveLengthwise(distanceBetweenPlots+200);
 		scriptmanager.getScript(ScriptNames.DROP_CARPET).execute(0, real_state, emptyHook, true);
 		
 		robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, false);
@@ -62,7 +63,7 @@ public class JUnit_College extends JUnit_Test {
 		robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
 		robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, true);
 		
-		robot.moveLengthwise(distanceBetweenPlots-50);
+		robot.moveLengthwise(distanceBetweenPlots-200);
 		robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
 		robot.moveLengthwise(50);
 		robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
@@ -125,13 +126,13 @@ public class JUnit_College extends JUnit_Test {
 					if (key == 'q')
 					{
 						System.out.println("on tourne a gauche");
-						robot.turnRelative(-Math.PI/2);
+						robot.turnRelative(Math.PI/2);
 						
 					}
 					else if (key == 'd')
 					{
 						System.out.println("on tourne a droite");
-						robot.turnRelative(Math.PI/2);
+						robot.turnRelative(-Math.PI/2);
 					}
 					else if (key == 'z')
 					{

@@ -101,13 +101,15 @@ public class RobotReal extends Robot
     @Override
     public void turn(double angle, ArrayList<Hook> hooks, boolean mur, boolean isTurnRelative) throws UnableToMoveException
     {
-        mLocomotion.turn(angle, hooks, isTurnRelative);
+    	if (isTurnRelative)
+    		angle += getOrientation();
+        mLocomotion.turn(angle, hooks);
     }
     
     @Override
     public void turn(double angle, ArrayList<Hook> hooks, boolean mur) throws UnableToMoveException
     {
-        mLocomotion.turn(angle, hooks, false);
+        mLocomotion.turn(angle, hooks);
     }
     
     @Override

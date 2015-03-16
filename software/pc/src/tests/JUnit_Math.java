@@ -1,5 +1,7 @@
 package tests;
 
+import java.util.Random;
+
 import org.junit.Test;
 import org.junit.Assert;
 
@@ -22,12 +24,36 @@ public class JUnit_Math extends JUnit_Test {
 	/** The z. */
 	Matrn z;
 	
+	@Test
+	public void testPositionEnnemi()
+	{
+		int positionCapteurGauche = 0;
+		int positionCapteurDroit = 0;
+		int L = 17;
+		Vec2 positionEnnemi = new Vec2 (1,1);
+		Random rand = new Random();
+		
+		
+		while (positionEnnemi.x != (int)Double.NaN || positionEnnemi.y != (int)Double.NaN)
+		{
+			positionCapteurGauche = rand.nextInt();
+			positionCapteurDroit = rand.nextInt();
+			
+			positionEnnemi = new Vec2(
+					(int)(Math.pow(positionCapteurGauche,2)-Math.pow(positionCapteurDroit,2))/(2 * L),
+					(int)((int)((L)/2 + Math.pow(Math.pow(Math.pow(L,2)+Math.pow(positionCapteurGauche,2)+Math.pow(positionCapteurDroit,2), 2)/(4 * Math.pow(L, 2)), 0.5)))); 
+			System.out.println("capteur gauche :"+positionCapteurGauche);
+			System.out.println("capteur droit :"+positionCapteurDroit);
+			System.out.println("position ennemi = ("+positionEnnemi.x+","+positionEnnemi.y+")");
+		}
+	}
+	
 	/**
 	 * Test_ vec2.
 	 *
 	 * @throws Exception the exception
 	 */
-	@Test
+//	@Test
 	public void test_Vec2() throws Exception
 	{
 		log.debug("JUnit_MathTest.test_Vec2()", this);
@@ -57,7 +83,7 @@ public class JUnit_Math extends JUnit_Test {
 	 *
 	 * @throws Exception the exception
 	 */
-	@Test public void test_matrn_constructor() throws Exception
+//	@Test public void test_matrn_constructor() throws Exception
 	{
 		log.debug("JUnit_MathTest.test_matrn_constructor()", this);
 		y = new Matrn(2);
@@ -79,7 +105,7 @@ public class JUnit_Math extends JUnit_Test {
 	 *
 	 * @throws Exception the exception
 	 */
-	@Test
+//	@Test
 	public void test_add() throws Exception
 	{
 		log.debug("JUnit_MathTest.test_add()", this);
@@ -107,7 +133,7 @@ public class JUnit_Math extends JUnit_Test {
 	 *
 	 * @throws Exception the exception
 	 */
-	@Test
+//	@Test
 	public void test_add_2() throws Exception
 	{
 		log.debug("JUnit_MathTest.test_add_2()", this);
@@ -135,7 +161,7 @@ public class JUnit_Math extends JUnit_Test {
 	 *
 	 * @throws Exception the exception
 	 */
-	@Test
+//	@Test
 	public void test_mul() throws Exception
 	{
 		log.debug("JUnit_MathTest.test_mul()", this);
@@ -163,7 +189,7 @@ public class JUnit_Math extends JUnit_Test {
 	 *
 	 * @throws Exception the exception
 	 */
-	@Test
+//	@Test
 	public void test_mul_2() throws Exception
 	{
 		log.debug("JUnit_MathTest.test_mul_2()", this);
@@ -191,7 +217,7 @@ public class JUnit_Math extends JUnit_Test {
 	 *
 	 * @throws Exception the exception
 	 */
-	@Test
+//	@Test
 	public void test_transpose() throws Exception
 	{
 		log.debug("JUnit_MathTest.test_transpose()", this);
@@ -223,7 +249,7 @@ public class JUnit_Math extends JUnit_Test {
 	 *
 	 * @throws Exception the exception
 	 */
-	@Test
+//	@Test
 	public void test_transpose_2() throws Exception
 	{
 		log.debug("JUnit_MathTest.test_transpose_2()", this);
@@ -255,7 +281,7 @@ public class JUnit_Math extends JUnit_Test {
 	 *
 	 * @throws Exception the exception
 	 */
-	@Test(expected=MatrixException.class)
+//	@Test(expected=MatrixException.class)
 	public void test_exception_add() throws Exception
 	{
 		log.debug("JUnit_MathTest.test_exception_add()", this);
@@ -276,7 +302,7 @@ public class JUnit_Math extends JUnit_Test {
 	 *
 	 * @throws Exception the exception
 	 */
-	@Test(expected=MatrixException.class)
+//	@Test(expected=MatrixException.class)
 	public void test_exception_mul() throws Exception
 	{
 		log.debug("JUnit_MathTest.test_exception_mul()", this);
@@ -295,7 +321,7 @@ public class JUnit_Math extends JUnit_Test {
 	 *
 	 * @throws Exception the exception
 	 */
-	@Test(expected=MatrixException.class)
+//	@Test(expected=MatrixException.class)
 	public void test_exception_transpose() throws Exception
 	{
 		log.debug("JUnit_MathTest.test_exception_transpose()", this);
