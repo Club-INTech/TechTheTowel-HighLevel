@@ -37,6 +37,7 @@ public class JUnit_College extends JUnit_Test {
 		emptyHook = new ArrayList<Hook> ();  
 		robot = real_state.robot;
 		
+		config.set("couleur", "vert");
 		robot.updateConfig();
 
 	}
@@ -125,13 +126,13 @@ public class JUnit_College extends JUnit_Test {
 					if (key == 'q')
 					{
 						System.out.println("on tourne a gauche");
-						robot.turnRelative(-Math.PI/2);
+						robot.turnRelative(Math.PI/2);
 						
 					}
 					else if (key == 'd')
 					{
 						System.out.println("on tourne a droite");
-						robot.turnRelative(Math.PI/2);
+						robot.turnRelative(-Math.PI/2);
 					}
 					else if (key == 'z')
 					{
