@@ -48,6 +48,11 @@ public class JUnit_Math extends JUnit_Test {
 		
 		while(goOn)
 		{
+			positionEnnemi1_X=0;
+			positionEnnemi1_Y=0;
+			positionEnnemi2_X=0;
+			positionEnnemi2_Y=0;
+			
 			lectureCapteurGauche = rand.nextInt(500-90)+90;
 			lectureCapteurDroit  = rand.nextInt(500-90)+90;
 			
@@ -59,8 +64,9 @@ public class JUnit_Math extends JUnit_Test {
 				positionEnnemi2_X = (float)Math.sin(20*Math.PI/180+orientationRobot)*lectureCapteurGauche-distanceBetweenCaptors/2+positionCapteur2_X;
 				positionEnnemi2_Y = (float)Math.cos(20*Math.PI/180+orientationRobot)*lectureCapteurGauche+positionCapteur2_Y;
 			
-				System.out.println("position ennemi droit = ("+positionEnnemi1_X+","+positionEnnemi1_Y+")");
 				System.out.println("position ennemi gauche = ("+positionEnnemi2_X+","+positionEnnemi2_Y+")");
+				System.out.println("position ennemi droit  = ("+positionEnnemi1_X+","+positionEnnemi1_Y+")");
+
 			}
 			else 
 			{			
@@ -73,12 +79,12 @@ public class JUnit_Math extends JUnit_Test {
 			if(positionEnnemi1_Y==Double.NaN || positionEnnemi2_Y==Double.NaN )
 				goOn=false;
 			
-			System.out.println("capteur droit :"+lectureCapteurDroit);
 			System.out.println("capteur gauche :"+lectureCapteurGauche);
+			System.out.println("capteur droit  :"+lectureCapteurDroit);
 
-
-			if(positionEnnemi1_X > 2000 || positionEnnemi1_Y > 2000 || positionEnnemi1_X < -2000 || positionEnnemi1_Y < -2000 ||
-			   positionEnnemi2_X > 2000 || positionEnnemi2_Y > 2000 || positionEnnemi2_X < -2000 || positionEnnemi2_Y < -2000)
+			
+			if(positionEnnemi1_X > 1500 || positionEnnemi1_Y > 2000 || positionEnnemi1_X < -1500 || positionEnnemi1_Y < -500 ||
+			   positionEnnemi2_X > 1500 || positionEnnemi2_Y > 2000 || positionEnnemi2_X < -1500 || positionEnnemi2_Y < -500)
 				goOn=false;
 		}
 	}
