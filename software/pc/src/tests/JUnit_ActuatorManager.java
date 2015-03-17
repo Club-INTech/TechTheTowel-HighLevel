@@ -5,7 +5,6 @@ import hook.Hook;
 
 import java.util.ArrayList;
 
-import scripts.AbstractScript;
 import scripts.ScriptManager;
 import smartMath.Vec2;
 import strategie.GameState;
@@ -15,12 +14,7 @@ import org.junit.Test;
 
 import pathDingDing.PathDingDing;
 import enums.ActuatorOrder;
-import enums.ScriptNames;
 import enums.ServiceNames;
-import exceptions.PathNotFoundException;
-import exceptions.Locomotion.UnableToMoveException;
-import exceptions.serial.SerialConnexionException;
-import exceptions.serial.SerialFinallyException;
 import robot.Robot;
 import robot.cardsWrappers.SensorsCardWrapper;
 

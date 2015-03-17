@@ -34,11 +34,6 @@ public class ObstacleManager
 	private int defaultObstacleRadius;
 	
 	/**
-	 * Booleen explicitant si l'obstacle existe deja
-	 */
-	private boolean isAlreadyExistant=false;
-  
-    /**
      * Instancie un nouveau gestionnaire d'obstacle.
      *
      * @param log le système de log sur lequel écrire.
@@ -207,33 +202,22 @@ public class ObstacleManager
      * Ajoute un obstacle sur la table a la position spécifiée, du rayon specifie (de type obstacleProximity)
      *
      * @param position position ou ajouter l'obstacle
-     * @param radius rayon de l'obstacle a ajouter     */
+     * @param radius rayon de l'obstacle a ajouter    
+      */
     public synchronized void addObstacle(final Vec2 position, final int radius)
     {
     	//si la position est dans la table on continue les tests
     	if (position.x>-1500 && position.x<1500 && position.y>0 && position.y<2000)
-    		if(!isInsideFixedObstacle(position))
-    			mMobileObstacles.add(new ObstacleProximity(position, radius));
-	    log.debug("Obstacle ajouté en "+position.x+";"+position.y, this);
+    	{
+    		/*on ne test pas si la position est dans un obstcle deja existant 
+    		 *on ne detecte pas les plots ni les goblets (et si on les detectes on prefere ne pas prendre le risque et on les evites)
+    		 * et si on detecte une deuxieme fois l'ennemi on rajoute un obstacle sur lui
+    		 */
+    		mMobileObstacles.add(new ObstacleProximity(position, radius));
+    		log.debug("Obstacle ajouté en "+position.x+";"+position.y, this);
+    	}
     }
-    /**
-     * FIXME a tester
-     * regarde si une position donne n'est pas a l'interieur d'un obstacle fixe
-     * @param position la position a tester
-     * @return vrai si l'obstacle intercepte un obstacle au moins faux sinon
-     */
-    private boolean isInsideFixedObstacle(Vec2 position) 
-    {
-    	boolean answer = false;
-		for (int i=0;answer || i<mFixedObstacles.size() ; i++)
-			answer = mFixedObstacles.get(i).position.distance(position)>mFixedObstacles.get(i).radius;
-		for (int i=0;answer || i<mRectangles.size(); i++)
-			answer = (mRectangles.get(i).positon.x-(mRectangles.get(i).sizeX/2)>position.x )
-			      || (mRectangles.get(i).positon.x+(mRectangles.get(i).sizeX/2)<position.x )
-			      || (mRectangles.get(i).positon.y>position.y )
-			      || (mRectangles.get(i).positon.y+(mRectangles.get(i).sizeY)>position.y );
-		return answer;
-	}
+
 
 	/**
      * 

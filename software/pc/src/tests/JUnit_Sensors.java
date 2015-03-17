@@ -44,6 +44,7 @@ public class JUnit_Sensors extends JUnit_Test
 	/* (non-Javadoc)
 	 * @see tests.JUnit_Test#setUp()
 	 */
+	@SuppressWarnings("unchecked")
 	@Before
 	public void setUp() throws Exception 
 	{
