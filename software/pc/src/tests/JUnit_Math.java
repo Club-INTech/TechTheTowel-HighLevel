@@ -5,7 +5,6 @@ import java.util.Random;
 import org.junit.Test;
 import org.junit.Assert;
 
-import exceptions.MatrixException;
 import smartMath.Matrn;
 import smartMath.Vec2;
 

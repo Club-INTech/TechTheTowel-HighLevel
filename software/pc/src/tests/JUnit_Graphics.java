@@ -2,11 +2,8 @@ package tests;
 
 import org.junit.*;
 
-import enums.ServiceNames;
 import graphics.*;
 import smartMath.Vec2;
-import table.Table;
-
 import java.util.ArrayList;
 
 public class JUnit_Graphics extends JUnit_Test

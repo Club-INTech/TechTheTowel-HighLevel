@@ -14,7 +14,6 @@ import scripts.ScriptManager;
 import smartMath.Vec2;
 import strategie.GameState;
 import enums.ServiceNames;
-import exceptions.serial.SerialConnexionException;
 
 public class JUnit_Symetry extends JUnit_Test
 {
