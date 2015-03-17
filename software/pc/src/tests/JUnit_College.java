@@ -115,6 +115,7 @@ public class JUnit_College extends JUnit_Test {
 	//@Test
 	public void jeuPourGamins() throws UnableToMoveException
 	{
+		float distance = 100;
 		String scanned = "";
 		@SuppressWarnings("resource")
 		Scanner scan = new Scanner(System.in);
@@ -126,29 +127,37 @@ public class JUnit_College extends JUnit_Test {
 				char[] arrayScanned = scanned.toCharArray();
 				//echo local
 				System.out.println(scanned);
-				for (int i = 0 ; i<arrayScanned.length ; i++)
+				if(scanned.contains("set distance"))
 				{
-					char key = arrayScanned[i];
-					if (key == 'q')
+					scanned.replaceAll("set distance", "");
+					distance = Float.parseFloat(scanned);
+				}
+				else
+				{
+					for (int i = 0 ; i<arrayScanned.length ; i++)
 					{
-						System.out.println("on tourne a gauche");
-						robot.turnRelative(Math.PI/2);
-						
-					}
-					else if (key == 'd')
-					{
-						System.out.println("on tourne a droite");
-						robot.turnRelative(-Math.PI/2);
-					}
-					else if (key == 'z')
-					{
-						System.out.println("on avance");
-						robot.moveLengthwise(100);
-					}
-					else if (key == 's')
-					{
-						System.out.println("on recule");
-						robot.moveLengthwise(-100);
+						char key = arrayScanned[i];
+						if (key == 'q')
+						{
+							System.out.println("on tourne a gauche");
+							robot.turnRelative(Math.PI/2);
+							
+						}
+						else if (key == 'd')
+						{
+							System.out.println("on tourne a droite");
+							robot.turnRelative(-Math.PI/2);
+						}
+						else if (key == 'z')
+						{
+							System.out.println("on avance");
+							robot.moveLengthwise((int)distance);
+						}
+						else if (key == 's')
+						{
+							System.out.println("on recule");
+							robot.moveLengthwise((int)-distance);
+						}
 					}
 				}
 			}
