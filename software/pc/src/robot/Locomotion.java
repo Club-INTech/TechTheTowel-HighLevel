@@ -616,7 +616,7 @@ public class Locomotion implements Service
      * @param front vrai si on veut detecter a l'avant du robot (donc si on avance en marche avant)
      * @throws UnexpectedObstacleOnPathException si obstacle sur le chemin
      */
-    private void detectEnemy(boolean front) throws UnexpectedObstacleOnPathException
+    public void detectEnemy(boolean front) throws UnexpectedObstacleOnPathException
     {
 
         int signe = -1;

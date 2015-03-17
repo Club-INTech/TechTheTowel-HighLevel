@@ -107,8 +107,8 @@ class ThreadSensor extends AbstractThread
 	/**
 	 * Positions des robots à ajouter
 	 */
-	Vec2 positionEnnemi_1;
-	Vec2 positionEnnemi_2;
+	Vec2 positionEnnemi_1=new Vec2 (0,0);
+	Vec2 positionEnnemi_2=new Vec2 (0,0);
 
 	
 	
@@ -347,7 +347,7 @@ class ThreadSensor extends AbstractThread
 			sensorFrequency = Integer.parseInt(config.getProperty("capteurs_frequence"));
 			radius = Integer.parseInt(config.getProperty("rayon_robot_adverse"));
 			//plus que cette distance (environ 50cm) on est beaucoup moins precis sur la position adverse (donc on ne l'ecrit pas !)
-			maxSensorRange = Integer.parseInt(config.getProperty("largeur_robot")) / Math.sin(Integer.parseInt(config.getProperty("angle_capteur")));
+			maxSensorRange = Integer.parseInt(config.getProperty("largeur_robot")) / Math.sin(Float.parseFloat(config.getProperty("angle_capteur")));
 			robotWidth = Integer.parseInt(config.getProperty("largeur_robot"));
 			robotLenght = Integer.parseInt(config.getProperty("longueur_robot"));
 	}
