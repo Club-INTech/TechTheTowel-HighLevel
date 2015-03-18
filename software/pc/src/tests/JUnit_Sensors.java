@@ -10,9 +10,12 @@ import org.junit.Assert;
 
 import enums.SensorNames;
 import enums.ServiceNames;
+import enums.UnableToMoveReason;
 import exceptions.ContainerException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
+import exceptions.Locomotion.UnexpectedObstacleOnPathException;
+import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialManagerException;
 import robot.Locomotion;
 import robot.Robot;
@@ -121,33 +124,47 @@ public class JUnit_Sensors extends JUnit_Test
 			}	
 		}
 	}
+
 	
+
+		
 	@Test
 	public void testCapteurFixe()
 	{
-		log.debug("Test d'évitement", this);
-		try 
-		{
-			state.robot.moveLengthwise(500);
-		} 
-		catch (UnableToMoveException e1)
-		{
-			log.critical("!!!!! Catch de"+e1+" dans testEvitement !!!!!" , this);
-		}
+		log.debug("Test d'évitement fixe", this);
 		while(true)
 		{
 			try
 			{
-				state.robot.moveToCircle(new Circle( state.robot.getPosition(),0 ) ,  new ArrayList<Hook>(), (Table)container.getService(ServiceNames.TABLE));
+				mLocomotion.detectEnemy(true);
+				log.debug("A gauche :"+((int[])capteurs.getSensorValue(SensorNames.ULTRASOUND_FRONT_SENSOR))[0], this);
+				log.debug("A droite :"+((int[])capteurs.getSensorValue(SensorNames.ULTRASOUND_FRONT_SENSOR))[1], this);
 			}
-			catch (UnableToMoveException | PathNotFoundException | ContainerException | SerialManagerException e) 
-			{
-				log.critical("!!!!!! Catch de"+e+" dans testEvitement !!!!!!" , this);
-			}	
-		}
-	}
+			catch (UnexpectedObstacleOnPathException unexpectedObstacle)
+	        {
+                log.critical("Haut: Catch de "+unexpectedObstacle+" dans moveToPointException", this); 
 
-		
+            	long detectionTime = System.currentTimeMillis();
+                log.critical("Détection d'un ennemi! Abandon du mouvement.", this);
+            	while(System.currentTimeMillis() - detectionTime < 600)
+            	{
+            		try
+            		{
+            			mLocomotion.detectEnemy(true);
+            			break;
+            		}
+            		catch(UnexpectedObstacleOnPathException e2)
+            		{
+                        log.critical("Catch de "+e2+" dans moveToPointException", this);
+            		}
+            	}
+			} catch (SerialConnexionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}	
+	}
+	
 
 /*    @Test
     public void faux_test() throws Exception
