@@ -114,6 +114,10 @@ public:
 			derniereDistance = mediane(ringBufferValeurs);
 			serial.printf("");//No hack here, follow your path...
 		}
+		else
+		{
+			//serial.printfln("I knew it !");
+		}
 	}
 
 

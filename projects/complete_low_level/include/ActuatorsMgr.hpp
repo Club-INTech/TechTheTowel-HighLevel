@@ -427,9 +427,8 @@ public:
 	}
 
 	void broad(){
-		clapGauche->goToB(100);
-		Delay(1000);
-		clapGauche->goToB(200);
+		machoireDroite->goToB(100);
+		machoireDroite->goToB(0);
 	}
 
 };

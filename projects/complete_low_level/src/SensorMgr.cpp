@@ -117,9 +117,9 @@ SensorMgr::SensorMgr():
 	/* PA6 is connected to EXTI_Line6, which has EXTI9_5_IRQn vector */
 	NVIC_InitStruct.NVIC_IRQChannel = EXTI9_5_IRQn;
 	/* Set priority */
-	NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 0;
+	NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 0x00;
 	/* Set sub priority */
-	NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
+	NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0x00;
 	/* Enable interrupt */
 	NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
 	/* Add to NVIC */
@@ -164,9 +164,9 @@ SensorMgr::SensorMgr():
 	/* PA4 is connected to EXTI_Line4, which has EXTI4_IRQn vector */
 	NVIC_InitStruct.NVIC_IRQChannel = EXTI4_IRQn;
 	/* Set priority */
-	NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 0;
+	NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 0x00;
 	/* Set sub priority */
-	NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
+	NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0x01;
 	/* Enable interrupt */
 	NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
 	/* Add to NVIC */
@@ -212,9 +212,9 @@ SensorMgr::SensorMgr():
 	/* PA7 is connected to EXTI_Line7, which has EXTI9_5_IRQn vector */
 	NVIC_InitStruct.NVIC_IRQChannel = EXTI9_5_IRQn;
 	/* Set priority */
-	NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 0;
+	NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 0x00;
 	/* Set sub priority */
-	NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
+	NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0x02;
 	/* Enable interrupt */
 	NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
 	/* Add to NVIC */
@@ -260,9 +260,9 @@ SensorMgr::SensorMgr():
 	/* PB1 is connected to EXTI_Line1, which has EXTI1_IRQn vector */
 	NVIC_InitStruct.NVIC_IRQChannel = EXTI1_IRQn;
 	/* Set priority */
-	NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 0;
+	NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 0x00;
 	/* Set sub priority */
-	NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
+	NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0x03;
 	/* Enable interrupt */
 	NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
 	/* Add to NVIC */
