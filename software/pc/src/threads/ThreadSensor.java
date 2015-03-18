@@ -77,13 +77,17 @@ class ThreadSensor extends AbstractThread
 	 * 
 	 */
 	
-	//Angles en degrés, transformés en radians
+	/**
+	 * Angles en degrés, transformés en radians
+	 */
 	double leftFrontSensorAngle=20		*2*(Math.PI) / 360;
 	double rightFrontSensorAngle=20 	*2*(Math.PI) / 360;
 	double leftBackSensorAngle=0		*2*(Math.PI) / 360;
 	double rightBackSensorAngle=0		*2*(Math.PI) / 360;
 	
-	// position des capteurs relativement au centre du robot, en mm
+	/** 
+	 *  position des capteurs relativement au centre du robot, en mm
+	 */
 	Vec2 rightFrontSensorPosition = new Vec2(15, 5);
 	Vec2 leftFrontSensorPosition = new Vec2(-15, 5);
 	Vec2 rightBackSensorPosition = new Vec2(15, -5);
@@ -190,12 +194,14 @@ class ThreadSensor extends AbstractThread
 		
 	}
 	/**
-	 * ajoute les obstacles avant a l'obstacleManager TODO a tester
+	 * ajoute les obstacles avant a l'obstacleManager FIXME a tester
 	 * @param distanceFront l'int[] recupere par la serie pour les capteurs avants
 	 * a modifier si ajout ou supression de capteurs
 	 */
 	private void addObstacleFront(int[] distanceFront) 
 	{
+		Vec2 positionRobot = mRobot.getPosition();
+		double orientation = mRobot.getOrientation();
 		/** Zones de detection : 0;1;2 capteurs dans leurs zones respectives
 		 * 
 		 * 		______ ___
@@ -212,57 +218,83 @@ class ThreadSensor extends AbstractThread
 		//0 gauche / 1 à droite
 		if ((minSensorRange<distanceFront[0] && distanceFront[0]<maxSensorRange) && (minSensorRange<distanceFront[1] && distanceFront[1]<maxSensorRange) )
 		{
-			//debrouillez vous, faites le calcul (le systeme c'est {x²+y²=distanceBack[0]² ;(L-x)²+y²= distanceBack[1]²})
 			
-
+			// Si on voit 2 ennemis distincts
 			if(Math.abs(distanceFront[1]-distanceFront[0]) > distanceBetweenFrontSensors)
-			{// Si on voit 2 ennemis distincts
+			{
 				
 				// droite
-				positionEnnemi_1.x = (int) ((float)Math.sin(20*Math.PI/180+mRobot.getOrientation())*distanceFront[1]+distanceBetweenFrontSensors/2+rightFrontSensorPosition.x);
-				positionEnnemi_1.y = (int) ((float)Math.cos(20*Math.PI/180+mRobot.getOrientation())*distanceFront[1]+rightFrontSensorPosition.y);
+				positionEnnemi_1.x = (int) (    Math.cos( Math.PI/2-orientation )																	// projection sur l'axe standard
+												*( rightFrontSensorPosition.y + distanceFront[1]*Math.sin(Math.PI/2 - rightFrontSensorAngle) ) 		// de la difference de hauteur avec l'obstacle si le robot est droit, en face de l'obstacle
+												+ Math.sin( Math.PI/2-orientation )																	// projection sur l'axe standard
+												*( rightFrontSensorPosition.x - distanceFront[1]*Math.cos(Math.PI/2 - rightFrontSensorAngle) ) 		// de la difference de longueur avec l'obstacle si le robot est droit, en face de l'obstacle
+												+ positionRobot.x);																					//position du robot
 				
-				//gauche
-				positionEnnemi_2.x = (int)Math.sin(20*Math.PI/180+mRobot.getOrientation())*distanceFront[0]-distanceBetweenFrontSensors/2+leftFrontSensorPosition.x;
-				positionEnnemi_2.y = (int)Math.cos(20*Math.PI/180+mRobot.getOrientation())*distanceFront[0]+leftFrontSensorPosition.y;
-			
+				
+				positionEnnemi_1.y = (int) (    Math.sin( Math.PI/2-orientation )																	// projection sur l'axe standard
+												*( rightFrontSensorPosition.y + distanceFront[1]*Math.cos(Math.PI/2 - rightFrontSensorAngle) ) 		// de la difference de hauteur avec l'obstacle si le robot est droit, en face de l'obstacle
+												+ Math.cos( Math.PI/2-orientation )																	// projection sur l'axe standard
+												*( rightFrontSensorPosition.x - distanceFront[1]*Math.sin(Math.PI/2 - rightFrontSensorAngle) ) 		// de la difference de longueur avec l'obstacle si le robot est droit, en face de l'obstacle
+												+ positionRobot.x);																					//position du robot
+										
+				
+				// gauche : seule difference, un signe dans le second membre
+				positionEnnemi_2.x = (int) (    Math.cos( Math.PI/2-orientation )																	// projection sur l'axe standard
+												*( rightFrontSensorPosition.y + distanceFront[0]*Math.sin(Math.PI/2 - leftFrontSensorAngle) ) 		// de la difference de hauteur avec l'obstacle si le robot est droit, en face de l'obstacle
+												+ Math.sin( Math.PI/2-orientation )																	// projection sur l'axe standard
+												*( rightFrontSensorPosition.x + distanceFront[0]*Math.cos(Math.PI/2 - leftFrontSensorAngle) ) 		// de la difference de longueur avec l'obstacle si le robot est droit, en face de l'obstacle
+												+ positionRobot.x);																					//position du robot
+				
+				
+				positionEnnemi_2.y = (int) (    Math.sin( Math.PI/2-orientation )																	// projection sur l'axe standard
+												*( rightFrontSensorPosition.y + distanceFront[0]*Math.cos(Math.PI/2 - leftFrontSensorAngle) ) 		// de la difference de hauteur avec l'obstacle si le robot est droit, en face de l'obstacle
+												+ Math.cos( Math.PI/2-orientation )																	// projection sur l'axe standard
+												*( rightFrontSensorPosition.x + distanceFront[0]*Math.sin(Math.PI/2 - leftFrontSensorAngle) ) 		// de la difference de longueur avec l'obstacle si le robot est droit, en face de l'obstacle
+												+ positionRobot.x);																					//position du robot
+										
+				
 				System.out.println("position ennemi gauche = ("+positionEnnemi_2.x+","+positionEnnemi_2.y+")");
 				System.out.println("position ennemi droit  = ("+positionEnnemi_1.x+","+positionEnnemi_1.y+")");
 
 			}
-			else  // sinon, on voit un seul et meme ennemi
+			// sinon, on voit un seul et meme ennemi
+			else  
 			{			
-				positionEnnemi_1.x = (int) ( mRobot.getPosition().x + (distanceBetweenFrontSensors/2+(Math.pow(distanceFront[0],2)-Math.pow(distanceFront[1],2))/(2 * distanceBetweenFrontSensors)));
-				positionEnnemi_1.y = (int) (rightFrontSensorPosition.y + Math.sqrt(Math.pow(distanceFront[0],2)-Math.pow(positionEnnemi_1.x, 2)));
+				positionEnnemi_1.x = (int) ( 	(Math.pow(distanceFront[0],2)-Math.pow(distanceFront[1],2))/(2 * distanceBetweenFrontSensors)+		//position de l'obstacle en fonction du robot
+												+positionRobot.x);																					//position du robot
+				
+				
+				positionEnnemi_1.y = (int) (	Math.sqrt(Math.pow(distanceFront[1],2)+Math.pow(positionEnnemi_1.x, 2))+leftFrontSensorPosition.y	//position de l'obstacle en fonction du robot
+												+positionRobot.y);																					//position du robot
 			
-				positionEnnemi_2.x=0;
-				positionEnnemi_2.y=0;
+				positionEnnemi_2.x=-3000;
+				positionEnnemi_2.y=-1000;
 				
 				System.out.println("position ennemi = ("+positionEnnemi_1.x+","+positionEnnemi_1.y+")");
 			}			
 			
-			
 			mTable.getObstacleManager().addObstacle(positionEnnemi_1);
-			if(! positionEnnemi_2.equals(new Vec2 (0,0) ) )
-				mTable.getObstacleManager().addObstacle(positionEnnemi_2);;
+			if(! positionEnnemi_2.equals(new Vec2 (-3000,-1000) ) )
+				mTable.getObstacleManager().addObstacle(positionEnnemi_2);
 
 		}
 		
-		// Sinon, on est dans les zones de simple detection
+		// Sinon, on est dans les zones de simple detection :
+		
 		else if (minSensorRange<distanceFront[0] && distanceFront[0]<maxSensorRange)// Capteur du cote gauche
 		{
-			mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x + (int)(rightFrontSensorPosition.x*Math.cos(mRobot.getOrientation()) - rightFrontSensorPosition.y*Math.sin(mRobot.getOrientation())) + (int)((distanceFront[0]+radius)*Math.cos(mRobot.getOrientation() + rightFrontSensorAngle)), 
-															 mRobot.getPosition().y + (int)(rightFrontSensorPosition.x*Math.sin(mRobot.getOrientation()) + rightFrontSensorPosition.y*Math.cos(mRobot.getOrientation())) + (int)((distanceFront[0]+radius)*Math.sin(mRobot.getOrientation() + rightFrontSensorAngle))));
+			mTable.getObstacleManager().addObstacle(new Vec2(positionRobot.x + (int)(leftFrontSensorPosition.x*Math.cos(orientation) - leftFrontSensorPosition.y*Math.sin(orientation) + (distanceFront[0]+radius)*Math.cos(orientation + leftFrontSensorAngle)), 
+															 positionRobot.y + (int)(leftFrontSensorPosition.x*Math.sin(orientation) + leftFrontSensorPosition.y*Math.cos(orientation) + (distanceFront[0]+radius)*Math.sin(orientation + leftFrontSensorAngle))));
 		}
 		else if (minSensorRange<distanceFront[1] && distanceFront[1]<maxSensorRange)// Capteur de coté droit
 		{
-			mTable.getObstacleManager().addObstacle(new Vec2(mRobot.getPosition().x + (int)(leftFrontSensorPosition.x*Math.cos(mRobot.getOrientation()) - leftFrontSensorPosition.y*Math.sin(mRobot.getOrientation())) + (int)((distanceFront[1]+radius)*Math.cos(mRobot.getOrientation() - leftFrontSensorAngle)), 
-															 mRobot.getPosition().y + (int)(leftFrontSensorPosition.x*Math.sin(mRobot.getOrientation()) + leftFrontSensorPosition.y*Math.cos(mRobot.getOrientation())) + (int)((distanceFront[1]+radius)*Math.sin(mRobot.getOrientation() - leftFrontSensorAngle))));
+			mTable.getObstacleManager().addObstacle(new Vec2(positionRobot.x + (int)(rightFrontSensorPosition.x*Math.cos(orientation) - rightFrontSensorPosition.y*Math.sin(orientation) + (distanceFront[1]+radius)*Math.cos(orientation - rightFrontSensorAngle)), 
+															 positionRobot.y + (int)(rightFrontSensorPosition.x*Math.sin(orientation) + rightFrontSensorPosition.y*Math.cos(orientation) + (distanceFront[1]+radius)*Math.sin(orientation - rightFrontSensorAngle))));
 		}
 	}
 
 	/**
-	 * ajoute les obstacles arrieres a l'obstacleManager FIXME debug primordial
+	 * ajoute les obstacles arrieres a l'obstacleManager FIXME a changer
 	 * @param distanceBack l'int[] recuperé par la serie pour les capteurs arrieres
 	 * a modifier si ajout ou supression de capteurs
 	 */
