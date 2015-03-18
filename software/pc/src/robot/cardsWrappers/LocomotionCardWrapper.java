@@ -354,5 +354,4 @@ public class LocomotionCardWrapper implements Service
 		return parsedInfos;
 	}
 
-	
 }
