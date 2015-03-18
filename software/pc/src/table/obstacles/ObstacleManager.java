@@ -216,6 +216,10 @@ public class ObstacleManager
     		mMobileObstacles.add(new ObstacleProximity(position, radius));
     		log.debug("Obstacle ajouté en "+position.x+";"+position.y, this);
     	}
+    	else 
+    	{
+    		log.debug("Obstacle hors de la table", this);
+		}
     }
 
 
@@ -238,7 +242,10 @@ public class ObstacleManager
     {
     	for(int i = 0; i < mMobileObstacles.size(); i++)
     		if(mMobileObstacles.get(i).getOutDatedTime() < System.currentTimeMillis())
+    		{
+    	    	log.debug("Obstacle:  "+i+" périmé",this);
     			mMobileObstacles.remove(i--);
+    		}
     }
 
     /**
@@ -251,6 +258,7 @@ public class ObstacleManager
     public boolean isDiscObstructed(final Vec2 discCenter, int radius)
     {
     	boolean isDiscObstructed = false;
+    	log.debug("Taille liste d'obstacles :  "+mMobileObstacles.size(),this);
     	for(int i=0; i<mMobileObstacles.size(); i++)
     	{
     		if ((radius+mMobileObstacles.get(i).radius)*(radius+mMobileObstacles.get(i).radius)

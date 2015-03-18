@@ -637,7 +637,11 @@ public class Locomotion implements Service
         }
         else 
         {
-			log.debug("Pas d'ennemi detecté", this);
+        	if(table.getObstacleManager().getMobileObstaclesCount()==0)
+        		log.debug("Pas d'ennemi en memoire", this);
+        	else {
+        		log.debug("Pas d'ennemi devant nous", this);
+			}
 		}
 
     }
