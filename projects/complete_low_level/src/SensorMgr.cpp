@@ -283,13 +283,18 @@ void SensorMgr::refresh()
 
 	if(currentTime - lastRefreshTime >= refreshDelay)
 	{
-		if(capteur == 0)
+		if(capteur == 0) {
+//			serial.printfln("g e:%d",Micros());
 			leftFrontUS.refresh();
-		else if(capteur == 1)
-			rightFrontUS.refresh();
-		else if(capteur == 2)
+//			serial.printfln("g s:%d",Micros());
+		} else if(capteur == 1) {
 			rightBackUS.refresh();
-		else if(capteur == 3)
+		}
+		else if(capteur == 2) {
+//			serial.printfln("d e:%d",Micros());
+			rightFrontUS.refresh();
+//			serial.printfln("d s:%d",Micros());
+		} else if(capteur == 3)
 			leftBackUS.refresh();
 
 		capteur = (capteur+1)%4;
@@ -303,12 +308,11 @@ void SensorMgr::refresh()
  */
 
 void SensorMgr::rightFrontUSInterrupt(){
-	//serial.printfln("Avant-Droit:");
 	rightFrontUS.interruption();
+
 }
 
 void SensorMgr::leftFrontUSInterrupt(){
-	//serial.printfln("Avant-Gauche:");
 	leftFrontUS.interruption();
 }
 

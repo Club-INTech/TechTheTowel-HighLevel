@@ -80,6 +80,7 @@ public:
 			// Le signal a été envoyé, maintenant on attend la réponse dans l'interruption
 		GPIO_sensor.GPIO_Mode = GPIO_Mode_IN;
 		GPIO_Init(GPIOx, &GPIO_sensor);
+		EXTI_sensor.EXTI_Trigger = EXTI_Trigger_Rising;
 		EXTI_sensor.EXTI_LineCmd = ENABLE;
 		EXTI_Init(&EXTI_sensor);
 	}
@@ -137,23 +138,21 @@ public:
 			current_time = Micros();
 			temps_impulsion = current_time - origineTimer;
 			ringBufferValeurs.append( 10*temps_impulsion/58 );
-			derniereDistance = mediane(ringBufferValeurs);
-			serial.printfln("%d  %d", GPIO_sensor.GPIO_Pin, 10*temps_impulsion/58);//No hack here, follow your path...
-
+			derniereDistance = 10*temps_impulsion/58;//mediane(ringBufferValeurs);
+			//serial.printfln("%d", 10*temps_impulsion/58);//No hack here, follow your path...
 			risingEdgeTrigger = true;
-			EXTI_sensor.EXTI_Trigger = EXTI_Trigger_Rising;
+			EXTI_sensor.EXTI_LineCmd = DISABLE;
 			EXTI_Init(&EXTI_sensor);
 		}
 	}
-
 
 private:
 	GPIO_InitTypeDef GPIO_sensor;//Variable permettant de régler les paramètres de la pin du capteur
 	EXTI_InitTypeDef EXTI_sensor;//Variable permettant de régler le vecteur d'interruptions associé au capteur
 	GPIO_TypeDef* GPIOx;//Port de la pin du capteur
 	ringBufferSRF ringBufferValeurs;
-	volatile uint32_t derniereDistance;		//contient la dernière distance acquise, prête à être envoyée
-	volatile uint32_t origineTimer;			//origine de temps afin de mesurer une durée
+	uint32_t derniereDistance;		//contient la dernière distance acquise, prête à être envoyée
+	uint32_t origineTimer;			//origine de temps afin de mesurer une durée
 };
 
 #endif

@@ -86,7 +86,6 @@ int main(void)
 			{
 				serial.printfln("%d", sensorMgr->getLeftFrontValue());//Distance mesurée par l'ultrason avant gauche, en mm
 				serial.printfln("%d", sensorMgr->getRightFrontValue());//Distance mesurée par l'ultrason avant droit, en mm
-				//serial.printfln("%d", sensorMgr->getRightFrontValue());
 			}
 			else if(!strcmp("us_ar",order))		//Indiquer les distances mesurées par les capteurs arrière
 			{
