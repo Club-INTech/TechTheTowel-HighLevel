@@ -80,8 +80,8 @@ public:
 			// Le signal a été envoyé, maintenant on attend la réponse dans l'interruption
 		GPIO_sensor.GPIO_Mode = GPIO_Mode_IN;
 		GPIO_Init(GPIOx, &GPIO_sensor);
-		EXTI_sensor.EXTI_Trigger = EXTI_Trigger_Rising;
-		EXTI_sensor.EXTI_LineCmd = ENABLE;
+		EXTI_sensor.EXTI_Trigger = EXTI_Trigger_Rising;		//On va maintenant recevoir un front montant, il faut se préparer pour ça
+		EXTI_sensor.EXTI_LineCmd = ENABLE;					//On accepte donc de lire les interruptions sur la pin du capteur à partir de maintenant
 		EXTI_Init(&EXTI_sensor);
 	}
 
@@ -129,19 +129,19 @@ public:
 		{
 			origineTimer = Micros();
 			risingEdgeTrigger = false;
-			EXTI_sensor.EXTI_Trigger = EXTI_Trigger_Falling;
+			EXTI_sensor.EXTI_Trigger = EXTI_Trigger_Falling;	//On devrait recevoir désormais un front descendant
 			EXTI_Init(&EXTI_sensor);
 		}
 		else
 		{
 			uint32_t temps_impulsion, current_time;
 			current_time = Micros();
-			temps_impulsion = current_time - origineTimer;
-			ringBufferValeurs.append( 10*temps_impulsion/58 );
-			derniereDistance = 10*temps_impulsion/58;//mediane(ringBufferValeurs);
+			temps_impulsion = current_time - origineTimer;		//Le temps entre les deux fronts
+			ringBufferValeurs.append( 10*temps_impulsion/58 );	//On ajoute la distance mesurée à cet instant dans un buffer, calculé ainsi en fonction du temps entre les fronts
+			derniereDistance = mediane(ringBufferValeurs);		//Ce qu'on renvoie est la médiane du buffer, ainsi on élimine les valeurs extrêmes qui peuvent être absurdes
 			//serial.printfln("%d", 10*temps_impulsion/58);//No hack here, follow your path...
 			risingEdgeTrigger = true;
-			EXTI_sensor.EXTI_LineCmd = DISABLE;
+			EXTI_sensor.EXTI_LineCmd = DISABLE;					//On a reçu la réponse qui nous intéressait, on désactive donc les lectures d'interruptions sur ce capteur
 			EXTI_Init(&EXTI_sensor);
 		}
 	}

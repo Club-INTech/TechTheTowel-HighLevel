@@ -22,7 +22,7 @@ SensorMgr::SensorMgr():
 	rightBackUS()
 {
 	lastRefreshTime = 0;
-	refreshDelay = 100;//(ms)
+	refreshDelay = 25;//(ms)
 
 	/* Set variables used */
 	GPIO_InitTypeDef GPIO_InitStruct;
@@ -284,16 +284,12 @@ void SensorMgr::refresh()
 	if(currentTime - lastRefreshTime >= refreshDelay)
 	{
 		if(capteur == 0) {
-//			serial.printfln("g e:%d",Micros());
 			leftFrontUS.refresh();
-//			serial.printfln("g s:%d",Micros());
 		} else if(capteur == 1) {
 			rightBackUS.refresh();
 		}
 		else if(capteur == 2) {
-//			serial.printfln("d e:%d",Micros());
 			rightFrontUS.refresh();
-//			serial.printfln("d s:%d",Micros());
 		} else if(capteur == 3)
 			leftBackUS.refresh();
 
