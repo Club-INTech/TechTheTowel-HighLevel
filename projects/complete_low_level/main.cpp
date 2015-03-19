@@ -25,7 +25,7 @@ int main(void)
 
 	while(1)
 	{
-		//sensorMgr->refresh();
+		sensorMgr->refresh();
 
 		uint8_t tailleBuffer = serial.available();
 
@@ -86,6 +86,7 @@ int main(void)
 			{
 				serial.printfln("%d", sensorMgr->getLeftFrontValue());//Distance mesurée par l'ultrason avant gauche, en mm
 				serial.printfln("%d", sensorMgr->getRightFrontValue());//Distance mesurée par l'ultrason avant droit, en mm
+				//serial.printfln("%d", sensorMgr->getRightFrontValue());
 			}
 			else if(!strcmp("us_ar",order))		//Indiquer les distances mesurées par les capteurs arrière
 			{
@@ -469,13 +470,13 @@ int main(void)
 				else if(!strcmp("om",order))
 				{//								Ouvrir les deux machoires
 					actuatorsMgr->omg();
-					Delay(10);
+					//Delay(10);
 					actuatorsMgr->omd();
 				}
 				else if(!strcmp("fm",order))
 				{//								Fermer les deux machoires
 					actuatorsMgr->fmg();
-					Delay(10);
+					//Delay(10);
 					actuatorsMgr->fmd();
 				}
 				else if(!strcmp("ah",order))
@@ -521,19 +522,19 @@ int main(void)
 				else if(!strcmp("go",order))
 				{//								Ouvrir le guide
 					actuatorsMgr->ogg();
-					Delay(10);
+					//Delay(10);
 					actuatorsMgr->ogd();
 				}
 				else if(!strcmp("gf",order))
 				{//								Fermer le guide
 					actuatorsMgr->fgg();
-					Delay(10);
+					//Delay(10);
 					actuatorsMgr->fgd();
 				}
 				else if(!strcmp("gi",order))
 				{//								Guide en position intermédiaire
 					actuatorsMgr->ggi();
-					Delay(10);
+					//Delay(10);
 					actuatorsMgr->gdi();
 				}
 				else if(!strcmp("ptd",order))

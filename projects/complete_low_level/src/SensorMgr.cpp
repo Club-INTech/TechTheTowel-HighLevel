@@ -22,7 +22,7 @@ SensorMgr::SensorMgr():
 	rightBackUS()
 {
 	lastRefreshTime = 0;
-	refreshDelay = 10;//(ms)
+	refreshDelay = 100;//(ms)
 
 	/* Set variables used */
 	GPIO_InitTypeDef GPIO_InitStruct;
@@ -109,7 +109,7 @@ SensorMgr::SensorMgr():
 	/* Interrupt mode */
 	EXTI_InitStruct.EXTI_Mode = EXTI_Mode_Interrupt;
 	/* Triggers on rising and falling edge */
-	EXTI_InitStruct.EXTI_Trigger = EXTI_Trigger_Rising_Falling;
+	EXTI_InitStruct.EXTI_Trigger = EXTI_Trigger_Rising;
 	/* Add to EXTI */
 	EXTI_Init(&EXTI_InitStruct);
 
@@ -156,7 +156,7 @@ SensorMgr::SensorMgr():
 	/* Interrupt mode */
 	EXTI_InitStruct.EXTI_Mode = EXTI_Mode_Interrupt;
 	/* Triggers on rising and falling edge */
-	EXTI_InitStruct.EXTI_Trigger = EXTI_Trigger_Rising_Falling;
+	EXTI_InitStruct.EXTI_Trigger = EXTI_Trigger_Rising;
 	/* Add to EXTI */
 	EXTI_Init(&EXTI_InitStruct);
 
@@ -204,7 +204,7 @@ SensorMgr::SensorMgr():
 	/* Interrupt mode */
 	EXTI_InitStruct.EXTI_Mode = EXTI_Mode_Interrupt;
 	/* Triggers on rising and falling edge */
-	EXTI_InitStruct.EXTI_Trigger = EXTI_Trigger_Rising_Falling;
+	EXTI_InitStruct.EXTI_Trigger = EXTI_Trigger_Rising;
 	/* Add to EXTI */
 	EXTI_Init(&EXTI_InitStruct);
 
@@ -252,7 +252,7 @@ SensorMgr::SensorMgr():
 	/* Interrupt mode */
 	EXTI_InitStruct.EXTI_Mode = EXTI_Mode_Interrupt;
 	/* Triggers on rising and falling edge */
-	EXTI_InitStruct.EXTI_Trigger = EXTI_Trigger_Rising_Falling;
+	EXTI_InitStruct.EXTI_Trigger = EXTI_Trigger_Rising;
 	/* Add to EXTI */
 	EXTI_Init(&EXTI_InitStruct);
 
@@ -284,9 +284,9 @@ void SensorMgr::refresh()
 	if(currentTime - lastRefreshTime >= refreshDelay)
 	{
 		if(capteur == 0)
-			rightFrontUS.refresh();
-		else if(capteur == 1)
 			leftFrontUS.refresh();
+		else if(capteur == 1)
+			rightFrontUS.refresh();
 		else if(capteur == 2)
 			rightBackUS.refresh();
 		else if(capteur == 3)

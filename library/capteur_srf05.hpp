@@ -85,38 +85,64 @@ public:
 	}
 
 
-	/** Fonction appellée par l'interruption. S'occupe d'envoyer la valeur de la longueur
-	 *  de l'impulsion retournée par le capteur dans la série.
+	/** Fonction appellée par l'interruption. S'occupe d'enregistrer la valeur de la longueur
+	 *  de l'impulsion retournée par le capteur, et de la convertir en une distance en mm.
 	 */
+//	void interruption()
+//	{
+//		// Front montant si bit == 1, descendant sinon.
+//		static uint8_t ancienBit=0;
+//		uint8_t bit = GPIO_ReadInputDataBit(GPIOx, GPIO_sensor.GPIO_Pin);
+//
+//		// Début de l'impulsion
+//		if (bit && bit!=ancienBit)
+//		{
+//			origineTimer = Micros();
+//			ancienBit=bit;
+//		}
+//
+//		// Fin de l'impulsion
+//		else if(!(bit) && bit!=ancienBit)
+//		{
+//			uint32_t temps_impulsion;
+//			ancienBit=bit;
+//				//Enregistrement de la dernière distance calculée, mais sans l'envoyer (l'envoi se fait par la méthode value)
+//			uint32_t current_time;
+//			current_time = Micros();
+//			temps_impulsion = current_time - origineTimer;
+//			ringBufferValeurs.append( 10*temps_impulsion/58 );
+//			derniereDistance = mediane(ringBufferValeurs);
+//			serial.printf("");//No hack here, follow your path...
+//		}
+//		else
+//		{
+//			//serial.printfln("I knew it !");
+//		}
+//	}
+
 	void interruption()
 	{
-		// Front montant si bit == 1, descendant sinon.
-		static uint8_t ancienBit=0;
-		uint8_t bit = GPIO_ReadInputDataBit(GPIOx, GPIO_sensor.GPIO_Pin);
+		static bool risingEdgeTrigger = true;
 
-		// Début de l'impulsion
-		if (bit && bit!=ancienBit)
+		if(risingEdgeTrigger)
 		{
 			origineTimer = Micros();
-			ancienBit=bit;
+			risingEdgeTrigger = false;
+			EXTI_sensor.EXTI_Trigger = EXTI_Trigger_Falling;
+			EXTI_Init(&EXTI_sensor);
 		}
-
-		// Fin de l'impulsion
-		else if(!(bit) && bit!=ancienBit)
+		else
 		{
-			uint32_t temps_impulsion;
-			ancienBit=bit;
-				//Enregistrement de la dernière distance calculée, mais sans l'envoyer (l'envoi se fait par la méthode value)
-			uint32_t current_time;
+			uint32_t temps_impulsion, current_time;
 			current_time = Micros();
 			temps_impulsion = current_time - origineTimer;
 			ringBufferValeurs.append( 10*temps_impulsion/58 );
 			derniereDistance = mediane(ringBufferValeurs);
-			serial.printf("");//No hack here, follow your path...
-		}
-		else
-		{
-			//serial.printfln("I knew it !");
+			serial.printfln("%d  %d", GPIO_sensor.GPIO_Pin, 10*temps_impulsion/58);//No hack here, follow your path...
+
+			risingEdgeTrigger = true;
+			EXTI_sensor.EXTI_Trigger = EXTI_Trigger_Rising;
+			EXTI_Init(&EXTI_sensor);
 		}
 	}
 
