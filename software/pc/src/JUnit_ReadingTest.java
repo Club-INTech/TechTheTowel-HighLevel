@@ -2,6 +2,12 @@ import org.junit.Test;
 
 import tests.JUnit_Test;
 
+/**
+ * Test de lecture de strings : verification s'il est un nombe, un ASCII...
+ * @author theo
+ *
+ */
+
 public class JUnit_ReadingTest extends JUnit_Test
 {
 	@Test

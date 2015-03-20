@@ -298,6 +298,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 		}
 	}
 	
+	
 	public void updateConfig()
 	{
 	}
@@ -324,7 +325,6 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	
 	
 	/**
-	 * 
 	 * Verifie si le string en argument eest un nombre, à virgule ou non, et meme negatif
 	 */
 	public boolean isNumber(String inputLines) throws Exception

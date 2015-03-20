@@ -334,7 +334,8 @@ public class LocomotionCardWrapper implements Service
 	
 	/**
 	 *  Verifie si le robot est arrivé et si c'est anormal
-	 *  @return fghjklmù
+	 *  @return Les informations sous forme d'un tableau de booleens
+	 *  lecture : [est ce qu'on bouge][est ce que c'est Anormal]
 	 */
 	public boolean[] isRobotMovingAndAbnormal() throws SerialConnexionException
 	{
