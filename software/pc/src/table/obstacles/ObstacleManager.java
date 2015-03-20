@@ -243,7 +243,6 @@ public class ObstacleManager
     	for(int i = 0; i < mMobileObstacles.size(); i++)
     		if(mMobileObstacles.get(i).getOutDatedTime() < System.currentTimeMillis())
     		{
-    	    	log.debug("Obstacle:  "+i+" périmé",this);
     			mMobileObstacles.remove(i--);
     		}
     }
