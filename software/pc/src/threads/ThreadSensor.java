@@ -240,8 +240,8 @@ class ThreadSensor extends AbstractThread
 			{
 				// Coté gauche : 
 				// relatif
-				positionEnnemi_1.x=(int) (distanceFront[0]*Math.sin(Math.PI/2 - leftFrontSensorAngle)+leftFrontSensorPosition.x);
-				positionEnnemi_1.y= (int) (distanceFront[0]*Math.cos(Math.PI/2- leftFrontSensorAngle) +distanceBetweenFrontSensors/2);
+				positionEnnemi_1.x= (int) (distanceFront[0]*Math.sin(Math.PI/2 -leftFrontSensorAngle) +leftFrontSensorPosition.x);
+				positionEnnemi_1.y= (int) (distanceFront[0]*Math.cos(Math.PI/2 -leftFrontSensorAngle) +distanceBetweenFrontSensors/2);
 				
 				// sauvegarde de la position relative
 				svgPosEnnemi1.x=positionEnnemi_1.x;
@@ -361,6 +361,8 @@ class ThreadSensor extends AbstractThread
 										));	
 			
 			mTable.getObstacleManager().addObstacle(positionEnnemi_1);
+			System.out.println("position ennemi = ("+positionEnnemi_1.x+","+positionEnnemi_1.y+")");
+
 
 		}
 		// Capteur de coté droit
@@ -389,6 +391,8 @@ class ThreadSensor extends AbstractThread
 										));
 			
 			mTable.getObstacleManager().addObstacle(positionEnnemi_1);
+			System.out.println("position ennemi = ("+positionEnnemi_1.x+","+positionEnnemi_1.y+")");
+
 
 		}
 	}
