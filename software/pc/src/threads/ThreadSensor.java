@@ -82,8 +82,8 @@ class ThreadSensor extends AbstractThread
 	/**
 	 * Angles en degrés, transformés en radians
 	 */
-	double leftFrontSensorAngle=20		*2*(Math.PI) / 360;
-	double rightFrontSensorAngle=20 	*2*(Math.PI) / 360;
+	double leftFrontSensorAngle=10		*2*(Math.PI) / 360;
+	double rightFrontSensorAngle=10 	*2*(Math.PI) / 360;
 	double leftBackSensorAngle=0		*2*(Math.PI) / 360;
 	double rightBackSensorAngle=0		*2*(Math.PI) / 360;
 	
@@ -353,7 +353,7 @@ class ThreadSensor extends AbstractThread
 											+ positionRobot.x
 									  ));	
 
-			positionEnnemi_1.y = (int) ( 	-(Math.cos( Math.PI/2-orientation )																	// projection sur l'axe standard
+			positionEnnemi_1.y = (int) ( 	(Math.cos( Math.PI/2-orientation )																	// projection sur l'axe standard
 											*( svgPosEnnemi1.x ) 		// de la difference de hauteur avec l'obstacle si le robot est droit, en face de l'obstacle
 											+ Math.sin( Math.PI/2-orientation )																	// projection sur l'axe standard
 											*( svgPosEnnemi1.y ) 		// de la difference de longueur avec l'obstacle si le robot est droit, en face de l'obstacle

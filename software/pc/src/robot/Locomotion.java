@@ -332,7 +332,8 @@ public class Locomotion implements Service
             {
                 log.critical("Haut: Catch de "+unexpectedObstacle+" dans moveToPointException", this); 
 
-            	immobilise();//FIXME  : le robot s'arrete en permanence 
+            	immobilise();
+            	
             	long detectionTime = System.currentTimeMillis();
                 log.critical("Détection d'un ennemi! Abandon du mouvement.", this);
             	while(System.currentTimeMillis() - detectionTime < maxTimeToWaitForEnemyToLeave)//TODO virer ?
@@ -416,8 +417,9 @@ public class Locomotion implements Service
      */
     private void correctAngle(Vec2 aim, boolean isMovementForward) throws BlockedException
     {
-    	//envoi de la consigne avec turnOnly a true et a isCorrection a true (c'est bien une correction et on ne veut que tourner)
-    	moveToPointSymmetry(aim, isMovementForward, true, true);
+    	//envoi de la consigne avec turnOnly a false et a isCorrection a true (c'est bien une correction)
+    	//la correction est toujours un turnOnly, on evite les doublons d'où le turnOnly à false.
+    	moveToPointSymmetry(aim, isMovementForward, false, true);
     }
 
     /**
@@ -442,7 +444,7 @@ public class Locomotion implements Service
         
         if(symetry) // miroir des positions
         {
-        	givenPosition.x=-givenPosition.x;
+        	givenPosition.x  = -givenPosition.x;
         	aimSymmetrized.x = -aimSymmetrized.x;
         }
         Vec2 delta = aimSymmetrized.clone();
@@ -454,9 +456,9 @@ public class Locomotion implements Service
         double angle;
         
         if(symetry)
-        	  angle=Math.atan2(-delta.y, delta.x);//Angle en absolu 
+        	  angle = Math.atan2(-delta.y, delta.x);//Angle en absolu 
         else 
-        	  angle =Math.atan2(delta.y, delta.x);//Angle en absolu 
+        	  angle = Math.atan2(delta.y, delta.x);//Angle en absolu 
 
         
         // si on a besoin de se retourner pour suivre la consigne de isMovementForward on le fait ici
@@ -539,7 +541,7 @@ public class Locomotion implements Service
                 while(!isMotionEnded()) 
                     Sleep.sleep(feedbackLoopDelay);
             
-            if(!turnOnly)
+            if(!(turnOnly || isCorrection))
             	deplacements.moveLengthwise(distance);
             
 
@@ -573,7 +575,7 @@ public class Locomotion implements Service
         	
         	if(!infos[0])//si le robot ne bouge plus
         	{
-        		if(infos[1])//si le robot patine
+        		if(infos[1])//si le robot patine, il est bloqué
         		{
                     log.critical("Robot bloqué, lancement de BlockedException dans isMotionEnded", this);
                     throw new BlockedException ();
@@ -618,7 +620,6 @@ public class Locomotion implements Service
      */
     public void detectEnemy(boolean front) throws UnexpectedObstacleOnPathException
     {
-
         int signe = -1;
         if(front)
             signe = 1;
@@ -648,6 +649,7 @@ public class Locomotion implements Service
 
     /**
      * Met à jour position et orientation via la carte d'asservissement.
+     * Donne la veritable positions du robot sur la table
      * @throws FinMatchException 
      * @throws SerialConnexionException
      */
