@@ -113,7 +113,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 	public void test() throws PathNotFoundException, SerialFinallyException, SerialConnexionException
 	{
 		//container.startAllThreads();
-		//waitMatchBegin();
+		waitMatchBegin();
 		//premiere action du match
 		
 		System.out.println("Le robot commence le match");

@@ -10,7 +10,6 @@ import org.junit.Assert;
 
 import enums.SensorNames;
 import enums.ServiceNames;
-import enums.UnableToMoveReason;
 import exceptions.ContainerException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -126,11 +125,19 @@ public class JUnit_Sensors extends JUnit_Test
 			}	
 		}
 	}
-
+	
+	@Test
+	public void testvide()
+	{
+		while (true)
+		{
+			
+		}
+	}
 	
 
 		
-	//@Test
+//	@Test
 	public void testCapteurFixe()
 	{
 		log.debug("Test d'évitement fixe", this);
@@ -167,7 +174,7 @@ public class JUnit_Sensors extends JUnit_Test
 	}
 	
 	
-	@Test
+//	@Test
 	public void testCapteurDeplacement()
 	{
 		log.debug("Test d'évitement", this);

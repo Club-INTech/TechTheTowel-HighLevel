@@ -83,13 +83,14 @@ public class GetGlass extends AbstractScript
 	
 	public void takeGlass0 (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
 	{
+		
 		takeGlass(stateToConsider,hooksToConsider,false,false);
 		stateToConsider.table.removeGlassX(0);
 	}
 	
 	public void takeGlass1 (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
 	{
-		takeGlass(stateToConsider,hooksToConsider,false,false);
+		takeGlass(stateToConsider,hooksToConsider,false,stateToConsider.robot.isGlassStoredRight);
 		stateToConsider.table.removeGlassX(1);
 	}
 	
@@ -97,13 +98,13 @@ public class GetGlass extends AbstractScript
 	{
 		stateToConsider.robot.turn(-Math.PI/2);//POur eviter le pathnotfound exception
 		stateToConsider.robot.moveLengthwise(stateToConsider.robot.robotRay);
-		takeGlass(stateToConsider,hooksToConsider,false,true);
+		takeGlass(stateToConsider,hooksToConsider,false,stateToConsider.robot.isGlassStoredRight);
 		stateToConsider.table.removeGlassX(2);
 	}
 	
 	public void takeGlass3 (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
 	{
-		takeGlass(stateToConsider,hooksToConsider, false,true);
+		takeGlass(stateToConsider,hooksToConsider, false,stateToConsider.robot.isGlassStoredRight);
 		stateToConsider.table.removeGlassX(3);
 	}
 	
@@ -174,10 +175,14 @@ public class GetGlass extends AbstractScript
 		//On ouvre le bras
 		if(isArmChosenLeft)
 		{
+			stateToConsider.robot.turn(-Math.PI/12, hooksToConsider, false, true);//TODO a tester
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);
 		}
 		else 
+		{
+			stateToConsider.robot.turn(Math.PI/12, hooksToConsider, false, true);//TODO a tester
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);
+		}
 		
 		//On avance vers le plot
 		stateToConsider.robot.moveLengthwise(80,hooksToConsider);
@@ -192,8 +197,8 @@ public class GetGlass extends AbstractScript
 
 		stateToConsider.robot.sleep(500);
 		
-		//on verifie
-		//si non, et si second essai on retente
+		//TODO on verifie
+		//si non, et si premier essai on retente (ne pas oublier de reculer)
 	}
 
 }
