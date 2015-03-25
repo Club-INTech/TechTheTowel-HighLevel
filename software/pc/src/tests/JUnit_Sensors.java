@@ -103,7 +103,7 @@ public class JUnit_Sensors extends JUnit_Test
 
 	}
 	
-	@Test
+	//@Test
 	public void testEvitement()
 	{
 		log.debug("Test d'évitement", this);
@@ -139,7 +139,7 @@ public class JUnit_Sensors extends JUnit_Test
 	
 
 		
-	//@Test
+	@Test
 	public void testCapteurFixe()
 	{
 		log.debug("Test d'évitement fixe", this);
@@ -148,7 +148,6 @@ public class JUnit_Sensors extends JUnit_Test
 			try
 			{
 				mLocomotion.detectEnemy(true);
-				log.debug("A gauche :"+((int[])capteurs.getSensorValue(SensorNames.ULTRASOUND_FRONT_SENSOR))[0] +"// A droite :"+((int[])capteurs.getSensorValue(SensorNames.ULTRASOUND_FRONT_SENSOR))[1], this);
 			}
 			catch (UnexpectedObstacleOnPathException unexpectedObstacle)
 	        {
@@ -168,9 +167,6 @@ public class JUnit_Sensors extends JUnit_Test
                         log.critical("Catch de "+e2+" dans moveToPointException", this);
             		}
             	}
-			} catch (SerialConnexionException e)
-			{
-                log.critical("Catch de "+e+" dans moveToPointException", this);
 			}
 		}	
 	}

@@ -28,7 +28,7 @@ class ThreadSensor extends AbstractThread
 	// Valeurs par défaut s'il y a un problème de config
 	
 	/** fréquence de mise a jour des valeurs renvoyés par les capteurs. Valeurs par défaut de 5 fois par seconde s'il y a un problème de config */
-	private int sensorFrequency = 5;
+	private int sensorFrequency = 17;
 	
 	/**
 	 * distance en mm entre les capteur ultrasond et le guide en plastique, 
@@ -189,7 +189,7 @@ class ThreadSensor extends AbstractThread
 			addObstacleBack(distanceBack);
 			
 			log.debug("Distance selon ultrasons avant:   "+distanceFront[0]+";"+distanceFront[1], this); 
-			log.debug("Distance selon ultrasons arriere: "+distanceBack[0]+";"+distanceBack[1], this);
+			//log.debug("Distance selon ultrasons arriere: "+distanceBack[0]+";"+distanceBack[1], this);
 			
 			if (distanceFront[1] > 0 && distanceFront[1] < 70 || distanceFront[0] > 0 && distanceFront[0] < 70)
 				log.debug("obstacle detecte a moins de 7 cm !", this);
@@ -201,7 +201,7 @@ class ThreadSensor extends AbstractThread
 		
 	}
 	/**
-	 * ajoute les obstacles avant a l'obstacleManager FIXME a tester
+	 * ajoute les obstacles avant a l'obstacleManager 
 	 * @param distanceFront l'int[] recupere par la serie pour les capteurs avants
 	 * a modifier si ajout ou supression de capteurs
 	 */

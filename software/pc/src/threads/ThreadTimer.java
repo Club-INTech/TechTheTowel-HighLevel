@@ -118,7 +118,6 @@ public class ThreadTimer extends AbstractThread
 			table.getObstacleManager().removeOutdatedObstacles();
 			
 			//on rafraichit l'interface graphique, TODO : à enlever
-			log.debug("rafraichissement de l'interface graphique", this);
 			mWindow.getPanel().repaint();
 			
 			try

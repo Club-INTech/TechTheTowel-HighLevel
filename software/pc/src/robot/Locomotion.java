@@ -627,7 +627,8 @@ public class Locomotion implements Service
         //rayon du cercle de detection
         int detectionRadius = robotLength/2 + detectionDistance;
         //centre du cercle de detection
-        Vec2 detectionCenter = new Vec2((int)(signe * detectionRadius * Math.cos(orientation)), (int)(signe * detectionRadius * Math.sin(orientation))); //centre par rapport au cnetre de position du robot
+        Vec2 detectionCenter = new Vec2((int)(signe * detectionRadius * Math.cos(orientation)), 
+        								(int)(signe * detectionRadius * Math.sin(orientation))); //centre par rapport au cnetre de position du robot
         detectionCenter.plus(position);
         
         if(table.getObstacleManager().isDiscObstructed(detectionCenter, detectionDistance))
