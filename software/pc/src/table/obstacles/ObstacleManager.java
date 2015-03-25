@@ -254,12 +254,14 @@ public class ObstacleManager
      * @param radius le rayon du disque
      * @return true, si au moins un obstacle chevauche le disque
      */
-    public boolean isDiscObstructed(final Vec2 discCenter, int radius)
+    public synchronized boolean isDiscObstructed(final Vec2 discCenter, int radius)
     {
     	boolean isDiscObstructed = false;
     	log.debug("Taille liste d'obstacles :  "+mMobileObstacles.size(),this);
     	for(int i=0; i<mMobileObstacles.size(); i++)
     	{
+    		if(mMobileObstacles.get(i).radius==0)
+    			System.out.print("Radius 0 en" + i);
     		if ((radius+mMobileObstacles.get(i).radius)*(radius+mMobileObstacles.get(i).radius)
     			 > (discCenter.x-mMobileObstacles.get(i).getPosition().x)*(discCenter.x-mMobileObstacles.get(i).getPosition().x)
     			 + (discCenter.y-mMobileObstacles.get(i).getPosition().y)*(discCenter.y-mMobileObstacles.get(i).getPosition().y))

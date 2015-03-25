@@ -13,7 +13,7 @@ public class ObstacleCircular extends Obstacle
 	protected Vec2 position;
 	
 	/** rayon en mm de cet obstacle */
-	protected int radius;
+	protected int radius=0;
 	
 	/**
 	 * crée un nouvel obstacle de forme circulaire a la position et a la taille spécifiée.
