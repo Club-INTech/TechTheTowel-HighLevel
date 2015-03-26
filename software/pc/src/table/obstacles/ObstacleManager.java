@@ -215,11 +215,14 @@ public class ObstacleManager
     		 */
     		mMobileObstacles.add(new ObstacleProximity(position, radius));
     		log.debug("Ennemi ajouté en "+position.x+";"+position.y, this);
+
     	}
     	else 
     	{
     		log.debug("Ennemi hors de la table", this);
 		}
+    	int a = 0;
+    	a++;
     }
 
 
