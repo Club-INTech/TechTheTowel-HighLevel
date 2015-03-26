@@ -402,4 +402,10 @@ public class GetPlot extends AbstractScript
 		}
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
 	}
+
+	@Override
+	public double getNoEnemyTime(GameState<?> stateToConsider) {
+		// FIXME Auto-generated method stub
+		return 0;
+	}
 }

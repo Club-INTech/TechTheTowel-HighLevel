@@ -201,4 +201,11 @@ public class GetGlass extends AbstractScript
 		//si non, et si premier essai on retente (ne pas oublier de reculer)
 	}
 
+	@Override
+	public double getNoEnemyTime(GameState<?> stateToConsider) 
+	{
+		// FIXME Auto-generated method stub
+		return 0;
+	}
+
 }
