@@ -208,6 +208,9 @@ public class Locomotion implements Service
     	
     	//un simple for (on vas au point 0 puis au point 1 etc.)
     	finalAim = path.get(path.size()-1);
+    	
+    	path.remove(0);//On enleve le premier point, notre propre position
+    	
     	for(int i = 0; i < path.size(); i++)
         {
             Vec2 aim = path.get(i);
@@ -641,9 +644,6 @@ public class Locomotion implements Service
         {
         	if(table.getObstacleManager().getMobileObstaclesCount()==0)
         		log.debug("Pas d'ennemi en memoire", this);
-        	else {
-        		log.debug("Pas d'ennemi devant nous", this);
-			}
 		}
 
     }

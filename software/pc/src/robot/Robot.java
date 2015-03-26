@@ -343,10 +343,6 @@ public abstract class Robot implements Service
     	
     	//retire une distance egale au rayon du cercle au dernier point du chemin (le centre du cercle)
     	
-    	//on enleve le premier point (notre position)
-    	//TODO : refaire ca propre dans PDD
-    	path.remove(0);
-    	
     	//on retire le dernier point (le centre du cercle)
     	path.remove(path.size()-1);
     	
