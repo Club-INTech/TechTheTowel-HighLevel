@@ -47,7 +47,7 @@ public class ThreadTimer extends AbstractThread
 	public static int obstacleRefreshInterval = 50;
 	
 	//TODO : interface graphique à enlever eventuellement (necessaire pour les tests)
-	public Window mWindow;
+	public Window window;
 	
 	/**
 	 * Crée le thread timer.
@@ -67,7 +67,7 @@ public class ThreadTimer extends AbstractThread
 		Thread.currentThread().setPriority(1);
 		
 		//TODO : interface graphique à enlever (necessaire pour les tests)
-		mWindow = new Window(table, robot);
+		window = new Window(table, robot);
 	}
 
 	/* (non-Javadoc)
@@ -118,7 +118,7 @@ public class ThreadTimer extends AbstractThread
 			table.getObstacleManager().removeOutdatedObstacles();
 			
 			//on rafraichit l'interface graphique, TODO : à enlever
-			mWindow.getPanel().repaint();
+			window.getPanel().repaint();
 			
 			try
 			{
