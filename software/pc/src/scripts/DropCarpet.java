@@ -110,4 +110,10 @@ public class DropCarpet extends AbstractScript
 		}
 	}
 
+	@Override
+	public double getNoEnemyTime(GameState<?> stateToConsider) {
+		// FIXME Auto-generated method stub
+		return 0;
+	}
+
 }

@@ -118,4 +118,11 @@ public abstract class AbstractScript implements Service
 	public void updateConfig()
 	{
 	}
+
+
+	/**
+	 * methode qui donne a la strategie le temps que prends le script si il n'y a pas d'ennemi (pour gagner du temps par rapport a RobotChrono)
+	 * @return le temps que prend le script si il n'y a pas d'ennemi sur notre route
+	 */
+	public abstract double getNoEnemyTime(GameState<?> stateToConsider);
 }
