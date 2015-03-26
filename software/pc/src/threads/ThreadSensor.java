@@ -1,5 +1,7 @@
 package threads;
 
+import org.hamcrest.core.IsSame;
+
 import enums.SensorNames;
 import exceptions.serial.SerialConnexionException;
 import robot.cardsWrappers.SensorsCardWrapper;
@@ -184,9 +186,12 @@ class ThreadSensor extends AbstractThread
 			
 			//ajout d'obstacles mobiles dans l'obstacleManager
 			// Analyse des capteurs avant, avec gestion dees angles TODO verifier les angles
-			addObstacleFront(distanceFront);
+			if(!mRobot.isRobotTurning)
+			{
+				addObstacleFront(distanceFront);
 			// Analyse des capteurs arrieres, avec gestion des angles
-			addObstacleBack(distanceBack);
+				addObstacleBack(distanceBack);
+			}
 			
 			log.debug("Distance selon ultrasons avant:   "+distanceFront[0]+";"+distanceFront[1], this); 
 			//log.debug("Distance selon ultrasons arriere: "+distanceBack[0]+";"+distanceBack[1], this);

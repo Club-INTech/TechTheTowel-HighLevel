@@ -207,18 +207,18 @@ public class ObstacleManager
     public synchronized void addObstacle(final Vec2 position, final int radius)
     {
     	//si la position est dans la table on continue les tests
-    	if (position.x>-1500 && position.x<1500 && position.y>0 && position.y<2000)
+    	if (position.x>-1500+radius && position.x<1500-radius && position.y>0+radius && position.y<2000-radius)
     	{
     		/*on ne test pas si la position est dans un obstcle deja existant 
     		 *on ne detecte pas les plots ni les goblets (et si on les detectes on prefere ne pas prendre le risque et on les evites)
     		 * et si on detecte une deuxieme fois l'ennemi on rajoute un obstacle sur lui
     		 */
     		mMobileObstacles.add(new ObstacleProximity(position, radius));
-    		log.debug("Obstacle ajouté en "+position.x+";"+position.y, this);
+    		log.debug("Ennemi ajouté en "+position.x+";"+position.y, this);
     	}
     	else 
     	{
-    		log.debug("Obstacle hors de la table", this);
+    		log.debug("Ennemi hors de la table", this);
 		}
     }
 

@@ -112,7 +112,17 @@ public class RobotReal extends Robot
     @Override
     public void turn(double angle, ArrayList<Hook> hooks, boolean mur) throws UnableToMoveException
     {
-        mLocomotion.turn(angle, hooks);
+    	isRobotTurning=true;
+    	try
+    	{
+    		mLocomotion.turn(angle, hooks);
+    	}
+    	catch (UnableToMoveException e)
+    	{
+            isRobotTurning=false; 
+            throw e;
+    	}// le robot s'est arreté de tourner qu'il y ait catch ou non.
+        isRobotTurning=false;
     }
     
     @Override
