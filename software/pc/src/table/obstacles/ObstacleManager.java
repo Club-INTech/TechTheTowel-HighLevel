@@ -213,13 +213,15 @@ public class ObstacleManager
     		 *on ne detecte pas les plots ni les goblets (et si on les detectes on prefere ne pas prendre le risque et on les evites)
     		 * et si on detecte une deuxieme fois l'ennemi on rajoute un obstacle sur lui
     		 */
-    		mMobileObstacles.add(new ObstacleProximity(position, radius));
+    		mMobileObstacles.add(new ObstacleProximity(position.clone(), radius));
     		log.debug("Obstacle ajouté en "+position.x+";"+position.y, this);
     	}
     	else 
     	{
     		log.debug("Obstacle hors de la table", this);
 		}
+    	int a = 0;
+    	a++;
     }
 
 
