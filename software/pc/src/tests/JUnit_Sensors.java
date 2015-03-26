@@ -58,7 +58,6 @@ public class JUnit_Sensors extends JUnit_Test
 		
 		container.getService(ServiceNames.THREAD_SENSOR);
 		container.getService(ServiceNames.THREAD_TIMER);
-		container.startInstanciedThreads();
 		
 		//locomotion
 		mLocomotion = (Locomotion)container.getService(ServiceNames.LOCOMOTION);
@@ -68,6 +67,9 @@ public class JUnit_Sensors extends JUnit_Test
 		mLocomotion.setOrientation(Math.PI);
 		mLocomotion.setTranslationnalSpeed(170);
 		mLocomotion.setRotationnalSpeed(160);
+		
+		container.startInstanciedThreads();
+
 	}
 
 	/**
@@ -126,7 +128,7 @@ public class JUnit_Sensors extends JUnit_Test
 		}
 	}
 	
-	@Test
+	//@Test
 	public void testvide()
 	{
 		while (true)
@@ -137,7 +139,7 @@ public class JUnit_Sensors extends JUnit_Test
 	
 
 		
-//	@Test
+	@Test
 	public void testCapteurFixe()
 	{
 		log.debug("Test d'évitement fixe", this);
@@ -146,7 +148,6 @@ public class JUnit_Sensors extends JUnit_Test
 			try
 			{
 				mLocomotion.detectEnemy(true);
-				log.debug("A gauche :"+((int[])capteurs.getSensorValue(SensorNames.ULTRASOUND_FRONT_SENSOR))[0] +"// A droite :"+((int[])capteurs.getSensorValue(SensorNames.ULTRASOUND_FRONT_SENSOR))[1], this);
 			}
 			catch (UnexpectedObstacleOnPathException unexpectedObstacle)
 	        {
@@ -166,15 +167,12 @@ public class JUnit_Sensors extends JUnit_Test
                         log.critical("Catch de "+e2+" dans moveToPointException", this);
             		}
             	}
-			} catch (SerialConnexionException e)
-			{
-                log.critical("Catch de "+e+" dans moveToPointException", this);
 			}
 		}	
 	}
 	
 	
-//	@Test
+    //@Test
 	public void testCapteurDeplacement()
 	{
 		log.debug("Test d'évitement", this);

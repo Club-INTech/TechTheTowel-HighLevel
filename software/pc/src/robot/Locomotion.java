@@ -627,7 +627,8 @@ public class Locomotion implements Service
         //rayon du cercle de detection
         int detectionRadius = robotLength/2 + detectionDistance;
         //centre du cercle de detection
-        Vec2 detectionCenter = new Vec2((int)(signe * detectionRadius * Math.cos(orientation)), (int)(signe * detectionRadius * Math.sin(orientation))); //centre par rapport au cnetre de position du robot
+        Vec2 detectionCenter = new Vec2((int)(signe * detectionRadius * Math.cos(orientation)), 
+        								(int)(signe * detectionRadius * Math.sin(orientation))); //centre par rapport au cnetre de position du robot
         detectionCenter.plus(position);
         
         if(table.getObstacleManager().isDiscObstructed(detectionCenter, detectionDistance))
@@ -702,13 +703,13 @@ public class Locomotion implements Service
 
     /**
      * Met à jour la position. A ne faire qu'en début de match.
-     * @param position
+     * @param positionWanted
      * @throws SerialConnexionException 
      * @throws FinMatchException 
      */
-    public void setPosition(Vec2 position)
+    public void setPosition(Vec2 positionWanted)
     {
-        this.position = position.clone();
+        this.position = positionWanted.clone();
         if(symetry)
         	this.position.x = -this.position.x;
 		try 
@@ -716,7 +717,7 @@ public class Locomotion implements Service
 			deplacements.setX(this.position.x);
 	        deplacements.setY(this.position.y);
 		} 
-		catch (SerialConnexionException e) 
+		catch (SerialConnexionException e)
 		{
             log.critical("Catch de "+e+" dans setPosition", this);
 		}
