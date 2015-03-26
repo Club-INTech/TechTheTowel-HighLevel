@@ -215,9 +215,7 @@ public class Locomotion implements Service
         {
             Vec2 aim = path.get(i);
 			moveToPointForwardBackward(aim, hooks, /*on suppose q'on ne se prends pas de mur (sinon la pathDingDing est a revoir)*/false, directionstrategy, /*on veut avancer*/false);
-        }
-    	
-		
+        }		
     }
 
 
@@ -333,12 +331,11 @@ public class Locomotion implements Service
             
             catch (UnexpectedObstacleOnPathException unexpectedObstacle)
             {
-                log.critical("Haut: Catch de "+unexpectedObstacle+" dans moveToPointException", this); 
-
+                log.critical("Ennemi detecté : Catch de "+unexpectedObstacle, this); 
             	immobilise();
             	
-            	long detectionTime = System.currentTimeMillis();
-                log.critical("Détection d'un ennemi! Abandon du mouvement.", this);
+                long detectionTime = System.currentTimeMillis();
+                /*
             	while(System.currentTimeMillis() - detectionTime < maxTimeToWaitForEnemyToLeave)//TODO virer ?
             	{
             		try
@@ -350,8 +347,9 @@ public class Locomotion implements Service
             		catch(UnexpectedObstacleOnPathException e2)
             		{
                         log.critical("Catch de "+e2+" dans moveToPointException", this);
+                        throw new UnableToMoveException(finalAim, UnableToMoveReason.OBSTACLE_DETECTED);
             		}
-            	}
+            	}*/
 
                 if(!doItAgain)
                 {
