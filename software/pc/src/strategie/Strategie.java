@@ -106,6 +106,7 @@ public class Strategie implements Service
 		 * TODO
 		 * (j'attends la verison definitive des stacks)
 		 * creer les stacks
+		 * ajouter le depacement jusqu'au script (si necessaire), ajouter le temps et les points du deplacement 
 		 * ajouter les scripts a chacunes des stacks et calculer le temps si necessaire
 		 * choisir la stacks la plus adaptée (celle que l'on considere la mieux)
 		 */
