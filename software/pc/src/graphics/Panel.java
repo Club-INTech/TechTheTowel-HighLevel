@@ -114,6 +114,10 @@ public class Panel extends JPanel
 		    		   -(mRobot.getPosition().y + 100) * this.getHeight() / 2000 + this.getHeight(), 
 		    		    (2 * 100) * this.getWidth() / 3000,
 		    		    (2 * 100) * this.getHeight() / 2000);
+		    g.drawLine((mRobot.getPosition().x + 1500) * this.getWidth() / 3000, 
+		    			-mRobot.getPosition().y * this.getHeight() / 2000 + this.getHeight(),
+		    			(int)((mRobot.getPosition().x + 200*Math.cos(mRobot.getOrientation()) + 1500) * this.getWidth() / 3000),
+		    			(int)(-(mRobot.getPosition().y + 200*Math.sin(mRobot.getOrientation())) * this.getHeight() / 2000 + this.getHeight()));
 	    }
 	    
 	    g.setColor(Color.green);

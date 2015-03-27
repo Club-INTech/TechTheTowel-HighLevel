@@ -20,7 +20,7 @@ public abstract class Obstacle
 	 */
 	public Obstacle (Vec2 position)
 	{
-		this.position = position;
+		this.position = position.clone();
 	}
 	
 	/* (non-Javadoc)

@@ -208,13 +208,14 @@ public class Locomotion implements Service
     	
     	//un simple for (on vas au point 0 puis au point 1 etc.)
     	finalAim = path.get(path.size()-1);
+    	
+    	path.remove(0);//On enleve le premier point, notre propre position
+    	
     	for(int i = 0; i < path.size(); i++)
         {
             Vec2 aim = path.get(i);
 			moveToPointForwardBackward(aim, hooks, /*on suppose q'on ne se prends pas de mur (sinon la pathDingDing est a revoir)*/false, directionstrategy, /*on veut avancer*/false);
-        }
-    	
-		
+        }		
     }
 
 
@@ -330,12 +331,11 @@ public class Locomotion implements Service
             
             catch (UnexpectedObstacleOnPathException unexpectedObstacle)
             {
-                log.critical("Haut: Catch de "+unexpectedObstacle+" dans moveToPointException", this); 
-
+                log.critical("Ennemi detecté : Catch de "+unexpectedObstacle, this); 
             	immobilise();
             	
-            	long detectionTime = System.currentTimeMillis();
-                log.critical("Détection d'un ennemi! Abandon du mouvement.", this);
+                long detectionTime = System.currentTimeMillis();
+                /*
             	while(System.currentTimeMillis() - detectionTime < maxTimeToWaitForEnemyToLeave)//TODO virer ?
             	{
             		try
@@ -347,8 +347,9 @@ public class Locomotion implements Service
             		catch(UnexpectedObstacleOnPathException e2)
             		{
                         log.critical("Catch de "+e2+" dans moveToPointException", this);
+                        throw new UnableToMoveException(finalAim, UnableToMoveReason.OBSTACLE_DETECTED);
             		}
-            	}
+            	}*/
 
                 if(!doItAgain)
                 {
@@ -640,10 +641,7 @@ public class Locomotion implements Service
         else 
         {
         	if(table.getObstacleManager().getMobileObstaclesCount()==0)
-        		log.debug("Pas d'ennemi en memoire", this);
-        	else {
-        		log.debug("Pas d'ennemi devant nous", this);
-			}
+        		;//log.debug("Pas d'ennemi en memoire", this);
 		}
 
     }

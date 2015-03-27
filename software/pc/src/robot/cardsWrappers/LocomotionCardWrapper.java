@@ -104,13 +104,14 @@ public class LocomotionCardWrapper implements Service
 	 */
 	public void immobilise() throws SerialConnexionException
 	{
-		log.critical("Immobilisation du robot pour la "+compteur+" ieme fois !", locomotionCardSerial);
-		compteur++;
+		log.critical("Immobilisation du robot", this);
 		
         disableTranslationnalFeedbackLoop();
         disableRotationnalFeedbackLoop();
+        
         while(isRobotMoving())
         	Sleep.sleep(delayBetweenSend); // On attend d'etre arreté
+        
         locomotionCardSerial.communiquer("stop", 0);// On s'asservit sur la position actuelle
         
         enableTranslationnalFeedbackLoop();

@@ -44,10 +44,10 @@ public class ThreadTimer extends AbstractThread
 	public static long matchDuration = Integer.parseInt(config.getProperty("temps_match").replaceAll(" ","") ) *1000;
 	
 	/** Temps en ms qui s'écoule entre deux mise a jour de la liste des obstacle périmables. Lors de chaque mise a jour, les obstacles périmés sont détruits. */
-	public static int obstacleRefreshInterval = 500;
+	public static int obstacleRefreshInterval = 50;
 	
 	//TODO : interface graphique à enlever eventuellement (necessaire pour les tests)
-	public Window mWindow;
+	public Window window;
 	
 	/**
 	 * Crée le thread timer.
@@ -67,7 +67,7 @@ public class ThreadTimer extends AbstractThread
 		Thread.currentThread().setPriority(1);
 		
 		//TODO : interface graphique à enlever (necessaire pour les tests)
-		mWindow = new Window(table, robot);
+		window = new Window(table, robot);
 	}
 
 	/* (non-Javadoc)
@@ -78,7 +78,7 @@ public class ThreadTimer extends AbstractThread
 	{
 		log.debug("Lancement du thread timer", this);
 
-		// on eteind les capteurs
+		// on eteind les capteursgetObstacleManager
 		config.set("capteurs_on", "false");
 		mSensorsCardWrapper.updateConfig();	
 		
@@ -118,7 +118,7 @@ public class ThreadTimer extends AbstractThread
 			table.getObstacleManager().removeOutdatedObstacles();
 			
 			//on rafraichit l'interface graphique, TODO : à enlever
-			mWindow.getPanel().repaint();
+			window.getPanel().repaint();
 			
 			try
 			{

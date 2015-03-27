@@ -103,7 +103,7 @@ public class JUnit_Sensors extends JUnit_Test
 
 	}
 	
-	//@Test
+	@Test
 	public void testEvitement()
 	{
 		log.debug("Test d'évitement", this);
@@ -129,6 +129,35 @@ public class JUnit_Sensors extends JUnit_Test
 	}
 	
 	//@Test
+	public void testDetectionTournante()
+	{
+		log.debug("Test d'évitement", this);
+		
+		try 
+		{
+			state.robot.moveLengthwise(500);
+		} 
+		catch (UnableToMoveException e1)
+		{
+			log.critical("!!!!! Catch de"+e1+" dans testEvitement !!!!!" , this);
+		}
+		while(true)
+		{
+			try 
+			{
+				state.robot.turn(Math.PI);
+				state.robot.turn(- Math.PI/2);
+				state.robot.turn(Math.PI);
+				state.robot.turn(  Math.PI/2);
+			} 
+			catch (UnableToMoveException e1)
+			{
+				log.critical("!!!!! Catch de"+e1+" dans testDetectionTournante !!!!!" , this);
+			}
+		}
+	}
+	
+	//@Test
 	public void testvide()
 	{
 		while (true)
@@ -139,7 +168,7 @@ public class JUnit_Sensors extends JUnit_Test
 	
 
 		
-	@Test
+	//@Test
 	public void testCapteurFixe()
 	{
 		log.debug("Test d'évitement fixe", this);

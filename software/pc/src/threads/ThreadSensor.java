@@ -1,5 +1,7 @@
 package threads;
 
+import org.hamcrest.core.IsSame;
+
 import enums.SensorNames;
 import exceptions.serial.SerialConnexionException;
 import robot.cardsWrappers.SensorsCardWrapper;
@@ -184,9 +186,10 @@ class ThreadSensor extends AbstractThread
 			
 			//ajout d'obstacles mobiles dans l'obstacleManager
 			// Analyse des capteurs avant, avec gestion dees angles TODO verifier les angles
-			addObstacleFront(distanceFront);
-			// Analyse des capteurs arrieres, avec gestion des angles
-			addObstacleBack(distanceBack);
+			{
+				addObstacleFront(distanceFront);			// Analyse des capteurs arrieres, avec gestion des angles
+				addObstacleBack(distanceBack);
+			}
 			
 			log.debug("Distance selon ultrasons avant:   "+distanceFront[0]+";"+distanceFront[1], this); 
 			//log.debug("Distance selon ultrasons arriere: "+distanceBack[0]+";"+distanceBack[1], this);
@@ -249,16 +252,16 @@ class ThreadSensor extends AbstractThread
 				svgPosEnnemi1.y=positionEnnemi_1.y;
 			
 				// On change de repere 
-				positionEnnemi_1.x= (int) ( 	(Math.sin( Math.PI/2-orientation )																	// projection sur l'axe standard
+				positionEnnemi_1.x= (int) ( 	+(Math.cos(orientation)																	// projection sur l'axe standard
 												*( svgPosEnnemi1.x ) 		// de la difference de hauteur avec l'obstacle si le robot est droit, en face de l'obstacle
-												+ Math.cos( Math.PI/2-orientation )																	// projection sur l'axe standard
+												- Math.sin(orientation)																	// projection sur l'axe standard
 												*( svgPosEnnemi1.y ) 		// de la difference de longueur avec l'obstacle si le robot est droit, en face de l'obstacle
 												+ positionRobot.x
 										  ));	
 
-				positionEnnemi_1.y = (int) ( 	-(Math.cos( Math.PI/2-orientation )																	// projection sur l'axe standard
+				positionEnnemi_1.y = (int) ( 	+(Math.sin(orientation )																	// projection sur l'axe standard
 												*( svgPosEnnemi1.x ) 		// de la difference de hauteur avec l'obstacle si le robot est droit, en face de l'obstacle
-												+ Math.sin( Math.PI/2-orientation )																	// projection sur l'axe standard
+												+ Math.cos( orientation )																	// projection sur l'axe standard
 												*( svgPosEnnemi1.y ) 		// de la difference de longueur avec l'obstacle si le robot est droit, en face de l'obstacle
 												+ positionRobot.y
 											));	
@@ -275,16 +278,16 @@ class ThreadSensor extends AbstractThread
 				svgPosEnnemi2.y=positionEnnemi_2.y;
 				
 				// On change de repere 
-				positionEnnemi_2.x= (int)( 		(Math.sin( Math.PI/2-orientation )	// projection sur l'axe standard
+				positionEnnemi_2.x= (int)( 		(Math.cos(orientation )	// projection sur l'axe standard
 												*( svgPosEnnemi2.x ) 				// de la difference de hauteur avec l'obstacle si le robot est droit, en face de l'obstacle
-												+ Math.cos( Math.PI/2-orientation )	// projection sur l'axe standard
+												- Math.sin(orientation )	// projection sur l'axe standard
 												*( svgPosEnnemi2.y ) 				// de la difference de longueur avec l'obstacle si le robot est droit, en face de l'obstacle
 												+ positionRobot.x
 										));	
 
-				positionEnnemi_2.y =(int) ( 	positionRobot.y-(Math.cos( Math.PI/2-orientation )	// projection sur l'axe standard
+				positionEnnemi_2.y =(int) ( 	positionRobot.y+(Math.sin(orientation )	// projection sur l'axe standard
 												*( svgPosEnnemi2.x ) 								// de la difference de hauteur avec l'obstacle si le robot est droit, en face de l'obstacle
-												+ Math.sin( Math.PI/2-orientation )					// projection sur l'axe standard
+												+ Math.cos(orientation )					// projection sur l'axe standard
 												*( svgPosEnnemi2.y ) 								// de la difference de longueur avec l'obstacle si le robot est droit, en face de l'obstacle
 											));
 				
@@ -313,15 +316,15 @@ class ThreadSensor extends AbstractThread
 				svgPosEnnemi1.x=positionEnnemi_1.x;
 				svgPosEnnemi1.y=positionEnnemi_1.y;
 				
-				positionEnnemi_1.x= (int)( 	(Math.sin( Math.PI/2-orientation )																	// projection sur l'axe standard
+				positionEnnemi_1.x= (int)( 	(Math.cos(orientation )																	// projection sur l'axe standard
 						 						*( svgPosEnnemi1.x ) 		// de la difference de hauteur avec l'obstacle si le robot est droit, en face de l'obstacle
-												+ Math.cos( Math.PI/2-orientation )																	// projection sur l'axe standard
+												- Math.sin(orientation )																	// projection sur l'axe standard
 												*( svgPosEnnemi1.y ) 		// de la difference de longueur avec l'obstacle si le robot est droit, en face de l'obstacle
 												+ positionRobot.x));	
 				 
-				positionEnnemi_1.y = (int) ( 	 positionRobot.y-(Math.cos( Math.PI/2-orientation )																	// projection sur l'axe standard
+				positionEnnemi_1.y = (int) ( 	 positionRobot.y+(Math.sin(orientation )																	// projection sur l'axe standard
 						 						*( svgPosEnnemi1.x ) 		// de la difference de hauteur avec l'obstacle si le robot est droit, en face de l'obstacle
-												+ Math.sin( Math.PI/2-orientation )																	// projection sur l'axe standard
+												+ Math.cos(orientation )																	// projection sur l'axe standard
 												*( svgPosEnnemi1.y ) 		// de la difference de longueur avec l'obstacle si le robot est droit, en face de l'obstacle
 												));	
 
@@ -347,16 +350,16 @@ class ThreadSensor extends AbstractThread
 			svgPosEnnemi1.y=positionEnnemi_1.y;
 			
 			// On change de repere 
-			positionEnnemi_1.x= (int) ( 	(Math.sin( Math.PI/2-orientation )																	// projection sur l'axe standard
+			positionEnnemi_1.x= (int) ( 	(Math.cos(orientation )																	// projection sur l'axe standard
 											*( svgPosEnnemi1.x ) 		// de la difference de hauteur avec l'obstacle si le robot est droit, en face de l'obstacle
-											+ Math.cos( Math.PI/2-orientation )																	// projection sur l'axe standard
+											- Math.sin(orientation )																	// projection sur l'axe standard
 											*( svgPosEnnemi1.y ) 		// de la difference de longueur avec l'obstacle si le robot est droit, en face de l'obstacle
 											+ positionRobot.x
 									  ));	
 
-			positionEnnemi_1.y = (int) ( 	(Math.cos( Math.PI/2-orientation )																	// projection sur l'axe standard
+			positionEnnemi_1.y = (int) ( 	(Math.sin(orientation )																	// projection sur l'axe standard
 											*( svgPosEnnemi1.x ) 		// de la difference de hauteur avec l'obstacle si le robot est droit, en face de l'obstacle
-											+ Math.sin( Math.PI/2-orientation )																	// projection sur l'axe standard
+											+ Math.cos(orientation )																	// projection sur l'axe standard
 											*( svgPosEnnemi1.y ) 		// de la difference de longueur avec l'obstacle si le robot est droit, en face de l'obstacle
 											+ positionRobot.y
 										));	
@@ -376,16 +379,16 @@ class ThreadSensor extends AbstractThread
 			svgPosEnnemi1.y=positionEnnemi_1.y;
 			
 			// On change de repere 
-			positionEnnemi_1.x= (int)( 	(Math.sin( Math.PI/2-orientation )																	// projection sur l'axe standard
+			positionEnnemi_1.x= (int)( 	(Math.cos(orientation )																	// projection sur l'axe standard
 										*( svgPosEnnemi1.x ) 		// de la difference de hauteur avec l'obstacle si le robot est droit, en face de l'obstacle
-										+ Math.cos( Math.PI/2-orientation )																	// projection sur l'axe standard
+										- Math.sin(orientation )																	// projection sur l'axe standard
 										*( svgPosEnnemi1.y ) 		// de la difference de longueur avec l'obstacle si le robot est droit, en face de l'obstacle
 										+ positionRobot.x
 									));
 
-			positionEnnemi_1.y = (int) ( 	 positionRobot.y + (Math.cos( Math.PI/2-orientation )																	// projection sur l'axe standard
+			positionEnnemi_1.y = (int) ( 	 positionRobot.y + (Math.sin(orientation )																	// projection sur l'axe standard
 											*( svgPosEnnemi1.x ) 		// de la difference de hauteur avec l'obstacle si le robot est droit, en face de l'obstacle
-											+ Math.sin( Math.PI/2-orientation )																	// projection sur l'axe standard
+											+ Math.cos(orientation )																	// projection sur l'axe standard
 											*( svgPosEnnemi1.y ) 		// de la difference de longueur avec l'obstacle si le robot est droit, en face de l'obstacle
 										));
 			
