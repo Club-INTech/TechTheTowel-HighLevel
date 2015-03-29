@@ -146,6 +146,7 @@ public class Locomotion implements Service
      */
     public void turn(double angle, ArrayList<Hook> hooks) throws UnableToMoveException
     {
+    	
 		updateCurrentPositionAndOrientation();
 
     	/**

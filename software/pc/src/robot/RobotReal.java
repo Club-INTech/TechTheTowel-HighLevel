@@ -106,11 +106,23 @@ public class RobotReal extends Robot
     {
     	if (isTurnRelative)
     		angle += getOrientation();
-        mLocomotion.turn(angle, hooks);
+        turn(angle, hooks);
     }
     
     @Override
     public void turn(double angle, ArrayList<Hook> hooks, boolean mur) throws UnableToMoveException
+    {
+    	try
+    	{
+    		turn(angle, hooks);
+    	}
+    	catch (UnableToMoveException e)
+    	{
+            throw e;
+    	}
+    }
+    
+    public void turn(double angle, ArrayList<Hook> hooks) throws UnableToMoveException
     {
     	isRobotTurning=true;
     	try
@@ -119,11 +131,12 @@ public class RobotReal extends Robot
     	}
     	catch (UnableToMoveException e)
     	{
-            isRobotTurning=false; 
+        	isRobotTurning=false;
             throw e;
     	}// le robot s'est arreté de tourner qu'il y ait catch ou non.
-        isRobotTurning=false;
+    	isRobotTurning=false;
     }
+
     
     @Override
     public void followPath(ArrayList<Vec2> chemin, ArrayList<Hook> hooks) throws UnableToMoveException
