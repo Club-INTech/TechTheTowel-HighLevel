@@ -36,7 +36,7 @@ class ThreadSensor extends AbstractThread
 	 * distance en mm entre les capteur ultrasond et le guide en plastique, 
 	 * on ne peut rien detecter de plus petit que cette distance donc toutes les informations de distance en dessous de cette valeur ne seron pas traités
 	 */
-	int distanceBetweenGuideAndUltrasound = 70;
+	int distanceBetweenGuideAndUltrasound = 80;
 	/**
 	 * distance en mm entre les deux capteurs avants
 	 */
@@ -54,7 +54,7 @@ class ThreadSensor extends AbstractThread
 	/**
 	 * Distance minimale à laquelle on peut se fier aux capteurs : ne pas detecter notre propre root par exemple
 	 */
-	double minSensorRange = 70;
+	double minSensorRange = 80;
 	
 	/** Les angles des capteurs :
 	 * 		
@@ -176,9 +176,8 @@ class ThreadSensor extends AbstractThread
 				return;
 			}
 			
-			if(!mRobot.isRobotTurning)// on ne detecte pas si on est en train de tourner (les capteurs font des choses etranges sinon.)
+			if(!mRobot.getIsRobotTurning())// on ne detecte pas si on est en train de tourner (les capteurs font des choses etranges sinon.)
 			{
-
 				/* recupere la distance mesurée par l'ultrason
 				 * on met la distance detecte, a l'avant et a l'arriere, dans deux variables int[] de taille deux
 				 * si la carte ne repond pas on revoie la valeur par default

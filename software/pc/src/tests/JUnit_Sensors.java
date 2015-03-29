@@ -104,7 +104,7 @@ public class JUnit_Sensors extends JUnit_Test
 
 	}
 	
-	//@Test
+//	@Test
 	public void testEvitement()
 	{
 		log.debug("Test d'évitement", this);
@@ -129,7 +129,7 @@ public class JUnit_Sensors extends JUnit_Test
 		}
 	}
 	
-	@Test
+	//@Test
 	public void testDetectionTournante()
 	{
 		log.debug("Test d'évitement", this);
@@ -141,7 +141,7 @@ public class JUnit_Sensors extends JUnit_Test
 				state.robot.turn(Math.PI);
 				Sleep.sleep(500);
 				state.robot.turn(- Math.PI/2);
-				Sleep.sleep(500);
+				Sleep.sleep(500);  
 				state.robot.turn(Math.PI);
 				Sleep.sleep(500);
 				state.robot.turn(  Math.PI/2);
@@ -165,7 +165,7 @@ public class JUnit_Sensors extends JUnit_Test
 	
 
 		
-	//@Test
+	@Test
 	public void testCapteurFixe()
 	{
 		log.debug("Test d'évitement fixe", this);

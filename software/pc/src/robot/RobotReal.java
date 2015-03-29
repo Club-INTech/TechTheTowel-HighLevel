@@ -124,17 +124,14 @@ public class RobotReal extends Robot
     
     public void turn(double angle, ArrayList<Hook> hooks) throws UnableToMoveException
     {
-    	isRobotTurning=true;
     	try
     	{
     		mLocomotion.turn(angle, hooks);
     	}
     	catch (UnableToMoveException e)
     	{
-        	isRobotTurning=false;
             throw e;
     	}// le robot s'est arreté de tourner qu'il y ait catch ou non.
-    	isRobotTurning=false;
     }
 
     
@@ -218,6 +215,11 @@ public class RobotReal extends Robot
 		} catch (SerialConnexionException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public boolean getIsRobotTurning()
+	{
+		return mLocomotion.isRobotTurning;
 	}
 
 	

@@ -60,9 +60,7 @@ public abstract class Robot implements Service
 	/** Rayon du robot provenant du fichier de config */
 	public int robotRay;
 	
-	/**Booleen explicitant si le robot est en train de tourner */
-	public boolean isRobotTurning=false;
-	
+
 	
 	/**
 	 * Instancie le robot.
@@ -312,11 +310,12 @@ public abstract class Robot implements Service
 	
     	try 
     	{
+			log.debug("Chemin suivi :"+path , this);
 			followPath(path , hooksToConsider);
 		} 
     	catch (UnableToMoveException unableToMoveException) 
     	{
-			log.critical("Catch de"+unableToMoveException+" dans moveToLocation , pret à calculer un nouveau path" , this);
+			log.critical("Catch de "+unableToMoveException+" dans moveToLocation" , this);
 			recalculate(unableToMoveException.aim, hooksToConsider); // on recalcule le path
 		}
     }
@@ -370,11 +369,12 @@ public abstract class Robot implements Service
     	
     	try 
     	{
+			log.debug("Chemin suivi :"+path , this);
 			followPath(path , hooksToConsider);
 		} 
     	catch (UnableToMoveException unableToMoveException) 
     	{
-			log.critical("Catch de"+unableToMoveException+" dans moveToCircle , pret à calculer un nouveau path" , this);
+			log.critical("Catch de "+unableToMoveException+" dans moveToCircle" , this);
 			
 			recalculate(unableToMoveException.aim, hooksToConsider); // on recalcule le path
 		}

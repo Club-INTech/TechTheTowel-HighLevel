@@ -112,6 +112,10 @@ public class Locomotion implements Service
      * 	La correction ne sera effectuée que si le robot est assez eloigné de son orientation souhaitée.
      */
     private double maxRotationCorrectionThreeshold = 0.05;
+    
+	/**Booleen explicitant si le robot est en train de tourner */
+	public boolean isRobotTurning=false;
+	
 
     
     
@@ -215,7 +219,11 @@ public class Locomotion implements Service
     	for(int i = 0; i < path.size(); i++)
         {
             Vec2 aim = path.get(i);
-			moveToPointForwardBackward(aim, hooks, /*on suppose q'on ne se prends pas de mur (sinon la pathDingDing est a revoir)*/false, directionstrategy, /*on veut avancer*/false);
+			moveToPointForwardBackward(aim, hooks,
+													/*on suppose qu'on ne se prends pas de mur (sinon la pathDingDing est a revoir)*/
+													false, directionstrategy,
+																			/*on veut avancer*/
+																			false);
         }		
     }
 
@@ -298,12 +306,17 @@ public class Locomotion implements Service
                         log.warning("On n'arrive plus à avancer. On se dégage", this);
                         if(turnOnly)
                         {
+                        	isRobotTurning=true;
+                        	
                         	// TODO: les appels à déplacements sont non bloquants, il faut rajouter des sleeps
                         	// on alterne rotation à gauche et à droite
                         	if((unexpectedWallImpactCounter & 1) == 0)
                         		deplacements.turn(orientation+angleToDisengage);
                         	else
                         		deplacements.turn(orientation-angleToDisengage);
+                        	
+                        	isRobotTurning=false;
+                        	
                         }
                         else if(isMovementForward)
                             deplacements.moveLengthwise(distanceToDisengage);
@@ -335,7 +348,7 @@ public class Locomotion implements Service
                 log.critical("Ennemi detecté : Catch de "+unexpectedObstacle, this); 
             	immobilise();
             	
-                long detectionTime = System.currentTimeMillis();
+                //long detectionTime = System.currentTimeMillis();
                 /*
             	while(System.currentTimeMillis() - detectionTime < maxTimeToWaitForEnemyToLeave)//TODO virer ?
             	{
@@ -382,7 +395,7 @@ public class Locomotion implements Service
      */
     private void moveToPointCorrectAngleAndDetectEnnemy(Vec2 aim, ArrayList<Hook> hooks, boolean isMovementForward, boolean turnOnly) throws UnexpectedObstacleOnPathException, BlockedException
     {         	
-    	double time=System.currentTimeMillis();
+    	//double time=System.currentTimeMillis();
         moveToPointSymmetry(aim, isMovementForward, turnOnly, false);
         do
         { 	
@@ -400,8 +413,8 @@ public class Locomotion implements Service
             // le fait de faire de nombreux appels permet de corriger la trajectoire
             correctAngle(aim, isMovementForward);
             
-            log.critical("Temps pour finir la boucle d'asservissement "+(System.currentTimeMillis()-time), this);
-            time=System.currentTimeMillis();
+            //log.critical("Temps pour finir la boucle d'asservissement "+(System.currentTimeMillis()-time), this);
+            //time=System.currentTimeMillis();
             
             // On sleep pour eviter le spam de la serie
             Sleep.sleep(feedbackLoopDelay);
@@ -526,22 +539,28 @@ public class Locomotion implements Service
 
         try
         {
+            isRobotTurning=true;// prochain ordre : on tourne
+
         	if(isCorrection && Math.abs(delta) > maxRotationCorrectionThreeshold)
         	{
         		deplacements.turn(angle);  // On ne tourne que si on est assez loin de l'orientation voulu
-                log.debug("Angle corrigé", this);
+              
+        		log.debug("Angle corrigé", this);
         	}
         	else if(!isCorrection)// Si ca n'est pas  une correction
         	{
         		deplacements.turn(angle);
         	}
         	
-
             // sans virage : la première rotation est bloquante
             if(!trajectoire_courbe) 
             	// on attend la fin du mouvement
                 while(!isMotionEnded()) 
+                {
                     Sleep.sleep(feedbackLoopDelay);
+                }
+            
+            isRobotTurning=false; // fin du turn
             
             if(!(turnOnly || isCorrection))
             	deplacements.moveLengthwise(distance);
@@ -551,6 +570,7 @@ public class Locomotion implements Service
         catch (SerialConnexionException e)
         {
             log.critical("Catch de "+e+" dans moveToPointSerialOrder", this);
+            isRobotTurning=false; // Meme avec un catch, on a fini de tourner
         }
     }
 
@@ -641,8 +661,8 @@ public class Locomotion implements Service
         }
         else 
         {
-        	if(table.getObstacleManager().getMobileObstaclesCount()==0)
-        		;//log.debug("Pas d'ennemi en memoire", this);
+        	if(table.getObstacleManager().getMobileObstaclesCount()==0);
+        	//log.debug("Pas d'ennemi en memoire", this);
 		}
 
     }
