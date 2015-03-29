@@ -98,7 +98,7 @@ class ThreadSensor extends AbstractThread
 	/**
 	 * Sauvegarde de la position ennemie
 	 */
-	private Vec2 svgPosEnnemi1 = new Vec2(0,0);
+	private Vec2 relativePosEnnemi1 = new Vec2(0,0);
 	private Vec2 svgPosEnnemi2 = new Vec2(0,0);
 
 	
@@ -251,11 +251,11 @@ class ThreadSensor extends AbstractThread
 				positionEnnemi_1.y= (int) (distanceFront[0]*Math.cos(Math.PI/2 - leftFrontSensorAngle) + distanceBetweenFrontSensors/2);
 				
 				// sauvegarde de la position relative
-				svgPosEnnemi1.x=positionEnnemi_1.x;
-				svgPosEnnemi1.y=positionEnnemi_1.y;
+				relativePosEnnemi1.x=positionEnnemi_1.x;
+				relativePosEnnemi1.y=positionEnnemi_1.y;
 			
 				// On change de repere 
-				positionEnnemi_1=changeReference(svgPosEnnemi1, positionRobot, orientation );
+				positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
 																
 				
 				// Coté droit :
@@ -291,11 +291,11 @@ class ThreadSensor extends AbstractThread
 												Math.sqrt( Math.pow(distanceObstacleFront[1],2)-
 														   Math.pow(positionEnnemi_1.y-distanceBetweenFrontSensors/2, 2)));	//position de l'obstacle en fonction du robot
 
-				svgPosEnnemi1.x=positionEnnemi_1.x;
-				svgPosEnnemi1.y=positionEnnemi_1.y;
+				relativePosEnnemi1.x=positionEnnemi_1.x;
+				relativePosEnnemi1.y=positionEnnemi_1.y;
 				
 				// Maintenant, on le remet dans le repere du robot
-				positionEnnemi_1=changeReference(svgPosEnnemi1, positionRobot, orientation );
+				positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
 
 				positionEnnemi_2.x=-3000;
 				positionEnnemi_2.y=-1000;
@@ -315,11 +315,11 @@ class ThreadSensor extends AbstractThread
 			positionEnnemi_1.y= (int) (distanceObstacleFront[0]*Math.cos(Math.PI/2- leftFrontSensorAngle) +distanceBetweenFrontSensors/2);
 			
 			// sauvegarde de la position relative
-			svgPosEnnemi1.x=positionEnnemi_1.x;
-			svgPosEnnemi1.y=positionEnnemi_1.y;
+			relativePosEnnemi1.x=positionEnnemi_1.x;
+			relativePosEnnemi1.y=positionEnnemi_1.y;
 			
 			// On change de repere 
-			positionEnnemi_1=changeReference(svgPosEnnemi1, positionRobot, orientation );
+			positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
 
 			
 			mTable.getObstacleManager().addObstacle(positionEnnemi_1);
@@ -333,11 +333,11 @@ class ThreadSensor extends AbstractThread
 			positionEnnemi_1.y= -(int) (distanceObstacleFront[1]*Math.cos(Math.PI/2- rightFrontSensorAngle) +distanceBetweenFrontSensors/2);
 			
 			// sauvegarde de la position relative
-			svgPosEnnemi1.x=positionEnnemi_1.x;
-			svgPosEnnemi1.y=positionEnnemi_1.y;
+			relativePosEnnemi1.x=positionEnnemi_1.x;
+			relativePosEnnemi1.y=positionEnnemi_1.y;
 			
 			// On change de repere 
-			positionEnnemi_1=changeReference(svgPosEnnemi1, positionRobot, orientation );
+			positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
 			
 			mTable.getObstacleManager().addObstacle(positionEnnemi_1);
 			System.out.println("position ennemi = ("+positionEnnemi_1.x+","+positionEnnemi_1.y+")");
@@ -434,21 +434,21 @@ class ThreadSensor extends AbstractThread
 			robotLenght = Integer.parseInt(config.getProperty("longueur_robot"));
 	}
 	
-	private Vec2 changeReference(Vec2 svgPosEnnemi, Vec2 positionRobot, double orientation )
+	private Vec2 changeReference(Vec2 relativePosEnnemi, Vec2 positionRobot, double orientation )
 	{
 		Vec2 positionEnnemi=new Vec2 (0,0);
 		
 		positionEnnemi.x= (int) ( 	(Math.cos(orientation )																	// projection sur l'axe standard
-									*( svgPosEnnemi.x ) 		// de la difference de hauteur avec l'obstacle si le robot est droit, en face de l'obstacle
+									*( relativePosEnnemi.x ) 		// de la difference de hauteur avec l'obstacle si le robot est droit, en face de l'obstacle
 									- Math.sin(orientation )																	// projection sur l'axe standard
-									*( svgPosEnnemi.y ) 		// de la difference de longueur avec l'obstacle si le robot est droit, en face de l'obstacle
+									*( relativePosEnnemi.y ) 		// de la difference de longueur avec l'obstacle si le robot est droit, en face de l'obstacle
 									+ positionRobot.x
 								));	
 
 		positionEnnemi.y = (int) ( 	(Math.sin(orientation )																	// projection sur l'axe standard
-									*( svgPosEnnemi.x ) 		// de la difference de hauteur avec l'obstacle si le robot est droit, en face de l'obstacle
+									*( relativePosEnnemi.x ) 		// de la difference de hauteur avec l'obstacle si le robot est droit, en face de l'obstacle
 									+ Math.cos(orientation )																	// projection sur l'axe standard
-									*( svgPosEnnemi.y ) 		// de la difference de longueur avec l'obstacle si le robot est droit, en face de l'obstacle
+									*( relativePosEnnemi.y ) 		// de la difference de longueur avec l'obstacle si le robot est droit, en face de l'obstacle
 									+ positionRobot.y
 								));
 		
