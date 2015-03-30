@@ -104,7 +104,7 @@ public class JUnit_Sensors extends JUnit_Test
 
 	}
 	
-//	@Test
+	//@Test
 	public void testEvitement()
 	{
 		log.debug("Test d'évitement", this);
@@ -173,7 +173,7 @@ public class JUnit_Sensors extends JUnit_Test
 		{
 			try
 			{
-				mLocomotion.detectEnemy(true);
+				mLocomotion.detectEnemy(true, false);
 			}
 			catch (UnexpectedObstacleOnPathException unexpectedObstacle)
 	        {
@@ -185,7 +185,7 @@ public class JUnit_Sensors extends JUnit_Test
             	{
             		try
             		{
-            			mLocomotion.detectEnemy(true);
+            			mLocomotion.detectEnemy(true, false);
             			break;
             		}
             		catch(UnexpectedObstacleOnPathException e2)
