@@ -175,13 +175,13 @@ public class GetGlass extends AbstractScript
 		//On ouvre le bras
 		if(isArmChosenLeft)
 		{
-			stateToConsider.robot.turn(-Math.PI/12, hooksToConsider, false, true);//TODO a tester
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);
+			stateToConsider.robot.turn(-Math.PI/12, hooksToConsider, false, true);
 		}
 		else 
 		{
-			stateToConsider.robot.turn(Math.PI/12, hooksToConsider, false, true);//TODO a tester
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);
+			stateToConsider.robot.turn(Math.PI/12, hooksToConsider, false, true);
 		}
 		
 		//On avance vers le plot
@@ -202,7 +202,7 @@ public class GetGlass extends AbstractScript
 	}
 
 	@Override
-	public double getNoEnemyTime(GameState<?> stateToConsider) 
+	public double getNoEnemyTime(GameState<?> stateToConsider, int id) 
 	{
 		// FIXME Auto-generated method stub
 		return 0;
