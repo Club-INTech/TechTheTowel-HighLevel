@@ -104,7 +104,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
 		robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
 		
-		robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, false);
+		robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 		
 		robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
 	}
