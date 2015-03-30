@@ -391,7 +391,7 @@ public abstract class Robot implements Service
     	try
     	{
     		// On le reclacule, et on essaye de le suivre 
-    		ArrayList<Vec2> newPath = pathDingDing.computePath(getPosition(),aim, EnumSet.noneOf(ObstacleGroups.class));
+    		ArrayList<Vec2> newPath = pathDingDing.computePath(getPosition(),aim, EnumSet.of(ObstacleGroups.ENNEMY_ROBOTS));
 			log.debug("Nouveau path calculé"+newPath , this);
 			followPath(newPath , hooksToConsider);
 		} 
