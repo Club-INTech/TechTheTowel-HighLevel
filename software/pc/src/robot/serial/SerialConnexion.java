@@ -94,7 +94,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 		}
 		catch (NoSuchPortException e2)
 		{
-			e2.printStackTrace();
+			log.critical("Catch de "+e2+" dans initialize",this);
 		}
 
 		// Ouverture du port s�rie
@@ -104,7 +104,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 		} 
 		catch (PortInUseException e1)
 		{
-			e1.printStackTrace();
+			log.critical("Catch de "+e1+" dans initialize",this);
 		}
 		try
 		{
@@ -121,7 +121,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 		}
 		catch (Exception e)
 		{
-			System.err.println(e.toString());
+			log.critical("Catch de "+e+" dans initialize",this);
 		}
 		
 		// permet d'avoir un readLine non bloquant
@@ -131,7 +131,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 		} 
 		catch (UnsupportedCommOperationException e)
 		{
-			e.printStackTrace();
+			log.critical("Catch de "+e+" dans initialize",this);
 		}
 	}
 
@@ -201,8 +201,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 			}
 			catch (Exception e)
 			{
-				e.printStackTrace();
-				log.critical("Ne peut pas parler à la carte " + this.name, this);
+				log.critical("Ne peut pas parler à la carte " + this.name + " lancement de "+e, this);
 				throw new SerialConnexionException();
 			}
 	
@@ -214,12 +213,26 @@ public class SerialConnexion implements SerialPortEventListener, Service
 					
 					//log.debug("Ligne "+i+": '"+inputLines[i]+"'",this); 
 					if(inputLines[i].equals(null) || inputLines[i].replaceAll(" ", "").equals("")|| inputLines[i].replaceAll(" ", "").equals("-"))
-						log.debug("='(",this);
+					{
+						log.critical("='( , renvoi de "+inputLines[i],this);
+						communiquer(messages, nb_lignes_reponse);
+					}
+					
+					if(!isAsciiExtended(inputLines[i]))
+					{
+						log.critical("='( , renvoi de "+inputLines[i],this);
+						communiquer(messages, nb_lignes_reponse); // On retente
+					}
+					else if(! isNumber(inputLines[i]) )
+					{
+						log.critical("='( , renvoi de "+inputLines[i],this);
+						communiquer(messages, nb_lignes_reponse); // On retente
+					}	
 				}
 			}
 			catch (Exception e)
 			{
-				log.critical("Ne peut pas parler à la carte " + this.name, this);
+				log.critical("Ne peut pas parler à la carte " + this.name + " lancement de "+e, this);
 				throw new SerialConnexionException();
 			}
 			return inputLines;
@@ -279,17 +292,57 @@ public class SerialConnexion implements SerialPortEventListener, Service
 			}
 			catch (Exception e)
 			{
-				
-				//TODO: n'afficher que les infos intéressantes et faire ca sur tout les printStackTrace du  projet
-				e.printStackTrace();
-				log.critical(e.getMessage(),this);
+				log.critical("Catch de "+e+" dans ping",this);
 			}
 			return ping;
 		}
 	}
 	
+	
 	public void updateConfig()
 	{
+	}
+	
+
+	/**
+	 * Fonction verifiant si on recoit bien de l'ascii etendu : sinon, bah le bas niveau deconne.
+	 */
+	public boolean isAsciiExtended(String inputLines) throws Exception
+	{
+		Boolean isAsciiExtended=true;
+		for (int i = 0; i < inputLines.length(); i++) 
+		{
+	        int characterSet = inputLines.charAt(i);
+	        if (characterSet > 259) 
+	        {
+				isAsciiExtended=false;
+                log.critical(inputLines+"n'est pas ASCII", this);
+				return isAsciiExtended;
+	        }
+	    }
+		return isAsciiExtended;
+	}
+	
+	
+	/**
+	 * Verifie si le string en argument eest un nombre, à virgule ou non, et meme negatif
+	 */
+	public boolean isNumber(String inputLines) throws Exception
+	{
+		Boolean isNumber=true;
+		for (int i = 0; i < inputLines.length(); i++) 
+		{
+			 if (!   ( inputLines.toCharArray()[i]=='-'  || inputLines.toCharArray()[i]=='.' || inputLines.toCharArray()[i]=='0' 
+		        		|| inputLines.toCharArray()[i]=='1' || inputLines.toCharArray()[i]=='2' || inputLines.toCharArray()[i]=='3' 
+		        		|| inputLines.toCharArray()[i]=='4' || inputLines.toCharArray()[i]=='5' || inputLines.toCharArray()[i]=='6' 
+		        		|| inputLines.toCharArray()[i]=='7' || inputLines.toCharArray()[i]=='8' || inputLines.toCharArray()[i]=='9' ) )
+	        {
+	        	isNumber=false;
+                log.critical(inputLines.toCharArray()[i]+"n'est pas un nombre", this);
+				return isNumber;
+	        }
+	    }
+		return isNumber;
 	}
 
 }

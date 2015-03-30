@@ -65,10 +65,17 @@ public class RobotChrono extends Robot
 		if(waitForCompletion)
 			this.chrono += order.getDuration();
 	}
+	
+	public void turn(double angle, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
+	{
+		turn (angle, hooksToConsider, expectsWallImpact, false);
+	}
 
 	@Override
-    public void turn(double angle, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
+    public void turn(double angle, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact, boolean isTurnRelative) throws UnableToMoveException
 	{
+		
+		
 		// symétrise la table si l'on est équipe jaune
         if(symmetry)
             angle = Math.PI-angle;
@@ -76,9 +83,13 @@ public class RobotChrono extends Robot
 		// met a jour l'orientation du robot
 		orientation = angle;
 		
-	    
-        // angle duqel le robot doit tourner pour avoir l'orientation désirée
-		double turnAmount = angle-orientation;
+		
+		// angle duqel le robot doit tourner pour avoir l'orientation désirée
+		double turnAmount;
+		if (isTurnRelative)
+			turnAmount = angle;
+		else
+			turnAmount = angle-orientation;
 		
 		// Met l'angle a parcourir dans ]-PI; PI]
 		if(turnAmount < 0)

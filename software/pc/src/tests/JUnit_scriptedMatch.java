@@ -46,18 +46,10 @@ public class JUnit_scriptedMatch extends JUnit_Test
         pathDingDing = (PathDingDing)container.getService(ServiceNames.PATHDINGDING);
 		emptyHook = new ArrayList<Hook> ();  
 
-		if (real_state.robot.getSymmetry())
-		{
-			real_state.robot.setPosition(new Vec2 (-1381,1000));
-			real_state.robot.setOrientation(0); 
-			//si on est jaune on est en 0 
-		}
-		else
-		{
+		
 			real_state.robot.setPosition(new Vec2 (1381,1000));
 			real_state.robot.setOrientation(Math.PI);
-			//sinon on est vert donc on est en PI
-		}
+		
 		
 		real_state.robot.updateConfig();
 		try 
@@ -103,8 +95,8 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
 		robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
 		
-		robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, false);
-		robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, false);
+		robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
+		robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);
 		
 		robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
 		robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
@@ -121,7 +113,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 	public void test() throws PathNotFoundException, SerialFinallyException, SerialConnexionException
 	{
 		//container.startAllThreads();
-		//waitMatchBegin();
+		waitMatchBegin();
 		//premiere action du match
 		
 		System.out.println("Le robot commence le match");
@@ -217,7 +209,6 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		{			
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant de deposer la pile sur l'estrade");
 			scriptmanager.getScript(ScriptNames.FREE_STACK).goToThenExec(1, real_state, true, emptyHook ); // On lache notree pile devnt (bientot sur l'estrade
-			real_state.robot.moveLengthwise(-300);		//On recule pour ne pas taper (le PF evitera ca)
 		}
 		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException e) 
 		{
@@ -228,17 +219,26 @@ public class JUnit_scriptedMatch extends JUnit_Test
 				
 		try 
 		{	
-			/*Le robot n'en est pas encore capable mais ca va venir avec le bas niveau et les fonctions "bras au milieu" etc
-			/*	scriptmanager.getScript(ScriptNames.TAKE_TENNIS_BALL).goToThenExec(1, real_state, true, emptyHook );*/
+			//Le robot n'en est pas encore capable mais ca va venir avec le bas niveau et les fonctions "bras au milieu" etc
+			scriptmanager.getScript(ScriptNames.TAKE_TENNIS_BALL).goToThenExec(1, real_state, true, emptyHook );
 			
-			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant de deposer le verre");
-			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(1, real_state, true, emptyHook );//On depose 1 verre dans notre zone
-			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après avoir deposé le verre");
 		}
 		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException e) 
 		{
 			e.printStackTrace();
 		}
+		System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant de deposer le verre");
+		try
+		{
+			
+			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(1, real_state, true, emptyHook );//On depose 1 verre dans notre zone
+		}
+		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException e) 
+		{
+			e.printStackTrace();
+		}
+		System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après avoir deposé le verre");
+
 		
 		System.out.println("Verre deposé");
 		

@@ -13,6 +13,8 @@ import enums.ServiceNames;
 import exceptions.ContainerException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
+import exceptions.Locomotion.UnexpectedObstacleOnPathException;
+import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialManagerException;
 import robot.Locomotion;
 import robot.Robot;
@@ -21,6 +23,7 @@ import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
+import utils.Sleep;
 
 /**
  * Test des capteurs : les obstacles doivent être détectés
@@ -41,6 +44,7 @@ public class JUnit_Sensors extends JUnit_Test
 	/* (non-Javadoc)
 	 * @see tests.JUnit_Test#setUp()
 	 */
+	@SuppressWarnings("unchecked")
 	@Before
 	public void setUp() throws Exception 
 	{
@@ -53,7 +57,8 @@ public class JUnit_Sensors extends JUnit_Test
 		config.set("capteurs_on", "true");
 		capteurs.updateConfig();
 		
-		container.startAllThreads();
+		container.getService(ServiceNames.THREAD_SENSOR);
+		container.getService(ServiceNames.THREAD_TIMER);
 		
 		//locomotion
 		mLocomotion = (Locomotion)container.getService(ServiceNames.LOCOMOTION);
@@ -63,6 +68,9 @@ public class JUnit_Sensors extends JUnit_Test
 		mLocomotion.setOrientation(Math.PI);
 		mLocomotion.setTranslationnalSpeed(170);
 		mLocomotion.setRotationnalSpeed(160);
+		
+		container.startInstanciedThreads();
+
 	}
 
 	/**
@@ -96,8 +104,8 @@ public class JUnit_Sensors extends JUnit_Test
 
 	}
 	
-	@Test
-	public void testEvitement() throws PathNotFoundException, ContainerException, SerialManagerException
+//	@Test
+	public void testEvitement()
 	{
 		log.debug("Test d'évitement", this);
 		try 
@@ -114,14 +122,97 @@ public class JUnit_Sensors extends JUnit_Test
 			{
 				state.robot.moveToCircle(new Circle(new Vec2(-600, 1000),0),  new ArrayList<Hook>(), (Table)container.getService(ServiceNames.TABLE));
 			}
-			catch (UnableToMoveException e) 
+			catch (UnableToMoveException | PathNotFoundException | ContainerException | SerialManagerException e) 
 			{
 				log.critical("!!!!!! Catch de"+e+" dans testEvitement !!!!!!" , this);
 			}	
 		}
 	}
+	
+	//@Test
+	public void testDetectionTournante()
+	{
+		log.debug("Test d'évitement", this);
 		
+		while(true)
+		{
+			try 
+			{
+				state.robot.turn(Math.PI);
+				Sleep.sleep(500);
+				state.robot.turn(- Math.PI/2);
+				Sleep.sleep(500);  
+				state.robot.turn(Math.PI);
+				Sleep.sleep(500);
+				state.robot.turn(  Math.PI/2);
+				Sleep.sleep(500);
+			} 
+			catch (UnableToMoveException e1)
+			{
+				log.critical("!!!!! Catch de"+e1+" dans testDetectionTournante !!!!!" , this);
+			}
+		}
+	}
+	
+	//@Test
+	public void testvide()
+	{
+		while (true)
+		{
+			
+		}
+	}
+	
 
+		
+	@Test
+	public void testCapteurFixe()
+	{
+		log.debug("Test d'évitement fixe", this);
+		while(true)
+		{
+			try
+			{
+				mLocomotion.detectEnemy(true);
+			}
+			catch (UnexpectedObstacleOnPathException unexpectedObstacle)
+	        {
+                log.critical("Haut: Catch de "+unexpectedObstacle+" dans moveToPointException", this); 
+
+            	long detectionTime = System.currentTimeMillis();
+                log.critical("Détection d'un ennemi! Abandon du mouvement.", this);
+            	while(System.currentTimeMillis() - detectionTime < 600)
+            	{
+            		try
+            		{
+            			mLocomotion.detectEnemy(true);
+            			break;
+            		}
+            		catch(UnexpectedObstacleOnPathException e2)
+            		{
+                        log.critical("Catch de "+e2+" dans moveToPointException", this);
+            		}
+            	}
+			}
+		}	
+	}
+	
+	
+    //@Test
+	public void testCapteurDeplacement()
+	{
+		log.debug("Test d'évitement", this);
+		try 
+		{
+			state.robot.moveLengthwise(300);
+		} 
+		catch (UnableToMoveException e1)
+		{
+			log.critical("!!!!! Catch de"+e1+" dans testEvitement !!!!!" , this);
+		}
+	}
+
+	
 /*    @Test
     public void faux_test() throws Exception
     {

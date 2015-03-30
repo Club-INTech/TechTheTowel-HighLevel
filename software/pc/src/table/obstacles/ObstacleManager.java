@@ -2,6 +2,7 @@ package table.obstacles;
 
 import java.util.ArrayList;
 
+import pathDingDing.PathDingDing;
 import smartMath.*;
 import utils.Log;
 import utils.Config;
@@ -33,11 +34,6 @@ public class ObstacleManager
 	private int defaultObstacleRadius;
 	
 	/**
-	 * Booleen explicitant si l'obstacle existe deja
-	 */
-	private boolean isAlreadyExistant=false;
-  
-    /**
      * Instancie un nouveau gestionnaire d'obstacle.
      *
      * @param log le système de log sur lequel écrire.
@@ -175,13 +171,17 @@ public class ObstacleManager
     
     /**
      * 
-     * @return la liste des lignes formant les bords des obstacles
+     * @return la liste des lignes formant les bords des obstacles sous forme de segments
      */
 	public ArrayList<Segment> getLines()
 	{
 		return mLines;
 	}
 	
+	/**
+	 * 
+	 * @return la liste des rectangles formant les obstacles rectangulaires
+	 */
 	public ArrayList<ObstacleRectangular> getRectangles()
 	{
 		return mRectangles;
@@ -202,11 +202,38 @@ public class ObstacleManager
      * Ajoute un obstacle sur la table a la position spécifiée, du rayon specifie (de type obstacleProximity)
      *
      * @param position position ou ajouter l'obstacle
-     * @param radius rayon de l'obstacle a ajouter     */
+     * @param radius rayon de l'obstacle a ajouter    
+      */
     public synchronized void addObstacle(final Vec2 position, final int radius)
     {
-	    mMobileObstacles.add(new ObstacleProximity(position, radius));
-	    log.debug("Obstacle ajouté en "+position.x+";"+position.y, this);
+    	//si la position est dans la table on continue les tests
+    	if (position.x>-1500+radius && position.x<1500-radius && position.y>0+radius && position.y<2000-radius)
+    	{
+    		/*on ne test pas si la position est dans un obstcle deja existant 
+    		 *on ne detecte pas les plots ni les goblets (et si on les detectes on prefere ne pas prendre le risque et on les evites)
+    		 * et si on detecte une deuxieme fois l'ennemi on rajoute un obstacle sur lui
+    		 */
+    		mMobileObstacles.add(new ObstacleProximity(position, radius));
+    		log.debug("Ennemi ajouté en "+position.x+";"+position.y, this);
+
+    	}
+    	else 
+    	{
+    		log.debug("Ennemi hors de la table", this);
+		}
+    	int a = 0;
+    	a++;
+    }
+
+
+	/**
+     * 
+     */
+    public synchronized void removeNonDetectedObstacles(Vec2 robotPosition, Vec2 detectionPoint)
+    {
+    	for(int i = 0; i < mMobileObstacles.size(); i++)
+    		if(PathDingDing.intersects(new Segment(robotPosition, detectionPoint), new Circle(mMobileObstacles.get(i).position, mMobileObstacles.get(i).radius)))
+    			mMobileObstacles.remove(i--);
     }
 
     /**
@@ -214,11 +241,13 @@ public class ObstacleManager
      *
      * @param date La date de péremption a partir de laquelle on garde les obstacles.
      */
-    public synchronized void removeOutdatedObstacles(long date)
+    public synchronized void removeOutdatedObstacles()
     {
     	for(int i = 0; i < mMobileObstacles.size(); i++)
-    		if(mMobileObstacles.get(i).getOutDatedTime() > System.currentTimeMillis())
-    			mMobileObstacles.remove(i);
+    		if(mMobileObstacles.get(i).getOutDatedTime() < System.currentTimeMillis())
+    		{
+    			mMobileObstacles.remove(i--);
+    		}
     }
 
     /**
@@ -228,7 +257,7 @@ public class ObstacleManager
      * @param radius le rayon du disque
      * @return true, si au moins un obstacle chevauche le disque
      */
-    public boolean isDiscObstructed(final Vec2 discCenter, int radius)
+    public synchronized boolean isDiscObstructed(final Vec2 discCenter, int radius)
     {
     	boolean isDiscObstructed = false;
     	for(int i=0; i<mMobileObstacles.size(); i++)

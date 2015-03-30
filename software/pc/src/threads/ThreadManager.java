@@ -58,11 +58,11 @@ public class ThreadManager
 	 * @param actuatorCardWrapper La carte actionneurs avec laquelle le thread va parler
 	 * @return le thread timer
 	 */
-	public AbstractThread getThreadTimer(Table table, SensorsCardWrapper sensorsCardWrapper, LocomotionCardWrapper locomotionCardWrapper, ActuatorCardWrapper actuatorCardWrapper)
+	public AbstractThread getThreadTimer(Table table, RobotReal robot, SensorsCardWrapper sensorsCardWrapper, LocomotionCardWrapper locomotionCardWrapper, ActuatorCardWrapper actuatorCardWrapper)
 	{
 		AbstractThread thread = instanciedThreads.get("threadTimer");
 		if(thread == null)
-			instanciedThreads.put("threadTimer", new ThreadTimer(table, sensorsCardWrapper, locomotionCardWrapper));
+			instanciedThreads.put("threadTimer", new ThreadTimer(table, robot, sensorsCardWrapper, locomotionCardWrapper));
 		return instanciedThreads.get("threadTimer");
 	}
 

@@ -21,6 +21,8 @@ import utils.Config;
  * @author Théo
  */
 
+
+
 public class Strategie implements Service
 {
 	/** système de log sur lequel écrire*/
@@ -33,49 +35,50 @@ public class Strategie implements Service
 	/** La table sur laquelle le robot se déplace */
 	private Table table;
 	
-	/** Les robots sur lequel on travaille :*/
+	/** Le robot sur lequel on travaille :*/
 	
 	private RobotReal robotReal;
-	private RobotChrono robotChrono;
 	
 	/** Le gameState de chaque robot : */
-	private GameState<Robot> gameState;
+	private GameState<RobotReal> gameState;
 	
 	/** Les scripts Manager des deux robots*/
-	ScriptManager scriptmanagerRobotReal,scriptmanagerRobotChrono;	
-	
-	/** Le nombre de points maximal que le robot est capable de faire en un temps infini */
-	int maxPointsPossible;
-	
-	/** Le temps maximum autorisé pour certaines actions : on ne fais pas tel ou tel script si un certain temps est passé*/
-	int maxTimeForTakingPlots=60;
-	int maxTimeForTakingGlass=70;
+	ScriptManager scriptmanager;	
 	
 	/** Le container necessaire pour les services */
 	protected Container container;
 	
 	/** Les hooks des deux robots*/
-	ArrayList<Hook> emptyHookRobotReal, emptyHookRobotChrono;
+	ArrayList<Hook> emptyHookRobotReal;
+	
+	/**
+	 * la liste des scripts a effectuer ainsi que les points et le temps qu'ils impliquent
+	 */
+	ArrayList<StackScript> list;
+	
+	
 	
 	/**
      * Crée la strategie, l'IA decisionnelle
      */
-	public Strategie(Config config, Log log, Table table, RobotReal robotReal, RobotChrono robotChrono)
+	public Strategie(Config config, Log log, GameState<RobotReal> state)
 	{
+		this.gameState = state;
 		this.config=config;
 		this.log=log;
-        this.table = table;
-        this.robotReal = robotReal;
-        this.robotChrono = robotChrono;		
+        this.table = state.table;
+        this.robotReal = state.robot;
         
 		try 
 		{
-			scriptmanagerRobotReal= scriptmanagerRobotChrono = (ScriptManager)container.getService(ServiceNames.SCRIPT_MANAGER);
+			scriptmanager = (ScriptManager)container.getService(ServiceNames.SCRIPT_MANAGER);
 			
 		}
 		catch (ContainerException | SerialManagerException e) 
 		{
-			e.printStackTrace();
+			//on affiche un message d'erreur
+			log.critical("erreur d'instanciation de l'IA", this);
+			//TODO on relance l'initialisation du robot depuis le depart
 		}
 	}
 
@@ -83,15 +86,14 @@ public class Strategie implements Service
 	{
 		table.updateConfig();
         robotReal.updateConfig();
-        robotChrono.updateConfig();
 	}
 	
 	public void IA()
 	{
-		//tant qu'il reste des points et que le match n'est pas fini, on prend des decisions :
-		while(( gameState.obtainedPoints <  maxPointsPossible ) &&
-			  ( gameState.timeEllapsed   <  Integer.parseInt(config.getProperty("temps_match")) )  )
+		//tant que le match n'est pas fini, on prend des decisions :
+		while(gameState.timeEllapsed   <  Integer.parseInt(config.getProperty("temps_match")))
 		{
+			updateConfig();
 			takeDecision(gameState.timeEllapsed);
 		}
 	}
@@ -100,17 +102,13 @@ public class Strategie implements Service
 	/** Fonction principale : prend une decision en prenant tout en compte */
 	public void takeDecision(long timeEllapsed)
 	{
-		//Gestion des decisions en fonction du temps
-		if( timeEllapsed > maxTimeForTakingPlots )
-		{
-			if( timeEllapsed > maxTimeForTakingGlass )
-			{
-				
-			}
-		}
-		else if( timeEllapsed > maxTimeForTakingGlass )
-		{
-			
-		}
+		/*
+		 * TODO
+		 * (j'attends la verison definitive des stacks)
+		 * creer les stacks
+		 * ajouter le depacement jusqu'au script (si necessaire), ajouter le temps et les points du deplacement 
+		 * ajouter les scripts a chacunes des stacks et calculer le temps si necessaire
+		 * choisir la stacks la plus adaptée (celle que l'on considere la mieux)
+		 */
 	}
 }

@@ -56,6 +56,9 @@ public class RobotReal extends Robot
 		
 		if(waitForCompletion)
 			Sleep.sleep(order.getDuration());
+		else 
+			Sleep.sleep(100); // On attend 25 ms pour Sylvain T_T
+		
 	}
 	
 	@Override
@@ -91,7 +94,7 @@ public class RobotReal extends Robot
 	 */
 	@Override
     public void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
-	{
+	{	
 		mLocomotion.moveLengthwise(distance, hooksToConsider, expectsWallImpact);
 	}	
 
@@ -99,10 +102,38 @@ public class RobotReal extends Robot
 	 * ATTENTION, la valeur "mur" est ignorée
 	 */
     @Override
+    public void turn(double angle, ArrayList<Hook> hooks, boolean mur, boolean isTurnRelative) throws UnableToMoveException
+    {
+    	if (isTurnRelative)
+    		angle += getOrientation();
+        turn(angle, hooks);
+    }
+    
+    @Override
     public void turn(double angle, ArrayList<Hook> hooks, boolean mur) throws UnableToMoveException
     {
-        mLocomotion.turn(angle, hooks);
+    	try
+    	{
+    		turn(angle, hooks);
+    	}
+    	catch (UnableToMoveException e)
+    	{
+            throw e;
+    	}
     }
+    
+    public void turn(double angle, ArrayList<Hook> hooks) throws UnableToMoveException
+    {
+    	try
+    	{
+    		mLocomotion.turn(angle, hooks);
+    	}
+    	catch (UnableToMoveException e)
+    	{
+            throw e;
+    	}// le robot s'est arreté de tourner qu'il y ait catch ou non.
+    }
+
     
     @Override
     public void followPath(ArrayList<Vec2> chemin, ArrayList<Hook> hooks) throws UnableToMoveException
@@ -184,6 +215,11 @@ public class RobotReal extends Robot
 		} catch (SerialConnexionException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public boolean getIsRobotTurning()
+	{
+		return mLocomotion.isRobotTurning;
 	}
 
 	

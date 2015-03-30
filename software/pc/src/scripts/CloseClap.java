@@ -511,6 +511,13 @@ public class CloseClap extends AbstractScript
 			throw new SerialFinallyException ();
 		}
 	}
+
+
+	@Override
+	public double getNoEnemyTime(GameState<?> stateToConsider, int id) {
+		// FIXME Auto-generated method stub
+		return 0;
+	}
 }
 
 

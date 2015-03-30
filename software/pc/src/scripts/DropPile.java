@@ -29,10 +29,8 @@ public class DropPile extends AbstractScript
 	{
 		super(hookFactory, config, log);
 		
-		// TODO: id n'est pas une variable temporaire du constructeur. C'est versions qui est un membre et qu'il faut initialiser ici
-		ArrayList<Integer> id = new ArrayList<Integer>();
-		id.add(1);
-		id.add(2);
+		//on initialise le membre versions
+		versions=new int[]{1,2};
 	}
 
 	@Override
@@ -49,18 +47,18 @@ public class DropPile extends AbstractScript
 			stateToConsider.robot.moveLengthwise(stateToConsider.robot.robotRay, hooksToConsider, true);
 
 			//on eleve notre membre (l'ascenseur)
-			//stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_STAGE, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_STAGE, true);
 			//on se deplace vers elle
 			stateToConsider.robot.moveLengthwise(50, hooksToConsider, true);
 			
 			//on y place notre membre
 			//Sem....Pai...  =O
 			
-			//stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
 			//on ouvre notre coeur (le guide) un peu
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
-			//stateToConsider.robot.moveLengthwise(50, hooksToConsider, true);
+			stateToConsider.robot.moveLengthwise(50, hooksToConsider, true);
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_GUIDE, true);
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_GUIDE, true);
 			
@@ -171,6 +169,13 @@ public class DropPile extends AbstractScript
 		{
 			throw new SerialFinallyException ();
 		}
+	}
+
+	@Override
+	public double getNoEnemyTime(GameState<?> stateToConsider, int id) 
+	{
+		// FIXME Auto-generated method stub
+		return 0;
 	}
 
 }

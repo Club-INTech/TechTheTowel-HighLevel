@@ -147,7 +147,7 @@ public class Log implements Service
 	 * APrès appele de cette méthode, le message été loggué en fonction de la configuration.
 	 *
 	 * @param message message a logguer
-	 * @param prefix le préfixe qa rajouter, avant que l'heure ne soit mise
+	 * @param prefix le préfixe a rajouter, avant que l'heure ne soit mise
 	 * @param logPrinter ou afficher sur l'écran le log
 	 */
 	private void writeToLog(String message, String prefix, PrintStream logPrinter)

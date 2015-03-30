@@ -2,11 +2,8 @@ package tests;
 
 import org.junit.*;
 
-import enums.ServiceNames;
 import graphics.*;
 import smartMath.Vec2;
-import table.Table;
-
 import java.util.ArrayList;
 
 public class JUnit_Graphics extends JUnit_Test
@@ -18,7 +15,7 @@ public class JUnit_Graphics extends JUnit_Test
     {
         super.setUp();
     	//
-    	win = new Window((Table)container.getService(ServiceNames.TABLE)/*, (RobotReal)container.getService(ServiceNames.ROBOT_REAL)*/);
+    	//win = new Window((Table)container.getService(ServiceNames.TABLE)/*, (RobotReal)container.getService(ServiceNames.ROBOT_REAL)*/);
     }
     
     //test de l'intersection de deux segments

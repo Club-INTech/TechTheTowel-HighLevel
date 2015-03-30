@@ -60,6 +60,8 @@ public abstract class Robot implements Service
 	/** Rayon du robot provenant du fichier de config */
 	public int robotRay;
 	
+
+	
 	/**
 	 * Instancie le robot.
 	 * Appell� par le container
@@ -119,6 +121,17 @@ public abstract class Robot implements Service
 	public abstract void immobilise();
 
 	/**
+	 * Fait tourner le robot (méthode bloquante).
+	 *
+	 * @param angle : valeur absolue en radiant de l'orientation que le robot doit avoir après cet appel
+	 * @param hooksToConsider hooks a considérer lors de ce déplacement. Le hook n'est déclenché que s'il est dans cette liste et que sa condition d'activation est remplie
+	 * @param expectsWallImpact true si le robot doit s'attendre a percuter un mur au cours de la rotation. false si les alentours du robot sont sensés être dégagés.
+	 * @param isTurnRelative vrai si l'angle est relatif et pas absolut
+	 * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
+	 */
+    public abstract void turn(double angle, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact, boolean isTurnRelative) throws UnableToMoveException;
+    
+    /**
 	 * Fait tourner le robot (méthode bloquante).
 	 *
 	 * @param angle : valeur absolue en radiant de l'orientation que le robot doit avoir après cet appel
@@ -206,7 +219,7 @@ public abstract class Robot implements Service
 	 */
 	public void turnRelative(double angle) throws UnableToMoveException
 	{
-		turn(getOrientation() + angle, null, false);
+		turn(angle, null, false, true);
 	}
 	
 	/**
@@ -218,7 +231,7 @@ public abstract class Robot implements Service
 	 */
     public void turn(double angle) throws UnableToMoveException
     {
-        turn(angle, null, false);
+        turn(angle, null, false, false);
     }
 
 	/**
@@ -234,9 +247,9 @@ public abstract class Robot implements Service
     	
     	// Fais la symétrie deux fois (symétrie de symétrie, c'est l'identité)
         if(symmetry)
-            turn(Math.PI-angle, null, false);
+            turn(Math.PI-angle, null, false, false);
         else
-            turn(angle, null, false);
+            turn(angle, null, false, false);
     }
 
 	/**
@@ -294,22 +307,16 @@ public abstract class Robot implements Service
     {
     	//TODO : preciser les obstacles a eviter
     	ArrayList<Vec2> path = pathDingDing.computePath(getPosition(),aim, EnumSet.of(ObstacleGroups.ENNEMY_ROBOTS));
-    	
-		try 
-		{
+	
+    	try 
+    	{
+			log.debug("Chemin suivi :"+path , this);
 			followPath(path , hooksToConsider);
 		} 
-		catch (UnableToMoveException e) 
-		{
-			log.critical("Catch de "+e+" dans moveToLocation, pret à calculer un nouveau path" , this);
-
-			//si le chemin est bloque par un robot ennemi on appel a nouveau le pathdingding pour qu'il calcul un autre chemin
-			if (e.reason.compareTo(UnableToMoveReason.OBSTACLE_DETECTED)==0)
-			{
-				ArrayList<Vec2> newPath = pathDingDing.computePath(getPosition(),aim, EnumSet.noneOf(ObstacleGroups.class));
-				log.debug("Nouveau path : "+ newPath,this);
-				followPath(newPath , hooksToConsider);
-			}
+    	catch (UnableToMoveException unableToMoveException) 
+    	{
+			log.critical("Catch de "+unableToMoveException+" dans moveToLocation" , this);
+			recalculate(unableToMoveException.aim, hooksToConsider); // on recalcule le path
 		}
     }
     
@@ -327,14 +334,10 @@ public abstract class Robot implements Service
     public void moveToCircle(Circle aim, ArrayList<Hook> hooksToConsider, Table table) throws PathNotFoundException, UnableToMoveException
     {
     	//TODO : preciser les obstacles a eviter
-    	ArrayList<Vec2> path = pathDingDing.computePath(getPosition(),aim.toVec2(),EnumSet.of(ObstacleGroups.ENNEMY_ROBOTS)); // TODO ATTENTION a changer 
+    	ArrayList<Vec2> path = pathDingDing.computePath(getPosition(),aim.toVec2(),EnumSet.of(ObstacleGroups.ENNEMY_ROBOTS));
     	
     	
     	//retire une distance egale au rayon du cercle au dernier point du chemin (le centre du cercle)
-    	
-    	//on enleve le premier point (notre position)
-    	//TODO : refaire ca propre dans PDD
-    	path.remove(0);
     	
     	//on retire le dernier point (le centre du cercle)
     	path.remove(path.size()-1);
@@ -363,23 +366,43 @@ public abstract class Robot implements Service
     	 */
     	path.add(movementVector.dotFloat( (movementVector.length()-aim.radius)/movementVector.length() ).plusNewVector(precedentPathPoint));
 
+    	
     	try 
     	{
+			log.debug("Chemin suivi :"+path , this);
 			followPath(path , hooksToConsider);
 		} 
-    	catch (UnableToMoveException e) 
+    	catch (UnableToMoveException unableToMoveException) 
     	{
-			log.critical("Catch de"+e+" dans moveToCircle , pret à calculer un nouveau path" , this);
-
-    		//si le chemin est bloque par un robot ennemi on recalcule le chemin par un autre appel au pathdingding
-			if (e.reason.compareTo(UnableToMoveReason.OBSTACLE_DETECTED)==0)
-			{
-				ArrayList<Vec2> newPath = pathDingDing.computePath(getPosition(),e.aim, EnumSet.noneOf(ObstacleGroups.class));
-				log.debug("Nouveau path calculé"+newPath , this);
-				followPath(newPath , hooksToConsider);
-			}
+			log.critical("Catch de "+unableToMoveException+" dans moveToCircle" , this);
+			
+			recalculate(unableToMoveException.aim, hooksToConsider); // on recalcule le path
 		}
     }
+    
+    /**
+     * 	Fonction recalculant le path à suivre, à utiliser pour l'evitement
+     * 	Elle s'appelle elle-meme tant qu'on a pas reussi.
+     * 	@throws PathNotFoundException 
+     */
+    
+    public void recalculate(Vec2 aim, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, PathNotFoundException
+    {
+    	try
+    	{
+    		// On le reclacule, et on essaye de le suivre 
+    		ArrayList<Vec2> newPath = pathDingDing.computePath(getPosition(),aim, EnumSet.noneOf(ObstacleGroups.class));
+			log.debug("Nouveau path calculé"+newPath , this);
+			followPath(newPath , hooksToConsider);
+		} 
+    	catch (UnableToMoveException unableToMoveException) 
+    	{
+    		//si cela echoue, on recalcule encore en tenant compte du nouvel obstacle
+    		if (unableToMoveException.reason.compareTo(UnableToMoveReason.OBSTACLE_DETECTED)==0)
+    			recalculate(unableToMoveException.aim, hooksToConsider);
+		}
+    }
+    
 
 	/**
 	 * Active l'asservissement en rotation du robot.

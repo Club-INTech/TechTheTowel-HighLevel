@@ -18,9 +18,12 @@ import enums.ObstacleGroups;
 import enums.ServiceNames;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
-import robot.Robot;
+import robot.*;
 import robot.cardsWrappers.ActuatorCardWrapper;
+import robot.cardsWrappers.SensorsCardWrapper;
 import pathDingDing.PathDingDing;
+
+import threads.ThreadTimer;
 
 public class JUnit_serialPathfinding extends JUnit_Test {
 
@@ -28,10 +31,11 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 	ActuatorCardWrapper actionneurs;
 	ArrayList<Vec2> path = new ArrayList<Vec2>();
 	Random rand = new Random();
-	ArrayList<Hook> emptyHook = new ArrayList<Hook>();	
-	Window win;
+	ArrayList<Hook> emptyHook = new ArrayList<Hook>();
 	Table table;
 	PathDingDing pf;
+	private Locomotion mLocomotion;
+	Window win;
 		
 	
 	@SuppressWarnings("unchecked")
@@ -40,27 +44,22 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 	{
 		super.setUp();
 		state = (GameState<Robot>)container.getService(ServiceNames.GAME_STATE);
-		actionneurs = (ActuatorCardWrapper)container.getService(ServiceNames.ACTUATOR_CARD_WRAPPER);
-
-
-		if (state.robot.getSymmetry())
-		{
-			state.robot.setPosition(new Vec2 (-1381,1000));
-			state.robot.setOrientation(0); 
-			//si on est jaune on est en 0 
-		}
-		else
-		{
-			state.robot.setPosition(new Vec2 (1381,1000));
-			state.robot.setOrientation(Math.PI);
-			//sinon on est vert donc on est en PI
-		}
+		
+		win = ((ThreadTimer)container.getService(ServiceNames.THREAD_TIMER)).window;
+		
+		//locomotion
+		mLocomotion = (Locomotion)container.getService(ServiceNames.LOCOMOTION);
+		config.set("couleur", "vert");
+		mLocomotion.updateConfig();
+		mLocomotion.setPosition(new Vec2 (1381,1000));
+		mLocomotion.setOrientation(Math.PI);
+		mLocomotion.setTranslationnalSpeed(170);
+		mLocomotion.setRotationnalSpeed(160);
+		
+		container.startInstanciedThreads();
 		
         table = (Table)container.getService(ServiceNames.TABLE);
-        win = new Window(table/*, (RobotReal)container.getService(ServiceNames.ROBOT_REAL)*/);
         pf = (PathDingDing)container.getService(ServiceNames.PATHDINGDING);
-		
-		state.robot.updateConfig();
 	}
 
 	//@Test
@@ -76,7 +75,7 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 			log.debug("impossible de bouger", this);
 		}
 		robot.sleep(3000);
-		System.out.println("en position ("+robot.getPosition().x+", "+robot.getPosition().y+")");
+		System.out.println("en positiWindowon ("+robot.getPosition().x+", "+robot.getPosition().y+")");
 		while (true)
 		{
 			int randX = rand.nextInt(3000)-1500;
@@ -122,12 +121,9 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 		{
 			try
 			{
-				path = pf.computePath(robot.getPosition(), win.getMouse().getLeftClickPosition(), EnumSet.noneOf(ObstacleGroups.class));
-				log.debug("chemin : "+path.toString(),this);
-				path.remove(0);
-				System.out.println("----------------Nouveau chemin---------------");
-				for(int i = 0; i < path.size(); i++)
-					System.out.println("noeud : ("+path.get(i).x+", "+path.get(i).y+")");
+				if(win.getMouse().hasClicked())
+					table.getObstacleManager().addObstacle(win.getMouse().getMiddleClickPosition());
+				path = pf.computePath(robot.getPosition(), win.getMouse().getLeftClickPosition(), EnumSet.of(ObstacleGroups.ENNEMY_ROBOTS));
 				robot.followPath(path, emptyHook);
 			}
 			catch (PathNotFoundException e) 
@@ -140,6 +136,5 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 			}
 			log.debug("en position ("+robot.getPosition().x+", "+robot.getPosition().y+")", this);
 		}
-		
 	}
 }

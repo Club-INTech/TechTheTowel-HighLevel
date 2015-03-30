@@ -1,9 +1,10 @@
 package tests;
 
+import java.util.Random;
+
 import org.junit.Test;
 import org.junit.Assert;
 
-import exceptions.MatrixException;
 import smartMath.Matrn;
 import smartMath.Vec2;
 
@@ -22,12 +23,77 @@ public class JUnit_Math extends JUnit_Test {
 	/** The z. */
 	Matrn z;
 	
+	@Test
+	public void testPositionEnnemi()
+	{
+		int lectureCapteurGauche = 0;
+		int lectureCapteurDroit = 0;
+		float distanceBetweenCaptors = 170;
+		float positionEnnemi1_X=0;
+		float positionEnnemi1_Y=0;
+		float positionEnnemi2_X=0;
+		float positionEnnemi2_Y=0;
+		float positionRobotX=0;
+		float positionRobotY=0;
+		float longueurRobot = 120;
+		float orientationRobot=0;
+		float positionCapteur1_X = positionRobotX - 140;
+		float positionCapteur1_Y = positionRobotY + (longueurRobot/2);
+		float positionCapteur2_X = positionRobotX + 140;
+		float positionCapteur2_Y = positionRobotY + (longueurRobot/2);
+		
+		Random rand = new Random();
+		boolean goOn=true;
+		
+		while(goOn)
+		{
+			positionEnnemi1_X=0;
+			positionEnnemi1_Y=0;
+			positionEnnemi2_X=0;
+			positionEnnemi2_Y=0;
+			
+			lectureCapteurGauche = rand.nextInt(500-90)+90;
+			lectureCapteurDroit  = rand.nextInt(500-90)+90;
+			
+			if(Math.abs(lectureCapteurDroit-lectureCapteurGauche) > distanceBetweenCaptors)
+			{
+				positionEnnemi1_X = (float)Math.sin(20*Math.PI/180+orientationRobot)*lectureCapteurDroit+distanceBetweenCaptors/2+positionCapteur1_X;
+				positionEnnemi1_Y = (float)Math.cos(20*Math.PI/180+orientationRobot)*lectureCapteurDroit+positionCapteur1_Y;
+				
+				positionEnnemi2_X = (float)Math.sin(20*Math.PI/180+orientationRobot)*lectureCapteurGauche-distanceBetweenCaptors/2+positionCapteur2_X;
+				positionEnnemi2_Y = (float)Math.cos(20*Math.PI/180+orientationRobot)*lectureCapteurGauche+positionCapteur2_Y;
+			
+				System.out.println("position ennemi gauche = ("+positionEnnemi2_X+","+positionEnnemi2_Y+")");
+				System.out.println("position ennemi droit  = ("+positionEnnemi1_X+","+positionEnnemi1_Y+")");
+
+			}
+			else 
+			{			
+				positionEnnemi1_X = (float) ( positionRobotX + (distanceBetweenCaptors/2+(Math.pow(lectureCapteurGauche,2)-Math.pow(lectureCapteurDroit,2))/(2 * distanceBetweenCaptors)));
+				positionEnnemi1_Y=(float) (positionCapteur1_Y + Math.sqrt(Math.pow(lectureCapteurGauche,2)-Math.pow(positionEnnemi1_X, 2)));
+			
+				System.out.println("position ennemi 1 = ("+positionEnnemi1_X+","+positionEnnemi1_Y+")");
+			}
+			
+			if(positionEnnemi1_Y==Double.NaN || positionEnnemi2_Y==Double.NaN )
+				goOn=false;
+			
+			System.out.println("capteur gauche :"+lectureCapteurGauche);
+			System.out.println("capteur droit  :"+lectureCapteurDroit);
+
+			
+			if(positionEnnemi1_X > 1500 || positionEnnemi1_Y > 2000 || positionEnnemi1_X < -1500 || positionEnnemi1_Y < -500 ||
+			   positionEnnemi2_X > 1500 || positionEnnemi2_Y > 2000 || positionEnnemi2_X < -1500 || positionEnnemi2_Y < -500)
+				goOn=false;
+		}
+	}
+	
 	/**
 	 * Test_ vec2.
 	 *
 	 * @throws Exception the exception
 	 */
-	@Test
+//	@Test
 	public void test_Vec2() throws Exception
 	{
 		log.debug("JUnit_MathTest.test_Vec2()", this);
@@ -57,7 +123,8 @@ public class JUnit_Math extends JUnit_Test {
 	 *
 	 * @throws Exception the exception
 	 */
-	@Test public void test_matrn_constructor() throws Exception
+//	@Test
+	public void test_matrn_constructor() throws Exception
 	{
 		log.debug("JUnit_MathTest.test_matrn_constructor()", this);
 		y = new Matrn(2);
@@ -79,7 +146,7 @@ public class JUnit_Math extends JUnit_Test {
 	 *
 	 * @throws Exception the exception
 	 */
-	@Test
+//	@Test
 	public void test_add() throws Exception
 	{
 		log.debug("JUnit_MathTest.test_add()", this);
@@ -107,7 +174,7 @@ public class JUnit_Math extends JUnit_Test {
 	 *
 	 * @throws Exception the exception
 	 */
-	@Test
+//	@Test
 	public void test_add_2() throws Exception
 	{
 		log.debug("JUnit_MathTest.test_add_2()", this);
@@ -135,7 +202,7 @@ public class JUnit_Math extends JUnit_Test {
 	 *
 	 * @throws Exception the exception
 	 */
-	@Test
+//	@Test
 	public void test_mul() throws Exception
 	{
 		log.debug("JUnit_MathTest.test_mul()", this);
@@ -163,7 +230,7 @@ public class JUnit_Math extends JUnit_Test {
 	 *
 	 * @throws Exception the exception
 	 */
-	@Test
+//	@Test
 	public void test_mul_2() throws Exception
 	{
 		log.debug("JUnit_MathTest.test_mul_2()", this);
@@ -191,7 +258,7 @@ public class JUnit_Math extends JUnit_Test {
 	 *
 	 * @throws Exception the exception
 	 */
-	@Test
+//	@Test
 	public void test_transpose() throws Exception
 	{
 		log.debug("JUnit_MathTest.test_transpose()", this);
@@ -223,7 +290,7 @@ public class JUnit_Math extends JUnit_Test {
 	 *
 	 * @throws Exception the exception
 	 */
-	@Test
+//	@Test
 	public void test_transpose_2() throws Exception
 	{
 		log.debug("JUnit_MathTest.test_transpose_2()", this);
@@ -255,7 +322,7 @@ public class JUnit_Math extends JUnit_Test {
 	 *
 	 * @throws Exception the exception
 	 */
-	@Test(expected=MatrixException.class)
+//	@Test(expected=MatrixException.class)
 	public void test_exception_add() throws Exception
 	{
 		log.debug("JUnit_MathTest.test_exception_add()", this);
@@ -276,7 +343,7 @@ public class JUnit_Math extends JUnit_Test {
 	 *
 	 * @throws Exception the exception
 	 */
-	@Test(expected=MatrixException.class)
+//	@Test(expected=MatrixException.class)
 	public void test_exception_mul() throws Exception
 	{
 		log.debug("JUnit_MathTest.test_exception_mul()", this);
@@ -295,7 +362,7 @@ public class JUnit_Math extends JUnit_Test {
 	 *
 	 * @throws Exception the exception
 	 */
-	@Test(expected=MatrixException.class)
+//	@Test(expected=MatrixException.class)
 	public void test_exception_transpose() throws Exception
 	{
 		log.debug("JUnit_MathTest.test_exception_transpose()", this);

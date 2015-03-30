@@ -14,7 +14,7 @@ import strategie.GameState;
 import utils.Config;
 import utils.Log;
 /**
- * 
+ * FIXME ajouter une version pour chopper le goblet en plus des tapis
  * @author paul
  * Script pour deposer les tapis sur l'escalier
  */
@@ -80,7 +80,7 @@ public class DropCarpet extends AbstractScript
 	@Override
 	public Circle entryPosition(int id, int ray) 
 	{
-		return new Circle(290,1300-distanceBetweenEntryAndStairs);
+		return new Circle(310,1400-distanceBetweenEntryAndStairs);//point de depose - distance de deplacement jusqua ce point
 	}
 
 	@Override
@@ -108,6 +108,12 @@ public class DropCarpet extends AbstractScript
 			log.debug("erreur termine DropCarpet script : impossible de ranger", this);
 			throw new SerialFinallyException ();
 		}
+	}
+
+	@Override
+	public double getNoEnemyTime(GameState<?> stateToConsider, int id) {
+		// FIXME Auto-generated method stub
+		return 0;
 	}
 
 }

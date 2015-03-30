@@ -25,43 +25,60 @@ public class Panel extends JPanel
 	
 	private ArrayList<Vec2> mPath;
 	private Table mTable;
-	@SuppressWarnings("unused")
 	private Robot mRobot;
 	private boolean showGraph;
 	private Graph mGraph;
+	private boolean isRobotPresent = true;
 	
-	
-	public Panel(Table table/*, RobotReal robot*/)
+	public Panel(Table table, RobotReal robot)
 	{
 		mPath = new ArrayList<Vec2>();
 		mTable = table;
-		//mRobot = robot;
+		mRobot = robot;
 		showGraph = false;
+	}
+	
+	public Panel(Table table)
+	{
+		mPath = new ArrayList<Vec2>();
+		mTable = table;
+		showGraph = false;
+		isRobotPresent = false;
 	}
 	
 	public void paintComponent(Graphics g)
 	{
+		// Les bords de la table
 		g.setColor(Color.black);
 	    g.fillRect(0, 0, this.getWidth(), this.getHeight());
 	    
-	    g.setColor(Color.darkGray);
 	    
+	    // Lignes des obstacles 
+	    g.setColor(Color.darkGray);
 	    ArrayList<Segment> lines = mTable.getObstacleManager().getLines();
 	    for(int i = 0; i < lines.size(); i++)
 	    {
-	    	g.drawLine((int)((lines.get(i).getA().x + 1500) * this.getWidth() / 3000), (int)((-lines.get(i).getA().y) * this.getHeight() / 2000 + this.getHeight()), (int)((lines.get(i).getB().x + 1500) * this.getWidth() / 3000), (int)((-lines.get(i).getB().y) * this.getHeight() / 2000 + this.getHeight()));
+	    	g.drawLine((int)((lines.get(i).getA().x + 1500) * this.getWidth() / 3000), 
+	    			   (int)((-lines.get(i).getA().y) * this.getHeight() / 2000 + this.getHeight()),
+	    			   (int)((lines.get(i).getB().x + 1500) * this.getWidth() / 3000),
+	    			   (int)((-lines.get(i).getB().y) * this.getHeight() / 2000 + this.getHeight()));
 	    }
 	    
-	    g.setColor(Color.white);
 	    
+	    // Obstacles rectangulaires
+	    g.setColor(Color.white);
 	    ArrayList<ObstacleRectangular> rects = mTable.getObstacleManager().getRectangles();
 	    for(int i = 0; i < rects.size(); i++)
 	    {
-	    	g.fillRect((rects.get(i).getPosition().x - (rects.get(i).getSizeX() / 2) + 1500) * this.getWidth() / 3000, -(rects.get(i).getPosition().y + rects.get(i).getSizeY()) * this.getHeight() / 2000 + this.getHeight(), rects.get(i).getSizeX() * this.getWidth() / 3000, rects.get(i).getSizeY() * this.getHeight() / 2000);
+	    	g.fillRect((rects.get(i).getPosition().x - (rects.get(i).getSizeX() / 2) + 1500) * this.getWidth() / 3000, 
+	    			  -(rects.get(i).getPosition().y + rects.get(i).getSizeY()) * this.getHeight() / 2000 + this.getHeight(), 
+	    			  rects.get(i).getSizeX() * this.getWidth() / 3000, 
+	    			  rects.get(i).getSizeY() * this.getHeight() / 2000);
 	    }
 	    
-	    g.setColor(new Color(100, 60, 5));
 	    
+	    //  Le graphe du pathdingding
+	    g.setColor(new Color(100, 60, 5));
 	    if(showGraph)
 	    {
 	    	//parcours des noeuds
@@ -71,15 +88,16 @@ public class Panel extends JPanel
 	    			g.drawLine((mGraph.getNodes().get(i).x + 1500) * this.getWidth() / 3000, -mGraph.getNodes().get(i).y * this.getHeight() / 2000 + this.getHeight(), (mGraph.getNodes().get(i).getLink(j).getDestination().x + 1500) * this.getWidth() / 3000, -mGraph.getNodes().get(i).getLink(j).getDestination().y * this.getHeight() / 2000 + this.getHeight());
 	    }
 	    
-	    g.setColor(Color.white);
 	    
-	    ArrayList<ObstacleCircular> mobileObstacles = mTable.getObstacleManager().getFixedObstacles();
-	    for(int i = 0; i < mobileObstacles.size(); i++)
+	    // Les obstacles fixes : plots, gobelets
+	    g.setColor(Color.white);
+	    ArrayList<ObstacleCircular> fixedObstacles = mTable.getObstacleManager().getFixedObstacles();
+	    for(int i = 0; i < fixedObstacles.size(); i++)
 	    {
-	    	g.drawOval((mobileObstacles.get(i).getPosition().x - mobileObstacles.get(i).getRadius() + 1500) * this.getWidth() / 3000, -(mobileObstacles.get(i).getPosition().y + mobileObstacles.get(i).getRadius()) * this.getHeight() / 2000 + this.getHeight(), (2 * mobileObstacles.get(i).getRadius()) * this.getWidth() / 3000, (2 * mobileObstacles.get(i).getRadius()) * this.getHeight() / 2000);
+	    	g.drawOval((fixedObstacles.get(i).getPosition().x - fixedObstacles.get(i).getRadius() + 1500) * this.getWidth() / 3000, -(fixedObstacles.get(i).getPosition().y + fixedObstacles.get(i).getRadius()) * this.getHeight() / 2000 + this.getHeight(), (2 * fixedObstacles.get(i).getRadius()) * this.getWidth() / 3000, (2 * fixedObstacles.get(i).getRadius()) * this.getHeight() / 2000);
 	    }
 	    
-	    //le premier robot ennemi
+	    //les robots ennemis
 	    g.setColor(Color.red);
 	    ArrayList<ObstacleProximity> ennemyRobots = mTable.getObstacleManager().getMobileObstacles();
 	    for(int i = 0; i < ennemyRobots.size(); i++)
@@ -88,39 +106,69 @@ public class Panel extends JPanel
 		    		(2 * ennemyRobots.get(i).getRadius()) * this.getWidth() / 3000,
 					(2 * ennemyRobots.get(i).getRadius()) * this.getHeight() / 2000);
 	    
+		// Notre robot
+	    if(isRobotPresent)
+	    {
+		    g.setColor(Color.green);
+		    g.drawOval( (mRobot.getPosition().x - 100 + 1500) * this.getWidth() / 3000,
+		    		   -(mRobot.getPosition().y + 100) * this.getHeight() / 2000 + this.getHeight(), 
+		    		    (2 * 100) * this.getWidth() / 3000,
+		    		    (2 * 100) * this.getHeight() / 2000);
+		    g.drawLine((mRobot.getPosition().x + 1500) * this.getWidth() / 3000, 
+		    			-mRobot.getPosition().y * this.getHeight() / 2000 + this.getHeight(),
+		    			(int)((mRobot.getPosition().x + 200*Math.cos(mRobot.getOrientation()) + 1500) * this.getWidth() / 3000),
+		    			(int)(-(mRobot.getPosition().y + 200*Math.sin(mRobot.getOrientation())) * this.getHeight() / 2000 + this.getHeight()));
+	    }
+	    
 	    g.setColor(Color.green);
-	    //g.drawOval((mRobot.getPosition().x - 100 + 1500) * this.getWidth() / 3000, -(mRobot.getPosition().y + 100) * this.getHeight() / 2000 + this.getHeight(), (2 * 100) * this.getWidth() / 3000, (2 * 100) * this.getHeight() / 2000);
-	    //System.out.println("Graphique : position du robot : ("+mRobot.getPosition().x+", "+mRobot.getPosition().y+")");
-	    
 	    //debug : zones
-	    for(int i=0; i<mGraph.mAreas.size(); i++)
-	    	g.drawRect((mGraph.mAreas.get(i).x + 1500) * this.getWidth() / 3000, -(mGraph.mAreas.get(i).y + mGraph.mAreas.get(i).height) * this.getHeight() / 2000 + this.getHeight(), mGraph.mAreas.get(i).width * this.getWidth() / 3000, mGraph.mAreas.get(i).height * this.getHeight() / 2000);
+	    if(showGraph)
+	    	for(int i=0; i<mGraph.mAreas.size(); i++)
+	    	{
+	    		g.drawRect((mGraph.mAreas.get(i).x + 1500) * this.getWidth() / 3000,
+	    				  -(mGraph.mAreas.get(i).y + mGraph.mAreas.get(i).height) * this.getHeight() / 2000 + this.getHeight(),
+	    				   mGraph.mAreas.get(i).width * this.getWidth() / 3000,
+	    				   mGraph.mAreas.get(i).height * this.getHeight() / 2000);
+	    	}
 	    
+	    // un chemin
 	    g.setColor(Color.blue);
 	    for(int i = 0; i+1 < mPath.size(); i++)
 	    {
-	    	g.drawLine((mPath.get(i).x + 1500) * this.getWidth() / 3000, -mPath.get(i).y * this.getHeight() / 2000 + this.getHeight(), (mPath.get(i+1).x + 1500) * this.getWidth() / 3000, -mPath.get(i+1).y * this.getHeight() / 2000 + this.getHeight());
+	    	g.drawLine( (mPath.get(i).x + 1500) * this.getWidth() / 3000, 
+	    			    -mPath.get(i).y * this.getHeight() / 2000 + this.getHeight(),
+	    			    (mPath.get(i+1).x + 1500) * this.getWidth() / 3000,
+	    			    -mPath.get(i+1).y * this.getHeight() / 2000 + this.getHeight() );
 	    }
 	    
+	    // les points du chemin
 	    g.setColor(Color.cyan);
 	    for(int i = 0; i < mPath.size(); i++)
 	    {
-	    	g.fillOval((mPath.get(i).x + 1500) * this.getWidth() / 3000 - 3, -mPath.get(i).y * this.getHeight() / 2000 + this.getHeight() - 3, 6, 6);
+	    	g.fillOval( (mPath.get(i).x + 1500) * this.getWidth() / 3000 - 3,
+	    			    -mPath.get(i).y * this.getHeight() / 2000 + this.getHeight() - 3,
+	    			     6,
+	    			     6);
 	    }
 	    
+	    // les coordonnées des points du chemin
 	    g.setColor(Color.magenta);
 	    for(int i = 0; i < mPath.size(); i++)
 	    {
-	    	g.drawString(mPath.get(i).x + ", " + mPath.get(i).y, (mPath.get(i).x + 1500) * this.getWidth() / 3000, -mPath.get(i).y * this.getHeight() / 2000 + this.getHeight());
+	    	g.drawString(mPath.get(i).x + ", " + mPath.get(i).y, 
+	    			    (mPath.get(i).x + 1500) * this.getWidth() / 3000, 
+	    			    -mPath.get(i).y * this.getHeight() / 2000 + this.getHeight());
 	    }
 	}
 	
+	//permet d'afficher un chemin
 	public void drawArrayList(ArrayList<Vec2> path)
 	{
 		mPath = path;
 		repaint();
 	}
 	
+	//permet d'afficher le graphe du pathdingding
 	public void drawGraph(Graph graph)
 	{
 		mGraph = graph;
