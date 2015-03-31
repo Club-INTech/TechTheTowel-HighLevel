@@ -176,7 +176,7 @@ class ThreadSensor extends AbstractThread
 				return;
 			}
 			
-			if(!mRobot.getIsRobotTurning())// on ne detecte pas si on est en train de tourner (les capteurs font des choses etranges sinon.)
+			//if(!mRobot.getIsRobotTurning())// on ne detecte pas si on est en train de tourner (les capteurs font des choses etranges sinon.)
 			{
 				/* recupere la distance mesurée par l'ultrason
 				 * on met la distance detecte, a l'avant et a l'arriere, dans deux variables int[] de taille deux
