@@ -117,8 +117,16 @@ public class JUnit_Sensors extends JUnit_Test
 			catch (UnableToMoveException e1)
 			{
 				log.critical("!!!!! Catch de"+e1+" dans testEvitement !!!!!" , this);
+				try {
+					state.robot.moveLengthwise(20);
+				} 
+				catch (UnableToMoveException e) 
+				{
+					;
+				}
 			}
 		}
+		log.critical("Fin de moveLengthWise" , this);
 		while(true)
 		{
 			try

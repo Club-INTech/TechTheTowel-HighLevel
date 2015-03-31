@@ -214,7 +214,7 @@ public class Locomotion implements Service
     	
     	//un simple for (on vas au point 0 puis au point 1 etc.)
     	finalAim = path.get(path.size()-1);
-    	
+  
     	path.remove(0);//On enleve le premier point, notre propre position
     	
     	for(int i = 0; i < path.size(); i++)
@@ -264,6 +264,8 @@ public class Locomotion implements Service
 	        
 	        moveToPointException(aim, hooks, direction, mur, turnOnly);
     	}
+    	
+    	log.debug("Arrivés en "+aim, this);
     }
     
     /**
@@ -609,7 +611,6 @@ public class Locomotion implements Service
         		}
         		else
         		{
-            		log.debug("Arrivés a destination", this);
         			return !infos[0];//On est arrivés
         		}
         	}
@@ -646,10 +647,6 @@ public class Locomotion implements Service
         								(int)(signe * detectionRadius * Math.sin(orientation))); //centre par rapport au cnetre de position du robot
         	
         detectionCenter.plus(position);
-        
-        
-        log.critical("isRobotTurning "+isRobotTurning+" dans Detect ennemy", this);
-
 
         // si on ne tourne pas, on regarde devant nous : sinon, on regarde autour de nous
         if(isRobotTurning)
