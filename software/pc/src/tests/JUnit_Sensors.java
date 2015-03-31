@@ -23,6 +23,7 @@ import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
+import utils.Sleep;
 
 /**
  * Test des capteurs : les obstacles doivent être détectés
@@ -107,14 +108,25 @@ public class JUnit_Sensors extends JUnit_Test
 	public void testEvitement()
 	{
 		log.debug("Test d'évitement", this);
-		try 
+		while(state.robot.getPosition().x > 950)
 		{
-			state.robot.moveLengthwise(500);
-		} 
-		catch (UnableToMoveException e1)
-		{
-			log.critical("!!!!! Catch de"+e1+" dans testEvitement !!!!!" , this);
+			try 
+			{
+				state.robot.moveLengthwise(state.robot.getPosition().x-950);
+			} 
+			catch (UnableToMoveException e1)
+			{
+				log.critical("!!!!! Catch de"+e1+" dans testEvitement !!!!!" , this);
+				try {
+					state.robot.moveLengthwise(20);
+				} 
+				catch (UnableToMoveException e) 
+				{
+					;
+				}
+			}
 		}
+		log.critical("Fin de moveLengthWise" , this);
 		while(true)
 		{
 			try
@@ -133,22 +145,18 @@ public class JUnit_Sensors extends JUnit_Test
 	{
 		log.debug("Test d'évitement", this);
 		
-		try 
-		{
-			state.robot.moveLengthwise(500);
-		} 
-		catch (UnableToMoveException e1)
-		{
-			log.critical("!!!!! Catch de"+e1+" dans testEvitement !!!!!" , this);
-		}
 		while(true)
 		{
 			try 
 			{
 				state.robot.turn(Math.PI);
+				Sleep.sleep(500);
 				state.robot.turn(- Math.PI/2);
+				Sleep.sleep(500);  
 				state.robot.turn(Math.PI);
+				Sleep.sleep(500);
 				state.robot.turn(  Math.PI/2);
+				Sleep.sleep(500);
 			} 
 			catch (UnableToMoveException e1)
 			{
@@ -176,7 +184,7 @@ public class JUnit_Sensors extends JUnit_Test
 		{
 			try
 			{
-				mLocomotion.detectEnemy(true);
+				mLocomotion.detectEnemy(true, false);
 			}
 			catch (UnexpectedObstacleOnPathException unexpectedObstacle)
 	        {
@@ -188,7 +196,7 @@ public class JUnit_Sensors extends JUnit_Test
             	{
             		try
             		{
-            			mLocomotion.detectEnemy(true);
+            			mLocomotion.detectEnemy(true, false);
             			break;
             		}
             		catch(UnexpectedObstacleOnPathException e2)

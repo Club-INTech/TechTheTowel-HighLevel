@@ -106,34 +106,50 @@ public class RobotReal extends Robot
     {
     	if (isTurnRelative)
     		angle += getOrientation();
-        mLocomotion.turn(angle, hooks);
+        turn(angle, hooks);
     }
     
     @Override
     public void turn(double angle, ArrayList<Hook> hooks, boolean mur) throws UnableToMoveException
     {
-    	isRobotTurning=true;
+    	try
+    	{
+    		turn(angle, hooks);
+    	}
+    	catch (UnableToMoveException e)
+    	{
+            throw e;
+    	}
+    }
+    
+    public void turn(double angle, ArrayList<Hook> hooks) throws UnableToMoveException
+    {
     	try
     	{
     		mLocomotion.turn(angle, hooks);
     	}
     	catch (UnableToMoveException e)
     	{
-            isRobotTurning=false; 
             throw e;
     	}// le robot s'est arreté de tourner qu'il y ait catch ou non.
-        isRobotTurning=false;
     }
+
     
     @Override
     public void followPath(ArrayList<Vec2> chemin, ArrayList<Hook> hooks) throws UnableToMoveException
     {
+    	cheminSuivi=(ArrayList<Vec2>) chemin.clone();
+    	System.out.println(cheminSuivi+" // "+chemin);
+
         mLocomotion.followPath(chemin, hooks, DirectionStrategy.getDefaultStrategy());
     }
+    
 
     @Override
     protected void followPath(ArrayList<Vec2> chemin, ArrayList<Hook> hooks, DirectionStrategy direction) throws UnableToMoveException
     {
+    	cheminSuivi=(ArrayList<Vec2>) chemin.clone();
+    	System.out.println(cheminSuivi+" // "+chemin);
         mLocomotion.followPath(chemin, hooks, direction);
     }
 
@@ -205,6 +221,11 @@ public class RobotReal extends Robot
 		} catch (SerialConnexionException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public boolean getIsRobotTurning()
+	{
+		return mLocomotion.isRobotTurning;
 	}
 
 	

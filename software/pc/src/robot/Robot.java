@@ -60,8 +60,8 @@ public abstract class Robot implements Service
 	/** Rayon du robot provenant du fichier de config */
 	public int robotRay;
 	
-	/**Booleen explicitant si le robot est en train de tourner */
-	public boolean isRobotTurning=false;
+	/** chemin que le robot suit, pour l'interface : TODO supprimer */
+	public ArrayList<Vec2> cheminSuivi= new ArrayList<Vec2>();
 	
 	
 	/**
@@ -312,11 +312,12 @@ public abstract class Robot implements Service
 	
     	try 
     	{
+			log.debug("Chemin suivi :"+path , this);
 			followPath(path , hooksToConsider);
 		} 
     	catch (UnableToMoveException unableToMoveException) 
     	{
-			log.critical("Catch de"+unableToMoveException+" dans moveToLocation , pret à calculer un nouveau path" , this);
+			log.critical("Catch de "+unableToMoveException+" dans moveToLocation" , this);
 			recalculate(unableToMoveException.aim, hooksToConsider); // on recalcule le path
 		}
     }
@@ -370,11 +371,12 @@ public abstract class Robot implements Service
     	
     	try 
     	{
+			log.debug("Chemin suivi :"+path , this);
 			followPath(path , hooksToConsider);
 		} 
     	catch (UnableToMoveException unableToMoveException) 
     	{
-			log.critical("Catch de"+unableToMoveException+" dans moveToCircle , pret à calculer un nouveau path" , this);
+			log.critical("Catch de "+unableToMoveException+" dans moveToCircle" , this);
 			
 			recalculate(unableToMoveException.aim, hooksToConsider); // on recalcule le path
 		}
@@ -391,9 +393,9 @@ public abstract class Robot implements Service
     	try
     	{
     		// On le reclacule, et on essaye de le suivre 
-    		ArrayList<Vec2> newPath = pathDingDing.computePath(getPosition(),aim, EnumSet.noneOf(ObstacleGroups.class));
-			log.debug("Nouveau path calculé"+newPath , this);
-			followPath(newPath , hooksToConsider);
+    		ArrayList<Vec2> newPath = pathDingDing.computePath(getPosition(),aim, EnumSet.of(ObstacleGroups.ENNEMY_ROBOTS));
+			log.debug("Nouveau Path recalculé: "+newPath, this);
+    		followPath(newPath , hooksToConsider);
 		} 
     	catch (UnableToMoveException unableToMoveException) 
     	{

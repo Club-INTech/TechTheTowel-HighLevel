@@ -98,7 +98,7 @@ public class TakeTennisBall extends AbstractScript
 	}
 
 	@Override
-	public double getNoEnemyTime(GameState<?> stateToConsider) {
+	public double getNoEnemyTime(GameState<?> stateToConsider, int id) {
 		// FIXME Auto-generated method stub
 		return 0;
 	}

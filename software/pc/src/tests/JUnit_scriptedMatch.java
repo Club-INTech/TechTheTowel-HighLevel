@@ -104,7 +104,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
 		robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
 		
-		robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, false);
+		robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 		
 		robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
 	}
@@ -209,7 +209,6 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		{			
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant de deposer la pile sur l'estrade");
 			scriptmanager.getScript(ScriptNames.FREE_STACK).goToThenExec(1, real_state, true, emptyHook ); // On lache notree pile devnt (bientot sur l'estrade
-			real_state.robot.moveLengthwise(-300);		//On recule pour ne pas taper (le PF evitera ca)
 		}
 		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException e) 
 		{
@@ -220,17 +219,26 @@ public class JUnit_scriptedMatch extends JUnit_Test
 				
 		try 
 		{	
-			/*Le robot n'en est pas encore capable mais ca va venir avec le bas niveau et les fonctions "bras au milieu" etc
-			/*	scriptmanager.getScript(ScriptNames.TAKE_TENNIS_BALL).goToThenExec(1, real_state, true, emptyHook );*/
+			//Le robot n'en est pas encore capable mais ca va venir avec le bas niveau et les fonctions "bras au milieu" etc
+			scriptmanager.getScript(ScriptNames.TAKE_TENNIS_BALL).goToThenExec(1, real_state, true, emptyHook );
 			
-			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant de deposer le verre");
-			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(1, real_state, true, emptyHook );//On depose 1 verre dans notre zone
-			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après avoir deposé le verre");
 		}
 		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException e) 
 		{
 			e.printStackTrace();
 		}
+		System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant de deposer le verre");
+		try
+		{
+			
+			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(1, real_state, true, emptyHook );//On depose 1 verre dans notre zone
+		}
+		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException e) 
+		{
+			e.printStackTrace();
+		}
+		System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après avoir deposé le verre");
+
 		
 		System.out.println("Verre deposé");
 		

@@ -1,13 +1,15 @@
 package threads;
 
+import java.util.ArrayList;
+
 import exceptions.serial.SerialConnexionException;
 import robot.cardsWrappers.LocomotionCardWrapper;
 import robot.cardsWrappers.SensorsCardWrapper;
 import table.Table;
 import utils.Sleep;
-
 import graphics.*;
 import robot.RobotReal;
+import smartMath.Vec2;
 
 /**
  * Thread qui s'occupe de la gestion du temps: début du match et immobilisation du robot en fin de match
@@ -62,6 +64,7 @@ public class ThreadTimer extends AbstractThread
 		this.table = table;
 		this.mSensorsCardWrapper = sensorsCardWrapper;
 		this.mLocomotionCardWrapper = locomotionCardWrapper;
+		this.robot=robot;
 		
 		updateConfig();
 		Thread.currentThread().setPriority(1);
@@ -119,6 +122,9 @@ public class ThreadTimer extends AbstractThread
 			
 			//on rafraichit l'interface graphique, TODO : à enlever
 			window.getPanel().repaint();
+			
+			
+			window.getPanel().drawArrayList(robot.cheminSuivi);
 			
 			try
 			{

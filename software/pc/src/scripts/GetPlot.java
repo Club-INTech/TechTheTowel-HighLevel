@@ -82,9 +82,11 @@ public class GetPlot extends AbstractScript
 			//on mange le plot
 			try 
 			{
-				if(versionToExecute==1)
-					stateToConsider.robot.turn(Math.PI);// On se tourne pour sauver le PF
-				eatPlot(false, isChoosenArmLeft, stateToConsider);
+				if(versionToExecute==0 || versionToExecute==1 || versionToExecute==2 )
+				{
+					eatPlot(false, isChoosenArmLeft, stateToConsider, true);
+					stateToConsider.table.eatPlotX(versionToExecute);
+				}
 
 				if(versionToExecute==7)
 				{
@@ -93,30 +95,21 @@ public class GetPlot extends AbstractScript
 					stateToConsider.robot.moveLengthwise(300);
 					stateToConsider.robot.turn(-Math.PI/2);
 					stateToConsider.robot.moveLengthwise(300);
-					
+					eatPlot(false, isChoosenArmLeft, stateToConsider, true);
+					stateToConsider.table.eatPlotX(versionToExecute);
 				}
 			} 
 			catch (UnableToEatPlot e) 
 			{
 				//on a pas reussi a manger, on le dit et on termine le script
 				log.debug("impossible de manger le plot n°"+versionToExecute+" mangeage echoue", this);
-				
-
-				if(versionToExecute==7)
-				{
-					System.out.println("en position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") avant la rectification du PF");
-					stateToConsider.robot.turn(Math.PI);// On se tourne pour sauver le PF
-					stateToConsider.robot.moveLengthwise(300);
-					stateToConsider.robot.turn(-Math.PI/2);
-					stateToConsider.robot.moveLengthwise(300);
-					
-				}
 				finalise(stateToConsider);
 				return;
 			}
-			stateToConsider.table.eatPlotX(versionToExecute);
+			
 			
 		}
+		//version 34 on mange en plus un goblet FIXME traiter le cas où on a trois plots stockés et qu'on ne veut pas manger n°4 et ne pas lancer le script si 2 gobl stockés
 		else if (versionToExecute == 34)
 		{
 			//debut du script recuperation du goblet
@@ -149,24 +142,16 @@ public class GetPlot extends AbstractScript
 				stateToConsider.robot.moveLengthwise(320, hooksToConsider);
 			}
 			
-			//si on a plus de place dans la pile on termine
-			if (stateToConsider.robot.storedPlotCount == 4)
-			{
-				return;
-			}
-			
-			stateToConsider.robot.turn(0);
-			
 			//on mange le plot 4
 			try 
 			{
-				eatPlot(false, true, stateToConsider);
+				eatPlot(false, true, stateToConsider, false);
 			}
 			catch (UnableToEatPlot e) 
 			{
 				try 
 				{
-					eatPlot(false, false, stateToConsider);
+					eatPlot(false, false, stateToConsider, false);
 				}
 				catch (UnableToEatPlot e1) 
 				{
@@ -179,13 +164,13 @@ public class GetPlot extends AbstractScript
 			//on mange le plot 3
 			try 
 			{
-				eatPlot(false, false, stateToConsider);
+				eatPlot(false, false, stateToConsider, false);
 			}
 			catch (UnableToEatPlot e) 
 			{
 				try 
 				{
-					eatPlot(false, false, stateToConsider);
+					eatPlot(false, false, stateToConsider, false);
 				}
 				catch (UnableToEatPlot e1) 
 				{
@@ -196,7 +181,7 @@ public class GetPlot extends AbstractScript
 			stateToConsider.table.eatPlotX(3);
 			
 		}
-		//TODO derniere version a traiter
+		//TODO derniere version a traiter FIXME traiter le cas où on a trois plots stockés et qu'on ne veut pas manger n°6
 		else if (versionToExecute == 56)
 		{
 			stateToConsider.robot.turn(Math.PI*0.5);
@@ -208,7 +193,7 @@ public class GetPlot extends AbstractScript
 					//plot 5 et 6 pas mangé, on mange les deux avec notre bras gauche (celui du coté de l'ascenceur)
 					try 
 					{
-						eatPlot(true, false, stateToConsider);
+						eatPlot(true, false, stateToConsider, false);
 					} 
 					catch (UnableToEatPlot e1) 
 					{
@@ -219,7 +204,7 @@ public class GetPlot extends AbstractScript
 					
 					try 
 					{
-						eatPlot(true, false, stateToConsider);
+						eatPlot(true, false, stateToConsider, false);
 					} 
 					catch (UnableToEatPlot e) 
 					{
@@ -236,7 +221,7 @@ public class GetPlot extends AbstractScript
 					
 					try 
 					{
-						eatPlot(true, false, stateToConsider);
+						eatPlot(true, false, stateToConsider, false);
 					} 
 					catch (UnableToEatPlot e) 
 					{
@@ -245,46 +230,6 @@ public class GetPlot extends AbstractScript
 				}
 			}
 		}
-		else
-		
-		try 
-		{
-			//pas d'actualite si on en a 3 au depart il ne faut pas ramasser le deuxieme plot mais il faut pouvoir recommencer le script a partir du deuxieme (point de depart different)
-			//version double
-			//on fait monter le potenetiel plot en cours
-			stateToConsider.robot.turn(Math.PI*0.5, hooksToConsider, false);
-			eatPlot(true, false, stateToConsider);
-			//si on a ramasse qqc on incrément le nb de plots
-			//on fait monter
-			stateToConsider.robot.moveLengthwise(1, hooksToConsider, false);
-			eatPlot(true, false, stateToConsider);
-			//si on a ramasse qqc on incrément le nb de plots
-		} 
-		catch (UnableToMoveException e) 
-		{
-			log.debug("bloque", this);
-			e.printStackTrace();	// remonter cette exception
-		}
-		catch (SerialConnexionException e)
-		{
-			log.debug("mauvaise entree serie", this);
-			e.printStackTrace(); //  remonter cette exception
-		} catch (UnableToEatPlot e) {
-			// Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		//si on en a 3 au depart il ne faut pas ramasser le deuxieme plot mais il faut pouvoir recommencer le script a partir du deuxieme (point de depart different)
-		//version proche de la zone de depart ! ne pas oublier le goblet
-		//se placer dans le bon sens
-		//manger premier plot (bras gauche) (on essaiera quand meme avec l'autre bras au cas où ?)
-		//si on a ramasse qqc on incrément le nb de plots
-		//si compteur < 4 on fait monter ?
-		//avancer !ne pas reculer sinon on peut perdre un verre
-		//manger deuxieme plot (bras gauche) (on essaiera quand meme avec l'autre bras au cas où ?)
-		//si on a ramasse qqc on incrément le nb de plots
-		//si compteur < 4 on fait monter ?
-		
 	}
 
 	@Override
@@ -337,12 +282,13 @@ public class GetPlot extends AbstractScript
 	 * 
 	 * @param isSecondTry vrai si l'essai de mangeage de plot est le deuxieme ou si on ne veux pas reessayer
 	 * @param isArmChosenLeft vrai si on mange avec le bras gauche
+	 * @param movementAllowed vrai si on autorise le robot a avancer pour manger le plot
 	 * @throws UnableToEatPlot si le mangeage echoue
 	 * @throws SerialConnexionException si impossible de communiquer avec les cartes
 	 * 
 	 * @throws SerialException
 	 */
-	private void eatPlot (boolean isSecondTry, boolean isArmChosenLeft, GameState<Robot> stateToConsider) throws UnableToEatPlot, SerialConnexionException
+	private void eatPlot (boolean isSecondTry, boolean isArmChosenLeft, GameState<Robot> stateToConsider, boolean movementAllowed) throws UnableToEatPlot, SerialConnexionException
 	{
 		//On change le bras choisi suivant la symetrie : à voir si l'IA s'en occupera, mais pour les tests ca reste là
 		if(stateToConsider.robot.getSymmetry())
@@ -352,6 +298,14 @@ public class GetPlot extends AbstractScript
 		
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
+		if (movementAllowed)
+			try 
+			{
+				stateToConsider.robot.moveLengthwise(100);
+			} catch (UnableToMoveException e1) 
+			{
+				log.debug("mouvement impossible, script GetPlot", this);
+			}
 		if (isArmChosenLeft) 
 		{
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
@@ -366,7 +320,7 @@ public class GetPlot extends AbstractScript
 		}
 		//si on a attrape qqc on termine sinon on essaie avec l'autre bras (si isSecondTry == false)
 		//si deuxieme essai ecrire dans le log qu'on a essaye de manger un plot et on jette une exeption impossible de manger
-		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+		
 		
 		boolean sensorAnswer;
 		try 
@@ -388,10 +342,11 @@ public class GetPlot extends AbstractScript
 			}
 			else
 			{
-				eatPlot(true,!isArmChosenLeft, stateToConsider);
+				eatPlot(true,!isArmChosenLeft, stateToConsider, false);
 				return;
 			}
 		}
+		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 		stateToConsider.robot.storedPlotCount++;
 		
 		//si on a encore de la place dans le guide alors on monte le plot
@@ -404,7 +359,7 @@ public class GetPlot extends AbstractScript
 	}
 
 	@Override
-	public double getNoEnemyTime(GameState<?> stateToConsider) {
+	public double getNoEnemyTime(GameState<?> stateToConsider, int id) {
 		// FIXME Auto-generated method stub
 		return 0;
 	}
