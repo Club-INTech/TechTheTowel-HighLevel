@@ -56,6 +56,13 @@ class ThreadSensor extends AbstractThread
 	 */
 	double minSensorRange = 80;
 	
+	/**
+	 *  Booleen explicitant si addObstacle a en effet ajouté un obstacle
+	 */
+	boolean obstacleAddedLeft;
+	boolean obstacleAddedRight;
+
+	
 	/** Les angles des capteurs :
 	 * 		
 	 * 			
@@ -215,6 +222,9 @@ class ThreadSensor extends AbstractThread
 	{
 		Vec2 positionRobot = mRobot.getPosition();
 		double orientation = mRobot.getOrientation();
+		obstacleAddedRight=false;
+		obstacleAddedLeft=false;
+
 		
 		/** Zones de detection : 0;1;2 capteurs dans leurs zones respectives
 		 * 
@@ -281,6 +291,9 @@ class ThreadSensor extends AbstractThread
 				
 				mTable.getObstacleManager().addObstacle(positionEnnemi_1);
 				mTable.getObstacleManager().addObstacle(positionEnnemi_2);
+				
+				obstacleAddedRight=true;
+				obstacleAddedLeft=true;
 
 			}
 			// sinon, on voit un seul et meme ennemi
@@ -306,7 +319,9 @@ class ThreadSensor extends AbstractThread
 				
 				System.out.println("position ennemi = ("+positionEnnemi_1.x+","+positionEnnemi_1.y+")");
 				mTable.getObstacleManager().addObstacle(positionEnnemi_1);
-
+				
+				obstacleAddedRight=true;
+				obstacleAddedLeft=true;
 			}			
 		}
 		else // Sinon, un seul des deux capteurs detecte quelque chose
@@ -328,6 +343,9 @@ class ThreadSensor extends AbstractThread
 			
 			mTable.getObstacleManager().addObstacle(positionEnnemi_1);
 			System.out.println("position ennemi = ("+positionEnnemi_1.x+","+positionEnnemi_1.y+")");
+			
+			obstacleAddedLeft=true;
+
 		}
 		// Capteur de coté droit
 		else if (minSensorRange<distanceFront[1] && distanceFront[1]<maxSensorRange)
@@ -345,7 +363,15 @@ class ThreadSensor extends AbstractThread
 			
 			mTable.getObstacleManager().addObstacle(positionEnnemi_1);
 			System.out.println("position ennemi = ("+positionEnnemi_1.x+","+positionEnnemi_1.y+")");
+			
+			obstacleAddedRight=true;
 		}
+		
+		
+		if(!obstacleAddedRight)
+			removeObstacleRight();
+		if(!obstacleAddedLeft)
+			removeObstacleLeft();
 	}
 
 	/**
@@ -469,5 +495,22 @@ class ThreadSensor extends AbstractThread
 		
 		return positionEnnemi;
 	}
+	
+	
+	private void removeObstacleLeft()
+	{
+		Vec2 positionObstacle;
+		for(int i = 0;i<mTable.getObstacleManager().getMobileObstaclesCount(); i++)
+		{
+			positionObstacle=mTable.getObstacleManager().getMobileObstacles().get(i).getPosition();
+			
+		}
+	}
+	
+	private void removeObstacleRight()
+	{
+		
+	}
+
 	
 }
