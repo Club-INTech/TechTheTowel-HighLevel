@@ -688,7 +688,7 @@ public class Locomotion implements Service
         
         //centre du cercle de detection
         Vec2 detectionCenter = new Vec2((int)(signe * detectionRadius * Math.cos(orientation)), 
-        								(int)(signe * detectionRadius * Math.sin(orientation))); //centre par rapport au cnetre de position du robot
+        								(int)(signe * detectionRadius * Math.sin(orientation))); //centre par rapport au centre de position du robot
         	
         detectionCenter.plus(position);
 
@@ -708,7 +708,9 @@ public class Locomotion implements Service
         {
             log.warning("Ennemi détecté en : " + detectionCenter, this);
             log.warning( "Lancement de UnexpectedObstacleOnPathException dans detectEnemy", this);
-            throw new UnexpectedObstacleOnPathException();
+            //si le pathfinding nous demande de sapprocer un peu de lobstacle (a mi-distance de notre detection) on y va malgrès l'ennemi
+            if (table.getObstacleManager().isDiscObstructed(detectionCenter, detectionDistance/2) || aim.distance(position)>(detectionDistance/2))
+            	throw new UnexpectedObstacleOnPathException();
         }
         else 
         {
