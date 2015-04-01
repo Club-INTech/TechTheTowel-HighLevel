@@ -160,10 +160,10 @@ public class DropPile extends AbstractScript
 	@Override
 	public int remainingScoreOfVersion(int version, GameState<?> stateToConsider)
 	{
+		int ball = 0;
 		if (stateToConsider.robot.isBallStored)
-			return 5*(stateToConsider.robot.storedPlotCount);
-		else
-			return 2*(stateToConsider.robot.storedPlotCount);
+			ball = 1;
+		return (2*ball+3)*stateToConsider.robot.storedPlotCount;
 	}
 
 	@Override

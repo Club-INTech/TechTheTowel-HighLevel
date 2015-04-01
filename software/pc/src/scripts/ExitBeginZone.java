@@ -26,6 +26,7 @@ public class ExitBeginZone extends AbstractScript
 	public ExitBeginZone(HookFactory hookFactory, Config config, Log log) 
 	{
 		super(hookFactory, config, log);
+		versions = new int[]{0};
 	}
 
 	@Override
