@@ -276,4 +276,19 @@ public class RobotChrono extends Robot
 		this.chrono += sensor.getAverageDuration();
 		return sensor.getDefaultValue();
 	}
+
+	@Override
+	public void moveLengthwiseWithoutDetection(int distance,
+			ArrayList<Hook> hooksToConsider, boolean expectsWallImpact)
+			throws UnableToMoveException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void turnWithoutDetection(double angle, ArrayList<Hook> hooks) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

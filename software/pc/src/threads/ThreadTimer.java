@@ -59,6 +59,7 @@ public class ThreadTimer extends AbstractThread
 	 * @param sensorsCardWrapper La carte capteurs avec laquelle on doit communiquer
 	 * @param locomotionCardWrapper La carte d'asservissement avec laquelle on doit communiquer
 	 */
+	
 	ThreadTimer(Table table, RobotReal robot, SensorsCardWrapper sensorsCardWrapper, LocomotionCardWrapper locomotionCardWrapper)
 	{
 		this.table = table;

@@ -236,6 +236,9 @@ public abstract class Robot implements Service
         turn(angle, null, false, false);
     }
 
+    
+    
+    
 	/**
 	 * Fait tourner le robot (méthode bloquante)
 	 * L'orientation est modifiée si on est équipe jaune: Cette méthode n'adapte pas l'orientation en fonction de la couleur de l'équipe 
@@ -264,6 +267,14 @@ public abstract class Robot implements Service
     public void moveLengthwise(int distance) throws UnableToMoveException
     {
         moveLengthwise(distance, null, false);
+    }
+    
+    public abstract void moveLengthwiseWithoutDetection(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException;
+
+    
+    public void moveLengthwiseWithoutDetection(int distance) throws UnableToMoveException
+    {
+    	moveLengthwiseWithoutDetection(distance, null, false);
     }
 
 	/**
@@ -430,4 +441,5 @@ public abstract class Robot implements Service
 	 */
 	public abstract Object getSensorValue(SensorNames captor) throws SerialConnexionException;
 
+	public abstract void turnWithoutDetection(double angle, ArrayList<Hook> hooks);
 }
