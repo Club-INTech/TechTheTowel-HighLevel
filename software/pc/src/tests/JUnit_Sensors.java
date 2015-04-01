@@ -104,20 +104,21 @@ public class JUnit_Sensors extends JUnit_Test
 
 	}
 	
-	@Test
+	//@Test
 	public void testEvitement()
 	{
 		log.debug("Test d'évitement", this);
 		while(state.robot.getPosition().x > 950)
 		{
 			try 
-			{
+			{	
 				state.robot.moveLengthwise(state.robot.getPosition().x-950);
 			} 
 			catch (UnableToMoveException e1)
 			{
 				log.critical("!!!!! Catch de"+e1+" dans testEvitement !!!!!" , this);
-				try {
+				try 
+				{
 					state.robot.moveLengthwise(20);
 				} 
 				catch (UnableToMoveException e) 
@@ -137,6 +138,20 @@ public class JUnit_Sensors extends JUnit_Test
 			{
 				log.critical("!!!!!! Catch de"+e+" dans testEvitement !!!!!!" , this);
 			}	
+		}
+	}
+	
+	@Test
+	public void testWithoutDetecting()
+	{
+		log.debug("Test d'évitement", this);
+		try 
+		{	
+			state.robot.moveLengthwise(500);
+		} 
+		catch (UnableToMoveException e) 
+		{
+			log.critical("!!!!!! Catch de"+e+" dans testWithoutDetecting !!!!!!" , this);;
 		}
 	}
 	
@@ -184,7 +199,7 @@ public class JUnit_Sensors extends JUnit_Test
 		{
 			try
 			{
-				mLocomotion.detectEnemy(true, false);
+				mLocomotion.detectEnemy(true, false, state.robot.getPosition());
 			}
 			catch (UnexpectedObstacleOnPathException unexpectedObstacle)
 	        {
@@ -196,7 +211,7 @@ public class JUnit_Sensors extends JUnit_Test
             	{
             		try
             		{
-            			mLocomotion.detectEnemy(true, false);
+            			mLocomotion.detectEnemy(true, false, state.robot.getPosition());
             			break;
             		}
             		catch(UnexpectedObstacleOnPathException e2)
@@ -224,14 +239,13 @@ public class JUnit_Sensors extends JUnit_Test
 	}
 
 	
-/*    @Test
+    //@Test
     public void faux_test() throws Exception
     {
-        config.set("capteurs_on", true);
+        config.set("capteurs_on", "true");
         for(int i = 0; i < 10000; i++)
         {
-            System.out.println(capteurs.mesurer_ultrason());
             Sleep.sleep(100);
         }
-    }*/
+    }
 }

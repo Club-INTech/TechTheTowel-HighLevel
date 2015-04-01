@@ -97,6 +97,15 @@ public class RobotReal extends Robot
 	{	
 		mLocomotion.moveLengthwise(distance, hooksToConsider, expectsWallImpact);
 	}	
+	
+	
+	@Override
+    public void moveLengthwiseWithoutDetection(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
+	{	
+		mLocomotion.moveLengthwise(distance, hooksToConsider, expectsWallImpact, false);
+	}	
+	
+
 
 	/**
 	 * ATTENTION, la valeur "mur" est ignorée
@@ -107,6 +116,19 @@ public class RobotReal extends Robot
     	if (isTurnRelative)
     		angle += getOrientation();
         turn(angle, hooks);
+    }
+    
+    @Override
+    public void turnWithoutDetection(double angle, ArrayList<Hook> hooks)
+    {
+    	try
+    	{
+    		mLocomotion.turn(angle, hooks, false);
+    	}
+    	catch (UnableToMoveException e)
+    	{
+            ;
+    	}
     }
     
     @Override
@@ -215,10 +237,13 @@ public class RobotReal extends Robot
 	@Override
 	public void setLocomotionSpeed(Speed vitesse)
 	{
-        try {
+        try
+        {
 			mLocomotion.setTranslationnalSpeed(vitesse.PWMTranslation);
 	        mLocomotion.setRotationnalSpeed(vitesse.PWMRotation);
-		} catch (SerialConnexionException e) {
+		} 
+        catch (SerialConnexionException e)
+        {
 			e.printStackTrace();
 		}
 	}
@@ -227,6 +252,4 @@ public class RobotReal extends Robot
 	{
 		return mLocomotion.isRobotTurning;
 	}
-
-	
 }
