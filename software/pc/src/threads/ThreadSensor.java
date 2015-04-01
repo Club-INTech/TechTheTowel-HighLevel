@@ -2,6 +2,8 @@ package threads;
 
 import org.hamcrest.core.IsSame;
 
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Single;
+
 import enums.SensorNames;
 import exceptions.serial.SerialConnexionException;
 import robot.cardsWrappers.SensorsCardWrapper;
@@ -368,11 +370,12 @@ class ThreadSensor extends AbstractThread
 			obstacleAddedRight=true;
 		}
 		
-		
+		/*
 		if(!obstacleAddedRight)
 			removeObstacleRight();
 		if(!obstacleAddedLeft)
 			removeObstacleLeft();
+			*/
 	}
 
 	/**
@@ -502,24 +505,53 @@ class ThreadSensor extends AbstractThread
 	{
 		for(int i = 0;i<mTable.getObstacleManager().getMobileObstaclesCount(); i++)
 		{
-			Vec2 positionObstacle, position;
+			Vec2 positionObstacle, position, posPointFrontRobot;
+			double orientation, angleBetweenVectors;
+
 			positionObstacle=mTable.getObstacleManager().getMobileObstacles().get(i).getPosition();
 			position=mRobot.getPosition();
+			orientation=mRobot.getOrientation();
+
 			
 			// On verifie si les obstacles sont proches du robot
 			if(		(positionObstacle.x-position.x)*(positionObstacle.x-position.x)
 				+   (positionObstacle.y-position.y)*(positionObstacle.y-position.y)	< (maxSensorRange+radius) )
 				// Parmis ceux près du robot, on verifie ceux qui sont visibles
-				;
+			{
+				posPointFrontRobot=changeReference(new Vec2(-distanceBetweenFrontSensors/2,100), position, orientation );
+				position.minus(positionObstacle);// position relative
+				angleBetweenVectors=position.angleBetween(posPointFrontRobot);
 				
+				
+			}
 			
 		}
 	}
 	
 	private void removeObstacleRight()
 	{
-		
+		for(int i = 0;i<mTable.getObstacleManager().getMobileObstaclesCount(); i++)
+		{
+			Vec2 positionObstacle, position, posPointFrontRobot;
+			double orientation, angleBetweenVectors;
+			
+			positionObstacle=mTable.getObstacleManager().getMobileObstacles().get(i).getPosition();
+			position=mRobot.getPosition();
+			orientation=mRobot.getOrientation();
+			
+			// On verifie si les obstacles sont proches du robot
+			if(		(positionObstacle.x-position.x)*(positionObstacle.x-position.x)
+				+   (positionObstacle.y-position.y)*(positionObstacle.y-position.y)	< (maxSensorRange+radius) )
+				// Parmis ceux près du robot, on verifie ceux qui sont visibles
+			{
+				posPointFrontRobot=changeReference(new Vec2(distanceBetweenFrontSensors/2,100), position, orientation );
+				position.minus(positionObstacle);// position relative
+				angleBetweenVectors=position.angleBetween(posPointFrontRobot);
+				
+				
+			}
+				
+			
+		}
 	}
-
-	
 }

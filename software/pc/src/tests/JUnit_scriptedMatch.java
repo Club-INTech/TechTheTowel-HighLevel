@@ -2,12 +2,13 @@ package tests;
 
 import hook.Hook;
 
-import java.util.ArrayList;
 
+import java.util.ArrayList;
 import scripts.AbstractScript;
 import scripts.ScriptManager;
 import smartMath.Vec2;
 import strategie.GameState;
+import threads.ThreadTimer;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -34,6 +35,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 	ScriptManager scriptmanager;
 	SensorsCardWrapper  mSensorsCardWrapper;
 	PathDingDing pathDingDing;
+	ThreadTimer threadTimer;
 	
 	@SuppressWarnings("unchecked")
 	@Before
@@ -44,6 +46,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		scriptmanager = (ScriptManager) container.getService(ServiceNames.SCRIPT_MANAGER);
 		mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
         pathDingDing = (PathDingDing)container.getService(ServiceNames.PATHDINGDING);
+        threadTimer = (ThreadTimer)container.getService(ServiceNames.THREAD_TIMER);
 		emptyHook = new ArrayList<Hook> ();  
 
 		
@@ -77,7 +80,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		}
 
 		// maintenant que le jumper est retiré, le match a commencé
-		//ThreadTimer.matchStarted = true;
+		ThreadTimer.matchStarted = true;
 	}
 	
 	/**
@@ -112,7 +115,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 	@Test
 	public void test() throws PathNotFoundException, SerialFinallyException, SerialConnexionException
 	{
-		//container.startAllThreads();
+		container.startAllThreads();
 		waitMatchBegin();
 		//premiere action du match
 		
