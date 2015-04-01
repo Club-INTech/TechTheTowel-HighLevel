@@ -60,7 +60,9 @@ public abstract class Robot implements Service
 	/** Rayon du robot provenant du fichier de config */
 	public int robotRay;
 	
-
+	/** chemin que le robot suit, pour l'interface : TODO supprimer */
+	public ArrayList<Vec2> cheminSuivi= new ArrayList<Vec2>();
+	
 	
 	/**
 	 * Instancie le robot.
@@ -391,9 +393,9 @@ public abstract class Robot implements Service
     	try
     	{
     		// On le reclacule, et on essaye de le suivre 
-    		ArrayList<Vec2> newPath = pathDingDing.computePath(getPosition(),aim, EnumSet.noneOf(ObstacleGroups.class));
-			log.debug("Nouveau path calculé"+newPath , this);
-			followPath(newPath , hooksToConsider);
+    		ArrayList<Vec2> newPath = pathDingDing.computePath(getPosition(),aim, EnumSet.of(ObstacleGroups.ENNEMY_ROBOTS));
+			log.debug("Nouveau Path recalculé: "+newPath, this);
+    		followPath(newPath , hooksToConsider);
 		} 
     	catch (UnableToMoveException unableToMoveException) 
     	{

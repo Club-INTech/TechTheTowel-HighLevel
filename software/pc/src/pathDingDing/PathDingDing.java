@@ -1,6 +1,7 @@
 package pathDingDing;
 
 import smartMath.*;
+import sun.util.logging.resources.logging;
 import table.Table;
 
 import java.util.ArrayList;
@@ -49,7 +50,10 @@ public class PathDingDing implements Service
 		directPath.add(start);
 		directPath.add(end);
 		if(isPathCorrect(directPath))
+		{
+			System.out.println("Path correct, direct : "+directPath );
 			return directPath;
+		}
 		
 		ArrayList<Node> pathNode = new ArrayList<Node>();
 		ArrayList<Vec2> pathVec2 = new ArrayList<Vec2>();
@@ -81,12 +85,16 @@ public class PathDingDing implements Service
 			mGraph.unlinkNode(endNode);
 			throw new PathNotFoundException();
 		}
+		
 		//recopie de pathNode dans pathVec2, avec inversion du sens
 		for(int i = pathNode.size() - 1; i >= 0; i--)
 			pathVec2.add(pathNode.get(i).toVec2());
 		simplify(pathVec2);
 		//on detache le dernier noeud du graphe
 		mGraph.unlinkNode(endNode);
+		
+		System.out.println("Path trouvé : "+pathVec2 );
+		
 		return pathVec2;
 	}
 	
@@ -231,7 +239,7 @@ public class PathDingDing implements Service
 	 * @return vrai si le chemin est correct(ne rencontre pas d'obstacles), faux sinon
 	 */
 	public boolean isPathCorrect(ArrayList<Vec2> path)
-	{
+	{		
 		//si un des points est en dehors de la table, on retourne directement false
 		boolean pathOnTable = true;
 		for(int i = 0; i < path.size(); i++)

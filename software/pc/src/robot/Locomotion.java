@@ -112,8 +112,9 @@ public class Locomotion implements Service
      * 	La correction ne sera effectuée que si le robot est assez eloigné de son orientation souhaitée.
      */
     private double maxRotationCorrectionThreeshold = 0.05;
-    
-	/**Booleen explicitant si le robot est en train de tourner */
+
+	
+	/**Booleen explicitant si le robot est pret à tourner, utile pour le cercle de detection */
 	public boolean isRobotTurning=false;
 	
 
@@ -213,7 +214,7 @@ public class Locomotion implements Service
     	
     	//un simple for (on vas au point 0 puis au point 1 etc.)
     	finalAim = path.get(path.size()-1);
-    	
+  
     	path.remove(0);//On enleve le premier point, notre propre position
     	
     	for(int i = 0; i < path.size(); i++)
@@ -263,6 +264,8 @@ public class Locomotion implements Service
 	        
 	        moveToPointException(aim, hooks, direction, mur, turnOnly);
     	}
+    	
+    	log.debug("Arrivés en "+aim, this);
     }
     
     /**
@@ -313,10 +316,7 @@ public class Locomotion implements Service
                         	if((unexpectedWallImpactCounter & 1) == 0)
                         		deplacements.turn(orientation+angleToDisengage);
                         	else
-                        		deplacements.turn(orientation-angleToDisengage);
-                        	
-                        	isRobotTurning=false;
-                        	
+                        		deplacements.turn(orientation-angleToDisengage);                        	
                         }
                         else if(isMovementForward)
                             deplacements.moveLengthwise(distanceToDisengage);
@@ -400,7 +400,7 @@ public class Locomotion implements Service
         do
         { 	
         	// en cas de détection d'ennemi, une exception est levée
-            detectEnemy(isMovementForward);
+            detectEnemy(isMovementForward, turnOnly);
             
             updateCurrentPositionAndOrientation();
 
@@ -539,16 +539,23 @@ public class Locomotion implements Service
 
         try
         {
-            isRobotTurning=true;// prochain ordre : on tourne
+            
 
         	if(isCorrection && Math.abs(delta) > maxRotationCorrectionThreeshold)
         	{
+        		isRobotTurning=true;// prochain ordre : on tourne
+                
         		deplacements.turn(angle);  // On ne tourne que si on est assez loin de l'orientation voulu
               
         		log.debug("Angle corrigé", this);
         	}
         	else if(!isCorrection)// Si ca n'est pas  une correction
         	{
+        		if(Math.abs(delta)>maxRotationCorrectionThreeshold)
+        		{// on ne tourne vraiment que si l'angle souhaité est vraiment different.
+	        		isRobotTurning=true;// prochain ordre : on tourne
+        		}
+                
         		deplacements.turn(angle);
         	}
         	
@@ -604,7 +611,6 @@ public class Locomotion implements Service
         		}
         		else
         		{
-            		log.debug("Arrivés a destination", this);
         			return !infos[0];//On est arrivés
         		}
         	}
@@ -620,27 +626,14 @@ public class Locomotion implements Service
         }
     }
     
-    public boolean isEnemyHere()
-    {
-		try 
-		{
-			detectEnemy(true);
-			return false;
-		}
-		catch (UnexpectedObstacleOnPathException e)
-		{
-            log.critical("Catch de "+e+" dans isEnemyHere", this);
-			return true;
-		}
-    }
-    
     /**
      * fonction vérifiant que l'on ne va pas taper dans le robot adverse.
      * test si le cercle devant (ou derriere en fonction du mouvement) est vide d'obstacle
      * @param front vrai si on veut detecter a l'avant du robot (donc si on avance en marche avant)
+     * @param isRobotTurning On detecte differement si on tourne ou translate
      * @throws UnexpectedObstacleOnPathException si obstacle sur le chemin
      */
-    public void detectEnemy(boolean front) throws UnexpectedObstacleOnPathException
+    public void detectEnemy(boolean front, boolean isRobotTurning) throws UnexpectedObstacleOnPathException
     {
         int signe = -1;
         if(front)
@@ -648,12 +641,24 @@ public class Locomotion implements Service
         
         //rayon du cercle de detection
         int detectionRadius = robotLength/2 + detectionDistance;
+        
         //centre du cercle de detection
         Vec2 detectionCenter = new Vec2((int)(signe * detectionRadius * Math.cos(orientation)), 
         								(int)(signe * detectionRadius * Math.sin(orientation))); //centre par rapport au cnetre de position du robot
+        	
         detectionCenter.plus(position);
+
+        // si on ne tourne pas, on regarde devant nous : sinon, on regarde autour de nous
+        if(isRobotTurning)
+        {
+        	  if(table.getObstacleManager().isDiscObstructed(position, robotLength/2))
+              {
+                  log.warning( "Lancement de UnexpectedObstacleOnPathException dans detectEnemy", this);
+                  throw new UnexpectedObstacleOnPathException();
+              }
+        }
         
-        if(table.getObstacleManager().isDiscObstructed(detectionCenter, detectionDistance))
+        else if(table.getObstacleManager().isDiscObstructed(detectionCenter, detectionDistance))
         {
             log.warning("Ennemi détecté en : " + detectionCenter, this);
             log.warning( "Lancement de UnexpectedObstacleOnPathException dans detectEnemy", this);
@@ -678,11 +683,14 @@ public class Locomotion implements Service
     {
         try {
             float[] infos = deplacements.getCurrentPositionAndOrientation();
+            
             position.x = (int)infos[0];
             if(symetry)
             	position.x = -position.x;
+            
             position.y = (int)infos[1];
             orientation = infos[2]; // car getCurrentPositionAndOrientation renvoie des radians
+            
             if(symetry)
             	orientation = Math.PI - orientation;
         }
