@@ -108,11 +108,11 @@ public class JUnit_Sensors extends JUnit_Test
 	public void testEvitement()
 	{
 		log.debug("Test d'évitement", this);
-		while(state.robot.getPosition().x > 950)
+		while(state.robot.getPosition().x > 800)
 		{
 			try 
 			{	
-				state.robot.moveLengthwiseWithoutDetection(state.robot.getPosition().x-950);
+				state.robot.moveLengthwiseWithoutDetection(state.robot.getPosition().x-800);
 			} 
 			catch (UnableToMoveException e1)
 			{
@@ -124,7 +124,7 @@ public class JUnit_Sensors extends JUnit_Test
 		{
 			try
 			{
-				state.robot.moveToCircle(new Circle(new Vec2(-600, 1000),0),  new ArrayList<Hook>(), (Table)container.getService(ServiceNames.TABLE));
+				state.robot.moveToCircle(new Circle(new Vec2(0, 1000),0),  new ArrayList<Hook>(), (Table)container.getService(ServiceNames.TABLE));
 			}
 			catch (UnableToMoveException | PathNotFoundException | ContainerException | SerialManagerException e) 
 			{

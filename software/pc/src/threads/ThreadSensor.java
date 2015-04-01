@@ -130,6 +130,7 @@ class ThreadSensor extends AbstractThread
 	Vec2 positionEnnemi_1=new Vec2 (0,0);
 	Vec2 positionEnnemi_2=new Vec2 (0,0);
 
+
 	
 	
 	/**
@@ -241,7 +242,7 @@ class ThreadSensor extends AbstractThread
 		int[] distanceObstacleFront={0,0};
 		
 		if(!(distanceFront[0]==0))
-			distanceObstacleFront[0]=distanceFront[0]+radius;
+			distanceObstacleFront[0]=distanceFront[0];
 		else
 			distanceObstacleFront[0]=0;
 		
@@ -499,10 +500,18 @@ class ThreadSensor extends AbstractThread
 	
 	private void removeObstacleLeft()
 	{
-		Vec2 positionObstacle;
 		for(int i = 0;i<mTable.getObstacleManager().getMobileObstaclesCount(); i++)
 		{
+			Vec2 positionObstacle, position;
 			positionObstacle=mTable.getObstacleManager().getMobileObstacles().get(i).getPosition();
+			position=mRobot.getPosition();
+			
+			// On verifie si les obstacles sont proches du robot
+			if(		(positionObstacle.x-position.x)*(positionObstacle.x-position.x)
+				+   (positionObstacle.y-position.y)*(positionObstacle.y-position.y)	< (maxSensorRange+radius) )
+				// Parmis ceux près du robot, on verifie ceux qui sont visibles
+				;
+				
 			
 		}
 	}
