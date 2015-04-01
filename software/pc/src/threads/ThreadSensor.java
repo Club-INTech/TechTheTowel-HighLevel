@@ -244,7 +244,7 @@ class ThreadSensor extends AbstractThread
 		int[] distanceObstacleFront={0,0};
 		
 		if(!(distanceFront[0]==0))
-			distanceObstacleFront[0]=distanceFront[0];
+			distanceObstacleFront[0]=distanceFront[0]+radius;
 		else
 			distanceObstacleFront[0]=0;
 		
@@ -370,12 +370,11 @@ class ThreadSensor extends AbstractThread
 			obstacleAddedRight=true;
 		}
 		
-		/*
+		
 		if(!obstacleAddedRight)
 			removeObstacleRight();
 		if(!obstacleAddedLeft)
 			removeObstacleLeft();
-			*/
 	}
 
 	/**
