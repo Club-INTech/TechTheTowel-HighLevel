@@ -24,11 +24,11 @@ import utils.Log;
  *
  *  ____________________________
  * 	|							|
- * 	|2							|
+ * 	|1							|
  *	|----					----|
- * 	|Debut ennemi			   1|Debut de NOTRE robot
+ * 	|Debut ennemi			   0|Debut de NOTRE robot
  * 	|----					----|
- * 	|3							|
+ * 	|2							|
  *	|___________________________|
  *
  */
@@ -39,7 +39,7 @@ public class DropGlass extends AbstractScript
 	public DropGlass(HookFactory hookFactory, Config config, Log log) 
 	{
 		super(hookFactory, config, log);
-		versions = new int[]{1, 2, 3}; // liste des versions
+		versions = new int[]{0, 1, 2}; // liste des versions
 	}
 
 	@Override
@@ -47,7 +47,7 @@ public class DropGlass extends AbstractScript
 	{
 		boolean isThereGlassLeft = true; //TODO capteurs
 
-		if (version==1)
+		if (version==0)
 		{
 			stateToConsider.robot.turn(0);//On se tourne dans le bon sens
 			
@@ -75,7 +75,7 @@ public class DropGlass extends AbstractScript
 			
 			stateToConsider.robot.turn(Math.PI);//On se tourne dans le bon sens
 		}
-		else if (version==2)
+		else if (version==1)
 		{
 			// 950 -> 1200 en x pour eviter les PatNotFoundEXeception
 			stateToConsider.robot.turn(Math.PI);
@@ -103,7 +103,7 @@ public class DropGlass extends AbstractScript
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
 		}
-		else if (version==3)
+		else if (version==2)
 		{
 			//-900 -> -1200 pour eviter la PathNotFound Exception
 			stateToConsider.robot.turn(Math.PI);
@@ -131,23 +131,21 @@ public class DropGlass extends AbstractScript
 			//On referme les 2 bras
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
-			
-			
 		}
 	}
 	
 	@Override
 	public Circle entryPosition(int id, int ray) 
 	{
-		if (id==1)
+		if (id==0)
 		{
 			return new Circle(881,1000,0); // endroit de depart -50 cm en x
 		}
-		else if (id==2)
+		else if (id==1)
 		{
 			return new Circle(-950,1500,0); //milieu zone ennemi haute
 		}
-		else if (id==3)
+		else if (id==2)
 		{
 			return new Circle(-900,500,0); //milieu zone haute chez l'ennemi
 		}
