@@ -67,8 +67,14 @@ public class DropPile extends AbstractScript
 			
 			stateToConsider.robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, true);
 			stateToConsider.robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, true);
-			//on se vide (de nos plots)
+			//on se vide (de nos plots) et on se reajuste (de nos points)
+			int ball = 0;
+			if (stateToConsider.robot.isBallStored)
+				ball = 1;
+			stateToConsider.obtainedPoints += (2*ball+3)*stateToConsider.robot.storedPlotCount;
 			stateToConsider.robot.storedPlotCount = 0;
+			stateToConsider.robot.isBallStored = false;
+
 			
 			//on sort notre membre
 			stateToConsider.robot.moveLengthwise(-200, hooksToConsider, false);
@@ -104,8 +110,13 @@ public class DropPile extends AbstractScript
 			
 			stateToConsider.robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, true);
 			stateToConsider.robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, true);
-			//on se vide de nos plots
+			//on se vide de nos plots et on met a jour les points
+			int ball = 0;
+			if (stateToConsider.robot.isBallStored)
+				ball = 1;
+			stateToConsider.obtainedPoints += (2*ball+3)*stateToConsider.robot.storedPlotCount;
 			stateToConsider.robot.storedPlotCount = 0;
+			stateToConsider.robot.isBallStored = false;
 			
 			stateToConsider.robot.moveLengthwise(-150, hooksToConsider, false);
 			
@@ -149,10 +160,10 @@ public class DropPile extends AbstractScript
 	@Override
 	public int remainingScoreOfVersion(int version, GameState<?> stateToConsider)
 	{
+		int ball = 0;
 		if (stateToConsider.robot.isBallStored)
-			return 5*(stateToConsider.robot.storedPlotCount);
-		else
-			return 2*(stateToConsider.robot.storedPlotCount);
+			ball = 1;
+		return (2*ball+3)*stateToConsider.robot.storedPlotCount;
 	}
 
 	@Override
@@ -171,11 +182,9 @@ public class DropPile extends AbstractScript
 		}
 	}
 
-	@Override
-	public double getNoEnemyTime(GameState<?> stateToConsider, int id) 
+	public int[] getVersion(GameState<?> stateToConsider)
 	{
-		// FIXME Auto-generated method stub
-		return 0;
+		return versions;
 	}
 
 }

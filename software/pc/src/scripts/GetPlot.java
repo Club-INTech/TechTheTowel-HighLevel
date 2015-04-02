@@ -29,25 +29,7 @@ public class GetPlot extends AbstractScript
 	public GetPlot(HookFactory hookFactory, Config config, Log log) 
 	{
 		super(hookFactory, config, log);
-		ArrayList<Integer> versionList = new ArrayList<Integer>();
-		
-		//pour le plot 0
-		versionList.add(0); 
-		
-		 //pour le plot 1
-		versionList.add(1);
-		
-		//pour le plot 2
-		versionList.add(2); 
-		
-		//pour les plots 3 et 4 et le goblet devant
-		versionList.add(34); 
-		
-		//pour les plots 5 et 6
-		versionList.add(56); 
-		
-		//pour le plot 7
-		versionList.add(7); 
+		versions = new int[]{0,1,2,34,56,7};
 		
 	}
 	
@@ -358,9 +340,11 @@ public class GetPlot extends AbstractScript
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
 	}
 
-	@Override
-	public double getNoEnemyTime(GameState<?> stateToConsider, int id) {
-		// FIXME Auto-generated method stub
-		return 0;
+
+	
+	public int[] getVersion(GameState<?> stateToConsider)
+	{
+		return versions;
 	}
+
 }

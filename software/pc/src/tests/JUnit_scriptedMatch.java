@@ -2,12 +2,13 @@ package tests;
 
 import hook.Hook;
 
-import java.util.ArrayList;
 
+import java.util.ArrayList;
 import scripts.AbstractScript;
 import scripts.ScriptManager;
 import smartMath.Vec2;
 import strategie.GameState;
+import threads.ThreadTimer;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -34,6 +35,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 	ScriptManager scriptmanager;
 	SensorsCardWrapper  mSensorsCardWrapper;
 	PathDingDing pathDingDing;
+	ThreadTimer threadTimer;
 	
 	@SuppressWarnings("unchecked")
 	@Before
@@ -44,6 +46,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		scriptmanager = (ScriptManager) container.getService(ServiceNames.SCRIPT_MANAGER);
 		mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
         pathDingDing = (PathDingDing)container.getService(ServiceNames.PATHDINGDING);
+        threadTimer = (ThreadTimer)container.getService(ServiceNames.THREAD_TIMER);
 		emptyHook = new ArrayList<Hook> ();  
 
 		
@@ -77,7 +80,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		}
 
 		// maintenant que le jumper est retiré, le match a commencé
-		//ThreadTimer.matchStarted = true;
+		ThreadTimer.matchStarted = true;
 	}
 	
 	/**
@@ -112,7 +115,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 	@Test
 	public void test() throws PathNotFoundException, SerialFinallyException, SerialConnexionException
 	{
-		//container.startAllThreads();
+		container.startAllThreads();
 		waitMatchBegin();
 		//premiere action du match
 		
@@ -231,7 +234,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		try
 		{
 			
-			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(1, real_state, true, emptyHook );//On depose 1 verre dans notre zone
+			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(0, real_state, true, emptyHook );//On depose 1 verre dans notre zone
 		}
 		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException e) 
 		{
@@ -281,7 +284,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		try 
 		{
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le deposage en zone basse enemie");
-			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(2, real_state, true, emptyHook ); // On depose le verre chez les ennemis, en bas.
+			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(1, real_state, true, emptyHook ); // On depose le verre chez les ennemis, en bas.
 		}
 		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException e) 
 		{
@@ -291,7 +294,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		try 
 		{
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le deposage en zone haute enemie");	
-			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(3, real_state, true, emptyHook ); // On depose le verre chez les ennemis, en haut.
+			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(2, real_state, true, emptyHook ); // On depose le verre chez les ennemis, en haut.
 		}
 		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException e) 
 		{

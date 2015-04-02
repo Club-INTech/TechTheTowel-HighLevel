@@ -23,7 +23,7 @@ public class JUnit_Math extends JUnit_Test {
 	/** The z. */
 	Matrn z;
 	
-	@Test
+	//@Test
 	public void testPositionEnnemi()
 	{
 		int lectureCapteurGauche = 0;
@@ -372,5 +372,4 @@ public class JUnit_Math extends JUnit_Test {
 
 		y.transpose_equal();
 	}
-	
 }

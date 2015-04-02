@@ -281,6 +281,19 @@ public class Vec2
 	{
 	    other.x = x;
 	    other.y = y;
+	}	
+	
+	
+	public float angleBetween(Vec2 v2)
+	{
+		float dot = this.x * v2.x + this.y * v2.y;		
+		float mag_v1 = (float) Math.sqrt ( this.x*this.x + this.y*this.y );
+		float mag_v2 = (float) Math.sqrt ( v2.x*v2.x + v2.y*v2.y );
+		
+		double cosa = (double) (dot/(mag_v1*mag_v2));
+		
+		float angle = (float) Math.acos(cosa);
+		return angle;
 	}
 	
 }

@@ -108,6 +108,7 @@ public class JUnit_Sensors extends JUnit_Test
 	public void testEvitement()
 	{
 		log.debug("Test d'évitement", this);
+<<<<<<< HEAD
 		while(state.robot.getPosition().x > 900)
 		{
 			try 
@@ -126,7 +127,18 @@ public class JUnit_Sensors extends JUnit_Test
 					;
 				}
 			}
+=======
+
+		try 
+		{	
+			state.robot.moveLengthwiseWithoutDetection(state.robot.getPosition().x-800);
+		} 
+		catch (UnableToMoveException e1)
+		{
+			;
+>>>>>>> 9f6ff9f00ea0d4d0416ee2f144550085d3745c6f
 		}
+
 		log.critical("Fin de moveLengthWise" , this);
 		while(true)
 		{
@@ -138,6 +150,20 @@ public class JUnit_Sensors extends JUnit_Test
 			{
 				log.critical("!!!!!! Catch de"+e+" dans testEvitement !!!!!!" , this);
 			}	
+		}
+	}
+	
+	//@Test
+	public void testDetecting()
+	{
+		log.debug("Test d'évitement", this);
+		try 
+		{	
+			state.robot.moveLengthwise(500);
+		} 
+		catch (UnableToMoveException e) 
+		{
+			log.critical("!!!!!! Catch de"+e+" dans testWithoutDetecting !!!!!!" , this);;
 		}
 	}
 	
@@ -185,7 +211,7 @@ public class JUnit_Sensors extends JUnit_Test
 		{
 			try
 			{
-				mLocomotion.detectEnemy(true, false);
+				mLocomotion.detectEnemy(true, false, state.robot.getPosition());
 			}
 			catch (UnexpectedObstacleOnPathException unexpectedObstacle)
 	        {
@@ -197,7 +223,7 @@ public class JUnit_Sensors extends JUnit_Test
             	{
             		try
             		{
-            			mLocomotion.detectEnemy(true, false);
+            			mLocomotion.detectEnemy(true, false, state.robot.getPosition());
             			break;
             		}
             		catch(UnexpectedObstacleOnPathException e2)
@@ -225,14 +251,14 @@ public class JUnit_Sensors extends JUnit_Test
 	}
 
 	
-/*    @Test
+    //@Test
     public void faux_test() throws Exception
     {
-        config.set("capteurs_on", true);
+        config.set("capteurs_on", "true");
         for(int i = 0; i < 10000; i++)
         {
-            System.out.println(capteurs.mesurer_ultrason());
             Sleep.sleep(100);
         }
-    }*/
+    }
+
 }

@@ -119,11 +119,6 @@ public abstract class AbstractScript implements Service
 	{
 	}
 
+	abstract public int[] getVersion(GameState<?> stateToConsider);
 
-	/**
-	 * methode qui donne a la strategie le temps que prends le script si il n'y a pas d'ennemi (pour gagner du temps par rapport a RobotChrono)
-	 * @param id le numero de verion du script
-	 * @return le temps que prend le script si il n'y a pas d'ennemi sur notre route
-	 */
-	public abstract double getNoEnemyTime(GameState<?> stateToConsider, int id);
 }
