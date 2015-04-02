@@ -230,7 +230,8 @@ public class ObstacleManager
     public synchronized void removeNonDetectedObstacles(Vec2 robotPosition, Vec2 detectionPoint)
     {
     	for(int i = 0; i < mMobileObstacles.size(); i++)
-    		if(PathDingDing.intersects(new Segment(robotPosition, detectionPoint), new Circle(mMobileObstacles.get(i).position, mMobileObstacles.get(i).radius)))
+    		if(PathDingDing.intersects(new Segment(robotPosition, detectionPoint),
+    								   new Circle(mMobileObstacles.get(i).position, mMobileObstacles.get(i).radius)))
     			mMobileObstacles.remove(i--);
     }
 
@@ -349,5 +350,39 @@ public class ObstacleManager
     	for(int i=0; i<mRectangles.size(); i++)
     		isObstructed=isPositionInObstacle(position, mRectangles.get(i));
         return isObstructed;
+    }
+    
+    /**
+     *  On enleve les obstacles presents sur la table virtuelle mais non detectés
+     */
+    public synchronized void removeNonDetectedObstacles(Vec2 position, double orientation, double detectionRadius, double detectionAngle, int ennemyRadius)
+    {
+    	for(int i = 0; i < mMobileObstacles.size(); i++)
+    	{// On verifie que l'ennemi est dans le cercle de detection actuel
+    		Vec2 ennemyPosition = mMobileObstacles.get(i).position;
+    		if(		(ennemyPosition.x - position.x)*(ennemyPosition.x - position.x)
+    			  + (ennemyPosition.y - position.y)*(ennemyPosition.y - position.y)
+    			  <  detectionRadius 
+    		  )
+    		{
+    			// On va faire en sorte que le "position" devienne le (0,0) d'un repere :
+    			
+    			Vec2 newEnnemyPosition = position.clone();
+    			newEnnemyPosition.minus(ennemyPosition);
+    			
+    			// On crée un vecteur qui part du capteur et va en ligne droite , centré en 0,0
+    			Vec2 vectorFrontSensor = new Vec2();
+    			vectorFrontSensor.x=(int) (Math.cos(orientation)*100);
+    			vectorFrontSensor.y=(int) (Math.sin(orientation)*100);
+    			
+    			// si on est dans le cone de detection :
+    			if(		vectorFrontSensor.angleBetween(newEnnemyPosition)  <  detectionAngle
+    				&&  vectorFrontSensor.angleBetween(newEnnemyPosition)  > -detectionAngle
+    				&&  PathDingDing.intersects(new Segment(vectorFrontSensor, new Vec2(0,0)), 
+    											new Circle(newEnnemyPosition, ennemyRadius) ) )
+    				 // alors, on supprime cet obstacle fantome
+    				mMobileObstacles.remove(i);
+    		}
+    	}
     }
 }

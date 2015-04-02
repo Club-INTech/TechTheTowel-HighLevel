@@ -54,6 +54,11 @@ class ThreadSensor extends AbstractThread
 	double maxSensorRange;
 	
 	/**
+	 *  Angle de visibilité qu'a le capteur 
+	 */
+	double detectionAngle;
+	
+	/**
 	 * Distance minimale à laquelle on peut se fier aux capteurs : ne pas detecter notre propre root par exemple
 	 */
 	double minSensorRange = 80;
@@ -473,6 +478,8 @@ class ThreadSensor extends AbstractThread
 		maxSensorRange = Integer.parseInt(config.getProperty("largeur_robot"))
 						 / Math.sin(Float.parseFloat(config.getProperty("angle_capteur")));
 		
+		detectionAngle=Float.parseFloat(config.getProperty("angle_capteur"));
+		
 		robotWidth = Integer.parseInt(config.getProperty("largeur_robot"));
 		robotLenght = Integer.parseInt(config.getProperty("longueur_robot"));
 	}
@@ -507,56 +514,33 @@ class ThreadSensor extends AbstractThread
 	}
 	
 	
+	
+	/**
+	 *  On enleve les obstacles qu'on ne voit pas
+	 */
 	private void removeObstacleLeft()
 	{
-		for(int i = 0;i<mTable.getObstacleManager().getMobileObstaclesCount(); i++)
-		{
-			Vec2 positionObstacle, position, posPointFrontRobot;
-			double orientation, angleBetweenVectors;
-
-			positionObstacle=mTable.getObstacleManager().getMobileObstacles().get(i).getPosition();
-			position=mRobot.getPosition();
-			orientation=mRobot.getOrientation();
-			
-			// On verifie si les obstacles sont proches du robot
-			if(		(positionObstacle.x-position.x)*(positionObstacle.x-position.x)
-				+   (positionObstacle.y-position.y)*(positionObstacle.y-position.y)	< (maxSensorRange+radius) )
-				// Parmis ceux près du robot, on verifie ceux qui sont visibles
-			{
-				posPointFrontRobot=changeReference(new Vec2(-distanceBetweenFrontSensors/2,100), position, orientation );
-				position.minus(positionObstacle);// position relative
-				angleBetweenVectors=position.angleBetween(posPointFrontRobot);
-				
-				
-			}
-			
-		}
+		Vec2 position, sensorPosition;
+		double orientation;
+		
+		orientation=mRobot.getOrientation();
+		position=mRobot.getPosition(); // absolu
+		
+		sensorPosition=changeReference(leftFrontSensorPosition, position, orientation); // passage de la position du capteur en absolu
+		
+		mTable.getObstacleManager().removeNonDetectedObstacles(position, (orientation+leftFrontSensorAngle), (maxSensorRange+radius), detectionAngle, radius);
 	}
 	
 	private void removeObstacleRight()
 	{
-		for(int i = 0;i<mTable.getObstacleManager().getMobileObstaclesCount(); i++)
-		{
-			Vec2 positionObstacle, position, posPointFrontRobot;
-			double orientation, angleBetweenVectors;
-			
-			positionObstacle=mTable.getObstacleManager().getMobileObstacles().get(i).getPosition();
-			position=mRobot.getPosition();
-			orientation=mRobot.getOrientation();
-			
-			// On verifie si les obstacles sont proches du robot
-			if(		(positionObstacle.x-position.x)*(positionObstacle.x-position.x)
-				+   (positionObstacle.y-position.y)*(positionObstacle.y-position.y)	< (maxSensorRange+radius) )
-				// Parmis ceux près du robot, on verifie ceux qui sont visibles
-			{
-				posPointFrontRobot=changeReference(new Vec2(distanceBetweenFrontSensors/2,100), position, orientation );
-				position.minus(positionObstacle);// position relative
-				angleBetweenVectors=position.angleBetween(posPointFrontRobot);
-				
-				
-			}
-				
-			
-		}
+		Vec2 position, sensorPosition;
+		double orientation;
+		
+		orientation=mRobot.getOrientation();
+		position=mRobot.getPosition(); // absolu
+		
+		sensorPosition=changeReference(rightFrontSensorPosition, position, orientation); // passage de la position du capteur en absolu
+		
+		mTable.getObstacleManager().removeNonDetectedObstacles(sensorPosition, (orientation+rightFrontSensorAngle), (maxSensorRange+radius), detectionAngle, radius);
 	}
 }
