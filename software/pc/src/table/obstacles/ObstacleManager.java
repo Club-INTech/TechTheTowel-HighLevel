@@ -355,27 +355,28 @@ public class ObstacleManager
     /**
      *  On enleve les obstacles presents sur la table virtuelle mais non detectés
      */
-    public synchronized void removeNonDetectedObstacles(Vec2 position, double orientation, double detectionRadius, double detectionAngle, int ennemyRadius)
+    public synchronized void removeNonDetectedObstacles(Vec2 position, double orientation, double detectionRadius, double detectionAngle)
     {
 		// On crée un vecteur qui part du capteur et va en ligne droite , centré en 0,0
 		Vec2 vectorFrontSensor = new Vec2();
-		vectorFrontSensor.x=(int) (Math.cos(orientation)*100);
-		vectorFrontSensor.y=(int) (Math.sin(orientation)*100);
+		vectorFrontSensor.x=(int) (Math.cos(orientation));
+		vectorFrontSensor.y=(int) (Math.sin(orientation));
 		log.debug("vectorFrontSensor "+vectorFrontSensor, this);
 		
 		Vec2 vectorCone1 = new Vec2();
-		vectorCone1.x=(int) (Math.cos(orientation+detectionAngle/2)*100);
-		vectorCone1.y=(int) (Math.sin(orientation+detectionAngle/2)*100);
-		log.debug("vectorFrontSensor "+vectorFrontSensor, this);
+		vectorCone1.x=(int) (Math.cos(orientation+detectionAngle/2));
+		vectorCone1.y=(int) (Math.sin(orientation+detectionAngle/2));
+		log.debug("vectorCone1 "+vectorFrontSensor, this);
 		
 		Vec2 vectorCone2 = new Vec2();
-		vectorCone2.x=(int) (Math.cos(orientation-detectionAngle/2)*100);
-		vectorCone2.y=(int) (Math.sin(orientation-detectionAngle/2)*100);
-		log.debug("vectorFrontSensor "+vectorCone2, this);
+		vectorCone2.x=(int) (Math.cos(orientation-detectionAngle/2));
+		vectorCone2.y=(int) (Math.sin(orientation-detectionAngle/2));
+		log.debug("vectorCone2 "+vectorCone2, this);
 		
     	for(int i = 0; i < mMobileObstacles.size(); i++)
     	{// On verifie que l'ennemi est dans le cercle de detection actuel
     		Vec2 ennemyPosition = mMobileObstacles.get(i).position;
+    		int  ennemyRadius	= mMobileObstacles.get(i).radius;
     		if(		(ennemyPosition.x - position.x)*(ennemyPosition.x - position.x)
     			  + (ennemyPosition.y - position.y)*(ennemyPosition.y - position.y)
     			  <  detectionRadius 
@@ -390,8 +391,10 @@ public class ObstacleManager
     			
     			
     			if(		// si on est dans le cone de detection :
-    				(			vectorFrontSensor.angleBetween(newEnnemyPosition)  <  detectionAngle/2
-    						&&  vectorFrontSensor.angleBetween(newEnnemyPosition)  > -detectionAngle/2 )
+    				(			Math.atan2(vectorFrontSensor.x-newEnnemyPosition.x, 
+    									  vectorFrontSensor.y-newEnnemyPosition.y )  <  detectionAngle/2
+    						&&  Math.atan2(vectorFrontSensor.x-newEnnemyPosition.x, 
+    									  vectorFrontSensor.y-newEnnemyPosition.y )   > -detectionAngle/2 )
     				// Ou si on croise les cotés du cone
     				||  PathDingDing.intersects(new Segment(vectorCone1, new Vec2(0,0)), 
     											new Circle(newEnnemyPosition, ennemyRadius) )
