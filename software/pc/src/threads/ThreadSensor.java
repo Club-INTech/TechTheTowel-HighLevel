@@ -528,7 +528,7 @@ class ThreadSensor extends AbstractThread
 		
 		sensorPosition=changeReference(leftFrontSensorPosition, position, orientation); // passage de la position du capteur en absolu
 		
-		mTable.getObstacleManager().removeNonDetectedObstacles(position, (orientation-leftFrontSensorAngle), (maxSensorRange+radius), detectionAngle);
+		mTable.getObstacleManager().removeNonDetectedObstacles(position, (orientation-leftFrontSensorAngle), maxSensorRange, detectionAngle);
 	}
 	
 	private void removeObstacleRight()
@@ -541,6 +541,6 @@ class ThreadSensor extends AbstractThread
 		
 		sensorPosition=changeReference(rightFrontSensorPosition, position, orientation); // passage de la position du capteur en absolu
 		
-		mTable.getObstacleManager().removeNonDetectedObstacles(sensorPosition, (orientation+rightFrontSensorAngle), (maxSensorRange+radius), detectionAngle);
+		mTable.getObstacleManager().removeNonDetectedObstacles(sensorPosition, (orientation+rightFrontSensorAngle), maxSensorRange, detectionAngle);
 	}
 }

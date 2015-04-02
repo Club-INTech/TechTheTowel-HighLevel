@@ -377,6 +377,7 @@ public class ObstacleManager
     	{// On verifie que l'ennemi est dans le cercle de detection actuel
     		Vec2 ennemyPosition = mMobileObstacles.get(i).position;
     		int  ennemyRadius	= mMobileObstacles.get(i).radius;
+    		int detectionPlusRadius = detectionRadius+ennemyRadius;
     		if(		(ennemyPosition.x - position.x)*(ennemyPosition.x - position.x)
     			  + (ennemyPosition.y - position.y)*(ennemyPosition.y - position.y)
     			  <  detectionRadius 
@@ -392,15 +393,15 @@ public class ObstacleManager
     			
     			if(		// si on est dans le cone de detection :
     				(			Math.atan2(vectorFrontSensor.x-newEnnemyPosition.x, 
-    									  vectorFrontSensor.y-newEnnemyPosition.y )  <  detectionAngle/2
+    									   vectorFrontSensor.y-newEnnemyPosition.y )  <  detectionAngle/2
     						&&  Math.atan2(vectorFrontSensor.x-newEnnemyPosition.x, 
-    									  vectorFrontSensor.y-newEnnemyPosition.y )   > -detectionAngle/2 )
+    									   vectorFrontSensor.y-newEnnemyPosition.y )   > -detectionAngle/2 )
     				// Ou si on croise les cotés du cone
     				||  PathDingDing.intersects(new Segment(vectorCone1, new Vec2(0,0)), 
     											new Circle(newEnnemyPosition, ennemyRadius) )
     				||  PathDingDing.intersects(new Segment(vectorCone2, new Vec2(0,0)), 
 												new Circle(newEnnemyPosition, ennemyRadius) ) 
-    			  )
+    			  ) 
     				 // alors, on supprime cet obstacle fantome
     				mMobileObstacles.remove(i);
     		}
