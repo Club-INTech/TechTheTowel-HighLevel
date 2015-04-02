@@ -221,8 +221,6 @@ public class ObstacleManager
     	{
     		log.debug("Ennemi hors de la table", this);
 		}
-    	int a = 0;
-    	a++;
     }
 
 

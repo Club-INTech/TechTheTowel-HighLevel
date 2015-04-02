@@ -138,12 +138,18 @@ public class RobotReal extends Robot
     @Override
     public void followPath(ArrayList<Vec2> chemin, ArrayList<Hook> hooks) throws UnableToMoveException
     {
+    	cheminSuivi=(ArrayList<Vec2>) chemin.clone();
+    	System.out.println(cheminSuivi+" // "+chemin);
+
         mLocomotion.followPath(chemin, hooks, DirectionStrategy.getDefaultStrategy());
     }
+    
 
     @Override
     protected void followPath(ArrayList<Vec2> chemin, ArrayList<Hook> hooks, DirectionStrategy direction) throws UnableToMoveException
     {
+    	cheminSuivi=(ArrayList<Vec2>) chemin.clone();
+    	System.out.println(cheminSuivi+" // "+chemin);
         mLocomotion.followPath(chemin, hooks, direction);
     }
 

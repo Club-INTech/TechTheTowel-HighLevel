@@ -112,8 +112,9 @@ public class Locomotion implements Service
      * 	La correction ne sera effectuée que si le robot est assez eloigné de son orientation souhaitée.
      */
     private double maxRotationCorrectionThreeshold = 0.05;
-    
-	/**Booleen explicitant si le robot est en train de tourner */
+
+	
+	/**Booleen explicitant si le robot est pret à tourner, utile pour le cercle de detection */
 	public boolean isRobotTurning=false;
 	
 
@@ -213,7 +214,7 @@ public class Locomotion implements Service
     	
     	//un simple for (on vas au point 0 puis au point 1 etc.)
     	finalAim = path.get(path.size()-1);
-    	
+  
     	path.remove(0);//On enleve le premier point, notre propre position
     	
     	for(int i = 0; i < path.size(); i++)
@@ -263,6 +264,8 @@ public class Locomotion implements Service
 	        
 	        moveToPointException(aim, hooks, direction, mur, turnOnly);
     	}
+    	
+    	log.debug("Arrivés en "+aim, this);
     }
     
     /**
@@ -313,10 +316,7 @@ public class Locomotion implements Service
                         	if((unexpectedWallImpactCounter & 1) == 0)
                         		deplacements.turn(orientation+angleToDisengage);
                         	else
-                        		deplacements.turn(orientation-angleToDisengage);
-                        	
-                        	isRobotTurning=false;
-                        	
+                        		deplacements.turn(orientation-angleToDisengage);                        	
                         }
                         else if(isMovementForward)
                             deplacements.moveLengthwise(distanceToDisengage);
@@ -539,16 +539,23 @@ public class Locomotion implements Service
 
         try
         {
-            isRobotTurning=true;// prochain ordre : on tourne
+            
 
         	if(isCorrection && Math.abs(delta) > maxRotationCorrectionThreeshold)
         	{
+        		isRobotTurning=true;// prochain ordre : on tourne
+                
         		deplacements.turn(angle);  // On ne tourne que si on est assez loin de l'orientation voulu
               
         		log.debug("Angle corrigé", this);
         	}
         	else if(!isCorrection)// Si ca n'est pas  une correction
         	{
+        		if(Math.abs(delta)>maxRotationCorrectionThreeshold)
+        		{// on ne tourne vraiment que si l'angle souhaité est vraiment different.
+	        		isRobotTurning=true;// prochain ordre : on tourne
+        		}
+                
         		deplacements.turn(angle);
         	}
         	
@@ -604,7 +611,6 @@ public class Locomotion implements Service
         		}
         		else
         		{
-            		log.debug("Arrivés a destination", this);
         			return !infos[0];//On est arrivés
         		}
         	}
@@ -635,13 +641,22 @@ public class Locomotion implements Service
         
         //rayon du cercle de detection
         int detectionRadius = robotLength/2 + detectionDistance;
-    
         
         //centre du cercle de detection
         Vec2 detectionCenter = new Vec2((int)(signe * detectionRadius * Math.cos(orientation)), 
         								(int)(signe * detectionRadius * Math.sin(orientation))); //centre par rapport au cnetre de position du robot
         	
         detectionCenter.plus(position);
+
+        // si on ne tourne pas, on regarde devant nous : sinon, on regarde autour de nous
+        if(isRobotTurning)
+        {
+        	  if(table.getObstacleManager().isDiscObstructed(position, robotLength/2))
+              {
+                  log.warning( "Lancement de UnexpectedObstacleOnPathException dans detectEnemy", this);
+                  throw new UnexpectedObstacleOnPathException();
+              }
+        }
         
         // si on ne tourne pas, on regarde devant nous : sinon, on regarde autour de nous
         if(isRobotTurning)
