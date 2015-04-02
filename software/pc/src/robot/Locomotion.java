@@ -701,7 +701,6 @@ public class Locomotion implements Service
                   if (table.getObstacleManager().isDiscObstructed(detectionCenter, detectionDistance/2) || aim.distance(position)>(detectionDistance/2))
                   	throw new UnexpectedObstacleOnPathException();
               }
-        	  isRobotTurning=false;
         }
         // si on ne tourne pas, on regarde devant nous : sinon, on regarde autour de nous
         if(isRobotTurning)

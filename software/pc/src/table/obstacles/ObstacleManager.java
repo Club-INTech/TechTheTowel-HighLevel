@@ -207,7 +207,7 @@ public class ObstacleManager
     public synchronized void addObstacle(final Vec2 position, final int radius)
     {
     	//si la position est dans la table on continue les tests
-    	if (position.x>-1500+radius && position.x<1500-radius && position.y>0+radius && position.y<2000-radius)
+    	if (position.x>-1500-radius && position.x<1500+radius && position.y>0-radius && position.y<2000+radius)
     	{
     		/*on ne test pas si la position est dans un obstcle deja existant 
     		 *on ne detecte pas les plots ni les goblets (et si on les detectes on prefere ne pas prendre le risque et on les evites)
@@ -377,7 +377,7 @@ public class ObstacleManager
     	{// On verifie que l'ennemi est dans le cercle de detection actuel
     		Vec2 ennemyPosition = mMobileObstacles.get(i).position;
     		int  ennemyRadius	= mMobileObstacles.get(i).radius;
-    		int detectionPlusRadius = detectionRadius+ennemyRadius;
+    		int detectionPlusRadius = (int) (detectionRadius+ennemyRadius);
     		if(		(ennemyPosition.x - position.x)*(ennemyPosition.x - position.x)
     			  + (ennemyPosition.y - position.y)*(ennemyPosition.y - position.y)
     			  <  detectionRadius 
