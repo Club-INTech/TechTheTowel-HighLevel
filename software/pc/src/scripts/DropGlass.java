@@ -36,6 +36,8 @@ public class DropGlass extends AbstractScript
 {
 	
 
+	private static final int AverageTimeToGetPlot = 5000;
+
 	public DropGlass(HookFactory hookFactory, Config config, Log log) 
 	{
 		super(hookFactory, config, log);
@@ -83,7 +85,7 @@ public class DropGlass extends AbstractScript
 			
 			stateToConsider.robot.turn((5/4)*Math.PI); // On se tourne aux 3/4 afin de pouvoir mettre l'un ou l'autre des verres
 
-			isThereGlassLeft=false;//histoire de changer mais lees capteurs feront le boulot
+			isThereGlassLeft=false;//TODO histoire de changer mais lees capteurs feront le boulot
 			if(isThereGlassLeft)
 			{
 				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);
@@ -159,7 +161,19 @@ public class DropGlass extends AbstractScript
 	@Override
 	public int remainingScoreOfVersion(int version, GameState<?> stateToConsider)
 	{
-		return 0;//TODO calculer score : normalement, 4 par version .
+		int toReturn=4;
+		//si la zone a remplir n'est pas deja remplie
+		if (!stateToConsider.table.isAreaXFilled(version))
+			//si on a un gobelet stocke
+			if (stateToConsider.robot.isGlassStoredLeft || stateToConsider.robot.isGlassStoredRight)
+			{
+				//si on gene la future prise de balle on retire des points
+				if(stateToConsider.table.isBallTaken() && version == 0)
+					toReturn -= 5*Math.min((int)(90000-stateToConsider.timeEllapsed)/AverageTimeToGetPlot,
+											stateToConsider.table.numberOfPlotLeft());
+				return toReturn;
+			}
+		return 0;
 	}
 
 	@Override
@@ -185,7 +199,22 @@ public class DropGlass extends AbstractScript
 
 	public int[] getVersion(GameState<?> stateToConsider)
 	{
-		return versions;
+		ArrayList<Integer> versionList = new ArrayList<Integer>();
+		versionList.add(0);
+		versionList.add(1);
+		versionList.add(2);
+		for (int i = 0; i<3; i++)
+			if (stateToConsider.table.isAreaXFilled(i))
+				versionList.remove((Integer) i);
+			
+			
+		//on convertit l'arrayList en int[]	
+		int[] retour = new int[versionList.size()];
+	    for (int i=0; i < retour.length; i++)
+	    {
+	    	retour[i] = versionList.get(i).intValue();
+	    }
+		return retour;
 	}
 
 }

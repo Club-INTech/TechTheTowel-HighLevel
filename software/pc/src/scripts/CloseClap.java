@@ -37,6 +37,10 @@ import utils.Log;
 
 public class CloseClap extends AbstractScript 
 {
+	private static final int AverageTimeToPlaceGlass = 10000;
+
+	private static final int AverageTimeToPlacePlot = 5000;
+
 	//Distance à avancer après le clap 2 pour esquiver l'estrade rouge en (0,0)
 	private int distanceToDodgeEstrade = 250;
 	
@@ -491,6 +495,12 @@ public class CloseClap extends AbstractScript
 			score -= 5;
 		if(stateToConsider.table.isClapXClosed(3) || version == 1 || version == 2 || version == 12 || version == -1 || version == -12)
 			score -= 5;
+		if(!stateToConsider.table.isGlassXTaken(0) && (version ==1 || version == 12 || version == -1 || version == -12))
+			score -=Math.min((int)(90000-stateToConsider.timeEllapsed)/AverageTimeToPlaceGlass, 4);
+		if(!stateToConsider.table.isPlotXEaten(3) && (version ==1 || version == 12 || version == -1 || version == -12))
+			score -= Math.min((int)(90000-stateToConsider.timeEllapsed)/AverageTimeToPlacePlot, 5);
+		if(!stateToConsider.table.isPlotXEaten(4) && (version ==1 || version == 12 || version == -1 || version == -12))
+			score -=Math.min((int)(90000-stateToConsider.timeEllapsed)/AverageTimeToPlacePlot,5);
 		return score;
 	}
 
@@ -515,7 +525,44 @@ public class CloseClap extends AbstractScript
 
 	public int[] getVersion(GameState<?> stateToConsider)
 	{
-		return versions;
+		ArrayList<Integer> versionList = new ArrayList<Integer>();
+		versionList.add(1);
+		versionList.add(2);
+		versionList.add(3);
+		versionList.add(12);
+		versionList.add(123);
+		versionList.add(-12);
+		versionList.add(-1);
+		
+		if (stateToConsider.table.isClapXClosed(1))
+		{
+			versionList.remove((Integer)1);
+			versionList.remove((Integer)12);
+			versionList.remove((Integer)123);
+			versionList.remove((Integer)(-12));
+			versionList.remove((Integer)(-1));
+		}
+		if (stateToConsider.table.isClapXClosed(2))
+		{
+			versionList.remove((Integer)2);
+			versionList.remove((Integer)12);
+			versionList.remove((Integer)(-12));
+			versionList.remove((Integer)123);
+		}
+		if (stateToConsider.table.isClapXClosed(3))
+		{
+			versionList.remove((Integer)3);
+			versionList.remove((Integer)123);
+		}
+		
+		
+		//on convertit l'arrayList en int[]	
+				int[] retour = new int[versionList.size()];
+			    for (int i=0; i < retour.length; i++)
+			    {
+			    	retour[i] = versionList.get(i).intValue();
+			    }
+				return retour;
 	}
 }
 

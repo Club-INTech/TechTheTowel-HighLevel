@@ -25,6 +25,11 @@ import utils.Log;
  */
 public class DropPile extends AbstractScript
 {
+	/**
+	 * le temps moyen qu'on met a manger un plot (ms)
+	 */
+	private static final int AverageTimeToGetPlot = 5000;
+
 	public DropPile(HookFactory hookFactory, Config config, Log log) 
 	{
 		super(hookFactory, config, log);
@@ -160,10 +165,15 @@ public class DropPile extends AbstractScript
 	@Override
 	public int remainingScoreOfVersion(int version, GameState<?> stateToConsider)
 	{
-		int ball = 0;
-		if (stateToConsider.robot.isBallStored)
-			ball = 1;
-		return (2*ball+3)*stateToConsider.robot.storedPlotCount;
+			int ball = 0;
+			if (stateToConsider.robot.isBallStored)
+				ball = 1;
+			int toReturn = (2*ball+3)*stateToConsider.robot.storedPlotCount;
+			//si on pose dans notre base et que la balle n'a pas deja ete attrapee on reduit le nombre de points par 5*le nombre de plots encore possible d'empiler
+			if (version == 2 && !stateToConsider.table.isBallTaken())
+				toReturn -= 5*Math.min((int)(90000-stateToConsider.timeEllapsed)/AverageTimeToGetPlot,
+									stateToConsider.table.numberOfPlotLeft());
+			return toReturn;
 	}
 
 	@Override
@@ -184,6 +194,7 @@ public class DropPile extends AbstractScript
 
 	public int[] getVersion(GameState<?> stateToConsider)
 	{
+		//TODO
 		return versions;
 	}
 

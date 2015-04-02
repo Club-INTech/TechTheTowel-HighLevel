@@ -20,6 +20,7 @@ import scripts.ScriptManager;
 import table.Table;
 import utils.Log;
 import utils.Config;
+import utils.Sleep;
 
 
 /**
@@ -96,6 +97,17 @@ public class Strategie implements Service
 	
 	public void IA()
 	{
+		try 
+		{
+			scriptmanager.getScript(ScriptNames.EXIT_START_ZONE).execute(0, gameState, hookRobot, true);
+		} 
+		catch (UnableToMoveException | SerialConnexionException e1) 
+		{
+			log.critical("impossible de sortir de la zone de depart", this);
+			Sleep.sleep(500);
+			IA();
+			return;
+		}
 		//tant que le match n'est pas fini, on prend des decisions :
 		while(realGameState.timeEllapsed   <  Integer.parseInt(config.getProperty("temps_match")))
 		{
@@ -122,26 +134,30 @@ public class Strategie implements Service
 		nextScriptValue=Integer.MIN_VALUE;
 		for(ScriptNames scriptName : ScriptNames.values())
 		{
-			AbstractScript script = scriptmanager.getScript(scriptName);
-			int[] versions = script.getVersion(realGameState);
-			
-			for(int i=0; i<(versions.length);i++)
+			if (scriptName != ScriptNames.EXIT_START_ZONE)
 			{
-				int valueScript = maxValuable(script, versions[i]);
-				if (valueScript>nextScriptValue)
+				AbstractScript script = scriptmanager.getScript(scriptName);
+				int[] versions = script.getVersion(realGameState);
+				
+				for(int i=0; i<(versions.length);i++)
 				{
-					nextScript=script;
-					nextScriptValue=valueScript;
-					nextScriptVersion=i;
+					int valueScript = maxValuable(script, versions[i]);
+					if (valueScript>nextScriptValue)
+					{
+						nextScript=script;
+						nextScriptValue=valueScript;
+						nextScriptVersion=i;
+					}
+						
 				}
-					
 			}
 		}
 	}
 
-	private int maxValuable(AbstractScript script, int i) 
+	private int maxValuable(AbstractScript script, int version) 
 	{
-		// TODO trouver la valeure d'un script
-		return 0;
+		// TODO trouver la valeur d'un script
+		return script.remainingScoreOfVersion(version, gameState);
+		
 	}
 }

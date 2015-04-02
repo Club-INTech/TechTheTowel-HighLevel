@@ -63,7 +63,8 @@ public class ExitBeginZone extends AbstractScript
 	@Override
 	public int remainingScoreOfVersion(int id_version, GameState<?> state) 
 	{		
-		return 0;
+		// grosse grosse value du script
+		return Integer.MAX_VALUE;
 	}
 
 	@Override
