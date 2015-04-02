@@ -715,7 +715,7 @@ public class Locomotion implements Service
             if (table.getObstacleManager().isDiscObstructed(detectionCenter, detectionDistance/2) || aim.distance(position)>(detectionDistance/2))
             	throw new UnexpectedObstacleOnPathException();
         }
-        else 
+        else
         {
         	if(table.getObstacleManager().getMobileObstaclesCount()==0);
         	//log.debug("Pas d'ennemi en memoire", this);

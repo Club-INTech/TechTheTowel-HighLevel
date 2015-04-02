@@ -312,11 +312,10 @@ class ThreadSensor extends AbstractThread
 				relativePosEnnemi1.x=positionEnnemi_1.x;
 				relativePosEnnemi1.y=positionEnnemi_1.y;
 				
-				//FIXME Bourrinage
-				relativePosEnnemi1.x=distanceObstacleFront[0];
+/*				relativePosEnnemi1.x=distanceObstacleFront[0];
 				relativePosEnnemi1.y=-distanceBetweenFrontSensors/2;
 				relativePosEnnemi2.x=distanceObstacleFront[1];
-				relativePosEnnemi2.y=distanceBetweenFrontSensors/2;
+				relativePosEnnemi2.y=distanceBetweenFrontSensors/2;*/
 				
 				// Maintenant, on le remet dans le repere du robot
 				positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
@@ -347,9 +346,9 @@ class ThreadSensor extends AbstractThread
 			relativePosEnnemi1.x=positionEnnemi_1.x;
 			relativePosEnnemi1.y=positionEnnemi_1.y;
 			
-			// FIXME Bourrinage
+			/*// FIXME Bourrinage
 			relativePosEnnemi1.x=distanceObstacleFront[0];
-			relativePosEnnemi1.y=-distanceBetweenFrontSensors/2;
+			relativePosEnnemi1.y=-distanceBetweenFrontSensors/2;*/
 			
 			// On change de repere 
 			positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
@@ -370,9 +369,9 @@ class ThreadSensor extends AbstractThread
 			relativePosEnnemi1.x=positionEnnemi_1.x;
 			relativePosEnnemi1.y=positionEnnemi_1.y;
 			
-			//FIXME Bourrinage
+			/*//FIXME Bourrinage
 			relativePosEnnemi1.x=distanceObstacleFront[1];
-			relativePosEnnemi1.y=distanceBetweenFrontSensors/2;
+			relativePosEnnemi1.y=distanceBetweenFrontSensors/2;*/
 			
 			// On change de repere 
 			positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
@@ -382,11 +381,14 @@ class ThreadSensor extends AbstractThread
 			obstacleAddedRight=true;
 		}
 		
-		
-		if(!obstacleAddedRight)
-			removeObstacleRight();
-		if(!obstacleAddedLeft)
-			removeObstacleLeft();
+		if(distanceObstacleFront[1] != 0)
+			removeObstacleRight((int)((distanceObstacleFront[1] - radius)*0.9));
+		else
+			removeObstacleRight((int)maxSensorRange);
+		if(distanceObstacleFront[0] != 0)
+			removeObstacleLeft((int)((distanceObstacleFront[0] - radius)*0.9));
+		else
+			removeObstacleLeft((int)maxSensorRange);
 	}
 
 	/**
@@ -518,7 +520,7 @@ class ThreadSensor extends AbstractThread
 	/**
 	 *  On enleve les obstacles qu'on ne voit pas
 	 */
-	private void removeObstacleLeft()
+	private void removeObstacleLeft(int detectionDistance)
 	{
 		Vec2 position, sensorPosition;
 		double orientation;
@@ -528,10 +530,10 @@ class ThreadSensor extends AbstractThread
 		
 		sensorPosition=changeReference(leftFrontSensorPosition, position, orientation); // passage de la position du capteur en absolu
 		
-		mTable.getObstacleManager().removeNonDetectedObstacles(position, (orientation-leftFrontSensorAngle), maxSensorRange, detectionAngle);
+		mTable.getObstacleManager().removeNonDetectedObstacles(position, (orientation-leftFrontSensorAngle), detectionDistance, detectionAngle);
 	}
 	
-	private void removeObstacleRight()
+	private void removeObstacleRight(int detectionDistance)
 	{
 		Vec2 position, sensorPosition;
 		double orientation;
@@ -541,6 +543,6 @@ class ThreadSensor extends AbstractThread
 		
 		sensorPosition=changeReference(rightFrontSensorPosition, position, orientation); // passage de la position du capteur en absolu
 		
-		mTable.getObstacleManager().removeNonDetectedObstacles(sensorPosition, (orientation+rightFrontSensorAngle), maxSensorRange, detectionAngle);
+		mTable.getObstacleManager().removeNonDetectedObstacles(sensorPosition, (orientation+rightFrontSensorAngle), detectionDistance, detectionAngle);
 	}
 }
