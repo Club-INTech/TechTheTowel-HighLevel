@@ -708,9 +708,8 @@ public class Locomotion implements Service
         {
             log.warning("Ennemi détecté en : " + detectionCenter, this);
             log.warning( "Lancement de UnexpectedObstacleOnPathException dans detectEnemy", this);
-            //si le pathfinding nous demande de sapprocer un peu de lobstacle (a mi-distance de notre detection) on y va malgrès l'ennemi
-            if (table.getObstacleManager().isDiscObstructed(detectionCenter, detectionDistance/2) || aim.distance(position)>(detectionDistance/2))
-            	throw new UnexpectedObstacleOnPathException();
+
+            throw new UnexpectedObstacleOnPathException();
         }
         else 
         {
