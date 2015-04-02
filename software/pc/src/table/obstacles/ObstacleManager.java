@@ -364,13 +364,13 @@ public class ObstacleManager
 		log.debug("vectorFrontSensor "+vectorFrontSensor, this);
 		
 		Vec2 vectorCone1 = new Vec2();
-		vectorCone1.x=(int) (Math.cos(orientation+detectionAngle)*100);
-		vectorCone1.y=(int) (Math.sin(orientation+detectionAngle)*100);
+		vectorCone1.x=(int) (Math.cos(orientation+detectionAngle/2)*100);
+		vectorCone1.y=(int) (Math.sin(orientation+detectionAngle/2)*100);
 		log.debug("vectorFrontSensor "+vectorFrontSensor, this);
 		
 		Vec2 vectorCone2 = new Vec2();
-		vectorCone2.x=(int) (Math.cos(orientation-detectionAngle)*100);
-		vectorCone2.y=(int) (Math.sin(orientation-detectionAngle)*100);
+		vectorCone2.x=(int) (Math.cos(orientation-detectionAngle/2)*100);
+		vectorCone2.y=(int) (Math.sin(orientation-detectionAngle/2)*100);
 		log.debug("vectorFrontSensor "+vectorCone2, this);
 		
     	for(int i = 0; i < mMobileObstacles.size(); i++)
@@ -388,12 +388,14 @@ public class ObstacleManager
     			
     			log.debug("newEnnemyPosition "+newEnnemyPosition, this);
     			
-    			// si on est dans le cone de detection :
-    			if(		vectorFrontSensor.angleBetween(newEnnemyPosition)  <  detectionAngle
-    				&&  vectorFrontSensor.angleBetween(newEnnemyPosition)  > -detectionAngle
-    				&&  PathDingDing.intersects(new Segment(vectorCone1, new Vec2(0,0)), 
+    			
+    			if(		// si on est dans le cone de detection :
+    				(			vectorFrontSensor.angleBetween(newEnnemyPosition)  <  detectionAngle/2
+    						&&  vectorFrontSensor.angleBetween(newEnnemyPosition)  > -detectionAngle/2 )
+    				// Ou si on croise les cotés du cone
+    				||  PathDingDing.intersects(new Segment(vectorCone1, new Vec2(0,0)), 
     											new Circle(newEnnemyPosition, ennemyRadius) )
-    				&&  PathDingDing.intersects(new Segment(vectorCone2, new Vec2(0,0)), 
+    				||  PathDingDing.intersects(new Segment(vectorCone2, new Vec2(0,0)), 
 												new Circle(newEnnemyPosition, ennemyRadius) ) 
     			  )
     				 // alors, on supprime cet obstacle fantome
