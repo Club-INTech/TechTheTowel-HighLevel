@@ -73,10 +73,8 @@ public class ExitBeginZone extends AbstractScript
 		//en effet, pas d'actionneur a rentrer donc abwa !
 	}
 
-	@Override
-	public double getNoEnemyTime(GameState<?> stateToConsider, int id) 
+	public int[] getVersion(GameState<?> stateToConsider)
 	{
-		// FIXME Auto-generated method stub
-		return 0;
+		return versions;
 	}
 }

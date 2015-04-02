@@ -54,7 +54,6 @@ class StackScript
 	public void add (AbstractScript script, int version, GameState<?> state)
 	{
 		points += script.remainingScoreOfVersion(version, state);
-		time += script.getNoEnemyTime(state, 0);
 		list.add(script);
 		versionList.add(version);
 	}
