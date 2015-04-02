@@ -348,20 +348,28 @@ public class ObstacleManager
     	//parcours des obstacles
     	for(int i = 0; i < mMobileObstacles.size(); i++)
     	{
+    		Vec2 positionEnnemy = mMobileObstacles.get(i).position;
+    		int ennemyRay = mMobileObstacles.get(i).radius;
     		// On verifie que l'ennemi est dans le cercle de detection actuel
-    		if((mMobileObstacles.get(i).position.x - position.x)*(mMobileObstacles.get(i).position.x - position.x)
-    		 + (mMobileObstacles.get(i).position.y - position.y)*(mMobileObstacles.get(i).position.y - position.y)
-    		 < (detectionRadius+mMobileObstacles.get(i).radius)*(detectionRadius+mMobileObstacles.get(i).radius))
+    		if((positionEnnemy.x - position.x)*(positionEnnemy.x - position.x)
+    		 + (positionEnnemy.y - position.y)*(positionEnnemy.y - position.y)
+    		 < (detectionRadius+ennemyRay)*(detectionRadius+ennemyRay))
     		{
     			// si le centre de l'obstacle est dans le cone ou si l'obstacle intersecte un segment du cone, on supprime l'obstacle
-    			double ennemyAngle = Math.atan2(mMobileObstacles.get(i).position.x - position.x, mMobileObstacles.get(i).position.y - position.y);
+    			double ennemyAngle = Math.atan2(positionEnnemy.x - position.x, positionEnnemy.y - position.y);
     			if(ennemyAngle < orientation + detectionAngle/2
     		    && ennemyAngle > orientation - detectionAngle/2
-    		    || PathDingDing.intersects(new Segment(position, new Vec2(position.x + (int)(detectionRadius*Math.cos(orientation + detectionAngle/2)), position.y + (int)(detectionRadius*Math.sin(orientation + detectionAngle/2)))), new Circle(mMobileObstacles.get(i).position, mMobileObstacles.get(i).radius))
-    		    || PathDingDing.intersects(new Segment(position, new Vec2(position.x + (int)(detectionRadius*Math.cos(orientation - detectionAngle/2)), position.y + (int)(detectionRadius*Math.sin(orientation - detectionAngle/2)))), new Circle(mMobileObstacles.get(i).position, mMobileObstacles.get(i).radius)))
+    		    || PathDingDing.intersects(new Segment(position, 
+    		    								new Vec2(position.x + (int)(detectionRadius*Math.cos(orientation + detectionAngle/2)), 
+    		    										 position.y + (int)(detectionRadius*Math.sin(orientation + detectionAngle/2)))),
+    		    						   new Circle(positionEnnemy, ennemyRay))
+    		    || PathDingDing.intersects(new Segment(position,
+    		    								new Vec2(position.x + (int)(detectionRadius*Math.cos(orientation - detectionAngle/2)), 
+    		    										 position.y + (int)(detectionRadius*Math.sin(orientation - detectionAngle/2)))), 
+    		    						   new Circle(positionEnnemy, ennemyRay)))
     			{
     				mMobileObstacles.remove(i--);
-    				log.debug("ennemi enlevé !", this);
+    				log.debug("Ennemi en "+positionEnnemy+" enlevé !", this);
     			}
     		}
     	}

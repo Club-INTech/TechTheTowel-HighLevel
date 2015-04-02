@@ -262,7 +262,7 @@ class ThreadSensor extends AbstractThread
 		//0 gauche / 1 à droite
 		// si les 2 capteurs detectent quelque chose
 		if ((minSensorRange<distanceFront[0] && distanceFront[0]<maxSensorRange) && (minSensorRange<distanceFront[1] && distanceFront[1]<maxSensorRange) )
-		{/*
+		{
 			// Si on voit 2 ennemis distincts
 			if(Math.abs(distanceFront[1]-distanceFront[0]) > distanceBetweenFrontSensors)
 			{
@@ -298,7 +298,7 @@ class ThreadSensor extends AbstractThread
 
 			}
 			// sinon, on voit un seul et meme ennemi
-			else  */
+			else  
 			{			
 				positionEnnemi_1.y =  (int)( 	(Math.pow(distanceObstacleFront[0],2)-Math.pow(distanceObstacleFront[1],2))
 												/(2 * distanceBetweenFrontSensors));	//position de l'obstacle en fonction du robot
@@ -312,22 +312,10 @@ class ThreadSensor extends AbstractThread
 				relativePosEnnemi1.x=positionEnnemi_1.x;
 				relativePosEnnemi1.y=positionEnnemi_1.y;
 				
-/*				relativePosEnnemi1.x=distanceObstacleFront[0];
-				relativePosEnnemi1.y=-distanceBetweenFrontSensors/2;
-				relativePosEnnemi2.x=distanceObstacleFront[1];
-				relativePosEnnemi2.y=distanceBetweenFrontSensors/2;*/
-				
 				// Maintenant, on le remet dans le repere du robot
 				positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
-				positionEnnemi_2=changeReference(relativePosEnnemi2, positionRobot, orientation );
 
-				/*
-				positionEnnemi_2.x= -3000;
-				positionEnnemi_2.y= -1000;
-				*/
-				
 				mTable.getObstacleManager().addObstacle(positionEnnemi_1);
-				mTable.getObstacleManager().addObstacle(positionEnnemi_2);
 
 				obstacleAddedRight=true;
 				obstacleAddedLeft=true;
@@ -345,10 +333,6 @@ class ThreadSensor extends AbstractThread
 			// sauvegarde de la position relative
 			relativePosEnnemi1.x=positionEnnemi_1.x;
 			relativePosEnnemi1.y=positionEnnemi_1.y;
-			
-			/*// FIXME Bourrinage
-			relativePosEnnemi1.x=distanceObstacleFront[0];
-			relativePosEnnemi1.y=-distanceBetweenFrontSensors/2;*/
 			
 			// On change de repere 
 			positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
@@ -368,10 +352,6 @@ class ThreadSensor extends AbstractThread
 			// sauvegarde de la position relative
 			relativePosEnnemi1.x=positionEnnemi_1.x;
 			relativePosEnnemi1.y=positionEnnemi_1.y;
-			
-			/*//FIXME Bourrinage
-			relativePosEnnemi1.x=distanceObstacleFront[1];
-			relativePosEnnemi1.y=distanceBetweenFrontSensors/2;*/
 			
 			// On change de repere 
 			positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
