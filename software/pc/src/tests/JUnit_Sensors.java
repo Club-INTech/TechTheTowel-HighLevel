@@ -108,27 +108,6 @@ public class JUnit_Sensors extends JUnit_Test
 	public void testEvitement()
 	{
 		log.debug("Test d'évitement", this);
-<<<<<<< HEAD
-		while(state.robot.getPosition().x > 900)
-		{
-			try 
-			{
-				state.robot.moveLengthwise(state.robot.getPosition().x-900);
-			} 
-			catch (UnableToMoveException e1)
-			{
-				log.critical("!!!!! Catch de"+e1+" dans testEvitement !!!!!" , this);
-				try 
-				{
-					state.robot.moveLengthwise(20);
-				} 
-				catch (UnableToMoveException e) 
-				{
-					;
-				}
-			}
-=======
-
 		try 
 		{	
 			state.robot.moveLengthwiseWithoutDetection(state.robot.getPosition().x-800);
@@ -136,7 +115,6 @@ public class JUnit_Sensors extends JUnit_Test
 		catch (UnableToMoveException e1)
 		{
 			;
->>>>>>> 9f6ff9f00ea0d4d0416ee2f144550085d3745c6f
 		}
 
 		log.critical("Fin de moveLengthWise" , this);
