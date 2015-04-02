@@ -703,9 +703,11 @@ public class Locomotion implements Service
               }
         	  isRobotTurning=false;
         }
+        // si on ne tourne pas, on regarde devant nous : sinon, on regarde autour de nous
+        if(isRobotTurning)
+        	detectionCenter.equals(position);
         
-        
-        else if(table.getObstacleManager().isDiscObstructed(detectionCenter, detectionDistance))
+        if(table.getObstacleManager().isDiscObstructed(detectionCenter, detectionDistance))
         {
             log.warning("Ennemi détecté en : " + detectionCenter, this);
             log.warning( "Lancement de UnexpectedObstacleOnPathException dans detectEnemy", this);
