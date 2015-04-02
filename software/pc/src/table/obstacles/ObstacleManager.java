@@ -357,6 +357,22 @@ public class ObstacleManager
      */
     public synchronized void removeNonDetectedObstacles(Vec2 position, double orientation, double detectionRadius, double detectionAngle, int ennemyRadius)
     {
+		// On crée un vecteur qui part du capteur et va en ligne droite , centré en 0,0
+		Vec2 vectorFrontSensor = new Vec2();
+		vectorFrontSensor.x=(int) (Math.cos(orientation)*100);
+		vectorFrontSensor.y=(int) (Math.sin(orientation)*100);
+		log.debug("vectorFrontSensor "+vectorFrontSensor, this);
+		
+		Vec2 vectorCone1 = new Vec2();
+		vectorCone1.x=(int) (Math.cos(orientation+detectionAngle)*100);
+		vectorCone1.y=(int) (Math.sin(orientation+detectionAngle)*100);
+		log.debug("vectorFrontSensor "+vectorFrontSensor, this);
+		
+		Vec2 vectorCone2 = new Vec2();
+		vectorCone2.x=(int) (Math.cos(orientation-detectionAngle)*100);
+		vectorCone2.y=(int) (Math.sin(orientation-detectionAngle)*100);
+		log.debug("vectorFrontSensor "+vectorCone2, this);
+		
     	for(int i = 0; i < mMobileObstacles.size(); i++)
     	{// On verifie que l'ennemi est dans le cercle de detection actuel
     		Vec2 ennemyPosition = mMobileObstacles.get(i).position;
@@ -370,16 +386,16 @@ public class ObstacleManager
     			Vec2 newEnnemyPosition = position.clone();
     			newEnnemyPosition.minus(ennemyPosition);
     			
-    			// On crée un vecteur qui part du capteur et va en ligne droite , centré en 0,0
-    			Vec2 vectorFrontSensor = new Vec2();
-    			vectorFrontSensor.x=(int) (Math.cos(orientation)*100);
-    			vectorFrontSensor.y=(int) (Math.sin(orientation)*100);
+    			log.debug("newEnnemyPosition "+newEnnemyPosition, this);
     			
     			// si on est dans le cone de detection :
     			if(		vectorFrontSensor.angleBetween(newEnnemyPosition)  <  detectionAngle
     				&&  vectorFrontSensor.angleBetween(newEnnemyPosition)  > -detectionAngle
-    				&&  PathDingDing.intersects(new Segment(vectorFrontSensor, new Vec2(0,0)), 
-    											new Circle(newEnnemyPosition, ennemyRadius) ) )
+    				&&  PathDingDing.intersects(new Segment(vectorCone1, new Vec2(0,0)), 
+    											new Circle(newEnnemyPosition, ennemyRadius) )
+    				&&  PathDingDing.intersects(new Segment(vectorCone2, new Vec2(0,0)), 
+												new Circle(newEnnemyPosition, ennemyRadius) ) 
+    			  )
     				 // alors, on supprime cet obstacle fantome
     				mMobileObstacles.remove(i);
     		}
