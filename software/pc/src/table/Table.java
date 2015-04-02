@@ -44,7 +44,7 @@ public class Table implements Service
 	
 	
 	//les huits plots (voir numerotation sur la table)
-	private boolean isPLotXEaten[];
+	private boolean isPlotXEaten[];
 	
 	//les 5 verres, pris ou non 
 	private boolean isGlassXTaken[];
@@ -52,15 +52,11 @@ public class Table implements Service
 	//les verres posés ou non
 	private boolean isGlassXDropped[];
 
-	//Les emplacements où sont posés les verres (voir doc des zones dans DropGlasss : 
-	//1=Notre zone, 2=haut zone ennemi, 3=bas zone ennemi
+	//les aires sont pleines ou non
+	private boolean[] isAreaXFilledWithGlass;
 	
-	@SuppressWarnings("unused")
-	private boolean isArea1FilledWithGlass;
-	@SuppressWarnings("unused")
-	private boolean isArea2FilledWithGlass;
-	@SuppressWarnings("unused")
-	private boolean isArea3FilledWithGlass;
+	//la balle de tennis
+	private boolean isBallTaken;
 	
 	
 	/**
@@ -75,9 +71,10 @@ public class Table implements Service
 		this.config = config;
 		this.mObstacleManager = new ObstacleManager(log, config);
 		
-		isPLotXEaten = new boolean[8];
+		isPlotXEaten = new boolean[8];
 		isGlassXTaken = new boolean[5];
 		isGlassXDropped = new boolean[5];
+		isAreaXFilledWithGlass = new boolean[3];
 		
 		initialise();
 	}
@@ -95,7 +92,7 @@ public class Table implements Service
 		
 		//les plots
 		for (int i = 0; i< 8; i++)
-			isPLotXEaten[i]=false;
+			isPlotXEaten[i]=false;
 		
 		//les verres
 		for (int i = 0; i< 5; i++)
@@ -106,9 +103,8 @@ public class Table implements Service
 			isGlassXDropped[i]=false;
 		
 		//Les zones où sont posés les verres
-		isArea1FilledWithGlass=false;
-		isArea2FilledWithGlass=false;
-		isArea3FilledWithGlass=false;
+		for(int i = 0; i<3; i++)
+			isAreaXFilledWithGlass[i]=false;
 	}
 	
 	public ObstacleManager getObstacleManager()
@@ -154,10 +150,24 @@ public class Table implements Service
 	public boolean isPlotXEaten (int x)
 	{
 		if (0<=x && x<=8)
-			return isPLotXEaten[x];
+			return isPlotXEaten[x];
 		else
 			log.debug("out of bound, plot counter",this);
 			return false;
+	}
+	/**
+	 * 
+	 * @return le nombre de plots restants sur la table
+	 */
+	public int numberOfPlotLeft() 
+	{
+		int toReturn = 8;
+		for (int i=0; i<isPlotXEaten.length; i++)
+		{
+			if (isPlotXEaten[i])
+					toReturn -= 1;
+		}
+		return toReturn;
 	}
 	
 	/**
@@ -167,11 +177,28 @@ public class Table implements Service
 	public void eatPlotX (int x)
 	{
 		if (0<=x && x<=8)
-			isPLotXEaten[x]=true;
+			isPlotXEaten[x]=true;
 		else
 			log.debug("out of bound, plot counter",this);
 	}
 	
+	/**
+	 * demande a la table si on a attrapé la balle
+	 * @return vrai si la balle a ete attrapée
+	 */
+	public boolean isBallTaken() 
+	{
+		return isBallTaken;
+	}
+
+	/**
+	 * prends la balle de la table
+	 */
+	public void takeBall() 
+	{
+		isBallTaken = true;
+	}
+
 	/**
 	 * enleve le verre x de la table
 	 * @param x le numero du verre doit etre dans [0..4]
@@ -181,7 +208,7 @@ public class Table implements Service
 		if (0<=x && x<=5)
 			isGlassXTaken[x]=true;
 		else
-			log.debug("Probleme dans isGlassTaken",this);
+			log.debug("out of bound isGlassTaken",this);
 	}
 	
 	/**
@@ -193,7 +220,7 @@ public class Table implements Service
 		if (0<=x && x<=5)
 			return isGlassXTaken[x];
 		else
-			log.debug("Probleme dans isGlassTaken",this);
+			log.debug("out of bound isGlassTaken",this);
 			return false;
 	}
 	
@@ -206,7 +233,7 @@ public class Table implements Service
 		if (0<=x && x<=5)
 			isGlassXDropped[x]=true;
 		else
-			log.debug("Probleme dans glassXDropped",this);
+			log.debug("out of bound glassXDropped",this);
 	}
 	
 	/**
@@ -215,14 +242,18 @@ public class Table implements Service
 	 */
 	public void areaXFilled (int x)
 	{
-		if (x==1)
-			isArea1FilledWithGlass=true;
-		else if (x==2)
-			isArea2FilledWithGlass=true;
-		else if (x==3)
-			isArea3FilledWithGlass=true;
+		if (0<=x && x<=2)
+			isAreaXFilledWithGlass[x]=true;
 		else
-			log.debug("Probleme dans areaXFilled",this);
+			log.debug("out of bound areaXFilled",this);
+	}
+	
+	public boolean isAreaXFilled (int x)
+	{
+		if (0<=x && x<=2)
+			return isAreaXFilledWithGlass[x];
+		log.debug("out of bound isAreaXFilled", this);
+		return false;
 	}
 
 	

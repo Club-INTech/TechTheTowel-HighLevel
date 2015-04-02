@@ -203,6 +203,7 @@ public class GetGlass extends AbstractScript
 
 	public int[] getVersion(GameState<?> stateToConsider)
 	{
+		//TODO
 		return versions;
 	}
 

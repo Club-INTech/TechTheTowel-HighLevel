@@ -112,7 +112,9 @@ public class DropCarpet extends AbstractScript
 
 	public int[] getVersion(GameState<?> stateToConsider)
 	{
-		return versions;
+		if (stateToConsider.table.getIsLeftCarpetDropped() && stateToConsider.table.getIsRightCarpetDropped())
+			return new int[]{};
+		return new int[]{1};
 	}
 
 }

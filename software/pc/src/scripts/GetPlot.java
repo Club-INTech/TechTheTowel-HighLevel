@@ -84,6 +84,7 @@ public class GetPlot extends AbstractScript
 			catch (UnableToEatPlot e) 
 			{
 				//on a pas reussi a manger, on le dit et on termine le script
+				stateToConsider.table.eatPlotX(versionToExecute);
 				log.debug("impossible de manger le plot n°"+versionToExecute+" mangeage echoue", this);
 				finalise(stateToConsider);
 				return;
@@ -137,8 +138,10 @@ public class GetPlot extends AbstractScript
 				}
 				catch (UnableToEatPlot e1) 
 				{
+					stateToConsider.table.eatPlotX(4);
 					stateToConsider.robot.moveLengthwise(-150, hooksToConsider);
 					finalise(stateToConsider);
+					return;
 				}
 			}
 			stateToConsider.table.eatPlotX(4);
@@ -156,8 +159,10 @@ public class GetPlot extends AbstractScript
 				}
 				catch (UnableToEatPlot e1) 
 				{
+					stateToConsider.table.eatPlotX(3);
 					stateToConsider.robot.moveLengthwise(-150, hooksToConsider);
 					finalise(stateToConsider);
+					return;
 				}
 			}
 			stateToConsider.table.eatPlotX(3);
@@ -237,6 +242,7 @@ public class GetPlot extends AbstractScript
 	@Override
 	public int remainingScoreOfVersion(int id_version, GameState<?> state) 
 	{
+		//TODO
 		return 0;//Ce script ne rapporte pas concretement de points tant que les plots ne sont pas posés
 	}
 
@@ -266,13 +272,12 @@ public class GetPlot extends AbstractScript
 	 * @param isArmChosenLeft vrai si on mange avec le bras gauche
 	 * @param movementAllowed vrai si on autorise le robot a avancer pour manger le plot
 	 * @throws UnableToEatPlot si le mangeage echoue
-	 * @throws SerialConnexionException si impossible de communiquer avec les cartes
-	 * 
+	 * @throws SerialConnexionException si impossible de communiquer avec les carte
 	 * @throws SerialException
 	 */
 	private void eatPlot (boolean isSecondTry, boolean isArmChosenLeft, GameState<Robot> stateToConsider, boolean movementAllowed) throws UnableToEatPlot, SerialConnexionException
 	{
-		//On change le bras choisi suivant la symetrie : à voir si l'IA s'en occupera, mais pour les tests ca reste là
+		//On change le bras choisi suivant la symetrie :TODO à voir si l'IA s'en occupera, mais pour les tests ca reste là
 		if(stateToConsider.robot.getSymmetry())
 		{
 			isArmChosenLeft=!isArmChosenLeft;
@@ -309,10 +314,18 @@ public class GetPlot extends AbstractScript
 		{
 			sensorAnswer = ((Boolean) stateToConsider.robot.getSensorValue(SensorNames.JAW_SENSOR));
 		} 
-		catch (SerialConnexionException e) 
+		catch (SerialConnexionException e1) 
 		{
-			//si impossible de communiquer avec le capteur on suppose qu'on a attrape le plot
-			sensorAnswer = ((Boolean) SensorNames.JAW_SENSOR.getDefaultValue());
+			stateToConsider.robot.sleep(500);
+			try 
+			{
+				sensorAnswer = ((Boolean) stateToConsider.robot.getSensorValue(SensorNames.JAW_SENSOR));
+			}
+			catch (SerialConnexionException e2) 
+			{
+				//si impossible de communiquer avec le capteur on suppose qu'on a attrape le plot
+				sensorAnswer = ((Boolean) SensorNames.JAW_SENSOR.getDefaultValue());
+			}
 		}
 
 		if (sensorAnswer)
@@ -344,6 +357,7 @@ public class GetPlot extends AbstractScript
 	
 	public int[] getVersion(GameState<?> stateToConsider)
 	{
+		//TODO
 		return versions;
 	}
 

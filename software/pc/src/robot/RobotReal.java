@@ -45,6 +45,10 @@ public class RobotReal extends Robot
     {
     	// TODO: vérifier que la copie est faite sur tout ce qu'il y a besoin
         getPosition().copy(rc.position);
+        rc.speed=speed;
+        rc.isBallStored=isBallStored;
+        rc.isGlassStoredLeft=isGlassStoredLeft;
+        rc.isGlassStoredRight=isGlassStoredRight;
         rc.orientation = getOrientation();
     }
     

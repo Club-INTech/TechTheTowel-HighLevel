@@ -88,6 +88,7 @@ public class TakeTennisBall extends AbstractScript
 	@Override
 	public int remainingScoreOfVersion(int version, GameState<?> stateToConsider) 
 	{
+		//TODO
 		return 0;
 	}
 	
@@ -99,6 +100,7 @@ public class TakeTennisBall extends AbstractScript
 
 	public int[] getVersion(GameState<?> stateToConsider)
 	{
+		//TODO
 		return versions;
 	}
 	
