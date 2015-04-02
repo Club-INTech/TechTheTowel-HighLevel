@@ -54,6 +54,11 @@ class ThreadSensor extends AbstractThread
 	double maxSensorRange;
 	
 	/**
+	 *  Angle de visibilité qu'a le capteur 
+	 */
+	double detectionAngle;
+	
+	/**
 	 * Distance minimale à laquelle on peut se fier aux capteurs : ne pas detecter notre propre root par exemple
 	 */
 	double minSensorRange = 80;
@@ -202,7 +207,7 @@ class ThreadSensor extends AbstractThread
 				addObstacleFront(distanceFront);			// Analyse des capteurs arrieres, avec gestion des angles
 				addObstacleBack(distanceBack);
 				
-				log.debug("Distance selon ultrasons avant:   "+distanceFront[0]+";"+distanceFront[1], this); 
+				log.debug("Distance selon ultrasons avant : "+distanceFront[0]+";"+distanceFront[1], this); 
 				//log.debug("Distance selon ultrasons arriere: "+distanceBack[0]+";"+distanceBack[1], this);
 				
 				if (distanceFront[1] > 0 && distanceFront[1] < 70 || distanceFront[0] > 0 && distanceFront[0] < 70)
@@ -272,9 +277,7 @@ class ThreadSensor extends AbstractThread
 			
 				// On change de repere 
 				positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
-																
-				
-				
+					
 				// Coté droit :
 				// relatif au robot
 				positionEnnemi_2.x=		(int) (distanceFront[1]*Math.cos(rightFrontSensorAngle) +rightFrontSensorPosition.x);
@@ -286,11 +289,6 @@ class ThreadSensor extends AbstractThread
 				
 				// On change de repere 
 				positionEnnemi_2=changeReference(relativePosEnnemi2, positionRobot, orientation );
-				
-				
-				
-				System.out.println("position ennemi gauche = ("+positionEnnemi_1.x+","+positionEnnemi_1.y+")");
-				System.out.println("position ennemi droit  = ("+positionEnnemi_2.x+","+positionEnnemi_2.y+")");
 				
 				mTable.getObstacleManager().addObstacle(positionEnnemi_1);
 				mTable.getObstacleManager().addObstacle(positionEnnemi_2);
@@ -317,12 +315,8 @@ class ThreadSensor extends AbstractThread
 				// Maintenant, on le remet dans le repere du robot
 				positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
 
-				positionEnnemi_2.x= -3000;
-				positionEnnemi_2.y= -1000;
-				
-				System.out.println("position ennemi = ("+positionEnnemi_1.x+","+positionEnnemi_1.y+")");
 				mTable.getObstacleManager().addObstacle(positionEnnemi_1);
-				
+
 				obstacleAddedRight=true;
 				obstacleAddedLeft=true;
 			}			
@@ -333,7 +327,7 @@ class ThreadSensor extends AbstractThread
 		if (minSensorRange<distanceFront[0] && distanceFront[0]<maxSensorRange)
 		{			
 			// relatif
-			positionEnnemi_1.x= (int) (distanceObstacleFront[0]*Math.cos(leftFrontSensorAngle) +leftFrontSensorPosition.x);
+			positionEnnemi_1.x=  (int) (distanceObstacleFront[0]*Math.cos(leftFrontSensorAngle) +leftFrontSensorPosition.x);
 			positionEnnemi_1.y= -(int) (distanceObstacleFront[0]*Math.sin(leftFrontSensorAngle) +distanceBetweenFrontSensors/2);
 			
 			// sauvegarde de la position relative
@@ -342,10 +336,8 @@ class ThreadSensor extends AbstractThread
 			
 			// On change de repere 
 			positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
-
 			
 			mTable.getObstacleManager().addObstacle(positionEnnemi_1);
-			System.out.println("position ennemi = ("+positionEnnemi_1.x+","+positionEnnemi_1.y+")");
 			
 			obstacleAddedLeft=true;
 
@@ -365,16 +357,18 @@ class ThreadSensor extends AbstractThread
 			positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
 			
 			mTable.getObstacleManager().addObstacle(positionEnnemi_1);
-			System.out.println("position ennemi = ("+positionEnnemi_1.x+","+positionEnnemi_1.y+")");
 			
 			obstacleAddedRight=true;
 		}
 		
-		
-		if(!obstacleAddedRight)
-			removeObstacleRight();
-		if(!obstacleAddedLeft)
-			removeObstacleLeft();
+		if(distanceObstacleFront[1] != 0)
+			removeObstacleRight((int)((distanceObstacleFront[1] - radius)*0.9));
+		else
+			removeObstacleRight((int)maxSensorRange);
+		if(distanceObstacleFront[0] != 0)
+			removeObstacleLeft((int)((distanceObstacleFront[0] - radius)*0.9));
+		else
+			removeObstacleLeft((int)maxSensorRange);
 	}
 
 	/**
@@ -466,6 +460,8 @@ class ThreadSensor extends AbstractThread
 		maxSensorRange = Integer.parseInt(config.getProperty("largeur_robot"))
 						 / Math.sin(Float.parseFloat(config.getProperty("angle_capteur")));
 		
+		detectionAngle=Float.parseFloat(config.getProperty("angle_capteur"));
+		
 		robotWidth = Integer.parseInt(config.getProperty("largeur_robot"));
 		robotLenght = Integer.parseInt(config.getProperty("longueur_robot"));
 	}
@@ -500,57 +496,33 @@ class ThreadSensor extends AbstractThread
 	}
 	
 	
-	private void removeObstacleLeft()
+	
+	/**
+	 *  On enleve les obstacles qu'on ne voit pas
+	 */
+	private void removeObstacleLeft(int detectionDistance)
 	{
-		for(int i = 0;i<mTable.getObstacleManager().getMobileObstaclesCount(); i++)
-		{
-			Vec2 positionObstacle, position, posPointFrontRobot;
-			double orientation, angleBetweenVectors;
-
-			positionObstacle=mTable.getObstacleManager().getMobileObstacles().get(i).getPosition();
-			position=mRobot.getPosition();
-			orientation=mRobot.getOrientation();
-
-			
-			// On verifie si les obstacles sont proches du robot
-			if(		(positionObstacle.x-position.x)*(positionObstacle.x-position.x)
-				+   (positionObstacle.y-position.y)*(positionObstacle.y-position.y)	< (maxSensorRange+radius) )
-				// Parmis ceux près du robot, on verifie ceux qui sont visibles
-			{
-				posPointFrontRobot=changeReference(new Vec2(-distanceBetweenFrontSensors/2,100), position, orientation );
-				position.minus(positionObstacle);// position relative
-				angleBetweenVectors=position.angleBetween(posPointFrontRobot);
-				
-				
-			}
-			
-		}
+		Vec2 position, sensorPosition;
+		double orientation;
+		
+		orientation=mRobot.getOrientation();
+		position=mRobot.getPosition(); // absolu
+		
+		sensorPosition=changeReference(leftFrontSensorPosition, position, orientation); // passage de la position du capteur en absolu
+		
+		mTable.getObstacleManager().removeNonDetectedObstacles(position, (orientation-leftFrontSensorAngle), detectionDistance, detectionAngle);
 	}
 	
-	private void removeObstacleRight()
+	private void removeObstacleRight(int detectionDistance)
 	{
-		for(int i = 0;i<mTable.getObstacleManager().getMobileObstaclesCount(); i++)
-		{
-			Vec2 positionObstacle, position, posPointFrontRobot;
-			double orientation, angleBetweenVectors;
-			
-			positionObstacle=mTable.getObstacleManager().getMobileObstacles().get(i).getPosition();
-			position=mRobot.getPosition();
-			orientation=mRobot.getOrientation();
-			
-			// On verifie si les obstacles sont proches du robot
-			if(		(positionObstacle.x-position.x)*(positionObstacle.x-position.x)
-				+   (positionObstacle.y-position.y)*(positionObstacle.y-position.y)	< (maxSensorRange+radius) )
-				// Parmis ceux près du robot, on verifie ceux qui sont visibles
-			{
-				posPointFrontRobot=changeReference(new Vec2(distanceBetweenFrontSensors/2,100), position, orientation );
-				position.minus(positionObstacle);// position relative
-				angleBetweenVectors=position.angleBetween(posPointFrontRobot);
-				
-				
-			}
-				
-			
-		}
+		Vec2 position, sensorPosition;
+		double orientation;
+		
+		orientation=mRobot.getOrientation();
+		position=mRobot.getPosition(); // absolu
+		
+		sensorPosition=changeReference(rightFrontSensorPosition, position, orientation); // passage de la position du capteur en absolu
+		
+		mTable.getObstacleManager().removeNonDetectedObstacles(sensorPosition, (orientation+rightFrontSensorAngle), detectionDistance, detectionAngle);
 	}
 }

@@ -10,7 +10,7 @@ import smartMath.*;
 public class ObstacleCircular extends Obstacle
 {
 	/** position du centre du disque constituant cet obstacle */
-	protected Vec2 position;
+	//protected Vec2 position;
 	
 	/** rayon en mm de cet obstacle */
 	protected int radius=0;

@@ -3,6 +3,8 @@ package robot;
 import java.util.ArrayList;
 import java.util.EnumSet;
 
+import org.omg.CORBA.PRIVATE_MEMBER;
+
 import pathDingDing.PathDingDing;
 import hook.Hook;
 import smartMath.Circle;
@@ -62,6 +64,10 @@ public abstract class Robot implements Service
 	
 	/** chemin que le robot suit, pour l'interface : TODO supprimer */
 	public ArrayList<Vec2> cheminSuivi= new ArrayList<Vec2>();
+	
+	/** Nombre d'essais maximal de tentative de calcul de PathDingDing */
+	private int maxNumberTriesRecalculation = 4;
+	private int actualNumberOfTries=0;
 	
 	
 	/**
@@ -328,6 +334,7 @@ public abstract class Robot implements Service
 		} 
     	catch (UnableToMoveException unableToMoveException) 
     	{
+			actualNumberOfTries=0;
 			log.critical("Catch de "+unableToMoveException+" dans moveToLocation" , this);
 			recalculate(unableToMoveException.aim, hooksToConsider); // on recalcule le path
 		}
@@ -388,7 +395,7 @@ public abstract class Robot implements Service
     	catch (UnableToMoveException unableToMoveException) 
     	{
 			log.critical("Catch de "+unableToMoveException+" dans moveToCircle" , this);
-			
+			actualNumberOfTries=0;
 			recalculate(unableToMoveException.aim, hooksToConsider); // on recalcule le path
 		}
     }
@@ -401,18 +408,26 @@ public abstract class Robot implements Service
     
     public void recalculate(Vec2 aim, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, PathNotFoundException
     {
-    	try
+    	if(actualNumberOfTries < maxNumberTriesRecalculation)
+		{
+    		actualNumberOfTries++;
+			try
+			{
+				// On le recaclule, et on essaye de le suivre 
+				ArrayList<Vec2> newPath = pathDingDing.computePath(getPosition(),aim, EnumSet.of(ObstacleGroups.ENNEMY_ROBOTS));
+				log.debug("Nouveau Path recalculé: "+newPath, this);
+				followPath(newPath , hooksToConsider);
+			} 
+			catch (UnableToMoveException unableToMoveException) 
+			{
+				//si cela echoue, on recalcule encore en tenant compte du nouvel obstacle
+				if (unableToMoveException.reason.compareTo(UnableToMoveReason.OBSTACLE_DETECTED)==0)
+					recalculate(unableToMoveException.aim, hooksToConsider);
+			}
+    	}
+    	else // On a depassé le nombre maximal d'essais :
     	{
-    		// On le reclacule, et on essaye de le suivre 
-    		ArrayList<Vec2> newPath = pathDingDing.computePath(getPosition(),aim, EnumSet.of(ObstacleGroups.ENNEMY_ROBOTS));
-			log.debug("Nouveau Path recalculé: "+newPath, this);
-    		followPath(newPath , hooksToConsider);
-		} 
-    	catch (UnableToMoveException unableToMoveException) 
-    	{
-    		//si cela echoue, on recalcule encore en tenant compte du nouvel obstacle
-    		if (unableToMoveException.reason.compareTo(UnableToMoveReason.OBSTACLE_DETECTED)==0)
-    			recalculate(unableToMoveException.aim, hooksToConsider);
+			;             
 		}
     }
     
@@ -433,6 +448,10 @@ public abstract class Robot implements Service
 		return symmetry;
 	}
 
+	public void setMaxNumberTriesRecalculation(int numberOfTries)
+	{
+		maxNumberTriesRecalculation=numberOfTries;
+	}
 	/**
 	 * le robot demande l'etat de ses capteurs
 	 * @param captor le nom du capteur dont on veut l'etat

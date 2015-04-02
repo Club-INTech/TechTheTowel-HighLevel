@@ -207,7 +207,7 @@ public class ObstacleManager
     public synchronized void addObstacle(final Vec2 position, final int radius)
     {
     	//si la position est dans la table on continue les tests
-    	if (position.x>-1500+radius && position.x<1500-radius && position.y>0+radius && position.y<2000-radius)
+    	if (position.x>-1500-radius && position.x<1500+radius && position.y>0-radius && position.y<2000+radius)
     	{
     		/*on ne test pas si la position est dans un obstcle deja existant 
     		 *on ne detecte pas les plots ni les goblets (et si on les detectes on prefere ne pas prendre le risque et on les evites)
@@ -221,17 +221,6 @@ public class ObstacleManager
     	{
     		log.debug("Ennemi hors de la table", this);
 		}
-    }
-
-
-	/**
-     * 
-     */
-    public synchronized void removeNonDetectedObstacles(Vec2 robotPosition, Vec2 detectionPoint)
-    {
-    	for(int i = 0; i < mMobileObstacles.size(); i++)
-    		if(PathDingDing.intersects(new Segment(robotPosition, detectionPoint), new Circle(mMobileObstacles.get(i).position, mMobileObstacles.get(i).radius)))
-    			mMobileObstacles.remove(i--);
     }
 
     /**
@@ -349,5 +338,40 @@ public class ObstacleManager
     	for(int i=0; i<mRectangles.size(); i++)
     		isObstructed=isPositionInObstacle(position, mRectangles.get(i));
         return isObstructed;
+    }
+    
+    /**
+     *  On enleve les obstacles presents sur la table virtuelle mais non detectés
+     */
+    public synchronized void removeNonDetectedObstacles(Vec2 position, double orientation, double detectionRadius, double detectionAngle)
+    {
+    	//parcours des obstacles
+    	for(int i = 0; i < mMobileObstacles.size(); i++)
+    	{
+    		Vec2 positionEnnemy = mMobileObstacles.get(i).position;
+    		int ennemyRay = mMobileObstacles.get(i).radius;
+    		// On verifie que l'ennemi est dans le cercle de detection actuel
+    		if((positionEnnemy.x - position.x)*(positionEnnemy.x - position.x)
+    		 + (positionEnnemy.y - position.y)*(positionEnnemy.y - position.y)
+    		 < (detectionRadius+ennemyRay)*(detectionRadius+ennemyRay))
+    		{
+    			// si le centre de l'obstacle est dans le cone ou si l'obstacle intersecte un segment du cone, on supprime l'obstacle
+    			double ennemyAngle = Math.atan2(positionEnnemy.x - position.x, positionEnnemy.y - position.y);
+    			if(ennemyAngle < orientation + detectionAngle/2
+    		    && ennemyAngle > orientation - detectionAngle/2
+    		    || PathDingDing.intersects(new Segment(position, 
+    		    								new Vec2(position.x + (int)(detectionRadius*Math.cos(orientation + detectionAngle/2)), 
+    		    										 position.y + (int)(detectionRadius*Math.sin(orientation + detectionAngle/2)))),
+    		    						   new Circle(positionEnnemy, ennemyRay))
+    		    || PathDingDing.intersects(new Segment(position,
+    		    								new Vec2(position.x + (int)(detectionRadius*Math.cos(orientation - detectionAngle/2)), 
+    		    										 position.y + (int)(detectionRadius*Math.sin(orientation - detectionAngle/2)))), 
+    		    						   new Circle(positionEnnemy, ennemyRay)))
+    			{
+    				mMobileObstacles.remove(i--);
+    				log.debug("Ennemi en "+positionEnnemy+" enlevé !", this);
+    			}
+    		}
+    	}
     }
 }
