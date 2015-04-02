@@ -215,7 +215,6 @@ public class ObstacleManager
     		 */
     		mMobileObstacles.add(new ObstacleProximity(position, radius));
     		log.debug("Ennemi ajouté en "+position.x+";"+position.y, this);
-
     	}
     	else 
     	{
