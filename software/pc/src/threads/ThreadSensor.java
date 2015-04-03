@@ -411,8 +411,18 @@ class ThreadSensor extends AbstractThread
 			
 			//on met tout les capteurs qui detectent un objet DANS le robot ou à plus de maxSensorRange a 0
 			for (int i=0; i<distanceFront.length; i++)
-				if (distanceFront[i]<distanceBetweenGuideAndUltrasound || distanceFront[i] > maxSensorRange) 
+			{
+				if(distanceFront[i]==0)
+					log.critical("ARRETEZ DE SPAMMER LES CAPTEURS !", this);
+				if (distanceFront[i]<distanceBetweenGuideAndUltrasound)
+				{
 					distanceFront[i]=0;
+				}
+				if ( distanceFront[i] > maxSensorRange) 
+				{
+					distanceFront[i]=0;
+				}
+			}
 		}
 		catch(SerialConnexionException e)
 		{
@@ -435,8 +445,12 @@ class ThreadSensor extends AbstractThread
 			distanceBack = (int[]) mSensorsCardWrapper.getSensorValue(SensorNames.ULTRASOUND_BACK_SENSOR);
 			//on met tout les capteurs qui detectent un objet à plus de maxSensorRange a 0
 			for (int i=0; i<distanceBack.length; i++)
+			{
+				if(distanceBack[i]==0)
+					log.critical("ARRETEZ DE SPAMMER LES CAPTEURS !", this);
 				if (distanceBack[i]<distanceBetweenGuideAndUltrasound || distanceBack[i] > maxSensorRange) 
 					distanceBack[i]=0;
+			}
 		}
 		catch (SerialConnexionException e)
 		{
@@ -509,7 +523,6 @@ class ThreadSensor extends AbstractThread
 		position=mRobot.getPosition(); // absolu
 		
 		sensorPosition=changeReference(leftFrontSensorPosition, position, orientation); // passage de la position du capteur en absolu
-		
 		mTable.getObstacleManager().removeNonDetectedObstacles(position, (orientation-leftFrontSensorAngle), detectionDistance, detectionAngle);
 	}
 	
@@ -522,7 +535,6 @@ class ThreadSensor extends AbstractThread
 		position=mRobot.getPosition(); // absolu
 		
 		sensorPosition=changeReference(rightFrontSensorPosition, position, orientation); // passage de la position du capteur en absolu
-		
 		mTable.getObstacleManager().removeNonDetectedObstacles(sensorPosition, (orientation+rightFrontSensorAngle), detectionDistance, detectionAngle);
 	}
 }

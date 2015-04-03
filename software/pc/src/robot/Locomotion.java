@@ -695,7 +695,7 @@ public class Locomotion implements Service
         {
         	  if(table.getObstacleManager().isDiscObstructed(position, robotLength/2))
               {
-        		  log.warning("Ennemi détecté en : " + detectionCenter, this);
+        		  log.warning("Ennemi en collision avec le cercle de detection en: " + position, this);
                   log.warning( "Lancement de UnexpectedObstacleOnPathException dans detectEnemy", this);
                   //si le pathfinding nous demande de sapprocer un peu de lobstacle (a mi-distance de notre detection) on y va malgrès l'ennemi
                   if (table.getObstacleManager().isDiscObstructed(detectionCenter, detectionDistance/2) || aim.distance(position)>(detectionDistance/2))
@@ -708,7 +708,7 @@ public class Locomotion implements Service
         
         if(table.getObstacleManager().isDiscObstructed(detectionCenter, detectionDistance))
         {
-            log.warning("Ennemi détecté en : " + detectionCenter, this);
+  		  	log.warning("Ennemi en collision avec le cercle de detection en: " + detectionCenter, this);
             log.warning( "Lancement de UnexpectedObstacleOnPathException dans detectEnemy", this);
 
             throw new UnexpectedObstacleOnPathException();
