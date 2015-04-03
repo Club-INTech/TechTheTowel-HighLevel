@@ -46,7 +46,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		scriptmanager = (ScriptManager) container.getService(ServiceNames.SCRIPT_MANAGER);
 		mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
         pathDingDing = (PathDingDing)container.getService(ServiceNames.PATHDINGDING);
-        threadTimer = (ThreadTimer)container.getService(ServiceNames.THREAD_TIMER);
+//        threadTimer = (ThreadTimer)container.getService(ServiceNames.THREAD_TIMER);
 		emptyHook = new ArrayList<Hook> ();  
 
 		
@@ -115,7 +115,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 	@Test
 	public void test() throws PathNotFoundException, SerialFinallyException, SerialConnexionException
 	{
-		container.startAllThreads();
+//		container.startAllThreads();
 		waitMatchBegin();
 		//premiere action du match
 		

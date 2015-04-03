@@ -128,21 +128,13 @@ public class GetPlot extends AbstractScript
 			//on mange le plot 4
 			try 
 			{
-				eatPlot(false, true, stateToConsider, false);
+				eatPlot(true, true, stateToConsider, false);
 			}
 			catch (UnableToEatPlot e) 
 			{
-				try 
-				{
-					eatPlot(false, false, stateToConsider, false);
-				}
-				catch (UnableToEatPlot e1) 
-				{
-					stateToConsider.table.eatPlotX(4);
-					stateToConsider.robot.moveLengthwise(-150, hooksToConsider);
-					finalise(stateToConsider);
-					return;
-				}
+				finalise(stateToConsider);
+				stateToConsider.robot.moveLengthwise(-150, hooksToConsider);
+				return;
 			}
 			stateToConsider.table.eatPlotX(4);
 			
@@ -153,17 +145,9 @@ public class GetPlot extends AbstractScript
 			}
 			catch (UnableToEatPlot e) 
 			{
-				try 
-				{
-					eatPlot(false, false, stateToConsider, false);
-				}
-				catch (UnableToEatPlot e1) 
-				{
-					stateToConsider.table.eatPlotX(3);
-					stateToConsider.robot.moveLengthwise(-150, hooksToConsider);
-					finalise(stateToConsider);
-					return;
-				}
+				finalise(stateToConsider);
+				stateToConsider.robot.moveLengthwise(-150, hooksToConsider);
+				return;
 			}
 			stateToConsider.table.eatPlotX(3);
 			
@@ -253,7 +237,7 @@ public class GetPlot extends AbstractScript
 		{
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
-			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
 		} 
 		catch (SerialConnexionException e) 

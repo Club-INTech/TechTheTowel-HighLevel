@@ -39,33 +39,38 @@ public class JUnit_DropPile extends JUnit_Test {
 		mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
 		emptyHook = new ArrayList<Hook> ();
 		
-		if (config.getProperty("couleur").equals("jaune"))
-		{
-			real_state.robot.setPosition(new Vec2 (-1381,1000));
-			//On est jaune donc on est en 0 
-			real_state.robot.setOrientation(0); 
-		}
-		else
-		{
-			real_state.robot.setPosition(new Vec2 (1381,1000));
-			//On est vert donc on est en PI
-			real_state.robot.setOrientation(Math.PI);
-		}
+		config.set("couleur", "vert");
+		real_state.robot.setPosition(new Vec2 (1381,1000));
+		//On est vert donc on est en PI 
+		real_state.robot.setOrientation(Math.PI); 
 		real_state.robot.updateConfig();
 		
 		//initialisation en position des AX-12
-		try 
-		{
-			real_state.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
-			real_state.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, false);
-			real_state.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, false);			
-			real_state.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
-			
-		} 
-		catch (SerialConnexionException e1) 
-		{
-			e1.printStackTrace();
-		}
+		matchSetUp(real_state.robot);
+	}
+	
+	public void matchSetUp(Robot robot) throws SerialConnexionException
+	{
+		robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
+
+		robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, false);
+		robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, true);
+		
+		robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
+		robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
+		
+		robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
+		robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);
+		
+		robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
+		robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
+		
+		robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
+		robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
+		
+		robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+		
+		robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
 	}
 	
 	@Test

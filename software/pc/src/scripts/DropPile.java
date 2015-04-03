@@ -43,27 +43,27 @@ public class DropPile extends AbstractScript
 	{
 		if (version==1)
 		{
-			//TODO: la version actuelle pose la pile devant l'estrade (il faut la modifier pour qu'elle la pose dessus)
+			//TODO: la version actuelle pose la pile A COTE DE l'estrade (il faut la modifier pour qu'elle la pose dessus)
 			//on se tourne vers la plus belle (l'estrade)  #^_^# 
 			
 			//Notice me Sempai  #'_'#
 			
-			stateToConsider.robot.turn(Math.PI*-0.5, hooksToConsider, false);//On avance pour eviter le PathNotFoundd EXception
-			stateToConsider.robot.moveLengthwise(stateToConsider.robot.robotRay, hooksToConsider, true);
+			stateToConsider.robot.turn(Math.PI*-3/4, hooksToConsider, false);//On avance pour eviter le PathNotFoundd EXception
 
 			//on eleve notre membre (l'ascenseur)
-			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_STAGE, true);
+//			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_STAGE, true);
 			//on se deplace vers elle
-			stateToConsider.robot.moveLengthwise(50, hooksToConsider, true);
+//			stateToConsider.robot.moveLengthwise(50, hooksToConsider, true);
 			
 			//on y place notre membre
 			//Sem....Pai...  =O
 			
-			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+//			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
 			//on ouvre notre coeur (le guide) un peu
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
-			stateToConsider.robot.moveLengthwise(50, hooksToConsider, true);
+			stateToConsider.robot.moveLengthwise((int) (100*Math.sqrt(4.5)), hooksToConsider, true);
+//			stateToConsider.robot.moveLengthwise(50, hooksToConsider, true);
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_GUIDE, true);
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_GUIDE, true);
 			
@@ -149,7 +149,7 @@ public class DropPile extends AbstractScript
 	{
 		if (id==1)
 		{
-			return new Circle(200+230,570);
+			return new Circle(500,325,0);
 		}
 		else if (id==2)
 		{
