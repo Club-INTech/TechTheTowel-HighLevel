@@ -159,7 +159,7 @@ Un bras est dit fermé si il est en position pour maintenir un gobelet à l'intéri
 On entend par "lentement" une vitesse permettant de ramasser un plot (ouverture) ou un gobelet (fermeture), les deux vitesses pouvant être différentes.
 
 obd		ouvrir le bras droit
-mbd		mettre le bras droit en position mediane 
+mbd		mettre le bras droit en position mediane
 fbd		fermer le bras droit
 
 obg		ouvrir le bras gauche
