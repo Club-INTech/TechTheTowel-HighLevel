@@ -16,6 +16,8 @@ import utils.Log;
 public class GetGlass extends AbstractScript 
 {
 
+	private static final int timeToDropGlass = 3000;
+
 	public GetGlass(HookFactory hookFactory, Config config, Log log) 
 	{
 		super(hookFactory, config, log);
@@ -138,15 +140,11 @@ public class GetGlass extends AbstractScript
 	@Override
 	public int remainingScoreOfVersion(int id_version, GameState<?> state) 
 	{
-		//TODO si le robot est plein a droite et a gauche (on attends les capteurs)
-		//if (robot.fullRight) 
-		//{
-		//	if (robot.fullLeft)
-		//	{
-		//		return 0;
-		//	}
-		//}
-		return 0; //Ne rapporte pas concretement de points si le verre n'est pas posé, il n'y a que des points potentiels
+		if (!(state.robot.isGlassStoredRight && state.robot.isGlassStoredLeft) && state.table.isGlassXTaken(id_version) && (90000-state.timeEllapsed)>timeToDropGlass) 
+		{
+			return 4;
+		}
+		return 0;
 	}
 
 	@Override

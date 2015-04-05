@@ -32,6 +32,10 @@ import utils.Sleep;
 
 public class Strategie implements Service
 {
+	/**
+	 * temps restant pour le match
+	 */
+	private long timeAvalible;
 	/** système de log sur lequel écrire*/
 	private Log log;
 	
@@ -91,6 +95,7 @@ public class Strategie implements Service
 
 	public void updateConfig() 
 	{
+		timeAvalible = Integer.parseInt(config.getProperty("temps_match"))-realGameState.timeEllapsed;
 		table.updateConfig();
         robotReal.updateConfig();
 	}

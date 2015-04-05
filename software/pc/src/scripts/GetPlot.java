@@ -23,6 +23,10 @@ import utils.Log;
  */
 public class GetPlot extends AbstractScript
 {
+	/**
+	 * le temps en ms pour faire un epile d'au moins 1 plot
+	 */
+	private static final int timeToDoPile = 2000;
 	int sleepAfterSlow=500;
 
 
@@ -226,8 +230,11 @@ public class GetPlot extends AbstractScript
 	@Override
 	public int remainingScoreOfVersion(int id_version, GameState<?> state) 
 	{
-		//TODO
-		return 0;//Ce script ne rapporte pas concretement de points tant que les plots ne sont pas posés
+		if (!state.table.isPlotXEaten(id_version) && (90000-state.timeEllapsed)>timeToDoPile && state.robot.storedPlotCount<4 /*TODO verifier que on a pas deja fait deux piles*/)
+		{
+			return 3+2*(state.robot.isBallStored?1:0)+1;//le +1 sert a ce que le robot privilégie le fait de manger un plot a deposer sa pile
+		}
+		return 0;
 	}
 
 	@Override
