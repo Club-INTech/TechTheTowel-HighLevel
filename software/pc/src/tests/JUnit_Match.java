@@ -57,16 +57,7 @@ public class JUnit_Match extends JUnit_Test
 		emptyHook = new ArrayList<Hook> ();
 		
 		real_state.robot.setPosition(new Vec2 (1381,1000));
-		if (config.getProperty("couleur").equals("jaune"))
-		{
-			//On est jaune donc on est en 0 
-			real_state.robot.setOrientation(0); 
-		}
-		else
-		{
-			//On est vert donc on est en PI
-			real_state.robot.setOrientation(Math.PI);
-		}
+		real_state.robot.setOrientation(Math.PI);
 		real_state.robot.updateConfig();
 	}
 	

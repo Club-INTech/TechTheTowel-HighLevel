@@ -46,7 +46,7 @@ public class ThreadTimer extends AbstractThread
 	public static long matchDuration = Integer.parseInt(config.getProperty("temps_match").replaceAll(" ","") ) *1000;
 	
 	/** Temps en ms qui s'écoule entre deux mise a jour de la liste des obstacle périmables. Lors de chaque mise a jour, les obstacles périmés sont détruits. */
-	public static int obstacleRefreshInterval = 50;
+	public static int obstacleRefreshInterval = 0;
 	
 	//TODO : interface graphique à enlever eventuellement (necessaire pour les tests)
 	public Window window;

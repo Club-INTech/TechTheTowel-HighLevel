@@ -341,8 +341,9 @@ public class ObstacleManager
     
     /**
      *  On enleve les obstacles presents sur la table virtuelle mais non detectés
+     *  @return true si on a enlevé un obstacle, false sinon
      */
-    public synchronized void removeNonDetectedObstacles(Vec2 position, double orientation, double detectionRadius, double detectionAngle)
+    public synchronized boolean removeNonDetectedObstacles(Vec2 position, double orientation, double detectionRadius, double detectionAngle)
     {
     	//parcours des obstacles
     	for(int i = 0; i < mMobileObstacles.size(); i++)
@@ -400,9 +401,10 @@ public class ObstacleManager
          						 position.y + (int)(detectionRadius*Math.sin(orientation - detectionAngle/2))), this);
     		    	}
     		    	
-    		    	
+    		    	return true;
     			}
     		}
     	}
+    	return false;
     }
 }

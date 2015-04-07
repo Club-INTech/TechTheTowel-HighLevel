@@ -2,6 +2,7 @@ package threads;
 
 import org.hamcrest.core.IsSame;
 
+import com.sun.org.apache.bcel.internal.generic.IREM;
 import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Single;
 
 import enums.SensorNames;
@@ -200,12 +201,17 @@ class ThreadSensor extends AbstractThread
 				int[] distanceFront = getDistanceFront();
 				int[] distanceBack = getDistanceBack();
 				
-				
-				//ajout d'obstacles mobiles dans l'obstacleManager
-				// Analyse des capteurs avant, avec gestion dees angles
-		
-				addObstacleFront(distanceFront);			// Analyse des capteurs arrieres, avec gestion des angles
-				addObstacleBack(distanceBack);
+				if(! (distanceFront[0]==-1 || 
+					  distanceFront[1]==-1)) // si on n'a pas spammé
+				{					
+					removeObstacleFront(distanceFront);
+					
+					//ajout d'obstacles mobiles dans l'obstacleManager
+					// Analyse des capteurs avant, avec gestion des angles
+					addObstacleFront(distanceFront);			// Analyse des capteurs arrieres, avec gestion des angles
+					addObstacleBack(distanceBack);
+				}
+					
 				
 				log.debug("Distance selon ultrasons avant : "+distanceFront[0]+";"+distanceFront[1], this); 
 				//log.debug("Distance selon ultrasons arriere: "+distanceBack[0]+";"+distanceBack[1], this);
@@ -257,8 +263,8 @@ class ThreadSensor extends AbstractThread
 			distanceObstacleFront[1]=distanceFront[1]+radius;
 		else
 			distanceObstacleFront[1]=0;
-			
-				
+
+		
 		//0 gauche / 1 à droite
 		// si les 2 capteurs detectent quelque chose
 		if ((minSensorRange<distanceFront[0] && distanceFront[0]<maxSensorRange) && (minSensorRange<distanceFront[1] && distanceFront[1]<maxSensorRange) )
@@ -360,15 +366,6 @@ class ThreadSensor extends AbstractThread
 			
 			obstacleAddedRight=true;
 		}
-		
-		if(distanceObstacleFront[1] != 0)
-			removeObstacleRight((int)((distanceObstacleFront[1] - radius)*0.9));
-		else
-			removeObstacleRight((int)maxSensorRange);
-		if(distanceObstacleFront[0] != 0)
-			removeObstacleLeft((int)((distanceObstacleFront[0] - radius)*0.9));
-		else
-			removeObstacleLeft((int)maxSensorRange);
 	}
 
 	/**
@@ -409,12 +406,18 @@ class ThreadSensor extends AbstractThread
 		{
 			distanceFront = (int[]) mSensorsCardWrapper.getSensorValue(SensorNames.ULTRASOUND_FRONT_SENSOR);
 			
+			log.debug("Distance selon ultrasons avant traitement : "+distanceFront[0]+";"+distanceFront[1], this); 
+
 			//on met tout les capteurs qui detectent un objet DANS le robot ou à plus de maxSensorRange a 0
 			for (int i=0; i<distanceFront.length; i++)
 			{
 				if(distanceFront[i]==0)
+				{
 					log.critical("ARRETEZ DE SPAMMER LES CAPTEURS !", this);
-				if (distanceFront[i]<distanceBetweenGuideAndUltrasound)
+					distanceFront[i]=-1;
+				}
+				if ( distanceFront[i] <distanceBetweenGuideAndUltrasound && 
+					 distanceFront[i] !=-1 )
 				{
 					distanceFront[i]=0;
 				}
@@ -510,6 +513,32 @@ class ThreadSensor extends AbstractThread
 	}
 	
 	
+	private void  removeObstacleFront(int[] distanceFront)
+	{
+		/**
+		 * Distances lues par les capteurs PLUSS le rayon d'un robot pour viser le centre
+		 */
+		int[] distanceObstacleFront={0,0};
+		
+		if(!(distanceFront[0]==0))
+			distanceObstacleFront[0]=distanceFront[0]+radius;
+		else
+			distanceObstacleFront[0]=0;
+		
+		if(!(distanceFront[1]==0))
+			distanceObstacleFront[1]=distanceFront[1]+radius;
+		else
+			distanceObstacleFront[1]=0;
+		
+		if(distanceObstacleFront[1] != 0)
+			removeObstacleRight((int)((distanceObstacleFront[1] - radius)*0.9));
+		else
+			removeObstacleRight((int)maxSensorRange);
+		if(distanceObstacleFront[0] != 0)
+			removeObstacleLeft((int)((distanceObstacleFront[0] - radius)*0.9));
+		else
+			removeObstacleLeft((int)maxSensorRange);
+	}
 	
 	/**
 	 *  On enleve les obstacles qu'on ne voit pas
@@ -523,7 +552,8 @@ class ThreadSensor extends AbstractThread
 		position=mRobot.getPosition(); // absolu
 		
 		sensorPosition=changeReference(leftFrontSensorPosition, position, orientation); // passage de la position du capteur en absolu
-		mTable.getObstacleManager().removeNonDetectedObstacles(position, (orientation-leftFrontSensorAngle), detectionDistance, detectionAngle);
+		if(mTable.getObstacleManager().removeNonDetectedObstacles(position, (orientation-leftFrontSensorAngle), detectionDistance, detectionAngle) )
+			log.debug("Obstacle enlevé avec le capteur gauche", this);
 	}
 	
 	private void removeObstacleRight(int detectionDistance)
@@ -535,6 +565,8 @@ class ThreadSensor extends AbstractThread
 		position=mRobot.getPosition(); // absolu
 		
 		sensorPosition=changeReference(rightFrontSensorPosition, position, orientation); // passage de la position du capteur en absolu
-		mTable.getObstacleManager().removeNonDetectedObstacles(sensorPosition, (orientation+rightFrontSensorAngle), detectionDistance, detectionAngle);
+		if(mTable.getObstacleManager().removeNonDetectedObstacles(sensorPosition, (orientation+rightFrontSensorAngle), detectionDistance, detectionAngle))
+			log.debug("Obstacle enlevé avec le capteur droit", this);
+
 	}
 }
