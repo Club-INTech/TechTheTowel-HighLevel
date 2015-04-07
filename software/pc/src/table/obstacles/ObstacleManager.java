@@ -194,7 +194,7 @@ public class ObstacleManager
      */
     public synchronized void addObstacle(final Vec2 position)
     {
-    	addObstacle (position,defaultObstacleRadius);
+    	addObstacle(position,defaultObstacleRadius);
     }
 
     
@@ -341,8 +341,9 @@ public class ObstacleManager
     
     /**
      *  On enleve les obstacles presents sur la table virtuelle mais non detectés
+     *  @return true si on a enlevé un obstacle, false sinon
      */
-    public synchronized void removeNonDetectedObstacles(Vec2 position, double orientation, double detectionRadius, double detectionAngle)
+    public synchronized boolean removeNonDetectedObstacles(Vec2 position, double orientation, double detectionRadius, double detectionAngle)
     {
     	//parcours des obstacles
     	for(int i = 0; i < mMobileObstacles.size(); i++)
@@ -361,17 +362,19 @@ public class ObstacleManager
     			// si on intersecte avec le coté gauche 
     			// ou
     			// si on interesecte avec le coté droit
-
+    			Segment coteGaucheCone = new Segment(position, 
+						new Vec2( position.x + (int)(detectionRadius*Math.cos(orientation + detectionAngle/2)), 
+								  position.y + (int)(detectionRadius*Math.sin(orientation + detectionAngle/2)) ) );
+    			Segment coteDroitCone = new Segment(position, 
+						new Vec2( position.x + (int)(detectionRadius*Math.cos(orientation - detectionAngle/2)), 
+								  position.y + (int)(detectionRadius*Math.sin(orientation - detectionAngle/2)) ) );
+    			
     			
     			if(ennemyAngle < (orientation + detectionAngle/2)
     		    && ennemyAngle > (orientation - detectionAngle/2)
-    		    || ( ( PathDingDing.intersects(new Segment(position, 
-    		    								new Vec2(position.x + (int)(detectionRadius*Math.cos(orientation + detectionAngle/2)), 
-    		    										 position.y + (int)(detectionRadius*Math.sin(orientation + detectionAngle/2)))),
+    		    || ( ( PathDingDing.intersects( coteGaucheCone , 
     		    						   new Circle(positionEnnemy, ennemyRay)) )
-    		    || ( PathDingDing.intersects(new Segment(position,
-    		    								new Vec2(position.x + (int)(detectionRadius*Math.cos(orientation - detectionAngle/2)), 
-    		    										 position.y + (int)(detectionRadius*Math.sin(orientation - detectionAngle/2)))), 
+    		    || ( PathDingDing.intersects(	coteDroitCone, 
     		    						   new Circle(positionEnnemy, ennemyRay))) )  )
     			{
     				mMobileObstacles.remove(i--);
@@ -381,28 +384,26 @@ public class ObstacleManager
     				// TODO enlever, Pourle debug 
     				if(ennemyAngle < (orientation + detectionAngle/2)&& ennemyAngle > (orientation - detectionAngle/2) ) 
         				log.debug("Cause : dans l'angle du cone", this);
-	    			if(PathDingDing.intersects(new Segment(position,new Vec2(position.x + (int)(detectionRadius*Math.cos(orientation + detectionAngle/2)), 
-    		    										 position.y + (int)(detectionRadius*Math.sin(orientation + detectionAngle/2)))),
+	    			if(PathDingDing.intersects(coteGaucheCone ,
     		    						   new Circle(positionEnnemy, ennemyRay)) )
 	    			{
-        				log.debug("Cause : intersectionne avec le coté droit du cone", this);
+        				log.debug("Cause : intersectionne avec le coté gauche du cone", this);
         				log.debug("Point devant le capteur : "+new Vec2(position.x + (int)(detectionRadius*Math.cos(orientation + detectionAngle/2)), 
           						 position.y + (int)(detectionRadius*Math.sin(orientation + detectionAngle/2))), this);
 	    			}
 	    			
-    		    	if( PathDingDing.intersects(new Segment(position,
-    		    								new Vec2(position.x + (int)(detectionRadius*Math.cos(orientation - detectionAngle/2)), 
-    		    										 position.y + (int)(detectionRadius*Math.sin(orientation - detectionAngle/2)))), 
+    		    	if( PathDingDing.intersects( coteDroitCone, 
     		    						   new Circle(positionEnnemy, ennemyRay)))
     		    	{
-        				log.debug("Cause : intersectionne avec le coté gauche du cone", this);    
+        				log.debug("Cause : intersectionne avec le coté droit du cone", this);    
         				log.debug("Point devant le capteur : "+new Vec2(position.x + (int)(detectionRadius*Math.cos(orientation - detectionAngle/2)), 
          						 position.y + (int)(detectionRadius*Math.sin(orientation - detectionAngle/2))), this);
     		    	}
     		    	
-    		    	
+    		    	return true;
     			}
     		}
     	}
+    	return false;
     }
 }
