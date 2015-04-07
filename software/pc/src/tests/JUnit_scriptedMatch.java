@@ -2,13 +2,17 @@ package tests;
 
 import hook.Hook;
 
-
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+
 import scripts.AbstractScript;
 import scripts.ScriptManager;
 import smartMath.Vec2;
 import strategie.GameState;
 import threads.ThreadTimer;
+import utils.Config;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -30,6 +34,7 @@ import robot.cardsWrappers.SensorsCardWrapper;
 
 public class JUnit_scriptedMatch extends JUnit_Test 
 {
+	static Config config;
 	ArrayList<Hook> emptyHook;
 	GameState<Robot> real_state;
 	ScriptManager scriptmanager;
@@ -46,11 +51,12 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		scriptmanager = (ScriptManager) container.getService(ServiceNames.SCRIPT_MANAGER);
 		mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
         pathDingDing = (PathDingDing)container.getService(ServiceNames.PATHDINGDING);
+        config = (Config)container.getService(ServiceNames.CONFIG);
 //        threadTimer = (ThreadTimer)container.getService(ServiceNames.THREAD_TIMER);
 		emptyHook = new ArrayList<Hook> ();  
 
 		
-			real_state.robot.setPosition(new Vec2 (1381,1000));
+			real_state.robot.setPosition(new Vec2 (1132,1000));
 			real_state.robot.setOrientation(Math.PI);
 		
 		
@@ -111,10 +117,41 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		
 		robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
 	}
+	
+	/**
+	 * Demande si la couleur est verte au jaune
+	 * @throws Exception
+	 */
+	static void configColor()
+	{
+
+		String couleur = "";
+		while(!couleur.contains("jaune") && !couleur.contains("vert"))
+		{
+			System.out.println("Rentrez \"vert\" ou \"jaune\" : ");
+			BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in)); 
+			 
+			try 
+			{
+				couleur = keyboard.readLine();
+			}
+			catch (IOException e) 
+			{
+				System.out.println("Eurreur IO: le clavier est il bien branché ?");
+			} 
+			if(couleur.contains("jaune"))
+				config.set("couleur","jaune");
+			else if(couleur.contains("vert"))
+				config.set("couleur", "vert");
+			
+		}
+		
+	}
 
 	@Test
 	public void test() throws PathNotFoundException, SerialFinallyException, SerialConnexionException
 	{
+		configColor();
 //		container.startAllThreads();
 		waitMatchBegin();
 		//premiere action du match

@@ -33,8 +33,8 @@ public class ExitBeginZone extends AbstractScript
 	public Circle entryPosition(int id, int ray)
 	{
 		// point de depart du match a modifier a chaque base roulante
-		return new Circle(1500-71-48,1000);
-		//1500 le bout de la table, 71 la taille du carre vert perce et 48 la taille de l'arriere du robot a son centre
+		return new Circle(1500-320-48,1000);
+		//1500 le bout de la table, 320 la taille de la cale et 48 la taille de l'arriere du robot a son centre
 	}
 	
 	@Override

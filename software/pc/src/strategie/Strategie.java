@@ -7,13 +7,10 @@ import java.util.ArrayList;
 import container.Container;
 import container.Service;
 import enums.ScriptNames;
-import enums.ServiceNames;
-import exceptions.ContainerException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
-import exceptions.serial.SerialManagerException;
 import robot.*;
 import scripts.AbstractScript;
 import scripts.ScriptManager;
@@ -100,6 +97,9 @@ public class Strategie implements Service
         robotReal.updateConfig();
 	}
 	
+	/**
+	 * on suppose que tout les AX-12 sont initialisés avant de lancer l'IA
+	 */
 	public void IA()
 	{
 		try 
@@ -126,7 +126,7 @@ public class Strategie implements Service
 			catch (UnableToMoveException | SerialConnexionException
 					| PathNotFoundException | SerialFinallyException e) 
 			{
-				// TODO Auto-generated catch block
+				// FIXME choix de l'IA face a un imprevu
 				e.printStackTrace();
 			}
 		}
@@ -146,12 +146,12 @@ public class Strategie implements Service
 				
 				for(int i=0; i<(versions.length);i++)
 				{
-					int valueScript = maxValuable(script, versions[i]);
-					if (valueScript>nextScriptValue)
+					int currentScriptValue = scriptValue(script, versions[i]);
+					if (currentScriptValue>nextScriptValue)
 					{
 						nextScript=script;
-						nextScriptValue=valueScript;
-						nextScriptVersion=i;
+						nextScriptValue=currentScriptValue;
+						nextScriptVersion=versions[i];
 					}
 						
 				}
@@ -159,7 +159,13 @@ public class Strategie implements Service
 		}
 	}
 
-	private int maxValuable(AbstractScript script, int version) 
+	/**
+	 * donne la valeur d'un script au sens de l'IA
+	 * @param script le script dont on veut connaitre la valeur
+	 * @param version la version du script a tester
+	 * @return un entier qui est la valeur de ce script
+	 */
+	private int scriptValue(AbstractScript script, int version) 
 	{
 		// TODO trouver la valeur d'un script
 		return script.remainingScoreOfVersion(version, gameState);

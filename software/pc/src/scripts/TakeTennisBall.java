@@ -22,6 +22,8 @@ import utils.Log;
 public class TakeTennisBall extends AbstractScript
 {
 		
+	private static final int AverageTimeToGetPlot = 5000;
+
 	public TakeTennisBall(HookFactory hookFactory, Config config, Log log)
 	{
 		super(hookFactory, config, log);
@@ -88,7 +90,12 @@ public class TakeTennisBall extends AbstractScript
 	@Override
 	public int remainingScoreOfVersion(int version, GameState<?> stateToConsider) 
 	{
-		//FIXME
+		//si on a pas deja pris la balle et si on a pas deja deposé une pile
+		if (!stateToConsider.table.isBallTaken() /*TODO verifier si une pile a pas deja ete posee*/)
+		{
+			return 5*Math.min((int)(90000-stateToConsider.timeEllapsed)/AverageTimeToGetPlot,
+									stateToConsider.table.numberOfPlotLeft());
+		}
 		return 0;
 	}
 	
