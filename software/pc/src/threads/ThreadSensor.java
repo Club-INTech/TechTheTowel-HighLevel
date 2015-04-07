@@ -203,13 +203,16 @@ class ThreadSensor extends AbstractThread
 				
 				if(! (distanceFront[0]==-1 || 
 					  distanceFront[1]==-1)) // si on n'a pas spammé
-				{					
+				{										
+					// on enleve les obstacles 
 					removeObstacleFront(distanceFront);
-					
+
 					//ajout d'obstacles mobiles dans l'obstacleManager
 					// Analyse des capteurs avant, avec gestion des angles
-					addObstacleFront(distanceFront);			// Analyse des capteurs arrieres, avec gestion des angles
+					addObstacleFront(distanceFront);
+					// Analyse descapt	eurs arrieres, avec gestion des angles
 					addObstacleBack(distanceBack);
+					
 				}
 					
 				
@@ -232,7 +235,7 @@ class ThreadSensor extends AbstractThread
 	 * @param distanceFront l'int[] recupere par la serie pour les capteurs avants
 	 * a modifier si ajout ou supression de capteurs
 	 */
-	private void addObstacleFront(int[] distanceFront) 
+	private boolean addObstacleFront(int[] distanceFront) 
 	{
 		Vec2 positionRobot = mRobot.getPosition();
 		double orientation = mRobot.getOrientation();
@@ -366,6 +369,7 @@ class ThreadSensor extends AbstractThread
 			
 			obstacleAddedRight=true;
 		}
+		return (obstacleAddedRight || obstacleAddedLeft);
 	}
 
 	/**
@@ -513,29 +517,14 @@ class ThreadSensor extends AbstractThread
 	}
 	
 	
-	private void  removeObstacleFront(int[] distanceFront)
+	private void removeObstacleFront(int[] distanceFront)
 	{
-		/**
-		 * Distances lues par les capteurs PLUSS le rayon d'un robot pour viser le centre
-		 */
-		int[] distanceObstacleFront={0,0};
-		
-		if(!(distanceFront[0]==0))
-			distanceObstacleFront[0]=distanceFront[0]+radius;
-		else
-			distanceObstacleFront[0]=0;
-		
-		if(!(distanceFront[1]==0))
-			distanceObstacleFront[1]=distanceFront[1]+radius;
-		else
-			distanceObstacleFront[1]=0;
-		
-		if(distanceObstacleFront[1] != 0)
-			removeObstacleRight((int)((distanceObstacleFront[1] - radius)*0.9));
+		if(distanceFront[1] != 0)
+			removeObstacleRight((int)((distanceFront[1])*0.7));
 		else
 			removeObstacleRight((int)maxSensorRange);
-		if(distanceObstacleFront[0] != 0)
-			removeObstacleLeft((int)((distanceObstacleFront[0] - radius)*0.9));
+		if(distanceFront[0] != 0)
+			removeObstacleLeft((int)((distanceFront[0])*0.7));
 		else
 			removeObstacleLeft((int)maxSensorRange);
 	}
@@ -552,7 +541,7 @@ class ThreadSensor extends AbstractThread
 		position=mRobot.getPosition(); // absolu
 		
 		sensorPosition=changeReference(leftFrontSensorPosition, position, orientation); // passage de la position du capteur en absolu
-		if(mTable.getObstacleManager().removeNonDetectedObstacles(position, (orientation-leftFrontSensorAngle), detectionDistance, detectionAngle) )
+		if(mTable.getObstacleManager().removeNonDetectedObstacles(sensorPosition, (orientation-leftFrontSensorAngle), detectionDistance, detectionAngle) )
 			log.debug("Obstacle enlevé avec le capteur gauche", this);
 	}
 	
