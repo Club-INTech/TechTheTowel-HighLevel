@@ -64,7 +64,7 @@ public class JUnit_Sensors extends JUnit_Test
 		mLocomotion = (Locomotion)container.getService(ServiceNames.LOCOMOTION);
 		config.set("couleur", "vert");
 		mLocomotion.updateConfig();
-		mLocomotion.setPosition(new Vec2 (1132,1000));
+		mLocomotion.setPosition(new Vec2 (1500-320-77,1000));
 		mLocomotion.setOrientation(Math.PI);
 		mLocomotion.setTranslationnalSpeed(170);
 		mLocomotion.setRotationnalSpeed(160);
