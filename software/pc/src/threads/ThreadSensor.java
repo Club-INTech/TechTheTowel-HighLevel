@@ -277,22 +277,24 @@ class ThreadSensor extends AbstractThread
 			// Si on voit 2 ennemis distincts
 			if(Math.abs(distanceFront[1]-distanceFront[0]) > distanceBetweenFrontSensors)
 			{
-				// Coté gauche : 
 				// relatif
-				positionEnnemi_1.x= (int) (distanceFront[0]*Math.cos(leftFrontSensorAngle) + leftFrontSensorPosition.x);
-				positionEnnemi_1.y= (int) (distanceFront[0]*Math.sin(leftFrontSensorAngle) + distanceBetweenFrontSensors/2);
+				positionEnnemi_1.x=   (int) (distanceObstacleFront[0]*Math.cos(leftFrontSensorAngle) +leftFrontSensorPosition.x);
+				positionEnnemi_1.y=  -(int) (distanceObstacleFront[0]*Math.sin(leftFrontSensorAngle) +distanceBetweenFrontSensors/2);
 				
 				// sauvegarde de la position relative
 				relativePosEnnemi1.x=positionEnnemi_1.x;
 				relativePosEnnemi1.y=positionEnnemi_1.y;
-			
+				
 				// On change de repere 
 				positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
-					
-				// Coté droit :
+				
+				mTable.getObstacleManager().addObstacle(positionEnnemi_1);
+				
+				obstacleAddedLeft=true;
+				
 				// relatif au robot
-				positionEnnemi_2.x=		(int) (distanceFront[1]*Math.cos(rightFrontSensorAngle) +rightFrontSensorPosition.x);
-				positionEnnemi_2.y=    -(int) (distanceFront[1]*Math.sin(rightFrontSensorAngle) +distanceBetweenFrontSensors/2);
+				positionEnnemi_2.x=  (int) (distanceObstacleFront[1]*Math.cos(rightFrontSensorAngle) +rightFrontSensorPosition.x);
+				positionEnnemi_2.y=  (int) (distanceObstacleFront[1]*Math.sin(rightFrontSensorAngle) +distanceBetweenFrontSensors/2);
 				
 				// sauvegarde de la position relative
 				relativePosEnnemi2.x=positionEnnemi_2.x;
@@ -301,12 +303,9 @@ class ThreadSensor extends AbstractThread
 				// On change de repere 
 				positionEnnemi_2=changeReference(relativePosEnnemi2, positionRobot, orientation );
 				
-				mTable.getObstacleManager().addObstacle(positionEnnemi_1);
 				mTable.getObstacleManager().addObstacle(positionEnnemi_2);
 				
 				obstacleAddedRight=true;
-				obstacleAddedLeft=true;
-
 			}
 			// sinon, on voit un seul et meme ennemi
 			else  

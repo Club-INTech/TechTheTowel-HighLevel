@@ -104,13 +104,13 @@ public class JUnit_Sensors extends JUnit_Test
 
 	}
 	
-	//@Test
+	@Test
 	public void testEvitement()
 	{
 		log.debug("Test d'évitement", this);
 		try 
 		{	
-			state.robot.moveLengthwiseWithoutDetection(state.robot.getPosition().x-800);
+			state.robot.moveLengthwiseWithoutDetection(200);
 		} 
 		catch (UnableToMoveException e1)
 		{
@@ -181,7 +181,7 @@ public class JUnit_Sensors extends JUnit_Test
 	
 
 		
-	@Test
+	//@Test
 	public void testCapteurFixe()
 	{
 		log.debug("Test d'évitement fixe", this);
