@@ -230,9 +230,12 @@ public class GetPlot extends AbstractScript
 	@Override
 	public int remainingScoreOfVersion(int id_version, GameState<?> state) 
 	{
-		if (!state.table.isPlotXEaten(id_version) && (90000-state.timeEllapsed)>timeToDoPile && state.robot.storedPlotCount<4 /*TODO verifier que on a pas deja fait deux piles*/)
+		int nbPlotofVersion = 1;
+		if (id_version == 34 || id_version == 56)
+			nbPlotofVersion = 2;
+		if (!state.table.isPlotXEaten(id_version) && (90000-state.timeEllapsed)>timeToDoPile && state.robot.storedPlotCount<(5-nbPlotofVersion) /*TODO verifier que on a pas deja fait deux piles*/)
 		{
-			return 3+2*(state.robot.isBallStored?1:0)+1;//le +1 sert a ce que le robot privilégie le fait de manger un plot a deposer sa pile
+			return (state.robot.storedPlotCount+nbPlotofVersion)*(3+2*(state.robot.isBallStored?1:0));
 		}
 		return 0;
 	}

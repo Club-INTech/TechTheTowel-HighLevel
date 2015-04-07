@@ -172,7 +172,7 @@ public class DropPile extends AbstractScript
 			//si on pose dans notre base et que la balle n'a pas deja ete attrapee on reduit le nombre de points par 5*le nombre de plots encore possible d'empiler
 			if (version == 2 && !stateToConsider.table.isBallTaken())
 				toReturn -= 5*Math.min((int)(90000-stateToConsider.timeEllapsed)/AverageTimeToGetPlot,
-									stateToConsider.table.numberOfPlotLeft());
+											stateToConsider.table.numberOfPlotLeft());
 			return toReturn;
 	}
 
