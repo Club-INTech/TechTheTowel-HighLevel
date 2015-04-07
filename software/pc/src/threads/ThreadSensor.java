@@ -97,10 +97,10 @@ class ThreadSensor extends AbstractThread
 	/**
 	 * Angles en degrés, transformés en radians
 	 */
-	double leftFrontSensorAngle=10		*2*(Math.PI) / 360;
-	double rightFrontSensorAngle=10 	*2*(Math.PI) / 360;
-	double leftBackSensorAngle=0		*2*(Math.PI) / 360;
-	double rightBackSensorAngle=0		*2*(Math.PI) / 360;
+	double leftFrontSensorAngle= 15		*2*(Math.PI) / 360;
+	double rightFrontSensorAngle= 15 	*2*(Math.PI) / 360;
+	double leftBackSensorAngle=  0		*2*(Math.PI) / 360;
+	double rightBackSensorAngle= 0		*2*(Math.PI) / 360;
 	
 	/** 
 	 *  position des capteurs relativement au centre du robot, en mm
@@ -138,6 +138,7 @@ class ThreadSensor extends AbstractThread
 	Vec2 positionEnnemi_1=new Vec2 (0,0);
 	Vec2 positionEnnemi_2=new Vec2 (0,0);
 
+	int[] realSensorValues = new int[2];
 
 	
 	
@@ -337,8 +338,8 @@ class ThreadSensor extends AbstractThread
 		if (minSensorRange<distanceFront[0] && distanceFront[0]<maxSensorRange)
 		{			
 			// relatif
-			positionEnnemi_1.x=  (int) (distanceObstacleFront[0]*Math.cos(leftFrontSensorAngle) +leftFrontSensorPosition.x);
-			positionEnnemi_1.y= -(int) (distanceObstacleFront[0]*Math.sin(leftFrontSensorAngle) +distanceBetweenFrontSensors/2);
+			positionEnnemi_1.x=   (int) (distanceObstacleFront[0]*Math.cos(leftFrontSensorAngle) +leftFrontSensorPosition.x);
+			positionEnnemi_1.y=  -(int) (distanceObstacleFront[0]*Math.sin(leftFrontSensorAngle) +distanceBetweenFrontSensors/2);
 			
 			// sauvegarde de la position relative
 			relativePosEnnemi1.x=positionEnnemi_1.x;
@@ -416,6 +417,8 @@ class ThreadSensor extends AbstractThread
 			distanceFront = (int[]) mSensorsCardWrapper.getSensorValue(SensorNames.ULTRASOUND_FRONT_SENSOR);
 			
 			log.debug("Distance selon ultrasons avant traitement : "+distanceFront[0]+";"+distanceFront[1], this); 
+			realSensorValues[0]=distanceFront[0];
+			realSensorValues[1]=distanceFront[1];
 
 			//on met tout les capteurs qui detectent un objet DANS le robot ou à plus de maxSensorRange a 0
 			for (int i=0; i<distanceFront.length; i++)
@@ -524,14 +527,9 @@ class ThreadSensor extends AbstractThread
 	
 	private void removeObstacleFront(int[] distanceFront)
 	{
-		if(distanceFront[1] != 0)
-			removeObstacleRight((int)((distanceFront[1])*0.9));
-		else
-			removeObstacleRight((int)(maxSensorRange*0.9));
-		if(distanceFront[0] != 0)
-			removeObstacleLeft((int)((distanceFront[0])*0.9));
-		else
-			removeObstacleLeft((int)(maxSensorRange*0.9));
+		removeObstacleRight((int)(realSensorValues[1]*0.7));
+		removeObstacleLeft((int)(realSensorValues[0]*0.7));
+
 	}
 	
 	/**
@@ -546,7 +544,7 @@ class ThreadSensor extends AbstractThread
 		position=mRobot.getPosition(); // absolu
 		
 		sensorPosition=changeReference(leftFrontSensorPosition, position, orientation); // passage de la position du capteur en absolu
-		if(mTable.getObstacleManager().removeNonDetectedObstacles(sensorPosition, (orientation-leftFrontSensorAngle), (detectionDistance), detectionAngle) )
+		if(mTable.getObstacleManager().removeNonDetectedObstacles(sensorPosition, (orientation+leftFrontSensorAngle), (detectionDistance), detectionAngle) )
 			log.debug("Obstacle enlevé avec le capteur gauche", this);
 	}
 	
@@ -559,7 +557,7 @@ class ThreadSensor extends AbstractThread
 		position=mRobot.getPosition(); // absolu
 		
 		sensorPosition=changeReference(rightFrontSensorPosition, position, orientation); // passage de la position du capteur en absolu
-		if(mTable.getObstacleManager().removeNonDetectedObstacles(sensorPosition, (orientation+rightFrontSensorAngle),  (detectionDistance), detectionAngle))
+		if(mTable.getObstacleManager().removeNonDetectedObstacles(sensorPosition, (orientation-rightFrontSensorAngle),  (detectionDistance), detectionAngle))
 			log.debug("Obstacle enlevé avec le capteur droit", this);
 
 	}
