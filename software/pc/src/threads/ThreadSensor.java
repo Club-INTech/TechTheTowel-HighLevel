@@ -527,8 +527,9 @@ class ThreadSensor extends AbstractThread
 	
 	private void removeObstacleFront(int[] distanceFront)
 	{
-		removeObstacleRight((int)(realSensorValues[1]*0.7));
-		removeObstacleLeft((int)(realSensorValues[0]*0.7));
+		// On limite les obstacles supprimés, pour eviter les problemes liés aux reflexions
+			removeObstacleLeft(  Math.min((int)( realSensorValues[0]*0.7),1000));
+			removeObstacleRight( Math.min((int)( realSensorValues[1]*0.7),1000));
 
 	}
 	
