@@ -42,6 +42,10 @@ public class Table implements Service
 	private boolean isLeftCarpetDropped;
 	private boolean isRightCarpetDropped;
 	
+	/**
+	 * le nombre de points que valent les piles posées dans la zone de depart (0) ou sur l'estrade (1)
+	 */
+	private int[] pileValue = {0,0}; 
 	
 	//les huits plots (voir numerotation sur la table)
 	private boolean isPlotXEaten[];
@@ -200,6 +204,29 @@ public class Table implements Service
 	}
 
 	/**
+	 * 
+	 * @param place 0 pour la zone de depart 1 pour l'estrade
+	 * @return le nombre de points que vaut la pile de plots a cet endroit
+	 */
+	public int getPileValue(int place) 
+	{
+		return pileValue[place];
+	}
+
+	/**
+	 * 
+	 * @param place 0 pour la zone de depart 1 pour l'estrade
+	 * @param value le nouveau nombre de point que vaut la pile de plots a cet endroit
+	 */
+	public void setPileValue(int place, int value) 
+	{
+		if (place == 0 || place ==1)
+			this.pileValue[place] = value;
+		else
+			log.debug("on essaye de mettre une valeur de pile a un endroit inexistant", this);
+	}
+
+	/**
 	 * enleve le verre x de la table
 	 * @param x le numero du verre doit etre dans [0..4]
 	 */
@@ -247,6 +274,12 @@ public class Table implements Service
 		else
 			log.debug("out of bound areaXFilled",this);
 	}
+	
+	/**
+	 * 
+	 * @param x FIXME a quelle zone ça correspond ?
+	 * @return
+	 */
 	
 	public boolean isAreaXFilled (int x)
 	{

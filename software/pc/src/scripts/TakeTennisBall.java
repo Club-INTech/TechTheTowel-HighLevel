@@ -90,11 +90,12 @@ public class TakeTennisBall extends AbstractScript
 	@Override
 	public int remainingScoreOfVersion(int version, GameState<?> stateToConsider) 
 	{
-		//si on a pas deja pris la balle et si on a pas deja deposé une pile
-		if (!stateToConsider.table.isBallTaken() /*TODO verifier si une pile a pas deja ete posee*/)
+		//si on a pas deja pris la balle et que rien n evas empecher la recuperation de cette balle TODO c'est la bonne zone que l'on regarde ?
+		if (!stateToConsider.table.isBallTaken() && stateToConsider.table.getPileValue(0)==0 && !stateToConsider.table.isAreaXFilled(0))
 		{
-			return 5*Math.min((int)(90000-stateToConsider.timeEllapsed)/AverageTimeToGetPlot,
-									stateToConsider.table.numberOfPlotLeft());
+			//on revoie le nombre de points possible a fairre avec cette balle
+			return (5*Math.min((int)(90000-stateToConsider.timeEllapsed)/AverageTimeToGetPlot,
+									stateToConsider.table.numberOfPlotLeft()));
 		}
 		return 0;
 	}
