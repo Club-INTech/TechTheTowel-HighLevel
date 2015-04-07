@@ -230,14 +230,38 @@ public class GetPlot extends AbstractScript
 	@Override
 	public int remainingScoreOfVersion(int id_version, GameState<?> state) 
 	{
-		int nbPlotofVersion = 1;
-		if (id_version == 34 || id_version == 56)
-			nbPlotofVersion = 2;
-		if (!state.table.isPlotXEaten(id_version) && (90000-state.timeEllapsed)>timeToDoPile && state.robot.storedPlotCount<(5-nbPlotofVersion) /*TODO verifier que on a pas deja fait deux piles*/)
+		int toReturn = 0;
+		int nbPlotOfVersion = 1;
+		if (id_version == 34)
 		{
-			return (state.robot.storedPlotCount+nbPlotofVersion)*(3+2*(state.robot.isBallStored?1:0));
+			nbPlotOfVersion = 2;
+			if (state.table.isPlotXEaten(3))
+				nbPlotOfVersion -= 1;
+			if (state.table.isPlotXEaten(4))
+				nbPlotOfVersion -= 1;
 		}
-		return 0;
+		else if (id_version == 56)
+		{
+			nbPlotOfVersion = 2;
+			if (state.table.isPlotXEaten(5))
+				nbPlotOfVersion -= 1;
+			if (state.table.isPlotXEaten(6))
+				nbPlotOfVersion -= 1;
+		}
+		else if (state.table.isPlotXEaten(id_version))
+			nbPlotOfVersion -= 1;
+		
+		
+		if ((90000-state.timeEllapsed)>timeToDoPile/*si il nous reste assez de temps*/ && state.robot.storedPlotCount<(5-nbPlotOfVersion)/*si on a assez de place dans le robot*/ && (state.table.getPileValue(0)==0 || state.table.getPileValue(1)==0)/*si on a pas deja fait deux piles*/)
+		{
+			toReturn = (state.robot.storedPlotCount+nbPlotOfVersion)*(3+2*(state.robot.isBallStored?1:0));
+		}
+		else
+			toReturn = Integer.MIN_VALUE+1;
+		
+		if (id_version == 34 && !state.table.isGlassXTaken(0))
+			toReturn += 4;
+		return toReturn;
 	}
 
 	@Override
