@@ -32,7 +32,7 @@ public class ObstacleManager
 	private ArrayList<ObstacleRectangular> mRectangles;
 
 	private int defaultObstacleRadius;
-	
+		
 	/**
      * Instancie un nouveau gestionnaire d'obstacle.
      *
@@ -345,6 +345,8 @@ public class ObstacleManager
      */
     public synchronized boolean removeNonDetectedObstacles(Vec2 position, double orientation, double detectionRadius, double detectionAngle)
     {
+		boolean obstacleDeleted=false;
+
     	//parcours des obstacles
     	for(int i = 0; i < mMobileObstacles.size(); i++)
     	{
@@ -369,7 +371,6 @@ public class ObstacleManager
 						new Vec2( position.x + (int)(detectionRadius*Math.cos(orientation - detectionAngle/2)), 
 								  position.y + (int)(detectionRadius*Math.sin(orientation - detectionAngle/2)) ) );
     			
-    			
     			if(ennemyAngle < (orientation + detectionAngle/2)
     		    && ennemyAngle > (orientation - detectionAngle/2)
     		    || ( ( PathDingDing.intersects( coteGaucheCone , 
@@ -378,9 +379,10 @@ public class ObstacleManager
     		    						   new Circle(positionEnnemy, ennemyRay))) )  )
     			{
     				mMobileObstacles.remove(i--);
+    				obstacleDeleted=true;
     				log.debug("Ennemi en "+positionEnnemy+" enlevé !", this);
     				
-    				
+
     				// TODO enlever, Pourle debug 
     				if(ennemyAngle < (orientation + detectionAngle/2)&& ennemyAngle > (orientation - detectionAngle/2) ) 
         				log.debug("Cause : dans l'angle du cone", this);
@@ -388,22 +390,16 @@ public class ObstacleManager
     		    						   new Circle(positionEnnemy, ennemyRay)) )
 	    			{
         				log.debug("Cause : intersectionne avec le coté gauche du cone", this);
-        				log.debug("Point devant le capteur : "+new Vec2(position.x + (int)(detectionRadius*Math.cos(orientation + detectionAngle/2)), 
-          						 position.y + (int)(detectionRadius*Math.sin(orientation + detectionAngle/2))), this);
 	    			}
 	    			
     		    	if( PathDingDing.intersects( coteDroitCone, 
     		    						   new Circle(positionEnnemy, ennemyRay)))
     		    	{
-        				log.debug("Cause : intersectionne avec le coté droit du cone", this);    
-        				log.debug("Point devant le capteur : "+new Vec2(position.x + (int)(detectionRadius*Math.cos(orientation - detectionAngle/2)), 
-         						 position.y + (int)(detectionRadius*Math.sin(orientation - detectionAngle/2))), this);
+        				log.debug("Cause : intersectionne avec le coté droit du cone", this);   
     		    	}
-    		    	
-    		    	return true;
     			}
     		}
     	}
-    	return false;
+    	return obstacleDeleted;
     }
 }
