@@ -35,7 +35,7 @@ public class DropPile extends AbstractScript
 		super(hookFactory, config, log);
 		
 		//on initialise le membre versions
-		versions=new int[]{1,2};
+		versions=new Integer[]{1,2};
 	}
 
 	@Override
@@ -192,7 +192,7 @@ public class DropPile extends AbstractScript
 		}
 	}
 
-	public int[] getVersion(GameState<?> stateToConsider)
+	public Integer[] getVersion(GameState<?> stateToConsider)
 	{
 		//TODO
 		return versions;

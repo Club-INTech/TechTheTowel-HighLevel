@@ -1,6 +1,7 @@
 package scripts;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import enums.ActuatorOrder;
 import enums.SensorNames;
@@ -33,7 +34,7 @@ public class GetPlot extends AbstractScript
 	public GetPlot(HookFactory hookFactory, Config config, Log log) 
 	{
 		super(hookFactory, config, log);
-		versions = new int[]{0,1,2,34,56,7};
+		versions = new Integer[]{0,1,2,34,56,7};
 		
 	}
 	
@@ -373,10 +374,32 @@ public class GetPlot extends AbstractScript
 
 
 	
-	public int[] getVersion(GameState<?> stateToConsider)
+	public Integer[] getVersion(GameState<?> stateToConsider)
 	{
-		//TODO
-		return versions;
+		ArrayList <Integer> versionList = new ArrayList<Integer>(Arrays.asList(versions));
+		
+		if (stateToConsider.table.isPlotXEaten(0))
+			versionList.remove(0);
+		if (stateToConsider.table.isPlotXEaten(1))
+			versionList.remove(1);
+		if (stateToConsider.table.isPlotXEaten(2))
+			versionList.remove(2);
+		if (stateToConsider.table.isPlotXEaten(7))
+			versionList.remove(7);
+		if (stateToConsider.table.isPlotXEaten(3) && stateToConsider.table.isPlotXEaten(4) && stateToConsider.table.isGlassXTaken(0))
+		{
+			versionList.remove(34);
+		}
+		if (stateToConsider.table.isPlotXEaten(5) && stateToConsider.table.isPlotXEaten(6))
+			versionList.remove(56);
+		
+		//on converti en Integer[]
+		Integer[] retour = new Integer[versionList.size()];
+	    for (int i=0; i < retour.length; i++)
+	    {
+	    	retour[i] = versionList.get(i).intValue();
+	    }
+	    return retour;
 	}
 
 }

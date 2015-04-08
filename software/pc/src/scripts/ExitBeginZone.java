@@ -26,7 +26,7 @@ public class ExitBeginZone extends AbstractScript
 	public ExitBeginZone(HookFactory hookFactory, Config config, Log log) 
 	{
 		super(hookFactory, config, log);
-		versions = new int[]{0};
+		versions = new Integer[]{0};
 	}
 
 	@Override
@@ -74,7 +74,7 @@ public class ExitBeginZone extends AbstractScript
 		//en effet, pas d'actionneur a rentrer donc abwa !
 	}
 
-	public int[] getVersion(GameState<?> stateToConsider)
+	public Integer[] getVersion(GameState<?> stateToConsider)
 	{
 		return versions;
 	}

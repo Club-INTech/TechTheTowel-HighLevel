@@ -34,7 +34,7 @@ public class DropCarpet extends AbstractScript
 	public DropCarpet(HookFactory hookFactory, Config config, Log log)
 	{
 		super(hookFactory, config, log);
-		versions = new int[]{1}; 
+		versions = new Integer[]{1}; 
 		//definition du tableau des versions, a modifier a chaque ajout d'une version (si il n'y en a qu'une je vois pas trop l'interet mais bon)
 	}
 
@@ -110,11 +110,11 @@ public class DropCarpet extends AbstractScript
 		}
 	}
 
-	public int[] getVersion(GameState<?> stateToConsider)
+	public Integer[] getVersion(GameState<?> stateToConsider)
 	{
 		if (stateToConsider.table.getIsLeftCarpetDropped() && stateToConsider.table.getIsRightCarpetDropped())
-			return new int[]{};
-		return new int[]{1};
+			return new Integer[]{};
+		return new Integer[]{1};
 	}
 
 }
