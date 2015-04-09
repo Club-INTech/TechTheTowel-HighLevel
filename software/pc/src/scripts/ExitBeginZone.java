@@ -21,7 +21,7 @@ import utils.Log;
 public class ExitBeginZone extends AbstractScript
 {
 	//la distance dont on avance pour sortir de la zone de depart
-	int distanceToExit=500;
+	int distanceToExit=200;
 	
 	public ExitBeginZone(HookFactory hookFactory, Config config, Log log) 
 	{

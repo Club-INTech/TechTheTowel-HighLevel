@@ -277,10 +277,8 @@ public class SerialConnexion implements SerialPortEventListener, Service
 			{
 			
 				//Evacuation de l'eventuel buffer indésirable
-				output.write("dfsfdsgdfgfd\r".getBytes());
-				//Evacuation de l'acquittement
-				input.readLine();
-			
+				output.flush();
+				
 				//ping
 				output.write("?\r".getBytes());
 				//evacuation de l'acquittement
