@@ -1,7 +1,6 @@
 package scripts;
 
 import java.util.ArrayList;
-
 import enums.ActuatorOrder;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
@@ -108,7 +107,8 @@ public class TakeTennisBall extends AbstractScript
 
 	public Integer[] getVersion(GameState<?> stateToConsider)
 	{
-		//TODO
+		if (stateToConsider.table.isBallTaken())
+			return new Integer[]{};
 		return versions;
 	}
 	

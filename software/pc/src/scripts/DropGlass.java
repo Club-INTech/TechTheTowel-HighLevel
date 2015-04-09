@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import enums.ActuatorOrder;
+import enums.SensorNames;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
@@ -48,7 +49,8 @@ public class DropGlass extends AbstractScript
 	@Override
 	public void execute(int version, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider,boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException
 	{
-		boolean isThereGlassLeft = true; //TODO capteurs
+		boolean isThereGlassLeft = (Boolean) stateToConsider.robot.getSensorValue(SensorNames.LEFT_ZONE_SENSOR);
+		boolean isThereGlassRight = (Boolean) stateToConsider.robot.getSensorValue(SensorNames.RIGHT_ZONE_SENSOR);
 
 		if (version==0)
 		{
@@ -61,15 +63,18 @@ public class DropGlass extends AbstractScript
 			{
 				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);
 			}
-			else 
+			else if (isThereGlassRight)
+			{
 				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);
+			}
+			else
+				return;
 			
 			//On recule en laissant notre gobelet
 			stateToConsider.robot.moveLengthwise(-50, hooksToConsider, true);//TODO doucement pour eviter de faire tomber le gobelet (en envoyant 350, le gobelet vacille donc bof niveau fiabilité..											 sinon vive les commentaires de 2m de long ! Et oui c'est voulu, surtout ssi tu t'es fais chmir à tout lire <3
 			stateToConsider.robot.moveLengthwise(-300, hooksToConsider, true);
 			
 			//On met à jour la table 
-			//TODO mettre à jour quel verre est posé ( stateToConsider.table.glassXDropped(x) )
 			stateToConsider.table.areaXFilled(1);
 			
 			//On referme les 2 bras
@@ -86,20 +91,22 @@ public class DropGlass extends AbstractScript
 			
 			stateToConsider.robot.turn((5/4)*Math.PI); // On se tourne aux 3/4 afin de pouvoir mettre l'un ou l'autre des verres
 
-			isThereGlassLeft=false;//TODO histoire de changer mais lees capteurs feront le boulot
 			if(isThereGlassLeft)
 			{
 				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);
 			}
-			else 
+			else if (isThereGlassRight)
+			{
 				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);
+			}
+			else
+				return;
 			
 			//On recule en laissant notre gobelet
 			stateToConsider.robot.moveLengthwise(-50, hooksToConsider, true);//TODO doucement pour eviter de faire tomber le gobelet
 			stateToConsider.robot.moveLengthwise(-300, hooksToConsider, true);	
 			
 			//On met à jour la table 
-			//TODO mettre à jour quel verre est posé ( stateToConsider.table.glassXDropped(x) )
 			stateToConsider.table.areaXFilled(2);
 			
 			//On referme les 2 bras
@@ -114,21 +121,23 @@ public class DropGlass extends AbstractScript
 			
 			
 			stateToConsider.robot.turn(Math.PI*3/4); // On se tourne aux 3/4 afin de pouvoir mettre l'un ou l'autre des verres
-			isThereGlassLeft=false;//histoire de changer mais lees capteurs feront le boulot
 
 			if(isThereGlassLeft)
 			{
 				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);
 			}
-			else 
+			else if (isThereGlassRight)
+			{
 				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);
+			}
+			else
+				return;
 			
 			//On recule en laissant notre gobelet
 			stateToConsider.robot.moveLengthwise(-50, hooksToConsider, true);//TODO doucement pour eviter de faire tomber le gobelet
 			stateToConsider.robot.moveLengthwise(-300, hooksToConsider, true);			
 			
 			//On met à jour la table 
-			//TODO mettre à jour quel verre est posé ( stateToConsider.table.glassXDropped(x) )
 			stateToConsider.table.areaXFilled(3);
 			
 			//On referme les 2 bras

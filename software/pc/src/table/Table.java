@@ -252,20 +252,8 @@ public class Table implements Service
 	}
 	
 	/**
-	 * le verre x a été laché, on met à jour la table
-	 * @param x le numero du verre doit etre dans [0..4]
-	 */
-	public void glassXDropped (int x)
-	{
-		if (0<=x && x<=5)
-			isGlassXDropped[x]=true;
-		else
-			log.debug("out of bound glassXDropped",this);
-	}
-	
-	/**
 	 * Un verre a été deposé dans la zone x, on  met à jour 
-	 * @param x la zone 
+	 * @param x la zone (0 la notre, 1 a notre droite et 2 a gauche)
 	 *  ____________________________
 	 * 	|							|
 	 * 	|1							|
@@ -286,7 +274,7 @@ public class Table implements Service
 	
 	/** Fonction renvoyant si la zone en argument est remplie d'un verre ou non 
 	 * 
-	 * @param x la zone 
+	 * @param x la zone (0 la notre, 1 a notre droite et 2 a gauche)
 	 *  ____________________________
 	 * 	|							|
 	 * 	|1							|
