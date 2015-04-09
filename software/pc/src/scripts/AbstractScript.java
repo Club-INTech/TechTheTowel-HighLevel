@@ -33,7 +33,7 @@ public abstract class AbstractScript implements Service
 	protected static HookFactory hookFactory;
 
 	/**  Liste des versions du script. */
-	protected int[] versions;	
+	protected Integer[] versions;	
 	
 	/**
 	 * Constructeur a appeller lorsque un script héritant de la classe AbstractScript est instancié.
@@ -119,6 +119,6 @@ public abstract class AbstractScript implements Service
 	{
 	}
 
-	abstract public int[] getVersion(GameState<?> stateToConsider);
+	abstract public Integer[] getVersion(GameState<?> stateToConsider);
 
 }

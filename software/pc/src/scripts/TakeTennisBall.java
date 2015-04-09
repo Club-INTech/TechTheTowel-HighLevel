@@ -27,7 +27,7 @@ public class TakeTennisBall extends AbstractScript
 	public TakeTennisBall(HookFactory hookFactory, Config config, Log log)
 	{
 		super(hookFactory, config, log);
-		versions = new int[]{1}; //Une seule version disponible car une seule balle, et une seule entrée
+		versions = new Integer[]{1}; //Une seule version disponible car une seule balle, et une seule entrée
 	}
 	
 	@Override
@@ -106,7 +106,7 @@ public class TakeTennisBall extends AbstractScript
 		
 	}
 
-	public int[] getVersion(GameState<?> stateToConsider)
+	public Integer[] getVersion(GameState<?> stateToConsider)
 	{
 		//TODO
 		return versions;

@@ -137,7 +137,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 			}
 			catch (IOException e) 
 			{
-				System.out.println("Eurreur IO: le clavier est il bien branché ?");
+				System.out.println("Erreur IO: le clavier est il bien branché ?");
 			} 
 			if(couleur.contains("jaune"))
 				config.set("couleur","jaune");

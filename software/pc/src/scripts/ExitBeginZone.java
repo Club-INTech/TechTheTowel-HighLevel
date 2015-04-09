@@ -21,12 +21,12 @@ import utils.Log;
 public class ExitBeginZone extends AbstractScript
 {
 	//la distance dont on avance pour sortir de la zone de depart
-	int distanceToExit=500;
+	int distanceToExit=200;
 	
 	public ExitBeginZone(HookFactory hookFactory, Config config, Log log) 
 	{
 		super(hookFactory, config, log);
-		versions = new int[]{0};
+		versions = new Integer[]{0};
 	}
 
 	@Override
@@ -74,7 +74,7 @@ public class ExitBeginZone extends AbstractScript
 		//en effet, pas d'actionneur a rentrer donc abwa !
 	}
 
-	public int[] getVersion(GameState<?> stateToConsider)
+	public Integer[] getVersion(GameState<?> stateToConsider)
 	{
 		return versions;
 	}

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
+import pathDingDing.PathDingDing;
 import robot.Robot;
 import robot.cardsWrappers.SensorsCardWrapper;
 import scripts.AbstractScript;
@@ -40,7 +41,7 @@ public class JUnit_DropPile extends JUnit_Test {
 		emptyHook = new ArrayList<Hook> ();
 		
 		config.set("couleur", "vert");
-		real_state.robot.setPosition(new Vec2 (1381,1000));
+		real_state.robot.setPosition(new Vec2 (1132,1000));
 		//On est vert donc on est en PI 
 		real_state.robot.setOrientation(Math.PI); 
 		real_state.robot.updateConfig();

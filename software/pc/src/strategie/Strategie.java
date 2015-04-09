@@ -142,7 +142,7 @@ public class Strategie implements Service
 			if (scriptName != ScriptNames.EXIT_START_ZONE)
 			{
 				AbstractScript script = scriptmanager.getScript(scriptName);
-				int[] versions = script.getVersion(realGameState);
+				Integer[] versions = script.getVersion(realGameState);
 				
 				for(int i=0; i<(versions.length);i++)
 				{

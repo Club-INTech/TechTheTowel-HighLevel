@@ -38,6 +38,7 @@ public enum ActuatorOrder
 	// Consignes de l'ascenseur monte-plot
 	ELEVATOR_HIGH("ah"),
 	ELEVATOR_STAGE("ae"),
+	ELEVATOR_ON_STAGE("ase"),
 	ELEVATOR_LOW("ab"),
 	ELEVATOR_GROUND("as"),
 	
