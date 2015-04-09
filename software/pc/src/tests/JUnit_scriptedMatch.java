@@ -56,8 +56,8 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		emptyHook = new ArrayList<Hook> ();  
 
 		
-			real_state.robot.setPosition(new Vec2 (1132,1000));
-			real_state.robot.setOrientation(Math.PI);
+		real_state.robot.setPosition(new Vec2 (1132,1000));
+		real_state.robot.setOrientation(Math.PI);
 		
 		
 		real_state.robot.updateConfig();

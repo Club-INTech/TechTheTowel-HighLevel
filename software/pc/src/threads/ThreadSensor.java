@@ -224,7 +224,10 @@ class ThreadSensor extends AbstractThread
 					log.debug("obstacle detecte a moins de 7 cm !", this);
 				
 			}
+			log.debug("Debut du wait dans sensors", this);
 			Sleep.sleep((long)(1000./sensorFrequency));
+			log.debug("Fin du wait dans sensors", this);
+
 			
 		}
         log.debug("Fin du thread de capteurs", this);
