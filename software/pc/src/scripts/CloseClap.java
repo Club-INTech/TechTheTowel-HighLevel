@@ -1,6 +1,7 @@
 package scripts;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import enums.ActuatorOrder;
 import exceptions.Locomotion.UnableToMoveException;
@@ -60,7 +61,7 @@ public class CloseClap extends AbstractScript
 	public CloseClap(HookFactory hookFactory, Config config, Log log)
 	{
 		super(hookFactory, config, log);
-		versions = new int[]{1, 2, 3 ,12 ,123 , -1, -12}; // liste des versions
+		versions = new Integer[]{1, 2, 3 ,12 ,123 , -1, -12}; // liste des versions
 	}
 	
 	@Override
@@ -523,16 +524,9 @@ public class CloseClap extends AbstractScript
 	}
 
 
-	public int[] getVersion(GameState<?> stateToConsider)
+	public Integer[] getVersion(GameState<?> stateToConsider)
 	{
-		ArrayList<Integer> versionList = new ArrayList<Integer>();
-		versionList.add(1);
-		versionList.add(2);
-		versionList.add(3);
-		versionList.add(12);
-		versionList.add(123);
-		versionList.add(-12);
-		versionList.add(-1);
+		ArrayList<Integer> versionList = new ArrayList<Integer>(Arrays.asList(versions));
 		
 		if (stateToConsider.table.isClapXClosed(1))
 		{
@@ -556,8 +550,8 @@ public class CloseClap extends AbstractScript
 		}
 		
 		
-		//on convertit l'arrayList en int[]	
-				int[] retour = new int[versionList.size()];
+		//on convertit l'arrayList en Integer[]	
+				Integer[] retour = new Integer[versionList.size()];
 			    for (int i=0; i < retour.length; i++)
 			    {
 			    	retour[i] = versionList.get(i).intValue();

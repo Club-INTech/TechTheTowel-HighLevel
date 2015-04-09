@@ -21,7 +21,7 @@ public class GetGlass extends AbstractScript
 	public GetGlass(HookFactory hookFactory, Config config, Log log) 
 	{
 		super(hookFactory, config, log);
-		versions = new int[]{0,1, 2, 3 ,4 }; 
+		versions = new Integer[]{0,1, 2, 3 ,4 }; 
 		
 		/* Table : numero des verres
 		 * 	___________________________________
@@ -199,7 +199,7 @@ public class GetGlass extends AbstractScript
 		//si non, et si premier essai on retente (ne pas oublier de reculer)
 	}
 
-	public int[] getVersion(GameState<?> stateToConsider)
+	public Integer[] getVersion(GameState<?> stateToConsider)
 	{
 		//TODO
 		return versions;

@@ -319,6 +319,7 @@ public class PathDingDing implements Service
 	 */
 	public void updateConfig()
 	{
+		mTable.updateConfig();
 	}
 }
 

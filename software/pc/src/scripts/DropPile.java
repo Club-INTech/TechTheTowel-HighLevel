@@ -35,7 +35,7 @@ public class DropPile extends AbstractScript
 		super(hookFactory, config, log);
 		
 		//on initialise le membre versions
-		versions=new int[]{1,2};
+		versions=new Integer[]{1,2};
 	}
 
 	@Override
@@ -48,22 +48,20 @@ public class DropPile extends AbstractScript
 			
 			//Notice me Sempai  #'_'#
 			
-			stateToConsider.robot.turn(Math.PI*-3/4, hooksToConsider, false);//On avance pour eviter le PathNotFoundd EXception
+			stateToConsider.robot.turn(-Math.PI/2, hooksToConsider, false);//On avance pour eviter le PathNotFoundd EXception
 
 			//on eleve notre membre (l'ascenseur)
-//			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_STAGE, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_STAGE, true);
 			//on se deplace vers elle
-//			stateToConsider.robot.moveLengthwise(50, hooksToConsider, true);
+			stateToConsider.robot.moveLengthwise(170, hooksToConsider, true);
 			
 			//on y place notre membre
 			//Sem....Pai...  =O
 			
-//			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
-			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_ON_STAGE, true);
 			//on ouvre notre coeur (le guide) un peu
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
-			stateToConsider.robot.moveLengthwise((int) (100*Math.sqrt(4.5)), hooksToConsider, true);
-//			stateToConsider.robot.moveLengthwise(50, hooksToConsider, true);
+			stateToConsider.robot.moveLengthwise(50, hooksToConsider, true);
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_GUIDE, true);
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_GUIDE, true);
 			
@@ -83,12 +81,9 @@ public class DropPile extends AbstractScript
 			
 			//on sort notre membre
 			stateToConsider.robot.moveLengthwise(-200, hooksToConsider, false);
+
 			
-			//mais on se referme un peu
-			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_GUIDE, false);
-			stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_GUIDE, true);
-			
-			//puis beaucoup
+			//mais on se referme
 			//Yamete Kudasai !
 			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, false);
 			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
@@ -149,7 +144,7 @@ public class DropPile extends AbstractScript
 	{
 		if (id==1)
 		{
-			return new Circle(500,325,0);
+			return new Circle(200,300,0);
 		}
 		else if (id==2)
 		{
@@ -192,7 +187,7 @@ public class DropPile extends AbstractScript
 		}
 	}
 
-	public int[] getVersion(GameState<?> stateToConsider)
+	public Integer[] getVersion(GameState<?> stateToConsider)
 	{
 		//TODO
 		return versions;
