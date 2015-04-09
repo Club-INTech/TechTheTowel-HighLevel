@@ -1,6 +1,7 @@
 package scripts;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import enums.ActuatorOrder;
 import exceptions.Locomotion.UnableToMoveException;
@@ -35,7 +36,7 @@ public class DropPile extends AbstractScript
 		super(hookFactory, config, log);
 		
 		//on initialise le membre versions
-		versions=new Integer[]{1,2};
+		versions=new Integer[]{0,1};
 	}
 
 	@Override
@@ -74,7 +75,10 @@ public class DropPile extends AbstractScript
 			int ball = 0;
 			if (stateToConsider.robot.isBallStored)
 				ball = 1;
-			stateToConsider.obtainedPoints += (2*ball+3)*stateToConsider.robot.storedPlotCount;
+			//le nombre de points que nous raporte le script
+			int valuePoints = (2*ball+3)*stateToConsider.robot.storedPlotCount;
+			stateToConsider.obtainedPoints += valuePoints;
+			stateToConsider.table.setPileValue(1,valuePoints);
 			stateToConsider.robot.storedPlotCount = 0;
 			stateToConsider.robot.isBallStored = false;
 
@@ -95,7 +99,7 @@ public class DropPile extends AbstractScript
 			
 			// THank... you, sempai #'.'#
 		}
-		else if (version==2)
+		else if (version==0)
 		{
 			stateToConsider.robot.moveLengthwise(150, hooksToConsider, false);
 			
@@ -114,7 +118,9 @@ public class DropPile extends AbstractScript
 			int ball = 0;
 			if (stateToConsider.robot.isBallStored)
 				ball = 1;
+			int valuePoints = (2*ball+3)*stateToConsider.robot.storedPlotCount;
 			stateToConsider.obtainedPoints += (2*ball+3)*stateToConsider.robot.storedPlotCount;
+			stateToConsider.table.setPileValue(0, valuePoints);
 			stateToConsider.robot.storedPlotCount = 0;
 			stateToConsider.robot.isBallStored = false;
 			
@@ -134,7 +140,7 @@ public class DropPile extends AbstractScript
 			}
 		else
 		{
-			// TODO: version ?
+			log.debug("version inconnue DropPile :"+version, this);
 		}
 	}
 	
@@ -189,8 +195,19 @@ public class DropPile extends AbstractScript
 
 	public Integer[] getVersion(GameState<?> stateToConsider)
 	{
-		//TODO
-		return versions;
+		ArrayList <Integer> versionList = new ArrayList<Integer>(Arrays.asList(versions));
+		
+		if(stateToConsider.table.getPileValue(0) != 0)
+			versionList.remove((Integer)0);
+		if(stateToConsider.table.getPileValue(1) != 0)
+			versionList.remove((Integer)1);
+		
+		Integer[] retour = new Integer[versionList.size()];
+	    for (int i=0; i < retour.length; i++)
+	    {
+	    	retour[i] = versionList.get(i).intValue();
+	    }
+	    return retour;
 	}
 
 }

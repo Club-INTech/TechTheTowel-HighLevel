@@ -3,8 +3,6 @@ package scripts;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import com.sun.org.apache.bcel.internal.generic.IREM;
-
 import enums.ActuatorOrder;
 import enums.SensorNames;
 import exceptions.UnableToEatPlot;
@@ -387,19 +385,19 @@ public class GetPlot extends AbstractScript
 		ArrayList <Integer> versionList = new ArrayList<Integer>(Arrays.asList(versions));
 		
 		if (stateToConsider.table.isPlotXEaten(0))
-			versionList.remove(0);
+			versionList.remove((Integer)0);
 		if (stateToConsider.table.isPlotXEaten(1))
-			versionList.remove(1);
+			versionList.remove((Integer)1);
 		if (stateToConsider.table.isPlotXEaten(2))
-			versionList.remove(2);
+			versionList.remove((Integer)2);
 		if (stateToConsider.table.isPlotXEaten(7))
-			versionList.remove(7);
+			versionList.remove((Integer)7);
 		if (stateToConsider.table.isPlotXEaten(3) && stateToConsider.table.isPlotXEaten(4) && stateToConsider.table.isGlassXTaken(0))
 		{
-			versionList.remove(34);
+			versionList.remove((Integer)34);
 		}
 		if (stateToConsider.table.isPlotXEaten(5) && stateToConsider.table.isPlotXEaten(6))
-			versionList.remove(56);
+			versionList.remove((Integer)56);
 		
 		//on converti en Integer[]
 		Integer[] retour = new Integer[versionList.size()];

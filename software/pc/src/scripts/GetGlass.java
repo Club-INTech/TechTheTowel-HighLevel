@@ -1,6 +1,7 @@
 package scripts;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import enums.ActuatorOrder;
 import exceptions.Locomotion.UnableToMoveException;
@@ -201,8 +202,21 @@ public class GetGlass extends AbstractScript
 
 	public Integer[] getVersion(GameState<?> stateToConsider)
 	{
-		//TODO
-		return versions;
+		ArrayList <Integer> versionList = new ArrayList<Integer>(Arrays.asList(versions));
+		
+		for (int i = 0; i<versionList.size(); i++)
+		{
+			if (stateToConsider.table.isGlassXTaken(i))
+				versionList.remove((Integer)i);
+		}
+		
+		//on converti en Integer[]
+		Integer[] retour = new Integer[versionList.size()];
+	    for (int i=0; i < retour.length; i++)
+	    {
+	    	retour[i] = versionList.get(i).intValue();
+	    }
+	    return retour;
 	}
 
 }

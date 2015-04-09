@@ -72,7 +72,7 @@ public class Graph
 					//parcours des cercles, si le lien ne coupe aucun cercle, on le rajoute
 					boolean intersects = false;
 					for(int k = 0; k < circles.size(); k++)
-						if(PathDingDing.intersects(new Segment(mNodes.get(i).toVec2(), mNodes.get(j).toVec2()), circles.get(k)))
+						if(PathDingDing.intersects(new Segment(mNodes.get(i).toVec2(), mNodes.get(j).toVec2()), new Circle(circles.get(k).position, circles.get(k).radius + mTable.getObstacleManager().getRobotRadius())))
 							intersects = true;
 					if(!intersects)
 						mNodes.get(i).addLink(mNodes.get(j));
