@@ -281,7 +281,7 @@ public class PathDingDing implements Service
 			for(int j = 0; j < circles.size(); j++)
 			{
 				//si le segment et le cercle se coupent
-				if(intersects(new Segment(path.get(i), path.get(i+1)), circles.get(j)))
+				if(intersects(new Segment(path.get(i), path.get(i+1)), new Circle(circles.get(j).position, circles.get(j).radius + mTable.getObstacleManager().getRobotRadius())))
 					intersects = true;
 			}
 		}
