@@ -34,6 +34,7 @@ public:
 
 		setOutputLimits(-32678, 32767);
 		setTunings(0, 0, 0);
+		resetErrors();
 	}
 
 	void compute() {

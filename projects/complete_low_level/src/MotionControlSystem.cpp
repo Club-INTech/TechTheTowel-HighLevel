@@ -54,8 +54,8 @@ void MotionControlSystem::init(int16_t maxPWMtranslation, int16_t maxPWMrotation
 			{150, 2.5, 0. , 600},//Rotation
 			{  0,  0 , 0. ,   0},//Translation
 			{100,  3 , 0. ,1200},//Rotation
-			{ 0., 0. , 0. ,  0.},//Translation
-			{ 0., 0. , 0. ,  0.} //Rotation
+			{60., 0.1, 0. , 25.},//Translation
+			{60., 0.5, 0. , 130} //Rotation
 	};
 
 	for(int i=0; i<NB_SPEED; i++)
@@ -190,10 +190,10 @@ void MotionControlSystem::control()
 
 	if (translationControlled)
 	{
-		if(pwmTranslation > maxPWMtranslation)
-			pwmTranslation = maxPWMtranslation;
-		if(pwmTranslation < -maxPWMtranslation)
-			pwmTranslation = -maxPWMtranslation;
+//		if(pwmTranslation > maxPWMtranslation)
+//			pwmTranslation = maxPWMtranslation;
+//		if(pwmTranslation < -maxPWMtranslation)
+//			pwmTranslation = -maxPWMtranslation;
 	}
 	else
 		pwmTranslation = 0;
@@ -203,10 +203,10 @@ void MotionControlSystem::control()
 
 	if (rotationControlled)
 	{
-		if(pwmRotation > maxPWMrotation)
-			pwmRotation = maxPWMrotation;
-		if(pwmRotation < -maxPWMrotation)
-			pwmRotation = -maxPWMrotation;
+//		if(pwmRotation > maxPWMrotation)
+//			pwmRotation = maxPWMrotation;
+//		if(pwmRotation < -maxPWMrotation)
+//			pwmRotation = -maxPWMrotation;
 	}
 	else
 		pwmRotation = 0;
@@ -335,11 +335,32 @@ void MotionControlSystem::printTrackingLocomotion()
 	}
 }
 
+void MotionControlSystem::printTrackingPWM()
+{
+	for(int i=0; i<TRACKER_SIZE; i++)
+	{
+		if(ABS(trackArray[i].pwmTranslation) > 5 || ABS(trackArray[i].pwmRotation) > 5)
+			serial.printfln("pwmT=%d | pwmR=%d", trackArray[i].pwmTranslation, trackArray[i].pwmRotation);
+	}
+}
+
 void MotionControlSystem::printTrackingSerie()
 {
 	for(int i=0; i<TRACKER_SIZE; i++)
 	{
 		serial.printfln("tBuff=%d", trackArray[i].tailleBufferReception);
+	}
+}
+
+void MotionControlSystem::printTrackingAsserv()
+{
+	serial.printfln("%d", TRACKER_SIZE);
+	serial.printfln("%f", TICK_TO_MM);
+	serial.printfln("%f", TICK_TO_RADIAN);
+	for(int i=0; i<TRACKER_SIZE; i++)
+	{
+		serial.printfln("%d", trackArray[i].translationCourante);
+		serial.printfln("%d", trackArray[i].rotationCourante);
 	}
 }
 
@@ -482,4 +503,61 @@ bool MotionControlSystem::isMoving() const{
 
 bool MotionControlSystem::isMoveAbnormal() const{
 	return moveAbnormal;
+}
+
+void MotionControlSystem::testPWM(int16_t listePWM[], unsigned int nbPWM)
+{
+	serial.printfln("Test des PWM");
+	serial.printfln("Appuyez sur [Entree] pour passer au PWM suivant");
+	serial.printfln("'q' pour quitter avant la fin");
+	translationControlled = false;
+	rotationControlled = false;
+	enable(false);
+	serial.printfln("[Le robot est désormai non asservi en position]");
+	serial.printf("\n");
+	char commande[64];
+	for(unsigned int i = 0; i < nbPWM; i++)
+	{
+		serial.read(commande);
+		if(!strcmp("q", commande))
+			break;
+		serial.printfln("PWM = %d", listePWM[i]);
+		leftMotor.run(listePWM[i]);
+		rightMotor.run(listePWM[i]);
+		Delay(500);
+		stop();
+		serial.printf("\n");
+	}
+	Delay(1000);
+	stop();
+	translationControlled = true;
+	rotationControlled = true;
+	enable(true);
+	serial.printfln("[Le robot est désormai asservi en position]");
+	serial.printf("\n");
+}
+
+void MotionControlSystem::testTranslation(int distance)
+{
+	orderTranslation(distance);
+	Delay(10*(100+distance));
+	serial.printfln("x=%f\r\ny=%f", getX(), getY());
+	serial.printfln("o=%f", getAngleRadian());
+	orderTranslation(-distance);
+	Delay(10*(100+distance));
+	serial.printfln("x=%f\r\ny=%f", getX(), getY());
+	serial.printfln("o=%f", getAngleRadian());
+}
+
+void MotionControlSystem::testRotation(float angle)
+{
+	float angleInitial = getAngleRadian();
+	orderRotation(angle + angleInitial);
+	Delay(angle*2000/PI+1000);
+	serial.printfln("x=%f\r\ny=%f", getX(), getY());
+	serial.printfln("o=%f", getAngleRadian());
+	orderRotation(angleInitial);
+	Delay(angle*1000/PI+1000);
+	serial.printfln("x=%f\r\ny=%f", getX(), getY());
+	serial.printfln("o=%f", getAngleRadian());
 }
