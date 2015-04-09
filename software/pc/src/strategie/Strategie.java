@@ -4,6 +4,7 @@ import hook.Hook;
 
 import java.util.ArrayList;
 
+import pathDingDing.PathDingDing;
 import container.Container;
 import container.Service;
 import enums.ScriptNames;
@@ -22,17 +23,13 @@ import utils.Sleep;
 
 /**
  *	Classe de l'IA
- * @author Théo
+ * @author Paul
  */
 
 
 
 public class Strategie implements Service
 {
-	/**
-	 * temps restant pour le match
-	 */
-	private long timeAvalible;
 	/** système de log sur lequel écrire*/
 	private Log log;
 	
@@ -77,9 +74,18 @@ public class Strategie implements Service
 	private int nextScriptVersion;
 	
 	/**
+	 * le trouveur de chemin de la strategie
+	 */
+	private PathDingDing pathDingDing;
+	/**
+	 * le chrono de la strategie
+	 */
+	private RobotChrono robotChrono;
+	
+	/**
      * Crée la strategie, l'IA decisionnelle
      */
-	public Strategie(Config config, Log log, GameState<RobotReal> state, GameState<Robot> gameState, ScriptManager scriptManager)
+	public Strategie(Config config, Log log, GameState<RobotReal> state, GameState<Robot> gameState, ScriptManager scriptManager, PathDingDing trouveurDeChemin)
 	{
 		this.realGameState = state;
 		this.config = config;
@@ -88,11 +94,12 @@ public class Strategie implements Service
         this.robotReal = state.robot;
         this.gameState = gameState;
         this.scriptmanager = scriptManager;
+        this.pathDingDing = trouveurDeChemin;
+        robotChrono = new RobotChrono(config, log, pathDingDing);
 	}
 
 	public void updateConfig() 
 	{
-		timeAvalible = Integer.parseInt(config.getProperty("temps_match"))-realGameState.timeEllapsed;
 		table.updateConfig();
         robotReal.updateConfig();
 	}
@@ -167,8 +174,26 @@ public class Strategie implements Service
 	 */
 	private int scriptValue(AbstractScript script, int version) 
 	{
-		// TODO trouver la valeur d'un script
-		return script.remainingScoreOfVersion(version, gameState);
+		//on replace le robotChrono pour le calcul du temps
+		robotReal.copy(robotChrono);
+		GameState<Robot> chronoState = new GameState<Robot>(config, log, table, robotChrono);
+		
+		
+		//calcul de la duree du script
+		long durationScript;
+		long initialTime = chronoState.timeEllapsed;
+		try 
+		{
+			script.goToThenExec(version, chronoState, true, hookRobot);
+			durationScript = chronoState.timeEllapsed - initialTime;
+		} 
+		catch (Exception e) 
+		{
+			durationScript = Long.MAX_VALUE;
+		}
+		
+		
+		return (int) (script.remainingScoreOfVersion(version, gameState)/durationScript);
 		
 	}
 }
