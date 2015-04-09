@@ -2,6 +2,8 @@ package scripts;
 
 import java.util.ArrayList;
 
+import com.sun.org.apache.bcel.internal.generic.IREM;
+
 import enums.ActuatorOrder;
 import enums.SensorNames;
 import exceptions.UnableToEatPlot;
@@ -96,7 +98,7 @@ public class GetPlot extends AbstractScript
 			
 			
 		}
-		//version 34 on mange en plus un goblet FIXME traiter le cas où on a trois plots stockés et qu'on ne veut pas manger n°4 et ne pas lancer le script si 2 gobl stockés
+		//version 34 on mange en plus un goblet
 		else if (versionToExecute == 34)
 		{
 			//debut du script recuperation du goblet
@@ -104,6 +106,7 @@ public class GetPlot extends AbstractScript
 			
 			if (!stateToConsider.table.isGlassXTaken(0))
 			{
+				// On ne ramasse pas l verre si on en a deja 2
 				if (!stateToConsider.robot.isGlassStoredLeft)
 				{
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);					
@@ -113,7 +116,7 @@ public class GetPlot extends AbstractScript
 					stateToConsider.robot.moveLengthwise(140, hooksToConsider);
 					stateToConsider.robot.isGlassStoredLeft = true;
 				}
-				else
+				else if(!stateToConsider.robot.isGlassStoredRight)
 				{
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);					
 					stateToConsider.robot.moveLengthwise(180, hooksToConsider);
@@ -129,31 +132,36 @@ public class GetPlot extends AbstractScript
 				stateToConsider.robot.moveLengthwise(320, hooksToConsider);
 			}
 			
-			//on mange le plot 4
-			try 
+			// on ne mange que si on est assez vide
+			if(stateToConsider.robot.storedPlotCount < 3)
 			{
-				eatPlot(true, true, stateToConsider, false);
-			}
-			catch (UnableToEatPlot e) 
-			{
-				finalise(stateToConsider);
-				stateToConsider.robot.moveLengthwise(-150, hooksToConsider);
-				return;
-			}
-			stateToConsider.table.eatPlotX(4);
+				//on mange le plot 4
+
+				try 
+				{
+					eatPlot(true, true, stateToConsider, false);
+				}
+				catch (UnableToEatPlot e) 
+				{
+					finalise(stateToConsider);
+					stateToConsider.robot.moveLengthwise(-150, hooksToConsider);
+					return;
+				}
+				stateToConsider.table.eatPlotX(4);
 			
-			//on mange le plot 3
-			try 
-			{
-				eatPlot(false, false, stateToConsider, false);
+				//on mange le plot 3
+				try 
+				{
+					eatPlot(false, false, stateToConsider, false);
+				}
+				catch (UnableToEatPlot e) 
+				{
+					finalise(stateToConsider);
+					stateToConsider.robot.moveLengthwise(-150, hooksToConsider);
+					return;
+				}
+				stateToConsider.table.eatPlotX(3);
 			}
-			catch (UnableToEatPlot e) 
-			{
-				finalise(stateToConsider);
-				stateToConsider.robot.moveLengthwise(-150, hooksToConsider);
-				return;
-			}
-			stateToConsider.table.eatPlotX(3);
 			
 		}
 		//TODO derniere version a traiter FIXME traiter le cas où on a trois plots stockés et qu'on ne veut pas manger n°6

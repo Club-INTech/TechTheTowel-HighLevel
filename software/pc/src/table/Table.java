@@ -265,7 +265,16 @@ public class Table implements Service
 	
 	/**
 	 * Un verre a été deposé dans la zone x, on  met à jour 
-	 * @param x le numero du verre doit etre dans [0..3]
+	 * @param x la zone 
+	 *  ____________________________
+	 * 	|							|
+	 * 	|1							|
+	 *	|----					----|
+	 * 	|Debut ennemi			   0|Debut de NOTRE robot
+	 * 	|----					----|
+	 * 	|2							|
+	 *	|___________________________|
+	 *
 	 */
 	public void areaXFilled (int x)
 	{
@@ -275,10 +284,20 @@ public class Table implements Service
 			log.debug("out of bound areaXFilled",this);
 	}
 	
-	/**
+	/** Fonction renvoyant si la zone en argument est remplie d'un verre ou non 
 	 * 
-	 * @param x FIXME a quelle zone ça correspond ?
-	 * @return
+	 * @param x la zone 
+	 *  ____________________________
+	 * 	|							|
+	 * 	|1							|
+	 *	|----					----|
+	 * 	|Debut ennemi			   0|Debut de NOTRE robot
+	 * 	|----					----|
+	 * 	|2							|
+	 *	|___________________________|
+	 *
+	 *
+	 * @return si la zone est remplie
 	 */
 	
 	public boolean isAreaXFilled (int x)
