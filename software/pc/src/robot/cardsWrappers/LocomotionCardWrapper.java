@@ -110,7 +110,9 @@ public class LocomotionCardWrapper implements Service
         disableRotationnalFeedbackLoop();
         
         while(isRobotMoving())
+        {
         	Sleep.sleep(delayBetweenSend); // On attend d'etre arreté
+        }
         
         locomotionCardSerial.communiquer("stop", 0);// On s'asservit sur la position actuelle
         

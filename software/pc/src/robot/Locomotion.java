@@ -442,8 +442,10 @@ public class Locomotion implements Service
         { 	
         	// en cas de détection d'ennemi, une exception est levée
         	if(mustDetect)
-        		detectEnemy(isMovementForward, turnOnly, aim);			
-            
+        		detectEnemy(isMovementForward, turnOnly, aim);
+        	else 
+        		log.debug("Pas de detection demandée", this); 
+        	
             updateCurrentPositionAndOrientation();
 
             //on evalue les hooks (non null !)
@@ -459,7 +461,10 @@ public class Locomotion implements Service
             //time=System.currentTimeMillis();
             
             // On sleep pour eviter le spam de la serie
+			log.debug("Debut du wait dans moveToPointCorrectAngleAndDetectEnnemy", this);
             Sleep.sleep(feedbackLoopDelay);
+			log.debug("Fin du wait dans moveToPointCorrectAngleAndDetectEnnemy", this);
+
 
         } 
         while(!isMotionEnded());
@@ -606,7 +611,10 @@ public class Locomotion implements Service
             	// on attend la fin du mouvement
                 while(!isMotionEnded()) 
                 {
+        			log.debug("Debut du wait dans moveToPointSerialOrder", this);
                     Sleep.sleep(feedbackLoopDelay);
+        			log.debug("Fin du wait dans moveToPointSerialOrder", this);
+
                 }
             
             isRobotTurning=false; // fin du turn
