@@ -144,6 +144,14 @@ int main(void)
 				serial.printfln("_");//Acquittement
 				motionControlSystem->setOriginalAngle(o);
 			}
+			else if(!strcmp("ctv",order))		//Régler le PWM max en translation
+			{
+				//TODO
+			}
+			else if(!strcmp("crv",order))		//Régler le PWM max en rotation
+			{
+				//TODO
+			}
 
 
 
