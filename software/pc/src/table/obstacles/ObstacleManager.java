@@ -36,6 +36,10 @@ public class ObstacleManager
 	private int defaultObstacleRadius;
 	//le rayon de notre robot
 	private int mRobotRadius;
+	
+	// TODO virer : juste du debugg / interface graphique
+	private int radiusDetectionDisc=0;
+	private Vec2 positionDetectionDisc=new Vec2(0,0);
 		
 	/**
      * Instancie un nouveau gestionnaire d'obstacle.
@@ -258,7 +262,11 @@ public class ObstacleManager
      */
     public synchronized boolean isDiscObstructed(final Vec2 discCenter, int radius)
     {
+    	
     	boolean isDiscObstructed = false;
+    	radiusDetectionDisc=radius;
+    	positionDetectionDisc=discCenter;
+    	
     	for(int i=0; i<mMobileObstacles.size(); i++)
     	{
     		if ((radius+mMobileObstacles.get(i).radius)*(radius+mMobileObstacles.get(i).radius)
@@ -266,6 +274,7 @@ public class ObstacleManager
     			 + (discCenter.y-mMobileObstacles.get(i).getPosition().y)*(discCenter.y-mMobileObstacles.get(i).getPosition().y))
     		{
     			log.debug("Disque obstructed avec l'obstacle "+mMobileObstacles.get(i).getPosition()+"de rayon"+mMobileObstacles.get(i).radius, this);
+    			log.debug("Disque en "+discCenter+"de rayon"+radius, this);
     			isDiscObstructed=true;
     		}
     	}
@@ -417,5 +426,18 @@ public class ObstacleManager
     		}
     	}
     	return obstacleDeleted;
+    }
+    
+    
+    /**
+     * Debug / interface graphique
+     */
+    public int getDiscRadius()
+    {
+    	return radiusDetectionDisc;
+    }
+    public Vec2 getDiscPosition()
+    {
+    	return positionDetectionDisc;
     }
 }

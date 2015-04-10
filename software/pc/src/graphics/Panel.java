@@ -159,6 +159,12 @@ public class Panel extends JPanel
 	    			    (mPath.get(i).x + 1500) * this.getWidth() / 3000, 
 	    			    -mPath.get(i).y * this.getHeight() / 2000 + this.getHeight());
 	    }
+	    
+	    g.setColor(Color.yellow);
+	    g.drawOval( (mTable.getObstacleManager().getDiscPosition().x- mTable.getObstacleManager().getDiscRadius() + 1500) * this.getWidth() / 3000,
+	    		   -(mTable.getObstacleManager().getDiscPosition().y + mTable.getObstacleManager().getDiscRadius()) * this.getHeight() / 2000 + this.getHeight(), 
+	    		    (2 * mTable.getObstacleManager().getDiscRadius()) * this.getWidth() / 3000,
+	    		    (2 * mTable.getObstacleManager().getDiscRadius()) * this.getHeight() / 2000);
 	}
 	
 	//permet d'afficher un chemin
