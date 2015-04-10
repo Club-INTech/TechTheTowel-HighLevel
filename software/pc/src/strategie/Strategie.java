@@ -81,6 +81,8 @@ public class Strategie implements Service
 	 * le chrono de la strategie
 	 */
 	private RobotChrono robotChrono;
+
+	private int matchDuration;
 	
 	/**
      * Crée la strategie, l'IA decisionnelle
@@ -95,6 +97,7 @@ public class Strategie implements Service
         this.gameState = gameState;
         this.scriptmanager = scriptManager;
         this.pathDingDing = trouveurDeChemin;
+        matchDuration = Integer.parseInt(config.getProperty("temps_match"));
         robotChrono = new RobotChrono(config, log, pathDingDing);
 	}
 
@@ -143,6 +146,7 @@ public class Strategie implements Service
 	/** Fonction principale : prend une decision en prenant tout en compte */
 	private void takeDecision(long timeEllapsed)
 	{
+		//TODO ajouter un script qui ne fait rien si tout les scripts ont deja étés effectués (qui fait 0 points)
 		nextScriptValue=Integer.MIN_VALUE;
 		for(ScriptNames scriptName : ScriptNames.values())
 		{
@@ -192,8 +196,8 @@ public class Strategie implements Service
 			durationScript = Long.MAX_VALUE;
 		}
 		
-		
-		return (int) (script.remainingScoreOfVersion(version, gameState)/durationScript);
+		//points = pointsScript * (tempsRestant - duree)/duree
+		return (int) (script.remainingScoreOfVersion(version, gameState)*((matchDuration-gameState.timeEllapsed)-durationScript)/durationScript);
 		
 	}
 }
