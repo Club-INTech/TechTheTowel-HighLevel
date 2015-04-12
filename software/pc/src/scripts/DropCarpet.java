@@ -11,6 +11,7 @@ import hook.types.HookFactory;
 import robot.Robot;
 import smartMath.Circle;
 import strategie.GameState;
+import sun.org.mozilla.javascript.ast.CatchClause;
 import utils.Config;
 import utils.Log;
 /**
@@ -46,7 +47,7 @@ public class DropCarpet extends AbstractScript
 		stateToConsider.robot.turn(-0.5*Math.PI, hooksToConsider, false);
 		// on avance vers ces demoiselles (les marches) (attention impact possible)
 		// TODO utiliser moveLengthwiseTorwardWalls
-		stateToConsider.robot.moveLengthwise(-distanceBetweenEntryAndStairs, hooksToConsider, true);
+		stateToConsider.robot.moveLengthwiseWithoutDetection(-distanceBetweenEntryAndStairs, hooksToConsider, true);
 		
 		System.out.println("en position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") avant depose-tapis");
 
@@ -74,7 +75,21 @@ public class DropCarpet extends AbstractScript
 		}
 		
 		//on s'eloigne de l'escalier
-		stateToConsider.robot.moveLengthwise(distanceBetweenEntryAndStairs, hooksToConsider, false);
+		try 
+		{
+			stateToConsider.robot.moveLengthwise(distanceBetweenEntryAndStairs, hooksToConsider, false);
+
+		}
+		catch (UnableToMoveException e) 
+		{
+			// tant qu'on est pas sorti, et que le pathDingDing peut reprendre lee  relais
+			while(stateToConsider.robot.getPosition().y > (1400-distanceBetweenEntryAndStairs+20))
+			{
+				System.out.println("catch dans le script : DropCarpet");
+				stateToConsider.robot.moveLengthwise((stateToConsider.robot.getPosition().y - (1400-distanceBetweenEntryAndStairs)), hooksToConsider, false);
+			}
+		}
+		
 	}
 	
 	@Override
