@@ -130,6 +130,12 @@ public class ObstacleManager
 	    mFixedObstacles.add(new ObstacleCircular(new Vec2(0, 350), 48)); // gobelet 2
 	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-590, 1170), 48)); // gobelet 3
 	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-1250, 250), 48)); // gobelet 4
+	    
+      	//la zone ennemie
+	    if(config.getProperty("couleur").equals("jaune"))
+	    	mFixedObstacles.add(new ObstacleCircular(new Vec2(1100, 1000), 200));
+	    else
+	    	mFixedObstacles.add(new ObstacleCircular(new Vec2(-1100, 1000), 200));
     }    
 
     /**

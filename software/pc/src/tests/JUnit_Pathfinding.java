@@ -58,7 +58,10 @@ public class JUnit_Pathfinding extends JUnit_Test
 		    	try
 		    	{
 		    		//table.getObstacleManager().setEnnemyRobot1Position(win.getMouse().getMiddleClickPosition());
-			    	win.getPanel().drawArrayList(pf.computePath(win.getMouse().getLeftClickPosition(), win.getMouse().getRightClickPosition(), EnumSet.of(ObstacleGroups.GREEN_PLOTS, ObstacleGroups.YELLOW_PLOTS, ObstacleGroups.GOBLETS, ObstacleGroups.ENNEMY_ROBOTS)));
+		    		long start = System.currentTimeMillis();
+			    	win.getPanel().drawArrayList(pf.computePath(win.getMouse().getLeftClickPosition(), win.getMouse().getRightClickPosition(), EnumSet.of(ObstacleGroups.ENNEMY_ROBOTS)));
+			    	long end = System.currentTimeMillis();
+			    	System.out.println("time elapsed : " + (end - start));
 			    }
 		    	catch(PathNotFoundException e)
 		    	{

@@ -94,7 +94,7 @@ public class Panel extends JPanel
 	    ArrayList<ObstacleCircular> fixedObstacles = mTable.getObstacleManager().getFixedObstacles();
 	    for(int i = 0; i < fixedObstacles.size(); i++)
 	    {
-	    	g.drawOval((fixedObstacles.get(i).getPosition().x - fixedObstacles.get(i).getRadius() + 1500) * this.getWidth() / 3000, -(fixedObstacles.get(i).getPosition().y + fixedObstacles.get(i).getRadius()) * this.getHeight() / 2000 + this.getHeight(), (2 * fixedObstacles.get(i).getRadius()) * this.getWidth() / 3000, (2 * fixedObstacles.get(i).getRadius()) * this.getHeight() / 2000);
+	    	g.drawOval((fixedObstacles.get(i).getPosition().x - (fixedObstacles.get(i).getRadius() + mTable.getObstacleManager().getRobotRadius()) + 1500) * this.getWidth() / 3000, -(fixedObstacles.get(i).getPosition().y + fixedObstacles.get(i).getRadius() + mTable.getObstacleManager().getRobotRadius()) * this.getHeight() / 2000 + this.getHeight(), (2 * (fixedObstacles.get(i).getRadius() + mTable.getObstacleManager().getRobotRadius())) * this.getWidth() / 3000, (2 * (fixedObstacles.get(i).getRadius() + mTable.getObstacleManager().getRobotRadius())) * this.getHeight() / 2000);
 	    }
 	    
 	    //les robots ennemis
