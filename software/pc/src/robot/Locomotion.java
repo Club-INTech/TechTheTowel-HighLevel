@@ -461,10 +461,7 @@ public class Locomotion implements Service
             //time=System.currentTimeMillis();
             
             // On sleep pour eviter le spam de la serie
-			log.debug("Debut du wait dans moveToPointCorrectAngleAndDetectEnnemy", this);
             Sleep.sleep(feedbackLoopDelay);
-			log.debug("Fin du wait dans moveToPointCorrectAngleAndDetectEnnemy", this);
-
 
         } 
         while(!isMotionEnded());
@@ -623,9 +620,7 @@ public class Locomotion implements Service
                 {
                 	if(mustDetect)
                 		detectEnemy(true, true, position);
-        			log.debug("Debut du wait dans moveToPointSerialOrder", this);
                     Sleep.sleep(feedbackLoopDelay);
-        			log.debug("Fin du wait dans moveToPointSerialOrder", this);
                 }
             
             isRobotTurning=false; // fin du turn

@@ -34,7 +34,7 @@ import robot.cardsWrappers.SensorsCardWrapper;
 
 public class JUnit_scriptedMatch extends JUnit_Test 
 {
-	static Config config;
+	Config config;
 	ArrayList<Hook> emptyHook;
 	GameState<Robot> real_state;
 	ScriptManager scriptmanager;
@@ -51,9 +51,13 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		scriptmanager = (ScriptManager) container.getService(ServiceNames.SCRIPT_MANAGER);
 		mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
         pathDingDing = (PathDingDing)container.getService(ServiceNames.PATHDINGDING);
-        config = (Config)container.getService(ServiceNames.CONFIG);
         sensors = (SensorsCardWrapper)container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
+        sensors.updateConfig();
+
+		container.getService(ServiceNames.THREAD_SENSOR);
 		container.getService(ServiceNames.THREAD_TIMER);
+
+
 
 
 //        threadTimer = (ThreadTimer)container.getService(ServiceNames.THREAD_TIMER);
@@ -73,6 +77,9 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		{
 			e.printStackTrace();
 		}		
+		
+		container.startInstanciedThreads();
+
 	}
 	
 	public void waitMatchBegin()
@@ -125,7 +132,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 	/**
 	 * Demande si la couleur est verte au jaune
 	 * @throws Exception
-	 */
+	 *//*
 	static void configColor()
 	{
 
@@ -150,7 +157,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 			
 		}
 		
-	}
+	}*/
 
 	@Test
 	public void test() throws PathNotFoundException, SerialFinallyException, SerialConnexionException

@@ -1,10 +1,5 @@
 package threads;
 
-import org.hamcrest.core.IsSame;
-
-import com.sun.org.apache.bcel.internal.generic.IREM;
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Single;
-
 import enums.SensorNames;
 import exceptions.serial.SerialConnexionException;
 import robot.cardsWrappers.SensorsCardWrapper;
