@@ -80,13 +80,16 @@ public class Main
 				container.getService(ServiceNames.LOG);
 				config = (Config) container.getService(ServiceNames.CONFIG);
 			
-				configColor();
+				//configColor();
+				
 				
 				// initialise les singletons
 				real_state = (GameState<Robot>) container.getService(ServiceNames.GAME_STATE);
 			    scriptmanager = (ScriptManager) container.getService(ServiceNames.SCRIPT_MANAGER);
 			    mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
 			    emptyHook = new ArrayList<Hook>(); //TODO la veritable liste des hooks pour le match
+			    
+			    config.updateConfig(); // instancie la couleur, etc
 			} 
 			catch (ContainerException e) 
 			//on gere les exceptions du container, en cas de probleme on a pas d'aure solution que de reessayer, mais si c'est vraiment impossible il faut debugger
@@ -175,7 +178,7 @@ public class Main
 			catch (PathNotFoundException e) 
 			{
 				System.out.println("CRITICAL : Le robot ne sait pas rester sur place");
-				System.out.println("verifiez le point d'etree de ExitBeginZone");
+				System.out.println("verifiez le point d'entree de ExitBeginZone");
 				return;
 			} catch (SerialFinallyException e) {
 				// TODO Auto-generated catch block

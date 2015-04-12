@@ -40,7 +40,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 	ScriptManager scriptmanager;
 	SensorsCardWrapper  mSensorsCardWrapper;
 	PathDingDing pathDingDing;
-	ThreadTimer threadTimer;
+	SensorsCardWrapper sensors;
 	
 	@SuppressWarnings("unchecked")
 	@Before
@@ -52,6 +52,10 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
         pathDingDing = (PathDingDing)container.getService(ServiceNames.PATHDINGDING);
         config = (Config)container.getService(ServiceNames.CONFIG);
+        sensors = (SensorsCardWrapper)container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
+		container.getService(ServiceNames.THREAD_TIMER);
+
+
 //        threadTimer = (ThreadTimer)container.getService(ServiceNames.THREAD_TIMER);
 		emptyHook = new ArrayList<Hook> ();  
 
@@ -151,9 +155,9 @@ public class JUnit_scriptedMatch extends JUnit_Test
 	@Test
 	public void test() throws PathNotFoundException, SerialFinallyException, SerialConnexionException
 	{
-		configColor();
+//		configColor();
 //		container.startAllThreads();
-		waitMatchBegin();
+		//waitMatchBegin();
 		//premiere action du match
 		
 		System.out.println("Le robot commence le match");
