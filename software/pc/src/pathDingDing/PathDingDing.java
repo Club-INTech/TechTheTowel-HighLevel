@@ -267,6 +267,7 @@ public class PathDingDing implements Service
 			//parcours des gobelets
 			for(int i = 16; i < 21; i++)
 				circles.add(new Circle(mTable.getObstacleManager().getFixedObstacles().get(i).getPosition(), mTable.getObstacleManager().getFixedObstacles().get(i).getRadius()));
+		circles.add(new Circle(mTable.getObstacleManager().getFixedObstacles().get(21).getPosition(), mTable.getObstacleManager().getFixedObstacles().get(21).getRadius()));
 		
 		boolean intersects = false;
 		//parcours du chemin
