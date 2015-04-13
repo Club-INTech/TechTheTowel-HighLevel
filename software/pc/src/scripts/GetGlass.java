@@ -47,15 +47,15 @@ public class GetGlass extends AbstractScript
 		EnumSet<ObstacleGroups> obstacleNotConsidered = EnumSet.noneOf(ObstacleGroups.class);
 		
 		if (versionToExecute == 0)
-			obstacleNotConsidered.add(ObstacleGroups.GOBLETS_0);
+			obstacleNotConsidered.add(ObstacleGroups.GOBLET_0);
 		else if (versionToExecute == 1)
-			obstacleNotConsidered.add(ObstacleGroups.GOBLETS_1);
+			obstacleNotConsidered.add(ObstacleGroups.GOBLET_1);
 		else if (versionToExecute == 2)
-			obstacleNotConsidered.add(ObstacleGroups.GOBLETS_2);
+			obstacleNotConsidered.add(ObstacleGroups.GOBLET_2);
 		else if (versionToExecute == 3)
-			obstacleNotConsidered.add(ObstacleGroups.GOBLETS_3);
+			obstacleNotConsidered.add(ObstacleGroups.GOBLET_3);
 		else if (versionToExecute == 4)
-			obstacleNotConsidered.add(ObstacleGroups.GOBLETS_4);
+			obstacleNotConsidered.add(ObstacleGroups.GOBLET_4);
 		else
 		{
 			log.debug("version de Script inconnue de GetGlass :"+versionToExecute, this);

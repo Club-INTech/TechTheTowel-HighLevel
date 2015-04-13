@@ -29,7 +29,7 @@ import utils.Log;
 public class GetPlot extends AbstractScript
 {
 	/**
-	 * le temps en ms pour faire un epile d'au moins 1 plot
+	 * le temps en ms pour faire une pile d'au moins 1 plot
 	 */
 	private static final int timeToDoPile = 2000;
 
@@ -48,59 +48,59 @@ public class GetPlot extends AbstractScript
 		if (versionToExecute == 0)
 		{
 			if (actualState.robot.getSymmetry())
-				obstacleNotConsidered.add(ObstacleGroups.YELLOW_PLOTS_0);
+				obstacleNotConsidered.add(ObstacleGroups.YELLOW_PLOT_0);
 			else
-				obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOTS_0);
+				obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_0);
 		}
 		else if (versionToExecute == 1)
 		{
 			if (actualState.robot.getSymmetry())
-				obstacleNotConsidered.add(ObstacleGroups.YELLOW_PLOTS_1);
+				obstacleNotConsidered.add(ObstacleGroups.YELLOW_PLOT_1);
 			else
-				obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOTS_1);
+				obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_1);
 		}
 		else if (versionToExecute == 2)
 		{
 			if (actualState.robot.getSymmetry())
-				obstacleNotConsidered.add(ObstacleGroups.YELLOW_PLOTS_2);
+				obstacleNotConsidered.add(ObstacleGroups.YELLOW_PLOT_2);
 			else
-				obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOTS_2);
+				obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_2);
 		}
 		else if (versionToExecute == 7)
 		{
 			if (actualState.robot.getSymmetry())
-				obstacleNotConsidered.add(ObstacleGroups.YELLOW_PLOTS_7);
+				obstacleNotConsidered.add(ObstacleGroups.YELLOW_PLOT_7);
 			else
-				obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOTS_7);
+				obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_7);
 		}
 		else if (versionToExecute == 34)
 		{
 			if (actualState.robot.getSymmetry())
-				obstacleNotConsidered.add(ObstacleGroups.YELLOW_PLOTS_3);
+				obstacleNotConsidered.add(ObstacleGroups.YELLOW_PLOT_3);
 			else
-				obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOTS_3);
+				obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_3);
 			
 			if (actualState.robot.getSymmetry())
-				obstacleNotConsidered.add(ObstacleGroups.YELLOW_PLOTS_4);
+				obstacleNotConsidered.add(ObstacleGroups.YELLOW_PLOT_4);
 			else
-				obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOTS_4);
+				obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_4);
 			
 			if (actualState.robot.getSymmetry())
-				obstacleNotConsidered.add(ObstacleGroups.GOBLETS_4);
+				obstacleNotConsidered.add(ObstacleGroups.GOBLET_4);
 			else
-				obstacleNotConsidered.add(ObstacleGroups.GOBLETS_0);
+				obstacleNotConsidered.add(ObstacleGroups.GOBLET_0);
 		}
 		else if (versionToExecute == 56)
 		{
 			if (actualState.robot.getSymmetry())
-				obstacleNotConsidered.add(ObstacleGroups.YELLOW_PLOTS_5);
+				obstacleNotConsidered.add(ObstacleGroups.YELLOW_PLOT_5);
 			else
-				obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOTS_5);
+				obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_5);
 			
 			if (actualState.robot.getSymmetry())
-				obstacleNotConsidered.add(ObstacleGroups.YELLOW_PLOTS_6);
+				obstacleNotConsidered.add(ObstacleGroups.YELLOW_PLOT_6);
 			else
-				obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOTS_6);
+				obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_6);
 		}
 		else 
 		{

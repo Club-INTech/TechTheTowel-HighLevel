@@ -344,25 +344,27 @@ public abstract class Robot implements Service
     	//si on est jaune
     	if (symmetry)
     	{
-    		path = pathDingDing.computePath(getPosition(),aim.toVec2(),EnumSet.complementOf(obstaclesNotConsiderd.add(ObstacleGroups.GREEN_PLOTS_0)
-    																											 .add(ObstacleGroups.GREEN_PLOTS_1)
-    																											 .add(ObstacleGroups.GREEN_PLOTS_2)
-    																											 .add(ObstacleGroups.GREEN_PLOTS_3)
-    																											 .add(ObstacleGroups.GREEN_PLOTS_4)
-    																											 .add(ObstacleGroups.GREEN_PLOTS_5)
-    																											 .add(ObstacleGroups.GREEN_PLOTS_6)
-    																											 .add(ObstacleGroups.GREEN_PLOTS_7)));
+    		obstaclesNotConsiderd.add(ObstacleGroups.GREEN_PLOT_0);
+    		obstaclesNotConsiderd.add(ObstacleGroups.GREEN_PLOT_1);
+    		obstaclesNotConsiderd.add(ObstacleGroups.GREEN_PLOT_2);
+    		obstaclesNotConsiderd.add(ObstacleGroups.GREEN_PLOT_3);
+    		obstaclesNotConsiderd.add(ObstacleGroups.GREEN_PLOT_4);
+    		obstaclesNotConsiderd.add(ObstacleGroups.GREEN_PLOT_5);
+    		obstaclesNotConsiderd.add(ObstacleGroups.GREEN_PLOT_6);
+    		obstaclesNotConsiderd.add(ObstacleGroups.GREEN_PLOT_7);
+    		path = pathDingDing.computePath(getPosition(),aim.toVec2(),EnumSet.complementOf(obstaclesNotConsiderd));
     	}
     	else
     	{
-    		path = pathDingDing.computePath(getPosition(),aim.toVec2(),EnumSet.complementOf(obstaclesNotConsiderd.add(ObstacleGroups.YELLOW_PLOTS_0)
-																												 .add(ObstacleGroups.YELLOW_PLOTS_1)
-																												 .add(ObstacleGroups.YELLOW_PLOTS_2)
-																												 .add(ObstacleGroups.YELLOW_PLOTS_3)
-																												 .add(ObstacleGroups.YELLOW_PLOTS_4)
-																												 .add(ObstacleGroups.YELLOW_PLOTS_5)
-																												 .add(ObstacleGroups.YELLOW_PLOTS_6)
-																												 .add(ObstacleGroups.YELLOW_PLOTS_7)));
+    		obstaclesNotConsiderd.add(ObstacleGroups.YELLOW_PLOT_0);
+    		obstaclesNotConsiderd.add(ObstacleGroups.YELLOW_PLOT_1);
+    		obstaclesNotConsiderd.add(ObstacleGroups.YELLOW_PLOT_2);
+    		obstaclesNotConsiderd.add(ObstacleGroups.YELLOW_PLOT_3);
+    		obstaclesNotConsiderd.add(ObstacleGroups.YELLOW_PLOT_4);
+    		obstaclesNotConsiderd.add(ObstacleGroups.YELLOW_PLOT_5);
+    		obstaclesNotConsiderd.add(ObstacleGroups.YELLOW_PLOT_6);
+    		obstaclesNotConsiderd.add(ObstacleGroups.YELLOW_PLOT_7);
+    		path = pathDingDing.computePath(getPosition(),aim.toVec2(),EnumSet.complementOf(obstaclesNotConsiderd));
     	}
     	
     	
