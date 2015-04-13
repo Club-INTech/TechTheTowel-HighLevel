@@ -530,13 +530,14 @@ public class Locomotion implements Service
         }
         
         // On passe l'angle d'absolu à relatif : getOrientation se gere de la symetrie
-       
+        
         // on annule la correction si on est trop proche de la destination
         if(isCorrection) 
         {
            Vec2 vectorTranslation = aimSymmetrized;
            vectorTranslation.minus( givenPosition );
-           if( (  vectorTranslation.length() <  maxLengthCorrectionThreeshold )) 
+           log.debug("Distance to aim : "+vectorTranslation.length(),this);
+           if( (  vectorTranslation.length() >  maxLengthCorrectionThreeshold )) 
 	        	moveToPointSerialOrder(aimSymmetrized, givenPosition, angle, distance, mustDetect, turnOnly, isCorrection);
 	        else 
 	        	return;// Si on est trop proche, on ne fais rien.
@@ -585,20 +586,17 @@ public class Locomotion implements Service
 				//on active la correction (on attendra pas d'avoir fini de tourner (le robot) pour reprendre le programme)
 				trajectoire_courbe = true;
 				//FIXME supr
-				System.out.println("correction en cours; angle :"+angle);
+				System.out.println("correction en cours; angle : "+angle+" pour un delta "+delta);
 			}
 			else
 			{
 				System.out.println("correction en abandon; delta :"+delta);
 				return;
 			}
-			
 		}
 
         try
         {
-            
-
         	if(isCorrection && Math.abs(delta) > maxRotationCorrectionThreeshold)
         	{
         		isRobotTurning=true;// prochain ordre : on tourne
