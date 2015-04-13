@@ -2,10 +2,14 @@ package scripts;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumSet;
 
 import enums.ActuatorOrder;
+import enums.ObstacleGroups;
+import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
+import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import hook.types.HookFactory;
 import robot.Robot;
@@ -36,6 +40,35 @@ public class GetGlass extends AbstractScript
 		 *   Bref : plus pret = 0; plus loin = 4
 		 */
 	}
+	
+	@Override
+	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, boolean shouldRetryIfBlocked, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException
+	{
+		EnumSet<ObstacleGroups> obstacleNotConsidered = EnumSet.noneOf(ObstacleGroups.class);
+		
+		if (versionToExecute == 0)
+			obstacleNotConsidered.add(ObstacleGroups.GOBLETS_0);
+		else if (versionToExecute == 1)
+			obstacleNotConsidered.add(ObstacleGroups.GOBLETS_1);
+		else if (versionToExecute == 2)
+			obstacleNotConsidered.add(ObstacleGroups.GOBLETS_2);
+		else if (versionToExecute == 3)
+			obstacleNotConsidered.add(ObstacleGroups.GOBLETS_3);
+		else if (versionToExecute == 4)
+			obstacleNotConsidered.add(ObstacleGroups.GOBLETS_4);
+		else
+		{
+			log.debug("version de Script inconnue de GetGlass :"+versionToExecute, this);
+			return;
+		}
+		
+
+		// va jusqu'au point d'entrée de la version demandée
+		actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.robotRay), hooksToConsider, actualState.table,obstacleNotConsidered);
+		
+		// exécute la version demandée
+			execute(versionToExecute, actualState, hooksToConsider, shouldRetryIfBlocked);
+}
 	
 	@Override
 	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException

@@ -3,8 +3,6 @@ package robot;
 import java.util.ArrayList;
 import java.util.EnumSet;
 
-import org.omg.CORBA.PRIVATE_MEMBER;
-
 import pathDingDing.PathDingDing;
 import hook.Hook;
 import smartMath.Circle;
@@ -322,22 +320,9 @@ public abstract class Robot implements Service
      * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
      * @throws PathNotFoundException lorsque le pathdingding ne trouve pas de chemin 
      */
-    public void moveToLocation(Vec2 aim, ArrayList<Hook> hooksToConsider, Table table) throws  PathNotFoundException, UnableToMoveException
+    public void moveToLocation(Vec2 aim, ArrayList<Hook> hooksToConsider, Table table, EnumSet<ObstacleGroups> obstaclesNotConsiderd) throws  PathNotFoundException, UnableToMoveException
     {
-    	//TODO : preciser les obstacles a eviter
-    	ArrayList<Vec2> path = pathDingDing.computePath(getPosition(),aim, EnumSet.of(ObstacleGroups.ENNEMY_ROBOTS));
-	
-    	try 
-    	{
-			log.debug("Chemin suivi :"+path , this);
-			followPath(path , hooksToConsider);
-		} 
-    	catch (UnableToMoveException unableToMoveException) 
-    	{
-			actualNumberOfTries=0;
-			log.critical("Catch de "+unableToMoveException+" dans moveToLocation" , this);
-			recalculate(unableToMoveException.aim, hooksToConsider); // on recalcule le path
-		}
+    	moveToCircle(new Circle(aim), hooksToConsider, table, obstaclesNotConsiderd);
     }
     
     /**
@@ -347,14 +332,38 @@ public abstract class Robot implements Service
      * @param aim le cercle ou l'on veut se rendre
 	 * @param hooksToConsider the hooks to consider
      * @param table la table sur laquell on est sensé se déplacer
+     * @param obstaclesNotConsiderd les obstacles a ne pas considerer dans le pathDingDing
      * 
      * @throws PathNotFoundException lorsque le pathdingding ne trouve pas de chemin 
      * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
      */
-    public void moveToCircle(Circle aim, ArrayList<Hook> hooksToConsider, Table table) throws PathNotFoundException, UnableToMoveException
+    public void moveToCircle(Circle aim, ArrayList<Hook> hooksToConsider, Table table, EnumSet<ObstacleGroups> obstaclesNotConsiderd) throws PathNotFoundException, UnableToMoveException
     {
     	//TODO : preciser les obstacles a eviter
-    	ArrayList<Vec2> path = pathDingDing.computePath(getPosition(),aim.toVec2(),EnumSet.of(ObstacleGroups.ENNEMY_ROBOTS));
+    	ArrayList<Vec2> path;
+    	//si on est jaune
+    	if (symmetry)
+    	{
+    		path = pathDingDing.computePath(getPosition(),aim.toVec2(),EnumSet.complementOf(obstaclesNotConsiderd.add(ObstacleGroups.GREEN_PLOTS_0)
+    																											 .add(ObstacleGroups.GREEN_PLOTS_1)
+    																											 .add(ObstacleGroups.GREEN_PLOTS_2)
+    																											 .add(ObstacleGroups.GREEN_PLOTS_3)
+    																											 .add(ObstacleGroups.GREEN_PLOTS_4)
+    																											 .add(ObstacleGroups.GREEN_PLOTS_5)
+    																											 .add(ObstacleGroups.GREEN_PLOTS_6)
+    																											 .add(ObstacleGroups.GREEN_PLOTS_7)));
+    	}
+    	else
+    	{
+    		path = pathDingDing.computePath(getPosition(),aim.toVec2(),EnumSet.complementOf(obstaclesNotConsiderd.add(ObstacleGroups.YELLOW_PLOTS_0)
+																												 .add(ObstacleGroups.YELLOW_PLOTS_1)
+																												 .add(ObstacleGroups.YELLOW_PLOTS_2)
+																												 .add(ObstacleGroups.YELLOW_PLOTS_3)
+																												 .add(ObstacleGroups.YELLOW_PLOTS_4)
+																												 .add(ObstacleGroups.YELLOW_PLOTS_5)
+																												 .add(ObstacleGroups.YELLOW_PLOTS_6)
+																												 .add(ObstacleGroups.YELLOW_PLOTS_7)));
+    	}
     	
     	
     	//retire une distance egale au rayon du cercle au dernier point du chemin (le centre du cercle)
@@ -381,8 +390,9 @@ public abstract class Robot implements Service
     	Vec2 movementVector = aim.position.minusNewVector(precedentPathPoint);
     	
     	
-    	/* on ajoute le point du cercle B'=(B-A)*(L-r)/L+A
+    	/* on ajoute le point sur le cercle B'=(B-A)*(L-r)/L+A
     	 * B le centre du cercle, r le rayon du cercle, A le point precedent dans le path et L la taille de B-A
+    	 * ainsi le robot finira son chemin sur le point B'
     	 */
     	path.add(movementVector.dotFloat( (movementVector.length()-aim.radius)/movementVector.length() ).plusNewVector(precedentPathPoint));
 
@@ -396,13 +406,14 @@ public abstract class Robot implements Service
     	{
 			log.critical("Catch de "+unableToMoveException+" dans moveToCircle" , this);
 			actualNumberOfTries=0;
-			recalculate(unableToMoveException.aim, hooksToConsider); // on recalcule le path
+			recalculate(path.get(path.size()-1), hooksToConsider); // on recalcule le path
 		}
     }
     
     /**
      * 	Fonction recalculant le path à suivre, à utiliser pour l'evitement
      * 	Elle s'appelle elle-meme tant qu'on a pas reussi.
+     *  Avant d'apeller cette méthode remettre actualNumberOfTries à 0
      * 	@throws PathNotFoundException 
      */
     
@@ -417,6 +428,8 @@ public abstract class Robot implements Service
 				ArrayList<Vec2> newPath = pathDingDing.computePath(getPosition(),aim, EnumSet.of(ObstacleGroups.ENNEMY_ROBOTS));
 				log.debug("Nouveau Path recalculé: "+newPath, this);
 				followPath(newPath , hooksToConsider);
+				//on reinitialise actualNumberOfTries puisque le mouvement a reussi
+				actualNumberOfTries=0;
 			} 
 			catch (UnableToMoveException unableToMoveException) 
 			{
