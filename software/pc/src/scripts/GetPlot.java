@@ -28,7 +28,6 @@ public class GetPlot extends AbstractScript
 	 * le temps en ms pour faire un epile d'au moins 1 plot
 	 */
 	private static final int timeToDoPile = 2000;
-	int sleepAfterSlow=500;
 
 
 	public GetPlot(HookFactory hookFactory, Config config, Log log) 
@@ -71,6 +70,11 @@ public class GetPlot extends AbstractScript
 			{
 				if(versionToExecute==0 || versionToExecute==1 || versionToExecute==2 )
 				{
+					if (versionToExecute == 1)
+					{
+						stateToConsider.robot.turn(-3*Math.PI/4);
+						stateToConsider.robot.moveLengthwise(75);
+					}
 					eatPlot(false, isChoosenArmLeft, stateToConsider, true);
 					stateToConsider.table.eatPlotX(versionToExecute);
 				}
@@ -111,7 +115,6 @@ public class GetPlot extends AbstractScript
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);					
 					stateToConsider.robot.moveLengthwise(180, hooksToConsider);
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
-					stateToConsider.robot.sleep(sleepAfterSlow);
 					stateToConsider.robot.moveLengthwise(140, hooksToConsider);
 					stateToConsider.robot.isGlassStoredLeft = true;
 				}
@@ -120,7 +123,6 @@ public class GetPlot extends AbstractScript
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);					
 					stateToConsider.robot.moveLengthwise(180, hooksToConsider);
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
-					stateToConsider.robot.sleep(sleepAfterSlow);
 					stateToConsider.robot.moveLengthwise(140, hooksToConsider);
 					stateToConsider.robot.isGlassStoredRight = true;
 				}
@@ -220,7 +222,7 @@ public class GetPlot extends AbstractScript
 		if (id==0)
 			return new Circle (200,600,180);
 		else if (id==1)
-			return new Circle (400+180,250);//pose souci au PF, on avancera
+			return new Circle (500,300,180);//pose souci au PF, on avancera
 		else if (id==2)
 			return new Circle (630,645,180);
 		else if (id==34)
@@ -302,12 +304,18 @@ public class GetPlot extends AbstractScript
 	 */
 	private void eatPlot (boolean isSecondTry, boolean isArmChosenLeft, GameState<Robot> stateToConsider, boolean movementAllowed) throws UnableToEatPlot, SerialConnexionException
 	{
+		//si on a deja 4 plots dans la bouche on me mange plus
+		if (stateToConsider.robot.storedPlotCount >= 4)
+			throw new UnableToEatPlot();
+		
+		
 		//On change le bras choisi suivant la symetrie :TODO à voir si l'IA s'en occupera, mais pour les tests ca reste là
 		if(stateToConsider.robot.getSymmetry())
 		{
 			isArmChosenLeft=!isArmChosenLeft;
 		}
-		
+		if (stateToConsider.robot.storedPlotCount>0)
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_HIGH, true);
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
 		if (movementAllowed)
@@ -321,18 +329,16 @@ public class GetPlot extends AbstractScript
 		if (isArmChosenLeft) 
 		{
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
-			stateToConsider.robot.sleep(sleepAfterSlow); //TODO modifier le temps d'xecution de ARM_LEFT_OPEN_SLOW a la place
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
 		}
 		else
 		{
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN_SLOW, true);
-			stateToConsider.robot.sleep(sleepAfterSlow); //TODO modifier le temps d'xecution de ARM_RIGHT_OPEN_SLOW a la place
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
 		}
 		//si on a attrape qqc on termine sinon on essaie avec l'autre bras (si isSecondTry == false)
 		//si deuxieme essai ecrire dans le log qu'on a essaye de manger un plot et on jette une exeption impossible de manger
-		
+		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 		
 		boolean sensorAnswer;
 		try 
@@ -353,7 +359,7 @@ public class GetPlot extends AbstractScript
 			}
 		}
 
-		if (sensorAnswer)
+		if (!sensorAnswer)
 		{
 			if (isSecondTry)
 			{
@@ -366,15 +372,7 @@ public class GetPlot extends AbstractScript
 				return;
 			}
 		}
-		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 		stateToConsider.robot.storedPlotCount++;
-		
-		//si on a encore de la place dans le guide alors on monte le plot
-		if (stateToConsider.robot.storedPlotCount<4)
-		{
-			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_HIGH, true);
-			stateToConsider.robot.sleep(500);//TODO modifier le temps d'xecution de ELEVATOR_HIGH a la place
-		}
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
 	}
 

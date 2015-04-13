@@ -116,7 +116,7 @@ public class SensorsCardWrapper implements Service
 		
 		if (sensor.getDefaultValue().getClass() == Boolean.class)
 		{
-			return (sensorAnswer[0].toString() != "0");
+			return (!sensorAnswer[0].toString().equals("0"));
 		}
 		else if (sensor.getDefaultValue().getClass() == boolean[].class)
 		{
