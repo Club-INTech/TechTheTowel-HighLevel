@@ -55,10 +55,10 @@ public enum ActuatorOrder
 	ARM_LEFT_OPEN("obg"),
 	ARM_RIGHT_CLOSE("fbd"),
 	ARM_LEFT_CLOSE("fbg"),
-	ARM_RIGHT_OPEN_SLOW("obdl"),
-	ARM_LEFT_OPEN_SLOW("obgl"),
-	ARM_RIGHT_CLOSE_SLOW("fbdl"),
-	ARM_LEFT_CLOSE_SLOW("fbgl"),
+	ARM_RIGHT_OPEN_SLOW("obdl",1400),
+	ARM_LEFT_OPEN_SLOW("obgl",1400),
+	ARM_RIGHT_CLOSE_SLOW("fbdl",1400),
+	ARM_LEFT_CLOSE_SLOW("fbgl",1400),
 	ARM_RIGHT_MIDDLE("mbd"),
 	ARM_LEFT_MIDDLE("mbg");
 

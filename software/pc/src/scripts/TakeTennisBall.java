@@ -37,20 +37,18 @@ public class TakeTennisBall extends AbstractScript
 		//On initialise l'ascenceur
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
-
 		
 		//On ferme tous les bras, si ce n'est deja fait (bras vers l'exterieur, vers les gobelets)
-		stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
-
-		stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
-
-		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
+		stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
+		stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
+		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
 
 		//On avance vers la balle
-		stateToConsider.robot.moveLengthwise(370,hooksToConsider);
+		stateToConsider.robot.moveLengthwise(400,hooksToConsider);
 		System.out.println("On avance vers la balle");
 
-		
+		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+
 		//On la recupere
 		stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_MIDDLE, true);
 		stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN_SLOW, true);
@@ -58,33 +56,30 @@ public class TakeTennisBall extends AbstractScript
 		stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
 		stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
 		stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
-		stateToConsider.robot.moveLengthwise(80,hooksToConsider);
-
-
-
-
 
 		//On refereme et on remonte le tout
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 
 		System.out.println("Balle prise");
-
+		
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_HIGH, true);
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
-		
-		stateToConsider.robot.moveLengthwise(-450,hooksToConsider);
+		// On recule pour retourner dans le PDD
+		stateToConsider.robot.moveLengthwise(-400,hooksToConsider);
 	}
 	
 	@Override
 	public Circle entryPosition(int id, int ray) 
 	{
 		if(id==1)
-				return new Circle(-881,1000,0); //debut-500
+				return new Circle(-830,1000,0); //1500-400-270
+		// 1500 : bord
+		// 400 : le moveLenghtWise
+		// 270 : pour etre loin du bord et avoir la place avec les bras
 		else
 		{
 			System.out.println("Probleme de version");
-			return new Circle(-881,1000,0);
-
+			return new Circle(-830,1000,0);
 		}
 	}
 	

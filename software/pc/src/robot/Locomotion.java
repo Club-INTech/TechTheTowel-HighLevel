@@ -105,7 +105,7 @@ public class Locomotion implements Service
      * 	La distance maximale pour une correction rotationelle 
      * 	La correction ne sera effectuée que si le robot est loin de son point d'arrivée.
      */
-    private int maxLengthCorrectionThreeshold = 50;
+    private int maxLengthCorrectionThreeshold = 300;
     
     /**
      * 	L'orientation maximale pour une correction rotationelle 
@@ -533,10 +533,14 @@ public class Locomotion implements Service
        
         // on annule la correction si on est trop proche de la destination
         if(isCorrection) 
-           if(aimSymmetrized.clone().minusNewVector( givenPosition ).length() <  maxLengthCorrectionThreeshold )
+        {
+           Vec2 vectorTranslation = aimSymmetrized;
+           vectorTranslation.minus( givenPosition );
+           if( (  vectorTranslation.length() <  maxLengthCorrectionThreeshold )) 
 	        	moveToPointSerialOrder(aimSymmetrized, givenPosition, angle, distance, mustDetect, turnOnly, isCorrection);
 	        else 
 	        	return;// Si on est trop proche, on ne fais rien.
+        }
         else 
         	moveToPointSerialOrder(aimSymmetrized, givenPosition, angle, distance, mustDetect, turnOnly, isCorrection);
         
@@ -576,7 +580,7 @@ public class Locomotion implements Service
 		if(isCorrection)
 		{
 			//Si l'angle petit, alors on fait la correction en angle
-			if((Math.abs(delta) < Math.PI/4))
+			if((Math.abs(delta) < Math.PI/8))
 			{
 				//on active la correction (on attendra pas d'avoir fini de tourner (le robot) pour reprendre le programme)
 				trajectoire_courbe = true;
@@ -708,8 +712,7 @@ public class Locomotion implements Service
         
         if(table.getObstacleManager().isDiscObstructed(detectionCenter, detectionDistance))
         {
-            log.warning( "Lancement de UnexpectedObstacleOnPathException dans detectEnemy", this);
-
+            log.warning("Lancement de UnexpectedObstacleOnPathException dans detectEnemy", this);
             throw new UnexpectedObstacleOnPathException();
         }
         else

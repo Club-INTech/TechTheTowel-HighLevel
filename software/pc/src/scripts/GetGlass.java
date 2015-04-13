@@ -184,7 +184,7 @@ public class GetGlass extends AbstractScript
 		}
 		
 		//On avance vers le plot
-		stateToConsider.robot.moveLengthwise(80,hooksToConsider);
+		stateToConsider.robot.moveLengthwise(60,hooksToConsider);
 
 		//On prend le verre
 		if(isArmChosenLeft)
