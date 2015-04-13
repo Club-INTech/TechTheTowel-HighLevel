@@ -61,7 +61,7 @@ public class Vec2
 	// Returns this vec2's magnitude
 	/**
 	 * Length.
-	 *
+	 * sqrt is applied
 	 * @return the float
 	 */
 	public float length()

@@ -3,18 +3,23 @@ package tests;
 import hook.Callback;
 import hook.Hook;
 import hook.methods.OpenLeftArmExe;
+import hook.methods.TakeGlassExe;
 import hook.types.HookFactory;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
+import scripts.AbstractScript;
 import scripts.ScriptManager;
 import smartMath.Vec2;
 import strategie.GameState;
+import table.Table;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import enums.ActuatorOrder;
+import enums.ObstacleGroups;
 import enums.ScriptNames;
 import enums.ServiceNames;
 import exceptions.ContainerException;
@@ -33,6 +38,7 @@ import robot.cardsWrappers.SensorsCardWrapper;
 
 public class JUnit_Hooks extends JUnit_Test 
 {
+	ArrayList<Hook> emptyHook;
 	GameState<Robot> real_state;
 	ScriptManager scriptmanager;
 	SensorsCardWrapper  mSensorsCardWrapper;
@@ -47,18 +53,8 @@ public class JUnit_Hooks extends JUnit_Test
 		scriptmanager = (ScriptManager) container.getService(ServiceNames.SCRIPT_MANAGER);
 		mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
 
-		if (real_state.robot.getSymmetry())
-		{
-			real_state.robot.setPosition(new Vec2 (-1381,1000));
-			real_state.robot.setOrientation(0); 
-			//si on est jaune on est en 0 
-		}
-		else
-		{
-			real_state.robot.setPosition(new Vec2 (1381,1000));
-			real_state.robot.setOrientation(Math.PI);
-			//sinon on est vert donc on est en PI
-		}
+		real_state.robot.setPosition(new Vec2 (1132,1000));
+		real_state.robot.setOrientation(Math.PI); 
 		
 		real_state.robot.updateConfig();
 		try 
@@ -90,7 +86,7 @@ public class JUnit_Hooks extends JUnit_Test
 		robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
 	}
 
-	@Test
+	//@Test
 	public void test() throws PathNotFoundException, SerialFinallyException, ContainerException, SerialManagerException, SerialConnexionException
 	{
 		container.startAllThreads();
@@ -132,4 +128,46 @@ public class JUnit_Hooks extends JUnit_Test
 		//Le match s'arrête
 		container.destructor();
 	}
+
+	@Test
+	public void testTakeGlass() throws PathNotFoundException, SerialFinallyException, ContainerException, SerialManagerException, SerialConnexionException
+	{
+		emptyHook = new ArrayList<Hook> ();  
+
+		/*
+		try
+		{
+			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE); // Sortie de la zone de depart
+			exitScript.execute(0, real_state, emptyHook, true );
+		} 
+		catch (UnableToMoveException | SerialConnexionException e) 
+		{
+			e.printStackTrace();
+		}*/
+		
+		hookFactory = (HookFactory) container.getService(ServiceNames.HOOK_FACTORY);
+
+		// liste de hook a passer a la locomotion
+		ArrayList<Hook> testHookList = new ArrayList<Hook> ();
+
+		
+	    Vec2 center = new Vec2(900,1000);
+		
+		// hook pour ouvrir le bras dès que le robot est dans un cercle, à une precision près
+		Hook takeGlassHook = hookFactory.newHookIsDistanceToPointLesserThan(100,center, 20);
+		
+		// ajoute un callback au hook de position qui ouvre le bras  bras
+		takeGlassHook.addCallback(	new Callback(new TakeGlassExe(),true, real_state)	);
+		
+		// ajoute le hook a la liste a passer a la locomotion
+		testHookList.add(takeGlassHook);
+		
+		try {
+			real_state.robot.moveLengthwise(1500, testHookList);
+		} 
+		catch (UnableToMoveException e) {
+			e.printStackTrace();
+		}
+	}
+	
 }
