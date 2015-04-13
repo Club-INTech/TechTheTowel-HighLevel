@@ -2,12 +2,16 @@ package scripts;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumSet;
 
 import enums.ActuatorOrder;
+import enums.ObstacleGroups;
 import enums.SensorNames;
+import exceptions.PathNotFoundException;
 import exceptions.UnableToEatPlot;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
+import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import hook.types.HookFactory;
 import robot.Robot;
@@ -35,6 +39,80 @@ public class GetPlot extends AbstractScript
 		super(hookFactory, config, log);
 		versions = new Integer[]{0,1,2,34,56,7};
 		
+	}
+	
+	@Override
+	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, boolean shouldRetryIfBlocked, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException
+	{
+		EnumSet<ObstacleGroups> obstacleNotConsidered = EnumSet.noneOf(ObstacleGroups.class);
+		if (versionToExecute == 0)
+		{
+			if (actualState.robot.getSymmetry())
+				obstacleNotConsidered.add(ObstacleGroups.YELLOW_PLOTS_0);
+			else
+				obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOTS_0);
+		}
+		else if (versionToExecute == 1)
+		{
+			if (actualState.robot.getSymmetry())
+				obstacleNotConsidered.add(ObstacleGroups.YELLOW_PLOTS_1);
+			else
+				obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOTS_1);
+		}
+		else if (versionToExecute == 2)
+		{
+			if (actualState.robot.getSymmetry())
+				obstacleNotConsidered.add(ObstacleGroups.YELLOW_PLOTS_2);
+			else
+				obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOTS_2);
+		}
+		else if (versionToExecute == 7)
+		{
+			if (actualState.robot.getSymmetry())
+				obstacleNotConsidered.add(ObstacleGroups.YELLOW_PLOTS_7);
+			else
+				obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOTS_7);
+		}
+		else if (versionToExecute == 34)
+		{
+			if (actualState.robot.getSymmetry())
+				obstacleNotConsidered.add(ObstacleGroups.YELLOW_PLOTS_3);
+			else
+				obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOTS_3);
+			
+			if (actualState.robot.getSymmetry())
+				obstacleNotConsidered.add(ObstacleGroups.YELLOW_PLOTS_4);
+			else
+				obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOTS_4);
+			
+			if (actualState.robot.getSymmetry())
+				obstacleNotConsidered.add(ObstacleGroups.GOBLETS_4);
+			else
+				obstacleNotConsidered.add(ObstacleGroups.GOBLETS_0);
+		}
+		else if (versionToExecute == 56)
+		{
+			if (actualState.robot.getSymmetry())
+				obstacleNotConsidered.add(ObstacleGroups.YELLOW_PLOTS_5);
+			else
+				obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOTS_5);
+			
+			if (actualState.robot.getSymmetry())
+				obstacleNotConsidered.add(ObstacleGroups.YELLOW_PLOTS_6);
+			else
+				obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOTS_6);
+		}
+		else 
+		{
+			log.debug("version de Script inconnue de GetPlot :"+versionToExecute, this);
+			return;
+		}
+			
+		// va jusqu'au point d'entrée de la version demandée
+		actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.robotRay), hooksToConsider, actualState.table,obstacleNotConsidered);
+		
+		// exécute la version demandée
+		execute(versionToExecute, actualState, hooksToConsider, shouldRetryIfBlocked);
 	}
 	
 	@Override
@@ -220,17 +298,17 @@ public class GetPlot extends AbstractScript
 	public Circle entryPosition(int id, int ray)
 	{
 		if (id==0)
-			return new Circle (200,600,180);
+			return new Circle (200,600,200);
 		else if (id==1)
-			return new Circle (500,300,180);//pose souci au PF, on avancera
+			return new Circle (500,300,200);//ce point n'est pas le centre du plot (pour cause de PathDD)
 		else if (id==2)
-			return new Circle (630,645,180);
+			return new Circle (630,645,200);
 		else if (id==34)
 			return new Circle (900,220,0);
 		else if (id==56)
 			return new Circle (850,1700,0); // Position devant le plot 5, on longeant l'escalier
 		else if (id==7)
-			return new Circle (1410,1800,180);//Point d'entrée dangereux mais (1280,1700) passe (On est à 166 du centre (1410,1800) )
+			return new Circle (1410,1800,200);//Point d'entrée dangereux mais (1280,1700) passe (On est à 166 du centre (1410,1800) )
 		else 
 			log.debug("out of bound : mauvais numero de script", this);
 			return new Circle (0,1000);

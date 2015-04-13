@@ -3,11 +3,13 @@ package tests;
 import hook.Hook;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import enums.ObstacleGroups;
 import enums.ServiceNames;
 import robot.*;
 import smartMath.Vec2;
@@ -69,14 +71,14 @@ public class JUnit_RobotChrono extends JUnit_Test {
 		robotchrono = new RobotChrono(config, log, (PathDingDing)container.getService(ServiceNames.PATHDINGDING));
 		robotchrono.setPosition(new Vec2(0, 1500));
 		robotchrono.setOrientation(0);
-		robotchrono.moveToLocation(new Vec2(10, 1400), new ArrayList<Hook>(), table);
+		robotchrono.moveToLocation(new Vec2(10, 1400), new ArrayList<Hook>(), table,EnumSet.noneOf(ObstacleGroups.class));
 		Assert.assertTrue(robotchrono.getPosition().distance(new Vec2(10,1400)) < 2);
 
 		config.set("couleur", "rouge");
 		robotchrono = new RobotChrono(config, log, (PathDingDing)container.getService(ServiceNames.PATHDINGDING));
 		robotchrono.setPosition(new Vec2(0, 1500));
 		robotchrono.setOrientation(0);
-		robotchrono.moveToLocation(new Vec2(10, 1400), new ArrayList<Hook>(), table);
+		robotchrono.moveToLocation(new Vec2(10, 1400), new ArrayList<Hook>(), table,EnumSet.noneOf(ObstacleGroups.class));
 		Assert.assertTrue(robotchrono.getPosition().distance(new Vec2(-10,1400)) < 2);
 	}
 	
@@ -89,7 +91,7 @@ public class JUnit_RobotChrono extends JUnit_Test {
 	public void test_va_au_point() throws Exception
 	{
 		log.debug("JUnit_RobotChronoTest.test_va_au_point()", this);
-		robotchrono.moveToLocation(new Vec2(10, 1400), new ArrayList<Hook>(), table);
+		robotchrono.moveToLocation(new Vec2(10, 1400), new ArrayList<Hook>(), table,EnumSet.noneOf(ObstacleGroups.class));
 		Assert.assertTrue(robotchrono.getPosition().distance(new Vec2(10,1400)) < 2);
 	}
 

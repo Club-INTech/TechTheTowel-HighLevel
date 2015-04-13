@@ -11,7 +11,6 @@ import hook.types.HookFactory;
 import robot.Robot;
 import smartMath.Circle;
 import strategie.GameState;
-import sun.org.mozilla.javascript.ast.CatchClause;
 import utils.Config;
 import utils.Log;
 /**

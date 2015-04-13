@@ -34,7 +34,6 @@ import robot.cardsWrappers.SensorsCardWrapper;
 
 public class JUnit_scriptedMatch extends JUnit_Test 
 {
-	Config config;
 	ArrayList<Hook> emptyHook;
 	GameState<Robot> real_state;
 	ScriptManager scriptmanager;
@@ -54,13 +53,12 @@ public class JUnit_scriptedMatch extends JUnit_Test
         sensors = (SensorsCardWrapper)container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
         sensors.updateConfig();
 
-		container.getService(ServiceNames.THREAD_SENSOR);
+//		container.getService(ServiceNames.THREAD_SENSOR);
 		container.getService(ServiceNames.THREAD_TIMER);
 
 
 
 
-//        threadTimer = (ThreadTimer)container.getService(ServiceNames.THREAD_TIMER);
 		emptyHook = new ArrayList<Hook> ();  
 
 		
@@ -132,8 +130,8 @@ public class JUnit_scriptedMatch extends JUnit_Test
 	/**
 	 * Demande si la couleur est verte au jaune
 	 * @throws Exception
-	 *//*
-	static void configColor()
+	 */
+	void configColor()
 	{
 
 		String couleur = "";
@@ -151,20 +149,20 @@ public class JUnit_scriptedMatch extends JUnit_Test
 				System.out.println("Erreur IO: le clavier est il bien branché ?");
 			} 
 			if(couleur.contains("jaune"))
-				config.set("couleur","jaune");
+				config.set("couleur", "jaune");
 			else if(couleur.contains("vert"))
 				config.set("couleur", "vert");
 			
 		}
 		
-	}*/
+	}
 
 	@Test
 	public void test() throws PathNotFoundException, SerialFinallyException, SerialConnexionException
 	{
-//		configColor();
-//		container.startAllThreads();
-		//waitMatchBegin();
+		configColor();
+		container.startInstanciedThreads();
+		waitMatchBegin();
 		//premiere action du match
 		
 		System.out.println("Le robot commence le match");
@@ -186,7 +184,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		try 
 		{
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le verre 1");
-			scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(1, real_state, true, emptyHook );//On prend le verre,  notre droite en sortant
+			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(2, real_state, true, emptyHook );//On prend le verre,  notre droite en sortant
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le verre 1");
 		} 
 		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException e) 
@@ -197,7 +195,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		try 
 		{
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant les tapis");
-			scriptmanager.getScript(ScriptNames.DROP_CARPET).goToThenExec(1, real_state, true, emptyHook ); // On depose les tapis
+			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(1, real_state, true, emptyHook ); // On depose les tapis
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition()+" après les tapis");
 
 		}
@@ -209,7 +207,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		try 
 		{
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le plot 2");
-			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(2, real_state, true, emptyHook ); // On prend le plot a notre gauche, en sortant de la zone de depart
+			scriptmanager.getScript(ScriptNames.FREE_STACK).goToThenExec(1, real_state, true, emptyHook ); // On prend le plot a notre gauche, en sortant de la zone de depart
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le plot 2");
 		} 
 		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException e1) 
@@ -218,6 +216,9 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		}
 		
 		System.out.println("Plot 2 pris");
+		boolean lol = true;
+		if (lol)
+			return;
 
 		try 
 		{
