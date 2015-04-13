@@ -169,9 +169,9 @@ public class SerialConnexion implements SerialPortEventListener, Service
 				for (String m : messages)
 				{
 					// affiche dans la console ce qu'on envois sur la série -> On cache ca, pour eviter le xy0? en permanence, mais ca peux etre interessant de le garder.
-					//ne jamais push un code avec cette ligne decommentee
+					//FIXME ne jamais push un code avec cette ligne decommentee
 
-					log.debug("Envoi serie : '" + m  + "'", this);
+//					log.debug("Envoi serie : '" + m  + "'", this);
 					m += "\r";
 					
 					output.write(m.getBytes());
@@ -182,9 +182,9 @@ public class SerialConnexion implements SerialPortEventListener, Service
 					{
 						nb_tests++;
 						
-						// affiche dans la console ce qu'on envoie sur la série
+						// affiche dans la console ce qu'on lit sur la série
 						String resposeFromCard = input.readLine();
-						log.debug("Reception acquitement : '" + resposeFromCard  + "'", this); 
+//						log.debug("Reception acquitement : '" + resposeFromCard  + "'", this); 
 						
 						acquittement = resposeFromCard.charAt(0);
 						if (acquittement != '_')
@@ -211,7 +211,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 				{
 					inputLines[i] = input.readLine();		
 					
-					log.debug("Ligne "+i+": '"+inputLines[i]+"'",this); 
+//					log.debug("Ligne "+i+": '"+inputLines[i]+"'",this); 
 					if(inputLines[i].equals(null) || inputLines[i].replaceAll(" ", "").equals("")|| inputLines[i].replaceAll(" ", "").equals("-"))
 					{
 						log.critical("='( , renvoi de "+inputLines[i],this);
@@ -223,11 +223,6 @@ public class SerialConnexion implements SerialPortEventListener, Service
 						log.critical("='( , renvoi de "+inputLines[i],this);
 						communiquer(messages, nb_lignes_reponse); // On retente
 					}
-					else if(! isNumber(inputLines[i]) )
-					{
-						log.critical("='( , renvoi de "+inputLines[i],this);
-						communiquer(messages, nb_lignes_reponse); // On retente
-					}	
 				}
 			}
 			catch (Exception e)
@@ -324,27 +319,4 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	    }
 		return isAsciiExtended;
 	}
-	
-	
-	/**
-	 * Verifie si le string en argument eest un nombre, à virgule ou non, et meme negatif
-	 */
-	public boolean isNumber(String inputLines) throws Exception
-	{
-		Boolean isNumber=true;
-		for (int i = 0; i < inputLines.length(); i++) 
-		{
-			 if (!   ( inputLines.toCharArray()[i]=='-'  || inputLines.toCharArray()[i]=='.' || inputLines.toCharArray()[i]=='0' 
-		        		|| inputLines.toCharArray()[i]=='1' || inputLines.toCharArray()[i]=='2' || inputLines.toCharArray()[i]=='3' 
-		        		|| inputLines.toCharArray()[i]=='4' || inputLines.toCharArray()[i]=='5' || inputLines.toCharArray()[i]=='6' 
-		        		|| inputLines.toCharArray()[i]=='7' || inputLines.toCharArray()[i]=='8' || inputLines.toCharArray()[i]=='9' ) )
-	        {
-	        	isNumber=false;
-                log.critical(inputLines.toCharArray()[i]+"n'est pas un nombre", this);
-				return isNumber;
-	        }
-	    }
-		return isNumber;
-	}
-
 }
