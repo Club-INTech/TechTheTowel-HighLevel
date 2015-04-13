@@ -175,12 +175,12 @@ public class GetGlass extends AbstractScript
 		if(isArmChosenLeft)
 		{
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);
-			stateToConsider.robot.turn(-Math.PI/12, hooksToConsider, false, true);
+			stateToConsider.robot.turn((-Math.PI/12), hooksToConsider, false, true);
 		}
 		else 
 		{
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);
-			stateToConsider.robot.turn(Math.PI/12, hooksToConsider, false, true);
+			stateToConsider.robot.turn((Math.PI/12), hooksToConsider, false, true);
 		}
 		
 		//On avance vers le plot

@@ -211,7 +211,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 				{
 					inputLines[i] = input.readLine();		
 					
-					//log.debug("Ligne "+i+": '"+inputLines[i]+"'",this); 
+					log.debug("Ligne "+i+": '"+inputLines[i]+"'",this); 
 					if(inputLines[i].equals(null) || inputLines[i].replaceAll(" ", "").equals("")|| inputLines[i].replaceAll(" ", "").equals("-"))
 					{
 						log.critical("='( , renvoi de "+inputLines[i],this);

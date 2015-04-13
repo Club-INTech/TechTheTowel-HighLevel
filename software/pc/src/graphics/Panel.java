@@ -94,7 +94,7 @@ public class Panel extends JPanel
 	    ArrayList<ObstacleCircular> fixedObstacles = mTable.getObstacleManager().getFixedObstacles();
 	    for(int i = 0; i < fixedObstacles.size(); i++)
 	    {
-	    	g.drawOval((fixedObstacles.get(i).getPosition().x - fixedObstacles.get(i).getRadius() + 1500) * this.getWidth() / 3000, -(fixedObstacles.get(i).getPosition().y + fixedObstacles.get(i).getRadius()) * this.getHeight() / 2000 + this.getHeight(), (2 * fixedObstacles.get(i).getRadius()) * this.getWidth() / 3000, (2 * fixedObstacles.get(i).getRadius()) * this.getHeight() / 2000);
+	    	g.drawOval((fixedObstacles.get(i).getPosition().x - (fixedObstacles.get(i).getRadius() + mTable.getObstacleManager().getRobotRadius()) + 1500) * this.getWidth() / 3000, -(fixedObstacles.get(i).getPosition().y + fixedObstacles.get(i).getRadius() + mTable.getObstacleManager().getRobotRadius()) * this.getHeight() / 2000 + this.getHeight(), (2 * (fixedObstacles.get(i).getRadius() + mTable.getObstacleManager().getRobotRadius())) * this.getWidth() / 3000, (2 * (fixedObstacles.get(i).getRadius() + mTable.getObstacleManager().getRobotRadius())) * this.getHeight() / 2000);
 	    }
 	    
 	    //les robots ennemis
@@ -159,6 +159,12 @@ public class Panel extends JPanel
 	    			    (mPath.get(i).x + 1500) * this.getWidth() / 3000, 
 	    			    -mPath.get(i).y * this.getHeight() / 2000 + this.getHeight());
 	    }
+	    
+	    g.setColor(Color.yellow);
+	    g.drawOval( (mTable.getObstacleManager().getDiscPosition().x- mTable.getObstacleManager().getDiscRadius() + 1500) * this.getWidth() / 3000,
+	    		   -(mTable.getObstacleManager().getDiscPosition().y + mTable.getObstacleManager().getDiscRadius()) * this.getHeight() / 2000 + this.getHeight(), 
+	    		    (2 * mTable.getObstacleManager().getDiscRadius()) * this.getWidth() / 3000,
+	    		    (2 * mTable.getObstacleManager().getDiscRadius()) * this.getHeight() / 2000);
 	}
 	
 	//permet d'afficher un chemin

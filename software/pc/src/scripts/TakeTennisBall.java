@@ -35,18 +35,14 @@ public class TakeTennisBall extends AbstractScript
 		stateToConsider.robot.turn(Math.PI, hooksToConsider, false);//on se tourne bien
 
 		//On initialise l'ascenceur
-		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, false);
-		stateToConsider.robot.sleep(1000);
+		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
-		stateToConsider.robot.sleep(1000);
 
 		
 		//On ferme tous les bras, si ce n'est deja fait (bras vers l'exterieur, vers les gobelets)
 		stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
-		stateToConsider.robot.sleep(1000);
 
 		stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
-		stateToConsider.robot.sleep(1000);
 
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
 
@@ -56,21 +52,27 @@ public class TakeTennisBall extends AbstractScript
 
 		
 		//On la recupere
-		stateToConsider.robot.sleep(1000);
-		stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
-		stateToConsider.robot.sleep(5000);
+		stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_MIDDLE, true);
 		stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN_SLOW, true);
-		stateToConsider.robot.sleep(5000);
+		stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_MIDDLE, true);
+		stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
+		stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
+		stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
+		stateToConsider.robot.moveLengthwise(80,hooksToConsider);
+
+
+
+
 
 		//On refereme et on remonte le tout
-		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, false);
+		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 
 		System.out.println("Balle prise");
 
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_HIGH, true);
-		stateToConsider.robot.sleep(1000);
-
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+		
+		stateToConsider.robot.moveLengthwise(-450,hooksToConsider);
 	}
 	
 	@Override

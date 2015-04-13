@@ -103,7 +103,7 @@ public class JUnit_TennisBall extends JUnit_Test
 		robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
 	}
 
-	@Test
+	//@Test
 	public void test() throws PathNotFoundException, SerialFinallyException
 	{
 		container.startAllThreads();
@@ -160,4 +160,18 @@ public class JUnit_TennisBall extends JUnit_Test
 		//Le match s'arrête
 		container.destructor();
 	}
+	
+	@Test
+	public void testStatic() throws PathNotFoundException, SerialFinallyException
+	{
+		try {
+			scriptmanager.getScript(ScriptNames.TAKE_TENNIS_BALL).execute(1, real_state, emptyHook, true );
+		} 
+		catch (UnableToMoveException | SerialConnexionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
 }
