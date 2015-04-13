@@ -186,8 +186,8 @@ public class GetGlass extends AbstractScript
 	{
 		try 
 		{
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
 		} 
 		catch (SerialConnexionException e)
 		{

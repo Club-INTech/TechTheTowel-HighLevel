@@ -243,7 +243,7 @@ public class GetPlot extends AbstractScript
 			}
 			
 		}
-		//TODO derniere version a traiter FIXME traiter le cas où on a trois plots stockés et qu'on ne veut pas manger n°6
+		//TODO derniere version a traiter + traiter le cas où on a trois plots stockés et qu'on ne veut pas manger n°6
 		else if (versionToExecute == 56)
 		{
 			stateToConsider.robot.turn(Math.PI*0.5);

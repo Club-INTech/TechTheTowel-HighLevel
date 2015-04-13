@@ -52,7 +52,7 @@ public abstract class AbstractScript implements Service
 	}
 		
 	/**
-	 * Tout les scripts voulant retirer des obstacles particuliers lors du calcul de chemin doivent reecrire cette methode
+	 * IMPORTANT : Tout les scripts voulant retirer des obstacles particuliers lors du calcul de chemin doivent reecrire cette methode et retirer ces obstacles dans leur propre calcul du pathfinding
 	 * Va au point d'entrée du script (en utilisant le Pathfinding), puis l'exécute
 	 * En fournissant un GameState<RobotChrono>, il est possible de chronométrer le temps que l'on metterait a exécuter ce script sans réellement l'exécuter
 	 *

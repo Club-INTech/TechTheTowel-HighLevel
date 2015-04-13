@@ -332,42 +332,41 @@ public abstract class Robot implements Service
      * @param aim le cercle ou l'on veut se rendre
 	 * @param hooksToConsider the hooks to consider
      * @param table la table sur laquell on est sensé se déplacer
-     * @param obstaclesNotConsiderd les obstacles a ne pas considerer dans le pathDingDing
+     * @param obstaclesNotConsidered les obstacles a ne pas considerer dans le pathDingDing comporte de base les plots ennemis
      * 
      * @throws PathNotFoundException lorsque le pathdingding ne trouve pas de chemin 
      * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
      */
-    public void moveToCircle(Circle aim, ArrayList<Hook> hooksToConsider, Table table, EnumSet<ObstacleGroups> obstaclesNotConsiderd) throws PathNotFoundException, UnableToMoveException
+    public void moveToCircle(Circle aim, ArrayList<Hook> hooksToConsider, Table table, EnumSet<ObstacleGroups> obstaclesNotConsidered) throws PathNotFoundException, UnableToMoveException
     {
-    	//TODO : preciser les obstacles a eviter
     	ArrayList<Vec2> path;
-    	//si on est jaune
+    	//si on est jaune on retire les plots verts de la liste des obstacles
     	if (symmetry)
     	{
-    		obstaclesNotConsiderd.add(ObstacleGroups.GREEN_PLOT_0);
-    		obstaclesNotConsiderd.add(ObstacleGroups.GREEN_PLOT_1);
-    		obstaclesNotConsiderd.add(ObstacleGroups.GREEN_PLOT_2);
-    		obstaclesNotConsiderd.add(ObstacleGroups.GREEN_PLOT_3);
-    		obstaclesNotConsiderd.add(ObstacleGroups.GREEN_PLOT_4);
-    		obstaclesNotConsiderd.add(ObstacleGroups.GREEN_PLOT_5);
-    		obstaclesNotConsiderd.add(ObstacleGroups.GREEN_PLOT_6);
-    		obstaclesNotConsiderd.add(ObstacleGroups.GREEN_PLOT_7);
-    		path = pathDingDing.computePath(getPosition(),aim.toVec2(),EnumSet.complementOf(obstaclesNotConsiderd));
+    		obstaclesNotConsidered.add(ObstacleGroups.GREEN_PLOT_0);
+    		obstaclesNotConsidered.add(ObstacleGroups.GREEN_PLOT_1);
+    		obstaclesNotConsidered.add(ObstacleGroups.GREEN_PLOT_2);
+    		obstaclesNotConsidered.add(ObstacleGroups.GREEN_PLOT_3);
+    		obstaclesNotConsidered.add(ObstacleGroups.GREEN_PLOT_4);
+    		obstaclesNotConsidered.add(ObstacleGroups.GREEN_PLOT_5);
+    		obstaclesNotConsidered.add(ObstacleGroups.GREEN_PLOT_6);
+    		obstaclesNotConsidered.add(ObstacleGroups.GREEN_PLOT_7);
     	}
+    	//si on est vert on retire les plots jaunes de la liste des obstacles
     	else
     	{
-    		obstaclesNotConsiderd.add(ObstacleGroups.YELLOW_PLOT_0);
-    		obstaclesNotConsiderd.add(ObstacleGroups.YELLOW_PLOT_1);
-    		obstaclesNotConsiderd.add(ObstacleGroups.YELLOW_PLOT_2);
-    		obstaclesNotConsiderd.add(ObstacleGroups.YELLOW_PLOT_3);
-    		obstaclesNotConsiderd.add(ObstacleGroups.YELLOW_PLOT_4);
-    		obstaclesNotConsiderd.add(ObstacleGroups.YELLOW_PLOT_5);
-    		obstaclesNotConsiderd.add(ObstacleGroups.YELLOW_PLOT_6);
-    		obstaclesNotConsiderd.add(ObstacleGroups.YELLOW_PLOT_7);
-    		path = pathDingDing.computePath(getPosition(),aim.toVec2(),EnumSet.complementOf(obstaclesNotConsiderd));
+    		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_0);
+    		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_1);
+    		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_2);
+    		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_3);
+    		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_4);
+    		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_5);
+    		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_6);
+    		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_7);
     	}
     	
-    	
+		path = pathDingDing.computePath(getPosition(),aim.toVec2(),EnumSet.complementOf(obstaclesNotConsidered));
+		
     	//retire une distance egale au rayon du cercle au dernier point du chemin (le centre du cercle)
     	
     	//on retire le dernier point (le centre du cercle)

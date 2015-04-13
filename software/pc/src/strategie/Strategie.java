@@ -123,6 +123,10 @@ public class Strategie implements Service
 			IA();
 			return;
 		}
+		
+		//TODO mettre le script du match en entier et en cas d'exeption lancer takeDecision
+		
+		
 		//tant que le match n'est pas fini, on prend des decisions :
 		while(realGameState.timeEllapsed   <  Integer.parseInt(config.getProperty("temps_match")))
 		{

@@ -1,7 +1,5 @@
 package threads;
 
-import java.util.ArrayList;
-
 import exceptions.serial.SerialConnexionException;
 import robot.cardsWrappers.LocomotionCardWrapper;
 import robot.cardsWrappers.SensorsCardWrapper;
@@ -9,7 +7,6 @@ import table.Table;
 import utils.Sleep;
 import graphics.*;
 import robot.RobotReal;
-import smartMath.Vec2;
 
 /**
  * Thread qui s'occupe de la gestion du temps: début du match et immobilisation du robot en fin de match
