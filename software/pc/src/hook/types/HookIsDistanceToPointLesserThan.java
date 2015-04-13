@@ -37,10 +37,10 @@ public class HookIsDistanceToPointLesserThan extends Hook
 	
 	public boolean evaluate()
 	{
-		if(Math.abs(  Math.pow(center.x - mState.robot.getPosition().x , 2)  +  
-					  Math.pow(center.y - mState.robot.getPosition().y , 2 )   ) <  Math.pow( (mRay+mTolerancy/2) , 2 ) ) // verification de la distance au point
+		if(  (center.x - mState.robot.getPosition().x)*(center.x - mState.robot.getPosition().x)  +  
+			 (center.y - mState.robot.getPosition().y)*(center.y - mState.robot.getPosition().y) <   (mRay+mTolerancy/2)*(mRay+mTolerancy/2) ) // verification de la distance au point
 		{
-			System.out.println("en position ("+mState.robot.getPosition().x+", "+mState.robot.getPosition().y+") au triger du Hook");
+			System.out.println("en position ("+mState.robot.getPosition().x+", "+mState.robot.getPosition().y+") au trigger du Hook");
             return trigger();
 		}
         return false;

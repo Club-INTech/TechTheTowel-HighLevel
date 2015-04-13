@@ -1,8 +1,10 @@
 package table;
 
 
+import smartMath.Vec2;
 import table.obstacles.*;
 import container.Service;
+import enums.ObstacleGroups;
 import utils.*;
 
 /* Positions :
@@ -180,10 +182,29 @@ public class Table implements Service
 	 */
 	public void eatPlotX (int x)
 	{
-		if (0<=x && x<=8)
+		if (0<=x && x<=7)
+		{
 			isPlotXEaten[x]=true;
+		}
 		else
 			log.debug("out of bound, plot counter",this);
+
+		if(isPlotXEaten[0])
+			mObstacleManager.removeFixedObstacle(new ObstacleCircular(new Vec2(200, 600), 30, ObstacleGroups.GREEN_PLOT_0));
+		if(isPlotXEaten[1])
+			mObstacleManager.removeFixedObstacle(new ObstacleCircular(new Vec2(400, 250), 30, ObstacleGroups.GREEN_PLOT_1));
+		if(isPlotXEaten[2])
+			mObstacleManager.removeFixedObstacle(new ObstacleCircular(new Vec2(630, 645), 30, ObstacleGroups.GREEN_PLOT_2));
+		if(isPlotXEaten[3])
+			mObstacleManager.removeFixedObstacle(new ObstacleCircular(new Vec2(1410, 150), 30, ObstacleGroups.GREEN_PLOT_3));
+		if(isPlotXEaten[4])
+			mObstacleManager.removeFixedObstacle(new ObstacleCircular(new Vec2(1410, 250), 30, ObstacleGroups.GREEN_PLOT_4));
+		if(isPlotXEaten[5])
+			mObstacleManager.removeFixedObstacle(new ObstacleCircular(new Vec2(650, 1800), 30, ObstacleGroups.GREEN_PLOT_5));
+		if(isPlotXEaten[6])
+			mObstacleManager.removeFixedObstacle(new ObstacleCircular(new Vec2(650, 1900), 30, ObstacleGroups.GREEN_PLOT_6));
+		if(isPlotXEaten[7])
+			mObstacleManager.removeFixedObstacle(new ObstacleCircular(new Vec2(1410, 1800), 30, ObstacleGroups.GREEN_PLOT_7));	
 	}
 	
 	/**
@@ -232,10 +253,21 @@ public class Table implements Service
 	 */
 	public void removeGlassX (int x)
 	{
-		if (0<=x && x<=5)
+		if (0<=x && x<=4)
 			isGlassXTaken[x]=true;
 		else
 			log.debug("out of bound isGlassTaken",this);
+		
+		if(isGlassXTaken[0])
+			mObstacleManager.removeFixedObstacle(new ObstacleCircular(new Vec2(1250, 250), 48, ObstacleGroups.GOBLET_0));
+		if(isGlassXTaken[1])
+			mObstacleManager.removeFixedObstacle(new ObstacleCircular(new Vec2(590, 1170), 48, ObstacleGroups.GOBLET_1));
+		if(isGlassXTaken[2])
+			mObstacleManager.removeFixedObstacle(new ObstacleCircular(new Vec2(0, 350), 48, ObstacleGroups.GOBLET_2));
+		if(isGlassXTaken[3])
+			mObstacleManager.removeFixedObstacle(new ObstacleCircular(new Vec2(-590, 1170), 48, ObstacleGroups.GOBLET_3));
+		if(isGlassXTaken[4])
+			mObstacleManager.removeFixedObstacle(new ObstacleCircular(new Vec2(-1250, 250), 48, ObstacleGroups.GOBLET_4));
 	}
 	
 	/**

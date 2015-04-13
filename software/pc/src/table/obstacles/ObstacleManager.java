@@ -104,7 +104,8 @@ public class ObstacleManager
       	mRectangles.add(new ObstacleRectangular(new Vec2(900, 1930),70,70));
       	mRectangles.add(new ObstacleRectangular(new Vec2(1200, 1930),70,70));
       	mRectangles.add(new ObstacleRectangular(new Vec2(1300, 778),400,444));
-
+      	
+      	
 	    // obstacles plots verts
 	    mFixedObstacles.add(new ObstacleCircular(new Vec2(200, 600), 30, ObstacleGroups.GREEN_PLOT_0));
 	    mFixedObstacles.add(new ObstacleCircular(new Vec2(400, 250), 30, ObstacleGroups.GREEN_PLOT_1));
@@ -179,6 +180,7 @@ public class ObstacleManager
      *
      * @return la liste des obstacles fixes de la table
      */
+    
     public ArrayList<ObstacleCircular> getFixedObstacles()
     {
         return mFixedObstacles;
@@ -446,5 +448,15 @@ public class ObstacleManager
     public Vec2 getDiscPosition()
     {
     	return positionDetectionDisc;
+    }
+    
+    public void removeFixedObstacle(ObstacleCircular obstacle)
+    {
+	    mFixedObstacles.remove(obstacle);
+    }
+    
+    public void removeFixedObstacle(ObstacleRectangular obstacle)
+    {
+	    mFixedObstacles.remove(obstacle);
     }
 }
