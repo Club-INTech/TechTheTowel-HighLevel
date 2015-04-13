@@ -52,7 +52,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
         sensors.updateConfig();
 
 //		container.getService(ServiceNames.THREAD_SENSOR);
-		container.getService(ServiceNames.THREAD_TIMER);
+//		container.getService(ServiceNames.THREAD_TIMER);
 
 
 
@@ -157,7 +157,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 	public void test() throws PathNotFoundException, SerialFinallyException, SerialConnexionException
 	{
 		configColor();
-		container.startInstanciedThreads();
+//		container.startInstanciedThreads();
 		waitMatchBegin();
 		//premiere action du match
 		

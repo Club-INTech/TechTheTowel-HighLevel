@@ -182,9 +182,10 @@ public class Strategie implements Service
 	 */
 	private int scriptValue(AbstractScript script, int version) 
 	{
-		//on replace le robotChrono pour le calcul du temps
+		//on replace le robotChrono pour le calcul du temps et la table (pour ne pas modifier la table actuelle)
 		robotReal.copy(robotChrono);
-		GameState<Robot> chronoState = new GameState<Robot>(config, log, table, robotChrono);
+		Table tableCopy = table.clone();
+		GameState<Robot> chronoState = new GameState<Robot>(config, log, tableCopy, robotChrono);
 		
 		
 		//calcul de la duree du script
