@@ -164,11 +164,12 @@ public class JUnit_TennisBall extends JUnit_Test
 	@Test
 	public void testStatic() throws PathNotFoundException, SerialFinallyException
 	{
-		try {
+		try
+		{
 			scriptmanager.getScript(ScriptNames.TAKE_TENNIS_BALL).execute(1, real_state, emptyHook, true );
 		} 
-		catch (UnableToMoveException | SerialConnexionException e) {
-			// TODO Auto-generated catch block
+		catch (UnableToMoveException | SerialConnexionException e) 
+		{
 			e.printStackTrace();
 		}
 

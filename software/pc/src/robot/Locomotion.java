@@ -708,8 +708,7 @@ public class Locomotion implements Service
         
         if(table.getObstacleManager().isDiscObstructed(detectionCenter, detectionDistance))
         {
-            log.warning( "Lancement de UnexpectedObstacleOnPathException dans detectEnemy", this);
-
+            log.warning("Lancement de UnexpectedObstacleOnPathException dans detectEnemy", this);
             throw new UnexpectedObstacleOnPathException();
         }
         else

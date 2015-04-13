@@ -262,7 +262,6 @@ public class ObstacleManager
      */
     public synchronized boolean isDiscObstructed(final Vec2 discCenter, int radius)
     {
-    	
     	boolean isDiscObstructed = false;
     	radiusDetectionDisc=radius;
     	positionDetectionDisc=discCenter;
@@ -276,10 +275,11 @@ public class ObstacleManager
     			log.debug("Disque obstructed avec l'obstacle "+mMobileObstacles.get(i).getPosition()+"de rayon"+mMobileObstacles.get(i).radius, this);
     			log.debug("Disque en "+discCenter+"de rayon"+radius, this);
     			isDiscObstructed=true;
+    			
     		}
     	}
     	return isDiscObstructed;
-    }   
+    }  
 
     /**
      * Change le position d'un robot adverse.

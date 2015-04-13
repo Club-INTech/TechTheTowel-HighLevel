@@ -37,13 +37,10 @@ public class TakeTennisBall extends AbstractScript
 		//On initialise l'ascenceur
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
-
 		
 		//On ferme tous les bras, si ce n'est deja fait (bras vers l'exterieur, vers les gobelets)
 		stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
-
 		stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
-
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
 
 		//On avance vers la balle
@@ -58,20 +55,17 @@ public class TakeTennisBall extends AbstractScript
 		stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
 		stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
 		stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
-		stateToConsider.robot.moveLengthwise(80,hooksToConsider);
-
-
-
+		stateToConsider.robot.moveLengthwise(80,hooksToConsider);                                                         
 
 
 		//On refereme et on remonte le tout
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 
 		System.out.println("Balle prise");
-
+		
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_HIGH, true);
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
-		
+		// On recule pour retourner dans le PDD
 		stateToConsider.robot.moveLengthwise(-450,hooksToConsider);
 	}
 	
