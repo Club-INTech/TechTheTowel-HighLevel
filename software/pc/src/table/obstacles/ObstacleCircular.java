@@ -1,5 +1,6 @@
 package table.obstacles;
 
+import enums.ObstacleGroups;
 import smartMath.*;
 
 /**
@@ -9,8 +10,8 @@ import smartMath.*;
  */
 public class ObstacleCircular extends Obstacle
 {
-	/** position du centre du disque constituant cet obstacle */
-	//protected Vec2 position;
+	/** groupe d'obstacle auquel appartient l'obstacle*/
+	protected ObstacleGroups obstacleGroup;
 	
 	/** rayon en mm de cet obstacle */
 	protected int radius=0;
@@ -21,10 +22,11 @@ public class ObstacleCircular extends Obstacle
 	 * @param position position du centre de l'obstacle a créer
 	 * @param radius rayon de l'obstacle a créer 
 	 */
-	public ObstacleCircular(Vec2 position, int radius)
+	public ObstacleCircular(Vec2 position, int radius, ObstacleGroups obstacleGroup)
 	{
 		super(position);
 		this.radius = radius;
+		this.obstacleGroup = obstacleGroup;
 	}
 	
 	/* (non-Javadoc)
@@ -32,7 +34,7 @@ public class ObstacleCircular extends Obstacle
 	 */
 	public ObstacleCircular clone()
 	{
-		return new ObstacleCircular(position.clone(), radius);
+		return new ObstacleCircular(position.clone(), radius, obstacleGroup);
 	}
 
 	/**
@@ -54,6 +56,11 @@ public class ObstacleCircular extends Obstacle
 	public int getRadius()
 	{
 		return radius;
+	}
+	
+	public ObstacleGroups getObstacleGroup()
+	{
+		return obstacleGroup;
 	}
 	
 	/**

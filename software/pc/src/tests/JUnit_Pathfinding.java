@@ -59,7 +59,7 @@ public class JUnit_Pathfinding extends JUnit_Test
 		    	{
 		    		//table.getObstacleManager().setEnnemyRobot1Position(win.getMouse().getMiddleClickPosition());
 		    		long start = System.currentTimeMillis();
-			    	win.getPanel().drawArrayList(pf.computePath(win.getMouse().getLeftClickPosition(), win.getMouse().getRightClickPosition(), EnumSet.of(ObstacleGroups.ENNEMY_ROBOTS)));
+			    	win.getPanel().drawArrayList(pf.computePath(win.getMouse().getLeftClickPosition(), win.getMouse().getRightClickPosition(), EnumSet.allOf(ObstacleGroups.class)));
 			    	long end = System.currentTimeMillis();
 			    	System.out.println("time elapsed : " + (end - start));
 			    }

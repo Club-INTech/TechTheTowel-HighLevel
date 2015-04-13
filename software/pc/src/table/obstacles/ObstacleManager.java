@@ -2,6 +2,7 @@ package table.obstacles;
 
 import java.util.ArrayList;
 
+import enums.ObstacleGroups;
 import pathDingDing.PathDingDing;
 import smartMath.*;
 import utils.Log;
@@ -105,37 +106,37 @@ public class ObstacleManager
       	mRectangles.add(new ObstacleRectangular(new Vec2(1300, 778),400,444));
 
 	    // obstacles plots verts
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(200, 600), 30)); // plot 0
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(400, 250), 30)); // plot 1
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(630, 645), 30)); // plot 2
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(1410, 150), 30)); // plot 3
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(1410, 250), 30)); // plot 4
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(650, 1800), 30)); // plot 5
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(650, 1900), 30)); // plot 6
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(1410, 1800), 30)); // plot 7
-      	
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(200, 600), 30, ObstacleGroups.GREEN_PLOT_0));
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(400, 250), 30, ObstacleGroups.GREEN_PLOT_1));
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(630, 645), 30, ObstacleGroups.GREEN_PLOT_2));
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(1410, 150), 30, ObstacleGroups.GREEN_PLOT_3));
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(1410, 250), 30, ObstacleGroups.GREEN_PLOT_4));
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(650, 1800), 30, ObstacleGroups.GREEN_PLOT_5));
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(650, 1900), 30, ObstacleGroups.GREEN_PLOT_6));
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(1410, 1800), 30, ObstacleGroups.GREEN_PLOT_7));
+	    
 	    //obstacles plots jaunes
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-200, 600), 30)); // plot 0
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-400, 250), 30)); // plot 1
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-630, 645), 30)); // plot 2
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-1410, 150), 30)); // plot 3
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-1410, 250), 30)); // plot 4
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-650, 1800), 30)); // plot 5
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-650, 1900), 30)); // plot 6
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-1410, 1800), 30)); // plot 7
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-200, 600), 30, ObstacleGroups.YELLOW_PLOT_0));
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-400, 250), 30, ObstacleGroups.YELLOW_PLOT_1));
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-630, 645), 30, ObstacleGroups.YELLOW_PLOT_2));
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-1410, 150), 30, ObstacleGroups.YELLOW_PLOT_3));
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-1410, 250), 30, ObstacleGroups.YELLOW_PLOT_4));
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-650, 1800), 30, ObstacleGroups.YELLOW_PLOT_5));
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-650, 1900), 30, ObstacleGroups.YELLOW_PLOT_6));
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-1410, 1800), 30, ObstacleGroups.YELLOW_PLOT_7));
 
 	    // gobelets
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(1250, 250), 48)); // gobelet 0
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(590, 1170), 48)); // gobelet 1
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(0, 350), 48)); // gobelet 2
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-590, 1170), 48)); // gobelet 3
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-1250, 250), 48)); // gobelet 4
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(1250, 250), 48, ObstacleGroups.GOBLET_0));
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(590, 1170), 48, ObstacleGroups.GOBLET_1));
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(0, 350), 48, ObstacleGroups.GOBLET_2));
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-590, 1170), 48, ObstacleGroups.GOBLET_3));
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-1250, 250), 48, ObstacleGroups.GOBLET_4));
 	    
       	//la zone ennemie
 	    if(config.getProperty("couleur").equals("jaune"))
-	    	mFixedObstacles.add(new ObstacleCircular(new Vec2(1100, 1000), 200));
+	    	mFixedObstacles.add(new ObstacleCircular(new Vec2(1100, 1000), 200, ObstacleGroups.ENNEMY_ZONE));
 	    else
-	    	mFixedObstacles.add(new ObstacleCircular(new Vec2(-1100, 1000), 200));
+	    	mFixedObstacles.add(new ObstacleCircular(new Vec2(-1100, 1000), 200, ObstacleGroups.ENNEMY_ZONE));
     }    
 
     /**
@@ -236,10 +237,10 @@ public class ObstacleManager
     		 *on ne detecte pas les plots ni les goblets (et si on les detectes on prefere ne pas prendre le risque et on les evites)
     		 * et si on detecte une deuxieme fois l'ennemi on rajoute un obstacle sur lui
     		 */
-    		mMobileObstacles.add(new ObstacleProximity(position, radius));
+    		mMobileObstacles.add(new ObstacleProximity(position, radius, ObstacleGroups.ENNEMY_ROBOTS));
     		log.debug("Ennemi ajouté en "+position.x+";"+position.y, this);
     	}
-    	else 
+    	else
     	{
     		log.debug("Ennemi hors de la table", this);
 		}
