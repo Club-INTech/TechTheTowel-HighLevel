@@ -374,6 +374,7 @@ void MotionControlSystem::printTrackingAsserv()
 void MotionControlSystem::orderTranslation(int32_t mmDistance) {
 	translationSetpoint += (int32_t) mmDistance / TICK_TO_MM;
 	moving = true;
+	moveAbnormal = false;
 }
 
 void MotionControlSystem::orderRotation(float angleRadian) {
@@ -381,6 +382,7 @@ void MotionControlSystem::orderRotation(float angleRadian) {
 	rotationSetpoint = MotionControlSystem::optimumAngle(currentAngle,
 			angleTick);
 	moving = true;
+	moveAbnormal = false;
 }
 
 void MotionControlSystem::orderRawPwm(Side side, int16_t pwm) {
