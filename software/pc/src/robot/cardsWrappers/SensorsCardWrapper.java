@@ -123,28 +123,28 @@ public class SensorsCardWrapper implements Service
 			boolean[] parsedAnswer = new boolean[sensor.getAwnserLineAmount()];
 			if (sensor.getAwnserLineAmount()==1)
 			{
-				return (sensorAnswer[0].toString() != "0");
+				return (!sensorAnswer[0].equals("0"));
 			}
 				for (int i = 0; i<sensor.getAwnserLineAmount(); i++)
 				{
-					parsedAnswer[i] = (sensorAnswer[i].toString() != "0");
+					parsedAnswer[i] = (!sensorAnswer[i].equals("0"));
 				}
 				return parsedAnswer;
 		}
 		else if (sensor.getDefaultValue().getClass() == Integer.class)
 		{
-			return Integer.parseInt(sensorAnswer[0].toString());
+			return Integer.parseInt(sensorAnswer[0]);
 		}
 		else if (sensor.getDefaultValue().getClass() == int[].class)
 		{
 			int[] parsedAnswer = new int[sensor.getAwnserLineAmount()];
 			if (sensor.getAwnserLineAmount()==1)
 			{
-				return Integer.parseInt(sensorAnswer[0].toString());
+				return Integer.parseInt(sensorAnswer[0]);
 			}
 			for (int i = 0; i<sensor.getAwnserLineAmount(); i++)
 			{
-				parsedAnswer[i] = Integer.parseInt(sensorAnswer[i].toString());
+				parsedAnswer[i] = Integer.parseInt(sensorAnswer[i]);
 			}
 			return parsedAnswer;
 		}
