@@ -462,15 +462,10 @@ public class ObstacleManager
     	{
     		if( mFixedObstacles.get(i).equalsGroups(obstacleGroupeToDelete) )
     		{
-				log.debug(mFixedObstacles.get(i).obstacleGroup+" enlevé car identique à "+obstacleGroupeToDelete, this);
 				if(mFixedObstacles.remove(mFixedObstacles.get(i)))
-				{
 					return;
-				}
 				else 
-				{
 					log.debug("Impossible d'enlever l'obstacle "+obstacleGroupeToDelete, this);
-				}
     		}
     	}
     }

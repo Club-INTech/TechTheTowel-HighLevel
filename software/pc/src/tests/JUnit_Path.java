@@ -4,9 +4,11 @@ import org.junit.*;
 
 import pathDingDing.PathDingDing;
 import table.Table;
+import robot.RobotReal;
 import scripts.ScriptManager;
 import smartMath.*;
 
+import java.awt.Robot;
 import java.util.EnumSet;
 
 import enums.ObstacleGroups;
@@ -22,14 +24,16 @@ public class JUnit_Path extends JUnit_Test
 	PathDingDing pf;
     ScriptManager scriptmanager;
     Window win;
-
+    RobotReal robot;
+    
     @Before
     public void setUp() throws Exception
     {
         super.setUp();
+        robot=(RobotReal)container.getService(ServiceNames.ROBOT_REAL);
         table = (Table)container.getService(ServiceNames.TABLE);
         pf = (PathDingDing)container.getService(ServiceNames.PATHDINGDING);
-        win = new Window(table, null);
+        win = new Window(table, robot);
     }
     
     
@@ -41,7 +45,7 @@ public class JUnit_Path extends JUnit_Test
     	try
     	{
     		//Test : computePath(new Vec2 [Point de depart] ,new Vec2[Point d'arrivée] )
-	    	win.getPanel().drawArrayList(pf.computePath(new Vec2 (1230, 1799),new Vec2(430,570), EnumSet.noneOf(ObstacleGroups.class)));
+	    	win.getPanel().drawArrayList(pf.computePath(new Vec2(580, 142),new Vec2(200,300), EnumSet.noneOf(ObstacleGroups.class)));
 	    }
     	catch(PathNotFoundException e)
     	{
