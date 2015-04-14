@@ -88,7 +88,6 @@ public class DropCarpet extends AbstractScript
 				stateToConsider.robot.moveLengthwise((stateToConsider.robot.getPosition().y - (1400-distanceBetweenEntryAndStairs)), hooksToConsider, false);
 			}
 		}
-		
 	}
 	
 	@Override

@@ -197,7 +197,7 @@ public class GetPlot extends AbstractScript
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);					
 					stateToConsider.robot.moveLengthwise(180, hooksToConsider);
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
-					stateToConsider.robot.moveLengthwise(160, hooksToConsider);
+					stateToConsider.robot.moveLengthwise(140, hooksToConsider);
 					stateToConsider.robot.isGlassStoredLeft = true;
 				}
 				else if(!stateToConsider.robot.isGlassStoredRight)
@@ -205,7 +205,7 @@ public class GetPlot extends AbstractScript
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);					
 					stateToConsider.robot.moveLengthwise(180, hooksToConsider);
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
-					stateToConsider.robot.moveLengthwise(160, hooksToConsider);
+					stateToConsider.robot.moveLengthwise(140, hooksToConsider);
 					stateToConsider.robot.isGlassStoredRight = true;
 				}
 				stateToConsider.table.removeGlassX(0);
@@ -404,7 +404,8 @@ public class GetPlot extends AbstractScript
 			try 
 			{
 				stateToConsider.robot.moveLengthwise(100);
-			} catch (UnableToMoveException e1) 
+			}
+			catch (UnableToMoveException e1) 
 			{
 				log.debug("mouvement impossible, script GetPlot", this);
 			}

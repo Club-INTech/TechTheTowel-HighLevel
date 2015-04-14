@@ -13,7 +13,9 @@ import enums.ServiceNames;
 import exceptions.Locomotion.UnableToMoveException;
 import robot.DirectionStrategy;
 import robot.Locomotion;
+import robot.cardsWrappers.LocomotionCardWrapper;
 import smartMath.Vec2;
+import utils.Sleep;
 
 /**
  * Tests unitaires pour Deplacements.
@@ -25,6 +27,7 @@ public class JUnit_Locomotion extends JUnit_Test
 
 	/** The deplacements. */
 	private Locomotion mLocomotion;
+	private LocomotionCardWrapper cardWrapper;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception
@@ -47,22 +50,48 @@ public class JUnit_Locomotion extends JUnit_Test
 		super.setUp();
 		log.debug("JUnit_DeplacementsTest.setUp()", this);
 		mLocomotion = (Locomotion)container.getService(ServiceNames.LOCOMOTION);
+		cardWrapper=(LocomotionCardWrapper)container.getService(ServiceNames.LOCOMOTION_CARD_WRAPPER);
 		config.set("couleur", "vert");
 		mLocomotion.updateConfig();
 		mLocomotion.setPosition(new Vec2 (1381,1000));
 		mLocomotion.setOrientation(Math.PI);
-		mLocomotion.setTranslationnalSpeed(170);
-		mLocomotion.setRotationnalSpeed(160);
 	}
 
-	public void testMoveLengthwise() throws Exception
+	@Test
+	public void testMoveLengthwise() 
 	{
-		mLocomotion.moveLengthwise(300,  new ArrayList<Hook>(), false);
-		Vec2 position = mLocomotion.getPosition();
-		log.debug("en position : x="+position.x+"; y="+position.y, this);
-		mLocomotion.moveLengthwise(-300,  new ArrayList<Hook>(), false);
-		position = mLocomotion.getPosition();
-		log.debug("en position : x="+position.x+"; y="+position.y, this);
+		try 
+		{
+			int distance = 210;
+			while(true)
+			{
+				cardWrapper.moveLengthwise(distance);
+				while(cardWrapper.isRobotMovingAndAbnormal()[0])
+				{
+					if(cardWrapper.isRobotMovingAndAbnormal()[1])
+						throw new Exception();
+				}
+				if(cardWrapper.isRobotMovingAndAbnormal()[1])
+					throw new Exception();
+				
+				cardWrapper.moveLengthwise(-distance);
+				while(cardWrapper.isRobotMovingAndAbnormal()[0])
+				{
+					if(cardWrapper.isRobotMovingAndAbnormal()[1])
+						throw new Exception();
+				}
+				if(cardWrapper.isRobotMovingAndAbnormal()[1])
+					throw new Exception();
+
+
+			}
+		}
+		catch (Exception e)
+		{
+			log.debug(e, this);
+			return;
+		}
+		
 	}	
 
 	/**
@@ -70,7 +99,7 @@ public class JUnit_Locomotion extends JUnit_Test
 	 * ATTENTION NE FONCTIONNE QUE DU COTE VERT !
 	 * @throws Exception the exception
 	 */
-	@Test
+	//@Test
 	public void test()
 	{
 		ArrayList<Vec2> path = new ArrayList<Vec2>();
