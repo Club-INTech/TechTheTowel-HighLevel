@@ -85,4 +85,9 @@ public class ObstacleCircular extends Obstacle
 	{
 		System.out.println("Obstacle enlevé:"+obstacleGroup);
 	}
+	
+	public void printObstacleMemory()
+	{
+		System.out.println("Obstacle en memoire:"+obstacleGroup);
+	}
 }

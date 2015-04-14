@@ -464,6 +464,6 @@ public class ObstacleManager
     public void printObstacleFixedList()
     {
     	for(int i=0; i<mFixedObstacles.size(); i++)
-    		mFixedObstacles.get(i).printObstacleDeleted();
+    		mFixedObstacles.get(i).printObstacleMemory();
     }
 }

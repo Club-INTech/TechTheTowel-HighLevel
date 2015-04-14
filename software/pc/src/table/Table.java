@@ -205,6 +205,9 @@ public class Table implements Service
 			mObstacleManager.removeFixedObstacle(new ObstacleCircular(new Vec2(650, 1900), 30, ObstacleGroups.GREEN_PLOT_6));
 		if(isPlotXEaten[7])
 			mObstacleManager.removeFixedObstacle(new ObstacleCircular(new Vec2(1410, 1800), 30, ObstacleGroups.GREEN_PLOT_7));	
+	
+		mObstacleManager.printObstacleFixedList();
+
 	}
 	
 	/**
@@ -268,6 +271,8 @@ public class Table implements Service
 			mObstacleManager.removeFixedObstacle(new ObstacleCircular(new Vec2(-590, 1170), 48, ObstacleGroups.GOBLET_3));
 		if(isGlassXTaken[4])
 			mObstacleManager.removeFixedObstacle(new ObstacleCircular(new Vec2(-1250, 250), 48, ObstacleGroups.GOBLET_4));
+		
+		mObstacleManager.printObstacleFixedList();
 	}
 	
 	/**
