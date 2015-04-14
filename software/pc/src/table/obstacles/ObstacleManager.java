@@ -452,11 +452,18 @@ public class ObstacleManager
     
     public void removeFixedObstacle(ObstacleCircular obstacle)
     {
+    	obstacle.printObstacleDeleted();
 	    mFixedObstacles.remove(obstacle);
     }
     
     public void removeFixedObstacle(ObstacleRectangular obstacle)
     {
 	    mFixedObstacles.remove(obstacle);
+    }
+    
+    public void printObstacleFixedList()
+    {
+    	for(int i=0; i<mFixedObstacles.size(); i++)
+    		mFixedObstacles.get(i).printObstacleDeleted();
     }
 }

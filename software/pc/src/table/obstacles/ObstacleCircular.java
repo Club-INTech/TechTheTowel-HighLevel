@@ -80,4 +80,9 @@ public class ObstacleCircular extends Obstacle
 	{
 		return "Obstacle circulaire de centre " + position + " et de rayon: "+radius;
 	}
+	
+	public void printObstacleDeleted()
+	{
+		System.out.println("Obstacle enlevé:"+obstacleGroup);
+	}
 }
