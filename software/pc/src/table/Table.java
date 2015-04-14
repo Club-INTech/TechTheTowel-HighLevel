@@ -189,21 +189,21 @@ public class Table implements Service
 		else
 			log.debug("out of bound, plot counter",this);
 
-		if(isPlotXEaten[0])
+		if(x==0)
 			mObstacleManager.removeFixedObstacle(ObstacleGroups.GREEN_PLOT_0);
-		if(isPlotXEaten[1])
+		else if(x==1)
 			mObstacleManager.removeFixedObstacle(ObstacleGroups.GREEN_PLOT_1);
-		if(isPlotXEaten[2])
+		else if(x==2)
 			mObstacleManager.removeFixedObstacle(ObstacleGroups.GREEN_PLOT_2);
-		if(isPlotXEaten[3])
+		else if(x==3)
 			mObstacleManager.removeFixedObstacle(ObstacleGroups.GREEN_PLOT_3);
-		if(isPlotXEaten[4])
+		else if(x==4)
 			mObstacleManager.removeFixedObstacle(ObstacleGroups.GREEN_PLOT_4);
-		if(isPlotXEaten[5])
+		else if(x==5)
 			mObstacleManager.removeFixedObstacle(ObstacleGroups.GREEN_PLOT_5);
-		if(isPlotXEaten[6])
+		else if(x==6)
 			mObstacleManager.removeFixedObstacle(ObstacleGroups.GREEN_PLOT_6);
-		if(isPlotXEaten[7])
+		else if(x==7)
 			mObstacleManager.removeFixedObstacle(ObstacleGroups.GREEN_PLOT_7);	
 	
 		mObstacleManager.printObstacleFixedList();
@@ -261,15 +261,15 @@ public class Table implements Service
 		else
 			log.debug("out of bound isGlassTaken",this);
 		
-		if(isGlassXTaken[0])
+		if(x==0)
 			mObstacleManager.removeFixedObstacle(ObstacleGroups.GOBLET_0);
-		else if(isGlassXTaken[1])
+		else if(x==1)
 			mObstacleManager.removeFixedObstacle(ObstacleGroups.GOBLET_1);
-		else if(isGlassXTaken[2])
+		else if(x==2)
 			mObstacleManager.removeFixedObstacle(ObstacleGroups.GOBLET_2);
-		else if(isGlassXTaken[3])
+		else if(x==3)
 			mObstacleManager.removeFixedObstacle(ObstacleGroups.GOBLET_3);
-		else if(isGlassXTaken[4])
+		else if(x==4)
 			mObstacleManager.removeFixedObstacle(ObstacleGroups.GOBLET_4);
 		
 		mObstacleManager.printObstacleFixedList();

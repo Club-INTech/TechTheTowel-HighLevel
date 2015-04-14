@@ -2,6 +2,8 @@ package table.obstacles;
 
 import java.util.ArrayList;
 
+import com.sun.org.apache.xpath.internal.axes.OneStepIterator;
+
 import enums.ObstacleGroups;
 import pathDingDing.PathDingDing;
 import smartMath.*;
@@ -450,14 +452,21 @@ public class ObstacleManager
     	return positionDetectionDisc;
     }
     
+    /**
+     * Enleve le premier element identique dans la liste des fixedObstacle
+     * @param obstacleGroupeToDelete
+     */
     public void removeFixedObstacle(ObstacleGroups obstacleGroupeToDelete)
     {
     	for(int i=0; i<mFixedObstacles.size(); i++)
     	{
-    		if(mFixedObstacles.get(i).obstacleGroup==obstacleGroupeToDelete);
+    		if( mFixedObstacles.get(i).equalsGroups(obstacleGroupeToDelete) )
     		{
+				log.debug(mFixedObstacles.get(i).obstacleGroup+" enlevé car identique à "+obstacleGroupeToDelete, this);
 				if(mFixedObstacles.remove(mFixedObstacles.get(i)))
-					log.debug(obstacleGroupeToDelete+" enlevé", this);
+				{
+					return;
+				}
 				else 
 				{
 					log.debug("Impossible d'enlever l'obstacle "+obstacleGroupeToDelete, this);

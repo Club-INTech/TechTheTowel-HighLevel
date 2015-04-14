@@ -131,6 +131,8 @@ public class GetPlot extends AbstractScript
 			//TODO: trouver le bon bras pour manger
 			//on choisi le bras le plus adapte (assez dificile)
 			boolean isChoosenArmLeft = true;
+			if (versionToExecute == 1)
+					isChoosenArmLeft = false;
 			
 			//On change le bras choisi suivant la symetrie : à voir si l'IA s'en occupera, mais pour les tests ca reste là
 			if(stateToConsider.robot.getSymmetry())
@@ -146,13 +148,15 @@ public class GetPlot extends AbstractScript
 			//on mange le plot
 			try 
 			{
-				if(versionToExecute==0 || versionToExecute==1 || versionToExecute==2 )
+				if (versionToExecute == 1)
 				{
-					if (versionToExecute == 1)
-					{
-						stateToConsider.robot.turn(-3*Math.PI/4);
-						stateToConsider.robot.moveLengthwise(75);
-					}
+					stateToConsider.robot.turn(-3*Math.PI/4);
+					stateToConsider.robot.moveLengthwise(75);
+					eatPlot(true, isChoosenArmLeft, stateToConsider, true);
+					stateToConsider.table.eatPlotX(versionToExecute);
+				}
+				if(versionToExecute==0 || versionToExecute==2 )
+				{
 					eatPlot(false, isChoosenArmLeft, stateToConsider, true);
 					stateToConsider.table.eatPlotX(versionToExecute);
 				}
@@ -193,7 +197,7 @@ public class GetPlot extends AbstractScript
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);					
 					stateToConsider.robot.moveLengthwise(180, hooksToConsider);
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
-					stateToConsider.robot.moveLengthwise(140, hooksToConsider);
+					stateToConsider.robot.moveLengthwise(160, hooksToConsider);
 					stateToConsider.robot.isGlassStoredLeft = true;
 				}
 				else if(!stateToConsider.robot.isGlassStoredRight)
@@ -201,14 +205,14 @@ public class GetPlot extends AbstractScript
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);					
 					stateToConsider.robot.moveLengthwise(180, hooksToConsider);
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
-					stateToConsider.robot.moveLengthwise(140, hooksToConsider);
+					stateToConsider.robot.moveLengthwise(160, hooksToConsider);
 					stateToConsider.robot.isGlassStoredRight = true;
 				}
 				stateToConsider.table.removeGlassX(0);
 			}
 			else
 			{
-				stateToConsider.robot.moveLengthwise(320, hooksToConsider);
+				stateToConsider.robot.moveLengthwise(340, hooksToConsider);
 			}
 			
 			// on ne mange que si on est assez vide

@@ -36,6 +36,30 @@ public class ObstacleCircular extends Obstacle
 	{
 		return new ObstacleCircular(position.clone(), radius, obstacleGroup);
 	}
+	
+	/**
+	 * Verifie si a == b pour des obstacles circulaires
+	 * @param otherObstacle b
+	 * @return true si a == b
+	 */
+	public boolean equals(ObstacleCircular otherObstacle) 
+	{
+		return (
+				this.radius == otherObstacle.radius
+			&&  this.position.equals(otherObstacle.position)	
+			&&	this.obstacleGroup.compareTo(otherObstacle.obstacleGroup)==0	
+				);
+	}
+	
+	/**
+	 * Verifie si le nom de a == b pour des obstacles circulaires
+	 * @param otherObstacle b
+	 * @return true si nom de a == nom de b
+	 */
+	public boolean equalsGroups(ObstacleGroups obstacleGroup) 
+	{
+		return this.obstacleGroup.compareTo(obstacleGroup)==0;
+	}
 
 	/**
 	 * Copie this dans other, sans modifier this
@@ -88,6 +112,6 @@ public class ObstacleCircular extends Obstacle
 	
 	public void printObstacleMemory()
 	{
-		System.out.println("Obstacle en memoire:"+obstacleGroup);
+		System.out.println("Obstacle en memoire : "+obstacleGroup);
 	}
 }
