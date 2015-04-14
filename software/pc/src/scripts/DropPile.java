@@ -2,8 +2,11 @@ package scripts;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumSet;
 
 import enums.ActuatorOrder;
+import enums.ObstacleGroups;
+import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
@@ -39,6 +42,19 @@ public class DropPile extends AbstractScript
 		versions=new Integer[]{0,1};
 	}
 
+	@Override
+	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, boolean shouldRetryIfBlocked, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException
+	{
+		EnumSet<ObstacleGroups> obstacleNotConsidered = EnumSet.noneOf(ObstacleGroups.class);
+		
+		if (versionToExecute == 1)
+			obstacleNotConsidered.add(ObstacleGroups.GOBLET_2);
+		// va jusqu'au point d'entrée de la version demandée
+		actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.robotRay), hooksToConsider, actualState.table,obstacleNotConsidered);
+		
+		// exécute la version demandée
+		execute(versionToExecute, actualState, hooksToConsider, shouldRetryIfBlocked);
+	}
 	@Override
 	public void execute(int version, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider,boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException
 	{

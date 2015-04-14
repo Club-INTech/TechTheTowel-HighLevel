@@ -416,7 +416,6 @@ public class GetPlot extends AbstractScript
 		}
 		//si on a attrape qqc on termine sinon on essaie avec l'autre bras (si isSecondTry == false)
 		//si deuxieme essai ecrire dans le log qu'on a essaye de manger un plot et on jette une exeption impossible de manger
-		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 		
 		boolean sensorAnswer;
 		try 
@@ -450,6 +449,8 @@ public class GetPlot extends AbstractScript
 				return;
 			}
 		}
+		
+		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 		stateToConsider.robot.storedPlotCount++;
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
 	}
