@@ -450,10 +450,20 @@ public class ObstacleManager
     	return positionDetectionDisc;
     }
     
-    public void removeFixedObstacle(ObstacleCircular obstacle)
+    public void removeFixedObstacle(ObstacleGroups obstacleGroupeToDelete)
     {
-    	obstacle.printObstacleDeleted();
-	    mFixedObstacles.remove(obstacle);
+    	for(int i=0; i<mFixedObstacles.size(); i++)
+    	{
+    		if(mFixedObstacles.get(i).obstacleGroup==obstacleGroupeToDelete);
+    		{
+				if(mFixedObstacles.remove(mFixedObstacles.get(i)))
+					log.debug(obstacleGroupeToDelete+" enlevé", this);
+				else 
+				{
+					log.debug("Impossible d'enlever l'obstacle "+obstacleGroupeToDelete, this);
+				}
+    		}
+    	}
     }
     
     public void removeFixedObstacle(ObstacleRectangular obstacle)
