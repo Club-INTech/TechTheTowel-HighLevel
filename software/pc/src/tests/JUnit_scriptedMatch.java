@@ -49,20 +49,16 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
         pathDingDing = (PathDingDing)container.getService(ServiceNames.PATHDINGDING);
         sensors = (SensorsCardWrapper)container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
+        
         sensors.updateConfig();
 
 //		container.getService(ServiceNames.THREAD_SENSOR);
-//		container.getService(ServiceNames.THREAD_TIMER);
-
-
-
+		container.getService(ServiceNames.THREAD_TIMER);
 
 		emptyHook = new ArrayList<Hook> ();  
 
-		
 		real_state.robot.setPosition(new Vec2 (1132,1000));
 		real_state.robot.setOrientation(Math.PI);
-		
 		
 		real_state.robot.updateConfig();
 		try 
@@ -156,9 +152,9 @@ public class JUnit_scriptedMatch extends JUnit_Test
 	@Test
 	public void test() throws PathNotFoundException, SerialFinallyException, SerialConnexionException
 	{
-		configColor();
+		//configColor();
 //		container.startInstanciedThreads();
-		waitMatchBegin();
+		//waitMatchBegin();
 		//premiere action du match
 		
 		System.out.println("Le robot commence le match");

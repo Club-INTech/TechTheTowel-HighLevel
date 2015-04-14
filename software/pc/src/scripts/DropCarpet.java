@@ -81,7 +81,7 @@ public class DropCarpet extends AbstractScript
 		}
 		catch (UnableToMoveException e) 
 		{
-			// tant qu'on est pas sorti, et que le pathDingDing peut reprendre lee  relais
+			// tant qu'on est pas sorti, et que le pathDingDing peut reprendre le  relais
 			while(stateToConsider.robot.getPosition().y > (1400-distanceBetweenEntryAndStairs+20))
 			{
 				System.out.println("catch dans le script : DropCarpet");
@@ -94,7 +94,7 @@ public class DropCarpet extends AbstractScript
 	@Override
 	public Circle entryPosition(int id, int ray) 
 	{
-		return new Circle(267,1400-distanceBetweenEntryAndStairs);//point de depose - distance de deplacement jusqua ce point
+		return new Circle(267,1400-distanceBetweenEntryAndStairs-70);//point de depose - distance de deplacement jusqua ce point - rayon robot (distance arriere - roues))
 	}
 
 	@Override

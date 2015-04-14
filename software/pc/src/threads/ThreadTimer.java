@@ -40,7 +40,7 @@ public class ThreadTimer extends AbstractThread
 	public static long matchStartTimestamp;
 	
 	/** Durée en miliseconde d'un match recupéré de la config */
-	public static long matchDuration = Integer.parseInt(config.getProperty("temps_match").replaceAll(" ","") ) *1000;
+	public static long matchDuration =90000000;
 	
 	/** Temps en ms qui s'écoule entre deux mise a jour de la liste des obstacle périmables. Lors de chaque mise a jour, les obstacles périmés sont détruits. */
 	public static int obstacleRefreshInterval = 0;
@@ -192,7 +192,7 @@ public class ThreadTimer extends AbstractThread
 		// facteur 1000 car temps_match est en secondes et duree_match en ms
 		try
 		{
-			matchDuration = 1000*Long.parseLong(config.getProperty("temps_match"));
+			matchDuration =  Integer.parseInt(config.getProperty("temps_match").replaceAll(" ","") ) *1000;
 		}
 		catch(Exception e)
 		{

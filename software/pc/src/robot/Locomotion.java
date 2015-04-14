@@ -105,7 +105,7 @@ public class Locomotion implements Service
      * 	La distance maximale pour une correction rotationelle 
      * 	La correction ne sera effectuée que si le robot est loin de son point d'arrivée.
      */
-    private int maxLengthCorrectionThreeshold = 300;
+    private int maxLengthCorrectionThreeshold = 100;
     
     /**
      * 	L'orientation maximale pour une correction rotationelle 
