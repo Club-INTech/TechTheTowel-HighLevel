@@ -252,6 +252,11 @@ int main(void)
 				motionControlSystem->setOriginalAngle(0);
 				motionControlSystem->stop();
 			}
+			else if(!strcmp("testPID",order))
+			{
+				motionControlSystem->testPID();
+			}
+
 
 
 	/**

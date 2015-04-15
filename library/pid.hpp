@@ -128,6 +128,10 @@ public:
 		return derivative;
 	}
 
+	int32_t getIntegralErrol() const {
+		return integral;
+	}
+
 private:
 
 	float kp;

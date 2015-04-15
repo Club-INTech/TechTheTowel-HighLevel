@@ -175,6 +175,7 @@ public:
 
 	void testTranslation(int);
 	void testRotation(float);
+	void testPID(void);
 };
 
 #endif /* MOTION_CONTROL_H_ */

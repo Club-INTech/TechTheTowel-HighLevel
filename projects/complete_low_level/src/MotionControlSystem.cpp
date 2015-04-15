@@ -399,6 +399,8 @@ void MotionControlSystem::stop() {
 	leftMotor.run(0);
 	rightMotor.run(0);
 	moving = false;
+	translationPID.resetErrors();
+	rotationPID.resetErrors();
 }
 
 /**
@@ -562,4 +564,21 @@ void MotionControlSystem::testRotation(float angle)
 	Delay(angle*1000/PI+1000);
 	serial.printfln("x=%f\r\ny=%f", getX(), getY());
 	serial.printfln("o=%f", getAngleRadian());
+}
+
+void MotionControlSystem::testPID()
+{
+	orderTranslation(300);
+	int i = 0;
+	while(true)
+	{
+		serial.printfln("p=%d  i=%d  d=%d", translationPID.getError(), translationPID.getIntegralErrol(), translationPID.getDerivativeError());
+		Delay(100);
+		if(i>240)
+		{
+			serial.printfln("Tu es dans une boucle infinie :p");
+			i=0;
+			Delay(5000);
+		}
+	}
 }
