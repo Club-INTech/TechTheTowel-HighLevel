@@ -368,9 +368,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		{
 			e.printStackTrace();
 		}
-		
-		// TODO  Balles de Pop Corn ?
-		
+				
 		try 
 		{
 			real_state.robot.turn(0);	

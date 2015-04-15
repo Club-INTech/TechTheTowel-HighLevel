@@ -116,6 +116,10 @@ public class Locomotion implements Service
 	
 	/**Booleen explicitant si le robot est pret à tourner, utile pour le cercle de detection */
 	public boolean isRobotTurning=false;	
+	
+	/** true si on doit retenter le deplacement après un catch de BlockedException */
+    private boolean retryIfBlockedExecption=true;
+
 
     
     
@@ -335,13 +339,21 @@ public class Locomotion implements Service
             catch (BlockedException e)
             {
                 log.critical("Haut : Catch de "+e+" dans moveToPointException", this);
-
-                unexpectedWallImpactCounter--;
-                immobilise();
+                if(retryIfBlockedExecption)
+                {
+                	retryIfBlockedExecption=false;
+                	moveToPointException(aim, hooks, isMovementForward, headingToWall, turnOnly, mustDetect); // on rentente s'iil a y eu un probleme
+                }
+                else
+                {
+	                unexpectedWallImpactCounter--;
+	                immobilise();
+                }
                 /*
                  * En cas de blocage, on recule (si on allait tout droit) ou on avance.
                  */
                 // Si on s'attendait à un mur, c'est juste normal de se le prendre.
+                /*
                 if(!headingToWall)
                 {
                     try
@@ -380,7 +392,7 @@ public class Locomotion implements Service
                         log.critical("Lancement de UnableToMoveException dans MoveToPointException, visant "+finalAim.x+" :: "+finalAim.y+" cause physique", this);
                         throw new UnableToMoveException(finalAim, UnableToMoveReason.PHYSICALLY_BLOCKED);
                     }
-                }
+                }*/
             }
             
             catch (UnexpectedObstacleOnPathException unexpectedObstacle)
@@ -464,7 +476,10 @@ public class Locomotion implements Service
             Sleep.sleep(feedbackLoopDelay);
 
         } 
-        while(!isMotionEnded());
+        while(!isMotionEnded())
+        	;
+        
+        retryIfBlockedExecption=true; // on remet la  variable à true  si on a reussi un deplacement.
     }
 
 

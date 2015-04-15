@@ -463,7 +463,6 @@ public class Main
 			}
 		}
 		
-		// TODO  Balles de Pop Corn ?
 		if(!isGrabGlass7Succeded)
 		{
 			try 
