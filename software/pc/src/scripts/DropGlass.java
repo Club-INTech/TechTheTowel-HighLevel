@@ -47,7 +47,7 @@ public class DropGlass extends AbstractScript
 	}
 
 	@Override
-	public void execute(int version, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider,boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException
+	public void execute(int version, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider,boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException, SerialFinallyException
 	{
 		boolean isThereGlassLeft = (Boolean) stateToConsider.robot.getSensorValue(SensorNames.LEFT_ZONE_SENSOR);
 		boolean isThereGlassRight = (Boolean) stateToConsider.robot.getSensorValue(SensorNames.RIGHT_ZONE_SENSOR);
@@ -197,23 +197,16 @@ public class DropGlass extends AbstractScript
 	}
 
 	@Override
-	protected void finalise(GameState<?> stateToConsider)
+	protected void finalise(GameState<?> stateToConsider) throws SerialFinallyException
 	{
 		try 
 		{
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
-		}
-		catch (SerialConnexionException e1) 
-		{
-			e1.printStackTrace();
-		}
-		try 
-		{
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
 		} 
 		catch (SerialConnexionException e) 
 		{
-			e.printStackTrace();
+			throw new SerialFinallyException ();
 		}
 	}
 

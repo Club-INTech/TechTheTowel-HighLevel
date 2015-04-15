@@ -65,7 +65,7 @@ public class CloseClap extends AbstractScript
 	}
 	
 	@Override
-	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
+	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException, SerialFinallyException
 	{		
 		if (versionToExecute == 123)
 			closeAllOurClaps(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
@@ -83,6 +83,8 @@ public class CloseClap extends AbstractScript
 			closeFirstAndSecondClapBackward(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
 		else
 			log.debug("Souci de version", this);	//TODO: lancer une exception de version inconnue (la créer si besoin)
+		
+		finalise(stateToConsider);
 	}
 	
 	public void closeFirstClap (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
