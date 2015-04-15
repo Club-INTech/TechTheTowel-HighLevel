@@ -443,8 +443,7 @@ public class GetPlot extends AbstractScript
 		{
 			if (isSecondTry)
 			{
-				log.debug("impossible d'attraper le plot", this);	
-				throw new UnableToEatPlot();
+				log.debug("impossible d'attraper le plot, tentative en fermant les machoires", this);	
 			}
 			else
 			{
@@ -454,9 +453,38 @@ public class GetPlot extends AbstractScript
 		}
 		
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+		
+		//si la reponse etait fausse et que c'est le deuxieme essai jusque là on reverifie une fois les machoires fermées
+		if (!sensorAnswer && isSecondTry)
+		{
+			try 
+			{
+				sensorAnswer = ((Boolean) stateToConsider.robot.getSensorValue(SensorNames.JAW_SENSOR));
+			} 
+			catch (SerialConnexionException e1) 
+			{
+				stateToConsider.robot.sleep(500);
+				try 
+				{
+					sensorAnswer = ((Boolean) stateToConsider.robot.getSensorValue(SensorNames.JAW_SENSOR));
+				}
+				catch (SerialConnexionException e2) 
+				{
+					//si impossible de communiquer avec le capteur on suppose qu'on a attrape le plot
+					sensorAnswer = ((Boolean) SensorNames.JAW_SENSOR.getDefaultValue());
+				}
+			}
+			if (!sensorAnswer)
+			{
+				log.debug("imoossible de manger le plot", this);
+				throw new UnableToEatPlot();
+			}
+		}
+			
+			
 		stateToConsider.robot.storedPlotCount++;
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
-	}
+		}
 
 
 	
