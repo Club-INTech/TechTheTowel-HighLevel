@@ -118,7 +118,7 @@ public class Strategie implements Service
 		{
 			scriptmanager.getScript(ScriptNames.EXIT_START_ZONE).execute(0, gameState, hookRobot, true);
 		} 
-		catch (UnableToMoveException | SerialConnexionException e1) 
+		catch (UnableToMoveException | SerialConnexionException | SerialFinallyException e1) 
 		{
 			log.critical("impossible de sortir de la zone de depart", this);
 			Sleep.sleep(500);

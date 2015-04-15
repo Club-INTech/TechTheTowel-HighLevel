@@ -68,7 +68,10 @@ public class DropGlass extends AbstractScript
 				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);
 			}
 			else
+			{
+				finalise(stateToConsider);
 				return;
+			}
 			
 			//On recule en laissant notre gobelet
 			stateToConsider.robot.moveLengthwise(-50, hooksToConsider, true);//TODO doucement pour eviter de faire tomber le gobelet (en envoyant 350, le gobelet vacille donc bof niveau fiabilité..											 sinon vive les commentaires de 2m de long ! Et oui c'est voulu, surtout ssi tu t'es fais chmir à tout lire <3
@@ -100,7 +103,10 @@ public class DropGlass extends AbstractScript
 				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);
 			}
 			else
+			{
+				finalise(stateToConsider);
 				return;
+			}
 			
 			//On recule en laissant notre gobelet
 			stateToConsider.robot.moveLengthwise(-50, hooksToConsider, true);//TODO doucement pour eviter de faire tomber le gobelet
@@ -131,7 +137,10 @@ public class DropGlass extends AbstractScript
 				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);
 			}
 			else
+			{
+				finalise(stateToConsider);
 				return;
+			}
 			
 			//On recule en laissant notre gobelet
 			stateToConsider.robot.moveLengthwise(-50, hooksToConsider, true);//TODO doucement pour eviter de faire tomber le gobelet
@@ -144,6 +153,7 @@ public class DropGlass extends AbstractScript
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
 		}
+		
 	}
 	
 	@Override
@@ -187,7 +197,7 @@ public class DropGlass extends AbstractScript
 	}
 
 	@Override
-	protected void finalise(GameState<?> stateToConsider) throws SerialFinallyException, UnableToMoveException 
+	protected void finalise(GameState<?> stateToConsider)
 	{
 		try 
 		{

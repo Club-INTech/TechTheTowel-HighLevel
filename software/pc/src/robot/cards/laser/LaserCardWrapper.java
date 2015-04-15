@@ -126,7 +126,6 @@ public class LaserCardWrapper implements Service {
 	 */
 	private boolean ping_beacon(int id) throws SerialConnexionException
 	{
-		// TODO (de PF) vérifier la méthode, mais on faisait comme ça l'année dernière
 		String[] ping = serie.communiquer("ping_all", beacons.length);	    
 		return !ping[id].equals("aucune réponse");
 	}
