@@ -117,8 +117,9 @@ public class Locomotion implements Service
 	/**Booleen explicitant si le robot est pret à tourner, utile pour le cercle de detection */
 	public boolean isRobotTurning=false;	
 	
-	/** true si on doit retenter le deplacement après un catch de BlockedException */
-    private boolean retryIfBlockedExecption=true;
+	/** nombre d'essais maximum après une BlockedException*/
+    private int maxRetriesIfBlocked=5;
+    private int actualRetriesIfBlocked=0;
 
 
     
@@ -208,6 +209,8 @@ public class Locomotion implements Service
      */
     public void moveLengthwise(int distance, ArrayList<Hook> hooks, boolean wall, boolean mustDetect) throws UnableToMoveException
     {    
+    	actualRetriesIfBlocked=0;
+    	
 		updateCurrentPositionAndOrientation();
 
         log.debug("Avancer de "+Integer.toString(distance), this);
@@ -224,6 +227,8 @@ public class Locomotion implements Service
         // il va donc en avant si la distance est positive, en arrière si elle est négative
         // si on est à 90°, on privilégie la marche avant
 		moveToPointException(aim, hooks, distance >= 0, wall, false, mustDetect);
+		
+		actualRetriesIfBlocked=0;// on reinitialise
     }
         
     /**
@@ -283,6 +288,8 @@ public class Locomotion implements Service
      */
     private void moveToPointForwardBackward(Vec2 aim, ArrayList<Hook> hooks, boolean mur, DirectionStrategy strategy, boolean turnOnly, boolean mustDetect) throws UnableToMoveException
     {
+		actualRetriesIfBlocked=0;// on reinitialise
+
 		updateCurrentPositionAndOrientation();
 
     	// on avance en fonction de ce que nous dit la strategie
@@ -309,6 +316,9 @@ public class Locomotion implements Service
     	}
     	
     	log.debug("Arrivés en "+aim, this);
+    	
+		actualRetriesIfBlocked=0;// on reinitialise
+
     }
     
     /**
@@ -339,60 +349,66 @@ public class Locomotion implements Service
             catch (BlockedException e)
             {
                 log.critical("Haut : Catch de "+e+" dans moveToPointException", this);
-                if(retryIfBlockedExecption)
+                
+                if(maxRetriesIfBlocked!=0)
                 {
-                	retryIfBlockedExecption=false;
-                	moveToPointException(aim, hooks, isMovementForward, headingToWall, turnOnly, mustDetect); // on rentente s'iil a y eu un probleme
+	                if(maxRetriesIfBlocked > actualRetriesIfBlocked)
+	                {
+	                	actualRetriesIfBlocked++;
+	                    log.critical("Tentative "+actualRetriesIfBlocked+" de deplacement ", this);
+	                	moveToPointException(aim, hooks, isMovementForward, headingToWall, turnOnly, mustDetect); // on rentente s'iil a y eu un probleme
+	                }
                 }
                 else
                 {
 	                unexpectedWallImpactCounter--;
 	                immobilise();
-                }
+                
                 /*
                  * En cas de blocage, on recule (si on allait tout droit) ou on avance.
                  */
                 // Si on s'attendait à un mur, c'est juste normal de se le prendre.
-                /*
-                if(!headingToWall)
-                {
-                    try
-                    {
-                        log.warning("On n'arrive plus à avancer. On se dégage", this);
-                        if(turnOnly)
-                        {
-                        	isRobotTurning=true;
-                        	
-                        	// TODO: les appels à déplacements sont non bloquants, il faut rajouter des sleeps
-                        	// on alterne rotation à gauche et à droite
-                        	if((unexpectedWallImpactCounter & 1) == 0)
-                        		deplacements.turn(orientation+angleToDisengage);
-                        	else
-                        		deplacements.turn(orientation-angleToDisengage);                        	
-                        }
-                        else if(isMovementForward)
-                            deplacements.moveLengthwise(distanceToDisengage);
-                        else
-                            deplacements.moveLengthwise(-distanceToDisengage);
-                        while(!isMotionEnded());
-                    		doItAgain = true; // si on est arrivé ici c'est qu'aucune exception n'a été levée
-                    } 
-                    catch (SerialConnexionException e1)
-                    {
-                        log.critical("On ne fait rien après ceci: Catch de "+e1+" dans moveToPointException", this);
-                    } 
-                    catch (BlockedException e1)
-                    {
-                        log.critical("Catch de "+e1+" dans moveToPointException", this);
-                    	immobilise();                       
-                        log.critical("On n'arrive pas à se dégager", this);
-					}
-                    if(!doItAgain)
-                    {
-                        log.critical("Lancement de UnableToMoveException dans MoveToPointException, visant "+finalAim.x+" :: "+finalAim.y+" cause physique", this);
-                        throw new UnableToMoveException(finalAim, UnableToMoveReason.PHYSICALLY_BLOCKED);
-                    }
-                }*/
+               
+	                if(!headingToWall)
+	                {
+	                    try
+	                    {
+	                        log.warning("On n'arrive plus à avancer. On se dégage", this);
+	                        if(turnOnly)
+	                        {
+	                        	isRobotTurning=true;
+	                        	
+	                        	// TODO: les appels à déplacements sont non bloquants, il faut rajouter des sleeps
+	                        	// on alterne rotation à gauche et à droite
+	                        	if((unexpectedWallImpactCounter & 1) == 0)
+	                        		deplacements.turn(orientation+angleToDisengage);
+	                        	else
+	                        		deplacements.turn(orientation-angleToDisengage);                        	
+	                        }
+	                        else if(isMovementForward)
+	                            deplacements.moveLengthwise(distanceToDisengage);
+	                        else
+	                            deplacements.moveLengthwise(-distanceToDisengage);
+	                        while(!isMotionEnded());
+	                    		doItAgain = true; // si on est arrivé ici c'est qu'aucune exception n'a été levée
+	                    } 
+	                    catch (SerialConnexionException e1)
+	                    {
+	                        log.critical("On ne fait rien après ceci: Catch de "+e1+" dans moveToPointException", this);
+	                    } 
+	                    catch (BlockedException e1)
+	                    {
+	                        log.critical("Catch de "+e1+" dans moveToPointException", this);
+	                    	immobilise();                       
+	                        log.critical("On n'arrive pas à se dégager", this);
+						}
+	                    if(!doItAgain)
+	                    {
+	                        log.critical("Lancement de UnableToMoveException dans MoveToPointException, visant "+finalAim.x+" :: "+finalAim.y+" cause physique", this);
+	                        throw new UnableToMoveException(finalAim, UnableToMoveReason.PHYSICALLY_BLOCKED);
+	                    }
+	                }
+                }
             }
             
             catch (UnexpectedObstacleOnPathException unexpectedObstacle)
