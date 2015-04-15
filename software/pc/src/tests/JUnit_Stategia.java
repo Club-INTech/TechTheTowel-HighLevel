@@ -135,7 +135,7 @@ public class JUnit_Stategia extends JUnit_Test
 	}
 	
 	@Test
-	void desisionTest()
+	public void desisionTest()
 	{
 		configColor();
 		container.startInstanciedThreads();

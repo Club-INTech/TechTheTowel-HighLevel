@@ -133,7 +133,7 @@ public class Strategie implements Service
 		while(realGameState.timeEllapsed   <  Integer.parseInt(config.getProperty("temps_match")))
 		{
 			updateConfig();
-			takeDecision(realGameState.timeEllapsed);
+			takeDecision();
 			
 			try 
 			{
@@ -150,7 +150,7 @@ public class Strategie implements Service
 	
 	
 	/** Fonction principale : prend une decision en prenant tout en compte */
-	private void takeDecision(long timeEllapsed)
+	private void takeDecision()
 	{
 		//TODO ajouter un script qui ne fait rien si tout les scripts ont deja étés effectués (qui fait 0 points)
 		nextScriptValue=Integer.MIN_VALUE;
@@ -192,11 +192,11 @@ public class Strategie implements Service
 		
 		//calcul de la duree du script
 		long durationScript;
-		long initialTime = chronoState.timeEllapsed;
+		robotChrono.resetChrono();
 		try 
 		{
 			script.goToThenExec(version, chronoState, true, hookRobot);
-			durationScript = chronoState.timeEllapsed - initialTime;
+			durationScript = robotChrono.getCurrentChrono();
 		} 
 		catch (Exception e) 
 		{
