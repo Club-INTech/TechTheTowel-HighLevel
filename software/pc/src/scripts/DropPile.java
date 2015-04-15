@@ -56,7 +56,7 @@ public class DropPile extends AbstractScript
 		execute(versionToExecute, actualState, hooksToConsider, shouldRetryIfBlocked);
 	}
 	@Override
-	public void execute(int version, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider,boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException
+	public void execute(int version, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider,boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException, SerialFinallyException
 	{
 		if (version==1)
 		{
@@ -114,6 +114,8 @@ public class DropPile extends AbstractScript
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
 			
 			// THank... you, sempai #'.'#
+			finalise(stateToConsider);
+
 		}
 		else if (version==0)
 		{
@@ -153,10 +155,14 @@ public class DropPile extends AbstractScript
 				
 			//on remet l'ascenceur en position de deplacement
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
-			}
+			
+			finalise(stateToConsider);
+
+		}
 		else
 		{
 			log.debug("version inconnue DropPile :"+version, this);
+			finalise(stateToConsider);
 		}
 	}
 	

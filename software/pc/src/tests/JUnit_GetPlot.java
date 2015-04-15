@@ -113,7 +113,7 @@ public class JUnit_GetPlot extends JUnit_Test
 			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
 			exitScript.execute(0, real_state, emptyHook, true );
 		} 
-		catch (SerialConnexionException  e) 
+		catch (SerialConnexionException | SerialFinallyException e) 
 		{
 			System.out.println("CRITICAL : Carte mal branchée. Match termine");
 			e.printStackTrace();

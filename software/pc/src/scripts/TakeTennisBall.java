@@ -1,6 +1,7 @@
 package scripts;
 
 import java.util.ArrayList;
+
 import enums.ActuatorOrder;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
@@ -30,7 +31,7 @@ public class TakeTennisBall extends AbstractScript
 	}
 	
 	@Override
-	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider,boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException
+	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider,boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException, SerialFinallyException
 	{
 		stateToConsider.robot.turn(Math.PI, hooksToConsider, false);//on se tourne bien
 
@@ -67,6 +68,8 @@ public class TakeTennisBall extends AbstractScript
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
 		// On recule pour retourner dans le PDD
 		stateToConsider.robot.moveLengthwise(-400,hooksToConsider);
+		
+		finalise(stateToConsider);
 	}
 	
 	@Override
@@ -100,7 +103,17 @@ public class TakeTennisBall extends AbstractScript
 	@Override
 	protected void finalise(GameState<?> stateToConsider) throws SerialFinallyException 
 	{
-		
+		try 
+		{
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+		} 
+		catch (SerialConnexionException e) 
+		{
+			throw new SerialFinallyException ();
+		}
 	}
 
 	public Integer[] getVersion(GameState<?> stateToConsider)

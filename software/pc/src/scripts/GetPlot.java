@@ -116,7 +116,7 @@ public class GetPlot extends AbstractScript
 	}
 	
 	@Override
-	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
+	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException, SerialFinallyException
 	{
 		//version circulaire
 		if (versionToExecute == 0 || versionToExecute == 1 || versionToExecute == 2 || versionToExecute == 7)
@@ -179,9 +179,7 @@ public class GetPlot extends AbstractScript
 				log.debug("impossible de manger le plot n°"+versionToExecute+" mangeage echoue", this);
 				finalise(stateToConsider);
 				return;
-			}
-			
-			
+			}			
 		}
 		//version 34 on mange en plus un goblet
 		else if (versionToExecute == 34)
@@ -296,6 +294,7 @@ public class GetPlot extends AbstractScript
 				}
 			}
 		}
+		finalise(stateToConsider);
 	}
 
 	@Override
@@ -356,7 +355,7 @@ public class GetPlot extends AbstractScript
 	}
 
 	@Override
-	protected void finalise(GameState<?> stateToConsider) 
+	protected void finalise(GameState<?> stateToConsider) throws SerialFinallyException 
 	{
 		try 
 		{
@@ -367,8 +366,7 @@ public class GetPlot extends AbstractScript
 		} 
 		catch (SerialConnexionException e) 
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new SerialFinallyException ();
 		}
 	}
 	

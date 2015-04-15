@@ -169,7 +169,7 @@ public class Locomotion implements Service
      */
     public void turn(double angle, ArrayList<Hook> hooks, boolean mustDetect) throws UnableToMoveException
     {
-    	
+    	actualRetriesIfBlocked=0;
 		updateCurrentPositionAndOrientation();
 
     	/**
@@ -184,13 +184,15 @@ public class Locomotion implements Service
     	finalAim = aim;
 
 		moveToPointException(aim, hooks, true, false, true, mustDetect);
+    	actualRetriesIfBlocked=0;
+
 
     }
     
     /**
      * Fait avancer le robot de "distance" (en mm).
      * @param distance la distance dont le robot doit se deplacer
-     * @param hooks les potetniels hooks a prendre en compte (ne pas mettre null !)
+     * @param hooks les potentiels hooks a prendre en compte (ne pas mettre null !)
      * @param wall vrai si on supppose qu'on vas se cogner dans un mur (et qu'il ne faut pas pousser dessus)
      * @throws UnableToMoveException si le robot a un bloquage mecanique
      */
@@ -495,7 +497,6 @@ public class Locomotion implements Service
         while(!isMotionEnded())
         	;
         
-        retryIfBlockedExecption=true; // on remet la  variable à true  si on a reussi un deplacement.
     }
 
 

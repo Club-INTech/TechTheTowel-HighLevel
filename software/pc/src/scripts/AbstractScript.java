@@ -82,8 +82,9 @@ public abstract class AbstractScript implements Service
 	 * @param hooksToConsider les hooks a considérer lors des déplacements vers ces scripts
 	 * @throws UnableToMoveException losrque le robot veut se déplacer et que quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
 	 * @throws SerialConnexionException s'il y a un problème de communication avec une des cartes électroniques
+	 * @throws SerialFinallyException 
 	 */
-	public abstract void execute(int versionToExecute, GameState<Robot> actualState,ArrayList<Hook> hooksToConsider,boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException;
+	public abstract void execute(int versionToExecute, GameState<Robot> actualState,ArrayList<Hook> hooksToConsider,boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException, SerialFinallyException;
 
 	/**
 	 * Renvoie le score que peut fournir une version d'un script.

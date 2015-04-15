@@ -71,7 +71,7 @@ public class GetGlass extends AbstractScript
 }
 	
 	@Override
-	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
+	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException, SerialFinallyException
 	{
 		//on se tourne vers le goblet
 		//on choisit le bras disponible (ici on montre avec le bras gauche)
@@ -115,6 +115,8 @@ public class GetGlass extends AbstractScript
 		}
 		else
 			log.debug("Souci de version avec les Verres", this);	//TODO: lancer une exception de version inconnue (la créer si besoin)
+	
+		finalise(stateToConsider);
 	}
 	
 	public void takeGlass0 (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
@@ -182,7 +184,7 @@ public class GetGlass extends AbstractScript
 	}
 
 	@Override
-	protected void finalise(GameState<?> stateToConsider) 
+	protected void finalise(GameState<?> stateToConsider) throws SerialFinallyException 
 	{
 		try 
 		{
@@ -191,7 +193,7 @@ public class GetGlass extends AbstractScript
 		} 
 		catch (SerialConnexionException e)
 		{
-			e.printStackTrace();
+			throw new SerialFinallyException ();
 		}
 		
 	}

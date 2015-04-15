@@ -58,6 +58,8 @@ public class ExitBeginZone extends AbstractScript
 				throw e;
 			}
 		}
+		
+		finalise(stateToConsider);
 	}
 
 	@Override

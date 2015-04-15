@@ -15,6 +15,7 @@ import enums.ScriptNames;
 import enums.ServiceNames;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
+import exceptions.serial.SerialFinallyException;
 import robot.Robot;
 import scripts.ScriptManager;
 import strategie.GameState;
@@ -61,7 +62,7 @@ public class JUnit_Claps extends JUnit_Test {
 			
 			scriptManager.getScript(ScriptNames.CLOSE_CLAP).execute(12, real_state, emptyHook, true);
 			
-		} catch (UnableToMoveException | SerialConnexionException e) {
+		} catch (UnableToMoveException | SerialConnexionException | SerialFinallyException e) {
 			log.debug("BUG !",this);
 			e.printStackTrace();
 		}

@@ -15,6 +15,7 @@ import enums.ScriptNames;
 import enums.ServiceNames;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
+import exceptions.serial.SerialFinallyException;
 import robot.Robot;
 import scripts.ScriptManager;
 import smartMath.Vec2;
@@ -73,7 +74,7 @@ public class JUnit_CarpetDropper extends JUnit_Test
 			game.robot.moveLengthwise(-110);
 			scriptManager.getScript(ScriptNames.DROP_CARPET).execute(1, game, emptyHook, false);
 		} 
-			catch (UnableToMoveException | SerialConnexionException e) 
+			catch (UnableToMoveException | SerialConnexionException | SerialFinallyException e) 
 		{
 			e.printStackTrace();
 		}

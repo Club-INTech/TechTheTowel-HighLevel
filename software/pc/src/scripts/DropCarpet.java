@@ -39,7 +39,7 @@ public class DropCarpet extends AbstractScript
 	}
 
 	@Override
-	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider,boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException
+	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider,boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException, SerialFinallyException
 	{
 		
 		//on presente ses arrieres a l'escalier
@@ -88,6 +88,8 @@ public class DropCarpet extends AbstractScript
 				stateToConsider.robot.moveLengthwise((stateToConsider.robot.getPosition().y - (1400-distanceBetweenEntryAndStairs)), hooksToConsider, false);
 			}
 		}
+		
+		finalise(stateToConsider);
 	}
 	
 	@Override
