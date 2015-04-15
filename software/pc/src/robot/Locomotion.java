@@ -358,7 +358,7 @@ public class Locomotion implements Service
 	                {
 	                	actualRetriesIfBlocked++;
 	                    log.critical("Tentative "+actualRetriesIfBlocked+" de deplacement ", this);
-	                	moveToPointException(aim, hooks, isMovementForward, headingToWall, turnOnly, mustDetect); // on rentente s'iil a y eu un probleme
+	                	moveToPointException(aim, hooks, isMovementForward, headingToWall, turnOnly, mustDetect); // on rentente s'il a y eu un probleme
 	                }
                 }
                 else

@@ -33,13 +33,13 @@ import exceptions.serial.SerialManagerException;
  */
 public class Main
 {
-	Container container;
-	Config config;
-	Strategie strategos;
-	GameState<Robot> real_state;
-	ArrayList<Hook> emptyHook;
-	ScriptManager scriptmanager;
-	SensorsCardWrapper mSensorsCardWrapper;
+	static Container container;
+	static Config config;
+	static Strategie strategos;
+	static GameState<Robot> real_state;
+	static ArrayList<Hook> emptyHook;
+	static ScriptManager scriptmanager;
+	static SensorsCardWrapper mSensorsCardWrapper;
 	
 	
 // dans la config de debut de match, toujours demander une entrée clavier assez longue (ex "oui" au lieu de "o", pour éviter les fautes de frappes. Une erreur a ce stade coûte cher.
@@ -55,10 +55,19 @@ public class Main
 		//nombre initial des essai pour le container et la serie
 		int numberOfTryContainer=0;
 		int numberOfTrySerial=0;
+		int numberOfTrymatchSetup=0;
+		
 		
 		//nombre maximum d'essai autorisee pour le container et la serie
 		int maximumOfTryContainer=5;
 		int maximumOfTrySerial=3;
+		int maximumOfmatchSetup=5;
+		
+		// booleen explicitant si on a reussi l'initialisation
+	    boolean isInitialisationDone = false;
+
+		
+
 
 		System.out.println("=== Robot INTech 2015 : initialisation ===");
         // si on veut exécuter un test unitaire sur la rasbe, recopier test.nomDeLaClasseDeTest
@@ -66,7 +75,7 @@ public class Main
 		
 		// Système d'injection de dépendances
 		//tant que le nombre d'essai n'est pas trop grand on recommence
-		while (numberOfTryContainer<maximumOfTryContainer || numberOfTrySerial<maximumOfTrySerial)
+		while (numberOfTryContainer<maximumOfTryContainer || numberOfTrySerial<maximumOfTrySerial || !isInitialisationDone)
 		{
 			try 
 			{
@@ -85,6 +94,8 @@ public class Main
 			    emptyHook = new ArrayList<Hook>(); //TODO la veritable liste des hooks pour le match
 			    
 			    config.updateConfig(); // instancie la couleur, etc
+			    
+			    isInitialisationDone=true;
 			} 
 			catch (ContainerException e) 
 			//on gere les exceptions du container, en cas de probleme on a pas d'aure solution que de reessayer, mais si c'est vraiment impossible il faut debugger
@@ -116,10 +127,29 @@ public class Main
 			} 
 		}
 		
-		
-		
+		isInitialisationDone=false;
+		while(numberOfTrymatchSetup<maximumOfmatchSetup || !isInitialisationDone) // On retente jusqu'à ce que ca fonctionne. 
+		{
+			try 
+			{
+				matchSetUp(real_state.robot);
+				isInitialisationDone=true;
+			}
+			catch (SerialConnexionException e) 
+			{
+				numberOfTrySerial++;
+
+				if(numberOfTrymatchSetup<maximumOfmatchSetup)
+					System.out.println ("erreur dans le matchSetup et la connexion serie");
+				else 
+				{
+					System.out.println ("erreur critique dans la connexion serie");
+					e.printStackTrace();
+				}
+			}
+		}
+
 		//initialisation du match
-		matchSetUp();
 		configColor();
 		real_state.robot.setPosition(new Vec2 (1381,1000));
 		real_state.robot.setOrientation(Math.PI);
@@ -144,7 +174,7 @@ public class Main
 	 * @param robot le robot a setuper
 	 * @throws SerialConnexionException si l'ordinateur n'arrive pas a communiquer avec les cartes
 	 */
-	private void matchSetUp(Robot robot) throws SerialConnexionException
+	private static void matchSetUp(Robot robot) throws SerialConnexionException
 	{
 		robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
 		robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
@@ -185,7 +215,7 @@ public class Main
 	 * Attends que le match soit lancé
 	 * cette fonciton prends fin quand le match a démarré
 	 */
-	void waitMatchBegin()
+	static void waitMatchBegin()
 	{
 
 		System.out.println("Robot pret pour le match, attente du retrait du jumper");
