@@ -37,6 +37,8 @@ public enum ServiceNames
 	 THREAD_LASER,
 	 THREAD_TIMER,
 	 
+	 STRATEGIE,
+	 
 	 CHECK_UP;
 	
 	 /** type de service, par défault: GENERIC*/

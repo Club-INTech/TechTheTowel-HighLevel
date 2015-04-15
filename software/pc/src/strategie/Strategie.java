@@ -46,10 +46,6 @@ public class Strategie implements Service
 	/** Le gameState reel*/
 	private GameState<RobotReal> realGameState;
 	
-	/**
-	 * Le gameState a donner aux script (mis a jour a chaque robotChrono et a l'execution du script chosit)
-	 */
-	private GameState<Robot> gameState;
 	
 	/** Les scripts Manager des deux robots*/
 	ScriptManager scriptmanager;	
@@ -84,17 +80,22 @@ public class Strategie implements Service
 
 	private int matchDuration;
 	
-	/**
-     * Crée la strategie, l'IA decisionnelle
-     */
-	public Strategie(Config config, Log log, GameState<RobotReal> state, GameState<Robot> gameState, ScriptManager scriptManager, PathDingDing trouveurDeChemin)
+	
+/**
+ * Crée la strategie, l'IA decisionnelle
+ * @param config
+ * @param log
+ * @param state
+ * @param scriptManager
+ * @param trouveurDeChemin
+ */
+	public Strategie(Config config, Log log, GameState<RobotReal> state, ScriptManager scriptManager, PathDingDing trouveurDeChemin)
 	{
 		this.realGameState = state;
 		this.config = config;
 		this.log = log;
         this.table = state.table;
         this.robotReal = state.robot;
-        this.gameState = gameState;
         this.scriptmanager = scriptManager;
         this.pathDingDing = trouveurDeChemin;
         matchDuration = Integer.parseInt(config.getProperty("temps_match"));
@@ -112,6 +113,7 @@ public class Strategie implements Service
 	 */
 	public void IA()
 	{
+		GameState<Robot> gameState = new GameState<Robot>(config, log, table, robotReal);
 		try 
 		{
 			scriptmanager.getScript(ScriptNames.EXIT_START_ZONE).execute(0, gameState, hookRobot, true);
@@ -202,7 +204,7 @@ public class Strategie implements Service
 		}
 		
 		//points = pointsScript * (tempsRestant - duree)/duree
-		return (int) (script.remainingScoreOfVersion(version, gameState)*((matchDuration-gameState.timeEllapsed)-durationScript)/durationScript);
+		return (int) (script.remainingScoreOfVersion(version, realGameState)*((matchDuration-realGameState.timeEllapsed)-durationScript)/durationScript);
 		
 	}
 }
