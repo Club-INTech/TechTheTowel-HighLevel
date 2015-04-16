@@ -151,7 +151,6 @@ public class GetPlot extends AbstractScript
 				if (versionToExecute == 1)
 				{
 					stateToConsider.robot.turn(-3*Math.PI/4);
-					stateToConsider.robot.moveLengthwise(75);
 					eatPlot(true, isChoosenArmLeft, stateToConsider, true);
 					stateToConsider.table.eatPlotX(versionToExecute);
 				}

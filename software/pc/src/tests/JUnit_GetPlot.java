@@ -73,30 +73,25 @@ public class JUnit_GetPlot extends JUnit_Test
 		}
 		
 		System.out.println("debut du match");
-		
-		//premier script
-		for (int i=0; i<listToGrab.size(); i++)
+		try 
 		{
-			try 
-			{
-				scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(1, real_state, true, emptyHook );
-			}
-			catch (UnableToMoveException | SerialConnexionException e) 
-			{
-				// un robot ennemi devant ?
-				e.printStackTrace();
-			
-			} 
-			catch (PathNotFoundException e)
-			{
-				//TODO: le pathfinding ne trouve pas de chemin
-				e.printStackTrace();
-			} 
-			catch (SerialFinallyException e) 
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(1, real_state, true, emptyHook );
+		}
+		catch (UnableToMoveException | SerialConnexionException e) 
+		{
+			// un robot ennemi devant ?
+			e.printStackTrace();
+		
+		} 
+		catch (PathNotFoundException e)
+		{
+			//TODO: le pathfinding ne trouve pas de chemin
+			e.printStackTrace();
+		} 
+		catch (SerialFinallyException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		System.out.println("match fini !");
