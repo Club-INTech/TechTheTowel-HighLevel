@@ -73,50 +73,58 @@ public class GetGlass extends AbstractScript
 	@Override
 	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException, SerialFinallyException
 	{
-		//on se tourne vers le goblet
-		//on choisit le bras disponible (ici on montre avec le bras gauche)
-		//si aucun bras disponible (logiquement l'IA ne devrai pas lancer le script (erreur ?)) on arrete le script
-		//on avance en ouvrant le bras gauche (respectivement droit)
-		//on se place proche du goblet pour le ramasser
-		//on ferme lentement le bras gauche (respectivement droit) pour attraper le goblet
-		//on demande si on a bien quelque chose a gauche (respectivement a droite)
-		//si on a rien (et que l'autre bras n'est pas occupe) on recule, on ouvre l'autre bras (droit , repectivement gauche), on avance et on ferme le bras droit (respectivement gauche)
-		//si on a toujours rien on arrete		
-		//si on a attrape quelque chose on le dit au robot ainsi que sa position (gauche / droite)
-		
-		stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
-		stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
-		
-		//gestion des version, si le verre est deja pris on ne le re-prend pas (bawi)
-		if (versionToExecute == 0)
+		try 
 		{
-			if(!stateToConsider.table.isGlassXTaken(0))
-				takeGlass0(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
+			
+			//on se tourne vers le goblet
+			//on choisit le bras disponible (ici on montre avec le bras gauche)
+			//si aucun bras disponible (logiquement l'IA ne devrai pas lancer le script (erreur ?)) on arrete le script
+			//on avance en ouvrant le bras gauche (respectivement droit)
+			//on se place proche du goblet pour le ramasser
+			//on ferme lentement le bras gauche (respectivement droit) pour attraper le goblet
+			//on demande si on a bien quelque chose a gauche (respectivement a droite)
+			//si on a rien (et que l'autre bras n'est pas occupe) on recule, on ouvre l'autre bras (droit , repectivement gauche), on avance et on ferme le bras droit (respectivement gauche)
+			//si on a toujours rien on arrete		
+			//si on a attrape quelque chose on le dit au robot ainsi que sa position (gauche / droite)
+			
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
+			
+			//gestion des version, si le verre est deja pris on ne le re-prend pas (bawi)
+			if (versionToExecute == 0)
+			{
+				if(!stateToConsider.table.isGlassXTaken(0))
+					takeGlass0(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
+			}
+			else if (versionToExecute == 1)
+			{
+				if(!stateToConsider.table.isGlassXTaken(1))
+					takeGlass1(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
+			}
+			else if (versionToExecute == 2)
+			{
+				if(!stateToConsider.table.isGlassXTaken(2))
+					takeGlass2(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
+			}
+			else if (versionToExecute == 3)
+			{
+				if(!stateToConsider.table.isGlassXTaken(3))
+					takeGlass3(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
+			}
+			else if (versionToExecute == 4)
+			{
+				if(!stateToConsider.table.isGlassXTaken(4))
+					takeGlass4(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
+			}
+			else
+				log.debug("Souci de version avec les Verres", this);	//TODO: lancer une exception de version inconnue (la créer si besoin)
+			
 		}
-		else if (versionToExecute == 1)
+		catch (UnableToMoveException | SerialConnexionException e) 
 		{
-			if(!stateToConsider.table.isGlassXTaken(1))
-				takeGlass1(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
+			finalise(stateToConsider);
+			throw e;
 		}
-		else if (versionToExecute == 2)
-		{
-			if(!stateToConsider.table.isGlassXTaken(2))
-				takeGlass2(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
-		}
-		else if (versionToExecute == 3)
-		{
-			if(!stateToConsider.table.isGlassXTaken(3))
-				takeGlass3(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
-		}
-		else if (versionToExecute == 4)
-		{
-			if(!stateToConsider.table.isGlassXTaken(4))
-				takeGlass4(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
-		}
-		else
-			log.debug("Souci de version avec les Verres", this);	//TODO: lancer une exception de version inconnue (la créer si besoin)
-	
-		finalise(stateToConsider);
 	}
 	
 	public void takeGlass0 (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException

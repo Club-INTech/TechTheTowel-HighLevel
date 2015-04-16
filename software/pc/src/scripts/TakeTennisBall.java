@@ -33,43 +33,50 @@ public class TakeTennisBall extends AbstractScript
 	@Override
 	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider,boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException, SerialFinallyException
 	{
-		stateToConsider.robot.turn(Math.PI, hooksToConsider, false);//on se tourne bien
-
-		//On initialise l'ascenceur
-		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
-		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
-		
-		//On ferme tous les bras, si ce n'est deja fait (bras vers l'exterieur, vers les gobelets)
-		stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
-		stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
-
-		//On avance vers la balle
-		stateToConsider.robot.moveLengthwise(400,hooksToConsider);
-		System.out.println("On avance vers la balle");
-
-		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
-		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
-
-		//On la recupere
-		stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_MIDDLE, true);
-		stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN_SLOW, true);
-		stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_MIDDLE, true);
-		stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
-		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
-
-		stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
-		stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
-
-		//On refereme et on remonte le tout
-
-		System.out.println("Balle prise");
-		
-		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_HIGH, false);
-		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
-		// On recule pour retourner dans le PDD
-		stateToConsider.robot.moveLengthwise(-400,hooksToConsider);
-		
-		finalise(stateToConsider);
+		try
+		{
+			stateToConsider.robot.turn(Math.PI, hooksToConsider, false);//on se tourne bien
+	
+			//On initialise l'ascenceur
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+			
+			//On ferme tous les bras, si ce n'est deja fait (bras vers l'exterieur, vers les gobelets)
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
+	
+			//On avance vers la balle
+			stateToConsider.robot.moveLengthwise(400,hooksToConsider);
+			System.out.println("On avance vers la balle");
+	
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
+	
+			//On la recupere
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_MIDDLE, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN_SLOW, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_MIDDLE, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+	
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
+	
+			//On refereme et on remonte le tout
+	
+			System.out.println("Balle prise");
+			
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_HIGH, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+			// On recule pour retourner dans le PDD
+			stateToConsider.robot.moveLengthwise(-400,hooksToConsider);
+			
+		}
+		catch(UnableToMoveException | SerialConnexionException e)
+		{
+			finalise(stateToConsider);
+			throw e;
+		}
 	}
 	
 	@Override

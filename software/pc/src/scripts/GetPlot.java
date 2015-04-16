@@ -151,7 +151,7 @@ public class GetPlot extends AbstractScript
 				if (versionToExecute == 1)
 				{
 					stateToConsider.robot.turn(Math.PI);
-					eatPlot(true, isChoosenArmLeft, stateToConsider, true);
+					eatPlot(false, true, stateToConsider, true);
 					stateToConsider.table.eatPlotX(versionToExecute);
 				}
 				if(versionToExecute==0 || versionToExecute==2 )
@@ -192,24 +192,24 @@ public class GetPlot extends AbstractScript
 				if (!stateToConsider.robot.isGlassStoredLeft)
 				{
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);					
-					stateToConsider.robot.moveLengthwise(180, hooksToConsider);
+					stateToConsider.robot.moveLengthwise(160, hooksToConsider);
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
-					stateToConsider.robot.moveLengthwise(140, hooksToConsider);
+					stateToConsider.robot.moveLengthwise(160, hooksToConsider);
 					stateToConsider.robot.isGlassStoredLeft = true;
 				}
 				else if(!stateToConsider.robot.isGlassStoredRight)
 				{
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);					
-					stateToConsider.robot.moveLengthwise(180, hooksToConsider);
+					stateToConsider.robot.moveLengthwise(160, hooksToConsider);
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
-					stateToConsider.robot.moveLengthwise(140, hooksToConsider);
+					stateToConsider.robot.moveLengthwise(160, hooksToConsider);
 					stateToConsider.robot.isGlassStoredRight = true;
 				}
 				stateToConsider.table.removeGlassX(0);
 			}
 			else
 			{
-				stateToConsider.robot.moveLengthwise(340, hooksToConsider);
+				stateToConsider.robot.moveLengthwise(320, hooksToConsider);
 			}
 			
 			// on ne mange que si on est assez vide
@@ -260,6 +260,7 @@ public class GetPlot extends AbstractScript
 					} 
 					catch (UnableToEatPlot e1) 
 					{
+						finalise(stateToConsider);
 						e1.printStackTrace();
 					}
 					
@@ -271,6 +272,7 @@ public class GetPlot extends AbstractScript
 					} 
 					catch (UnableToEatPlot e) 
 					{
+						finalise(stateToConsider);
 						e.printStackTrace();
 					}
 				}
@@ -288,12 +290,12 @@ public class GetPlot extends AbstractScript
 					} 
 					catch (UnableToEatPlot e) 
 					{
+						finalise(stateToConsider);
 						e.printStackTrace();
 					}
 				}
 			}
 		}
-		finalise(stateToConsider);
 	}
 
 	@Override
