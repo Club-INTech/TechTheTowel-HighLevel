@@ -75,7 +75,7 @@ public class JUnit_GetPlot extends JUnit_Test
 		System.out.println("debut du match");
 		try 
 		{
-			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(1, real_state, true, emptyHook );
+			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(56, real_state, true, emptyHook );
 		}
 		catch (UnableToMoveException | SerialConnexionException e) 
 		{

@@ -247,7 +247,7 @@ public class GetPlot extends AbstractScript
 		//TODO derniere version a traiter + traiter le cas où on a trois plots stockés et qu'on ne veut pas manger n°6
 		else if (versionToExecute == 56)
 		{
-			stateToConsider.robot.turn(Math.PI);
+			stateToConsider.robot.turn(Math.PI/2);
 			
 			if (!stateToConsider.table.isPlotXEaten(5))
 			{//plot 5 pas mangé
@@ -256,7 +256,7 @@ public class GetPlot extends AbstractScript
 					//plot 5 et 6 pas mangé, on mange les deux avec notre bras gauche (celui du coté de l'ascenceur)
 					try 
 					{
-						eatPlot(true, false, stateToConsider, false);
+						eatPlot(true, true, stateToConsider, false);
 					} 
 					catch (UnableToEatPlot e1) 
 					{
@@ -267,7 +267,7 @@ public class GetPlot extends AbstractScript
 					
 					try 
 					{
-						eatPlot(true, false, stateToConsider, false);
+						eatPlot(true, true, stateToConsider, false);
 					} 
 					catch (UnableToEatPlot e) 
 					{
@@ -308,7 +308,7 @@ public class GetPlot extends AbstractScript
 		else if (id==34)
 			return new Circle (900,220,0);
 		else if (id==56)
-			return new Circle (850,1700,0); // Position devant le plot 5, on longeant l'escalier
+			return new Circle (780,1620,0); // Position devant le plot 5, on longeant l'escalier
 		else if (id==7)
 			return new Circle (1410,1800,200);//Point d'entrée dangereux mais (1280,1700) passe (On est à 166 du centre (1410,1800) )
 		else 
