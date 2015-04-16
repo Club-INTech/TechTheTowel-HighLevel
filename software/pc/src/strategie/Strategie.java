@@ -132,8 +132,14 @@ public class Strategie implements Service
 		//tant que le match n'est pas fini, on prend des decisions :
 		while(realGameState.timeEllapsed   <  Integer.parseInt(config.getProperty("temps_match")))
 		{
+			log.debug("======choix script======", this);
+			System.out.println();
+			
 			updateConfig();
 			takeDecision();
+			
+			log.debug("script choisit :"+nextScript.getClass().getName(), this);
+			log.debug("version :"+nextScriptVersion, this);
 			
 			try 
 			{
@@ -202,9 +208,13 @@ public class Strategie implements Service
 		{
 			durationScript = Long.MAX_VALUE;
 		}
-		
+		log.debug("script :"+script.getClass().getName(), this);
+		log.debug("version :"+version, this);
+		log.debug("temps :"+durationScript, this);
+		int points = (int) (script.remainingScoreOfVersion(version, realGameState)*((matchDuration-realGameState.timeEllapsed)-durationScript)/durationScript);
+		log.debug("points :"+points, this);
 		//points = pointsScript * (tempsRestant - duree)/duree
-		return (int) (script.remainingScoreOfVersion(version, realGameState)*((matchDuration-realGameState.timeEllapsed)-durationScript)/durationScript);
+		return points;
 		
 	}
 }
