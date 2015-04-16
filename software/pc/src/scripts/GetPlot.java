@@ -150,7 +150,7 @@ public class GetPlot extends AbstractScript
 			{
 				if (versionToExecute == 1)
 				{
-					stateToConsider.robot.turn(-3*Math.PI/4);
+					stateToConsider.robot.turn(Math.PI);
 					eatPlot(true, isChoosenArmLeft, stateToConsider, true);
 					stateToConsider.table.eatPlotX(versionToExecute);
 				}
@@ -302,7 +302,7 @@ public class GetPlot extends AbstractScript
 		if (id==0)
 			return new Circle (200,600,200);
 		else if (id==1)
-			return new Circle (520,420,0);//ce point n'est pas le centre du plot (pour cause de PathDD)
+			return new Circle (670,260,0);//ce point n'est pas le centre du plot (pour cause de PathDD)
 		else if (id==2)
 			return new Circle (630,645,200);
 		else if (id==34)
