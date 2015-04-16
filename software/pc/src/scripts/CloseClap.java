@@ -148,19 +148,11 @@ public class CloseClap extends AbstractScript
 		}	
 		
 		stateToConsider.robot.moveLengthwise(300, hooksToConsider, false);
-		stateToConsider.table.clapXClosed(2);	
 		
-		if(stateToConsider.robot.getSymmetry())
-		{
-			//Coté jaune
-			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, true);
-		}
-		else //coté vert
-		{
-			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, true);
-		}
 		//On s'echape
 		stateToConsider.robot.turn(Math.PI/2, hooksToConsider, false);
+		stateToConsider.table.clapXClosed(2);	
+
 						
 		//On ferme tout pour finir
 		stateToConsider.robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
