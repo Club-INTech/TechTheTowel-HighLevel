@@ -147,8 +147,6 @@ public class CloseClap extends AbstractScript
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
 		}	
 		
-		stateToConsider.robot.moveLengthwise(300, hooksToConsider, false);
-		
 		//On s'echape
 		stateToConsider.robot.turn(Math.PI/2, hooksToConsider, false);
 		stateToConsider.table.clapXClosed(2);	
@@ -461,7 +459,7 @@ public class CloseClap extends AbstractScript
 		if (version == 1)
 			return new Circle(1290,230); //point d'entrée : bord de la table, robot devant le clap 1
 		else if(version == 2)
-			return new Circle(700,230); //point d'entrée : devant le clap 2
+			return new Circle(760,260); //point d'entrée : devant le clap 2
 		else if(version == 3)
 			return new Circle(-900,500);//point d'entrée : devant le clap 3
 		else if(version == 12)
