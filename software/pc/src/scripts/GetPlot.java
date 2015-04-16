@@ -248,7 +248,7 @@ public class GetPlot extends AbstractScript
 		//TODO derniere version a traiter + traiter le cas où on a trois plots stockés et qu'on ne veut pas manger n°6
 		else if (versionToExecute == 56)
 		{
-			stateToConsider.robot.turn(Math.PI*0.5);
+			stateToConsider.robot.turn(Math.PI);
 			
 			if (!stateToConsider.table.isPlotXEaten(5))
 			{//plot 5 pas mangé
@@ -303,7 +303,7 @@ public class GetPlot extends AbstractScript
 		if (id==0)
 			return new Circle (200,600,200);
 		else if (id==1)
-			return new Circle (500,300,200);//ce point n'est pas le centre du plot (pour cause de PathDD)
+			return new Circle (500,400,0);//ce point n'est pas le centre du plot (pour cause de PathDD)
 		else if (id==2)
 			return new Circle (630,645,200);
 		else if (id==34)
