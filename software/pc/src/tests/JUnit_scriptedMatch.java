@@ -127,9 +127,9 @@ public class JUnit_scriptedMatch extends JUnit_Test
 //		container.startInstanciedThreads();
 		//waitMatchBegin();
 		//premiere action du match
-		
+		long timeMatchBegin=System.currentTimeMillis();
+
 		System.out.println("Le robot commence le match");
-	
 		try 
 		{
 			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE); // Sortie de la zone de depart
@@ -370,5 +370,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 
 		//Le match s'arrête
 		container.destructor();
+		
+		System.out.println(System.currentTimeMillis()-timeMatchBegin+" ms depuis le debut : < 90.000 ?");
 	}
 }

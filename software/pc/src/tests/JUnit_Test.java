@@ -39,6 +39,12 @@ public abstract class JUnit_Test
 		log = (Log) container.getService(ServiceNames.LOG);
 	}
 	
+	/**
+	 * le set up du match en cours (mise en place des actionneurs)
+	 * @param robot le robot a setuper
+	 * @throws SerialConnexionException si l'ordinateur n'arrive pas a communiquer avec les cartes
+	 */
+
 	public void matchSetUp(Robot robot) throws SerialConnexionException
 	{
 		robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);

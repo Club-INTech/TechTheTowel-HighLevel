@@ -302,7 +302,7 @@ public class GetPlot extends AbstractScript
 		if (id==0)
 			return new Circle (200,600,200);
 		else if (id==1)
-			return new Circle (500,400,0);//ce point n'est pas le centre du plot (pour cause de PathDD)
+			return new Circle (520,420,0);//ce point n'est pas le centre du plot (pour cause de PathDD)
 		else if (id==2)
 			return new Circle (630,645,200);
 		else if (id==34)
