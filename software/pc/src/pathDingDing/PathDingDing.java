@@ -40,10 +40,13 @@ public class PathDingDing implements Service
 	 * @return un chemin optimise liant depart et arrivee
 	 * @throws Exception pas encore implemente
 	 */
-	public ArrayList<Vec2> computePath(Vec2 start, Vec2 end, EnumSet<ObstacleGroups> obstaclesToConsider) throws PathNotFoundException
+	public ArrayList<Vec2> computePath(Vec2 start, Vec2 end, EnumSet<ObstacleGroups> obstaclesToConsider) throws PathNotFoundException, InObstacleException
 	{
 		this.mObstaclesToConsider = obstaclesToConsider;
 		mGraph.setObstaclesToConsider(mObstaclesToConsider);
+		
+		if(!mGraph.isOnTable(new Node(end.x, end.y)))
+			throw new InObstacleException();
 		
 		//le cas ou les points de depart et d'arrivee sont reliables en ligne droite est directement traite
 		ArrayList<Vec2> directPath =  new ArrayList<Vec2>();

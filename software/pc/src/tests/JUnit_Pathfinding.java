@@ -2,7 +2,7 @@ package tests;
 
 import org.junit.*;
 
-import pathDingDing.PathDingDing;
+import pathDingDing.*;
 import table.Table;
 import smartMath.*;
 import enums.*;
@@ -47,7 +47,7 @@ public class JUnit_Pathfinding extends JUnit_Test
     	}
     }
     
-   // @Test
+    @Test
     public void testClickedPF() throws Exception
     {
     	win.getPanel().drawGraph(pf.getGraph());
@@ -94,7 +94,32 @@ public class JUnit_Pathfinding extends JUnit_Test
     	}
     }
     
-    @Test
+    //@Test
+    public void testIsOnTable() throws Exception
+    {
+    	try
+    	{
+    		pf.computePath(new Vec2(), new Vec2(), EnumSet.allOf(ObstacleGroups.class));
+    	}
+    	catch(PathNotFoundException e)
+    	{}
+    	while(true)
+    	{
+    		if(win.getMouse().hasClicked())
+    		{
+    			Node node = new Node(win.getMouse().getRightClickPosition().x, win.getMouse().getRightClickPosition().y);
+    			ArrayList<Vec2> path = new ArrayList<Vec2>();
+		    	if(pf.getGraph().isOnTable(node))
+		    		path.add(win.getMouse().getRightClickPosition());
+		    	win.getPanel().drawArrayList(path);
+		    	win.getPanel().repaint();
+    		}
+    		else
+    			Thread.sleep(200);
+    	}
+    }
+    
+    //@Test
     public void testEnums()
     {
     	table.eatPlotX(5);

@@ -16,7 +16,7 @@ import org.junit.Test;
 
 import enums.ObstacleGroups;
 import enums.ServiceNames;
-import exceptions.PathNotFoundException;
+import exceptions.*;
 import exceptions.Locomotion.UnableToMoveException;
 import robot.*;
 import robot.cardsWrappers.ActuatorCardWrapper;
@@ -127,6 +127,10 @@ public class JUnit_serialPathfinding extends JUnit_Test {
 				robot.followPath(path, emptyHook);
 			}
 			catch (PathNotFoundException e) 
+			{
+				log.debug("point en dehors de la table : ("+win.getMouse().getLeftClickPosition().x+", "+win.getMouse().getLeftClickPosition().y+")", this);
+			}
+			catch (InObstacleException e) 
 			{
 				log.debug("point en dehors de la table : ("+win.getMouse().getLeftClickPosition().x+", "+win.getMouse().getLeftClickPosition().y+")", this);
 			}
