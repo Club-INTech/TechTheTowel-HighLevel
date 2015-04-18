@@ -123,9 +123,9 @@ public class JUnit_scriptedMatch extends JUnit_Test
 	@Test
 	public void test() throws PathNotFoundException, SerialFinallyException, SerialConnexionException
 	{
-		//configColor();
+		configColor();
 //		container.startInstanciedThreads();
-		//waitMatchBegin();
+		waitMatchBegin();
 		//premiere action du match
 		long timeMatchBegin=System.currentTimeMillis();
 

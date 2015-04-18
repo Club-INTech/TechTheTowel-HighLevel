@@ -4,6 +4,7 @@ import hook.Hook;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -104,7 +105,7 @@ public class JUnit_Sensors extends JUnit_Test
 
 	}
 	
-	@Test
+//	@Test
 	public void testEvitement()
 	{
 		log.debug("Test d'évitement", this);
@@ -214,18 +215,37 @@ public class JUnit_Sensors extends JUnit_Test
 	}
 	
 	
-    //@Test
-	public void testCapteurDeplacement()
+    @Test
+	public void testCapteurDeplacement() throws SerialConnexionException
 	{
-		log.debug("Test d'évitement", this);
-		try 
-		{
+    	matchSetUp(state.robot);
+    	try 
+    	{
 			state.robot.moveLengthwise(300);
 		} 
-		catch (UnableToMoveException e1)
-		{
-			log.critical("!!!!! Catch de"+e1+" dans testEvitement !!!!!" , this);
+    	catch (UnableToMoveException e2) 
+    	{
+			e2.printStackTrace();
 		}
+		log.debug("Test d'évitement", this);
+		Random rand = new Random();
+    	while(true)
+    	{
+			int x=0,y=0;
+			try 
+			{
+				x = rand.nextInt(3000)-1500;
+				y = rand.nextInt(2000);
+				state.robot.moveToLocation(new Vec2 (x,y),new ArrayList<Hook>(), state.table, EnumSet.noneOf(ObstacleGroups.class));
+			} 
+			catch (UnableToMoveException e1)
+			{
+				log.critical("!!!!! Catch de"+e1+" dans testEvitement !!!!!" , this);
+				break;
+			} catch (PathNotFoundException e) {
+				log.debug("pas de chemin trouvé : ("+x+";"+y+")", this);
+			}
+    	}
 	}
 
 	
