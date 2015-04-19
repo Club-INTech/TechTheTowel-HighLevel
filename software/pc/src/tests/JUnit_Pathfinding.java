@@ -67,6 +67,12 @@ public class JUnit_Pathfinding extends JUnit_Test
 		    	{
 		    		log.debug("pas de chemin trouve entre "+win.getMouse().getLeftClickPosition()+"et"+ win.getMouse().getRightClickPosition(), this);
 		    	}
+		    	catch(InObstacleException e)
+		    	{
+		    		log.debug("point d'arrivée dans un obstacle : " + win.getMouse().getRightClickPosition() +
+		    				  "\n appartient aux groupes d'obstacles suivants :" + e.getObstacleGroup().toString()
+		    				  , this);
+		    	}
 		    	win.getPanel().repaint();
     		}
     		else
