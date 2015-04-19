@@ -151,7 +151,7 @@ public class GetPlot extends AbstractScript
 				if (versionToExecute == 1)
 				{
 					stateToConsider.robot.turn(Math.PI);
-					eatPlot(true, isChoosenArmLeft, stateToConsider, true);
+					eatPlot(false, true, stateToConsider, true);
 					stateToConsider.table.eatPlotX(versionToExecute);
 				}
 				if(versionToExecute==0 || versionToExecute==2 )
@@ -192,24 +192,24 @@ public class GetPlot extends AbstractScript
 				if (!stateToConsider.robot.isGlassStoredLeft)
 				{
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);					
-					stateToConsider.robot.moveLengthwise(180, hooksToConsider);
+					stateToConsider.robot.moveLengthwise(160, hooksToConsider);
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
-					stateToConsider.robot.moveLengthwise(140, hooksToConsider);
+					stateToConsider.robot.moveLengthwise(160, hooksToConsider);
 					stateToConsider.robot.isGlassStoredLeft = true;
 				}
 				else if(!stateToConsider.robot.isGlassStoredRight)
 				{
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);					
-					stateToConsider.robot.moveLengthwise(180, hooksToConsider);
+					stateToConsider.robot.moveLengthwise(160, hooksToConsider);
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
-					stateToConsider.robot.moveLengthwise(140, hooksToConsider);
+					stateToConsider.robot.moveLengthwise(160, hooksToConsider);
 					stateToConsider.robot.isGlassStoredRight = true;
 				}
 				stateToConsider.table.removeGlassX(0);
 			}
 			else
 			{
-				stateToConsider.robot.moveLengthwise(340, hooksToConsider);
+				stateToConsider.robot.moveLengthwise(320, hooksToConsider);
 			}
 			
 			// on ne mange que si on est assez vide
@@ -247,7 +247,7 @@ public class GetPlot extends AbstractScript
 		//TODO derniere version a traiter + traiter le cas où on a trois plots stockés et qu'on ne veut pas manger n°6
 		else if (versionToExecute == 56)
 		{
-			stateToConsider.robot.turn(Math.PI);
+			stateToConsider.robot.turn(Math.PI/2);
 			
 			if (!stateToConsider.table.isPlotXEaten(5))
 			{//plot 5 pas mangé
@@ -256,10 +256,11 @@ public class GetPlot extends AbstractScript
 					//plot 5 et 6 pas mangé, on mange les deux avec notre bras gauche (celui du coté de l'ascenceur)
 					try 
 					{
-						eatPlot(true, false, stateToConsider, false);
+						eatPlot(true, true, stateToConsider, false);
 					} 
 					catch (UnableToEatPlot e1) 
 					{
+						finalise(stateToConsider);
 						e1.printStackTrace();
 					}
 					
@@ -267,10 +268,11 @@ public class GetPlot extends AbstractScript
 					
 					try 
 					{
-						eatPlot(true, false, stateToConsider, false);
+						eatPlot(true, true, stateToConsider, false);
 					} 
 					catch (UnableToEatPlot e) 
 					{
+						finalise(stateToConsider);
 						e.printStackTrace();
 					}
 				}
@@ -288,12 +290,12 @@ public class GetPlot extends AbstractScript
 					} 
 					catch (UnableToEatPlot e) 
 					{
+						finalise(stateToConsider);
 						e.printStackTrace();
 					}
 				}
 			}
 		}
-		finalise(stateToConsider);
 	}
 
 	@Override
@@ -308,7 +310,7 @@ public class GetPlot extends AbstractScript
 		else if (id==34)
 			return new Circle (900,220,0);
 		else if (id==56)
-			return new Circle (850,1700,0); // Position devant le plot 5, on longeant l'escalier
+			return new Circle (780,1620,0); // Position devant le plot 5, on longeant l'escalier
 		else if (id==7)
 			return new Circle (1410,1800,200);//Point d'entrée dangereux mais (1280,1700) passe (On est à 166 du centre (1410,1800) )
 		else 

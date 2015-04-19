@@ -123,7 +123,7 @@ public class JUnit_Sensors extends JUnit_Test
 		{
 			try
 			{
-				state.robot.moveToCircle(new Circle(new Vec2(-600, 1000),0),  new ArrayList<Hook>(), (Table)container.getService(ServiceNames.TABLE),EnumSet.noneOf(ObstacleGroups.class));
+				state.robot.moveToCircle(new Circle(new Vec2(-700, 900),0),  new ArrayList<Hook>(), (Table)container.getService(ServiceNames.TABLE),EnumSet.noneOf(ObstacleGroups.class));
 			}
 			catch (UnableToMoveException | PathNotFoundException | ContainerException | SerialManagerException e) 
 			{
