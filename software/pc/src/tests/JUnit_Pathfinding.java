@@ -47,7 +47,7 @@ public class JUnit_Pathfinding extends JUnit_Test
     	}
     }
     
-   // @Test
+   @Test
     public void testClickedPF() throws Exception
     {
     	win.getPanel().drawGraph(pf.getGraph());
@@ -94,7 +94,7 @@ public class JUnit_Pathfinding extends JUnit_Test
     	}
     }
     
-    @Test
+    //@Test
     public void testEnums()
     {
     	table.eatPlotX(5);

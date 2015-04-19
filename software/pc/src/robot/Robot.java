@@ -365,7 +365,7 @@ public abstract class Robot implements Service
     		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_7);
     	}
     	
-		path = pathDingDing.computePath(getPosition(),aim.toVec2(),EnumSet.complementOf(obstaclesNotConsidered));
+		path = pathDingDing.computePath(getPosition(),aim.toVec2(),/*EnumSet.complementOf(obstaclesNotConsidered)*/EnumSet.of(ObstacleGroups.ENNEMY_ROBOTS));
 		
     	//retire une distance egale au rayon du cercle au dernier point du chemin (le centre du cercle)
     	
