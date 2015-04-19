@@ -3,11 +3,13 @@ package strategie;
 import hook.Hook;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
 import pathDingDing.PathDingDing;
 import container.Container;
 import container.Service;
 import enums.ScriptNames;
+import enums.ObstacleGroups;
 import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -213,12 +215,70 @@ public class Strategie implements Service
 		} 
 		catch (InObstacleException e) 
 		{
-			//TODO refaire le pathdingding si le point visé est dans un obstacle (et retirer le nombre de points correspondant a cet obstacle)
+			//on enleve les obstacles genants en adaptant les points
+			if (!e.getObstacleGroup().isEmpty())
+			{
+				try 
+				{
+					robotChrono.resetChrono();
+					script.goToThenExec(version, chronoState, true, hookRobot,e.getObstacleGroup());
+					durationScript = robotChrono.getCurrentChrono();
+				}
+				catch (UnableToMoveException | SerialConnexionException
+						| PathNotFoundException | SerialFinallyException
+						| InObstacleException e1) 
+				//en cas de double erreur on suppose que le robot n'y arrivera pas
+				{
+					durationScript = Long.MAX_VALUE;
+				}
+			
+				//on retire le nombre de points correspondant a ces obstacles = malus
+				//on suppose ces obstacles toulours sur la table (a voir si on peut tester)
+				for (ObstacleGroups obstacle : e.getObstacleGroup())
+				{
+					if 
+					(	
+						obstacle == ObstacleGroups.GOBLET_0 || 
+						obstacle == ObstacleGroups.GOBLET_1 || 
+						obstacle == ObstacleGroups.GOBLET_2 || 
+						obstacle == ObstacleGroups.GOBLET_3 || 
+						obstacle == ObstacleGroups.GOBLET_4
+					)
+						points -= 4;
+					else if 
+					(	
+						obstacle == ObstacleGroups.YELLOW_PLOT_0 || 
+						obstacle == ObstacleGroups.YELLOW_PLOT_1 || 
+						obstacle == ObstacleGroups.YELLOW_PLOT_2 || 
+						obstacle == ObstacleGroups.YELLOW_PLOT_3 || 
+						obstacle == ObstacleGroups.YELLOW_PLOT_4 ||
+						obstacle == ObstacleGroups.YELLOW_PLOT_5 || 
+						obstacle == ObstacleGroups.YELLOW_PLOT_6 || 
+						obstacle == ObstacleGroups.YELLOW_PLOT_7 || 
+						obstacle == ObstacleGroups.GREEN_PLOT_0 || 
+						obstacle == ObstacleGroups.GREEN_PLOT_1 || 
+						obstacle == ObstacleGroups.GREEN_PLOT_2 || 
+						obstacle == ObstacleGroups.GREEN_PLOT_3 || 
+						obstacle == ObstacleGroups.GREEN_PLOT_4 || 
+						obstacle == ObstacleGroups.GREEN_PLOT_5 || 
+						obstacle == ObstacleGroups.GREEN_PLOT_6 || 
+						obstacle == ObstacleGroups.GREEN_PLOT_7
+					)
+						points -= 5;
+					//si il faut suprimer le zone adverse ou le robot enemi on suprime les points de ce script (puni)
+					else if
+					(
+						obstacle == ObstacleGroups.ENNEMY_ROBOTS ||
+						obstacle == ObstacleGroups.ENNEMY_ZONE
+						
+					)
+						points = Integer.MIN_VALUE;
+				}
+			}
 			//si aucun obstacle a enlever alors le point visé est hors de la table engueuler les scripts
-			e.printStackTrace();
-			// TODO malus
-			points += -4;
-			durationScript = Long.MAX_VALUE;
+			else
+				durationScript = Long.MAX_VALUE;
+			
 			
 		}
 		//FIXME supr debug
