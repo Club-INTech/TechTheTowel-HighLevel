@@ -1,6 +1,7 @@
 package robot;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
 import hook.Hook;
 import smartMath.Vec2;
@@ -9,6 +10,7 @@ import utils.Log;
 import utils.Config;
 import pathDingDing.PathDingDing;
 import enums.ActuatorOrder;
+import enums.ObstacleGroups;
 import enums.SensorNames;
 import enums.Speed;
 import exceptions.Locomotion.UnableToMoveException;
@@ -154,7 +156,7 @@ public class RobotChrono extends Robot
 	}
 	
 	@Override
-	public void moveToLocation(Vec2 point, ArrayList<Hook> hooksToConsider,Table table)
+	public void moveToLocation(Vec2 point, ArrayList<Hook> hooksToConsider,Table table, EnumSet<ObstacleGroups> obstaclesNotConsiderd)
 	{
 		// symétrise la table si l'on est équipe jaune
 		if(symmetry)

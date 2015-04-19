@@ -3,11 +3,13 @@ package tests;
 import hook.Hook;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.Assert;
 
+import enums.ObstacleGroups;
 import enums.SensorNames;
 import enums.ServiceNames;
 import exceptions.ContainerException;
@@ -66,8 +68,6 @@ public class JUnit_Sensors extends JUnit_Test
 		mLocomotion.updateConfig();
 		mLocomotion.setPosition(new Vec2 (1500-320-77,1000));
 		mLocomotion.setOrientation(Math.PI);
-		mLocomotion.setTranslationnalSpeed(170);
-		mLocomotion.setRotationnalSpeed(160);
 		
 		container.startInstanciedThreads();
 
@@ -110,7 +110,7 @@ public class JUnit_Sensors extends JUnit_Test
 		log.debug("Test d'évitement", this);
 		try 
 		{	
-			state.robot.moveLengthwiseWithoutDetection(200);
+			state.robot.moveLengthwiseWithoutDetection(250);
 		} 
 		catch (UnableToMoveException e1)
 		{
@@ -122,7 +122,7 @@ public class JUnit_Sensors extends JUnit_Test
 		{
 			try
 			{
-				state.robot.moveToCircle(new Circle(new Vec2(-600, 1000),0),  new ArrayList<Hook>(), (Table)container.getService(ServiceNames.TABLE));
+				state.robot.moveToCircle(new Circle(new Vec2(-600, 1000),0),  new ArrayList<Hook>(), (Table)container.getService(ServiceNames.TABLE),EnumSet.noneOf(ObstacleGroups.class));
 			}
 			catch (UnableToMoveException | PathNotFoundException | ContainerException | SerialManagerException e) 
 			{

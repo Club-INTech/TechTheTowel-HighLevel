@@ -40,10 +40,13 @@ public class PathDingDing implements Service
 	 * @return un chemin optimise liant depart et arrivee
 	 * @throws Exception pas encore implemente
 	 */
-	public ArrayList<Vec2> computePath(Vec2 start, Vec2 end, EnumSet<ObstacleGroups> obstaclesToConsider) throws PathNotFoundException
+	public ArrayList<Vec2> computePath(Vec2 start, Vec2 end, EnumSet<ObstacleGroups> obstaclesToConsider) throws PathNotFoundException, InObstacleException
 	{
 		this.mObstaclesToConsider = obstaclesToConsider;
 		mGraph.setObstaclesToConsider(mObstaclesToConsider);
+		
+		if(!mGraph.isOnTable(new Node(end.x, end.y)))
+			throw new InObstacleException();
 		
 		//le cas ou les points de depart et d'arrivee sont reliables en ligne droite est directement traite
 		ArrayList<Vec2> directPath =  new ArrayList<Vec2>();
@@ -248,24 +251,17 @@ public class PathDingDing implements Service
 		if(!pathOnTable)
 			return false;
 			
+		mObstaclesToConsider.add(ObstacleGroups.ENNEMY_ZONE);
+		
 		//conversion des obstacles circulaires en cercles
-		
 		ArrayList<Circle> circles = new ArrayList<Circle>();
-		if(mObstaclesToConsider.contains(ObstacleGroups.ENNEMY_ROBOTS))
-			for(int i = 0; i < mTable.getObstacleManager().getMobileObstacles().size(); i++)
+		for(int i = 0; i < mTable.getObstacleManager().getMobileObstacles().size(); i++)
+			//si l'obstacle est sp�cifi� par la liste d'obstacles � consid�rer
+			if(mObstaclesToConsider.contains(mTable.getObstacleManager().getMobileObstacles().get(i).getObstacleGroup()))
 				circles.add(new Circle(mTable.getObstacleManager().getMobileObstacles().get(i).getPosition(), mTable.getObstacleManager().getMobileObstacles().get(i).getRadius()));
-		
-		if(mObstaclesToConsider.contains(ObstacleGroups.YELLOW_PLOTS))
-			//parcours des plots jaunes
-			for(int i = 0; i < 8; i++)
-				circles.add(new Circle(mTable.getObstacleManager().getFixedObstacles().get(i).getPosition(), mTable.getObstacleManager().getFixedObstacles().get(i).getRadius()));
-		if(mObstaclesToConsider.contains(ObstacleGroups.GREEN_PLOTS))
-			//parcours des plots verts
-			for(int i = 8; i < 16; i++)
-				circles.add(new Circle(mTable.getObstacleManager().getFixedObstacles().get(i).getPosition(), mTable.getObstacleManager().getFixedObstacles().get(i).getRadius()));
-		if(mObstaclesToConsider.contains(ObstacleGroups.GOBLETS))
-			//parcours des gobelets
-			for(int i = 16; i < 21; i++)
+		for(int i = 0; i < mTable.getObstacleManager().getFixedObstacles().size(); i++)
+			//si l'obstacle est sp�cifi� par la liste d'obstacles � consid�rer
+			if(mObstaclesToConsider.contains(mTable.getObstacleManager().getFixedObstacles().get(i).getObstacleGroup()))
 				circles.add(new Circle(mTable.getObstacleManager().getFixedObstacles().get(i).getPosition(), mTable.getObstacleManager().getFixedObstacles().get(i).getRadius()));
 		
 		boolean intersects = false;
@@ -281,7 +277,7 @@ public class PathDingDing implements Service
 			for(int j = 0; j < circles.size(); j++)
 			{
 				//si le segment et le cercle se coupent
-				if(intersects(new Segment(path.get(i), path.get(i+1)), circles.get(j)))
+				if(intersects(new Segment(path.get(i), path.get(i+1)), new Circle(circles.get(j).position, circles.get(j).radius + mTable.getObstacleManager().getRobotRadius())))
 					intersects = true;
 			}
 		}

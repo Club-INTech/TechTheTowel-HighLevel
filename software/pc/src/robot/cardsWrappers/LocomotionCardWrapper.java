@@ -93,9 +93,9 @@ public class LocomotionCardWrapper implements Service
 	public void turnRelative(double angle) throws SerialConnexionException
 	{
 		// tronque l'angle que l'on envoit a la série pour éviter les overflows
-				float angleTruncated = (float)angle;
-				String chaines[] = {"t3", Float.toString(angleTruncated)};
-				locomotionCardSerial.communiquer(chaines, 0);
+		float angleTruncated = (float)angle;
+		String chaines[] = {"t3", Float.toString(angleTruncated)};
+		locomotionCardSerial.communiquer(chaines, 0);
 	}
 	
 	/**
@@ -110,7 +110,9 @@ public class LocomotionCardWrapper implements Service
         disableRotationnalFeedbackLoop();
         
         while(isRobotMoving())
+        {
         	Sleep.sleep(delayBetweenSend); // On attend d'etre arreté
+        }
         
         locomotionCardSerial.communiquer("stop", 0);// On s'asservit sur la position actuelle
         

@@ -1,5 +1,6 @@
 package table.obstacles;
 import smartMath.Vec2;
+import enums.ObstacleGroups;
 
 /**
  * Obstacles mobiles détectés par la balise laser.
@@ -20,9 +21,9 @@ public class ObstacleBeacon extends ObstacleCircular
 	 * @param rad orientation de l'obstacle, même si cet obstacle est supposé de forme circulaire, son orientation est mémorisé pour en déduire son vecteur vitesse
 	 * @param speed vitesse d'évolution de cet obstacle sur la table
 	 */
-	public ObstacleBeacon (Vec2 position, int rad, Vec2 speed)
+	public ObstacleBeacon (Vec2 position, int rad, ObstacleGroups obstacleGroup, Vec2 speed)
 	{
-		super(position,rad);
+		super(position,rad, obstacleGroup);
 		this.speed = speed;
 	}
 

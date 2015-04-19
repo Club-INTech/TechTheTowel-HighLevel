@@ -72,7 +72,7 @@ public class Graph
 					//parcours des cercles, si le lien ne coupe aucun cercle, on le rajoute
 					boolean intersects = false;
 					for(int k = 0; k < circles.size(); k++)
-						if(PathDingDing.intersects(new Segment(mNodes.get(i).toVec2(), mNodes.get(j).toVec2()), circles.get(k)))
+						if(PathDingDing.intersects(new Segment(mNodes.get(i).toVec2(), mNodes.get(j).toVec2()), new Circle(circles.get(k).position, circles.get(k).radius + mTable.getObstacleManager().getRobotRadius())))
 							intersects = true;
 					if(!intersects)
 						mNodes.get(i).addLink(mNodes.get(j));
@@ -224,29 +224,22 @@ public class Graph
 	
 	public boolean isOnTable(Node node)
 	{
+		mObstaclesToConsider.add(ObstacleGroups.ENNEMY_ZONE);
+		
 		//conversion des obstacles circulaires en cercles
-		
 		ArrayList<Circle> circles = new ArrayList<Circle>();
-		if(mObstaclesToConsider.contains(ObstacleGroups.ENNEMY_ROBOTS))
-			for(int i = 0; i < mTable.getObstacleManager().getMobileObstacles().size(); i++)
+		for(int i = 0; i < mTable.getObstacleManager().getMobileObstacles().size(); i++)
+			//si l'obstacle est spécifié par la liste d'obstacles à considérer
+			if(mObstaclesToConsider.contains(mTable.getObstacleManager().getMobileObstacles().get(i).getObstacleGroup()))
 				circles.add(new Circle(mTable.getObstacleManager().getMobileObstacles().get(i).getPosition(), mTable.getObstacleManager().getMobileObstacles().get(i).getRadius()));
-		
-		if(mObstaclesToConsider.contains(ObstacleGroups.YELLOW_PLOTS))
-			//parcours des plots jaunes
-			for(int i = 0; i < 8; i++)
-				circles.add(new Circle(mTable.getObstacleManager().getFixedObstacles().get(i).getPosition(), mTable.getObstacleManager().getFixedObstacles().get(i).getRadius()));
-		if(mObstaclesToConsider.contains(ObstacleGroups.GREEN_PLOTS))
-			//parcours des plots verts
-			for(int i = 8; i < 16; i++)
-				circles.add(new Circle(mTable.getObstacleManager().getFixedObstacles().get(i).getPosition(), mTable.getObstacleManager().getFixedObstacles().get(i).getRadius()));
-		if(mObstaclesToConsider.contains(ObstacleGroups.GOBLETS))
-			//parcours des gobelets
-			for(int i = 16; i < 21; i++)
+		for(int i = 0; i < mTable.getObstacleManager().getFixedObstacles().size(); i++)
+			//si l'obstacle est spécifié par la liste d'obstacles à considérer
+			if(mObstaclesToConsider.contains(mTable.getObstacleManager().getFixedObstacles().get(i).getObstacleGroup()))
 				circles.add(new Circle(mTable.getObstacleManager().getFixedObstacles().get(i).getPosition(), mTable.getObstacleManager().getFixedObstacles().get(i).getRadius()));
 		
 		//si le noeud est dans un cercle, on retourne directement false
 		for(int i = 0; i < circles.size(); i++)
-			if((circles.get(i).position.x - node.x)*(circles.get(i).position.x - node.x) + (circles.get(i).position.y - node.y)*(circles.get(i).position.y - node.y) < circles.get(i).radius*circles.get(i).radius)
+			if((circles.get(i).position.x - node.x)*(circles.get(i).position.x - node.x) + (circles.get(i).position.y - node.y)*(circles.get(i).position.y - node.y) < (circles.get(i).radius + mTable.getObstacleManager().getRobotRadius())*(circles.get(i).radius + mTable.getObstacleManager().getRobotRadius()))
 				return false;
 		
 		boolean isOnTable = false;
@@ -263,7 +256,7 @@ public class Graph
 	}
 	
 	//retourne le noeud correct (pas dans un obstacle) le plus proche de la position
-	//cree un bug si TOUS les noeuds sont occupes par des obstacles
+	//TODO : cree un bug si TOUS les noeuds sont occupes par des obstacles
 	public Node closestNode(Vec2 position)
 	{
 		int minSquaredDistance = 13000000;

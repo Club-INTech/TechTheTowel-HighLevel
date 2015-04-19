@@ -3,6 +3,7 @@ package tests;
 import hook.Hook;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,6 +15,7 @@ import scripts.ScriptManager;
 import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
+import enums.ObstacleGroups;
 import enums.ScriptNames;
 import enums.ServiceNames;
 import exceptions.PathNotFoundException;
@@ -63,7 +65,7 @@ public class JUnit_DropGlass extends JUnit_Test {
 			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
 			exitScript.execute(0, real_state, emptyHook, true );
 		} 
-		catch (SerialConnexionException  e) 
+		catch (SerialConnexionException  | SerialFinallyException e) 
 		{
 			log.critical("Carte mal branchée. Match termine", this);
 			e.printStackTrace();
@@ -81,13 +83,13 @@ public class JUnit_DropGlass extends JUnit_Test {
 			real_state.robot.moveLengthwise(300, emptyHook, true);//FIXME probleme : sans ca, le robot va très mal au point d'entrée -> Boucle d'acquitement de TURN ?
 			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(1, real_state, true, emptyHook );
 				
-		    real_state.robot.moveToCircle(new Circle(0,400,0), emptyHook, real_state.table); // PDD à appeler
+		    real_state.robot.moveToCircle(new Circle(0,400,0), emptyHook, real_state.table, EnumSet.noneOf(ObstacleGroups.class)); // PDD à appeler
 
 			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(3, real_state, true, emptyHook );
 			
 			//On se degage, tant qu'il n'y a pas de PDD
-		    real_state.robot.moveToCircle(new Circle(-800,400,0), emptyHook, real_state.table);
-		    real_state.robot.moveToCircle(new Circle(-800,1500,0), emptyHook, real_state.table);
+		    real_state.robot.moveToCircle(new Circle(-800,400,0), emptyHook, real_state.table,EnumSet.noneOf(ObstacleGroups.class));
+		    real_state.robot.moveToCircle(new Circle(-800,1500,0), emptyHook, real_state.table,EnumSet.noneOf(ObstacleGroups.class));
 			
 			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(2, real_state, true, emptyHook );
 		}

@@ -83,7 +83,7 @@ public class JUnit_DropPile extends JUnit_Test {
 			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
 			exitScript.execute(0, real_state, emptyHook, true );
 		} 
-		catch (SerialConnexionException  e) 
+		catch (SerialConnexionException  | SerialFinallyException e) 
 		{
 			log.critical("Carte mal branchée. Match termine", this);
 			e.printStackTrace();

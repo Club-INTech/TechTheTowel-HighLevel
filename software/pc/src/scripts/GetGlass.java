@@ -1,10 +1,15 @@
 package scripts;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.EnumSet;
 
 import enums.ActuatorOrder;
+import enums.ObstacleGroups;
+import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
+import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import hook.types.HookFactory;
 import robot.Robot;
@@ -37,50 +42,89 @@ public class GetGlass extends AbstractScript
 	}
 	
 	@Override
-	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
+	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, boolean shouldRetryIfBlocked, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException
 	{
-		//on se tourne vers le goblet
-		//on choisit le bras disponible (ici on montre avec le bras gauche)
-		//si aucun bras disponible (logiquement l'IA ne devrai pas lancer le script (erreur ?)) on arrete le script
-		//on avance en ouvrant le bras gauche (respectivement droit)
-		//on se place proche du goblet pour le ramasser
-		//on ferme lentement le bras gauche (respectivement droit) pour attraper le goblet
-		//on demande si on a bien quelque chose a gauche (respectivement a droite)
-		//si on a rien (et que l'autre bras n'est pas occupe) on recule, on ouvre l'autre bras (droit , repectivement gauche), on avance et on ferme le bras droit (respectivement gauche)
-		//si on a toujours rien on arrete		
-		//si on a attrape quelque chose on le dit au robot ainsi que sa position (gauche / droite)
+		EnumSet<ObstacleGroups> obstacleNotConsidered = EnumSet.noneOf(ObstacleGroups.class);
 		
-		stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
-		stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
-		
-		//gestion des version, si le verre est deja pris on ne le re-prend pas (bawi)
 		if (versionToExecute == 0)
-		{
-			if(!stateToConsider.table.isGlassXTaken(0))
-				takeGlass0(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
-		}
+			obstacleNotConsidered.add(ObstacleGroups.GOBLET_0);
 		else if (versionToExecute == 1)
-		{
-			if(!stateToConsider.table.isGlassXTaken(1))
-				takeGlass1(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
-		}
+			obstacleNotConsidered.add(ObstacleGroups.GOBLET_1);
 		else if (versionToExecute == 2)
-		{
-			if(!stateToConsider.table.isGlassXTaken(2))
-				takeGlass2(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
-		}
+			obstacleNotConsidered.add(ObstacleGroups.GOBLET_2);
 		else if (versionToExecute == 3)
-		{
-			if(!stateToConsider.table.isGlassXTaken(3))
-				takeGlass3(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
-		}
+			obstacleNotConsidered.add(ObstacleGroups.GOBLET_3);
 		else if (versionToExecute == 4)
-		{
-			if(!stateToConsider.table.isGlassXTaken(4))
-				takeGlass4(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
-		}
+			obstacleNotConsidered.add(ObstacleGroups.GOBLET_4);
 		else
-			log.debug("Souci de version avec les Verres", this);	//TODO: lancer une exception de version inconnue (la créer si besoin)
+		{
+			log.debug("version de Script inconnue de GetGlass :"+versionToExecute, this);
+			return;
+		}
+		
+
+		// va jusqu'au point d'entrée de la version demandée
+		actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.robotRay), hooksToConsider, actualState.table,obstacleNotConsidered);
+		
+		// exécute la version demandée
+			execute(versionToExecute, actualState, hooksToConsider, shouldRetryIfBlocked);
+}
+	
+	@Override
+	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException, SerialFinallyException
+	{
+		try 
+		{
+			
+			//on se tourne vers le goblet
+			//on choisit le bras disponible (ici on montre avec le bras gauche)
+			//si aucun bras disponible (logiquement l'IA ne devrai pas lancer le script (erreur ?)) on arrete le script
+			//on avance en ouvrant le bras gauche (respectivement droit)
+			//on se place proche du goblet pour le ramasser
+			//on ferme lentement le bras gauche (respectivement droit) pour attraper le goblet
+			//on demande si on a bien quelque chose a gauche (respectivement a droite)
+			//si on a rien (et que l'autre bras n'est pas occupe) on recule, on ouvre l'autre bras (droit , repectivement gauche), on avance et on ferme le bras droit (respectivement gauche)
+			//si on a toujours rien on arrete		
+			//si on a attrape quelque chose on le dit au robot ainsi que sa position (gauche / droite)
+			
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
+			
+			//gestion des version, si le verre est deja pris on ne le re-prend pas (bawi)
+			if (versionToExecute == 0)
+			{
+				if(!stateToConsider.table.isGlassXTaken(0))
+					takeGlass0(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
+			}
+			else if (versionToExecute == 1)
+			{
+				if(!stateToConsider.table.isGlassXTaken(1))
+					takeGlass1(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
+			}
+			else if (versionToExecute == 2)
+			{
+				if(!stateToConsider.table.isGlassXTaken(2))
+					takeGlass2(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
+			}
+			else if (versionToExecute == 3)
+			{
+				if(!stateToConsider.table.isGlassXTaken(3))
+					takeGlass3(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
+			}
+			else if (versionToExecute == 4)
+			{
+				if(!stateToConsider.table.isGlassXTaken(4))
+					takeGlass4(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
+			}
+			else
+				log.debug("Souci de version avec les Verres", this);	//TODO: lancer une exception de version inconnue (la créer si besoin)
+			
+		}
+		catch (UnableToMoveException | SerialConnexionException e) 
+		{
+			finalise(stateToConsider);
+			throw e;
+		}
 	}
 	
 	public void takeGlass0 (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
@@ -148,16 +192,16 @@ public class GetGlass extends AbstractScript
 	}
 
 	@Override
-	protected void finalise(GameState<?> stateToConsider) 
+	protected void finalise(GameState<?> stateToConsider) throws SerialFinallyException 
 	{
 		try 
 		{
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
 		} 
 		catch (SerialConnexionException e)
 		{
-			e.printStackTrace();
+			throw new SerialFinallyException ();
 		}
 		
 	}
@@ -174,16 +218,16 @@ public class GetGlass extends AbstractScript
 		if(isArmChosenLeft)
 		{
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);
-			stateToConsider.robot.turn(-Math.PI/12, hooksToConsider, false, true);
+			stateToConsider.robot.turn((-Math.PI/12), hooksToConsider, false, true);
 		}
 		else 
 		{
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);
-			stateToConsider.robot.turn(Math.PI/12, hooksToConsider, false, true);
+			stateToConsider.robot.turn((Math.PI/12), hooksToConsider, false, true);
 		}
 		
 		//On avance vers le plot
-		stateToConsider.robot.moveLengthwise(80,hooksToConsider);
+		stateToConsider.robot.moveLengthwise(60,hooksToConsider);
 
 		//On prend le verre
 		if(isArmChosenLeft)
@@ -201,8 +245,21 @@ public class GetGlass extends AbstractScript
 
 	public Integer[] getVersion(GameState<?> stateToConsider)
 	{
-		//TODO
-		return versions;
+		ArrayList <Integer> versionList = new ArrayList<Integer>(Arrays.asList(versions));
+		
+		for (int i = 0; i<versionList.size(); i++)
+		{
+			if (stateToConsider.table.isGlassXTaken(i))
+				versionList.remove((Integer)i);
+		}
+		
+		//on converti en Integer[]
+		Integer[] retour = new Integer[versionList.size()];
+	    for (int i=0; i < retour.length; i++)
+	    {
+	    	retour[i] = versionList.get(i).intValue();
+	    }
+	    return retour;
 	}
 
 }

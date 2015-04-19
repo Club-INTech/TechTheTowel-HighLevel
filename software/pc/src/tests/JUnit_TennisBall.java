@@ -91,19 +91,29 @@ public class JUnit_TennisBall extends JUnit_Test
 	 */
 	public void matchSetUp(Robot robot) throws SerialConnexionException
 	{
+		robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
+
+		robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, false);
+		robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, true);
+		
 		robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
 		robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
-		robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, false);
-		robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, false);
+		
+		robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
+		robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);
+		
 		robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
 		robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
+		
 		robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
 		robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
-		robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, false);
+		
+		robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+		
 		robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
 	}
 
-	@Test
+	//@Test
 	public void test() throws PathNotFoundException, SerialFinallyException
 	{
 		container.startAllThreads();
@@ -160,4 +170,20 @@ public class JUnit_TennisBall extends JUnit_Test
 		//Le match s'arrête
 		container.destructor();
 	}
+	
+	@Test
+	public void testStatic() throws PathNotFoundException, SerialFinallyException
+	{
+		try
+		{
+			//real_state.robot.moveLengthwise(-450,emptyHook);
+			scriptmanager.getScript(ScriptNames.TAKE_TENNIS_BALL).execute(1, real_state, emptyHook, true );
+		} 
+		catch (UnableToMoveException | SerialConnexionException e) 
+		{
+			e.printStackTrace();
+		}
+
+	}
+
 }

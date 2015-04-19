@@ -3,10 +3,13 @@ package tests;
 import org.junit.Before;
 import org.junit.After;
 
+import robot.Robot;
 import utils.Log;
 import utils.Config;
 import container.Container;
+import enums.ActuatorOrder;
 import enums.ServiceNames;
+import exceptions.serial.SerialConnexionException;
 
 /**
  * The Class JUnit_Test.
@@ -35,6 +38,37 @@ public abstract class JUnit_Test
 		config = (Config) container.getService(ServiceNames.CONFIG);
 		log = (Log) container.getService(ServiceNames.LOG);
 	}
+	
+	/**
+	 * le set up du match en cours (mise en place des actionneurs)
+	 * @param robot le robot a setuper
+	 * @throws SerialConnexionException si l'ordinateur n'arrive pas a communiquer avec les cartes
+	 */
+
+	public void matchSetUp(Robot robot) throws SerialConnexionException
+	{
+		robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
+
+		robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, false);
+		robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, true);
+		
+		robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
+		robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
+		
+		robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
+		robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);
+		
+		robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
+		robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
+		
+		robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
+		robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
+		
+		robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+		
+		robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+	}
+	
 
 	/**
 	 * Tear down.

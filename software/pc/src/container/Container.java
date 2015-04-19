@@ -11,6 +11,7 @@ import utils.*;
 import pathDingDing.PathDingDing;
 import scripts.ScriptManager;
 import strategie.GameState;
+import strategie.Strategie;
 import table.Table;
 import threads.ThreadManager;
 import robot.Locomotion;
@@ -210,6 +211,14 @@ public class Container
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new LaserFiltration(
 																	(Config)getService(ServiceNames.CONFIG),
 																	(Log)getService(ServiceNames.LOG)
+																);
+		else if(serviceRequested == ServiceNames.STRATEGIE)
+			instanciedServices[serviceRequested.ordinal()] = 	(Service)new Strategie(
+																(Config)getService(ServiceNames.CONFIG),
+																(Log)getService(ServiceNames.LOG),
+																(GameState<RobotReal>)getService(ServiceNames.GAME_STATE), 
+																(ScriptManager)getService(ServiceNames.SCRIPT_MANAGER), 
+																(PathDingDing)getService(ServiceNames.PATHDINGDING)
 																);
 		else if(serviceRequested == ServiceNames.CHECK_UP)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new CheckUp(

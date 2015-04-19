@@ -12,6 +12,7 @@ import hook.types.HookFactory;
 import robot.Robot;
 import smartMath.Circle;
 import strategie.GameState;
+import sun.org.mozilla.javascript.EcmaError;
 import utils.Config;
 import utils.Log;
 
@@ -65,24 +66,32 @@ public class CloseClap extends AbstractScript
 	}
 	
 	@Override
-	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
+	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException, SerialFinallyException
 	{		
-		if (versionToExecute == 123)
-			closeAllOurClaps(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
-		else if (versionToExecute == 1)
-			closeFirstClap(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
-		else if (versionToExecute == 2)
-			closeSecondClap(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
-		else if (versionToExecute == 3)
-			closeThirdClap(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
-		else if (versionToExecute == 12)
-			closeFirstAndSecondClap(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
-		else if (versionToExecute == -1)
-			closeFirstClapBackward(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
-		else if (versionToExecute == -12)
-			closeFirstAndSecondClapBackward(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
-		else
-			log.debug("Souci de version", this);	//TODO: lancer une exception de version inconnue (la créer si besoin)
+		try
+		{
+			if (versionToExecute == 123)
+				closeAllOurClaps(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
+			else if (versionToExecute == 1)
+				closeFirstClap(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
+			else if (versionToExecute == 2)
+				closeSecondClap(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
+			else if (versionToExecute == 3)
+				closeThirdClap(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
+			else if (versionToExecute == 12)
+				closeFirstAndSecondClap(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
+			else if (versionToExecute == -1)
+				closeFirstClapBackward(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
+			else if (versionToExecute == -12)
+				closeFirstAndSecondClapBackward(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
+			else
+				log.debug("Souci de version", this);	//TODO: lancer une exception de version inconnue (la créer si besoin)
+		}
+		catch (UnableToMoveException | SerialConnexionException e)
+		{
+			finalise(stateToConsider);
+			throw e ;
+		}
 	}
 	
 	public void closeFirstClap (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
@@ -145,20 +154,10 @@ public class CloseClap extends AbstractScript
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
 		}	
 		
-		stateToConsider.robot.moveLengthwise(300, hooksToConsider, false);
-		stateToConsider.table.clapXClosed(2);	
-		
-		if(stateToConsider.robot.getSymmetry())
-		{
-			//Coté jaune
-			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, true);
-		}
-		else //coté vert
-		{
-			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, true);
-		}
 		//On s'echape
 		stateToConsider.robot.turn(Math.PI/2, hooksToConsider, false);
+		stateToConsider.table.clapXClosed(2);	
+
 						
 		//On ferme tout pour finir
 		stateToConsider.robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
@@ -467,7 +466,7 @@ public class CloseClap extends AbstractScript
 		if (version == 1)
 			return new Circle(1290,230); //point d'entrée : bord de la table, robot devant le clap 1
 		else if(version == 2)
-			return new Circle(700,230); //point d'entrée : devant le clap 2
+			return new Circle(760,260); //point d'entrée : devant le clap 2
 		else if(version == 3)
 			return new Circle(-900,500);//point d'entrée : devant le clap 3
 		else if(version == 12)

@@ -47,110 +47,51 @@ public class JUnit_GetPlot extends JUnit_Test
 		scriptmanager = (ScriptManager) container.getService(ServiceNames.SCRIPT_MANAGER);
 		mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
 		emptyHook = new ArrayList<Hook> ();
-		
-		if (config.getProperty("couleur").equals("jaune"))
-		{
-			real_state.robot.setPosition(new Vec2 (-1381,1000));
-			real_state.robot.setOrientation(0); 
-			//si on est jaune on est en 0 
-		}
-		else
-		{
-			real_state.robot.setPosition(new Vec2 (1381,1000));
-			real_state.robot.setOrientation(Math.PI);
-			//sinon on est vert donc on est en PI
-		}
+
+		real_state.robot.setPosition(new Vec2 (1132,1000));
+		real_state.robot.setOrientation(Math.PI);
+		matchSetUp(real_state.robot);
+
 		real_state.robot.updateConfig();
 	}
 	
-	public void waitMatchBegin()
-	{
-
-		System.out.println("Robot pret pour le match, attente du retrait du jumper");
-		
-		// attends que le jumper soit retiré du robot
-		
-		boolean jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
-		while(jumperWasAbsent || !mSensorsCardWrapper.isJumperAbsent())
-		{
-			jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
-			 Sleep.sleep(100);
-		}
-
-		
-		// maintenant que le jumper est retiré, le match a commencé
-		//ThreadTimer.matchStarted = true;
-	}
+	
 
 	@Test
 	public void test()
 	{
 		try 
 		{
-			real_state.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
-			real_state.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, false);
-			real_state.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, false);			
-			real_state.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
-			
-		} 
-		catch (SerialConnexionException e1) 
-		{
-			e1.printStackTrace();
-		}
-		// on remplis la liste des plots a attraper (dans l'ordre)
-			listToGrab.add(56);
-			listToGrab.add(7);
-		
-		//container.startAllThreads();
-		//waitMatchBegin();
-		//premiere action du match
-		
-		System.out.println("Le robot commence le match");
-		
-		//on sort de la zone de depart
-		try 
-		{
 			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
 			exitScript.execute(0, real_state, emptyHook, true );
 		} 
-		catch (SerialConnexionException  e) 
+		catch (SerialConnexionException | SerialFinallyException | UnableToMoveException e) 
 		{
 			System.out.println("CRITICAL : Carte mal branchée. Match termine");
 			e.printStackTrace();
 			return;
 		}
-		catch (UnableToMoveException e) 
-		{
-			System.out.println("CRITICAL : Chemin bloque, enlevez votre main");
-			e.printStackTrace();
-		}
 		
-		//debut du match
 		System.out.println("debut du match");
-		
-		//premier script
-		for (int i=0; i<listToGrab.size(); i++)
+		try 
 		{
-			try 
-			{
-				scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(listToGrab.get(i), real_state, true, emptyHook );
-			}
-			catch (UnableToMoveException | SerialConnexionException e) 
-			{
-				// un robot ennemi devant ?
-				e.printStackTrace();
-			
-			} 
-			catch (PathNotFoundException e)
-			{
-				//TODO: le pathfinding ne trouve pas de chemin
-				e.printStackTrace();
-			} 
-			catch (SerialFinallyException e) 
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(56, real_state, true, emptyHook );
+		}
+		catch (UnableToMoveException | SerialConnexionException e) 
+		{
+			// un robot ennemi devant ?
+			e.printStackTrace();
+		
+		} 
+		catch (PathNotFoundException e)
+		{
+			//TODO: le pathfinding ne trouve pas de chemin
+			e.printStackTrace();
+		} 
+		catch (SerialFinallyException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		System.out.println("match fini !");

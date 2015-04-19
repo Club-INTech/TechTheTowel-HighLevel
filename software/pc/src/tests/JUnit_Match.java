@@ -3,6 +3,7 @@ package tests;
 import java.util.ArrayList;
 
 import hook.Hook;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,6 +11,7 @@ import enums.ScriptNames;
 import enums.ServiceNames;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
+import exceptions.serial.SerialFinallyException;
 import robot.Robot;
 import robot.cardsWrappers.SensorsCardWrapper;
 import scripts.AbstractScript;
@@ -69,7 +71,7 @@ public class JUnit_Match extends JUnit_Test
 			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
 			exitScript.execute(0, real_state, emptyHook, true );
 		} 
-		catch (SerialConnexionException  e) 
+		catch (SerialConnexionException | SerialFinallyException e) 
 		{
 			log.critical("Carte mal branchée. Match termine",this);
 			e.printStackTrace();

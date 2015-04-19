@@ -1,8 +1,10 @@
 package table;
 
 
+import smartMath.Vec2;
 import table.obstacles.*;
 import container.Service;
+import enums.ObstacleGroups;
 import utils.*;
 
 /* Positions :
@@ -180,10 +182,32 @@ public class Table implements Service
 	 */
 	public void eatPlotX (int x)
 	{
-		if (0<=x && x<=8)
+		if (0<=x && x<=7)
+		{
 			isPlotXEaten[x]=true;
+		}
 		else
 			log.debug("out of bound, plot counter",this);
+
+		if(x==0)
+			mObstacleManager.removeFixedObstacle(ObstacleGroups.GREEN_PLOT_0);
+		else if(x==1)
+			mObstacleManager.removeFixedObstacle(ObstacleGroups.GREEN_PLOT_1);
+		else if(x==2)
+			mObstacleManager.removeFixedObstacle(ObstacleGroups.GREEN_PLOT_2);
+		else if(x==3)
+			mObstacleManager.removeFixedObstacle(ObstacleGroups.GREEN_PLOT_3);
+		else if(x==4)
+			mObstacleManager.removeFixedObstacle(ObstacleGroups.GREEN_PLOT_4);
+		else if(x==5)
+			mObstacleManager.removeFixedObstacle(ObstacleGroups.GREEN_PLOT_5);
+		else if(x==6)
+			mObstacleManager.removeFixedObstacle(ObstacleGroups.GREEN_PLOT_6);
+		else if(x==7)
+			mObstacleManager.removeFixedObstacle(ObstacleGroups.GREEN_PLOT_7);	
+	
+		mObstacleManager.printObstacleFixedList();
+
 	}
 	
 	/**
@@ -232,10 +256,23 @@ public class Table implements Service
 	 */
 	public void removeGlassX (int x)
 	{
-		if (0<=x && x<=5)
+		if (0<=x && x<=4)
 			isGlassXTaken[x]=true;
 		else
 			log.debug("out of bound isGlassTaken",this);
+		
+		if(x==0)
+			mObstacleManager.removeFixedObstacle(ObstacleGroups.GOBLET_0);
+		else if(x==1)
+			mObstacleManager.removeFixedObstacle(ObstacleGroups.GOBLET_1);
+		else if(x==2)
+			mObstacleManager.removeFixedObstacle(ObstacleGroups.GOBLET_2);
+		else if(x==3)
+			mObstacleManager.removeFixedObstacle(ObstacleGroups.GOBLET_3);
+		else if(x==4)
+			mObstacleManager.removeFixedObstacle(ObstacleGroups.GOBLET_4);
+		
+		mObstacleManager.printObstacleFixedList();
 	}
 	
 	/**
@@ -252,20 +289,8 @@ public class Table implements Service
 	}
 	
 	/**
-	 * le verre x a été laché, on met à jour la table
-	 * @param x le numero du verre doit etre dans [0..4]
-	 */
-	public void glassXDropped (int x)
-	{
-		if (0<=x && x<=5)
-			isGlassXDropped[x]=true;
-		else
-			log.debug("out of bound glassXDropped",this);
-	}
-	
-	/**
 	 * Un verre a été deposé dans la zone x, on  met à jour 
-	 * @param x la zone 
+	 * @param x la zone (0 la notre, 1 a notre droite et 2 a gauche)
 	 *  ____________________________
 	 * 	|							|
 	 * 	|1							|
@@ -286,7 +311,7 @@ public class Table implements Service
 	
 	/** Fonction renvoyant si la zone en argument est remplie d'un verre ou non 
 	 * 
-	 * @param x la zone 
+	 * @param x la zone (0 la notre, 1 a notre droite et 2 a gauche)
 	 *  ____________________________
 	 * 	|							|
 	 * 	|1							|

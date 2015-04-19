@@ -1,10 +1,5 @@
 package threads;
 
-import org.hamcrest.core.IsSame;
-
-import com.sun.org.apache.bcel.internal.generic.IREM;
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Single;
-
 import enums.SensorNames;
 import exceptions.serial.SerialConnexionException;
 import robot.cardsWrappers.SensorsCardWrapper;
@@ -168,8 +163,6 @@ class ThreadSensor extends AbstractThread
 		
 		
 		// boucle d'attente de début de match
-		//TODO : decommenter
-		/*
 		while(!ThreadTimer.matchStarted)
 		{
 			if(stopThreads)
@@ -179,7 +172,6 @@ class ThreadSensor extends AbstractThread
 			}
 			Sleep.sleep(50);
 		}
-		*/
 		
 		
 		// boucle principale, celle qui dure tout le match
@@ -224,7 +216,10 @@ class ThreadSensor extends AbstractThread
 					log.debug("obstacle detecte a moins de 7 cm !", this);
 				
 			}
+//			log.debug("Debut du wait dans sensors", this);
 			Sleep.sleep((long)(1000./sensorFrequency));
+//			log.debug("Fin du wait dans sensors", this);
+
 			
 		}
         log.debug("Fin du thread de capteurs", this);
