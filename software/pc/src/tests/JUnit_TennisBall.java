@@ -8,11 +8,14 @@ import scripts.AbstractScript;
 import scripts.ScriptManager;
 import smartMath.Vec2;
 import strategie.GameState;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import enums.ActuatorOrder;
 import enums.ScriptNames;
 import enums.ServiceNames;
+import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
@@ -114,7 +117,7 @@ public class JUnit_TennisBall extends JUnit_Test
 	}
 
 	//@Test
-	public void test() throws PathNotFoundException, SerialFinallyException
+	public void test() throws PathNotFoundException, SerialFinallyException, InObstacleException
 	{
 		container.startAllThreads();
 		waitMatchBegin();

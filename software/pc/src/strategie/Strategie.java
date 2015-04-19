@@ -8,6 +8,7 @@ import pathDingDing.PathDingDing;
 import container.Container;
 import container.Service;
 import enums.ScriptNames;
+import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
@@ -146,7 +147,7 @@ public class Strategie implements Service
 				nextScript.goToThenExec(nextScriptVersion, gameState, true, hookRobot);
 			} 
 			catch (UnableToMoveException | SerialConnexionException
-					| PathNotFoundException | SerialFinallyException e) 
+					| PathNotFoundException | SerialFinallyException | InObstacleException e) 
 			{
 				// FIXME choix de l'IA face a un imprevu
 				e.printStackTrace();
@@ -204,7 +205,8 @@ public class Strategie implements Service
 			script.goToThenExec(version, chronoState, true, hookRobot);
 			durationScript = robotChrono.getCurrentChrono();
 		} 
-		catch (Exception e) 
+		catch (UnableToMoveException | SerialConnexionException
+				| PathNotFoundException | SerialFinallyException | InObstacleException e) 
 		{
 			durationScript = Long.MAX_VALUE;
 		}

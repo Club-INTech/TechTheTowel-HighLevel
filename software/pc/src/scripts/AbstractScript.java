@@ -12,6 +12,7 @@ import container.Service;
 import hook.Hook;
 import hook.types.HookFactory;
 import enums.ObstacleGroups;
+import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
@@ -64,8 +65,9 @@ public abstract class AbstractScript implements Service
 	 * @throws SerialConnexionException s'il y a un problème de communication avec une des cartes électroniques
 	 * @throws PathNotFoundException  si le pathfinding ne trouve pas de chemin
 	 * @throws SerialFinallyException si le finally n'est pas correctement execute (erreur critique)
+	 * @throws InObstacleException lorqsque le robot veut aller dans un obstacle
 	 */
-	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, boolean shouldRetryIfBlocked, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException
+	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, boolean shouldRetryIfBlocked, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, InObstacleException
 	{
 		// va jusqu'au point d'entrée de la version demandée
 		actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.robotRay), hooksToConsider, actualState.table,EnumSet.noneOf(ObstacleGroups.class));

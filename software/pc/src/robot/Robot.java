@@ -14,6 +14,7 @@ import enums.ObstacleGroups;
 import enums.SensorNames;
 import enums.Speed;
 import enums.UnableToMoveReason;
+import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
@@ -319,8 +320,9 @@ public abstract class Robot implements Service
      * @param table la table sur laquelle le robot se deplace
      * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
      * @throws PathNotFoundException lorsque le pathdingding ne trouve pas de chemin 
+     * @throws InObstacleException lorqsque le robot veut aller dans un obstacle
      */
-    public void moveToLocation(Vec2 aim, ArrayList<Hook> hooksToConsider, Table table, EnumSet<ObstacleGroups> obstaclesNotConsiderd) throws  PathNotFoundException, UnableToMoveException
+    public void moveToLocation(Vec2 aim, ArrayList<Hook> hooksToConsider, Table table, EnumSet<ObstacleGroups> obstaclesNotConsiderd) throws  PathNotFoundException, UnableToMoveException, InObstacleException
     {
     	moveToCircle(new Circle(aim), hooksToConsider, table, obstaclesNotConsiderd);
     }
@@ -336,8 +338,9 @@ public abstract class Robot implements Service
      * 
      * @throws PathNotFoundException lorsque le pathdingding ne trouve pas de chemin 
      * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
+     * @throws InObstacleException lorqsque le robot veut aller dans un obstacle
      */
-    public void moveToCircle(Circle aim, ArrayList<Hook> hooksToConsider, Table table, EnumSet<ObstacleGroups> obstaclesNotConsidered) throws PathNotFoundException, UnableToMoveException
+    public void moveToCircle(Circle aim, ArrayList<Hook> hooksToConsider, Table table, EnumSet<ObstacleGroups> obstaclesNotConsidered) throws PathNotFoundException, UnableToMoveException, InObstacleException
     {
     	ArrayList<Vec2> path;
     	//si on est jaune on retire les plots verts de la liste des obstacles
@@ -416,9 +419,10 @@ public abstract class Robot implements Service
      * 	Elle s'appelle elle-meme tant qu'on a pas reussi.
      *  Avant d'apeller cette méthode remettre actualNumberOfTries à 0
      * 	@throws PathNotFoundException 
+     * @throws InObstacleException lorqsque le robot veut aller dans un obstacle
      */
     
-    public void recalculate(Vec2 aim, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, PathNotFoundException
+    public void recalculate(Vec2 aim, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, PathNotFoundException, InObstacleException
     {
     	if(actualNumberOfTries < maxNumberTriesRecalculation)
 		{

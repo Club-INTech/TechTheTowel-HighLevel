@@ -14,6 +14,7 @@ import enums.ObstacleGroups;
 import enums.SensorNames;
 import enums.ServiceNames;
 import exceptions.ContainerException;
+import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.Locomotion.UnexpectedObstacleOnPathException;
@@ -106,7 +107,7 @@ public class JUnit_Sensors extends JUnit_Test
 	}
 	
 //	@Test
-	public void testEvitement()
+	public void testEvitement() throws InObstacleException
 	{
 		log.debug("Test d'évitement", this);
 		try 
@@ -216,7 +217,7 @@ public class JUnit_Sensors extends JUnit_Test
 	
 	
     @Test
-	public void testCapteurDeplacement() throws SerialConnexionException
+	public void testCapteurDeplacement() throws SerialConnexionException, InObstacleException
 	{
     	matchSetUp(state.robot);
     	try 
