@@ -94,6 +94,7 @@ public class JUnit_Pathfinding extends JUnit_Test
     	}
     }
     
+
     //@Test
     public void testIsOnTable() throws Exception
     {

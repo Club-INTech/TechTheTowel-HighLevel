@@ -18,6 +18,7 @@ import strategie.GameState;
 import enums.ObstacleGroups;
 import enums.ScriptNames;
 import enums.ServiceNames;
+import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
@@ -57,7 +58,7 @@ public class JUnit_DropGlass extends JUnit_Test {
 	}
 	
 	@Test
-	public void test()
+	public void test() throws InObstacleException
 	{
 		//on sort de la zone de depart
 		try 

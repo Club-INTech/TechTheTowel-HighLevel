@@ -8,6 +8,7 @@ import pathDingDing.PathDingDing;
 import container.Container;
 import container.Service;
 import enums.ScriptNames;
+import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
@@ -146,7 +147,7 @@ public class Strategie implements Service
 				nextScript.goToThenExec(nextScriptVersion, gameState, true, hookRobot);
 			} 
 			catch (UnableToMoveException | SerialConnexionException
-					| PathNotFoundException | SerialFinallyException e) 
+					| PathNotFoundException | SerialFinallyException | InObstacleException e) 
 			{
 				// FIXME choix de l'IA face a un imprevu
 				e.printStackTrace();
@@ -190,6 +191,7 @@ public class Strategie implements Service
 	 */
 	private int scriptValue(AbstractScript script, int version) 
 	{
+		int points = 0;
 		//on replace le robotChrono pour le calcul du temps et la table (pour ne pas modifier la table actuelle)
 		robotReal.copy(robotChrono);
 		Table tableCopy = table.clone();
@@ -204,16 +206,31 @@ public class Strategie implements Service
 			script.goToThenExec(version, chronoState, true, hookRobot);
 			durationScript = robotChrono.getCurrentChrono();
 		} 
-		catch (Exception e) 
+		catch (UnableToMoveException | SerialConnexionException
+				| PathNotFoundException | SerialFinallyException e) 
 		{
 			durationScript = Long.MAX_VALUE;
+		} 
+		catch (InObstacleException e) 
+		{
+			//TODO refaire le pathdingding si le point visé est dans un obstacle (et retirer le nombre de points correspondant a cet obstacle)
+			//si aucun obstacle a enlever alors le point visé est hors de la table engueuler les scripts
+			e.printStackTrace();
+			// TODO malus
+			points += -4;
+			durationScript = Long.MAX_VALUE;
+			
 		}
+		//FIXME supr debug
 		log.debug("script :"+script.getClass().getName(), this);
 		log.debug("version :"+version, this);
 		log.debug("temps :"+durationScript, this);
-		int points = (int) (script.remainingScoreOfVersion(version, realGameState)*((matchDuration-realGameState.timeEllapsed)-durationScript)/durationScript);
+		
+		
+		points += script.remainingScoreOfVersion(version, realGameState);
+		points *= ((matchDuration-realGameState.timeEllapsed)-durationScript)/durationScript;
 		log.debug("points :"+points, this);
-		//points = pointsScript * (tempsRestant - duree)/duree
+		//points = (pointsScript+malus) * (tempsRestant - duree)/duree
 		return points;
 		
 	}
