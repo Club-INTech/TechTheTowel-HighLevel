@@ -229,11 +229,11 @@ public class Graph
 		//conversion des obstacles circulaires en cercles
 		ArrayList<Circle> circles = new ArrayList<Circle>();
 		for(int i = 0; i < mTable.getObstacleManager().getMobileObstacles().size(); i++)
-			//si l'obstacle est spécifié par la liste d'obstacles à considérer
+			//si l'obstacle est spï¿½cifiï¿½ par la liste d'obstacles ï¿½ considï¿½rer
 			if(mObstaclesToConsider.contains(mTable.getObstacleManager().getMobileObstacles().get(i).getObstacleGroup()))
 				circles.add(new Circle(mTable.getObstacleManager().getMobileObstacles().get(i).getPosition(), mTable.getObstacleManager().getMobileObstacles().get(i).getRadius()));
 		for(int i = 0; i < mTable.getObstacleManager().getFixedObstacles().size(); i++)
-			//si l'obstacle est spécifié par la liste d'obstacles à considérer
+			//si l'obstacle est spï¿½cifiï¿½ par la liste d'obstacles ï¿½ considï¿½rer
 			if(mObstaclesToConsider.contains(mTable.getObstacleManager().getFixedObstacles().get(i).getObstacleGroup()))
 				circles.add(new Circle(mTable.getObstacleManager().getFixedObstacles().get(i).getPosition(), mTable.getObstacleManager().getFixedObstacles().get(i).getRadius()));
 		

@@ -45,8 +45,13 @@ public class PathDingDing implements Service
 		this.mObstaclesToConsider = obstaclesToConsider;
 		mGraph.setObstaclesToConsider(mObstaclesToConsider);
 		
+		//si le noeud d'arrivée n'est pas sur la table, on jette une exception
 		if(!mGraph.isOnTable(new Node(end.x, end.y)))
-			throw new InObstacleException();
+		{
+			EnumSet<ObstacleGroups> obstacleGroupsInPosition = mTable.getObstacleManager().obstacleGroupsInPosition(end);
+				obstacleGroupsInPosition.retainAll(mObstaclesToConsider);
+			throw new InObstacleException(obstacleGroupsInPosition);
+		}
 		
 		//le cas ou les points de depart et d'arrivee sont reliables en ligne droite est directement traite
 		ArrayList<Vec2> directPath =  new ArrayList<Vec2>();
