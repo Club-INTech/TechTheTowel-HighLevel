@@ -239,7 +239,7 @@ public class Graph
 		
 		//si le noeud est dans un cercle, on retourne directement false
 		for(int i = 0; i < circles.size(); i++)
-			if((circles.get(i).position.x - node.x)*(circles.get(i).position.x - node.x) + (circles.get(i).position.y - node.y)*(circles.get(i).position.y - node.y) < circles.get(i).radius*circles.get(i).radius)
+			if((circles.get(i).position.x - node.x)*(circles.get(i).position.x - node.x) + (circles.get(i).position.y - node.y)*(circles.get(i).position.y - node.y) < (circles.get(i).radius + mTable.getObstacleManager().getRobotRadius())*(circles.get(i).radius + mTable.getObstacleManager().getRobotRadius()))
 				return false;
 		
 		boolean isOnTable = false;
@@ -256,7 +256,7 @@ public class Graph
 	}
 	
 	//retourne le noeud correct (pas dans un obstacle) le plus proche de la position
-	//cree un bug si TOUS les noeuds sont occupes par des obstacles
+	//TODO : cree un bug si TOUS les noeuds sont occupes par des obstacles
 	public Node closestNode(Vec2 position)
 	{
 		int minSquaredDistance = 13000000;
