@@ -50,10 +50,11 @@ public abstract class AbstractScript implements Service
 		AbstractScript.hookFactory = hookFactory;
 		AbstractScript.config = config;
 		AbstractScript.log = log;
-	}
-		
+	}	
+	
 	/**
 	 * IMPORTANT : Tout les scripts voulant retirer des obstacles particuliers lors du calcul de chemin doivent reecrire cette methode et retirer ces obstacles dans leur propre calcul du pathfinding
+	 * (on suppose qu'on prends en compte tout les obstacles hors plots adverses)
 	 * Va au point d'entrée du script (en utilisant le Pathfinding), puis l'exécute
 	 * En fournissant un GameState<RobotChrono>, il est possible de chronométrer le temps que l'on metterait a exécuter ce script sans réellement l'exécuter
 	 *
@@ -69,12 +70,34 @@ public abstract class AbstractScript implements Service
 	 */
 	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, boolean shouldRetryIfBlocked, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, InObstacleException
 	{
+		goToThenExec(versionToExecute, actualState, shouldRetryIfBlocked, hooksToConsider, EnumSet.noneOf(ObstacleGroups.class));
+	}
+		
+	/**
+	 * Va au point d'entrée du script (en utilisant le Pathfinding), puis l'exécute
+	 * En fournissant un GameState<RobotChrono>, il est possible de chronométrer le temps que l'on metterait a exécuter ce script sans réellement l'exécuter
+	 *
+	 * @param versionToExecute la version du
+	 * @param actualState l'état courrant du match.
+	 * @param shouldRetryIfBlocked vrai si le robot doit renter le script s'il bloque mécaniquement
+	 * @param hooksToConsider les hooks a considérer lors des déplacements vers ces scripts
+	 * @param enumObstacle les obstacles qu'on ne veut pas prendre ne compte dans le pathDingDing
+	 * @throws UnableToMoveException losrque le robot veut se déplacer et que quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
+	 * @throws SerialConnexionException s'il y a un problème de communication avec une des cartes électroniques
+	 * @throws PathNotFoundException  si le pathfinding ne trouve pas de chemin
+	 * @throws SerialFinallyException si le finally n'est pas correctement execute (erreur critique)
+	 * @throws InObstacleException lorqsque le robot veut aller dans un obstacle
+	 */
+	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, boolean shouldRetryIfBlocked, ArrayList<Hook> hooksToConsider, EnumSet<ObstacleGroups> enumObstacle) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, InObstacleException
+	{
 		// va jusqu'au point d'entrée de la version demandée
-		actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.robotRay), hooksToConsider, actualState.table,EnumSet.noneOf(ObstacleGroups.class));
+		actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.robotRay), hooksToConsider, actualState.table, enumObstacle);
 		
 		// exécute la version demandée
 		execute(versionToExecute, actualState, hooksToConsider, shouldRetryIfBlocked);
 	}
+	
+
 	   
 	/**
 	 * Exécute le script
