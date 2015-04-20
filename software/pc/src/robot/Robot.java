@@ -67,6 +67,9 @@ public abstract class Robot implements Service
 	/** Nombre d'essais maximal de tentative de calcul de PathDingDing */
 	private int maxNumberTriesRecalculation = 4;
 	private int actualNumberOfTries=0;
+
+	/** Booleen explicitant si on a un plot dans les machoires mais pas encore dans le tube */
+	private boolean hasNonDigestedPlot=false;
 	
 	
 	/**
@@ -479,4 +482,21 @@ public abstract class Robot implements Service
 	public abstract Object getSensorValue(SensorNames captor) throws SerialConnexionException;
 
 	public abstract void turnWithoutDetection(double angle, ArrayList<Hook> hooks);
+	
+	/** met hasNonDigestedPlot à false  */
+	public void digestPlot()
+	{
+		hasNonDigestedPlot=false;
+	}
+	
+	/** met hasNonDigestedPlot à true  */
+	public void aMiamiam()
+	{
+		hasNonDigestedPlot=true;
+	}	
+	
+	public boolean hasRobotNonDigestedPlot()
+	{
+		return hasNonDigestedPlot;
+	}
 }

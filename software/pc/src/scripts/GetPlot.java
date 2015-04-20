@@ -396,8 +396,11 @@ public class GetPlot extends AbstractScript
 		{
 			isArmChosenLeft=!isArmChosenLeft;
 		}
-		if (stateToConsider.robot.storedPlotCount>0)
+		if (stateToConsider.robot.hasRobotNonDigestedPlot())
+		{
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_HIGH, true);
+			stateToConsider.robot.digestPlot();
+		}
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
 		if (movementAllowed)
@@ -486,7 +489,9 @@ public class GetPlot extends AbstractScript
 			
 		stateToConsider.robot.storedPlotCount++;
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
-		}
+		
+		stateToConsider.robot.aMiamiam();
+	}
 
 
 	

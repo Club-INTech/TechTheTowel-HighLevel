@@ -172,12 +172,22 @@ public class JUnit_Sensors extends JUnit_Test
 		}
 	}
 	
-	//@Test
-	public void testvide()
+	@Test
+	public void testMoveThenDetect()
 	{
+		
+		try 
+		{
+			state.robot.moveLengthwiseWithoutDetection(500);
+			state.robot.turn(- Math.PI/2);
+		} 
+		catch (UnableToMoveException e1)
+		{
+			log.critical("!!!!! Catch de"+e1+" dans testDetectionTournante !!!!!" , this);
+		}
 		while (true)
 		{
-			
+			;
 		}
 	}
 	
@@ -216,7 +226,7 @@ public class JUnit_Sensors extends JUnit_Test
 	}
 	
 	
-    @Test
+   // @Test
 	public void testCapteurDeplacement() throws SerialConnexionException, InObstacleException
 	{
     	matchSetUp(state.robot);
