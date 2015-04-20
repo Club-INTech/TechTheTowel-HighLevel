@@ -6,6 +6,7 @@ import java.util.EnumSet;
 
 import enums.ActuatorOrder;
 import enums.ObstacleGroups;
+import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
@@ -42,7 +43,7 @@ public class GetGlass extends AbstractScript
 	}
 	
 	@Override
-	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, boolean shouldRetryIfBlocked, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException
+	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, boolean shouldRetryIfBlocked, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, InObstacleException
 	{
 		EnumSet<ObstacleGroups> obstacleNotConsidered = EnumSet.noneOf(ObstacleGroups.class);
 		
@@ -86,9 +87,6 @@ public class GetGlass extends AbstractScript
 			//si on a rien (et que l'autre bras n'est pas occupe) on recule, on ouvre l'autre bras (droit , repectivement gauche), on avance et on ferme le bras droit (respectivement gauche)
 			//si on a toujours rien on arrete		
 			//si on a attrape quelque chose on le dit au robot ainsi que sa position (gauche / droite)
-			
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
 			
 			//gestion des version, si le verre est deja pris on ne le re-prend pas (bawi)
 			if (versionToExecute == 0)

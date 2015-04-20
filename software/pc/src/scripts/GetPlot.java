@@ -7,6 +7,7 @@ import java.util.EnumSet;
 import enums.ActuatorOrder;
 import enums.ObstacleGroups;
 import enums.SensorNames;
+import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.UnableToEatPlot;
 import exceptions.Locomotion.UnableToMoveException;
@@ -42,7 +43,7 @@ public class GetPlot extends AbstractScript
 	}
 	
 	@Override
-	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, boolean shouldRetryIfBlocked, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException
+	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, boolean shouldRetryIfBlocked, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, InObstacleException
 	{
 		EnumSet<ObstacleGroups> obstacleNotConsidered = EnumSet.noneOf(ObstacleGroups.class);
 		if (versionToExecute == 0)
@@ -192,24 +193,24 @@ public class GetPlot extends AbstractScript
 				if (!stateToConsider.robot.isGlassStoredLeft)
 				{
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);					
-					stateToConsider.robot.moveLengthwise(160, hooksToConsider);
+					stateToConsider.robot.moveLengthwise(150, hooksToConsider);
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
-					stateToConsider.robot.moveLengthwise(160, hooksToConsider);
+					stateToConsider.robot.moveLengthwise(180, hooksToConsider);
 					stateToConsider.robot.isGlassStoredLeft = true;
 				}
 				else if(!stateToConsider.robot.isGlassStoredRight)
 				{
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);					
-					stateToConsider.robot.moveLengthwise(160, hooksToConsider);
+					stateToConsider.robot.moveLengthwise(150, hooksToConsider);
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
-					stateToConsider.robot.moveLengthwise(160, hooksToConsider);
+					stateToConsider.robot.moveLengthwise(180, hooksToConsider);
 					stateToConsider.robot.isGlassStoredRight = true;
 				}
 				stateToConsider.table.removeGlassX(0);
 			}
 			else
 			{
-				stateToConsider.robot.moveLengthwise(320, hooksToConsider);
+				stateToConsider.robot.moveLengthwise(330, hooksToConsider);
 			}
 			
 			// on ne mange que si on est assez vide
@@ -378,11 +379,12 @@ public class GetPlot extends AbstractScript
 	 * 
 	 * @param isSecondTry vrai si l'essai de mangeage de plot est le deuxieme ou si on ne veux pas reessayer
 	 * @param isArmChosenLeft vrai si on mange avec le bras gauche
+	 * @param stateToCOnsider la table
 	 * @param movementAllowed vrai si on autorise le robot a avancer pour manger le plot
 	 * @throws UnableToEatPlot si le mangeage echoue
 	 * @throws SerialConnexionException si impossible de communiquer avec les carte
-	 * @throws SerialException
 	 */
+	
 	private void eatPlot (boolean isSecondTry, boolean isArmChosenLeft, GameState<Robot> stateToConsider, boolean movementAllowed) throws UnableToEatPlot, SerialConnexionException
 	{
 		//si on a deja 4 plots dans la bouche on me mange plus
@@ -395,8 +397,11 @@ public class GetPlot extends AbstractScript
 		{
 			isArmChosenLeft=!isArmChosenLeft;
 		}
-		if (stateToConsider.robot.storedPlotCount>0)
+		if (stateToConsider.robot.hasRobotNonDigestedPlot())
+		{
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_HIGH, true);
+			stateToConsider.robot.digestPlot();
+		}
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
 		if (movementAllowed)
@@ -485,7 +490,9 @@ public class GetPlot extends AbstractScript
 			
 		stateToConsider.robot.storedPlotCount++;
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
-		}
+		
+		stateToConsider.robot.aMiamiam();
+	}
 
 
 	

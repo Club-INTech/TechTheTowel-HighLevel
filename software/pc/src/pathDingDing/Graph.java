@@ -229,11 +229,11 @@ public class Graph
 		//conversion des obstacles circulaires en cercles
 		ArrayList<Circle> circles = new ArrayList<Circle>();
 		for(int i = 0; i < mTable.getObstacleManager().getMobileObstacles().size(); i++)
-			//si l'obstacle est spécifié par la liste d'obstacles à considérer
+			//si l'obstacle est spï¿½cifiï¿½ par la liste d'obstacles ï¿½ considï¿½rer
 			if(mObstaclesToConsider.contains(mTable.getObstacleManager().getMobileObstacles().get(i).getObstacleGroup()))
 				circles.add(new Circle(mTable.getObstacleManager().getMobileObstacles().get(i).getPosition(), mTable.getObstacleManager().getMobileObstacles().get(i).getRadius()));
 		for(int i = 0; i < mTable.getObstacleManager().getFixedObstacles().size(); i++)
-			//si l'obstacle est spécifié par la liste d'obstacles à considérer
+			//si l'obstacle est spï¿½cifiï¿½ par la liste d'obstacles ï¿½ considï¿½rer
 			if(mObstaclesToConsider.contains(mTable.getObstacleManager().getFixedObstacles().get(i).getObstacleGroup()))
 				circles.add(new Circle(mTable.getObstacleManager().getFixedObstacles().get(i).getPosition(), mTable.getObstacleManager().getFixedObstacles().get(i).getRadius()));
 		
@@ -254,6 +254,31 @@ public class Graph
 		}
 		return isOnTable;
 	}
+	
+    /**
+     * 
+     * @param position
+     * @return les groupes d'obstacles dans lesquels est le point, en y ajoutant le rayon du robot
+     */
+    //TODO : trouver un meilleur nom?
+    public EnumSet<ObstacleGroups> obstacleGroupsInPosition(Vec2 position)
+    {
+    	EnumSet<ObstacleGroups> obstacleGroups = EnumSet.noneOf(ObstacleGroups.class);
+    	for(int i = 0; i < mTable.getObstacleManager().getMobileObstacles().size(); i++)
+			if((position.x - mTable.getObstacleManager().getMobileObstacles().get(i).getPosition().x)*(position.x - mTable.getObstacleManager().getMobileObstacles().get(i).getPosition().x)
+			 + (position.y - mTable.getObstacleManager().getMobileObstacles().get(i).getPosition().y)*(position.y - mTable.getObstacleManager().getMobileObstacles().get(i).getPosition().y)
+			 < (mTable.getObstacleManager().getMobileObstacles().get(i).getRadius() + mTable.getObstacleManager().getRobotRadius())*(mTable.getObstacleManager().getMobileObstacles().get(i).getRadius() + mTable.getObstacleManager().getRobotRadius()))
+			{
+				obstacleGroups.add(mTable.getObstacleManager().getMobileObstacles().get(i).getObstacleGroup());
+				break;
+			}
+		for(int i = 0; i < mTable.getObstacleManager().getFixedObstacles().size(); i++)
+			if((position.x - mTable.getObstacleManager().getFixedObstacles().get(i).getPosition().x)*(position.x - mTable.getObstacleManager().getFixedObstacles().get(i).getPosition().x)
+					 + (position.y - mTable.getObstacleManager().getFixedObstacles().get(i).getPosition().y)*(position.y - mTable.getObstacleManager().getFixedObstacles().get(i).getPosition().y)
+					 < (mTable.getObstacleManager().getFixedObstacles().get(i).getRadius() + mTable.getObstacleManager().getRobotRadius())*(mTable.getObstacleManager().getFixedObstacles().get(i).getRadius() + mTable.getObstacleManager().getRobotRadius()))
+				obstacleGroups.add(mTable.getObstacleManager().getFixedObstacles().get(i).getObstacleGroup());
+    	return obstacleGroups;
+    }
 	
 	//retourne le noeud correct (pas dans un obstacle) le plus proche de la position
 	//TODO : cree un bug si TOUS les noeuds sont occupes par des obstacles

@@ -11,6 +11,7 @@ import exceptions.serial.SerialConnexionException;
 import robot.Robot;
 import smartMath.Circle;
 import strategie.GameState;
+import table.Table;
 import utils.Config;
 import utils.Log;
 
@@ -32,9 +33,7 @@ public class ExitBeginZone extends AbstractScript
 	@Override
 	public Circle entryPosition(int id, int ray)
 	{
-		// point de depart du match a modifier a chaque base roulante
-		return new Circle(1500-320-77,1000);
-		//1500 le bout de la table, 320 la taille de la cale et 48 la taille de l'arriere du robot a son centre
+		return new Circle(Table.entryPosition);
 	}
 	
 	@Override

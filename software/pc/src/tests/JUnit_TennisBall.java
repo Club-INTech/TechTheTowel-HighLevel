@@ -8,11 +8,14 @@ import scripts.AbstractScript;
 import scripts.ScriptManager;
 import smartMath.Vec2;
 import strategie.GameState;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import enums.ActuatorOrder;
 import enums.ScriptNames;
 import enums.ServiceNames;
+import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
@@ -36,25 +39,16 @@ public class JUnit_TennisBall extends JUnit_Test
 	public void setUp() throws Exception
 	{
 		super.setUp();
+		real_state.robot.updateConfig();
+
 		real_state = (GameState<Robot>) container.getService(ServiceNames.GAME_STATE);
 		scriptmanager = (ScriptManager) container.getService(ServiceNames.SCRIPT_MANAGER);
 		mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
 		emptyHook = new ArrayList<Hook> ();
 		
-		if (real_state.robot.getSymmetry())
-		{
-			real_state.robot.setPosition(new Vec2 (-1381,1000));
-			real_state.robot.setOrientation(0); 
-			//si on est jaune on est en 0 
-		}
-		else
-		{
-			real_state.robot.setPosition(new Vec2 (1381,1000));
-			real_state.robot.setOrientation(Math.PI);
-			//sinon on est vert donc on est en PI
-		}
+		real_state.robot.setPosition(new Vec2 (1132,1000));
+		real_state.robot.setOrientation(Math.PI);
 		
-		real_state.robot.updateConfig();
 		try 
 		{
 			matchSetUp(real_state.robot);
@@ -114,7 +108,7 @@ public class JUnit_TennisBall extends JUnit_Test
 	}
 
 	//@Test
-	public void test() throws PathNotFoundException, SerialFinallyException
+	public void test() throws PathNotFoundException, SerialFinallyException, InObstacleException
 	{
 		container.startAllThreads();
 		waitMatchBegin();

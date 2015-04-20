@@ -76,10 +76,6 @@
 <wire x1="67.31" y1="-3.81" x2="-1.27" y2="-3.81" width="0.254" layer="20"/>
 <wire x1="34.29" y1="59.69" x2="34.29" y2="35.56" width="0.254" layer="20"/>
 <wire x1="34.29" y1="35.56" x2="-1.27" y2="35.56" width="0.254" layer="20"/>
-<dimension x1="67.31" y1="59.69" x2="67.31" y2="-3.81" x3="80.01" y3="27.94" layer="20"/>
-<dimension x1="67.31" y1="-3.81" x2="-1.27" y2="-3.81" x3="33.02" y3="-15.24" layer="20"/>
-<dimension x1="34.29" y1="35.56" x2="-1.27" y2="35.56" x3="16.51" y3="38.1" layer="20"/>
-<dimension x1="34.29" y1="59.69" x2="34.29" y2="35.56" x3="31.75" y3="47.625" layer="20"/>
 </plain>
 <libraries>
 <library name="con-lstb">
@@ -571,4 +567,10 @@ design rules under a new name.</description>
 </signals>
 </board>
 </drawing>
+<compatibility>
+<note version="6.3" minversion="6.2.2" severity="warning">
+Since Version 6.2.2 text objects can contain more than one line,
+which will not be processed correctly with this version.
+</note>
+</compatibility>
 </eagle>

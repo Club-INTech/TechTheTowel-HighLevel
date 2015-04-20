@@ -14,6 +14,7 @@ import enums.ObstacleGroups;
 import enums.SensorNames;
 import enums.Speed;
 import enums.UnableToMoveReason;
+import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
@@ -66,6 +67,9 @@ public abstract class Robot implements Service
 	/** Nombre d'essais maximal de tentative de calcul de PathDingDing */
 	private int maxNumberTriesRecalculation = 4;
 	private int actualNumberOfTries=0;
+
+	/** Booleen explicitant si on a un plot dans les machoires mais pas encore dans le tube */
+	private boolean hasNonDigestedPlot=false;
 	
 	
 	/**
@@ -302,11 +306,11 @@ public abstract class Robot implements Service
 	 * @param distance en mm que le robot doit franchir. Si cette distance est négative, le robot va reculer. Attention, en cas de distance négative, cette méthode ne vérifie pas s'il y a un système d'évitement a l'arrère du robot
 	 * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
 	 */
-    public void moveLengthwiseTowardWall(int distance /* TODO: ajouter hook en argument */ ) throws UnableToMoveException
+    public void moveLengthwiseTowardWall(int distance, ArrayList<Hook> hooksToConsider) throws UnableToMoveException
     {
         Speed oldSpeed = speed; 
         setLocomotionSpeed(Speed.INTO_WALL);
-        moveLengthwise(distance, null, true);
+        moveLengthwise(distance, hooksToConsider, true);
         setLocomotionSpeed(oldSpeed);
     }
     
@@ -319,8 +323,9 @@ public abstract class Robot implements Service
      * @param table la table sur laquelle le robot se deplace
      * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
      * @throws PathNotFoundException lorsque le pathdingding ne trouve pas de chemin 
+     * @throws InObstacleException lorqsque le robot veut aller dans un obstacle
      */
-    public void moveToLocation(Vec2 aim, ArrayList<Hook> hooksToConsider, Table table, EnumSet<ObstacleGroups> obstaclesNotConsiderd) throws  PathNotFoundException, UnableToMoveException
+    public void moveToLocation(Vec2 aim, ArrayList<Hook> hooksToConsider, Table table, EnumSet<ObstacleGroups> obstaclesNotConsiderd) throws  PathNotFoundException, UnableToMoveException, InObstacleException
     {
     	moveToCircle(new Circle(aim), hooksToConsider, table, obstaclesNotConsiderd);
     }
@@ -336,8 +341,9 @@ public abstract class Robot implements Service
      * 
      * @throws PathNotFoundException lorsque le pathdingding ne trouve pas de chemin 
      * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
+     * @throws InObstacleException lorqsque le robot veut aller dans un obstacle
      */
-    public void moveToCircle(Circle aim, ArrayList<Hook> hooksToConsider, Table table, EnumSet<ObstacleGroups> obstaclesNotConsidered) throws PathNotFoundException, UnableToMoveException
+    public void moveToCircle(Circle aim, ArrayList<Hook> hooksToConsider, Table table, EnumSet<ObstacleGroups> obstaclesNotConsidered) throws PathNotFoundException, UnableToMoveException, InObstacleException
     {
     	ArrayList<Vec2> path;
     	//si on est jaune on retire les plots verts de la liste des obstacles
@@ -416,9 +422,10 @@ public abstract class Robot implements Service
      * 	Elle s'appelle elle-meme tant qu'on a pas reussi.
      *  Avant d'apeller cette méthode remettre actualNumberOfTries à 0
      * 	@throws PathNotFoundException 
+     * @throws InObstacleException lorqsque le robot veut aller dans un obstacle
      */
     
-    public void recalculate(Vec2 aim, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, PathNotFoundException
+    public void recalculate(Vec2 aim, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, PathNotFoundException, InObstacleException
     {
     	if(actualNumberOfTries < maxNumberTriesRecalculation)
 		{
@@ -475,4 +482,21 @@ public abstract class Robot implements Service
 	public abstract Object getSensorValue(SensorNames captor) throws SerialConnexionException;
 
 	public abstract void turnWithoutDetection(double angle, ArrayList<Hook> hooks);
+	
+	/** met hasNonDigestedPlot à false  */
+	public void digestPlot()
+	{
+		hasNonDigestedPlot=false;
+	}
+	
+	/** met hasNonDigestedPlot à true  */
+	public void aMiamiam()
+	{
+		hasNonDigestedPlot=true;
+	}	
+	
+	public boolean hasRobotNonDigestedPlot()
+	{
+		return hasNonDigestedPlot;
+	}
 }

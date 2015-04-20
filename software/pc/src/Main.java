@@ -5,12 +5,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import robot.Locomotion;
 import robot.Robot;
 import robot.cardsWrappers.SensorsCardWrapper;
 import scripts.ScriptManager;
 import smartMath.Vec2;
 import strategie.GameState;
 import strategie.Strategie;
+import table.Table;
 import threads.ThreadTimer;
 import utils.Config;
 import utils.Sleep;
@@ -21,6 +23,7 @@ import enums.ServiceNames;
 import exceptions.ContainerException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
+import exceptions.Locomotion.UnexpectedObstacleOnPathException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import exceptions.serial.SerialManagerException;
@@ -40,6 +43,7 @@ public class Main
 	static ArrayList<Hook> emptyHook;
 	static ScriptManager scriptmanager;
 	static SensorsCardWrapper mSensorsCardWrapper;
+	static Locomotion mLocomotion;
 	
 	
 // dans la config de debut de match, toujours demander une entrée clavier assez longue (ex "oui" au lieu de "o", pour éviter les fautes de frappes. Une erreur a ce stade coûte cher.
@@ -47,7 +51,6 @@ public class Main
 	/**
 	 * Point d'entrée du programme. C'est ici que le code commence par être exécuté 
 	 * @param args chaine de caractère des arguments de la ligne de commande
-	 * @throws Exception TODO : quels sont les exeptions lancés ?
 	 */
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args)
@@ -56,12 +59,14 @@ public class Main
 		int numberOfTryContainer=0;
 		int numberOfTrySerial=0;
 		int numberOfTrymatchSetup=0;
+		int numberOfTryMove=0;
 		
 		
 		//nombre maximum d'essai autorisee pour le container et la serie
 		int maximumOfTryContainer=5;
 		int maximumOfTrySerial=3;
 		int maximumOfmatchSetup=5;
+		int maximumOfTryMove=3;
 		
 		// booleen explicitant si on a reussi l'initialisation
 	    boolean isInitialisationDone = false;
@@ -75,7 +80,9 @@ public class Main
 		
 		// Système d'injection de dépendances
 		//tant que le nombre d'essai n'est pas trop grand on recommence
-		while (numberOfTryContainer<maximumOfTryContainer || numberOfTrySerial<maximumOfTrySerial || !isInitialisationDone)
+		while (numberOfTryContainer<maximumOfTryContainer ||
+			   numberOfTrySerial<maximumOfTrySerial ||
+			   !isInitialisationDone)
 		{
 			try 
 			{
@@ -85,16 +92,14 @@ public class Main
 			
 				//configColor();
 				
-				
 				// initialise les singletons
 				real_state = (GameState<Robot>) container.getService(ServiceNames.GAME_STATE);
 			    scriptmanager = (ScriptManager) container.getService(ServiceNames.SCRIPT_MANAGER);
 			    mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
 			    strategos = (Strategie) container.getService(ServiceNames.STRATEGIE);
+			    mLocomotion=(Locomotion) container.getService(ServiceNames.LOCOMOTION);
 			    emptyHook = new ArrayList<Hook>(); //TODO la veritable liste des hooks pour le match
-			    
 			    config.updateConfig(); // instancie la couleur, etc
-			    
 			    isInitialisationDone=true;
 			} 
 			catch (ContainerException e) 
@@ -110,7 +115,7 @@ public class Main
 					System.out.println ("erreur dans le container, a debugger d'urgence !");
 					e.printStackTrace();
 				}
-			}  
+			}
 			catch (SerialManagerException | IOException e)  
 			//SerialManager gere le serie et IOException gere les entrees/sortie donc le probleme serai dans les deux cas un probleme de branchement
 			{
@@ -128,11 +133,26 @@ public class Main
 		}
 		
 		isInitialisationDone=false;
-		while(numberOfTrymatchSetup<maximumOfmatchSetup || !isInitialisationDone) // On retente jusqu'à ce que ca fonctionne. 
+		while(numberOfTrymatchSetup<maximumOfmatchSetup || 
+			  !isInitialisationDone) // On retente jusqu'à ce que ca fonctionne. 
 		{
 			try 
 			{
 				matchSetUp(real_state.robot);
+				testMove(real_state.robot);
+				
+				System.out.println("Placez votre main devant le robot");
+				try
+				{
+					testSensors(mLocomotion);
+				}
+				catch (UnexpectedObstacleOnPathException e)
+				{
+					System.out.println("Main / ennemi bien detecté");
+					real_state.robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, true);
+					real_state.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, true);
+				}
+				
 				isInitialisationDone=true;
 			}
 			catch (SerialConnexionException e) 
@@ -147,11 +167,23 @@ public class Main
 					e.printStackTrace();
 				}
 			}
+			catch (UnableToMoveException e) 
+			{
+				numberOfTryMove++;
+
+				if(numberOfTrymatchSetup<maximumOfmatchSetup)
+					System.out.println ("erreur dans le testMove et le deplacement");
+				else 
+				{
+					System.out.println ("erreur critique dans le deplacement");
+					e.printStackTrace();
+				}
+			}
 		}
 
 		//initialisation du match
 		configColor();
-		real_state.robot.setPosition(new Vec2 (1381,1000));
+		real_state.robot.setPosition(Table.entryPosition);
 		real_state.robot.setOrientation(Math.PI);
 		
 		// Threads
@@ -197,6 +229,28 @@ public class Main
 		robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 		
 		robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+	}
+	
+	/**
+	 * le  test de deplacement à lancer entre le posage de robot sur la table et le lancement du jumper
+	 * @param robot le robot a setuper
+	 * @throws SerialConnexionException si l'ordinateur n'arrive pas a communiquer avec les cartes
+	 * @throws UnableToMoveException , gros probleme si c'est lancé ! 
+	 */
+	private static void testMove(Robot robot) throws UnableToMoveException
+	{
+		robot.moveLengthwise(100);
+		robot.moveLengthwise(-100);
+	}
+	
+	/**
+	 * le test de capteurs entre le posage de robot sur la table et le lancement du jumper
+	 * @param robot le robot a setuper
+	 * @throws UnexpectedObstacleOnPathException : lancé si on  vu un ennemi, sinon, non 
+	 */
+	private static void testSensors(Locomotion mLocomotion) throws UnexpectedObstacleOnPathException 
+	{
+		mLocomotion.detectEnemy(true, false, new Vec2 (0,0));
 	}
 
 	/**

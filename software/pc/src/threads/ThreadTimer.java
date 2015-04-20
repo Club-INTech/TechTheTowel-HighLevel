@@ -40,7 +40,7 @@ public class ThreadTimer extends AbstractThread
 	public static long matchStartTimestamp;
 	
 	/** Durée en miliseconde d'un match recupéré de la config */
-	public static long matchDuration =90000000;
+	public static long matchDuration =90000000;//FIXME 90.000
 	
 	/** Temps en ms qui s'écoule entre deux mise a jour de la liste des obstacle périmables. Lors de chaque mise a jour, les obstacles périmés sont détruits. */
 	public static int obstacleRefreshInterval = 0;

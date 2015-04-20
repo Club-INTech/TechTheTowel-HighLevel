@@ -6,6 +6,7 @@ import java.util.EnumSet;
 
 import enums.ActuatorOrder;
 import enums.ObstacleGroups;
+import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
@@ -43,7 +44,7 @@ public class DropPile extends AbstractScript
 	}
 
 	@Override
-	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, boolean shouldRetryIfBlocked, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException
+	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, boolean shouldRetryIfBlocked, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, InObstacleException
 	{
 		EnumSet<ObstacleGroups> obstacleNotConsidered = EnumSet.noneOf(ObstacleGroups.class);
 		
@@ -72,23 +73,26 @@ public class DropPile extends AbstractScript
 	
 				//on eleve notre membre (l'ascenseur)
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_STAGE, true);
-				//on se deplace vers elle
-				stateToConsider.robot.moveLengthwise(170, hooksToConsider, true);
+				//on se deplace vers elle 120
+				stateToConsider.robot.moveLengthwise(120, hooksToConsider, true);
 				
 				//on y place notre membre
 				//Sem....Pai...  =O
 				
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_ON_STAGE, true);
+
 				//on ouvre notre coeur (le guide) un peu
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
-				stateToConsider.robot.moveLengthwise(50, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(20, hooksToConsider, true);//On peux avancer bien pluss avec la machoire ouverte
+
+
+				stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_GUIDE, false);
 				stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_GUIDE, true);
-				stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_GUIDE, true);
 				
 				//puis beaucoup
 				//Ya... Yamete  ! #O_o#
 				
-				stateToConsider.robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, false);
 				stateToConsider.robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, true);
 				//on se vide (de nos plots) et on se reajuste (de nos points)
 				int ball = 0;
@@ -108,15 +112,16 @@ public class DropPile extends AbstractScript
 				
 				//mais on se referme
 				//Yamete Kudasai !
-				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, false);
-				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
-				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, false);
+				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);
 				
-					
 				//on remet notre membre en position de deplacement
-				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
-				
-				// THank... you, sempai #'.'#
+				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
+
+								
+				// Thank... you, sempai #'.'#
 	
 			}
 			else if (version==0)
@@ -127,12 +132,12 @@ public class DropPile extends AbstractScript
 				//on ouvre le guide un peu
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
 				
-				stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_GUIDE, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_GUIDE, false);
 				stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_GUIDE, true);
 				
 				//puis beaucoup
 				
-				stateToConsider.robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, false);
 				stateToConsider.robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, true);
 				//on se vide de nos plots et on met a jour les points
 				int ball = 0;
@@ -156,7 +161,7 @@ public class DropPile extends AbstractScript
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 					
 				//on remet l'ascenceur en position de deplacement
-				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
 				
 			}
 			else
@@ -214,7 +219,7 @@ public class DropPile extends AbstractScript
 			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, false);
 			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);	
 			stateToConsider.robot.moveLengthwise(-20);
-			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
 		} 
 		catch (SerialConnexionException e) 
 		{
