@@ -26,7 +26,7 @@ public class ObstacleProximity extends ObstacleCircular
 	public ObstacleProximity (Vec2 position, int radius, ObstacleGroups obstacleGroup)
 	{
 		super(position,radius, obstacleGroup);
-		mOutDatedTime = System.currentTimeMillis() + 5000;// la date de peremption = temps actuel + temps de peremption de l'obstacle
+		mOutDatedTime = System.currentTimeMillis() + 8000;// la date de peremption = temps actuel + temps de peremption de l'obstacle
 		//TODO mettre dans le fichier de config le "tempsde peremption" de chaque obstacle 
 	}
 	

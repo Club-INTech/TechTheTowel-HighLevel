@@ -1,6 +1,7 @@
 package table.obstacles;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
 import com.sun.org.apache.xpath.internal.axes.OneStepIterator;
 
@@ -373,6 +374,27 @@ public class ObstacleManager
     	for(int i=0; i<mRectangles.size(); i++)
     		isObstructed=isPositionInObstacle(position, mRectangles.get(i));
         return isObstructed;
+    }
+    
+    /**
+     * 
+     * @param position
+     * @return les groupes d'obstacles dans lesquels est le point
+     */
+    //TODO : trouver un meilleur nom?
+    public EnumSet<ObstacleGroups> obstacleGroupsInPosition(Vec2 position)
+    {
+    	EnumSet<ObstacleGroups> obstacleGroups = EnumSet.noneOf(ObstacleGroups.class);
+    	for(int i = 0; i < mMobileObstacles.size(); i++)
+			if(isPositionInObstacle(position, mMobileObstacles.get(i)))
+			{
+				obstacleGroups.add(mMobileObstacles.get(i).getObstacleGroup());
+				break;
+			}
+		for(int i = 0; i < mFixedObstacles.size(); i++)
+			if(isPositionInObstacle(position, mFixedObstacles.get(i)))
+				obstacleGroups.add(mFixedObstacles.get(i).getObstacleGroup());
+    	return obstacleGroups;
     }
     
     /**

@@ -7,6 +7,7 @@ import java.util.EnumSet;
 import enums.ActuatorOrder;
 import enums.ObstacleGroups;
 import enums.SensorNames;
+import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.UnableToEatPlot;
 import exceptions.Locomotion.UnableToMoveException;
@@ -42,7 +43,7 @@ public class GetPlot extends AbstractScript
 	}
 	
 	@Override
-	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, boolean shouldRetryIfBlocked, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException
+	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, boolean shouldRetryIfBlocked, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, InObstacleException
 	{
 		EnumSet<ObstacleGroups> obstacleNotConsidered = EnumSet.noneOf(ObstacleGroups.class);
 		if (versionToExecute == 0)
@@ -395,8 +396,11 @@ public class GetPlot extends AbstractScript
 		{
 			isArmChosenLeft=!isArmChosenLeft;
 		}
-		if (stateToConsider.robot.storedPlotCount>0)
+		if (stateToConsider.robot.hasRobotNonDigestedPlot())
+		{
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_HIGH, true);
+			stateToConsider.robot.digestPlot();
+		}
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
 		if (movementAllowed)
@@ -485,7 +489,9 @@ public class GetPlot extends AbstractScript
 			
 		stateToConsider.robot.storedPlotCount++;
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
-		}
+		
+		stateToConsider.robot.aMiamiam();
+	}
 
 
 	

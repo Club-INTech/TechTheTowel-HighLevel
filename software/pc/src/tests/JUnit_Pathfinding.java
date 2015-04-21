@@ -69,7 +69,9 @@ public class JUnit_Pathfinding extends JUnit_Test
 		    	}
 		    	catch(InObstacleException e)
 		    	{
-		    		log.debug("point d'arrivée dans un obstacle", this);
+		    		log.debug("point d'arrivÃ©e dans un obstacle : " + win.getMouse().getRightClickPosition() +
+		    				  "\n appartient aux groupes d'obstacles suivants :" + e.getObstacleGroup().toString()
+		    				  , this);
 		    	}
 		    	win.getPanel().repaint();
     		}
@@ -98,6 +100,7 @@ public class JUnit_Pathfinding extends JUnit_Test
     	}
     }
     
+
     //@Test
     public void testIsOnTable() throws Exception
     {
