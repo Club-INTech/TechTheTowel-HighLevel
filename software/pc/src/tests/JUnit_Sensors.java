@@ -172,7 +172,7 @@ public class JUnit_Sensors extends JUnit_Test
 		}
 	}
 	
-	@Test
+	//@Test
 	public void testMoveThenDetect()
 	{
 		
@@ -222,11 +222,11 @@ public class JUnit_Sensors extends JUnit_Test
             		}
             	}
 			}
-		}	
+		}
 	}
 	
 	
-   // @Test
+    @Test
 	public void testCapteurDeplacement() throws SerialConnexionException, InObstacleException
 	{
     	matchSetUp(state.robot);
@@ -253,9 +253,16 @@ public class JUnit_Sensors extends JUnit_Test
 			{
 				log.critical("!!!!! Catch de"+e1+" dans testEvitement !!!!!" , this);
 				break;
-			} catch (PathNotFoundException e) {
+			} 
+			catch (PathNotFoundException e) 
+			{
 				log.debug("pas de chemin trouvé : ("+x+";"+y+")", this);
 			}
+			catch (InObstacleException e) 
+			{
+				log.debug("dans un obstacle!", this);
+			}
+			
     	}
 	}
 
