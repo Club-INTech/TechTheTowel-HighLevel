@@ -172,7 +172,7 @@ public class JUnit_Sensors extends JUnit_Test
 		}
 	}
 	
-	@Test
+	//@Test
 	public void testMoveThenDetect()
 	{
 		
@@ -193,7 +193,7 @@ public class JUnit_Sensors extends JUnit_Test
 	
 
 		
-	//@Test
+	@Test
 	public void testCapteurFixe()
 	{
 		log.debug("Test d'évitement fixe", this);

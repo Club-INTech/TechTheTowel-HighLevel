@@ -193,7 +193,9 @@ class ThreadSensor extends AbstractThread
 			int[] distanceBack = getDistanceBack();
 			
 			if(! (distanceFront[0]==-1 || 
-				  distanceFront[1]==-1)) // si on n'a pas spammé
+				  distanceFront[1]==-1 ||
+				   distanceBack[0]==-1 ||
+				   distanceBack[1]==-1 )) // si on n'a pas spammé
 			{										
 				// on enleve les obstacles 
 				removeObstacleFront(distanceFront);
@@ -210,10 +212,12 @@ class ThreadSensor extends AbstractThread
 				
 			
 			log.debug("Distance selon ultrasons avant : "+distanceFront[0]+";"+distanceFront[1], this); 
-			//log.debug("Distance selon ultrasons arriere: "+distanceBack[0]+";"+distanceBack[1], this);
+			log.debug("Distance selon ultrasons arriere: "+distanceBack[0]+";"+distanceBack[1], this);
 			
 			if (distanceFront[1] > 0 && distanceFront[1] < 70 || distanceFront[0] > 0 && distanceFront[0] < 70)
-				log.debug("obstacle detecte a moins de 7 cm !", this);
+				log.debug("obstacle detecte a moins de 7 cm en avant !", this);
+			if (distanceBack[1] > 0 && distanceBack[1] < 70 || distanceBack[0] > 0 && distanceBack[0] < 70)
+				log.debug("obstacle detecte a moins de 7 cm en arriere !", this);
 				
 			Sleep.sleep((long)(1000./sensorFrequency));
 
@@ -453,7 +457,7 @@ class ThreadSensor extends AbstractThread
 				
 				
 				
-				positionEnnemi_1.x =  (int)(	rightBackSensorPosition.x + Math.sqrt( 
+				positionEnnemi_1.x =  -(int)(	rightBackSensorPosition.x + Math.sqrt( 
 																(distanceObstacleBack[1]*distanceObstacleBack[1])-
 														        (positionEnnemi_1.y-distanceBetweenBackSensors/2)*(positionEnnemi_1.y-distanceBetweenBackSensors/2)));	//position de l'obstacle en fonction du robot
 
@@ -563,7 +567,7 @@ class ThreadSensor extends AbstractThread
 	 * 
 	 * @return la distance selon les ultrasons arrieres, [gauche, droite]
 	 */
-	private int[] getDistanceBack() 
+	private int[] getDistanceBack()
 	{
 		int[] distanceBack;
 		try 
