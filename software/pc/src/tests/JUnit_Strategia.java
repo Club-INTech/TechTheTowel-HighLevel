@@ -20,7 +20,7 @@ import enums.ActuatorOrder;
 import enums.ServiceNames;
 import exceptions.serial.SerialConnexionException;
 
-public class JUnit_Stategia extends JUnit_Test 
+public class JUnit_Strategia extends JUnit_Test 
 {
 	GameState<Robot> real_state;
 	Strategie strategos;
