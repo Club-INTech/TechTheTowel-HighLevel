@@ -14,6 +14,7 @@ import scripts.AbstractScript;
 import scripts.ScriptManager;
 import smartMath.Vec2;
 import strategie.GameState;
+import threads.ThreadTimer;
 import enums.ActuatorOrder;
 import enums.ScriptNames;
 import enums.ServiceNames;
@@ -49,30 +50,24 @@ public class JUnit_DropPile extends JUnit_Test {
 		
 		//initialisation en position des AX-12
 		matchSetUp(real_state.robot);
+		waitMatchBegin();
 	}
-	
-	public void matchSetUp(Robot robot) throws SerialConnexionException
+	public void waitMatchBegin()
 	{
-		robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
 
-		robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, false);
-		robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, true);
+		System.out.println("Robot pret pour le match, attente du retrait du jumper");
 		
-		robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
-		robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
+		// attends que le jumper soit retiré du robot
 		
-		robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
-		robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);
-		
-		robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
-		robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
-		
-		robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
-		robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
-		
-		robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
-		
-		robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+		boolean jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
+		while(jumperWasAbsent || !mSensorsCardWrapper.isJumperAbsent())
+		{
+			jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
+			 real_state.robot.sleep(100);
+		}
+
+		// maintenant que le jumper est retiré, le match a commencé
+		ThreadTimer.matchStarted = true;
 	}
 	
 	@Test
