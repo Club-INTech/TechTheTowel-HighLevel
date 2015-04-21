@@ -133,8 +133,8 @@ class ThreadSensor extends AbstractThread
 	Vec2 positionEnnemi_1=new Vec2 (0,0);
 	Vec2 positionEnnemi_2=new Vec2 (0,0);
 
-	int[] realSensorValues = new int[2];
-
+	int[] realSensorValuesFront = new int[2];
+	int[] realSensorValuesBack = new int[2];
 	
 	
 	/**
@@ -197,11 +197,13 @@ class ThreadSensor extends AbstractThread
 			{										
 				// on enleve les obstacles 
 				removeObstacleFront(distanceFront);
+				removeObstacleBack(distanceBack);
+
 
 				//ajout d'obstacles mobiles dans l'obstacleManager
 				// Analyse des capteurs avant, avec gestion des angles
 				addObstacleFront(distanceFront);
-				// Analyse descapt	eurs arrieres, avec gestion des angles
+				// Analyse des capteurs arrieres, avec gestion des angles
 				addObstacleBack(distanceBack);
 				
 			}
@@ -526,8 +528,8 @@ class ThreadSensor extends AbstractThread
 			distanceFront = (int[]) mSensorsCardWrapper.getSensorValue(SensorNames.ULTRASOUND_FRONT_SENSOR);
 			
 			log.debug("Distance selon ultrasons avant traitement : "+distanceFront[0]+";"+distanceFront[1], this); 
-			realSensorValues[0]=distanceFront[0];
-			realSensorValues[1]=distanceFront[1];
+			realSensorValuesFront[0]=distanceFront[0];
+			realSensorValuesFront[1]=distanceFront[1];
 
 			//on met tout les capteurs qui detectent un objet DANS le robot ou à plus de maxSensorRange a 0
 			for (int i=0; i<distanceFront.length; i++)
@@ -567,12 +569,14 @@ class ThreadSensor extends AbstractThread
 		try 
 		{
 			distanceBack = (int[]) mSensorsCardWrapper.getSensorValue(SensorNames.ULTRASOUND_BACK_SENSOR);
+			realSensorValuesBack[0]=distanceBack[0];
+			realSensorValuesBack[1]=distanceBack[1];
 			//on met tout les capteurs qui detectent un objet à plus de maxSensorRange a 0
 			for (int i=0; i<distanceBack.length; i++)
 			{
 				if(distanceBack[i]==0)
 					log.critical("ARRETEZ DE SPAMMER LES CAPTEURS !", this);
-				if (distanceBack[i]<distanceBetweenGuideAndUltrasound || distanceBack[i] > maxSensorRange) 
+				if (distanceBack[i] > maxSensorRange) 
 					distanceBack[i]=0;
 			}
 		}
@@ -637,15 +641,23 @@ class ThreadSensor extends AbstractThread
 	private void removeObstacleFront(int[] distanceFront)
 	{
 		// On limite les obstacles supprimés, pour eviter les problemes liés aux reflexions
-			removeObstacleLeft(  Math.min((int)( realSensorValues[0]*0.7),1000));
-			removeObstacleRight( Math.min((int)( realSensorValues[1]*0.7),1000));
+			removeObstacleLeftFront(  Math.min((int)( realSensorValuesFront[0]*0.7),1000));
+			removeObstacleRightFront( Math.min((int)( realSensorValuesFront[1]*0.7),1000));
+
+	}
+	
+	private void removeObstacleBack(int[] distanceFront)
+	{
+		// On limite les obstacles supprimés, pour eviter les problemes liés aux reflexions
+			removeObstacleLeftBack(  Math.min((int)( realSensorValuesBack[0]*0.7),1000));
+			removeObstacleRightBack( Math.min((int)( realSensorValuesBack[1]*0.7),1000));
 
 	}
 	
 	/**
 	 *  On enleve les obstacles qu'on ne voit pas
 	 */
-	private void removeObstacleLeft(int detectionDistance)
+	private void removeObstacleLeftFront(int detectionDistance)
 	{
 		Vec2 position, sensorPosition;
 		double orientation;
@@ -658,7 +670,7 @@ class ThreadSensor extends AbstractThread
 			log.debug("Obstacle enlevé avec le capteur gauche", this);
 	}
 	
-	private void removeObstacleRight(int detectionDistance)
+	private void removeObstacleRightFront(int detectionDistance)
 	{
 		Vec2 position, sensorPosition;
 		double orientation;
@@ -668,6 +680,36 @@ class ThreadSensor extends AbstractThread
 		
 		sensorPosition=changeReference(rightFrontSensorPosition, position, orientation); // passage de la position du capteur en absolu
 		if(mTable.getObstacleManager().removeNonDetectedObstacles(sensorPosition, (orientation-rightFrontSensorAngle),  (detectionDistance), detectionAngle))
+			log.debug("Obstacle enlevé avec le capteur droit", this);
+
+	}
+	
+	/**
+	 *  On enleve les obstacles qu'on ne voit pas derriere nous
+	 */
+	private void removeObstacleLeftBack(int detectionDistance)
+	{
+		Vec2 position, sensorPosition;
+		double orientation;
+		
+		orientation=mRobot.getOrientation();
+		position=mRobot.getPosition(); // absolu
+		
+		sensorPosition=changeReference(leftBackSensorPosition, position, orientation); // passage de la position du capteur en absolu
+		if(mTable.getObstacleManager().removeNonDetectedObstacles(sensorPosition, (orientation+leftBackSensorAngle), (detectionDistance), detectionAngle) )
+			log.debug("Obstacle enlevé avec le capteur gauche", this);
+	}
+	
+	private void removeObstacleRightBack(int detectionDistance)
+	{
+		Vec2 position, sensorPosition;
+		double orientation;
+		
+		orientation=mRobot.getOrientation();
+		position=mRobot.getPosition(); // absolu
+		
+		sensorPosition=changeReference(rightBackSensorPosition, position, orientation); // passage de la position du capteur en absolu
+		if(mTable.getObstacleManager().removeNonDetectedObstacles(sensorPosition, (orientation-rightBackSensorAngle),  (detectionDistance), detectionAngle))
 			log.debug("Obstacle enlevé avec le capteur droit", this);
 
 	}
