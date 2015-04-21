@@ -173,17 +173,27 @@ public class JUnit_Sensors extends JUnit_Test
 	}
 	
 	//@Test
-	public void testvide()
+	public void testMoveThenDetect()
 	{
+		
+		try 
+		{
+			state.robot.moveLengthwiseWithoutDetection(500);
+			state.robot.turn(- Math.PI/2);
+		} 
+		catch (UnableToMoveException e1)
+		{
+			log.critical("!!!!! Catch de"+e1+" dans testDetectionTournante !!!!!" , this);
+		}
 		while (true)
 		{
-			
+			;
 		}
 	}
 	
 
 		
-	//@Test
+	@Test
 	public void testCapteurFixe()
 	{
 		log.debug("Test d'évitement fixe", this);
@@ -212,7 +222,7 @@ public class JUnit_Sensors extends JUnit_Test
             		}
             	}
 			}
-		}	
+		}
 	}
 	
 	
@@ -243,9 +253,16 @@ public class JUnit_Sensors extends JUnit_Test
 			{
 				log.critical("!!!!! Catch de"+e1+" dans testEvitement !!!!!" , this);
 				break;
-			} catch (PathNotFoundException e) {
+			} 
+			catch (PathNotFoundException e) 
+			{
 				log.debug("pas de chemin trouvé : ("+x+";"+y+")", this);
 			}
+			catch (InObstacleException e) 
+			{
+				log.debug("dans un obstacle!", this);
+			}
+			
     	}
 	}
 

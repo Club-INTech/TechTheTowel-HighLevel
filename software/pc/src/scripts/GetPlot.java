@@ -193,24 +193,24 @@ public class GetPlot extends AbstractScript
 				if (!stateToConsider.robot.isGlassStoredLeft)
 				{
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);					
-					stateToConsider.robot.moveLengthwise(160, hooksToConsider);
+					stateToConsider.robot.moveLengthwise(140, hooksToConsider);
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
-					stateToConsider.robot.moveLengthwise(160, hooksToConsider);
+					stateToConsider.robot.moveLengthwise(190, hooksToConsider);
 					stateToConsider.robot.isGlassStoredLeft = true;
 				}
 				else if(!stateToConsider.robot.isGlassStoredRight)
 				{
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);					
-					stateToConsider.robot.moveLengthwise(160, hooksToConsider);
+					stateToConsider.robot.moveLengthwise(140, hooksToConsider);
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
-					stateToConsider.robot.moveLengthwise(160, hooksToConsider);
+					stateToConsider.robot.moveLengthwise(190, hooksToConsider);
 					stateToConsider.robot.isGlassStoredRight = true;
 				}
 				stateToConsider.table.removeGlassX(0);
 			}
 			else
 			{
-				stateToConsider.robot.moveLengthwise(320, hooksToConsider);
+				stateToConsider.robot.moveLengthwise(330, hooksToConsider);
 			}
 			
 			// on ne mange que si on est assez vide
@@ -396,8 +396,11 @@ public class GetPlot extends AbstractScript
 		{
 			isArmChosenLeft=!isArmChosenLeft;
 		}
-		if (stateToConsider.robot.storedPlotCount>0)
+		if (stateToConsider.robot.hasRobotNonDigestedPlot())
+		{
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_HIGH, true);
+			stateToConsider.robot.digestPlot();
+		}
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
 		if (movementAllowed)
@@ -486,7 +489,9 @@ public class GetPlot extends AbstractScript
 			
 		stateToConsider.robot.storedPlotCount++;
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
-		}
+		
+		stateToConsider.robot.aMiamiam();
+	}
 
 
 	
