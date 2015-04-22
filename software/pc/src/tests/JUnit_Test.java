@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.After;
 
 import robot.Robot;
+import table.Table;
 import utils.Log;
 import utils.Config;
 import container.Container;
@@ -67,6 +68,11 @@ public abstract class JUnit_Test
 		robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 		
 		robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+	}
+	
+	public void setBeginPosition(Robot robot)
+	{
+		robot.setPosition(Table.entryPosition);
 	}
 	
 
