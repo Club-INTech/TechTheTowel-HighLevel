@@ -11,6 +11,7 @@ import scripts.ScriptManager;
 import smartMath.Vec2;
 import strategie.GameState;
 import strategie.Strategie;
+import table.Table;
 import threads.ThreadTimer;
 import utils.Config;
 import utils.Sleep;
@@ -151,7 +152,7 @@ public class Main
 
 		//initialisation du match
 		configColor();
-		real_state.robot.setPosition(new Vec2 (1381,1000));
+		real_state.robot.setPosition(Table.entryPosition));
 		real_state.robot.setOrientation(Math.PI);
 		
 		// Threads
