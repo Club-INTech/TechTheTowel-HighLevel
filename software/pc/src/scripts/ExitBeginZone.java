@@ -34,12 +34,13 @@ public class ExitBeginZone extends AbstractScript
 	{
 		// point de depart du match a modifier a chaque base roulante
 		return new Circle(1500-320-77,1000);
-		//1500 le bout de la table, 320 la taille de la cale et 48 la taille de l'arriere du robot a son centre
+		//1500 le bout de la table, 320 la taille de la cale et 77 la taille de l'arriere du robot a son centre
 	}
 	
 	@Override
 	public void execute (int id_version, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException
 	{
+		stateToConsider.robot.setPosition(entryPosition(id_version,stateToConsider.robot.robotRay).toVec2());
 		try
 		{
 			//on met l'ascenseur en haut pour ne pas frotter

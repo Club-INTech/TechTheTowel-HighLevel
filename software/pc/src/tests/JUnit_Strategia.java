@@ -37,9 +37,6 @@ public class JUnit_Strategia extends JUnit_Test
 		real_state = (GameState<Robot>) container.getService(ServiceNames.GAME_STATE);
 		strategos = (Strategie) container.getService(ServiceNames.STRATEGIE);
         
-
-		container.getService(ServiceNames.THREAD_TIMER);
-
 		emptyHook = new ArrayList<Hook> ();  
 
 		real_state.robot.setPosition(new Vec2 (1132,1000));
@@ -138,7 +135,7 @@ public class JUnit_Strategia extends JUnit_Test
 	public void desisionTest()
 	{
 		configColor();
-		container.startInstanciedThreads();
+		container.startAllThreads();
 		waitMatchBegin();
 		strategos.updateConfig();
 		strategos.IA();
