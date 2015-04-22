@@ -767,15 +767,9 @@ public class Locomotion implements Service
         try {
             float[] infos = deplacements.getCurrentPositionAndOrientation();
             
-            position.x = (int)infos[0];
-            if(symetry)
-            	position.x = -position.x;
-            
+            position.x = (int)infos[0];            
             position.y = (int)infos[1];
             orientation = infos[2]; // car getCurrentPositionAndOrientation renvoie des radians
-            
-            if(symetry)
-            	orientation = Math.PI - orientation;
         }
         catch(SerialConnexionException e)
         {
@@ -845,7 +839,7 @@ public class Locomotion implements Service
         if(symetry)
         	this.orientation = Math.PI-this.orientation;
         try {
-    		deplacements.setOrientation(orientation);
+    		deplacements.setOrientation(this.orientation);
         } catch (SerialConnexionException e) {
             log.critical("Catch de "+e+" dans setOrientation", this);
         }
@@ -859,8 +853,6 @@ public class Locomotion implements Service
     {
         updateCurrentPositionAndOrientation();
         Vec2 out = position.clone();
-        if(symetry)
-        	out.x = -out.x;
         return out;
     }
 
@@ -871,10 +863,7 @@ public class Locomotion implements Service
     public double getOrientation()
     {
         updateCurrentPositionAndOrientation();
-        if(symetry)
-        	return Math.PI-orientation;
-        else
-        	return orientation;
+        return orientation;
     }
 
     public void desasservit()
