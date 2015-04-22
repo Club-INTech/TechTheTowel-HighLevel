@@ -49,7 +49,6 @@ public class JUnit_Symetry extends JUnit_Test
 		try 
 		{
 			real_state.robot.moveLengthwise(100);
-			real_state.robot.moveLengthwise(-100);
 			real_state.robot.turn(Math.PI);
 			real_state.robot.turn(-Math.PI/2);
 			real_state.robot.turn(0);

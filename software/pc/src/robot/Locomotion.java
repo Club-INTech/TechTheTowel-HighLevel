@@ -66,10 +66,16 @@ public class Locomotion implements Service
     private int detectionDistance;
     
     /**
-     * Position "haut niveau" du robot, celle du robot
-     * qui commence toujours à droite de la table
+     * Position "bas niveau" du robot, celle du robot
+     * La vraie.
      */
-    private Vec2 position = new Vec2();
+    private Vec2 lowLevelPosition = new Vec2();
+    
+    /**
+     * Position "haut niveau" du robot, celle du robot
+     * Celle qui commence toujours en vert
+     */
+    private Vec2 highLevelPosition = new Vec2();
     
     /**
      * la position visee au final par le deplacement
@@ -80,7 +86,12 @@ public class Locomotion implements Service
      * orientation réelle du robot (symetrisee)
      * non connue par les classes de plus haut niveau
      */
-    private double orientation;
+    private double lowLevelOrientation;
+    
+    /**
+     * orientation réelle du robot non symetrisée
+     */
+    private double highLevelOrientation;
     
     /**
      * vrai si on est a gauche de la table (x<0 et jaune)
@@ -178,8 +189,8 @@ public class Locomotion implements Service
     	 */
     	Vec2 aim = new Vec2(
 
-        (int) (position.x + 1000*Math.cos(angle)),
-        (int) (position.y + 1000*Math.sin(angle))
+        (int) (lowLevelPosition.x + 1000*Math.cos(angle)),
+        (int) (lowLevelPosition.y + 1000*Math.sin(angle))
         );
     	finalAim = aim;
 
@@ -222,8 +233,8 @@ public class Locomotion implements Service
          */
         Vec2 aim = new Vec2(); 
         
-        aim.x = (int) (position.x + distance*Math.cos(orientation));
-        aim.y = (int) (position.y + distance*Math.sin(orientation));      
+        aim.x = (int) (lowLevelPosition.x + distance*Math.cos(lowLevelOrientation));
+        aim.y = (int) (lowLevelPosition.y + distance*Math.sin(lowLevelOrientation));      
         finalAim = aim;
         // l'appel à cette méthode sous-entend que le robot ne tourne pas
         // il va donc en avant si la distance est positive, en arrière si elle est négative
@@ -307,9 +318,9 @@ public class Locomotion implements Service
     	{
     		// Calcul du moyen le plus rapide (on se sert d'un calcul de produit scalaire)
 	        Vec2 delta = aim.clone();
-	        delta.minus(position);
+	        delta.minus(lowLevelPosition);
 	        // Le coeff 1000 vient du fait que Vec2 est constitué d'entiers
-	        Vec2 orientationVec = new Vec2((int)(1000*Math.cos(orientation)), (int)(1000*Math.sin(orientation)));
+	        Vec2 orientationVec = new Vec2((int)(1000*Math.cos(lowLevelOrientation)), (int)(1000*Math.sin(lowLevelOrientation)));
 	     
 	        // On regarde le produit scalaire; si c'est positif, alors on est dans le bon sens, et inversement
 	        boolean direction = delta.dot(orientationVec) >= 0;
@@ -383,9 +394,9 @@ public class Locomotion implements Service
 	                        	// TODO: les appels à déplacements sont non bloquants, il faut rajouter des sleeps
 	                        	// on alterne rotation à gauche et à droite
 	                        	if((unexpectedWallImpactCounter & 1) == 0)
-	                        		deplacements.turn(orientation+angleToDisengage);
+	                        		deplacements.turn(lowLevelOrientation+angleToDisengage);
 	                        	else
-	                        		deplacements.turn(orientation-angleToDisengage);                        	
+	                        		deplacements.turn(lowLevelOrientation-angleToDisengage);                        	
 	                        }
 	                        else if(isMovementForward)
 	                            deplacements.moveLengthwise(distanceToDisengage);
@@ -517,8 +528,9 @@ public class Locomotion implements Service
     /**
      * Non bloquant. 
      * Gère la symétrie et la marche arrière. (si on est en marche arriere le aim doit etre modifié pour que la consigne vers le bas niveau soit bonne)
-     * @param aim la position visee sur la table (consigne donné par plus haut niveau donc non symetrise)
+     * @param aim la position visee sur la tab le (consigne donné par plus haut niveau donc non symetrise)
      * @param isMovementForward vrai si on vas en avant et faux si on vas en arriere
+     * @param mustDetect, si on autorise la detection pendant ce deplacement
      * @param turnOnly vrai si on veut uniquement tourner (et pas avancer)
      * @param isCorrection vrai si la consigne est une correction et pas un ordre de deplacement
      * @param isTurnRelative vrai si l'angle est relatif et pas absolut
@@ -530,7 +542,7 @@ public class Locomotion implements Service
         updateCurrentPositionAndOrientation();
         
         // position donnée par le bas niveau avec un traitement dans UpdateCurrentPositionAndOrientation
-        Vec2 givenPosition = position.clone();
+        Vec2 givenPosition = highLevelPosition.clone();
         
         // Le point qu'on vise, donné par le haut niveau donc comme si on etais vert
         Vec2 aimSymmetrized = aim.clone();   
@@ -560,9 +572,7 @@ public class Locomotion implements Service
             distance *= -1;
             angle += Math.PI;
         }
-        
-        // On passe l'angle d'absolu à relatif : getOrientation se gere de la symetrie
-        
+                
         // on annule la correction si on est trop proche de la destination
         if(isCorrection) 
         {
@@ -598,7 +608,7 @@ public class Locomotion implements Service
     	boolean trajectoire_courbe = false;
 
     	// Ce code fait juste un modulo 2*pi, avec un résultat entre -PI et +PI
-		double delta = (angle-orientation) % (2*Math.PI);
+		double delta = (angle-lowLevelOrientation) % (2*Math.PI);
 		if(delta > Math.PI)
 			delta -= 2*Math.PI;
 		else if(delta < -Math.PI)
@@ -653,7 +663,7 @@ public class Locomotion implements Service
                 while(!isMotionEnded()) 
                 {
                 	if(mustDetect)
-                		detectEnemy(true, true, position);
+                		detectEnemy(true, true, lowLevelPosition);
                     Sleep.sleep(feedbackLoopDelay);
                 }
             
@@ -731,14 +741,14 @@ public class Locomotion implements Service
         int detectionRadius = robotLength/2 + detectionDistance;
         
         //centre du cercle de detection
-        Vec2 detectionCenter = new Vec2((int)(signe * detectionRadius * Math.cos(orientation)), 
-        								(int)(signe * detectionRadius * Math.sin(orientation))); //centre par rapport au centre de position du robot
+        Vec2 detectionCenter = new Vec2((int)(signe * detectionRadius * Math.cos(lowLevelOrientation)), 
+        								(int)(signe * detectionRadius * Math.sin(lowLevelOrientation))); //centre par rapport au centre de position du robot
         	
-        detectionCenter.plus(position);
+        detectionCenter.plus(lowLevelPosition);
 
         // si on ne tourne pas, on regarde devant nous : sinon, on regarde autour de nous
         if(isTurnOnly || isRobotTurning)
-        	detectionCenter=position;
+        	detectionCenter=lowLevelPosition;
         
         if(table.getObstacleManager().isDiscObstructed(detectionCenter, detectionDistance))
         {
@@ -764,12 +774,23 @@ public class Locomotion implements Service
     
     private void updateCurrentPositionAndOrientation()
     {
-        try {
+        try 
+        {
             float[] infos = deplacements.getCurrentPositionAndOrientation();
             
-            position.x = (int)infos[0];            
-            position.y = (int)infos[1];
-            orientation = infos[2]; // car getCurrentPositionAndOrientation renvoie des radians
+            lowLevelPosition.x = (int)infos[0];            
+            lowLevelPosition.y = (int)infos[1];
+            lowLevelOrientation = infos[2]; // car getCurrentPositionAndOrientation renvoie des radians
+            
+            highLevelPosition=lowLevelPosition;
+            highLevelOrientation=lowLevelOrientation;
+            
+            if(symetry)
+            {
+            	highLevelPosition.x = -lowLevelPosition.x;
+            	highLevelOrientation=Math.PI-highLevelOrientation;
+            }
+            
         }
         catch(SerialConnexionException e)
         {
@@ -794,7 +815,7 @@ public class Locomotion implements Service
      */
     public void immobilise()
     {
-        log.warning("Arrêt du robot en "+position, this);
+        log.warning("Arrêt du robot en "+lowLevelPosition, this);
         try 
         {
             deplacements.immobilise();
@@ -813,13 +834,13 @@ public class Locomotion implements Service
      */
     public void setPosition(Vec2 positionWanted)
     {
-        this.position = positionWanted.clone();
+        this.lowLevelPosition = positionWanted.clone();
         if(symetry)
-        	this.position.x = -this.position.x;
+        	this.lowLevelPosition.x = -this.lowLevelPosition.x;
 		try 
 		{
-			deplacements.setX(this.position.x);
-	        deplacements.setY(this.position.y);
+			deplacements.setX(this.lowLevelPosition.x);
+	        deplacements.setY(this.lowLevelPosition.y);
 		} 
 		catch (SerialConnexionException e)
 		{
@@ -835,24 +856,26 @@ public class Locomotion implements Service
      */
     public void setOrientation(double orientation)
     {
-        this.orientation = orientation;
+        this.lowLevelOrientation = orientation;
         if(symetry)
-        	this.orientation = Math.PI-this.orientation;
-        try {
-    		deplacements.setOrientation(this.orientation);
-        } catch (SerialConnexionException e) {
+        	this.lowLevelOrientation = Math.PI-this.lowLevelOrientation;
+        try 
+        {
+    		deplacements.setOrientation(this.lowLevelOrientation);
+        }
+        catch (SerialConnexionException e) 
+        {
             log.critical("Catch de "+e+" dans setOrientation", this);
         }
     }
 
     /**
-     * 
      * @return la position du robot en debut de match
      */
     public Vec2 getPosition()
     {
         updateCurrentPositionAndOrientation();
-        Vec2 out = position.clone();
+        Vec2 out = lowLevelPosition.clone();
         return out;
     }
 
@@ -863,7 +886,7 @@ public class Locomotion implements Service
     public double getOrientation()
     {
         updateCurrentPositionAndOrientation();
-        return orientation;
+        return lowLevelOrientation;
     }
 
     public void desasservit()
