@@ -1,15 +1,26 @@
 package tests;
 
+import hook.Hook;
+
+import java.util.ArrayList;
+import java.util.EnumSet;
+
 import org.junit.Before;
 import org.junit.After;
 
 import robot.Robot;
+import smartMath.Vec2;
+import strategie.GameState;
 import table.Table;
 import utils.Log;
 import utils.Config;
 import container.Container;
 import enums.ActuatorOrder;
+import enums.ObstacleGroups;
 import enums.ServiceNames;
+import exceptions.InObstacleException;
+import exceptions.PathNotFoundException;
+import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 
 /**
@@ -75,6 +86,13 @@ public abstract class JUnit_Test
 		robot.setPosition(Table.entryPosition);
 	}
 	
+	public void returnToEntryPosition(GameState<Robot> state) throws PathNotFoundException, UnableToMoveException, InObstacleException
+	{
+		state.robot.moveToLocation(new Vec2(Table.entryPosition.x-250, Table.entryPosition.y),new ArrayList<Hook>(), state.table, EnumSet.noneOf(ObstacleGroups.class));
+		state.robot.turn(Math.PI);
+		state.robot.moveLengthwise(-250);
+	}
+	
 
 	/**
 	 * Tear down.
@@ -82,7 +100,8 @@ public abstract class JUnit_Test
 	 * @throws Exception the exception
 	 */
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown() throws Exception 
+	{
 		container.destructor();
 		try {
 			Thread.sleep(1000);
