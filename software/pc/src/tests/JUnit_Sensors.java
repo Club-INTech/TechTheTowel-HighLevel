@@ -53,6 +53,7 @@ public class JUnit_Sensors extends JUnit_Test
 	public void setUp() throws Exception 
 	{
 		super.setUp();
+		mLocomotion.updateConfig();
 		state = (GameState<Robot>)container.getService(ServiceNames.GAME_STATE);
 		
 		log.debug("JUnit_ActionneursTest.setUp()", this);
@@ -66,7 +67,6 @@ public class JUnit_Sensors extends JUnit_Test
 		
 		//locomotion
 		mLocomotion = (Locomotion)container.getService(ServiceNames.LOCOMOTION);
-		mLocomotion.updateConfig();
 		mLocomotion.setPosition(new Vec2 (1500-320-77,1000));
 		mLocomotion.setOrientation(Math.PI);
 		

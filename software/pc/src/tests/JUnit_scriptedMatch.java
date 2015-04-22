@@ -46,6 +46,8 @@ public class JUnit_scriptedMatch extends JUnit_Test
 	public void setUp() throws Exception
 	{
 		super.setUp();
+		real_state.robot.updateConfig();
+
 		real_state = (GameState<Robot>) container.getService(ServiceNames.GAME_STATE);
 		scriptmanager = (ScriptManager) container.getService(ServiceNames.SCRIPT_MANAGER);
 		mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
@@ -58,11 +60,10 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		container.getService(ServiceNames.THREAD_TIMER);
 
 		emptyHook = new ArrayList<Hook> ();  
-
+		
 		real_state.robot.setPosition(new Vec2 (1132,1000));
 		real_state.robot.setOrientation(Math.PI);
 		
-		real_state.robot.updateConfig();
 		try 
 		{
 			matchSetUp(real_state.robot);
