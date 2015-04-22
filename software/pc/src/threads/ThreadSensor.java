@@ -198,7 +198,7 @@ class ThreadSensor extends AbstractThread
 				   distanceBack[1]==-1 )) // si on n'a pas spammé
 			{										
 				// on enleve les obstacles 
-				removeObstacleFront(distanceFront);
+				//removeObstacleFront(distanceFront);
 				removeObstacleBack(distanceBack);
 
 

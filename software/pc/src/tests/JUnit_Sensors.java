@@ -66,8 +66,8 @@ public class JUnit_Sensors extends JUnit_Test
 		
 		//locomotion
 		mLocomotion = (Locomotion)container.getService(ServiceNames.LOCOMOTION);
-		config.set("couleur", "vert");
 		mLocomotion.updateConfig();
+
 		mLocomotion.setPosition(new Vec2 (1500-320-77,1000));
 		mLocomotion.setOrientation(Math.PI);
 		
@@ -226,7 +226,7 @@ public class JUnit_Sensors extends JUnit_Test
 	}
 	
 	
-    @Test
+   // @Test
 	public void testCapteurDeplacement() throws SerialConnexionException, InObstacleException
 	{
     	matchSetUp(state.robot);
