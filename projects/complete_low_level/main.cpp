@@ -460,11 +460,35 @@ int main(void)
  *		   *|ACTIONNEURS|*
  *		   *|___________|*
  */
+			else if(!strcmp("reanim",order))
+			{
+				actuatorsMgr->reanimation();
+			}
+			else if(!strcmp("setallid",order))
+			{
+				actuatorsMgr->setAllID();
+			}
 			else if(!strcmp("ss",order))
 			{
 				uint16_t a17 = 0x19;
 				serial.read(a17);
 				actuatorsMgr->setArmSpeed(a17);
+			}
+			else if(!strcmp("testAX",order))
+			{
+				for(int i=0; i<50; i++)
+				{
+					actuatorsMgr->cdh();
+//					actuatorsMgr->omd();
+//					actuatorsMgr->omg();
+//					actuatorsMgr->obd();
+					Delay(200);
+//					actuatorsMgr->fmd();
+//					actuatorsMgr->fmg();
+					actuatorsMgr->cdb();
+//					actuatorsMgr->fbd();
+					Delay(200);
+				}
 			}
 			else if(!strcmp("e",order))
 			{

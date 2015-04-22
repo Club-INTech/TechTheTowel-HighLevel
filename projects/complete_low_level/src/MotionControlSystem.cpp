@@ -18,6 +18,9 @@ MotionControlSystem::MotionControlSystem(): leftMotor(Side::LEFT), rightMotor(Si
 	toleranceInTick = 100;
 	pwmMinToMove = 0;//60
 	minSpeed = 1;
+
+	vitesseEvolutionConsigneTranslation = 4;
+	vitesseEvolutionConsigneRotation = 4;
 }
 
 MotionControlSystem::MotionControlSystem(const MotionControlSystem&): leftMotor(Side::LEFT), rightMotor(Side::RIGHT),
@@ -158,6 +161,33 @@ void MotionControlSystem::enableRotationControl(bool enabled) {
 
 void MotionControlSystem::control()
 {
+	/*
+	 * Gestion de la rampe de la consigne
+	 * (un créneau pose problème ...)
+	 */
+
+	if(translationSetpoint < translationFinalSetpoint - vitesseEvolutionConsigneTranslation)
+	{
+		translationSetpoint += vitesseEvolutionConsigneTranslation;
+	}
+	else if(translationSetpoint > translationFinalSetpoint + vitesseEvolutionConsigneTranslation)
+	{
+		translationSetpoint -= vitesseEvolutionConsigneTranslation;
+	}
+
+	if(rotationSetpoint < rotationFinalSetpoint - vitesseEvolutionConsigneRotation)
+	{
+		rotationSetpoint += vitesseEvolutionConsigneRotation;
+	}
+	else if(rotationSetpoint > rotationFinalSetpoint + vitesseEvolutionConsigneRotation)
+	{
+		rotationSetpoint -= vitesseEvolutionConsigneRotation;
+	}
+
+
+
+
+
 	/*
 	 * Comptage des ticks de la roue droite
 	 * Cette codeuse est connectée à un timer 16bit
@@ -372,14 +402,14 @@ void MotionControlSystem::printTrackingAsserv()
  */
 
 void MotionControlSystem::orderTranslation(int32_t mmDistance) {
-	translationSetpoint += (int32_t) mmDistance / TICK_TO_MM;
+	translationFinalSetpoint += (int32_t) mmDistance / TICK_TO_MM;
 	moving = true;
 	moveAbnormal = false;
 }
 
 void MotionControlSystem::orderRotation(float angleRadian) {
 	int32_t angleTick = (angleRadian - originalAngle) / TICK_TO_RADIAN;
-	rotationSetpoint = MotionControlSystem::optimumAngle(currentAngle,
+	rotationFinalSetpoint = MotionControlSystem::optimumAngle(currentAngle,
 			angleTick);
 	moving = true;
 	moveAbnormal = false;
@@ -395,6 +425,8 @@ void MotionControlSystem::orderRawPwm(Side side, int16_t pwm) {
 void MotionControlSystem::stop() {
 	translationSetpoint = currentDistance;
 	rotationSetpoint = currentAngle;
+	translationFinalSetpoint = currentDistance;
+	rotationFinalSetpoint = currentAngle;
 
 	leftMotor.run(0);
 	rightMotor.run(0);

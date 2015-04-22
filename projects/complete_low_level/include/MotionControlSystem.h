@@ -51,6 +51,12 @@ private:
 	//Consignes à atteindre en tick
 	volatile int32_t rotationSetpoint;
 	volatile int32_t translationSetpoint;
+	volatile int32_t translationFinalSetpoint;
+	volatile int32_t rotationFinalSetpoint;
+
+	//Coefficients directeurs de la rampe de la consigne (unité : tick/fréquence d'asserv)
+	float vitesseEvolutionConsigneTranslation;
+	float vitesseEvolutionConsigneRotation;
 
 	volatile int16_t pwmRotation;
 	volatile int16_t pwmTranslation;

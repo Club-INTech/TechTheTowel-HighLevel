@@ -250,7 +250,64 @@ public:
 	void e(uint16_t angle){
 		machoireDroite->goTo(angle);
 	}
+	void setAllID(){
+		int i;
+		serial.printfln("Reglage des ID des AX12");
+		serial.printfln("Brancher uniquement l'AX12 indique");
+		serial.printf("\n");
 
+		serial.printfln("Machoire droite");
+		serial.read(i);
+		machoireDroite->initIDB(0);
+		serial.printfln("done");
+
+		serial.printfln("Machoire gauche");
+		serial.read(i);
+		machoireDroite->initIDB(1);
+		serial.printfln("done");
+
+		serial.printfln("Bras droit");
+		serial.read(i);
+		machoireDroite->initIDB(2);
+		serial.printfln("done");
+
+		serial.printfln("Bras gauche");
+		serial.read(i);
+		machoireDroite->initIDB(3);
+		serial.printfln("done");
+
+		serial.printfln("Guide droit");
+		serial.read(i);
+		machoireDroite->initIDB(4);
+		serial.printfln("done");
+
+		serial.printfln("Guide gauche");
+		serial.read(i);
+		machoireDroite->initIDB(5);
+		serial.printfln("done");
+
+		serial.printfln("Tapis droit");
+		serial.read(i);
+		machoireDroite->initIDB(6);
+		serial.printfln("done");
+
+		serial.printfln("Tapis gauche");
+		serial.read(i);
+		machoireDroite->initIDB(7);
+		serial.printfln("done");
+
+		serial.printfln("Clap droit");
+		serial.read(i);
+		machoireDroite->initIDB(8);
+		serial.printfln("done");
+
+		serial.printfln("Clap gauche");
+		serial.read(i);
+		machoireDroite->initIDB(9);
+		serial.printfln("done");
+
+		serial.printfln("Fin du reglage");
+	}
 	void omd() {
 		machoireDroite->goTo(mdOuvert);
 	}
