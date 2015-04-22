@@ -36,7 +36,7 @@ public class JUnit_Symetry extends JUnit_Test
 		emptyHook = new ArrayList<Hook> ();  
 
 		// La position est setée qu'on soit jaune ou vert
-		real_state.robot.setPosition(new Vec2 (1381,1000));
+		real_state.robot.setPosition(new Vec2 (1103,1000));
 		real_state.robot.setOrientation(Math.PI); 
 		
 		real_state.robot.updateConfig();	

@@ -188,9 +188,8 @@ public class Locomotion implements Service
     	 *   on vise une position eloignee mais on ne s'y deplacera pas, le robot ne fera que tourner
     	 */
     	Vec2 aim = new Vec2(
-
-        (int) (lowLevelPosition.x + 1000*Math.cos(angle)),
-        (int) (lowLevelPosition.y + 1000*Math.sin(angle))
+        (int) (highLevelPosition.x + 1000*Math.cos(angle)),
+        (int) (highLevelPosition.y + 1000*Math.sin(angle))
         );
     	finalAim = aim;
 
@@ -233,8 +232,8 @@ public class Locomotion implements Service
          */
         Vec2 aim = new Vec2(); 
         
-        aim.x = (int) (lowLevelPosition.x + distance*Math.cos(lowLevelOrientation));
-        aim.y = (int) (lowLevelPosition.y + distance*Math.sin(lowLevelOrientation));      
+        aim.x = (int) (highLevelPosition.x + distance*Math.cos(highLevelOrientation));
+        aim.y = (int) (highLevelPosition.y + distance*Math.sin(highLevelOrientation));      
         finalAim = aim;
         // l'appel à cette méthode sous-entend que le robot ne tourne pas
         // il va donc en avant si la distance est positive, en arrière si elle est négative
@@ -479,7 +478,7 @@ public class Locomotion implements Service
     {         	
     	//double time=System.currentTimeMillis();
         moveToPointSymmetry(aim, isMovementForward, mustDetect, turnOnly, false);
-        do
+        do 
         { 	
         	// en cas de détection d'ennemi, une exception est levée
         	if(mustDetect)
@@ -555,15 +554,16 @@ public class Locomotion implements Service
         Vec2 delta = aimSymmetrized.clone();
         
         delta.minus(givenPosition);
+ 
         
         //calcul de la nouvelle distance et du nouvel angle
         double distance = delta.length();
         double angle;
-        
+        /*
         if(symetry)
         	  angle = Math.atan2(-delta.y, delta.x);//Angle en absolu 
-        else 
-        	  angle = Math.atan2(delta.y, delta.x);//Angle en absolu 
+        else */
+    	angle = Math.atan2(delta.y, delta.x);//Angle en absolu
 
         
         // si on a besoin de se retourner pour suivre la consigne de isMovementForward on le fait ici
@@ -782,12 +782,12 @@ public class Locomotion implements Service
             lowLevelPosition.y = (int)infos[1];
             lowLevelOrientation = infos[2]; // car getCurrentPositionAndOrientation renvoie des radians
             
-            highLevelPosition=lowLevelPosition;
+            highLevelPosition=lowLevelPosition.clone();
             highLevelOrientation=lowLevelOrientation;
             
             if(symetry)
             {
-            	highLevelPosition.x = -lowLevelPosition.x;
+            	highLevelPosition.x = -highLevelPosition.x;
             	highLevelOrientation=Math.PI-highLevelOrientation;
             }
             
@@ -836,7 +836,7 @@ public class Locomotion implements Service
     {
         this.lowLevelPosition = positionWanted.clone();
         if(symetry)
-        	this.lowLevelPosition.x = -this.lowLevelPosition.x;
+        	this.lowLevelPosition.x = -this.lowLevelPosition.x;// on lui met la vraie position
 		try 
 		{
 			deplacements.setX(this.lowLevelPosition.x);
@@ -858,7 +858,7 @@ public class Locomotion implements Service
     {
         this.lowLevelOrientation = orientation;
         if(symetry)
-        	this.lowLevelOrientation = Math.PI-this.lowLevelOrientation;
+        	this.lowLevelOrientation = Math.PI-this.lowLevelOrientation; // la vraie orientation
         try 
         {
     		deplacements.setOrientation(this.lowLevelOrientation);
@@ -875,7 +875,7 @@ public class Locomotion implements Service
     public Vec2 getPosition()
     {
         updateCurrentPositionAndOrientation();
-        Vec2 out = lowLevelPosition.clone();
+        Vec2 out = highLevelPosition.clone();
         return out;
     }
 
@@ -886,7 +886,7 @@ public class Locomotion implements Service
     public double getOrientation()
     {
         updateCurrentPositionAndOrientation();
-        return lowLevelOrientation;
+        return highLevelOrientation;
     }
 
     public void desasservit()
