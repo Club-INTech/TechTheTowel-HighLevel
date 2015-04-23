@@ -73,7 +73,7 @@ public class DropPile extends AbstractScript
 	
 				//on eleve notre membre (l'ascenseur)
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_STAGE, true);
-				//on se deplace vers elle
+				//on se deplace vers elle 120
 				stateToConsider.robot.moveLengthwise(120, hooksToConsider, true);
 				
 				//on y place notre membre
@@ -116,8 +116,10 @@ public class DropPile extends AbstractScript
 				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);
 				
 				//on remet notre membre en position de deplacement
-				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+
 								
 				// Thank... you, sempai #'.'#
 	

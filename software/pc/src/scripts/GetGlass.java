@@ -88,9 +88,6 @@ public class GetGlass extends AbstractScript
 			//si on a toujours rien on arrete		
 			//si on a attrape quelque chose on le dit au robot ainsi que sa position (gauche / droite)
 			
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
-			
 			//gestion des version, si le verre est deja pris on ne le re-prend pas (bawi)
 			if (versionToExecute == 0)
 			{

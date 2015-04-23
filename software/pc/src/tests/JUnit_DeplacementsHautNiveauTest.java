@@ -1,5 +1,6 @@
 package tests;
 
+import hook.Hook;
 import hook.types.HookFactory;
 
 import java.util.ArrayList;
@@ -184,7 +185,7 @@ public class JUnit_DeplacementsHautNiveauTest extends JUnit_Test
     {
         container.startAllThreads();
 //        robot.avancer(1500, null, true);
-        real_state.robot.moveLengthwiseTowardWall(1500);
+        real_state.robot.moveLengthwiseTowardWall(1500, new ArrayList<Hook>());
     }
 
     /**
@@ -197,11 +198,11 @@ public class JUnit_DeplacementsHautNiveauTest extends JUnit_Test
     {
         real_state.robot.moveLengthwise(200);
         Sleep.sleep(1000);
-        real_state.robot.moveLengthwiseTowardWall(200);
+        real_state.robot.moveLengthwiseTowardWall(200, new ArrayList<Hook>());
         Sleep.sleep(1000);
         real_state.robot.moveLengthwise(200);
         Sleep.sleep(1000);
-        real_state.robot.moveLengthwiseTowardWall(200);
+        real_state.robot.moveLengthwiseTowardWall(200, new ArrayList<Hook>());
         Sleep.sleep(1000);
         real_state.robot.moveLengthwise(200);
     }
