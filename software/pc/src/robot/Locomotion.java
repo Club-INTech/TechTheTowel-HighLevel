@@ -360,65 +360,69 @@ public class Locomotion implements Service
             }
             catch (BlockedException e)
             {
+            	
                 log.critical("Haut : Catch de "+e+" dans moveToPointException", this);
                 
-                if(maxRetriesIfBlocked!=0)
+                if (!headingToWall) // si on s'y attendaiq, on ne faais rien.
                 {
-	                if(maxRetriesIfBlocked > actualRetriesIfBlocked)
+	                if(maxRetriesIfBlocked!=0)
 	                {
-	                	actualRetriesIfBlocked++;
-	                    log.critical("Tentative "+actualRetriesIfBlocked+" de deplacement ", this);
-	                	moveToPointException(aim, hooks, isMovementForward, headingToWall, turnOnly, mustDetect); // on rentente s'il a y eu un probleme
+		                if(maxRetriesIfBlocked > actualRetriesIfBlocked)
+		                {
+		                	actualRetriesIfBlocked++;
+		                    log.critical("Tentative "+actualRetriesIfBlocked+" de deplacement ", this);
+		                	moveToPointException(aim, hooks, isMovementForward, headingToWall, turnOnly, mustDetect); // on rentente s'il a y eu un probleme
+		                }
 	                }
-                }
-                else
-                {
-	                unexpectedWallImpactCounter--;
-	                immobilise();
-                
-                /*
-                 * En cas de blocage, on recule (si on allait tout droit) ou on avance.
-                 */
-                // Si on s'attendait à un mur, c'est juste normal de se le prendre.
-               
-	                if(!headingToWall)
+	                else
 	                {
-	                    try
-	                    {
-	                        log.warning("On n'arrive plus à avancer. On se dégage", this);
-	                        if(turnOnly)
-	                        {
-	                        	isRobotTurning=true;
-	                        	
-	                        	// TODO: les appels à déplacements sont non bloquants, il faut rajouter des sleeps
-	                        	// on alterne rotation à gauche et à droite
-	                        	if((unexpectedWallImpactCounter & 1) == 0)
-	                        		deplacements.turn(lowLevelOrientation+angleToDisengage);
-	                        	else
-	                        		deplacements.turn(lowLevelOrientation-angleToDisengage);                        	
-	                        }
-	                        else if(isMovementForward)
-	                            deplacements.moveLengthwise(distanceToDisengage);
-	                        else
-	                            deplacements.moveLengthwise(-distanceToDisengage);
-	                        while(!isMotionEnded());
-	                    		doItAgain = true; // si on est arrivé ici c'est qu'aucune exception n'a été levée
-	                    } 
-	                    catch (SerialConnexionException e1)
-	                    {
-	                        log.critical("On ne fait rien après ceci: Catch de "+e1+" dans moveToPointException", this);
-	                    } 
-	                    catch (BlockedException e1)
-	                    {
-	                        log.critical("Catch de "+e1+" dans moveToPointException", this);
-	                    	immobilise();                       
-	                        log.critical("On n'arrive pas à se dégager", this);
-						}
-	                    if(!doItAgain)
-	                    {
-	                        log.critical("Lancement de UnableToMoveException dans MoveToPointException, visant "+finalAim.x+" :: "+finalAim.y+" cause physique", this);
-	                        throw new UnableToMoveException(finalAim, UnableToMoveReason.PHYSICALLY_BLOCKED);
-	                    }
+		                unexpectedWallImpactCounter--;
+		                immobilise();
+	                
+	                /*
+	                 * En cas de blocage, on recule (si on allait tout droit) ou on avance.
+	                 */
+	                // Si on s'attendait à un mur, c'est juste normal de se le prendre.
+	               
+		                if(!headingToWall)
+		                {
+		                    try
+		                    {
+		                        log.warning("On n'arrive plus à avancer. On se dégage", this);
+		                        if(turnOnly)
+		                        {
+		                        	isRobotTurning=true;
+		                        	
+		                        	// TODO: les appels à déplacements sont non bloquants, il faut rajouter des sleeps
+		                        	// on alterne rotation à gauche et à droite
+		                        	if((unexpectedWallImpactCounter & 1) == 0)
+		                        		deplacements.turn(lowLevelOrientation+angleToDisengage);
+		                        	else
+		                        		deplacements.turn(lowLevelOrientation-angleToDisengage);                        	
+		                        }
+		                        else if(isMovementForward)
+		                            deplacements.moveLengthwise(distanceToDisengage);
+		                        else
+		                            deplacements.moveLengthwise(-distanceToDisengage);
+		                        while(!isMotionEnded());
+		                    		doItAgain = true; // si on est arrivé ici c'est qu'aucune exception n'a été levée
+		                    } 
+		                    catch (SerialConnexionException e1)
+		                    {
+		                        log.critical("On ne fait rien après ceci: Catch de "+e1+" dans moveToPointException", this);
+		                    } 
+		                    catch (BlockedException e1)
+		                    {
+		                        log.critical("Catch de "+e1+" dans moveToPointException", this);
+		                    	immobilise();                       
+		                        log.critical("On n'arrive pas à se dégager", this);
+							}
+		                    if(!doItAgain)
+		                    {
+		                        log.critical("Lancement de UnableToMoveException dans MoveToPointException, visant "+finalAim.x+" :: "+finalAim.y+" cause physique", this);
+		                        throw new UnableToMoveException(finalAim, UnableToMoveReason.PHYSICALLY_BLOCKED);
+		                    }
+		                }
 	                }
                 }
             }
