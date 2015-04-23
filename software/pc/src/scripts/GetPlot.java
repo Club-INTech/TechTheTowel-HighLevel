@@ -387,6 +387,8 @@ public class GetPlot extends AbstractScript
 	
 	private void eatPlot (boolean isSecondTry, boolean isArmChosenLeft, GameState<Robot> stateToConsider, boolean movementAllowed) throws UnableToEatPlot, SerialConnexionException
 	{
+		boolean sensorAnswer=false;
+
 		//si on a deja 4 plots dans la bouche on me mange plus
 		if (stateToConsider.robot.storedPlotCount >= 4)
 			throw new UnableToEatPlot();
@@ -409,7 +411,6 @@ public class GetPlot extends AbstractScript
 			{
 				stateToConsider.robot.moveLengthwise(150);
 				//premiere verif (avant les bras)
-				boolean sensorAnswer;
 				try 
 				{
 					sensorAnswer = ((Boolean) stateToConsider.robot.getSensorValue(SensorNames.JAW_SENSOR));
@@ -427,57 +428,58 @@ public class GetPlot extends AbstractScript
 						sensorAnswer = ((Boolean) SensorNames.JAW_SENSOR.getDefaultValue());
 					}
 				}
-				if (sensorAnswer)
-					return;
+					
 			}
 			catch (UnableToMoveException e1) 
 			{
 				log.debug("mouvement impossible, script GetPlot", this);
+				sensorAnswer = false;
 			}
 		
-		
-		if (isArmChosenLeft) 
-		{
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
-		}
-		else
-		{
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN_SLOW, true);
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
-		}
-		//si on a attrape qqc on termine sinon on essaie avec l'autre bras (si isSecondTry == false)
-		//si deuxieme essai ecrire dans le log qu'on a essaye de manger un plot et on jette une exeption impossible de manger
-		
-		boolean sensorAnswer;
-		try 
-		{
-			sensorAnswer = ((Boolean) stateToConsider.robot.getSensorValue(SensorNames.JAW_SENSOR));
-		} 
-		catch (SerialConnexionException e1) 
-		{
-			stateToConsider.robot.sleep(40);
-			try 
-			{
-				sensorAnswer = ((Boolean) stateToConsider.robot.getSensorValue(SensorNames.JAW_SENSOR));
-			}
-			catch (SerialConnexionException e2) 
-			{
-				//si impossible de communiquer avec le capteur on suppose qu'on a attrape le plot
-				sensorAnswer = ((Boolean) SensorNames.JAW_SENSOR.getDefaultValue());
-			}
-		}
-
 		if (!sensorAnswer)
 		{
-			if (isSecondTry)
+			if (isArmChosenLeft) 
 			{
-				log.debug("impossible d'attraper le plot, tentative en fermant les machoires", this);	
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
 			}
 			else
 			{
-				eatPlot(true,!isArmChosenLeft, stateToConsider, false);
-				return;
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN_SLOW, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
+			}
+			//si on a attrape qqc on termine sinon on essaie avec l'autre bras (si isSecondTry == false)
+			//si deuxieme essai ecrire dans le log qu'on a essaye de manger un plot et on jette une exeption impossible de manger
+			
+			try 
+			{
+				sensorAnswer = ((Boolean) stateToConsider.robot.getSensorValue(SensorNames.JAW_SENSOR));
+			} 
+			catch (SerialConnexionException e1) 
+			{
+				stateToConsider.robot.sleep(40);
+				try 
+				{
+					sensorAnswer = ((Boolean) stateToConsider.robot.getSensorValue(SensorNames.JAW_SENSOR));
+				}
+				catch (SerialConnexionException e2) 
+				{
+					//si impossible de communiquer avec le capteur on suppose qu'on a attrape le plot
+					sensorAnswer = ((Boolean) SensorNames.JAW_SENSOR.getDefaultValue());
+				}
+			}
+	
+			if (!sensorAnswer)
+			{
+				if (isSecondTry)
+				{
+					log.debug("impossible d'attraper le plot, tentative en fermant les machoires", this);	
+				}
+				else
+				{
+					eatPlot(true,!isArmChosenLeft, stateToConsider, false);
+					return;
+				}
 			}
 		}
 		
