@@ -85,7 +85,7 @@ public class JUnit_Hooks extends JUnit_Test
 		robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
 	}
 
-	@Test
+	//@Test
 	public void test() throws PathNotFoundException, SerialFinallyException, ContainerException, SerialManagerException, SerialConnexionException
 	{
 		//container.startAllThreads();
@@ -168,6 +168,53 @@ public class JUnit_Hooks extends JUnit_Test
 		catch (UnableToMoveException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@Test
+	public void testHookClap() throws PathNotFoundException, SerialFinallyException, ContainerException, SerialManagerException, SerialConnexionException
+	{
+		//container.startAllThreads();
+		//premiere action du match
+		
+		real_state.robot.setPosition(new Vec2(0, 0));
+		
+		System.out.println("Le robot commence le match");
+		try 
+		{
+			//hookfactory qui contient les differents hooks
+			hookFactory = (HookFactory) container.getService(ServiceNames.HOOK_FACTORY);
+
+			// liste de hook a passer a la locomotion
+			ArrayList<Hook> testHookList = new ArrayList<Hook> ();
+			
+			Hook testHook1 = hookFactory.newHookXisLesser(0, 10);
+			Hook testHook2 = hookFactory.newHookXisLesser(-250, 10);
+			Hook testHook3 = hookFactory.newHookXisLesser(-360, 10);
+			
+			// ajoute un callback au hook de position qui ouvre le bras  bras
+			testHook1.addCallback(	new Callback(new OpenClapLeftMiddleExe(),true, real_state)	);
+			testHook2.addCallback(	new Callback(new OpenClapLeftHighExe(),true, real_state)	);
+			testHook3.addCallback(	new Callback(new OpenClapLeftMiddleExe(),true, real_state)	);
+			
+			// ajoute le hook a la liste a passer a la locomotion
+			testHookList.add(testHook1);
+			testHookList.add(testHook2);
+			testHookList.add(testHook3);
+			
+			//scriptmanager.getScript(ScriptNames.EXIT_START_ZONE).execute(0, real_state, testHookList, true );
+			
+			System.out.println("debut du mouvement");
+			real_state.robot.moveLengthwise(800, testHookList);
+			System.out.println("fin du mouvement");
+		}
+		catch (UnableToMoveException e) 
+		{
+			e.printStackTrace();
+		}		
+		System.out.println("match fini !");
+
+		//Le match s'arrête
+		container.destructor();
 	}
 	
 }
