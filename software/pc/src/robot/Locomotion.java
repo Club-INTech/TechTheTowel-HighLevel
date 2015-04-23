@@ -589,8 +589,6 @@ public class Locomotion implements Service
         }
         else 
         	moveToPointSerialOrder(aimSymmetrized, givenPosition, angle, distance, mustDetect, turnOnly, isCorrection);
-        
-
     }
     
     /**

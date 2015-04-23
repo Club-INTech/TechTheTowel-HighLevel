@@ -42,7 +42,6 @@ public class ExitBeginZone extends AbstractScript
 		try
 		{
 			//on met l'ascenseur en haut pour ne pas frotter
-			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
 			stateToConsider.robot.moveLengthwise(distanceToExit, hooksToConsider, false);
 		}
 		catch (UnableToMoveException e)
