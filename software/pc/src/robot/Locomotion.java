@@ -459,7 +459,7 @@ public class Locomotion implements Service
         } 
         while(doItAgain)
         	;     
-        ; // on recommence tant qu'il le faut
+        // on recommence tant qu'il le faut
 
 
     // Tout s'est bien passé

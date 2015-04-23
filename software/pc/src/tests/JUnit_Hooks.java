@@ -2,6 +2,7 @@ package tests;
 
 import hook.Callback;
 import hook.Hook;
+import hook.methods.OpenClapLeftHighExe;
 import hook.methods.OpenLeftArmExe;
 import hook.methods.TakeGlassExe;
 import hook.types.HookFactory;
@@ -53,7 +54,7 @@ public class JUnit_Hooks extends JUnit_Test
 		scriptmanager = (ScriptManager) container.getService(ServiceNames.SCRIPT_MANAGER);
 		mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
 
-		real_state.robot.setPosition(new Vec2 (1132,1000));
+		real_state.robot.setPosition(new Vec2 (1107,1000));
 		real_state.robot.setOrientation(Math.PI); 
 		
 		real_state.robot.updateConfig();
@@ -157,7 +158,7 @@ public class JUnit_Hooks extends JUnit_Test
 		Hook takeGlassHook = hookFactory.newHookIsDistanceToPointLesserThan(100,center, 20);
 		
 		// ajoute un callback au hook de position qui ouvre le bras  bras
-		takeGlassHook.addCallback(	new Callback(new TakeGlassExe(),true, real_state)	);
+		takeGlassHook.addCallback(	new Callback(new OpenClapLeftHighExe(),true, real_state)	);
 		
 		// ajoute le hook a la liste a passer a la locomotion
 		testHookList.add(takeGlassHook);

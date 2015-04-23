@@ -78,8 +78,8 @@ public class DropGlass extends AbstractScript
 				stateToConsider.table.areaXFilled(1);
 				
 				//On referme les 2 bras
-				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
-				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
 				
 				stateToConsider.robot.turn(Math.PI);//On se tourne dans le bon sens
 			}
@@ -108,8 +108,8 @@ public class DropGlass extends AbstractScript
 				stateToConsider.table.areaXFilled(2);
 				
 				//On referme les 2 bras
-				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
-				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
 			}
 			else if (version==2)
 			{
@@ -137,8 +137,8 @@ public class DropGlass extends AbstractScript
 				stateToConsider.table.areaXFilled(3);
 				
 				//On referme les 2 bras
-				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
-				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
 			}
 		}
 		catch(UnableToMoveException | SerialConnexionException e)
@@ -194,8 +194,8 @@ public class DropGlass extends AbstractScript
 	{
 		try 
 		{
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
 		} 
 		catch (SerialConnexionException e) 
 		{

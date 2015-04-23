@@ -364,7 +364,7 @@ public class GetPlot extends AbstractScript
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
-			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
 		} 
 		catch (SerialConnexionException e) 
 		{
@@ -405,7 +405,7 @@ public class GetPlot extends AbstractScript
 			stateToConsider.robot.digestPlot();
 		}
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
-		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
+		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
 		if (movementAllowed)
 			try 
 			{
