@@ -406,12 +406,35 @@ public class GetPlot extends AbstractScript
 		if (movementAllowed)
 			try 
 			{
-				stateToConsider.robot.moveLengthwise(100);
+				stateToConsider.robot.moveLengthwise(150);
+				//premiere verif (avant les bras)
+				boolean sensorAnswer;
+				try 
+				{
+					sensorAnswer = ((Boolean) stateToConsider.robot.getSensorValue(SensorNames.JAW_SENSOR));
+				} 
+				catch (SerialConnexionException e1) 
+				{
+					stateToConsider.robot.sleep(500);
+					try 
+					{
+						sensorAnswer = ((Boolean) stateToConsider.robot.getSensorValue(SensorNames.JAW_SENSOR));
+					}
+					catch (SerialConnexionException e2) 
+					{
+						//si impossible de communiquer avec le capteur on suppose qu'on a attrape le plot
+						sensorAnswer = ((Boolean) SensorNames.JAW_SENSOR.getDefaultValue());
+					}
+				}
+				if (sensorAnswer)
+					return;
 			}
 			catch (UnableToMoveException e1) 
 			{
 				log.debug("mouvement impossible, script GetPlot", this);
 			}
+		
+		
 		if (isArmChosenLeft) 
 		{
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
@@ -432,7 +455,7 @@ public class GetPlot extends AbstractScript
 		} 
 		catch (SerialConnexionException e1) 
 		{
-			stateToConsider.robot.sleep(500);
+			stateToConsider.robot.sleep(40);
 			try 
 			{
 				sensorAnswer = ((Boolean) stateToConsider.robot.getSensorValue(SensorNames.JAW_SENSOR));
