@@ -59,10 +59,7 @@ public class RobotReal extends Robot
 		mActuatorCardWrapper.useActuator(order);
 		
 		if(waitForCompletion)
-			sleep(order.getDuration());
-		else 
-			sleep(100); // On attend 25 ms pour Sylvain T_T
-		
+			sleep(order.getDuration());		
 	}
 	
 	@Override
