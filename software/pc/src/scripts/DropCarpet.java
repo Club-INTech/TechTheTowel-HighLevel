@@ -69,7 +69,7 @@ public class DropCarpet extends AbstractScript
 				{
 					stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_DROP, true);
 					stateToConsider.table.setIsRightCarpetDropped(true);
-					stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, true);
+					stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
 				}
 				System.out.println("En position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") après avoir deposé les tapis");
 			}
@@ -124,7 +124,7 @@ public class DropCarpet extends AbstractScript
 		try 
 		{
 			stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
-			stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
 		} 
 		catch (SerialConnexionException e) 
 		{

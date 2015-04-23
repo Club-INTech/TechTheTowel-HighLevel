@@ -379,11 +379,12 @@ public class GetPlot extends AbstractScript
 	 * 
 	 * @param isSecondTry vrai si l'essai de mangeage de plot est le deuxieme ou si on ne veux pas reessayer
 	 * @param isArmChosenLeft vrai si on mange avec le bras gauche
+	 * @param stateToCOnsider la table
 	 * @param movementAllowed vrai si on autorise le robot a avancer pour manger le plot
 	 * @throws UnableToEatPlot si le mangeage echoue
 	 * @throws SerialConnexionException si impossible de communiquer avec les carte
-	 * @throws SerialException
 	 */
+	
 	private void eatPlot (boolean isSecondTry, boolean isArmChosenLeft, GameState<Robot> stateToConsider, boolean movementAllowed) throws UnableToEatPlot, SerialConnexionException
 	{
 		//si on a deja 4 plots dans la bouche on me mange plus
