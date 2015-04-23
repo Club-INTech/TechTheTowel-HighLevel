@@ -11,6 +11,7 @@ import scripts.AbstractScript;
 import scripts.ScriptManager;
 import smartMath.Vec2;
 import strategie.GameState;
+import table.Table;
 import threads.ThreadTimer;
 
 import org.junit.Before;
@@ -61,7 +62,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 
 		emptyHook = new ArrayList<Hook> ();  
 		
-		real_state.robot.setPosition(new Vec2 (1132,1000));
+		real_state.robot.setPosition(Table.entryPosition);
 		real_state.robot.setOrientation(Math.PI);
 		
 		try 
