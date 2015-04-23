@@ -170,7 +170,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 				{
 					// affiche dans la console ce qu'on envois sur la série -> On cache ca, pour eviter le xy0? en permanence, mais ca peux etre interessant de le garder.
 					//FIXME ne jamais push un code avec cette ligne decommentee
-					log.debug("Envoi serie : '" + m  + "'", this);
+					//log.debug("Envoi serie : '" + m  + "'", this);
 					m += "\r";
 					
 					output.write(m.getBytes());
@@ -212,7 +212,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 					inputLines[i] = input.readLine();		
 					
 					//TODO commenter.
-					log.debug("Ligne "+i+": '"+inputLines[i]+"'",this); 
+					//log.debug("Ligne "+i+": '"+inputLines[i]+"'",this); 
 					if(inputLines[i].equals(null) || inputLines[i].replaceAll(" ", "").equals("")|| inputLines[i].replaceAll(" ", "").equals("-"))
 					{
 						log.critical("='( , renvoi de "+inputLines[i],this);
