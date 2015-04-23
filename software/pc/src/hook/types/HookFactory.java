@@ -200,27 +200,6 @@ public class HookFactory implements Service
     {
         return new HookYisGreater(config, log, realState, yValue);
     }
-    
-    /* ======================================================================
-	 * 							Hooks de distance
-	 * ======================================================================
-	 */
-    
-    
-
-	/**
-	 * Hook de distance à un point : se declanche si le robot est proche du point
-	 * L'idée principale est de declecher le hook quand le robot rentre dans un cercle
-	 * 
-	 * @param ray, distance minimum de declenchement du hook
-	 * @param point, centre du cercle de declencement du hook
-	 * @param tolerancy le hook sera déclenché si le robot est dans [point, ray+tolerency/2]
-	 * @return le hook
-	 */
-    public Hook newHookIsDistanceToPointLesserThan(float ray, Vec2 point, float tolerancy)
-    {
-    	return new HookIsDistanceToPointLesserThan(config, log, realState, ray, point, tolerancy);
-    }
 
     /* ======================================================================
    	 * 							Hooks de position et orientation

@@ -2,7 +2,7 @@ package tests;
 
 import hook.Callback;
 import hook.Hook;
-import hook.methods.OpenLeftArmExe;
+import hook.methods.*;
 import hook.methods.TakeGlassExe;
 import hook.types.HookFactory;
 
@@ -44,7 +44,6 @@ public class JUnit_Hooks extends JUnit_Test
 	SensorsCardWrapper  mSensorsCardWrapper;
 	HookFactory hookFactory;
 	
-	@SuppressWarnings("unchecked")
 	@Before
 	public void setUp() throws Exception
 	{
@@ -53,8 +52,8 @@ public class JUnit_Hooks extends JUnit_Test
 		scriptmanager = (ScriptManager) container.getService(ServiceNames.SCRIPT_MANAGER);
 		mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
 
-		real_state.robot.setPosition(new Vec2 (1132,1000));
-		real_state.robot.setOrientation(Math.PI); 
+		real_state.robot.setPosition(Table.entryPosition);
+		real_state.robot.setOrientation(Math.PI);
 		
 		real_state.robot.updateConfig();
 		try 
@@ -86,10 +85,10 @@ public class JUnit_Hooks extends JUnit_Test
 		robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
 	}
 
-	//@Test
+	@Test
 	public void test() throws PathNotFoundException, SerialFinallyException, ContainerException, SerialManagerException, SerialConnexionException
 	{
-		container.startAllThreads();
+		//container.startAllThreads();
 		//premiere action du match
 		
 		System.out.println("Le robot commence le match");
@@ -100,25 +99,23 @@ public class JUnit_Hooks extends JUnit_Test
 
 			// liste de hook a passer a la locomotion
 			ArrayList<Hook> testHookList = new ArrayList<Hook> ();
-
 			
-		    Vec2 center = new Vec2();
-		    center.x=1000; center.y=1000;
-			
-			// hook pour ouvrir le bras dès que le robot est dans un cercle, à une precision près
-			Hook openArmTestHook = hookFactory.newHookIsDistanceToPointLesserThan(100,center, 20);
+			Hook testHookX = hookFactory.newHookX(500);
 			
 			// ajoute un callback au hook de position qui ouvre le bras  bras
-			openArmTestHook.addCallback(	new Callback(new OpenLeftArmExe(),true, real_state)	);
+			testHookX.addCallback(	new Callback(new OpenClapLeftHighExe(),true, real_state)	);
 			
 			// ajoute le hook a la liste a passer a la locomotion
-			testHookList.add(openArmTestHook);
+			testHookList.add(testHookX);
 			
 			scriptmanager.getScript(ScriptNames.EXIT_START_ZONE).execute(0, real_state, testHookList, true );
 			
-			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+")");
-			System.out.println("On est sortis !");
-		} 
+			System.out.println("debut du mouvement");
+			real_state.robot.moveLengthwise(1500, testHookList);
+			real_state.robot.turn(0, testHookList, false);
+			real_state.robot.moveLengthwise(1400, testHookList);
+			System.out.println("fin du mouvement");
+		}
 		catch (UnableToMoveException e) 
 		{
 			e.printStackTrace();
@@ -129,7 +126,7 @@ public class JUnit_Hooks extends JUnit_Test
 		container.destructor();
 	}
 
-	@Test
+	//@Test
 	public void testTakeGlass() throws PathNotFoundException, SerialFinallyException, ContainerException, SerialManagerException, SerialConnexionException
 	{
 		emptyHook = new ArrayList<Hook> ();  
@@ -153,6 +150,8 @@ public class JUnit_Hooks extends JUnit_Test
 		
 	    Vec2 center = new Vec2(900,1000);
 		
+	    //TODO : à refaire
+	    /*
 		// hook pour ouvrir le bras dès que le robot est dans un cercle, à une precision près
 		Hook takeGlassHook = hookFactory.newHookIsDistanceToPointLesserThan(100,center, 20);
 		
@@ -161,6 +160,7 @@ public class JUnit_Hooks extends JUnit_Test
 		
 		// ajoute le hook a la liste a passer a la locomotion
 		testHookList.add(takeGlassHook);
+		*/
 		
 		try {
 			real_state.robot.moveLengthwise(1500, testHookList);

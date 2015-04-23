@@ -496,7 +496,6 @@ public class Locomotion implements Service
             if(hooks != null)
 	            for(Hook hook : hooks)
 	                hook.evaluate();
-            log.debug("logs tous evalues", this);
                         
             // le fait de faire de nombreux appels permet de corriger la trajectoire
             correctAngle(aim, isMovementForward, mustDetect);
@@ -505,7 +504,7 @@ public class Locomotion implements Service
             //time=System.currentTimeMillis();
             
             // On sleep pour eviter le spam de la serie
-            Sleep.sleep(feedbackLoopDelay);
+            //Sleep.sleep(feedbackLoopDelay);
 
         } 
         while(!isMotionEnded())
