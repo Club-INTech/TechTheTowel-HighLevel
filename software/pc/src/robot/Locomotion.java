@@ -663,7 +663,7 @@ public class Locomotion implements Service
                 while(!isMotionEnded()) 
                 {
                 	if(mustDetect)
-                		detectEnemy(true, true, lowLevelPosition);
+                		detectEnemy(true, true, highLevelPosition);
                     Sleep.sleep(feedbackLoopDelay);
                 }
             
@@ -705,7 +705,7 @@ public class Locomotion implements Service
         		if(infos[1])//si le robot patine, il est bloqué
         		{
                     log.critical("Robot bloqué, lancement de BlockedException dans isMotionEnded", this);
-                    throw new BlockedException ();
+                    throw new BlockedException();
         		}
         		else
         		{
@@ -741,14 +741,14 @@ public class Locomotion implements Service
         int detectionRadius = robotLength/2 + detectionDistance;
         
         //centre du cercle de detection
-        Vec2 detectionCenter = new Vec2((int)(signe * detectionRadius * Math.cos(lowLevelOrientation)), 
-        								(int)(signe * detectionRadius * Math.sin(lowLevelOrientation))); //centre par rapport au centre de position du robot
+        Vec2 detectionCenter = new Vec2((int)(signe * detectionRadius * Math.cos(highLevelOrientation)), 
+        								(int)(signe * detectionRadius * Math.sin(highLevelOrientation))); //centre par rapport au centre de position du robot
         	
-        detectionCenter.plus(lowLevelPosition);
+        detectionCenter.plus(highLevelPosition);
 
         // si on ne tourne pas, on regarde devant nous : sinon, on regarde autour de nous
         if(isTurnOnly || isRobotTurning)
-        	detectionCenter=lowLevelPosition;
+        	detectionCenter=highLevelPosition;
         
         if(table.getObstacleManager().isDiscObstructed(detectionCenter, detectionDistance))
         {

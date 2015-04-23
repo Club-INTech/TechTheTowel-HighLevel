@@ -64,6 +64,12 @@ class ThreadSensor extends AbstractThread
 	 */
 	boolean obstacleAddedLeft;
 	boolean obstacleAddedRight;
+	
+    /**
+     * vrai si on est a gauche de la table (x<0 et jaune)
+     * faux sinon
+     */
+    private boolean symetry;
 
 	
 	/** Les angles des capteurs :
@@ -150,6 +156,8 @@ class ThreadSensor extends AbstractThread
 		Thread.currentThread().setPriority(2);
 		mTable = table;
 		mRobot = robot;
+		
+		
 	}
 	
 	/* (non-Javadoc)
@@ -198,9 +206,8 @@ class ThreadSensor extends AbstractThread
 				   distanceBack[1]==-1 )) // si on n'a pas spammé
 			{										
 				// on enleve les obstacles 
-				//removeObstacleFront(distanceFront);
+				removeObstacleFront(distanceFront);
 				removeObstacleBack(distanceBack);
-
 
 				//ajout d'obstacles mobiles dans l'obstacleManager
 				// Analyse des capteurs avant, avec gestion des angles
@@ -531,9 +538,17 @@ class ThreadSensor extends AbstractThread
 		{
 			distanceFront = (int[]) mSensorsCardWrapper.getSensorValue(SensorNames.ULTRASOUND_FRONT_SENSOR);
 			
-			log.debug("Distance selon ultrasons avant traitement : "+distanceFront[0]+";"+distanceFront[1], this); 
+			log.debug("Distance selon ultrasons avant traitement : "+distanceFront[0]+";"+distanceFront[1], this);
+			if(symetry) // On inverse capteur droit et gauche : en effet, on traite les obstacles et les capteurs comme si on etait verts
+			{
+				int svg=distanceFront[0];
+				distanceFront[0]=distanceFront[1];
+				distanceFront[1]=svg;
+			}
+			
 			realSensorValuesFront[0]=distanceFront[0];
 			realSensorValuesFront[1]=distanceFront[1];
+
 
 			//on met tout les capteurs qui detectent un objet DANS le robot ou à plus de maxSensorRange a 0
 			for (int i=0; i<distanceFront.length; i++)
@@ -573,8 +588,16 @@ class ThreadSensor extends AbstractThread
 		try 
 		{
 			distanceBack = (int[]) mSensorsCardWrapper.getSensorValue(SensorNames.ULTRASOUND_BACK_SENSOR);
+			if(symetry) // On inverse capteur droit et gauche : en effet, on traite les obstacles et les capteurs comme si on etait verts
+			{
+				int svg=distanceBack[0];
+				distanceBack[0]=distanceBack[1];
+				distanceBack[1]=svg;
+			}
+			
 			realSensorValuesBack[0]=distanceBack[0];
 			realSensorValuesBack[1]=distanceBack[1];
+
 			//on met tout les capteurs qui detectent un objet à plus de maxSensorRange a 0
 			for (int i=0; i<distanceBack.length; i++)
 			{
@@ -610,6 +633,9 @@ class ThreadSensor extends AbstractThread
 		
 		robotWidth = Integer.parseInt(config.getProperty("largeur_robot"));
 		robotLenght = Integer.parseInt(config.getProperty("longueur_robot"));
+		
+		symetry = config.getProperty("couleur").replaceAll(" ","").equals("jaune");
+
 	}
 	
 	/**
