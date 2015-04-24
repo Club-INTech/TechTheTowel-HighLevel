@@ -119,9 +119,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 				config.set("couleur", "jaune");
 			else if(couleur.contains("vert"))
 				config.set("couleur", "vert");
-			
 		}
-		
 	}
 
 	@Test

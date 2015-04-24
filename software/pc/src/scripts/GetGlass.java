@@ -230,10 +230,10 @@ public class GetGlass extends AbstractScript
 		//On prend le verre
 		if(isArmChosenLeft)
 		{
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
 		}
 		else 
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
 	}
 
 	public Integer[] getVersion(GameState<?> stateToConsider)
