@@ -194,8 +194,8 @@ public class GetGlass extends AbstractScript
 	{
 		try 
 		{
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
 		} 
 		catch (SerialConnexionException e)
 		{
@@ -215,12 +215,12 @@ public class GetGlass extends AbstractScript
 		//On ouvre le bras
 		if(isArmChosenLeft)
 		{
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, false);
 			stateToConsider.robot.turn((-Math.PI/12), hooksToConsider, false, true);
 		}
 		else 
 		{
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, false);
 			stateToConsider.robot.turn((Math.PI/12), hooksToConsider, false, true);
 		}
 		
@@ -234,11 +234,6 @@ public class GetGlass extends AbstractScript
 		}
 		else 
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
-
-		stateToConsider.robot.sleep(500);
-		
-		//TODO on verifie
-		//si non, et si premier essai on retente (ne pas oublier de reculer)
 	}
 
 	public Integer[] getVersion(GameState<?> stateToConsider)

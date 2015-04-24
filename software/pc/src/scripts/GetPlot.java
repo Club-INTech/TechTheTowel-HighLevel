@@ -193,7 +193,7 @@ public class GetPlot extends AbstractScript
 				if (!stateToConsider.robot.isGlassStoredLeft)
 				{
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);					
-					stateToConsider.robot.moveLengthwise(150, hooksToConsider);
+					stateToConsider.robot.moveLengthwise(140, hooksToConsider);
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
 					stateToConsider.robot.moveLengthwise(180, hooksToConsider);
 					stateToConsider.robot.isGlassStoredLeft = true;
@@ -201,7 +201,7 @@ public class GetPlot extends AbstractScript
 				else if(!stateToConsider.robot.isGlassStoredRight)
 				{
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);					
-					stateToConsider.robot.moveLengthwise(150, hooksToConsider);
+					stateToConsider.robot.moveLengthwise(140, hooksToConsider);
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
 					stateToConsider.robot.moveLengthwise(180, hooksToConsider);
 					stateToConsider.robot.isGlassStoredRight = true;
@@ -210,7 +210,7 @@ public class GetPlot extends AbstractScript
 			}
 			else
 			{
-				stateToConsider.robot.moveLengthwise(330, hooksToConsider);
+				stateToConsider.robot.moveLengthwise(320, hooksToConsider);
 			}
 			
 			// on ne mange que si on est assez vide
@@ -364,7 +364,7 @@ public class GetPlot extends AbstractScript
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
-			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
 		} 
 		catch (SerialConnexionException e) 
 		{
@@ -387,6 +387,8 @@ public class GetPlot extends AbstractScript
 	
 	private void eatPlot (boolean isSecondTry, boolean isArmChosenLeft, GameState<Robot> stateToConsider, boolean movementAllowed) throws UnableToEatPlot, SerialConnexionException
 	{
+		boolean sensorAnswer=false;
+
 		//si on a deja 4 plots dans la bouche on me mange plus
 		if (stateToConsider.robot.storedPlotCount >= 4)
 			throw new UnableToEatPlot();
@@ -403,58 +405,81 @@ public class GetPlot extends AbstractScript
 			stateToConsider.robot.digestPlot();
 		}
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
-		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
+		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
 		if (movementAllowed)
 			try 
 			{
-				stateToConsider.robot.moveLengthwise(100);
+				stateToConsider.robot.moveLengthwise(150);
+				//premiere verif (avant les bras)
+				try 
+				{
+					sensorAnswer = ((Boolean) stateToConsider.robot.getSensorValue(SensorNames.JAW_SENSOR));
+				} 
+				catch (SerialConnexionException e1) 
+				{
+					stateToConsider.robot.sleep(500);
+					try 
+					{
+						sensorAnswer = ((Boolean) stateToConsider.robot.getSensorValue(SensorNames.JAW_SENSOR));
+					}
+					catch (SerialConnexionException e2) 
+					{
+						//si impossible de communiquer avec le capteur on suppose qu'on a attrape le plot
+						sensorAnswer = ((Boolean) SensorNames.JAW_SENSOR.getDefaultValue());
+					}
+				}
+					
 			}
 			catch (UnableToMoveException e1) 
 			{
 				log.debug("mouvement impossible, script GetPlot", this);
+				sensorAnswer = false;
 			}
-		if (isArmChosenLeft) 
-		{
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
-		}
-		else
-		{
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN_SLOW, true);
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
-		}
-		//si on a attrape qqc on termine sinon on essaie avec l'autre bras (si isSecondTry == false)
-		//si deuxieme essai ecrire dans le log qu'on a essaye de manger un plot et on jette une exeption impossible de manger
 		
-		boolean sensorAnswer;
-		try 
-		{
-			sensorAnswer = ((Boolean) stateToConsider.robot.getSensorValue(SensorNames.JAW_SENSOR));
-		} 
-		catch (SerialConnexionException e1) 
-		{
-			stateToConsider.robot.sleep(500);
-			try 
-			{
-				sensorAnswer = ((Boolean) stateToConsider.robot.getSensorValue(SensorNames.JAW_SENSOR));
-			}
-			catch (SerialConnexionException e2) 
-			{
-				//si impossible de communiquer avec le capteur on suppose qu'on a attrape le plot
-				sensorAnswer = ((Boolean) SensorNames.JAW_SENSOR.getDefaultValue());
-			}
-		}
-
 		if (!sensorAnswer)
 		{
-			if (isSecondTry)
+			if (isArmChosenLeft) 
 			{
-				log.debug("impossible d'attraper le plot, tentative en fermant les machoires", this);	
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
 			}
 			else
 			{
-				eatPlot(true,!isArmChosenLeft, stateToConsider, false);
-				return;
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN_SLOW, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
+			}
+			//si on a attrape qqc on termine sinon on essaie avec l'autre bras (si isSecondTry == false)
+			//si deuxieme essai ecrire dans le log qu'on a essaye de manger un plot et on jette une exeption impossible de manger
+			
+			try 
+			{
+				sensorAnswer = ((Boolean) stateToConsider.robot.getSensorValue(SensorNames.JAW_SENSOR));
+			} 
+			catch (SerialConnexionException e1) 
+			{
+				stateToConsider.robot.sleep(40);
+				try 
+				{
+					sensorAnswer = ((Boolean) stateToConsider.robot.getSensorValue(SensorNames.JAW_SENSOR));
+				}
+				catch (SerialConnexionException e2) 
+				{
+					//si impossible de communiquer avec le capteur on suppose qu'on a attrape le plot
+					sensorAnswer = ((Boolean) SensorNames.JAW_SENSOR.getDefaultValue());
+				}
+			}
+	
+			if (!sensorAnswer)
+			{
+				if (isSecondTry)
+				{
+					log.debug("impossible d'attraper le plot, tentative en fermant les machoires", this);	
+				}
+				else
+				{
+					eatPlot(true,!isArmChosenLeft, stateToConsider, false);
+					return;
+				}
 			}
 		}
 		
