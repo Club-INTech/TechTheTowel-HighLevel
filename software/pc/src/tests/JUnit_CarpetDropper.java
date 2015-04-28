@@ -50,9 +50,6 @@ public class JUnit_CarpetDropper extends JUnit_Test
 		game.robot.setOrientation(Math.PI);
 		
 		matchSetUp(game.robot);
-		
-		//on sort de la zone de depart
-		game.robot.moveLengthwise(1000);
 	}
 
 	@After
