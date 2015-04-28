@@ -110,13 +110,13 @@ public class DropCarpet extends AbstractScript
 			try
 			{
 				//FIXME creer un hook pour attraper le gobGob et ajouter a hooksToConsider
-				Hook hookGoblet = hookFactory.newHookTimer(System.currentTimeMillis() + 1000, 50);
+				Hook hookGoblet = hookFactory.newHookTimer(System.currentTimeMillis() + 2100, 500);
 				hookGoblet.addCallback(new Callback(new CloseRightArmExe(),true, stateToConsider));
 				hooksToConsider.add(hookGoblet);
 				
 				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, false);
 				//le 2.9 a ete testé de façon experimentale (ainsi que le 606), a modifier si quelqu'un veut le calculer
-				stateToConsider.robot.turn(2.9);
+				stateToConsider.robot.turn(2.98);
 				stateToConsider.robot.moveLengthwise(606, hooksToConsider);
 				stateToConsider.table.removeGlassX(1);
 				
