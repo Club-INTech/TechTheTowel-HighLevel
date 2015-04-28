@@ -74,6 +74,16 @@ public class JUnit_CarpetDropper extends JUnit_Test
 			e.printStackTrace();
 		}
 		log.debug("fin du depose tapis", this);
+		try 
+		{
+			returnToEntryPosition(game);
+		} 
+		catch (PathNotFoundException | UnableToMoveException
+				| InObstacleException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }
