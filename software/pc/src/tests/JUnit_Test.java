@@ -18,6 +18,7 @@ import container.Container;
 import enums.ActuatorOrder;
 import enums.ObstacleGroups;
 import enums.ServiceNames;
+import enums.Speed;
 import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -59,6 +60,8 @@ public abstract class JUnit_Test
 
 	public void matchSetUp(Robot robot) throws SerialConnexionException
 	{
+		robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+		
 		robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
 
 		robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, false);
@@ -79,6 +82,8 @@ public abstract class JUnit_Test
 		robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 		
 		robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+		
+		robot.setLocomotionSpeed(Speed.BETWEEN_SCRIPTS);
 	}
 	
 	public void setBeginPosition(Robot robot)

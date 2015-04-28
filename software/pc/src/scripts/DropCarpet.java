@@ -3,6 +3,7 @@ package scripts;
 import java.util.ArrayList;
 
 import enums.ActuatorOrder;
+import enums.Speed;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
@@ -117,13 +118,19 @@ public class DropCarpet extends AbstractScript
 				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, false);
 				//le 2.9 a ete testé de façon experimentale (ainsi que le 606), a modifier si quelqu'un veut le calculer
 				stateToConsider.robot.turn(2.98);
+
+				Speed oldSpeed = stateToConsider.robot.getSpeed();
+				Speed speed = Speed.SLOW;
+				stateToConsider.robot.setLocomotionSpeed(speed);
+				
 				stateToConsider.robot.moveLengthwise(606, hooksToConsider);
 				stateToConsider.table.removeGlassX(1);
+				
+				stateToConsider.robot.setLocomotionSpeed(oldSpeed);
 				
 				//on presente ses arrieres a l'escalier
 				stateToConsider.robot.turn(-0.5*Math.PI, hooksToConsider, false);
 				// on avance vers ces demoiselles (les marches) (attention impact possible)
-				// TODO utiliser moveLengthwiseTorwardWalls
 				stateToConsider.robot.moveLengthwiseWithoutDetection(-distanceBetweenEntryAndStairs, hooksToConsider, true);
 				
 				//TODO supr
