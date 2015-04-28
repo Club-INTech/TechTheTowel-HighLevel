@@ -219,5 +219,22 @@ public class HookFactory implements Service
     {
     	return new HookIsPositionAndOrientationCorrect(config, log, realState, point, orientation , tolerancyPoint, tolerancyOrientation);
     }
+    
+	/* ======================================================================
+	 * 							Hooks timer
+	 * ======================================================================
+	 */
+	
+	/**
+	 * demande l'instanciation d'un hook se déclenchant si le temps est proche du temps d'expiration de moins du temps de tolérance
+	 *
+	 * @param expirationTime temps de déckanchement du hook
+	 * @param tolerancy le hook sera déclenché si la distance entre le point de déclenchement et la position du robot est inférieure a cette valeur
+	 * @return le hook créé
+	 */
+	public Hook newHookTimer(long expirationTime, int tolerancy)
+	{
+		return new HookTimer(config, log, realState, expirationTime, tolerancy);
+	}
 
 }
