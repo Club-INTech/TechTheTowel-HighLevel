@@ -9,16 +9,16 @@ package enums;
 public enum Speed
 {
 	/** vitesse en temps normal */
-    BETWEEN_SCRIPTS(170, 160),
+    BETWEEN_SCRIPTS(100, 100),
     
     /** vitesse a avoir si l'on veut percuter un mur. Celle ci est plus faible pour prendre soin de la méca du robot */
-    INTO_WALL(90, 160),
+//    INTO_WALL(90, 160),
     
     /** vitesse lente pour ne pas percuter des objects et les perdre */
-    SLOW(60,60),
+    SLOW(60,60);
     
     /** Vitesse a avoir en cours de recalage du robot sur la table. Le recalage nous fais percuter dans les murs, donc on avance pas trop vite */
-    READJUSTMENT(90, 90);
+//    READJUSTMENT(90, 90);
     
     /** PWM des moteurs lors d'une translation, ce sont ces valeurs qui seront envoyées à la carte d'asserv */
     public int PWMTranslation;

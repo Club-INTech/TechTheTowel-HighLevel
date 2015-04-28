@@ -309,7 +309,7 @@ public abstract class Robot implements Service
     public void moveLengthwiseTowardWall(int distance, ArrayList<Hook> hooksToConsider) throws UnableToMoveException
     {
         Speed oldSpeed = speed; 
-        setLocomotionSpeed(Speed.INTO_WALL);
+        setLocomotionSpeed(Speed.SLOW);
         moveLengthwise(distance, hooksToConsider, true);
         setLocomotionSpeed(oldSpeed);
     }
@@ -371,7 +371,13 @@ public abstract class Robot implements Service
     		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_7);
     	}
     	
-		path = pathDingDing.computePath(getPosition(),aim.toVec2(),EnumSet.complementOf(obstaclesNotConsidered));
+    	EnumSet<ObstacleGroups> obstacleConsidered = EnumSet.complementOf(obstaclesNotConsidered);
+    	if (obstacleConsidered == null)
+    	{
+    		obstacleConsidered = EnumSet.noneOf(ObstacleGroups.class);
+    	}
+    	
+		path = pathDingDing.computePath(getPosition(),aim.toVec2(),obstacleConsidered);
 		
     	//retire une distance egale au rayon du cercle au dernier point du chemin (le centre du cercle)
     	
