@@ -475,26 +475,37 @@ public class ObstacleManager
     }
     
     /**
-     * Enleve le premier element identique dans la liste des fixedObstacle
-     * @param obstacleGroupeToDelete
+     * supprime tous les obstacles dont le groupe est celui spécifié
+     * 
+     * @param obstacleGroupToDelete
      */
-    public void removeFixedObstacle(ObstacleGroups obstacleGroupeToDelete)
+    public void removeFixedObstacle(ObstacleGroups obstacleGroupToDelete)
     {
     	for(int i=0; i<mFixedObstacles.size(); i++)
     	{
-    		if( mFixedObstacles.get(i).equalsGroups(obstacleGroupeToDelete) )
+    		if( mFixedObstacles.get(i).getObstacleGroup() == obstacleGroupToDelete )
     		{
 				if(mFixedObstacles.remove(mFixedObstacles.get(i)))
 					return;
 				else 
-					log.debug("Impossible d'enlever l'obstacle "+obstacleGroupeToDelete, this);
+					log.debug("Impossible d'enlever l'obstacle "+obstacleGroupToDelete, this);
     		}
     	}
     }
     
-    public void removeFixedObstacle(ObstacleRectangular obstacle)
+    /**
+     * supprime les obstacles fixes dans le disque
+     * 
+     * @param position
+     * @param radius
+     */
+    public void removeFixedObstaclesInDisc(Vec2 position, int radius)
     {
-	    mFixedObstacles.remove(obstacle);
+    	for(int i=0; i<mFixedObstacles.size(); i++)
+    		if((position.x-mFixedObstacles.get(i).getPosition().x)*(position.x-mFixedObstacles.get(i).getPosition().x)
+    		 + (position.y-mFixedObstacles.get(i).getPosition().y)*(position.y-mFixedObstacles.get(i).getPosition().y)
+    		 <= radius*radius)
+    			mFixedObstacles.remove(mFixedObstacles.get(i));
     }
     
     public void printObstacleFixedList()

@@ -6,10 +6,12 @@ import enums.ActuatorOrder;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
+import hook.Callback;
 import hook.Hook;
+import hook.methods.CloseRightArmExe;
 import hook.types.HookFactory;
 import robot.Robot;
-import smartMath.Circle;
+import smartMath.*;
 import strategie.GameState;
 import utils.Config;
 import utils.Log;
@@ -108,6 +110,9 @@ public class DropCarpet extends AbstractScript
 			try
 			{
 				//FIXME creer un hook pour attraper le gobGob et ajouter a hooksToConsider
+				Hook hookGoblet = hookFactory.newHookPosition(new Vec2(590, 1170), 150);
+				hookGoblet.addCallback(new Callback(new CloseRightArmExe(),true, stateToConsider));
+				hooksToConsider.add(hookGoblet);
 				
 				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, false);
 				//le 2.9 a ete testé de façon experimentale (ainsi que le 606), a modifier si quelqu'un veut le calculer
