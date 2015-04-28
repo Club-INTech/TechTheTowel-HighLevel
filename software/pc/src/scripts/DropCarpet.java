@@ -16,7 +16,6 @@ import strategie.GameState;
 import utils.Config;
 import utils.Log;
 /**
- * FIXME ajouter une version pour chopper le goblet en plus des tapis
  * @author paul
  * Script pour deposer les tapis sur l'escalier
  */
@@ -41,7 +40,7 @@ public class DropCarpet extends AbstractScript
 	}
 
 	@Override
-	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider,boolean shouldRetryIfBlocke) throws SerialFinallyException
+	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider) throws SerialFinallyException
 	{
 		if (versionToExecute == 1)
 			try 
@@ -104,7 +103,7 @@ public class DropCarpet extends AbstractScript
 			}
 			catch (UnableToMoveException | SerialConnexionException e)
 			{
-				finalise(stateToConsider);
+				finalize(stateToConsider);
 			}
 		else if(versionToExecute == 0)
 		{
@@ -176,7 +175,7 @@ public class DropCarpet extends AbstractScript
 			}
 			catch(UnableToMoveException | SerialConnexionException e)
 			{
-				finalise(stateToConsider);
+				finalize(stateToConsider);
 			}
 		}
 	}
@@ -197,6 +196,8 @@ public class DropCarpet extends AbstractScript
 	public int remainingScoreOfVersion(int version, GameState<?> stateToConsider) 
 	{
 		int score = 24;
+		if (version == 0 && !stateToConsider.table.isGlassXTaken(1))
+			score += 4;
 		if(stateToConsider.table.getIsLeftCarpetDropped())
 			score -= 12;
 		if(stateToConsider.table.getIsRightCarpetDropped())
@@ -206,7 +207,7 @@ public class DropCarpet extends AbstractScript
 	}
 
 	@Override
-	public void finalise(GameState<?> stateToConsider) throws SerialFinallyException 
+	public void finalize(GameState<?> stateToConsider) throws SerialFinallyException 
 	{
 		try 
 		{
@@ -222,9 +223,17 @@ public class DropCarpet extends AbstractScript
 
 	public Integer[] getVersion(GameState<?> stateToConsider)
 	{
-		if (stateToConsider.table.getIsLeftCarpetDropped() && stateToConsider.table.getIsRightCarpetDropped())
-			return new Integer[]{};
-		return versions;
+		//si un des deux tapis n'est pas deposé
+		if (!stateToConsider.table.getIsLeftCarpetDropped() || !stateToConsider.table.getIsRightCarpetDropped())
+			//et si le verre 1 n'est pas pris on renvoie toutes les versions
+			if (!stateToConsider.table.isGlassXTaken(1))
+				return versions;
+			//si le verre 1 est pris on donne seulement a version 1
+			else
+				return new Integer[]{1};
+
+		//si les deux tapis ont été deposés on ne donne aucune version (tant pis pour le gobelet 1, il y a mieux pour le catch)
+		return new Integer[]{};
 	}
 
 }

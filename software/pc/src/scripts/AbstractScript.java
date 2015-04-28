@@ -60,7 +60,6 @@ public abstract class AbstractScript implements Service
 	 *
 	 * @param versionToExecute la version du
 	 * @param actualState l'état courrant du match.
-	 * @param shouldRetryIfBlocked vrai si le robot doit renter le script s'il bloque mécaniquement
 	 * @param hooksToConsider les hooks a considérer lors des déplacements vers ces scripts
 	 * @throws UnableToMoveException losrque le robot veut se déplacer et que quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
 	 * @throws SerialConnexionException s'il y a un problème de communication avec une des cartes électroniques
@@ -68,9 +67,9 @@ public abstract class AbstractScript implements Service
 	 * @throws SerialFinallyException si le finally n'est pas correctement execute (erreur critique)
 	 * @throws InObstacleException lorqsque le robot veut aller dans un obstacle
 	 */
-	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, boolean shouldRetryIfBlocked, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, InObstacleException
+	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, InObstacleException
 	{
-		goToThenExec(versionToExecute, actualState, shouldRetryIfBlocked, hooksToConsider, EnumSet.noneOf(ObstacleGroups.class));
+		goToThenExec(versionToExecute, actualState, hooksToConsider, EnumSet.noneOf(ObstacleGroups.class));
 	}
 		
 	/**
@@ -79,7 +78,6 @@ public abstract class AbstractScript implements Service
 	 *
 	 * @param versionToExecute la version du
 	 * @param actualState l'état courrant du match.
-	 * @param shouldRetryIfBlocked vrai si le robot doit renter le script s'il bloque mécaniquement
 	 * @param hooksToConsider les hooks a considérer lors des déplacements vers ces scripts
 	 * @param enumObstacle les obstacles qu'on ne veut pas prendre ne compte dans le pathDingDing
 	 * @throws UnableToMoveException losrque le robot veut se déplacer et que quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
@@ -88,13 +86,13 @@ public abstract class AbstractScript implements Service
 	 * @throws SerialFinallyException si le finally n'est pas correctement execute (erreur critique)
 	 * @throws InObstacleException lorqsque le robot veut aller dans un obstacle
 	 */
-	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, boolean shouldRetryIfBlocked, ArrayList<Hook> hooksToConsider, EnumSet<ObstacleGroups> enumObstacle) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, InObstacleException
+	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, ArrayList<Hook> hooksToConsider, EnumSet<ObstacleGroups> enumObstacle) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, InObstacleException
 	{
 		// va jusqu'au point d'entrée de la version demandée
 		actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.robotRay), hooksToConsider, actualState.table, enumObstacle);
 		
 		// exécute la version demandée
-		execute(versionToExecute, actualState, hooksToConsider, shouldRetryIfBlocked);
+		execute(versionToExecute, actualState, hooksToConsider);
 	}
 	
 
@@ -103,13 +101,12 @@ public abstract class AbstractScript implements Service
 	 * Exécute le script
 	 * @param versionToExecute la version du
 	 * @param actualState l'état courrant du match.
-	 * @param shouldRetryIfBlocked vrai si le robot doit renter le script s'il bloque mécaniquement
 	 * @param hooksToConsider les hooks a considérer lors des déplacements vers ces scripts
 	 * @throws UnableToMoveException losrque le robot veut se déplacer et que quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
 	 * @throws SerialConnexionException s'il y a un problème de communication avec une des cartes électroniques
-	 * @throws SerialFinallyException 
+	 * @throws SerialFinallyException s'il y a un problème de communication avec une des cartes électroniques lors du finallize
 	 */
-	public abstract void execute(int versionToExecute, GameState<Robot> actualState,ArrayList<Hook> hooksToConsider,boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException, SerialFinallyException;
+	public abstract void execute(int versionToExecute, GameState<Robot> actualState,ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, SerialFinallyException;
 
 	/**
 	 * Renvoie le score que peut fournir une version d'un script.
@@ -139,7 +136,7 @@ public abstract class AbstractScript implements Service
 	 * @throws UnableToMoveException losrque le robot veut se déplacer et que quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
 	 * @throws SerialConnexionException s'il y a un problème de communication avec une des cartes électroniques
 	 */
-	public abstract void finalise(GameState<?> state) throws UnableToMoveException, SerialFinallyException;
+	public abstract void finalize(GameState<?> state) throws UnableToMoveException, SerialFinallyException;
 	
 	/* (non-Javadoc)
 	 * @see container.Service#updateConfig()
