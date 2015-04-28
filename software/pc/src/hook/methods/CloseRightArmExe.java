@@ -6,8 +6,8 @@ import exceptions.serial.SerialConnexionException;
 import hook.Executable;
 
 /**
- * @author theo
- * Classe à utiliser par un hook permettant d'ouvrir un bras
+ * @author Etienne
+ * Classe à utiliser par un hook permettant de fermer un bras
  *
  */
 
@@ -16,7 +16,7 @@ public class CloseRightArmExe implements Executable
    
 	 public CloseRightArmExe()
      {
-			System.out.println("Hook d'ouverture du bras droit");
+			System.out.println("Hook de fermeture du bras droit");
      }
 	
     @Override
