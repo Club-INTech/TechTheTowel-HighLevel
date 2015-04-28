@@ -191,6 +191,8 @@ public class DropCarpet extends AbstractScript
 	public int remainingScoreOfVersion(int version, GameState<?> stateToConsider) 
 	{
 		int score = 24;
+		if (version == 0 && !stateToConsider.table.isGlassXTaken(1))
+			score += 4;
 		if(stateToConsider.table.getIsLeftCarpetDropped())
 			score -= 12;
 		if(stateToConsider.table.getIsRightCarpetDropped())
@@ -216,9 +218,17 @@ public class DropCarpet extends AbstractScript
 
 	public Integer[] getVersion(GameState<?> stateToConsider)
 	{
-		if (stateToConsider.table.getIsLeftCarpetDropped() && stateToConsider.table.getIsRightCarpetDropped())
-			return new Integer[]{};
-		return versions;
+		//si un des deux tapis n'est pas deposé
+		if (!stateToConsider.table.getIsLeftCarpetDropped() || !stateToConsider.table.getIsRightCarpetDropped())
+			//et si le verre 1 n'est pas pris on renvoie toutes les versions
+			if (!stateToConsider.table.isGlassXTaken(1))
+				return versions;
+			//si le verre 1 est pris on donne seulement a version 1
+			else
+				return new Integer[]{1};
+
+		//si les deux tapis ont été deposés on ne donne aucune version (tant pis pour le gobelet 1, il y a mieux pour le catch)
+		return new Integer[]{};
 	}
 
 }
