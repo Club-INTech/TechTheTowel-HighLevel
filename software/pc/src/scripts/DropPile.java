@@ -54,10 +54,10 @@ public class DropPile extends AbstractScript
 		actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.robotRay), hooksToConsider, actualState.table,obstacleNotConsidered);
 		
 		// exécute la version demandée
-		execute(versionToExecute, actualState, hooksToConsider, shouldRetryIfBlocked);
+		execute(versionToExecute, actualState, hooksToConsider);
 	}
 	@Override
-	public void execute(int version, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider,boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException, SerialFinallyException
+	public void execute(int version, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, SerialFinallyException
 	{
 		try
 		{

@@ -64,7 +64,7 @@ public class JUnit_GetPlot extends JUnit_Test
 		try 
 		{
 			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
-			exitScript.execute(0, real_state, emptyHook, true );
+			exitScript.execute(0, real_state, emptyHook );
 		} 
 		catch (SerialConnexionException | SerialFinallyException | UnableToMoveException e) 
 		{

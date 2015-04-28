@@ -133,7 +133,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		try 
 		{
 			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE); // Sortie de la zone de depart
-			exitScript.execute(0, real_state, emptyHook, true );
+			exitScript.execute(0, real_state, emptyHook );
 		} 
 		catch (UnableToMoveException | SerialConnexionException e) 
 		{

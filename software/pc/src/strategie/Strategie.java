@@ -118,7 +118,7 @@ public class Strategie implements Service
 		GameState<Robot> gameState = new GameState<Robot>(config, log, table, robotReal);
 		try 
 		{
-			scriptmanager.getScript(ScriptNames.EXIT_START_ZONE).execute(0, gameState, hookRobot, true);
+			scriptmanager.getScript(ScriptNames.EXIT_START_ZONE).execute(0, gameState, hookRobot);
 		} 
 		catch (UnableToMoveException | SerialConnexionException | SerialFinallyException e1) 
 		{

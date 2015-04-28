@@ -36,7 +36,7 @@ public class ExitBeginZone extends AbstractScript
 	}
 	
 	@Override
-	public void execute (int id_version, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocke) throws SerialFinallyException
+	public void execute (int id_version, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider) throws SerialFinallyException
 	{
 		try
 		{

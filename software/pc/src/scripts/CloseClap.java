@@ -65,24 +65,24 @@ public class CloseClap extends AbstractScript
 	}
 	
 	@Override
-	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException, SerialFinallyException
+	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, SerialFinallyException
 	{		
 		try
 		{
 			if (versionToExecute == 123)
-				closeAllOurClaps(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
+				closeAllOurClaps(stateToConsider, hooksToConsider);
 			else if (versionToExecute == 1)
-				closeFirstClap(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
+				closeFirstClap(stateToConsider, hooksToConsider);
 			else if (versionToExecute == 2)
-				closeSecondClap(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
+				closeSecondClap(stateToConsider, hooksToConsider);
 			else if (versionToExecute == 3)
-				closeThirdClap(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
+				closeThirdClap(stateToConsider, hooksToConsider);
 			else if (versionToExecute == 12)
-				closeFirstAndSecondClap(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
+				closeFirstAndSecondClap(stateToConsider, hooksToConsider);
 			else if (versionToExecute == -1)
-				closeFirstClapBackward(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
+				closeFirstClapBackward(stateToConsider, hooksToConsider);
 			else if (versionToExecute == -12)
-				closeFirstAndSecondClapBackward(stateToConsider, hooksToConsider, shouldRetryIfBlocked);
+				closeFirstAndSecondClapBackward(stateToConsider, hooksToConsider);
 			else
 				log.debug("Souci de version", this);	//TODO: lancer une exception de version inconnue (la créer si besoin)
 		}
@@ -93,7 +93,7 @@ public class CloseClap extends AbstractScript
 		}
 	}
 	
-	public void closeFirstClap (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
+	public void closeFirstClap (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException
 	{
 		//pour ne pas frotter l'ascenceur
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
@@ -134,7 +134,7 @@ public class CloseClap extends AbstractScript
 		stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
 	}
 
-	public void closeSecondClap (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
+	public void closeSecondClap (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException
 	{
 		//pour ne pas frotter l'ascenceur
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
@@ -163,7 +163,7 @@ public class CloseClap extends AbstractScript
 		stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);	
 	}
 	
-	public void closeThirdClap (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException  //Ferme le claps de fin
+	public void closeThirdClap (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException  //Ferme le claps de fin
 	{
 		
 		//pour ne pas frotter l'ascenceur
@@ -208,7 +208,7 @@ public class CloseClap extends AbstractScript
 		stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
 	}
 	
-	public void closeFirstAndSecondClap (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
+	public void closeFirstAndSecondClap (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException
 	{
 		//pour ne pas frotter l'ascenceur
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
@@ -275,7 +275,7 @@ public class CloseClap extends AbstractScript
 		stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
 	}
 	
-	public void closeAllOurClaps(GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException  //Ferme tous les Claps, depuis le  debut
+	public void closeAllOurClaps(GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException  //Ferme tous les Claps, depuis le  debut
 	{
 		//pour ne pas frotter l'ascenceur
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
@@ -375,7 +375,7 @@ public class CloseClap extends AbstractScript
 	}
 	
 	
-	void closeFirstClapBackward(GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
+	void closeFirstClapBackward(GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException
 	{
 		//pour ne pas frotter l'ascenceur
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
@@ -417,7 +417,7 @@ public class CloseClap extends AbstractScript
 		stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
 	}
 
-	void closeFirstAndSecondClapBackward(GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException
+	void closeFirstAndSecondClapBackward(GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException
 	{
 		try 
 		{

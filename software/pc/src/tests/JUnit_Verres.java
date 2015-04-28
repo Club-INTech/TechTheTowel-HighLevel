@@ -101,7 +101,7 @@ public class JUnit_Verres extends JUnit_Test
 		try 
 		{
 			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
-			exitScript.execute(0, real_state, emptyHook, true );
+			exitScript.execute(0, real_state, emptyHook );
 		} 
 		catch (SerialConnexionException | SerialFinallyException e) 
 		{
@@ -121,7 +121,7 @@ public class JUnit_Verres extends JUnit_Test
 		try 
 		{
 			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
-			exitScript.execute(0, real_state, emptyHook, true );
+			exitScript.execute(0, real_state, emptyHook );
 		
 			scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(0, real_state, true, emptyHook );
 			System.out.println("Verre 0 attrapé");

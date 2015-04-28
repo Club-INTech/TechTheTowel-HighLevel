@@ -77,7 +77,7 @@ public class JUnit_DropPile extends JUnit_Test {
 		try 
 		{
 			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
-			exitScript.execute(0, real_state, emptyHook, true );
+			exitScript.execute(0, real_state, emptyHook );
 		} 
 		catch (SerialConnexionException  | SerialFinallyException e) 
 		{

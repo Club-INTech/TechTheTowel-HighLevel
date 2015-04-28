@@ -14,7 +14,6 @@ import strategie.GameState;
 import utils.Config;
 import utils.Log;
 /**
- * FIXME ajouter une version pour chopper le goblet en plus des tapis
  * @author paul
  * Script pour deposer les tapis sur l'escalier
  */
@@ -39,7 +38,7 @@ public class DropCarpet extends AbstractScript
 	}
 
 	@Override
-	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider,boolean shouldRetryIfBlocke) throws SerialFinallyException
+	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider) throws SerialFinallyException
 	{
 		if (versionToExecute == 1)
 			try 

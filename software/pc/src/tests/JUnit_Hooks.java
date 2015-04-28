@@ -108,7 +108,7 @@ public class JUnit_Hooks extends JUnit_Test
 			// ajoute le hook a la liste a passer a la locomotion
 			testHookList.add(testHookX);
 			
-			scriptmanager.getScript(ScriptNames.EXIT_START_ZONE).execute(0, real_state, testHookList, true );
+			scriptmanager.getScript(ScriptNames.EXIT_START_ZONE).execute(0, real_state, testHookList );
 			
 			System.out.println("debut du mouvement");
 			real_state.robot.moveLengthwise(1500, testHookList);

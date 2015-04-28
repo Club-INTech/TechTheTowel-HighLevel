@@ -64,7 +64,7 @@ public class JUnit_DropGlass extends JUnit_Test {
 		try 
 		{
 			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
-			exitScript.execute(0, real_state, emptyHook, true );
+			exitScript.execute(0, real_state, emptyHook );
 		} 
 		catch (SerialConnexionException  | SerialFinallyException e) 
 		{
@@ -81,7 +81,7 @@ public class JUnit_DropGlass extends JUnit_Test {
 		// libère le verre
 		try 
 		{
-			real_state.robot.moveLengthwise(300, emptyHook, true);//FIXME probleme : sans ca, le robot va très mal au point d'entrée -> Boucle d'acquitement de TURN ?
+			real_state.robot.moveLengthwise(300, emptyHook, true);// sans ca, le robot va très mal au point d'entrée -> Boucle d'acquitement de TURN ?
 			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(1, real_state, true, emptyHook );
 				
 		    real_state.robot.moveToCircle(new Circle(0,400,0), emptyHook, real_state.table, EnumSet.noneOf(ObstacleGroups.class)); // PDD à appeler
