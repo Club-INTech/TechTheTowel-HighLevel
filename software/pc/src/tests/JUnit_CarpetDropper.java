@@ -20,12 +20,10 @@ import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import robot.Robot;
 import scripts.ScriptManager;
-import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
 /**
  * test pour le script du depose tapis 
- * on suppose que le robot est place en (261,1410)
  * @author paul
  *
  */
