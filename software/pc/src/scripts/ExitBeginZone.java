@@ -5,9 +5,8 @@ import hook.types.HookFactory;
 
 import java.util.ArrayList;
 
-import enums.ActuatorOrder;
 import exceptions.Locomotion.UnableToMoveException;
-import exceptions.serial.SerialConnexionException;
+import exceptions.serial.SerialFinallyException;
 import robot.Robot;
 import smartMath.Circle;
 import strategie.GameState;
@@ -37,7 +36,7 @@ public class ExitBeginZone extends AbstractScript
 	}
 	
 	@Override
-	public void execute (int id_version, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException
+	public void execute (int id_version, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocke) throws SerialFinallyException
 	{
 		try
 		{
@@ -46,18 +45,9 @@ public class ExitBeginZone extends AbstractScript
 		}
 		catch (UnableToMoveException e)
 		{
-			if (shouldRetryIfBlocke)
-			{
-				execute (id_version, stateToConsider, hooksToConsider,false);
-			}
-			else
-			{
-				log.critical("erreur ExitBeginZone script : impossible de sortir de la zone de depart\n", this);
-				throw e;
-			}
+			log.critical("erreur ExitBeginZone script : impossible de sortir de la zone de depart\n", this);
+			finalise(stateToConsider);
 		}
-		
-		finalise(stateToConsider);
 	}
 
 	@Override
@@ -68,10 +58,10 @@ public class ExitBeginZone extends AbstractScript
 	}
 
 	@Override
-	protected void finalise(GameState<?> state) 
+	public void finalise(GameState<?> state) throws SerialFinallyException 
 	{
-		//abwa ?
-		//en effet, pas d'actionneur a rentrer donc abwa !
+		//lance toujours une exeption, le match dois absolument commencer
+		throw new SerialFinallyException();
 	}
 
 	public Integer[] getVersion(GameState<?> stateToConsider)

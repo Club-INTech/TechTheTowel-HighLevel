@@ -24,7 +24,7 @@ import utils.Log;
  *Table :
  *
  *    ___________________
- *   |					|
+ *   |                  |
  * 	 |					|
  *   |					|Debut du robot ici
  *   |					|
@@ -504,7 +504,7 @@ public class CloseClap extends AbstractScript
 	}
 
 	@Override
-	protected void finalise(GameState<?> stateToConsider) throws SerialFinallyException
+	public void finalise(GameState<?> stateToConsider) throws SerialFinallyException
 	{	
 		try 
 		{

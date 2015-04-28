@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 import scripts.AbstractScript;
 import scripts.ScriptManager;
-import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
 import threads.ThreadTimer;
@@ -18,7 +17,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import pathDingDing.PathDingDing;
-import enums.ActuatorOrder;
 import enums.ScriptNames;
 import enums.ServiceNames;
 import exceptions.InObstacleException;

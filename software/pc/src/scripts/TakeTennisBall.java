@@ -108,7 +108,7 @@ public class TakeTennisBall extends AbstractScript
 	}
 	
 	@Override
-	protected void finalise(GameState<?> stateToConsider) throws SerialFinallyException 
+	public void finalise(GameState<?> stateToConsider) throws SerialFinallyException 
 	{
 		try 
 		{

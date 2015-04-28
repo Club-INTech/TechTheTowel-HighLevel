@@ -3,7 +3,6 @@ package strategie;
 import hook.Hook;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 
 import pathDingDing.PathDingDing;
 import container.Container;
@@ -129,35 +128,79 @@ public class Strategie implements Service
 			return;
 		}
 		
-		//TODO mettre le script du match en entier et en cas d'exeption lancer takeDecision
-		
-		
-		//tant que le match n'est pas fini, on prend des decisions :
-		while(realGameState.timeEllapsed   <  Integer.parseInt(config.getProperty("temps_match")))
+		try 
 		{
-			log.debug("======choix script======", this);
-			System.out.println();
-			
-			updateConfig();
-			takeDecision();
-			
-			log.debug("script choisit :"+nextScript.getClass().getName(), this);
-			log.debug("version :"+nextScriptVersion, this);
-			
-			try 
+			scriptedMatch(gameState);
+		} 
+		catch (PathNotFoundException | InObstacleException| UnableToMoveException e1) 
+		{
+					
+			//tant que le match n'est pas fini, on prend des decisions :
+			while(realGameState.timeEllapsed   <  Integer.parseInt(config.getProperty("temps_match")))
 			{
-				nextScript.goToThenExec(nextScriptVersion, gameState, true, hookRobot);
-			} 
-			catch (UnableToMoveException | SerialConnexionException
-					| PathNotFoundException | SerialFinallyException | InObstacleException e) 
-			{
-				// FIXME choix de l'IA face a un imprevu
-				e.printStackTrace();
+				log.debug("======choix script======", this);
+				System.out.println();
+				
+				updateConfig();
+				takeDecision();
+				
+				log.debug("script choisit :"+nextScript.getClass().getName(), this);
+				log.debug("version :"+nextScriptVersion, this);
+				
+				try 
+				{
+					nextScript.goToThenExec(nextScriptVersion, gameState, true, hookRobot);
+				} 
+				catch (UnableToMoveException | SerialConnexionException
+						| PathNotFoundException | SerialFinallyException | InObstacleException e) 
+				{
+					// FIXME choix de l'IA face a un imprevu
+					e.printStackTrace();
+				}
 			}
 		}
 	}
 	
 	
+	private void scriptedMatch(GameState<Robot> gameState) throws PathNotFoundException, InObstacleException, UnableToMoveException 
+	{
+		//TODO ajouter les scripts ainsi que leur version au match scripté
+		ArrayList<AbstractScript> scriptArray = new ArrayList<AbstractScript>();
+		ArrayList<Integer> versionArray = new ArrayList<Integer>();
+
+		while(!scriptArray.isEmpty())
+		{
+			try 
+			{
+				scriptArray.get(0).goToThenExec(versionArray.get(0), gameState, true, hookRobot);
+			}
+			catch (SerialConnexionException | SerialFinallyException e) 
+			{
+				//on attends 3 secodes pour tenter un finalise
+				gameState.robot.sleep(3000);
+				try 
+				{
+					scriptArray.get(0).finalise(gameState);
+				} 
+				catch (SerialFinallyException e1)
+				{
+					log.critical("enchainement de SerialFinallyException : arret du robot !", this);
+					container.destructor();
+					//on attends la fin du match
+						try 
+						{
+							Thread.sleep(1000);
+						} 
+						catch (InterruptedException e2) 
+						{
+							e2.printStackTrace();
+						}
+				}
+			}
+		}
+		
+	}
+
 	/** Fonction principale : prend une decision en prenant tout en compte */
 	private void takeDecision()
 	{

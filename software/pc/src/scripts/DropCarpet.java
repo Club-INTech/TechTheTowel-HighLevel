@@ -34,76 +34,159 @@ public class DropCarpet extends AbstractScript
 	public DropCarpet(HookFactory hookFactory, Config config, Log log)
 	{
 		super(hookFactory, config, log);
-		versions = new Integer[]{1}; 
-		//definition du tableau des versions, a modifier a chaque ajout d'une version (si il n'y en a qu'une je vois pas trop l'interet mais bon)
+		versions = new Integer[]{0,1}; 
+		//definition du tableau des versions, a modifier a chaque ajout d'une version
 	}
 
 	@Override
-	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider,boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException, SerialFinallyException
+	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider,boolean shouldRetryIfBlocke) throws SerialFinallyException
 	{
-		try 
-		{	
-			//on presente ses arrieres a l'escalier
-			stateToConsider.robot.turn(-0.5*Math.PI, hooksToConsider, false);
-			// on avance vers ces demoiselles (les marches) (attention impact possible)
-			// TODO utiliser moveLengthwiseTorwardWalls
-			stateToConsider.robot.moveLengthwiseWithoutDetection(-distanceBetweenEntryAndStairs, hooksToConsider, true);
-			
-			System.out.println("en position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") avant depose-tapis");
-	
-			
-			//verification de la position : on n'effectue l'action que si on est assez proche (ie pas d'obstacle)
-			//if(Math.abs((stateToConsider.robot.getPosition().y-1340))<50) // position- position du centre parfait<marge d'erreur
-			
-			{
-				//on depose le tapis gauche (si celui-ci n'est pas deja depose)
-				if (!stateToConsider.table.getIsLeftCarpetDropped())
+		if (versionToExecute == 1)
+			try 
+			{	
+				//on presente ses arrieres a l'escalier
+				stateToConsider.robot.turn(-0.5*Math.PI, hooksToConsider, false);
+				// on avance vers ces demoiselles (les marches) (attention impact possible)
+				// TODO utiliser moveLengthwiseTorwardWalls
+				stateToConsider.robot.moveLengthwiseWithoutDetection(-distanceBetweenEntryAndStairs, hooksToConsider, true);
+				
+				//TODO supr
+				System.out.println("en position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") avant depose-tapis");
+		
+				
+				//verification de la position : on n'effectue l'action que si on est assez proche (ie pas d'obstacle)
+				if(Math.abs((stateToConsider.robot.getPosition().y-1340))<50) // position- position du centre parfait<marge d'erreur
+				
 				{
-					stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_DROP, true);
-					stateToConsider.table.setIsLeftCarpetDropped(true);
-					stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
+					//on depose le tapis gauche (si celui-ci n'est pas deja depose)
+					if (!stateToConsider.table.getIsLeftCarpetDropped())
+					{
+						stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_DROP, true);
+						stateToConsider.table.setIsLeftCarpetDropped(true);
+						stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
+					}
+					
+					//on depose le tapis droit (si celui-ci n'est pas deja depose)
+					if (!stateToConsider.table.getIsRightCarpetDropped())
+					{
+						stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_DROP, true);
+						stateToConsider.table.setIsRightCarpetDropped(true);
+						stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
+					}
+					//TODO supr
+					System.out.println("En position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") après avoir deposé les tapis");
 				}
 				
-				//on depose le tapis droit (si celui-ci n'est pas deja depose)
-				if (!stateToConsider.table.getIsRightCarpetDropped())
+				//on s'eloigne de l'escalier
+				try 
 				{
-					stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_DROP, true);
-					stateToConsider.table.setIsRightCarpetDropped(true);
-					stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
+					stateToConsider.robot.moveLengthwise(distanceBetweenEntryAndStairs, hooksToConsider, false);
+		
 				}
-				System.out.println("En position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") après avoir deposé les tapis");
-			}
-			
-			//on s'eloigne de l'escalier
-			try 
-			{
-				stateToConsider.robot.moveLengthwise(distanceBetweenEntryAndStairs, hooksToConsider, false);
-	
-			}
-			catch (UnableToMoveException e) 
-			{
-				// tant qu'on est pas sorti, et que le pathDingDing peut reprendre le  relais
-				while(stateToConsider.robot.getPosition().y > (1400-distanceBetweenEntryAndStairs+20))
+				catch (UnableToMoveException e) 
 				{
-					System.out.println("catch dans le script : DropCarpet");
-					stateToConsider.robot.moveLengthwise((stateToConsider.robot.getPosition().y - (1400-distanceBetweenEntryAndStairs)), hooksToConsider, false);
-					finalise(stateToConsider);
+					// tant qu'on est pas sorti, et que le pathDingDing ne peut peut reprendre le relais on avance
+					while(stateToConsider.robot.getPosition().y > (1400-distanceBetweenEntryAndStairs+20))
+					{
+						try
+						{
+							stateToConsider.robot.moveLengthwise(Math.min((stateToConsider.robot.getPosition().y - (1400-distanceBetweenEntryAndStairs)),50), hooksToConsider, false);
+						}
+						catch (UnableToMoveException e1)
+						{
+							log.debug("catch dans le script DropCarpet : impossible de s'eloigner de l'escalier",this);
+						}
+					}
 				}
+		
 			}
-
-		}
-		catch (UnableToMoveException | SerialConnexionException e)
+			catch (UnableToMoveException | SerialConnexionException e)
+			{
+				finalise(stateToConsider);
+			}
+		else if(versionToExecute == 0)
 		{
-			finalise(stateToConsider);
-			throw e;
+			try
+			{
+				//FIXME creer un hook pour attraper le gobGob et ajouter a hooksToConsider
+				
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, false);
+				//le 2.9 a ete testé de façon experimentale (ainsi que le 606), a modifier si quelqu'un veut le calculer
+				stateToConsider.robot.turn(2.9);
+				stateToConsider.robot.moveLengthwise(606, hooksToConsider);
+				stateToConsider.table.removeGlassX(1);
+				
+				//on presente ses arrieres a l'escalier
+				stateToConsider.robot.turn(-0.5*Math.PI, hooksToConsider, false);
+				// on avance vers ces demoiselles (les marches) (attention impact possible)
+				// TODO utiliser moveLengthwiseTorwardWalls
+				stateToConsider.robot.moveLengthwiseWithoutDetection(-distanceBetweenEntryAndStairs, hooksToConsider, true);
+				
+				//TODO supr
+				System.out.println("en position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") avant depose-tapis");
+		
+				
+				//verification de la position : on n'effectue l'action que si on est assez proche (ie pas d'obstacle)
+				if(Math.abs((stateToConsider.robot.getPosition().y-1340))<50) // position- position du centre parfait<marge d'erreur
+				
+					//on depose le tapis gauche (si celui-ci n'est pas deja depose)
+					if (!stateToConsider.table.getIsLeftCarpetDropped())
+					{
+						stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_DROP, true);
+						stateToConsider.table.setIsLeftCarpetDropped(true);
+						stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
+					}
+					
+					//on depose le tapis droit (si celui-ci n'est pas deja depose)
+					if (!stateToConsider.table.getIsRightCarpetDropped())
+					{
+						stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_DROP, true);
+						stateToConsider.table.setIsRightCarpetDropped(true);
+						stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
+					}
+					//TODO supr
+					System.out.println("En position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") après avoir deposé les tapis");
+				
+				//on s'eloigne de l'escalier
+				try 
+				{
+					stateToConsider.robot.moveLengthwise(distanceBetweenEntryAndStairs, hooksToConsider, false);
+		
+				}
+				catch (UnableToMoveException e) 
+				{
+					// tant qu'on est pas sorti, et que le pathDingDing ne peut peut reprendre le relais on avance
+					while(stateToConsider.robot.getPosition().y > (1400-distanceBetweenEntryAndStairs+20))
+					{
+						try
+						{
+							stateToConsider.robot.moveLengthwise(Math.min((stateToConsider.robot.getPosition().y - (1400-distanceBetweenEntryAndStairs)),50), hooksToConsider, false);
+						}
+						catch (UnableToMoveException e1)
+						{
+							log.debug("catch dans le script DropCarpet : impossible de s'eloigner de l'escalier",this);
+						}
+					}
+				}
+			}
+			catch(UnableToMoveException | SerialConnexionException e)
+			{
+				finalise(stateToConsider);
+			}
 		}
 	}
 	
 	@Override
 	public Circle entryPosition(int id, int ray) 
 	{
-		return new Circle(265,1400-distanceBetweenEntryAndStairs);//point de depose - distance de deplacement jusqua ce point - rayon robot (distance arriere - roues))
-	}//FIXME il manque pas le rayon du robot ?
+		if (id==1)
+			return new Circle(265,1400-distanceBetweenEntryAndStairs);//point de depose - distance de deplacement jusqua ce point - rayon robot (distance arriere - roues))
+		else if (id == 0)
+			return new Circle (1500-320-77-250,1000);
+		else
+			log.debug("erreur id script :"+id+" attendu 0 ou 1", this);
+			return new Circle(0,1000);
+	}
 
 	@Override
 	public int remainingScoreOfVersion(int version, GameState<?> stateToConsider) 
@@ -118,7 +201,7 @@ public class DropCarpet extends AbstractScript
 	}
 
 	@Override
-	protected void finalise(GameState<?> stateToConsider) throws SerialFinallyException 
+	public void finalise(GameState<?> stateToConsider) throws SerialFinallyException 
 	{
 		try 
 		{

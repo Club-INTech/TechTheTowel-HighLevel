@@ -212,7 +212,7 @@ public class DropPile extends AbstractScript
 	}
 
 	@Override
-	protected void finalise(GameState<?> stateToConsider) throws SerialFinallyException, UnableToMoveException 
+	public void finalise(GameState<?> stateToConsider) throws SerialFinallyException, UnableToMoveException 
 	{
 		try 
 		{
