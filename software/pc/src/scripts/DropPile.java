@@ -44,7 +44,7 @@ public class DropPile extends AbstractScript
 	}
 
 	@Override
-	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, boolean shouldRetryIfBlocked, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, InObstacleException
+	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, InObstacleException
 	{
 		EnumSet<ObstacleGroups> obstacleNotConsidered = EnumSet.noneOf(ObstacleGroups.class);
 		
@@ -167,13 +167,13 @@ public class DropPile extends AbstractScript
 			else
 			{
 				log.debug("version inconnue DropPile :"+version, this);
-				finalise(stateToConsider);
+				finalize(stateToConsider);
 			}
 			
 		}
 		catch (UnableToMoveException | SerialConnexionException e) 
 		{
-			finalise(stateToConsider);
+			finalize(stateToConsider);
 			throw e;
 		}
 	}
@@ -212,7 +212,7 @@ public class DropPile extends AbstractScript
 	}
 
 	@Override
-	public void finalise(GameState<?> stateToConsider) throws SerialFinallyException, UnableToMoveException 
+	public void finalize(GameState<?> stateToConsider) throws SerialFinallyException, UnableToMoveException 
 	{
 		try 
 		{

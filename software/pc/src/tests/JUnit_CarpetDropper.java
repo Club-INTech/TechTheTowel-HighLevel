@@ -70,7 +70,7 @@ public class JUnit_CarpetDropper extends JUnit_Test
 		try 
 		{
 			scriptManager.getScript(ScriptNames.EXIT_START_ZONE).execute(0, game, emptyHook);
-			scriptManager.getScript(ScriptNames.DROP_CARPET).goToThenExec(0, game, false, emptyHook);
+			scriptManager.getScript(ScriptNames.DROP_CARPET).goToThenExec(0, game, emptyHook);
 		} 
 			catch (UnableToMoveException | SerialConnexionException | SerialFinallyException | PathNotFoundException | InObstacleException e) 
 		{

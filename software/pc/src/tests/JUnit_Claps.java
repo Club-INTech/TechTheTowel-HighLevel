@@ -85,7 +85,7 @@ public class JUnit_Claps extends JUnit_Test {
 			scriptManager.getScript(ScriptNames.EXIT_START_ZONE).execute(1, real_state, emptyHook);
 
 			try {
-				scriptManager.getScript(ScriptNames.CLOSE_CLAP).goToThenExec(2, real_state, true, emptyHook);
+				scriptManager.getScript(ScriptNames.CLOSE_CLAP).goToThenExec(2, real_state, emptyHook);
 			} catch (PathNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

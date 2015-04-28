@@ -101,7 +101,7 @@ public class DropCarpet extends AbstractScript
 			}
 			catch (UnableToMoveException | SerialConnexionException e)
 			{
-				finalise(stateToConsider);
+				finalize(stateToConsider);
 			}
 		else if(versionToExecute == 0)
 		{
@@ -170,7 +170,7 @@ public class DropCarpet extends AbstractScript
 			}
 			catch(UnableToMoveException | SerialConnexionException e)
 			{
-				finalise(stateToConsider);
+				finalize(stateToConsider);
 			}
 		}
 	}
@@ -202,7 +202,7 @@ public class DropCarpet extends AbstractScript
 	}
 
 	@Override
-	public void finalise(GameState<?> stateToConsider) throws SerialFinallyException 
+	public void finalize(GameState<?> stateToConsider) throws SerialFinallyException 
 	{
 		try 
 		{

@@ -139,7 +139,7 @@ public class JUnit_TennisBall extends JUnit_Test
 		//premier script
 		try 
 		{
-			scriptmanager.getScript(ScriptNames.TAKE_TENNIS_BALL).goToThenExec(1, real_state, true, emptyHook );
+			scriptmanager.getScript(ScriptNames.TAKE_TENNIS_BALL).goToThenExec(1, real_state, emptyHook );
 		}
 		catch (UnableToMoveException | SerialConnexionException e) 
 		{

@@ -150,7 +150,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		try 
 		{
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le verre 1");
-			scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(1, real_state, true, emptyHook );//On prend le verre,  notre droite en sortant
+			scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(1, real_state, emptyHook );//On prend le verre,  notre droite en sortant
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le verre 1");
 		} 
 		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e) 
@@ -161,7 +161,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		try 
 		{
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant les tapis");
-			scriptmanager.getScript(ScriptNames.DROP_CARPET).goToThenExec(0, real_state, true, emptyHook ); // On depose les tapis
+			scriptmanager.getScript(ScriptNames.DROP_CARPET).goToThenExec(0, real_state, emptyHook ); // On depose les tapis
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition()+" après les tapis");
 
 		}
@@ -173,7 +173,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		try 
 		{
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le plot 2");
-			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(2, real_state, true, emptyHook ); // On prend le plot a notre gauche, en sortant de la zone de depart
+			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(2, real_state, emptyHook ); // On prend le plot a notre gauche, en sortant de la zone de depart
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le plot 2");
 		} 
 		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e1) 
@@ -186,7 +186,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		try 
 		{
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant les plots 3 et 4, et le verre 0");
-			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(34, real_state, true, emptyHook ); // On prend les 2 plots en bas de notre zonee de depart, et le verre
+			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(34, real_state, emptyHook ); // On prend les 2 plots en bas de notre zonee de depart, et le verre
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après les plots 3 et 4 et verre 0");
 		} 
 		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e1) 
@@ -199,7 +199,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		try 
 		{
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant les claps 1 et 2");
-			scriptmanager.getScript(ScriptNames.CLOSE_CLAP).goToThenExec(-12, real_state, true, emptyHook );
+			scriptmanager.getScript(ScriptNames.CLOSE_CLAP).goToThenExec(-12, real_state, emptyHook );
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après les claps 1 et 2");
 
 		}
@@ -213,7 +213,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		try 
 		{//TODO PathNotFound Exception
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le plot 1");
-			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(1, real_state, true, emptyHook ); // On prend le plot a cote de l'estrade
+			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(1, real_state, emptyHook ); // On prend le plot a cote de l'estrade
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le plot 1");
 		}
 		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e) 
@@ -226,7 +226,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		try 
 		{			
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant de deposer la pile sur l'estrade");
-			scriptmanager.getScript(ScriptNames.FREE_STACK).goToThenExec(1, real_state, true, emptyHook ); // On lache notree pile devnt (bientot sur l'estrade
+			scriptmanager.getScript(ScriptNames.FREE_STACK).goToThenExec(1, real_state, emptyHook ); // On lache notree pile devnt (bientot sur l'estrade
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après deposer la pile sur l'estrade");
 
 		}
@@ -254,7 +254,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		try
 		{
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant de deposer le verre");
-			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(0, real_state, true, emptyHook );//On depose 1 verre dans notre zone
+			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(0, real_state, emptyHook );//On depose 1 verre dans notre zone
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après deposer le verre");
 
 		}
@@ -268,7 +268,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		try
 		{
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le plot 0");
-			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(0, real_state, true, emptyHook ); // On recupere le plot en face de l'escalier
+			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(0, real_state, emptyHook ); // On recupere le plot en face de l'escalier
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le plot 0");
 
 		}
@@ -282,7 +282,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		try 
 		{
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le verre 2");
-			scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(2, real_state, true, emptyHook ); // ON recupere le verre devant l'estrade
+			scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(2, real_state, emptyHook ); // ON recupere le verre devant l'estrade
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le verre 2");
 
 		}
@@ -296,7 +296,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		try 
 		{			
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le clap 3");
-			scriptmanager.getScript(ScriptNames.CLOSE_CLAP).goToThenExec(3, real_state, true, emptyHook ); // ON recupere le verre devant l'estrade
+			scriptmanager.getScript(ScriptNames.CLOSE_CLAP).goToThenExec(3, real_state, emptyHook ); // ON recupere le verre devant l'estrade
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le clap 3");
 
 		}
@@ -310,7 +310,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		try 
 		{
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le deposage en zone basse enemie");
-			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(1, real_state, true, emptyHook ); // On depose le verre chez les ennemis, en bas.
+			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(1, real_state, emptyHook ); // On depose le verre chez les ennemis, en bas.
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le deposage en zone basse enemie");
 
 		}
@@ -322,7 +322,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		try 
 		{
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le deposage en zone haute enemie");	
-			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(2, real_state, true, emptyHook ); // On depose le verre chez les ennemis, en haut.
+			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(2, real_state, emptyHook ); // On depose le verre chez les ennemis, en haut.
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le deposage en zone haute enemie");	
 
 		}
@@ -334,7 +334,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		try 
 		{
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le plot 5 et 6");
-			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(56, real_state, true, emptyHook );//On recupere les 2 plots a droite de l'escalier
+			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(56, real_state, emptyHook );//On recupere les 2 plots a droite de l'escalier
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le plot 5 et 6");
 
 		}
@@ -347,7 +347,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		{
 			real_state.robot.turn(0);	
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le plot 7");
-			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(7, real_state, true, emptyHook );//On recupere le dernier plot
+			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(7, real_state, emptyHook );//On recupere le dernier plot
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le plot 7");
 
 		}
@@ -360,7 +360,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		{
 			
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le deposage de la pile dans notre zone");
-			scriptmanager.getScript(ScriptNames.FREE_STACK).goToThenExec(2, real_state, true, emptyHook ); // On libere la pile ans notre zone
+			scriptmanager.getScript(ScriptNames.FREE_STACK).goToThenExec(2, real_state, emptyHook ); // On libere la pile ans notre zone
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le deposage de la pile dans notre zone");
 
 		}

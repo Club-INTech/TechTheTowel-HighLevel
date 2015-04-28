@@ -82,17 +82,17 @@ public class JUnit_DropGlass extends JUnit_Test {
 		try 
 		{
 			real_state.robot.moveLengthwise(300, emptyHook, true);// sans ca, le robot va très mal au point d'entrée -> Boucle d'acquitement de TURN ?
-			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(1, real_state, true, emptyHook );
+			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(1, real_state, emptyHook );
 				
 		    real_state.robot.moveToCircle(new Circle(0,400,0), emptyHook, real_state.table, EnumSet.noneOf(ObstacleGroups.class)); // PDD à appeler
 
-			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(3, real_state, true, emptyHook );
+			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(3, real_state, emptyHook );
 			
 			//On se degage, tant qu'il n'y a pas de PDD
 		    real_state.robot.moveToCircle(new Circle(-800,400,0), emptyHook, real_state.table,EnumSet.noneOf(ObstacleGroups.class));
 		    real_state.robot.moveToCircle(new Circle(-800,1500,0), emptyHook, real_state.table,EnumSet.noneOf(ObstacleGroups.class));
 			
-			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(2, real_state, true, emptyHook );
+			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(2, real_state, emptyHook );
 		}
 		catch (UnableToMoveException e) 
 		{

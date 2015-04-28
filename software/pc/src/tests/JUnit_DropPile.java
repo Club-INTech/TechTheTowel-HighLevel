@@ -94,7 +94,7 @@ public class JUnit_DropPile extends JUnit_Test {
 		// libère la pile de plots
 		try 
 		{
-			scriptmanager.getScript(ScriptNames.FREE_STACK).goToThenExec(1, real_state, true, emptyHook );
+			scriptmanager.getScript(ScriptNames.FREE_STACK).goToThenExec(1, real_state, emptyHook );
 		}
 		catch (UnableToMoveException | SerialConnexionException e) 
 		{

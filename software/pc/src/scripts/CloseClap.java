@@ -88,7 +88,7 @@ public class CloseClap extends AbstractScript
 		}
 		catch (UnableToMoveException | SerialConnexionException e)
 		{
-			finalise(stateToConsider);
+			finalize(stateToConsider);
 			throw e ;
 		}
 	}
@@ -504,7 +504,7 @@ public class CloseClap extends AbstractScript
 	}
 
 	@Override
-	public void finalise(GameState<?> stateToConsider) throws SerialFinallyException
+	public void finalize(GameState<?> stateToConsider) throws SerialFinallyException
 	{	
 		try 
 		{

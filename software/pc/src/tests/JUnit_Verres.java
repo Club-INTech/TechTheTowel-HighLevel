@@ -123,19 +123,19 @@ public class JUnit_Verres extends JUnit_Test
 			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
 			exitScript.execute(0, real_state, emptyHook );
 		
-			scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(0, real_state, true, emptyHook );
+			scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(0, real_state, emptyHook );
 			System.out.println("Verre 0 attrapé");
 
-			scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(1, real_state, true, emptyHook );
+			scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(1, real_state, emptyHook );
 			System.out.println("Verre 1 attrapé");
 
-			scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(2, real_state, true, emptyHook );
+			scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(2, real_state, emptyHook );
 			System.out.println("Verre 2 attrapé");
 
-			scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(3, real_state, true, emptyHook );
+			scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(3, real_state, emptyHook );
 			System.out.println("Verre 3 attrapé");
 
-			scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(4, real_state, true, emptyHook );
+			scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(4, real_state, emptyHook );
 			System.out.println("Verre 4 attrapé");
 
 		}

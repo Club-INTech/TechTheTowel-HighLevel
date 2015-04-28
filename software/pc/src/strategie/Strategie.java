@@ -149,7 +149,7 @@ public class Strategie implements Service
 				
 				try 
 				{
-					nextScript.goToThenExec(nextScriptVersion, gameState, true, hookRobot);
+					nextScript.goToThenExec(nextScriptVersion, gameState, hookRobot);
 				} 
 				catch (UnableToMoveException | SerialConnexionException
 						| PathNotFoundException | SerialFinallyException | InObstacleException e) 
@@ -172,7 +172,7 @@ public class Strategie implements Service
 		{
 			try 
 			{
-				scriptArray.get(0).goToThenExec(versionArray.get(0), gameState, true, hookRobot);
+				scriptArray.get(0).goToThenExec(versionArray.get(0), gameState, hookRobot);
 			}
 			catch (SerialConnexionException | SerialFinallyException e) 
 			{
@@ -180,7 +180,7 @@ public class Strategie implements Service
 				gameState.robot.sleep(3000);
 				try 
 				{
-					scriptArray.get(0).finalise(gameState);
+					scriptArray.get(0).finalize(gameState);
 				} 
 				catch (SerialFinallyException e1)
 				{
@@ -248,7 +248,7 @@ public class Strategie implements Service
 		robotChrono.resetChrono();
 		try 
 		{
-			script.goToThenExec(version, chronoState, true, hookRobot);
+			script.goToThenExec(version, chronoState, hookRobot);
 			durationScript = robotChrono.getCurrentChrono();
 		} 
 		catch (UnableToMoveException | SerialConnexionException
@@ -264,7 +264,7 @@ public class Strategie implements Service
 				try 
 				{
 					robotChrono.resetChrono();
-					script.goToThenExec(version, chronoState, true, hookRobot,e.getObstacleGroup());
+					script.goToThenExec(version, chronoState, hookRobot, e.getObstacleGroup());
 					durationScript = robotChrono.getCurrentChrono();
 				}
 				catch (UnableToMoveException | SerialConnexionException

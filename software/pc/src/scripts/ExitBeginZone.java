@@ -46,7 +46,7 @@ public class ExitBeginZone extends AbstractScript
 		catch (UnableToMoveException e)
 		{
 			log.critical("erreur ExitBeginZone script : impossible de sortir de la zone de depart\n", this);
-			finalise(stateToConsider);
+			finalize(stateToConsider);
 		}
 	}
 
@@ -58,7 +58,7 @@ public class ExitBeginZone extends AbstractScript
 	}
 
 	@Override
-	public void finalise(GameState<?> state) throws SerialFinallyException 
+	public void finalize(GameState<?> state) throws SerialFinallyException 
 	{
 		//lance toujours une exeption, le match dois absolument commencer
 		throw new SerialFinallyException();
