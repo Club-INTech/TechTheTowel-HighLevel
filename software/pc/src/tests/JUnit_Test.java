@@ -9,9 +9,11 @@ import org.junit.Before;
 import org.junit.After;
 
 import robot.Robot;
+import robot.cardsWrappers.SensorsCardWrapper;
 import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
+import threads.ThreadTimer;
 import utils.Log;
 import utils.Config;
 import container.Container;
@@ -57,6 +59,24 @@ public abstract class JUnit_Test
 	 * @param robot le robot a setuper
 	 * @throws SerialConnexionException si l'ordinateur n'arrive pas a communiquer avec les cartes
 	 */
+	
+	public void waitMatchBegin(SensorsCardWrapper sensorsCard, Robot robot)
+	{
+
+		System.out.println("Robot pret pour le match, attente du retrait du jumper");
+		
+		// attends que le jumper soit retiré du robot
+		
+		boolean jumperWasAbsent = sensorsCard.isJumperAbsent();
+		while(jumperWasAbsent || !sensorsCard.isJumperAbsent())
+		{
+			jumperWasAbsent = sensorsCard.isJumperAbsent();
+			 robot.sleep(100);
+		}
+
+		// maintenant que le jumper est retiré, le match a commencé
+		ThreadTimer.matchStarted = true;
+	}
 
 	public void matchSetUp(Robot robot) throws SerialConnexionException
 	{

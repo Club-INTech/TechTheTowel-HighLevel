@@ -14,8 +14,10 @@ import scripts.AbstractScript;
 import scripts.ScriptManager;
 import smartMath.Vec2;
 import strategie.GameState;
+import table.Table;
 import threads.ThreadTimer;
 import enums.ActuatorOrder;
+import enums.ObstacleGroups;
 import enums.ScriptNames;
 import enums.ServiceNames;
 import exceptions.InObstacleException;
@@ -41,37 +43,25 @@ public class JUnit_DropPile extends JUnit_Test {
 		scriptmanager = (ScriptManager) container.getService(ServiceNames.SCRIPT_MANAGER);
 		mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
 		emptyHook = new ArrayList<Hook> ();
-		
-		config.set("couleur", "vert");
-		real_state.robot.setPosition(new Vec2 (1132,1000));
+
+
+		real_state.robot.setPosition(Table.entryPosition);
 		//On est vert donc on est en PI 
 		real_state.robot.setOrientation(Math.PI); 
 		real_state.robot.updateConfig();
 		
 		//initialisation en position des AX-12
 		matchSetUp(real_state.robot);
-		waitMatchBegin();
-	}
-	public void waitMatchBegin()
-	{
-
-		System.out.println("Robot pret pour le match, attente du retrait du jumper");
 		
-		// attends que le jumper soit retiré du robot
-		
-		boolean jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
-		while(jumperWasAbsent || !mSensorsCardWrapper.isJumperAbsent())
-		{
-			jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
-			 real_state.robot.sleep(100);
-		}
+		real_state.robot.isGlassStoredLeft=true;
+		real_state.robot.isGlassStoredRight=true;
 
-		// maintenant que le jumper est retiré, le match a commencé
-		ThreadTimer.matchStarted = true;
+		waitMatchBegin(mSensorsCardWrapper, real_state.robot);
 	}
+
 	
 	@Test
-	public void test() throws InObstacleException
+	public void test()
 	{
 		//on sort de la zone de depart
 		try 
@@ -81,35 +71,38 @@ public class JUnit_DropPile extends JUnit_Test {
 		} 
 		catch (SerialConnexionException  | SerialFinallyException e) 
 		{
-			log.critical("Carte mal branchée. Match termine", this);
 			e.printStackTrace();
 			return;
 		}
 		catch (UnableToMoveException e) 
 		{
-			log.critical("CRITICAL : Chemin bloque, enlevez votre main", this);
 			e.printStackTrace();
+			return;
 		}
 		
 		// libère la pile de plots
 		try 
 		{
-			scriptmanager.getScript(ScriptNames.FREE_STACK).goToThenExec(1, real_state, emptyHook );
+			scriptmanager.getScript(ScriptNames.FREE_STACK).goToThenExec(0, real_state, emptyHook );
+		} 
+		catch (InObstacleException e) 
+		{
+						for (ObstacleGroups obst : e.getObstacleGroup())
+						{
+							log.critical(obst.name(),this);
+						}
 		}
 		catch (UnableToMoveException | SerialConnexionException e) 
 		{
-			// un robot ennemi devant ?
 			e.printStackTrace();
 		
 		} 
 		catch (PathNotFoundException e)
 		{
-			//TODO: le pathfinding ne trouve pas de chemin
 			e.printStackTrace();
 		} 
 		catch (SerialFinallyException e) 
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
