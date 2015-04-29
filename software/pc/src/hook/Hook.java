@@ -20,7 +20,7 @@ abstract public class Hook
 
 	/** Système de log sur lequel écrire */
 	@SuppressWarnings("unused")
-	private Log log;
+	protected Log log;
 	
 	/** endroit ou lire la configuration du robot */
 	@SuppressWarnings("unused")
