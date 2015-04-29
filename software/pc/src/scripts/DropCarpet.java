@@ -24,7 +24,7 @@ public class DropCarpet extends AbstractScript
 {
 	
 	/**distance de déplacement entre le point de depart et les marches (position pour poser les tapis) en mm */
-	private int distanceBetweenEntryAndStairs=150;
+	private int distanceBetweenEntryAndStairs=220;
 
 	/**
 	 * Constructeur (normalement appelé uniquement par le scriptManager) du script déposant les tapis
@@ -119,7 +119,7 @@ public class DropCarpet extends AbstractScript
 				else
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, false);
 
-				//le 2.9 a ete testé de façon experimentale (ainsi que le 606), a modifier si quelqu'un veut le calculer
+				//le 2.98 a ete testé de façon experimentale (ainsi que le 606), a modifier si quelqu'un veut le calculer
 				stateToConsider.robot.turn(2.98);
 
 				Speed oldSpeed = stateToConsider.robot.getSpeed();
@@ -134,7 +134,7 @@ public class DropCarpet extends AbstractScript
 				//on presente ses arrieres a l'escalier
 				stateToConsider.robot.turn(-0.5*Math.PI, hooksToConsider, false);
 				// on avance vers ces demoiselles (les marches) (attention impact possible)
-				stateToConsider.robot.moveLengthwiseWithoutDetection(-distanceBetweenEntryAndStairs*2, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwiseWithoutDetection(-distanceBetweenEntryAndStairs, hooksToConsider, true);
 
 				
 				//verification de la position : on n'effectue l'action que si on est assez proche (ie pas d'obstacle)
@@ -160,7 +160,6 @@ public class DropCarpet extends AbstractScript
 				try 
 				{
 					stateToConsider.robot.moveLengthwise(distanceBetweenEntryAndStairs, hooksToConsider, false);
-		
 				}
 				catch (UnableToMoveException e) 
 				{
