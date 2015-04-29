@@ -7,16 +7,12 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
-import pathDingDing.PathDingDing;
 import robot.Robot;
 import robot.cardsWrappers.SensorsCardWrapper;
 import scripts.AbstractScript;
 import scripts.ScriptManager;
-import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
-import threads.ThreadTimer;
-import enums.ActuatorOrder;
 import enums.ObstacleGroups;
 import enums.ScriptNames;
 import enums.ServiceNames;
@@ -87,10 +83,10 @@ public class JUnit_DropPile extends JUnit_Test {
 		} 
 		catch (InObstacleException e) 
 		{
-						for (ObstacleGroups obst : e.getObstacleGroup())
-						{
-							log.critical(obst.name(),this);
-						}
+				for (ObstacleGroups obst : e.getObstacleGroup())
+				{
+					log.critical(obst.name(),this);
+				}
 		}
 		catch (UnableToMoveException | SerialConnexionException e) 
 		{

@@ -114,7 +114,11 @@ public class DropCarpet extends AbstractScript
 				hookGoblet.addCallback(new Callback(new CloseRightArmExe(),true, stateToConsider));
 				hooksToConsider.add(hookGoblet);
 				
-				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, false);
+				if (!stateToConsider.robot.getSymmetry())
+					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, false);
+				else
+					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, false);
+
 				//le 2.9 a ete testé de façon experimentale (ainsi que le 606), a modifier si quelqu'un veut le calculer
 				stateToConsider.robot.turn(2.98);
 
@@ -131,10 +135,7 @@ public class DropCarpet extends AbstractScript
 				stateToConsider.robot.turn(-0.5*Math.PI, hooksToConsider, false);
 				// on avance vers ces demoiselles (les marches) (attention impact possible)
 				stateToConsider.robot.moveLengthwiseWithoutDetection(-distanceBetweenEntryAndStairs*2, hooksToConsider, true);
-				
-				//TODO supr
-				System.out.println("en position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") avant depose-tapis");
-		
+
 				
 				//verification de la position : on n'effectue l'action que si on est assez proche (ie pas d'obstacle)
 				if(Math.abs((stateToConsider.robot.getPosition().y-1340))<50) // position- position du centre parfait<marge d'erreur
@@ -154,9 +155,7 @@ public class DropCarpet extends AbstractScript
 						stateToConsider.table.setIsRightCarpetDropped(true);
 						stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
 					}
-					//TODO supr
-					System.out.println("En position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") après avoir deposé les tapis");
-				
+					
 				//on s'eloigne de l'escalier
 				try 
 				{
@@ -219,6 +218,8 @@ public class DropCarpet extends AbstractScript
 		{
 			stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
 			stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
 		} 
 		catch (SerialConnexionException e) 
 		{
