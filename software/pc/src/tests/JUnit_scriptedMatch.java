@@ -52,6 +52,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
         pathDingDing = (PathDingDing)container.getService(ServiceNames.PATHDINGDING);
         sensors = (SensorsCardWrapper)container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
         
+        
 		real_state.robot.updateConfig();
         sensors.updateConfig();
 
