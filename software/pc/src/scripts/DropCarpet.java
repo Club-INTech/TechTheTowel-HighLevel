@@ -24,7 +24,7 @@ public class DropCarpet extends AbstractScript
 {
 	
 	/**distance de déplacement entre le point de depart et les marches (position pour poser les tapis) en mm */
-	private int distanceBetweenEntryAndStairs=220;
+	private int distanceBetweenEntryAndStairs=150;
 
 	/**
 	 * Constructeur (normalement appelé uniquement par le scriptManager) du script déposant les tapis
@@ -110,7 +110,6 @@ public class DropCarpet extends AbstractScript
 		{
 			try
 			{
-				//FIXME creer un hook pour attraper le gobGob et ajouter a hooksToConsider
 				Hook hookGoblet = hookFactory.newHookTimer(System.currentTimeMillis() + 2100, 500);
 				hookGoblet.addCallback(new Callback(new CloseRightArmExe(),true, stateToConsider));
 				hooksToConsider.add(hookGoblet);

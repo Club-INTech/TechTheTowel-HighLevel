@@ -71,8 +71,8 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		catch (SerialConnexionException e) 
 		{
 			e.printStackTrace();
-		}		
-
+		}
+		//container.startInstanciedThreads();
 	}
 	
 	public void waitMatchBegin()
@@ -135,11 +135,12 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		{
 			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE); // Sortie de la zone de depart
 			exitScript.execute(0, real_state, emptyHook );
-		} 
+		}
 		catch (UnableToMoveException | SerialConnexionException e) 
 		{
 			e.printStackTrace();
-		} catch (SerialFinallyException e) {
+		} catch (SerialFinallyException e)
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -148,10 +149,14 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		System.out.println("Debut du match");
 		System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après etre sorti");//On s'attend  (881,1000)
 				
+		//////////////////////////////////////////////////////
+		//	script drop carpet 0
+		//////////////////////////////////////////////////////
+		
 		try 
 		{
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant les tapis");
-			scriptmanager.getScript(ScriptNames.DROP_CARPET).goToThenExec(1, real_state, emptyHook ); // On depose les tapis
+			scriptmanager.getScript(ScriptNames.DROP_CARPET).goToThenExec(0, real_state, emptyHook ); // On depose les tapis
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition()+" après les tapis");
 
 		}
@@ -159,6 +164,10 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		{
 			e.printStackTrace();
 		}
+		
+		//////////////////////////////////////////////////////
+		//	script grab plot 2
+		//////////////////////////////////////////////////////
 		
 		try 
 		{
@@ -173,6 +182,10 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		
 		System.out.println("Plot 2 pris");
 
+		//////////////////////////////////////////////////////
+		//	script grab plot 34
+		//////////////////////////////////////////////////////
+		
 		try 
 		{
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant les plots 3 et 4, et le verre 0");
@@ -185,6 +198,10 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		}
 		
 		System.out.println("Plot 3, 4 et gobelet pris");
+		
+		//////////////////////////////////////////////////////
+		//	script drop carpet -12
+		//////////////////////////////////////////////////////
 		
 		try 
 		{
@@ -200,6 +217,10 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		
 		System.out.println("Clap 1 et 2 Fermés");
 
+		//////////////////////////////////////////////////////
+		//	script grab plot 1
+		//////////////////////////////////////////////////////
+		
 		try 
 		{//TODO PathNotFound Exception
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le plot 1");
@@ -212,6 +233,10 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		}
 		
 		System.out.println("Plot 1 pris");
+		
+		//////////////////////////////////////////////////////
+		//	script free stack 0
+		//////////////////////////////////////////////////////
 		
 		try 
 		{			
