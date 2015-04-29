@@ -164,37 +164,63 @@ public class Strategie implements Service
 	
 	private void scriptedMatch(GameState<Robot> gameState) throws PathNotFoundException, InObstacleException, UnableToMoveException 
 	{
-		//TODO ajouter les scripts ainsi que leur version au match scripté
+		//FIXME ajouter les scripts ainsi que leur version au match scripté
 		ArrayList<AbstractScript> scriptArray = new ArrayList<AbstractScript>();
 		ArrayList<Integer> versionArray = new ArrayList<Integer>();
 
+		
+		scriptArray.add(scriptmanager.getScript(ScriptNames.DROP_CARPET));
+		versionArray.add(1);
+		
+		scriptArray.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
+		versionArray.add(2);
+		
+		scriptArray.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
+		versionArray.add(34);
+		
+		scriptArray.add(scriptmanager.getScript(ScriptNames.CLOSE_CLAP));
+		versionArray.add(-12);
+		
+		scriptArray.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
+		versionArray.add(1);
+		
+		scriptArray.add(scriptmanager.getScript(ScriptNames.FREE_STACK));
+		versionArray.add(0);
+		
+		
 		while(!scriptArray.isEmpty())
 		{
 			try 
 			{
 				scriptArray.get(0).goToThenExec(versionArray.get(0), gameState, hookRobot);
+				scriptArray.remove(0);
+				versionArray.remove(0);
+			}
+			catch (IndexOutOfBoundsException e)
+			{
+				log.debug("out of bound, IA's scripted match", this);
+				return;
 			}
 			catch (SerialConnexionException | SerialFinallyException e) 
 			{
-				//on attends 3 secodes pour tenter un finalise
-				gameState.robot.sleep(3000);
-				try 
+				while (true)
 				{
-					scriptArray.get(0).finalize(gameState);
-				} 
-				catch (SerialFinallyException e1)
-				{
-					log.critical("enchainement de SerialFinallyException : arret du robot !", this);
-					container.destructor();
-					//on attends la fin du match
-						try 
-						{
-							Thread.sleep(1000);
-						} 
-						catch (InterruptedException e2) 
-						{
-							e2.printStackTrace();
-						}
+					//on attends 3 secondes pour (re)tenter un finalise
+					gameState.robot.sleep(3000);
+					try 
+					{
+						scriptArray.get(0).finalize(gameState);
+					} 
+					catch (IndexOutOfBoundsException e1)
+					{
+						log.debug("out of bound, IA's scripted match", this);
+						//on ajoute le script de depart pour lancer son finalize (puisqu'il n'y avait pas de script prevu apres c'est pas grave)
+						scriptArray.add(scriptmanager.getScript(ScriptNames.EXIT_START_ZONE));
+					}
+					catch (SerialFinallyException e1)
+					{
+						log.critical("enchainement de SerialFinallyException", this);
+					}
 				}
 			}
 		}
