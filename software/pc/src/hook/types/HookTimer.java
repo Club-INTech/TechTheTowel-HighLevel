@@ -23,7 +23,7 @@ class HookTimer extends Hook
 	
 
     /**
-     * Instancie le hook sur position du robot. Position et tolérance paramétrable.
+     * Instancie le hook au moment spécifié par le temps d'expiration, à une précision près.
      * @param config : sur quel objet lire la configuration du match
      * @param log : la sortie de log à utiliser
      * @param realState : lien avec le robot a surveiller pour le déclenchement du hook

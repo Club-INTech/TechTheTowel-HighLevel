@@ -17,10 +17,7 @@ import table.Table;
 import org.junit.Before;
 import org.junit.Test;
 
-import enums.ActuatorOrder;
-import enums.ObstacleGroups;
-import enums.ScriptNames;
-import enums.ServiceNames;
+import enums.*;
 import exceptions.ContainerException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -64,25 +61,6 @@ public class JUnit_Hooks extends JUnit_Test
 		{
 			e.printStackTrace();
 		}		
-	}
-	
-	/**
-	 * le set up du match en cours (mise en place des actionneurs)
-	 * @param robot le robot a setuper
-	 * @throws SerialConnexionException si l'ordinateur n'arrive pas a communiquer avec les cartes
-	 */
-	public void matchSetUp(Robot robot) throws SerialConnexionException
-	{
-		robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
-		robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
-		robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, false);
-		robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, false);
-		robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
-		robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
-		robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
-		robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
-		robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, false);
-		robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
 	}
 
 	//@Test
@@ -189,7 +167,7 @@ public class JUnit_Hooks extends JUnit_Test
 			
 			Hook testHook1 = hookFactory.newHookXisLesser(0, 10);
 			Hook testHook2 = hookFactory.newHookXisLesser(-250, 10);
-			Hook testHook3 = hookFactory.newHookXisLesser(-360, 10);
+			Hook testHook3 = hookFactory.newHookXisLesser(-400, 10);
 			
 			// ajoute un callback au hook de position qui ouvre le bras  bras
 			testHook1.addCallback(	new Callback(new OpenClapLeftMiddleExe(),true, real_state)	);
@@ -205,6 +183,51 @@ public class JUnit_Hooks extends JUnit_Test
 			
 			System.out.println("debut du mouvement");
 			real_state.robot.moveLengthwise(800, testHookList);
+			System.out.println("fin du mouvement");
+		}
+		catch (UnableToMoveException e) 
+		{
+			e.printStackTrace();
+		}		
+		System.out.println("match fini !");
+
+		//Le match s'arrête
+		container.destructor();
+	}
+	
+	//@Test
+	public void testHookJawSensor() throws PathNotFoundException, SerialFinallyException, ContainerException, SerialManagerException, SerialConnexionException
+	{
+		//container.startAllThreads();
+		//premiere action du match
+		
+		real_state.robot.setLocomotionSpeed(Speed.SLOW);
+		
+		real_state.robot.setPosition(new Vec2(0, 0));
+		
+		System.out.println("Le robot commence le match");
+		try 
+		{
+			//hookfactory qui contient les differents hooks
+			hookFactory = (HookFactory) container.getService(ServiceNames.HOOK_FACTORY);
+
+			// liste de hook a passer a la locomotion
+			ArrayList<Hook> testHookList = new ArrayList<Hook> ();
+			
+			Hook testHook = hookFactory.newHookJawSensor();
+			
+			// ajoute un callback au hook de position qui ouvre le bras  bras
+			testHook.addCallback(	new Callback(new OpenRightArmExe(),true, real_state)	);
+			
+			// ajoute le hook a la liste a passer a la locomotion
+			testHookList.add(testHook);
+			
+			//scriptmanager.getScript(ScriptNames.EXIT_START_ZONE).execute(0, real_state, testHookList, true );
+			
+			System.out.println("debut du mouvement");
+			real_state.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+			real_state.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
+			real_state.robot.moveLengthwise(300, testHookList);
 			System.out.println("fin du mouvement");
 		}
 		catch (UnableToMoveException e) 

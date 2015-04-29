@@ -236,5 +236,23 @@ public class HookFactory implements Service
 	{
 		return new HookTimer(config, log, realState, expirationTime, tolerancy);
 	}
+	
+	/* ======================================================================
+	 * 							Hooks capteur machoire
+	 * ======================================================================
+	 */
+	
+	/**
+	 * demande l'instanciation d'un hook se déclenchant si le capteur machoire est actionné
+	 *
+	 * @param expirationTime temps de déckanchement du hook
+	 * @param tolerancy le hook sera déclenché si la distance entre le point de déclenchement et la position du robot est inférieure a cette valeur
+	 * @return le hook créé
+	 */
+	public Hook newHookJawSensor()
+	{
+		return new HookJawSensor(config, log, realState);
+	}
+	
 
 }
