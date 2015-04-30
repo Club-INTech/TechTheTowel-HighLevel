@@ -12,10 +12,10 @@
 
 extern Uart<1> serial;
 
-#define bgOuvert 292
+#define bgOuvert 300
 #define bgFerme 98
 #define bgMilieu 208
-#define bdOuvert 8
+#define bdOuvert 0
 #define bdMilieu 95
 #define bdFerme 203
 #define mgOuvert 240
@@ -248,7 +248,7 @@ public:
 	}
 
 	void e(uint16_t angle){
-		machoireDroite->goTo(angle);
+		brasGauche->goTo(angle);
 	}
 	void setAllID(){
 		int i;

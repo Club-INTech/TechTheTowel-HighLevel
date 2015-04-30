@@ -26,7 +26,7 @@
 //#define TICK_TO_RADIAN 0.00012663 // TICK_TO_MM/256 : entre roues de 25.6cm
 #define TICK_TO_RADIAN 0.0014468
 
-#define NB_SPEED 4 //Nombre de vitesses différentes gérées par l'asservissement
+#define NB_SPEED 6 //Nombre de vitesses différentes gérées par l'asservissement
 #define NB_CTE_ASSERV 4 //Nombre de variables constituant un asservissement : pwmMAX, kp, ki, kd
 
 #if DEBUG
@@ -162,6 +162,7 @@ public:
 	int16_t getMaxPWMrotation() const;
 	void setMaxPWMtranslation(int16_t);
 	void setMaxPWMrotation(int16_t);
+	void setDelayToStop(uint32_t);
 
 	/*
 	 * Règlage des constantes d'asservissement et du pwm
