@@ -31,7 +31,7 @@ public class TakeTennisBall extends AbstractScript
 	}
 	
 	@Override
-	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider,boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException, SerialFinallyException
+	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, SerialFinallyException
 	{
 		try
 		{
@@ -74,7 +74,7 @@ public class TakeTennisBall extends AbstractScript
 		}
 		catch(UnableToMoveException | SerialConnexionException e)
 		{
-			finalise(stateToConsider);
+			finalize(stateToConsider);
 			throw e;
 		}
 	}
@@ -108,7 +108,7 @@ public class TakeTennisBall extends AbstractScript
 	}
 	
 	@Override
-	protected void finalise(GameState<?> stateToConsider) throws SerialFinallyException 
+	public void finalize(GameState<?> stateToConsider) throws SerialFinallyException 
 	{
 		try 
 		{

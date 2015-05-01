@@ -78,6 +78,7 @@ public abstract class Robot implements Service
 	 *
 	 * @param config : sur quel objet lire la configuration du match
 	 * @param log : la sortie de log à utiliser
+	 * @param pathDingDing l'instance de pathfinding a utiliser
 	 */
 	public Robot(Config config, Log log, PathDingDing pathDingDing)
 	{
@@ -309,7 +310,7 @@ public abstract class Robot implements Service
     public void moveLengthwiseTowardWall(int distance, ArrayList<Hook> hooksToConsider) throws UnableToMoveException
     {
         Speed oldSpeed = speed; 
-        setLocomotionSpeed(Speed.INTO_WALL);
+        setLocomotionSpeed(Speed.SLOW);
         moveLengthwise(distance, hooksToConsider, true);
         setLocomotionSpeed(oldSpeed);
     }
@@ -371,7 +372,13 @@ public abstract class Robot implements Service
     		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_7);
     	}
     	
-		path = pathDingDing.computePath(getPosition(),aim.toVec2(),EnumSet.complementOf(obstaclesNotConsidered));
+    	EnumSet<ObstacleGroups> obstacleConsidered = EnumSet.complementOf(obstaclesNotConsidered);
+    	if (obstacleConsidered == null)
+    	{
+    		obstacleConsidered = EnumSet.noneOf(ObstacleGroups.class);
+    	}
+    	
+		path = pathDingDing.computePath(getPosition(),aim.toVec2(),obstacleConsidered);
 		
     	//retire une distance egale au rayon du cercle au dernier point du chemin (le centre du cercle)
     	
@@ -422,7 +429,7 @@ public abstract class Robot implements Service
      * 	Elle s'appelle elle-meme tant qu'on a pas reussi.
      *  Avant d'apeller cette méthode remettre actualNumberOfTries à 0
      * 	@throws PathNotFoundException 
-     * @throws InObstacleException lorqsque le robot veut aller dans un obstacle
+     *  @throws InObstacleException lorqsque le robot veut aller dans un obstacle
      */
     
     public void recalculate(Vec2 aim, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, PathNotFoundException, InObstacleException
@@ -481,7 +488,7 @@ public abstract class Robot implements Service
 	 */
 	public abstract Object getSensorValue(SensorNames captor) throws SerialConnexionException;
 
-	public abstract void turnWithoutDetection(double angle, ArrayList<Hook> hooks);
+	public abstract void turnWithoutDetection(double angle, ArrayList<Hook> hooks) throws UnableToMoveException;
 	
 	/** met hasNonDigestedPlot à false  */
 	public void digestPlot()

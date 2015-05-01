@@ -53,9 +53,11 @@ public:
 		this->EXTI_sensor = EXTI_sensor;
 	}
 
-	uint32_t value() const
+	uint32_t value()
 	{
-		return derniereDistance;
+		uint32_t valeurRetour = derniereDistance;
+		derniereDistance = 0;
+		return valeurRetour;
 	}
 
 	void refresh()
@@ -102,6 +104,7 @@ public:
 			uint32_t temps_impulsion, current_time;
 			current_time = Micros();
 			temps_impulsion = current_time - origineTimer;		//Le temps entre les deux fronts
+			//derniereDistance = 10*temps_impulsion/58;
 			ringBufferValeurs.append( 10*temps_impulsion/58 );	//On ajoute la distance mesurée à cet instant dans un buffer, calculé ainsi en fonction du temps entre les fronts
 			derniereDistance = mediane(ringBufferValeurs);		//Ce qu'on renvoie est la médiane du buffer, ainsi on élimine les valeurs extrêmes qui peuvent être absurdes
 			risingEdgeTrigger = true;
@@ -115,8 +118,8 @@ private:
 	EXTI_InitTypeDef EXTI_sensor;//Variable permettant de régler le vecteur d'interruptions associé au capteur
 	GPIO_TypeDef* GPIOx;//Port de la pin du capteur
 	ringBufferSRF ringBufferValeurs;
-	uint32_t derniereDistance;		//contient la dernière distance acquise, prête à être envoyée
-	uint32_t origineTimer;			//origine de temps afin de mesurer une durée
+	volatile uint32_t derniereDistance;		//contient la dernière distance acquise, prête à être envoyée
+	volatile uint32_t origineTimer;			//origine de temps afin de mesurer une durée
 };
 
 #endif

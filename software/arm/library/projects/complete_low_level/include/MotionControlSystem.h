@@ -81,8 +81,8 @@ private:
 		int rotationCourante;
 		bool asservTranslation;
 		bool asservRotation;
-		uint8_t pwmTranslation;
-		uint8_t pwmRotation;
+		int16_t pwmTranslation;
+		int16_t pwmRotation;
 		uint8_t tailleBufferReception;
 	};
 
@@ -119,6 +119,8 @@ public:
 	void printTrackingAll();///Affiche l'intégralité du tableau de tracking
 	void printTrackingLocomotion();
 	void printTrackingSerie();
+	void printTrackingPWM();
+	void printTrackingAsserv();
 
 	int getPWMTranslation() const;
 	int getPWMRotation() const;
@@ -167,6 +169,13 @@ public:
 
 	bool isMoving() const;
 	bool isMoveAbnormal() const;
+
+	/* Fonction permettant de Test de différents PWM, afin de connaître le PWM minimal mettant en mouvement le robot */
+	void testPWM(int16_t listePWM[], unsigned int nbPWM);
+
+	void testTranslation(int);
+	void testRotation(float);
+	void testPID(void);
 };
 
 #endif /* MOTION_CONTROL_H_ */

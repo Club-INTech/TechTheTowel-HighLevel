@@ -44,36 +44,36 @@ public class DropPile extends AbstractScript
 	}
 
 	@Override
-	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, boolean shouldRetryIfBlocked, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, InObstacleException
+	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, InObstacleException
 	{
 		EnumSet<ObstacleGroups> obstacleNotConsidered = EnumSet.noneOf(ObstacleGroups.class);
-		
 		if (versionToExecute == 1)
 			obstacleNotConsidered.add(ObstacleGroups.GOBLET_2);
+		if (versionToExecute == 0)
+			obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_2);
+		
 		// va jusqu'au point d'entrée de la version demandée
 		actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.robotRay), hooksToConsider, actualState.table,obstacleNotConsidered);
 		
 		// exécute la version demandée
-		execute(versionToExecute, actualState, hooksToConsider, shouldRetryIfBlocked);
+		execute(versionToExecute, actualState, hooksToConsider);
 	}
 	@Override
-	public void execute(int version, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider,boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException, SerialFinallyException
+	public void execute(int version, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, SerialFinallyException
 	{
 		try
 		{
-			
+			//version estrade
 			if (version==1)
 			{
-				//TODO: la version actuelle pose la pile A COTE DE l'estrade (il faut la modifier pour qu'elle la pose dessus)
 				//on se tourne vers la plus belle (l'estrade)  #^_^# 
-				
 				//Notice me Sempai  #'_'#
 				
-				stateToConsider.robot.turn(-Math.PI/2, hooksToConsider, false);//On avance pour eviter le PathNotFoundd EXception
+				stateToConsider.robot.turn(-Math.PI/2, hooksToConsider, false);
 	
 				//on eleve notre membre (l'ascenseur)
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_STAGE, true);
-				//on se deplace vers elle 120
+				//on se deplace vers elle
 				stateToConsider.robot.moveLengthwise(120, hooksToConsider, true);
 				
 				//on y place notre membre
@@ -124,9 +124,11 @@ public class DropPile extends AbstractScript
 				// Thank... you, sempai #'.'#
 	
 			}
+			//version zone de depart
 			else if (version==0)
 			{
-				stateToConsider.robot.moveLengthwise(150, hooksToConsider, false);
+				stateToConsider.robot.turn(Math.PI/4, hooksToConsider, false);
+				stateToConsider.robot.moveLengthwise(400, hooksToConsider, true);
 				
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
 				//on ouvre le guide un peu
@@ -136,7 +138,6 @@ public class DropPile extends AbstractScript
 				stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_GUIDE, true);
 				
 				//puis beaucoup
-				
 				stateToConsider.robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, false);
 				stateToConsider.robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, true);
 				//on se vide de nos plots et on met a jour les points
@@ -149,12 +150,9 @@ public class DropPile extends AbstractScript
 				stateToConsider.robot.storedPlotCount = 0;
 				stateToConsider.robot.isBallStored = false;
 				
-				stateToConsider.robot.moveLengthwise(-150, hooksToConsider, false);
+				stateToConsider.robot.moveLengthwise(-180, hooksToConsider, false);
 				
-				//On referme doucement, un peu
-				stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_GUIDE, false);
-				stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_GUIDE, true);
-				
+			
 				//Puis on finit
 				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, false);
 				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
@@ -163,17 +161,37 @@ public class DropPile extends AbstractScript
 				//on remet l'ascenceur en position de deplacement
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
 				
+				if (!stateToConsider.table.isAreaXFilled(0))
+				{
+					if (!stateToConsider.robot.getSymmetry() && stateToConsider.robot.isGlassStoredRight)
+					{
+						stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);
+						stateToConsider.robot.moveLengthwise(-250, hooksToConsider);
+						stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
+						stateToConsider.robot.isGlassStoredRight = false;
+						stateToConsider.table.areaXFilled(0);
+					}
+					else if (stateToConsider.robot.getSymmetry() && stateToConsider.robot.isGlassStoredLeft)
+					{
+						stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);
+						stateToConsider.robot.moveLengthwise(-250, hooksToConsider);
+						stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
+						stateToConsider.robot.isGlassStoredLeft = false;
+						stateToConsider.table.areaXFilled(0);
+					}
+				}
+				
 			}
 			else
 			{
 				log.debug("version inconnue DropPile :"+version, this);
-				finalise(stateToConsider);
+				finalize(stateToConsider);
 			}
 			
 		}
 		catch (UnableToMoveException | SerialConnexionException e) 
 		{
-			finalise(stateToConsider);
+			finalize(stateToConsider);
 			throw e;
 		}
 	}
@@ -186,9 +204,9 @@ public class DropPile extends AbstractScript
 		{
 			return new Circle(200,300,0);
 		}
-		else if (id==2)
+		else if (id==0)
 		{
-			return new Circle(881,1000,0); // endroit de depart -50 cm en x
+			return new Circle(750,800); 
 		}
 		else
 		{
@@ -205,14 +223,19 @@ public class DropPile extends AbstractScript
 				ball = 1;
 			int toReturn = (2*ball+3)*stateToConsider.robot.storedPlotCount;
 			//si on pose dans notre base et que la balle n'a pas deja ete attrapee on reduit le nombre de points par 5*le nombre de plots encore possible d'empiler
-			if (version == 2 && !stateToConsider.table.isBallTaken())
-				toReturn -= 5*Math.min((int)(90000-stateToConsider.timeEllapsed)/AverageTimeToGetPlot,
-											stateToConsider.table.numberOfPlotLeft());
+			if (version == 0)
+			{
+				if (!stateToConsider.table.isBallTaken())
+					toReturn -= 5*Math.min((int)(90000-stateToConsider.timeEllapsed)/AverageTimeToGetPlot,
+												stateToConsider.table.numberOfPlotLeft());
+				if (!stateToConsider.table.isAreaXFilled(0) && (stateToConsider.robot.isGlassStoredLeft || stateToConsider.robot.isGlassStoredRight))
+					toReturn += 4;
+			}
 			return toReturn;
 	}
 
 	@Override
-	protected void finalise(GameState<?> stateToConsider) throws SerialFinallyException, UnableToMoveException 
+	public void finalize(GameState<?> stateToConsider) throws SerialFinallyException
 	{
 		try 
 		{
@@ -220,8 +243,11 @@ public class DropPile extends AbstractScript
 			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);	
 			stateToConsider.robot.moveLengthwise(-20);
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
+			
 		} 
-		catch (SerialConnexionException e) 
+		catch (SerialConnexionException | UnableToMoveException e) 
 		{
 			throw new SerialFinallyException ();
 		}

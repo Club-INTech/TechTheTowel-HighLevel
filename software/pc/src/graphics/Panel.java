@@ -110,14 +110,16 @@ public class Panel extends JPanel
 	    if(isRobotPresent)
 	    {
 		    g.setColor(Color.green);
-		    g.drawOval( (mRobot.getPosition().x - 100 + 1500) * this.getWidth() / 3000,
-		    		   -(mRobot.getPosition().y + 100) * this.getHeight() / 2000 + this.getHeight(), 
+		    Vec2 position = mRobot.getPosition();
+		    double orientation = mRobot.getOrientation();
+		    g.drawOval( (position.x - 100 + 1500) * this.getWidth() / 3000,
+		    		   -(position.y + 100) * this.getHeight() / 2000 + this.getHeight(), 
 		    		    (2 * 100) * this.getWidth() / 3000,
 		    		    (2 * 100) * this.getHeight() / 2000);
-		    g.drawLine((mRobot.getPosition().x + 1500) * this.getWidth() / 3000, 
-		    			-mRobot.getPosition().y * this.getHeight() / 2000 + this.getHeight(),
-		    			(int)((mRobot.getPosition().x + 200*Math.cos(mRobot.getOrientation()) + 1500) * this.getWidth() / 3000),
-		    			(int)(-(mRobot.getPosition().y + 200*Math.sin(mRobot.getOrientation())) * this.getHeight() / 2000 + this.getHeight()));
+		    g.drawLine((position.x + 1500) * this.getWidth() / 3000, 
+		    			-position.y * this.getHeight() / 2000 + this.getHeight(),
+		    			(int)((position.x + 200*Math.cos(orientation) + 1500) * this.getWidth() / 3000),
+		    			(int)(-(position.y + 200*Math.sin(orientation)) * this.getHeight() / 2000 + this.getHeight()));
 	    }
 	    
 	    g.setColor(Color.green);

@@ -69,7 +69,7 @@ public class JUnit_Match extends JUnit_Test
 		try 
 		{
 			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
-			exitScript.execute(0, real_state, emptyHook, true );
+			exitScript.execute(1, real_state, emptyHook );
 		} 
 		catch (SerialConnexionException | SerialFinallyException e) 
 		{
