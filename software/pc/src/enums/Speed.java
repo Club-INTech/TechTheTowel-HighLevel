@@ -9,7 +9,8 @@ package enums;
 public enum Speed
 {
 	/** vitesse en temps normal */
-    BETWEEN_SCRIPTS(100, 100),
+    // BETWEEN_SCRIPTS(100, 100), // valeurs des anciens asservissements
+	BETWEEN_SCRIPTS(10, 10), // valeurs des anciens asservissements
     
     /** vitesse a avoir si l'on veut percuter un mur. Celle ci est plus faible pour prendre soin de la méca du robot */
 //    INTO_WALL(90, 160),
@@ -45,7 +46,6 @@ public enum Speed
         /**
          * Formule héritée de Deboc (intech 2012).
          * Ca peut être intéressant de refaire des mesures et une interpolation.
-         * (avis aux 1A: cette formule n'as rien a voir avec la "correction intégrale de l'asservissement" via java) 
          */
         invertedTranslationnalSpeed = (int) (1./(((float)2500)/((float)613.52 * (float)(Math.pow((double)PWM_translation,(double)(-1.034))))/1000));
         invertedRotationnalSpeed = (int) (1./(((float)Math.PI)/((float)277.85 * (float)Math.pow(PWM_rotation,(-1.222)))/1000));

@@ -78,6 +78,7 @@ public abstract class Robot implements Service
 	 *
 	 * @param config : sur quel objet lire la configuration du match
 	 * @param log : la sortie de log à utiliser
+	 * @param pathDingDing l'instance de pathfinding a utiliser
 	 */
 	public Robot(Config config, Log log, PathDingDing pathDingDing)
 	{
@@ -428,7 +429,7 @@ public abstract class Robot implements Service
      * 	Elle s'appelle elle-meme tant qu'on a pas reussi.
      *  Avant d'apeller cette méthode remettre actualNumberOfTries à 0
      * 	@throws PathNotFoundException 
-     * @throws InObstacleException lorqsque le robot veut aller dans un obstacle
+     *  @throws InObstacleException lorqsque le robot veut aller dans un obstacle
      */
     
     public void recalculate(Vec2 aim, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, PathNotFoundException, InObstacleException
@@ -487,7 +488,7 @@ public abstract class Robot implements Service
 	 */
 	public abstract Object getSensorValue(SensorNames captor) throws SerialConnexionException;
 
-	public abstract void turnWithoutDetection(double angle, ArrayList<Hook> hooks);
+	public abstract void turnWithoutDetection(double angle, ArrayList<Hook> hooks) throws UnableToMoveException;
 	
 	/** met hasNonDigestedPlot à false  */
 	public void digestPlot()

@@ -120,7 +120,7 @@ public class RobotReal extends Robot
     }
     
     @Override
-    public void turnWithoutDetection(double angle, ArrayList<Hook> hooks)
+    public void turnWithoutDetection(double angle, ArrayList<Hook> hooks) throws UnableToMoveException
     {
     	try
     	{
@@ -128,7 +128,7 @@ public class RobotReal extends Robot
     	}
     	catch (UnableToMoveException e)
     	{
-            ;
+    		throw e;
     	}
     }
     

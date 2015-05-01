@@ -188,7 +188,7 @@ public class DropCarpet extends AbstractScript
 	public Circle entryPosition(int id, int ray) 
 	{
 		if (id==1)
-			return new Circle(265,1400-distanceBetweenEntryAndStairs);//point de depose - distance de deplacement jusqua ce point - rayon robot (distance arriere - roues))
+			return new Circle(261,1400-distanceBetweenEntryAndStairs);//point de depose - distance de deplacement jusqua ce point - rayon robot (distance arriere - roues))
 		else if (id == 0)
 			return new Circle (1500-320-77-250,1000);
 		else
