@@ -72,7 +72,6 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		{
 			e.printStackTrace();
 		}
-		//container.startInstanciedThreads();
 	}
 	
 	public void waitMatchBegin()
@@ -122,30 +121,42 @@ public class JUnit_scriptedMatch extends JUnit_Test
 	}
 
 	@Test
-	public void test()
+	public void startMatch()
 	{
 		//configColor();
-//		container.startInstanciedThreads();
+		// TODO : container.startInstanciedThreads();
 		waitMatchBegin();
 		//premiere action du match
+		
+		//////////////////////////////////////////////////////
+		//	Début du match
+		//////////////////////////////////////////////////////
+		
 		long timeMatchBegin=System.currentTimeMillis();
 
+		//////////////////////////////////////////////////////
+		//	Script de sortie de la zone de départ
+		//////////////////////////////////////////////////////
+		
+		/*
 		System.out.println("Le robot commence le match");
 		try 
 		{
-			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE); // Sortie de la zone de depart
+			// Sortie de la zone de depart
+			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
 			exitScript.execute(0, real_state, emptyHook );
 		}
 		catch (UnableToMoveException | SerialConnexionException e) 
 		{
 			e.printStackTrace();
-		} catch (SerialFinallyException e)
+		}
+		catch (SerialFinallyException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		*/
 		
-		//debut du match
 		System.out.println("Debut du match");
 		System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après etre sorti");//On s'attend  (881,1000)
 				
@@ -156,11 +167,14 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		try 
 		{
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant les tapis");
-			scriptmanager.getScript(ScriptNames.DROP_CARPET).goToThenExec(0, real_state, emptyHook ); // On depose les tapis
+			// On depose les tapis
+			//scriptmanager.getScript(ScriptNames.DROP_CARPET).goToThenExec(0, real_state, emptyHook );
+			// TODO : à revoir
+			// ce script sert désormais également à sortir de la zone de départ!!!
+			scriptmanager.getScript(ScriptNames.DROP_CARPET).execute(2, real_state, emptyHook);
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition()+" après les tapis");
-
 		}
-		catch (UnableToMoveException | SerialConnexionException| PathNotFoundException | SerialFinallyException | InObstacleException e) 
+		catch (UnableToMoveException | SerialConnexionException | SerialFinallyException e) 
 		{
 			e.printStackTrace();
 		}
@@ -172,7 +186,8 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		try 
 		{
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le plot 2");
-			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(2, real_state, emptyHook ); // On prend le plot a notre gauche, en sortant de la zone de depart
+			// On prend le plot a notre gauche, en sortant de la zone de depart
+			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(2, real_state, emptyHook );
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le plot 2");
 		} 
 		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e1) 
@@ -189,7 +204,8 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		try 
 		{
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant les plots 3 et 4, et le verre 0");
-			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(34, real_state, emptyHook ); // On prend les 2 plots en bas de notre zonee de depart, et le verre
+			// On prend les 2 plots en bas de notre zone de depart, et le verre
+			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(34, real_state, emptyHook );
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après les plots 3 et 4 et verre 0");
 		} 
 		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e1) 
@@ -200,13 +216,13 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		System.out.println("Plot 3, 4 et gobelet pris");
 		
 		//////////////////////////////////////////////////////
-		//	script drop carpet -12
+		//	script close clap 12
 		//////////////////////////////////////////////////////
 		
 		try 
 		{
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant les claps 1 et 2");
-			scriptmanager.getScript(ScriptNames.CLOSE_CLAP).goToThenExec(-12, real_state, emptyHook );
+			scriptmanager.getScript(ScriptNames.CLOSE_CLAP).goToThenExec(12, real_state, emptyHook );
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après les claps 1 et 2");
 
 		}
@@ -224,7 +240,8 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		try 
 		{//TODO PathNotFound Exception
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le plot 1");
-			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(1, real_state, emptyHook ); // On prend le plot a cote de l'estrade
+			// On prend le plot a cote de l'estrade
+			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(1, real_state, emptyHook );
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le plot 1");
 		}
 		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e) 
@@ -241,7 +258,8 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		try 
 		{			
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant de deposer la pile sur l'estrade");
-			scriptmanager.getScript(ScriptNames.FREE_STACK).goToThenExec(0, real_state, emptyHook ); // On lache notree pile devnt (bientot sur l'estrade
+			// On lache notree pile devnt (bientot sur l'estrade
+			scriptmanager.getScript(ScriptNames.FREE_STACK).goToThenExec(0, real_state, emptyHook );
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après deposer la pile sur l'estrade");
 
 		}
@@ -384,6 +402,10 @@ public class JUnit_scriptedMatch extends JUnit_Test
 //		{
 //			e.printStackTrace();
 //		}
+		
+		//////////////////////////////////////////////////////
+		//	Fin du match
+		//////////////////////////////////////////////////////
 		
 		System.out.println("match fini !");
 

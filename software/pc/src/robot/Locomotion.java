@@ -363,7 +363,7 @@ public class Locomotion implements Service
             	
                 log.critical("Haut : Catch de "+e+" dans moveToPointException", this);
                 
-                if (!headingToWall) // si on s'y attendaiq, on ne faais rien.
+                if (!headingToWall) // si on s'y attendaiq, on ne fais rien.
                 {
 	                if(maxRetriesIfBlocked!=0)
 	                {
@@ -662,6 +662,7 @@ public class Locomotion implements Service
                 {
                 	if(mustDetect)
                 		detectEnemy(true, true, highLevelPosition);
+                	//TODO : ce sleep ne pose-t-il pas de problèmes?
                     Sleep.sleep(feedbackLoopDelay);
                 }
             

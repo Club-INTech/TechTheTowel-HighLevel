@@ -201,7 +201,7 @@ public class JUnit_Hooks extends JUnit_Test
 		//container.startAllThreads();
 		//premiere action du match
 		
-		real_state.robot.setLocomotionSpeed(Speed.SLOW);
+		real_state.robot.setLocomotionSpeed(Speed.FAST);
 		
 		real_state.robot.setPosition(new Vec2(0, 0));
 		

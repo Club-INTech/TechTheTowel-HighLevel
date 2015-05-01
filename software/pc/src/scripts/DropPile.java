@@ -127,8 +127,8 @@ public class DropPile extends AbstractScript
 			//version zone de depart
 			else if (version==0)
 			{
-				stateToConsider.robot.turn(Math.PI/4, hooksToConsider, false);
-				stateToConsider.robot.moveLengthwise(400, hooksToConsider, true);
+				stateToConsider.robot.turn(0, hooksToConsider, false);
+				stateToConsider.robot.moveLengthwise(200, hooksToConsider, true);
 				
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
 				//on ouvre le guide un peu
@@ -206,7 +206,7 @@ public class DropPile extends AbstractScript
 		}
 		else if (id==0)
 		{
-			return new Circle(750,800); 
+			return new Circle(800, 1000); 
 		}
 		else
 		{

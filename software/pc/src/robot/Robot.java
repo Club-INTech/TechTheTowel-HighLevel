@@ -310,7 +310,7 @@ public abstract class Robot implements Service
     public void moveLengthwiseTowardWall(int distance, ArrayList<Hook> hooksToConsider) throws UnableToMoveException
     {
         Speed oldSpeed = speed; 
-        setLocomotionSpeed(Speed.SLOW);
+        setLocomotionSpeed(Speed.FAST);
         moveLengthwise(distance, hooksToConsider, true);
         setLocomotionSpeed(oldSpeed);
     }
