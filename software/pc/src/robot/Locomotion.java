@@ -11,6 +11,7 @@ import utils.Config;
 import utils.Log;
 import utils.Sleep;
 import container.Service;
+import enums.Direction;
 import enums.UnableToMoveReason;
 import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -175,7 +176,7 @@ public class Locomotion implements Service
      * n'en devient plus qu'un cas particulier (celui où... on n'avance pas)
      * @param angle l'angle vise (en absolut)
      * @param hooks les potentiels hooks a prendre en compte (ne pas mettre null !)
-     * @param mustDetect, true si on veut detecter, false sinon.
+     * @param mustDetect true si on veut detecter, false sinon.
      * @throws UnableToMoveException si le robot a un bloquage mecanique
      */
     public void turn(double angle, ArrayList<Hook> hooks, boolean mustDetect) throws UnableToMoveException
@@ -216,7 +217,7 @@ public class Locomotion implements Service
      * @param distance la distance dont le robot doit se deplacer
      * @param hooks les potetniels hooks a prendre en compte (ne pas mettre null !)
      * @param wall vrai si on supppose qu'on vas se cogner dans un mur (et qu'il ne faut pas pousser dessus)
-     * @param mustDetect, true si on veut detecter, false sinon.
+     * @param mustDetect true si on veut detecter, false sinon.
      * @throws UnableToMoveException si le robot a un bloquage mecanique
      */
     public void moveLengthwise(int distance, ArrayList<Hook> hooks, boolean wall, boolean mustDetect) throws UnableToMoveException
@@ -229,6 +230,7 @@ public class Locomotion implements Service
         
         /**
          * aim est la visée du haut niveau, qui commence toujours à droite
+         * TODO; trouver ce que veut dire ce commentaire
          */
         Vec2 aim = new Vec2(); 
         
@@ -257,10 +259,9 @@ public class Locomotion implements Service
      */
     public void moveTowardEnnemy(int distance, ArrayList<Hook> hooks) throws UnableToMoveException, BlockedException, UnexpectedObstacleOnPathException
     {    
-    	// FIXME : tester cette méthode avant de l'utiliser
     	
     	// si l'on s'approche trop d'un ennemi, on lance une exception du type UnexpectedObstacleOnPathException
-    	int MinDistanceToStop = 100;
+    	int MinDistanceToStop = 85;
     	
 		updateCurrentPositionAndOrientation();
 
@@ -268,6 +269,7 @@ public class Locomotion implements Service
         
         /**
          * aim est la visée du haut niveau, qui commence toujours à droite
+         * TODO; trouver ce que veut dire ce commentaire
          */
         Vec2 aim = new Vec2(); 
         
@@ -281,15 +283,21 @@ public class Locomotion implements Service
         }
         catch(UnexpectedObstacleOnPathException e)
         {
-        	log.debug("moveToPointSymmetry a renvoyé une UnexpectedObstacleOnPathException alors que la détection d'obstacle était désactivée", this);
+        	log.debug("moveTowardEnnemy a renvoyé une UnexpectedObstacleOnPathException alors que la détection d'obstacle était désactivée", this);
         }
+        
         do 
         {
             updateCurrentPositionAndOrientation();
-            
+
+        	log.debug("table.getObstacleManager().distanceToClosestEnemy(highLevelPosition) :" + table.getObstacleManager().distanceToClosestEnemy(highLevelPosition) , this);
             // si l'ennemi le plus proche est trop proche
-            if(table.getObstacleManager().closestEnemy(highLevelPosition) <= MinDistanceToStop)
+            if(table.getObstacleManager().distanceToClosestEnemy(highLevelPosition) <= MinDistanceToStop)
+            {
+            	log.debug("moveTowardEnnemy voit que l'ennemei est trop proche", this);
+            	immobilise();
             	throw new UnexpectedObstacleOnPathException();
+            }
 
             //on evalue les hooks (non null !)
             if(hooks != null)
@@ -318,7 +326,7 @@ public class Locomotion implements Service
      * @param path le chemin a suivre (un arraylist de Vec2 qui sont les point de rotation du robot)
      * @param hooks les potentiels hooks a prendre en compte (ne pas mettre null !)
      * @param directionstrategy ce que la strategie choisit comme optimal (en avant, en arriere, au plus rapide)
-     * @param mustDetect, true si on veut detecter, false sinon.
+     * @param mustDetect true si on veut detecter, false sinon.
      * @throws UnableToMoveException si le robot a un bloquage mecanique
      */
     public void followPath(ArrayList<Vec2> path, ArrayList<Hook> hooks, DirectionStrategy directionstrategy, boolean mustDetect) throws UnableToMoveException
@@ -353,7 +361,7 @@ public class Locomotion implements Service
      * @param mur vrai si on suppose qu'on vas se cogner dans un mur (et qu'on veut s'arreter des qu'on cogne)
      * @param strategy ce que la strategie choisit comme optimal (en avant, en arriere, au plus rapide)
      * @param turnOnly vrai si on veut uniquement tourner (et pas avancer)
-     * @param mustDetect, true si on veut detecter, false sinon.
+     * @param mustDetect true si on veut detecter, false sinon.
      * @throws UnableToMoveException si le robot a un bloquage mecanique
      */
     private void moveToPointForwardBackward(Vec2 aim, ArrayList<Hook> hooks, boolean mur, DirectionStrategy strategy, boolean turnOnly, boolean mustDetect) throws UnableToMoveException
@@ -400,12 +408,12 @@ public class Locomotion implements Service
      * @param headingToWall vrai si on suppose qu'on vas se cogner dans un mur (et qu'on veut s'arreter des qu'on cogne)
      * @param isTurnRelative vrai si l'angle vise est relatif et pas absolut
      * @param turnOnly vrai si on veut uniquement tourner (et pas avancer)
-     * @param mustDetect, true si on veut detecter, false sinon.
+     * @param mustDetect true si on veut detecter, false sinon.
      * @throws UnableToMoveException si le robot a un bloquage mecanique
      */
     private void moveToPointException(Vec2 aim, ArrayList<Hook> hooks, boolean isMovementForward, boolean headingToWall, boolean turnOnly, boolean mustDetect) throws UnableToMoveException
     {
-        int maxTimeToWaitForEnemyToLeave = 600; // combien de temps attendre que l'ennemi parte avant d'abandonner
+        //int maxTimeToWaitForEnemyToLeave = 600; // combien de temps attendre que l'ennemi parte avant d'abandonner
         int unexpectedWallImpactCounter = 2; // combien de fois on réessayer si on se prend un mur (si wall est a true alors les impacts sont attendus donc on s'en fout)
         boolean doItAgain;
         do 
@@ -532,7 +540,7 @@ public class Locomotion implements Service
      * @param isMovementForward vrai si on vas en avant et faux si on vas en arriere
      * @param turnOnly vrai si on veut uniquement tourner (et pas avancer)
      * @param isTurnRelative vrai si l'angle est relatif et pas absolut
-     * @param mustDetect, true si on veut detecter, false sinon.
+     * @param mustDetect true si on veut detecter, false sinon.
      * @throws BlockedException si le robot a un bloquage mecanique
      * @throws UnexpectedObstacleOnPathException si le robot rencontre un obstacle innatendu sur son chemin (par les capteurs)
      */
@@ -542,13 +550,15 @@ public class Locomotion implements Service
         moveToPointSymmetry(aim, isMovementForward, mustDetect, turnOnly, false);
         do 
         { 	
+            updateCurrentPositionAndOrientation();
+            
         	// en cas de détection d'ennemi, une exception est levée
         	if(mustDetect)
-        		detectEnemy(isMovementForward, turnOnly, aim);
+        		//detectEnemyInFrontDisk(isMovementForward, turnOnly, aim);
+        		detectEnemyAtDistance(85);	// laisse 85mm de large entre notre robot et le robot adverse
         	else 
         		log.debug("Pas de detection demandée", this); 
         	
-            updateCurrentPositionAndOrientation();
 
             //on evalue les hooks (non null !)
             if(hooks != null)
@@ -590,7 +600,7 @@ public class Locomotion implements Service
      * Gère la symétrie et la marche arrière. (si on est en marche arriere le aim doit etre modifié pour que la consigne vers le bas niveau soit bonne)
      * @param aim la position visee sur la tab le (consigne donné par plus haut niveau donc non symetrise)
      * @param isMovementForward vrai si on vas en avant et faux si on vas en arriere
-     * @param mustDetect, si on autorise la detection pendant ce deplacement
+     * @param mustDetect si on autorise la detection pendant ce deplacement
      * @param turnOnly vrai si on veut uniquement tourner (et pas avancer)
      * @param isCorrection vrai si la consigne est une correction et pas un ordre de deplacement
      * @param isTurnRelative vrai si l'angle est relatif et pas absolut
@@ -719,7 +729,7 @@ public class Locomotion implements Service
                 while(!isMotionEnded()) 
                 {
                 	if(mustDetect)
-                		detectEnemy(true, true, highLevelPosition);
+                		detectEnemyInFrontDisk(true, true, highLevelPosition);
                 	//TODO : ce sleep ne pose-t-il pas de problèmes?
                     Sleep.sleep(feedbackLoopDelay);
                 }
@@ -786,9 +796,10 @@ public class Locomotion implements Service
      * test si le cercle devant (ou derriere en fonction du mouvement) est vide d'obstacle
      * @param front vrai si on veut detecter a l'avant du robot (donc si on avance en marche avant)
      * @param isTurnOnly On detecte differement si on tourne ou translate
+     * @param aim 
      * @throws UnexpectedObstacleOnPathException si obstacle sur le chemin
      */
-    public void detectEnemy(boolean front, boolean isTurnOnly, Vec2 aim) throws UnexpectedObstacleOnPathException
+    public void detectEnemyInFrontDisk(boolean front, boolean isTurnOnly, Vec2 aim) throws UnexpectedObstacleOnPathException
     {
         int signe = -1;
         if(front)
@@ -811,6 +822,22 @@ public class Locomotion implements Service
         {
             log.warning("Lancement de UnexpectedObstacleOnPathException dans detectEnemy", this);
             throw new UnexpectedObstacleOnPathException();
+        }
+    }
+    
+
+    /**
+     * Lance une exception si un ennemi se trouve a une distance inférieur a celle spécifiée
+     * @param distance distance jusqu'a un ennemi en mm en dessous de laquelle on doit abandonner le mouvement
+     * @throws UnexpectedObstacleOnPathException si obstacle sur le chemin
+     */
+    public void detectEnemyAtDistance(int distance) throws UnexpectedObstacleOnPathException
+    {
+        if(table.getObstacleManager().distanceToClosestEnemy(highLevelPosition, Direction.Forward) <= distance)
+        {
+        	log.debug("DetectEnemyAtDistance voit un ennemi trop proche pour continuer le déplacement (distance de" + table.getObstacleManager().distanceToClosestEnemy(highLevelPosition, Direction.Forward) +" mm)", this);
+        	immobilise();
+        	throw new UnexpectedObstacleOnPathException();
         }
     }
 

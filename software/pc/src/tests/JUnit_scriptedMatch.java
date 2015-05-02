@@ -132,43 +132,17 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		//////////////////////////////////////////////////////
 		
 		long timeMatchBegin=System.currentTimeMillis();
-
-		//////////////////////////////////////////////////////
-		//	Script de sortie de la zone de départ
-		//////////////////////////////////////////////////////
-		
-		/*
-		System.out.println("Le robot commence le match");
-		try 
-		{
-			// Sortie de la zone de depart
-			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
-			exitScript.execute(0, real_state, emptyHook );
-		}
-		catch (UnableToMoveException | SerialConnexionException e) 
-		{
-			e.printStackTrace();
-		}
-		catch (SerialFinallyException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
 		
 		System.out.println("Debut du match");
-		System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après etre sorti");//On s'attend  (881,1000)
+		System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") en debut de match");
 				
 		//////////////////////////////////////////////////////
-		//	script drop carpet 2
+		//	script drop carpet 2 (sortie de zone de départ + gobelet + tapis)
 		//////////////////////////////////////////////////////
 		
 		try 
 		{
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant les tapis");
-			// On depose les tapis
-			//scriptmanager.getScript(ScriptNames.DROP_CARPET).goToThenExec(0, real_state, emptyHook );
-			// TODO : à revoir
 			// ce script sert désormais également à sortir de la zone de départ!!!
 			scriptmanager.getScript(ScriptNames.DROP_CARPET).execute(2, real_state, emptyHook);
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition()+" après les tapis");

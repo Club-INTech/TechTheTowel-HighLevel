@@ -201,7 +201,7 @@ public class JUnit_Sensors extends JUnit_Test
 		{
 			try
 			{
-				mLocomotion.detectEnemy(true, false, state.robot.getPosition());
+				mLocomotion.detectEnemyInFrontDisk(true, false, state.robot.getPosition());
 			}
 			catch (UnexpectedObstacleOnPathException unexpectedObstacle)
 	        {
@@ -213,7 +213,7 @@ public class JUnit_Sensors extends JUnit_Test
             	{
             		try
             		{
-            			mLocomotion.detectEnemy(true, false, state.robot.getPosition());
+            			mLocomotion.detectEnemyInFrontDisk(true, false, state.robot.getPosition());
             			break;
             		}
             		catch(UnexpectedObstacleOnPathException e2)

@@ -13,7 +13,9 @@ import enums.ActuatorOrder;
 import enums.ObstacleGroups;
 import enums.SensorNames;
 import enums.Speed;
+import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
+import exceptions.Locomotion.UnexpectedObstacleOnPathException;
 
 /**
  * Robot virtuel ne faisant pas bouger le robot réel, mais détermine la durée des actions.
@@ -289,6 +291,14 @@ public class RobotChrono extends Robot
 
 	@Override
 	public void turnWithoutDetection(double angle, ArrayList<Hook> hooks) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void moveTowardEnnemy(int distance, ArrayList<Hook> hooksToConsider)
+			throws UnableToMoveException, BlockedException,
+			UnexpectedObstacleOnPathException {
 		// TODO Auto-generated method stub
 		
 	}
