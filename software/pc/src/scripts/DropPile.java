@@ -112,7 +112,7 @@ public class DropPile extends AbstractScript
 				
 				//mais on se referme
 				//Yamete Kudasai !
-				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, false);
+				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
 				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);
 				
 				//on remet notre membre en position de deplacement
@@ -154,8 +154,8 @@ public class DropPile extends AbstractScript
 				
 			
 				//Puis on finit
-				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, false);
 				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 					
 				//on remet l'ascenceur en position de deplacement

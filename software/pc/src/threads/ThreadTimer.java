@@ -103,7 +103,6 @@ public class ThreadTimer extends AbstractThread
 
 		log.debug("LE MATCH COMMENCE !", this);
 
-
 		// boucle principale, celle qui dure tout le match
 		while(System.currentTimeMillis() - matchStartTimestamp < matchDuration)
 		{
@@ -120,7 +119,6 @@ public class ThreadTimer extends AbstractThread
 			
 			//on rafraichit l'interface graphique, TODO : à enlever
 			window.getPanel().repaint();
-			
 			
 			window.getPanel().drawArrayList(robot.cheminSuivi);
 			
