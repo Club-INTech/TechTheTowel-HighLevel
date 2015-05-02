@@ -76,7 +76,6 @@ public class JUnit_scriptedMatch extends JUnit_Test
 	
 	public void waitMatchBegin()
 	{
-
 		System.out.println("Robot pret pour le match, attente du retrait du jumper");
 		
 		// attends que le jumper soit retiré du robot
@@ -134,7 +133,6 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		long timeMatchBegin=System.currentTimeMillis();
 		
 		System.out.println("Debut du match");
-		System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") en debut de match");
 				
 		//////////////////////////////////////////////////////
 		//	script drop carpet 2 (sortie de zone de départ + gobelet + tapis)
