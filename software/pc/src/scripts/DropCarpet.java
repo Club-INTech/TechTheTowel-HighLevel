@@ -4,7 +4,9 @@ import java.util.ArrayList;
 
 import enums.ActuatorOrder;
 import enums.Speed;
+import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
+import exceptions.Locomotion.UnexpectedObstacleOnPathException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import hook.Callback;
@@ -208,6 +210,7 @@ public class DropCarpet extends AbstractScript
 				
 				//le 3.05 a ete testé de façon experimentale (ainsi que le 850), a modifier si quelqu'un veut le calculer
 				stateToConsider.robot.turn(3.05);
+				//stateToConsider.robot.moveTowardEnnemy(850, hooksToConsider);
 				stateToConsider.robot.moveLengthwise(850, hooksToConsider);
 				stateToConsider.table.removeGlassX(1);
 				

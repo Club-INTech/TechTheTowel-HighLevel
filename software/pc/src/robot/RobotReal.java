@@ -14,7 +14,9 @@ import java.util.ArrayList;
 import enums.ActuatorOrder;
 import enums.SensorNames;
 import enums.Speed;
+import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
+import exceptions.Locomotion.UnexpectedObstacleOnPathException;
 import exceptions.serial.SerialConnexionException;
 
 /**
@@ -99,6 +101,13 @@ public class RobotReal extends Robot
 		mLocomotion.moveLengthwise(distance, hooksToConsider, expectsWallImpact);
 	}	
 	
+	
+
+	@Override
+    public void moveTowardEnnemy(int distance, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, BlockedException, UnexpectedObstacleOnPathException
+	{	
+		mLocomotion.moveTowardEnnemy(distance, hooksToConsider);
+	}	
 	
 	@Override
     public void moveLengthwiseWithoutDetection(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException

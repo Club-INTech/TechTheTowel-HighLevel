@@ -5,6 +5,7 @@ import java.util.EnumSet;
 
 import com.sun.org.apache.xpath.internal.axes.OneStepIterator;
 
+import enums.Direction;
 import enums.ObstacleGroups;
 import pathDingDing.PathDingDing;
 import smartMath.*;
@@ -296,33 +297,33 @@ public class ObstacleManager
     /**
      * retourne la distance à l'ennemi le plus proche (en mm)
      * si l'ennemi le plus proche est tangent à notre robot, ou plus proche, on retourne 0
-     * @param position
+     * @param position la position a laquelle on doit mesurer la proximité des ennemis
      * @return la distance à l'ennemi le plus proche (>= 0)
      */
-    public synchronized int closestEnemy(Vec2 position)
+    public synchronized int distanceToClosestEnemy(Vec2 position, Direction restrictToDirection)
     {
     	//si aucun ennemi n'est détecté, on suppose que l'ennemi le plus proche est à 1m)
     	if(mMobileObstacles.size() == 0)
     		return 1000;
     	
     	int distanceToClosestEnemy = (mMobileObstacles.get(0).position.x - position.x)*(mMobileObstacles.get(0).position.x - position.x)
-    					 + (mMobileObstacles.get(0).position.y - position.y)*(mMobileObstacles.get(0).position.y - position.y)
-    					 - mRobotRadius
-    					 - mMobileObstacles.get(0).radius;
+    					 + (mMobileObstacles.get(0).position.y - position.y)*(mMobileObstacles.get(0).position.y - position.y);
     	
+    	int indexOfClosestEnnemy = 0;
     	for(int i=1; i<mMobileObstacles.size(); i++)
     	{
     		int distanceToEnemy = (mMobileObstacles.get(i).position.x - position.x)*(mMobileObstacles.get(i).position.x - position.x)
-					 			+ (mMobileObstacles.get(i).position.y - position.y)*(mMobileObstacles.get(i).position.y - position.y)
-					 			- mRobotRadius
-					 			- mMobileObstacles.get(i).radius; 
+					 			+ (mMobileObstacles.get(i).position.y - position.y)*(mMobileObstacles.get(i).position.y - position.y); 
     		if(distanceToEnemy < distanceToClosestEnemy)
+    		{
     			distanceToClosestEnemy = distanceToEnemy;
+    			indexOfClosestEnnemy = i;
+    		}
     	}
     	if(distanceToClosestEnemy <= 0)
     		return 0;
-    	return (int)Math.sqrt((double)distanceToClosestEnemy);
-    }  
+    	return (int)Math.sqrt((double)distanceToClosestEnemy) - mRobotRadius - mMobileObstacles.get(indexOfClosestEnnemy).radius;
+    }
 
     /**
      * Change le position d'un robot adverse.
@@ -341,6 +342,7 @@ public class ObstacleManager
     /**
      * Utilis� par le thread de stratégie. (pas implemente : NE PAS UTILISER!!!)
      * renvoie la position du robot ennemi voulu sur la table.
+     * @param ennemyID l'ennemi dont on veut la position
      *
      * @return la position de l'ennemi spécifié
      */
