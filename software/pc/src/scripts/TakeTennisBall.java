@@ -1,8 +1,12 @@
 package scripts;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
 import enums.ActuatorOrder;
+import enums.ObstacleGroups;
+import exceptions.InObstacleException;
+import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
@@ -28,6 +32,27 @@ public class TakeTennisBall extends AbstractScript
 	{
 		super(hookFactory, config, log);
 		versions = new Integer[]{1}; //Une seule version disponible car une seule balle, et une seule entrée
+	}
+	
+	@Override
+	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, boolean shouldRetryIfBlocked, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, InObstacleException
+	{
+		EnumSet<ObstacleGroups> obstacleNotConsidered = EnumSet.noneOf(ObstacleGroups.class);
+		if (versionToExecute == 1)
+		{
+			obstacleNotConsidered.add(ObstacleGroups.ENNEMY_ZONE);
+		}
+		else 
+		{
+			log.debug("version de Script inconnue de TakeTennisBall :"+versionToExecute, this);
+			return;
+		}
+			
+		// va jusqu'au point d'entrée de la version demandée
+		actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.robotRay), hooksToConsider, actualState.table,obstacleNotConsidered);
+		
+		// exécute la version demandée
+		execute(versionToExecute, actualState, hooksToConsider, shouldRetryIfBlocked);
 	}
 	
 	@Override
