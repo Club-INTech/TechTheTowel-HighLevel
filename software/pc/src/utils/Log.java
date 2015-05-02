@@ -2,7 +2,6 @@ package utils;
 
 import java.io.FileWriter;
 import java.io.PrintStream;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -36,9 +35,6 @@ public class Log implements Service
 	
 	/** Vrai s'il faut sauvegarder les logs dans un fichier. */
 	private boolean saveLogs = false;
-	
-	/** Liste des logs rendus muets*/
-	private ArrayList<String> mutedClasses;
 
 	
 	/**
@@ -64,22 +60,8 @@ public class Log implements Service
 			{
 				critical(e, this);
 			}
-		
-		initMutedClassList();
 		debug("Service de log démarré", this);
 	
-	}
-	
-
-	/**
-	 * Initialise la liste des classes rendues muettes sur le log
-	 */
-	private void initMutedClassList()
-	{
-		mutedClasses = new ArrayList<String>();
-		mutedClasses.add("threads.ThreadSensor");
-		mutedClasses.add("table.obstacles.ObstacleManager");
-		mutedClasses.add("strategie.Strategie");
 	}
 		
 	/**
@@ -101,8 +83,7 @@ public class Log implements Service
 	 */
 	public void debug(Object message, Object objet)
 	{
-		if( !mutedClasses.contains(objet.getClass().getName()) )
-			debug(message.toString(), objet);
+		debug(message.toString(), objet);
 	}
 	
 	/**
@@ -113,7 +94,7 @@ public class Log implements Service
 	 */
 	public void debug(String message, Object objet)
 	{
-		if( printLogs && !mutedClasses.contains(objet.getClass().getName()) )
+		if(printLogs)
 			writeToLog(objet.getClass().getName()+": "+message, debugPrefix, System.out);
 	}
 
@@ -125,8 +106,7 @@ public class Log implements Service
 	 */
 	public void warning(Object message, Object objet)
 	{
-		if( !mutedClasses.contains(objet.getClass().getName()) )
-			warning(message.toString(), objet);
+		warning(message.toString(), objet);
 	}
 
 	/**
@@ -148,8 +128,7 @@ public class Log implements Service
 	 */
 	public void critical(Object message, Object objet)
 	{
-		if( !mutedClasses.contains(objet.getClass().getName()) )
-			critical(message.toString(), objet);
+		critical(message.toString(), objet);
 	}
 	
 	/**
@@ -160,14 +139,12 @@ public class Log implements Service
 	 */
 	public void critical(String message, Object objet)
 	{
-		if( !mutedClasses.contains(objet.getClass().getName()) )
-		
-			writeToLog(objet.getClass().getName()+": "+message, criticalPrefix, System.err);
+		writeToLog(objet.getClass().getName()+": "+message, criticalPrefix, System.err);
 	}
 
 	/**
 	 * loggue pour de vrai le massage.
-	 * Après appele de cette méthode, le message été loggué en fonction de la configuration.
+	 * APrès appele de cette méthode, le message été loggué en fonction de la configuration.
 	 *
 	 * @param message message a logguer
 	 * @param prefix le préfixe a rajouter, avant que l'heure ne soit mise

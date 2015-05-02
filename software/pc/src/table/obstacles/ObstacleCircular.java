@@ -50,6 +50,16 @@ public class ObstacleCircular extends Obstacle
 			&&	this.obstacleGroup.compareTo(otherObstacle.obstacleGroup)==0	
 				);
 	}
+	
+	/**
+	 * Verifie si le nom de a == b pour des obstacles circulaires
+	 * @param otherObstacle b
+	 * @return true si nom de a == nom de b
+	 */
+	public boolean equalsGroups(ObstacleGroups obstacleGroup) 
+	{
+		return this.obstacleGroup.compareTo(obstacleGroup)==0;
+	}
 
 	/**
 	 * Copie this dans other, sans modifier this

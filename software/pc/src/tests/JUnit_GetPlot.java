@@ -64,7 +64,7 @@ public class JUnit_GetPlot extends JUnit_Test
 		try 
 		{
 			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
-			exitScript.execute(0, real_state, emptyHook );
+			exitScript.execute(0, real_state, emptyHook, true );
 		} 
 		catch (SerialConnexionException | SerialFinallyException | UnableToMoveException e) 
 		{
@@ -76,7 +76,7 @@ public class JUnit_GetPlot extends JUnit_Test
 		System.out.println("debut du match");
 		try 
 		{
-			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(56, real_state, emptyHook );
+			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(56, real_state, true, emptyHook );
 		}
 		catch (UnableToMoveException | SerialConnexionException e) 
 		{

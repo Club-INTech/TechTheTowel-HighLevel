@@ -200,8 +200,48 @@ public class LocomotionCardWrapper implements Service
 	 */
 	public void setTranslationnalSpeed(int pwmMax) throws SerialConnexionException
 	{
-		// envois a la carte d'asservissement le nouveau maximum du pwm
-		String chaines[] = {"ctv", Integer.toString(pwmMax)};
+		double 	kp,	// valeur du correcteur proportionnel
+				kd; // valeur du correcteur dérivé
+		
+		// échelonne les valeurs des correcteurs en fonction de la nouvelle valeur maximum que peut prenvent prendre les pwm des moteurs
+		if(pwmMax >= 195)
+		{
+			kp = 0.55;
+			kd = 27.0;
+		}
+		else if(pwmMax >= 165)
+		{
+			kp = 0.52;
+			kd = 17.0;
+		}
+		else if(pwmMax >= 145)
+		{
+			kp = 0.52;
+			kd = 17.0;
+		}
+		else if(pwmMax >= 115)
+		{
+			kp = 0.45;
+			kd = 12.0;
+		}
+		else if(pwmMax >= 85)
+		{
+			kp = 0.45;
+			kd = 12.5;
+		}
+		else if(pwmMax >= 55)
+		{
+			kp = 0.5;
+			kd = 4.0;
+		}
+		else
+		{
+			kp = 1.15;
+			kd = 3.0;
+		}
+		
+		// envois a la carte d'asservissement les nouvelles valeurs des correcteurs et le nouveau maximum des pwm en float
+		String chaines[] = {"ctv", Float.toString((float)kp), Float.toString((float)kd), Integer.toString(pwmMax)};
 		locomotionCardSerial.communiquer(chaines, 0);			
 	}
 
@@ -212,8 +252,33 @@ public class LocomotionCardWrapper implements Service
 	 */
 	public void setRotationnalSpeed(int pwmMax) throws SerialConnexionException
 	{
-		// envois a la carte d'asservissement le nouveau maximum du pwm
-		String chaines[] = {"crv", Integer.toString(pwmMax)};
+		double 	kp, // valeur du correcteur proportionnel
+				kd; // valeur du correcteur dérivé
+	
+		// échelonne les valeurs des correcteurs en fonction de la nouvelle valeur maximum que peut prenvent prendre les pwm des moteurs
+		if(pwmMax > 155)
+		{
+			kp = 2.0;
+			kd = 50.0;
+		}
+		else if(pwmMax > 115)
+		{
+			kp = 0.85;
+			kd = 25.0;
+		}
+		else if(pwmMax > 85)
+		{
+			kp = 1.0;
+			kd = 15.0;
+		}
+		else
+		{
+			kp = 2.0;
+			kd = 14.0;
+		}
+
+		// envois a la carte d'asservissement les nouvelles valeurs des correcteurs et le nouveau maximum des pwm
+		String chaines[] = {"crv", Float.toString((float)kp), Float.toString((float)kd), Integer.toString(pwmMax)};
 		locomotionCardSerial.communiquer(chaines, 0);
 	}
 	

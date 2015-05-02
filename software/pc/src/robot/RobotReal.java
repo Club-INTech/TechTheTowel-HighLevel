@@ -120,7 +120,7 @@ public class RobotReal extends Robot
     }
     
     @Override
-    public void turnWithoutDetection(double angle, ArrayList<Hook> hooks) throws UnableToMoveException
+    public void turnWithoutDetection(double angle, ArrayList<Hook> hooks)
     {
     	try
     	{
@@ -128,7 +128,7 @@ public class RobotReal extends Robot
     	}
     	catch (UnableToMoveException e)
     	{
-    		throw e;
+            ;
     	}
     }
     
@@ -158,8 +158,7 @@ public class RobotReal extends Robot
     }
 
     
-    @SuppressWarnings("unchecked")
-	@Override
+    @Override
     public void followPath(ArrayList<Vec2> chemin, ArrayList<Hook> hooks) throws UnableToMoveException
     {
     	cheminSuivi=(ArrayList<Vec2>) chemin.clone();
@@ -168,8 +167,7 @@ public class RobotReal extends Robot
     }
     
 
-    @SuppressWarnings("unchecked")
-	@Override
+    @Override
     protected void followPath(ArrayList<Vec2> chemin, ArrayList<Hook> hooks, DirectionStrategy direction) throws UnableToMoveException
     {
     	cheminSuivi=(ArrayList<Vec2>) chemin.clone();

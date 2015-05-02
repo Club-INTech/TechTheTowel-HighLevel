@@ -99,7 +99,7 @@ public class TakeTennisBall extends AbstractScript
 		}
 		catch(UnableToMoveException | SerialConnexionException e)
 		{
-			finalize(stateToConsider);
+			finalise(stateToConsider);
 			throw e;
 		}
 	}
@@ -133,7 +133,7 @@ public class TakeTennisBall extends AbstractScript
 	}
 	
 	@Override
-	public void finalize(GameState<?> stateToConsider) throws SerialFinallyException 
+	protected void finalise(GameState<?> stateToConsider) throws SerialFinallyException 
 	{
 		try 
 		{

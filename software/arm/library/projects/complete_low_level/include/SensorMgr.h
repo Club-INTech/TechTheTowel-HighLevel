@@ -19,10 +19,10 @@ class SensorMgr : public Singleton<SensorMgr>
 public:
 	SensorMgr();
 
-	int getLeftFrontValue();
-	int getRightFrontValue();
-	int getLeftBackValue();
-	int getRightBackValue();
+	int getLeftFrontValue() const;
+	int getRightFrontValue() const;
+	int getLeftBackValue() const;
+	int getRightBackValue() const;
 	bool isPlotInside() const;
 	bool isLeftGlassInside() const;
 	bool isRightGlassInside() const;

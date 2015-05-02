@@ -475,37 +475,26 @@ public class ObstacleManager
     }
     
     /**
-     * supprime tous les obstacles dont le groupe est celui spécifié
-     * 
-     * @param obstacleGroupToDelete
+     * Enleve le premier element identique dans la liste des fixedObstacle
+     * @param obstacleGroupeToDelete
      */
-    public void removeFixedObstacle(ObstacleGroups obstacleGroupToDelete)
+    public void removeFixedObstacle(ObstacleGroups obstacleGroupeToDelete)
     {
     	for(int i=0; i<mFixedObstacles.size(); i++)
     	{
-    		if( mFixedObstacles.get(i).getObstacleGroup() == obstacleGroupToDelete )
+    		if( mFixedObstacles.get(i).equalsGroups(obstacleGroupeToDelete) )
     		{
 				if(mFixedObstacles.remove(mFixedObstacles.get(i)))
 					return;
 				else 
-					log.debug("Impossible d'enlever l'obstacle "+obstacleGroupToDelete, this);
+					log.debug("Impossible d'enlever l'obstacle "+obstacleGroupeToDelete, this);
     		}
     	}
     }
     
-    /**
-     * supprime les obstacles fixes dans le disque
-     * 
-     * @param position
-     * @param radius
-     */
-    public void removeFixedObstaclesInDisc(Vec2 position, int radius)
+    public void removeFixedObstacle(ObstacleRectangular obstacle)
     {
-    	for(int i=0; i<mFixedObstacles.size(); i++)
-    		if((position.x-mFixedObstacles.get(i).getPosition().x)*(position.x-mFixedObstacles.get(i).getPosition().x)
-    		 + (position.y-mFixedObstacles.get(i).getPosition().y)*(position.y-mFixedObstacles.get(i).getPosition().y)
-    		 <= radius*radius)
-    			mFixedObstacles.remove(mFixedObstacles.get(i));
+	    mFixedObstacles.remove(obstacle);
     }
     
     public void printObstacleFixedList()

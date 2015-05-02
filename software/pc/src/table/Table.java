@@ -65,7 +65,7 @@ public class Table implements Service
 	private boolean isBallTaken;
 	
 	// point de depart du match a modifier a chaque base roulante
-	public static final Vec2 entryPosition = new Vec2 (1099,1000);
+	public static final Vec2 entryPosition = new Vec2 (1500-320-77,1000);
 	//1500 le bout de la table, 320 la taille de la cale et 77 la taille de l'arriere du robot a son centre,1000);
 	
 	
@@ -210,8 +210,7 @@ public class Table implements Service
 		else if(x==7)
 			mObstacleManager.removeFixedObstacle(ObstacleGroups.GREEN_PLOT_7);	
 	
-		// Pourquoi, M. Anderson, Pourquoi !? Pourquoi spammez vous mon log avec du caca ? 
-		//mObstacleManager.printObstacleFixedList();
+		mObstacleManager.printObstacleFixedList();
 
 	}
 	
@@ -277,8 +276,7 @@ public class Table implements Service
 		else if(x==4)
 			mObstacleManager.removeFixedObstacle(ObstacleGroups.GOBLET_4);
 		
-		// Pourquoi, M. Anderson, Pourquoi !? Pourquoi spammez vous mon log avec du caca ? 
-		//mObstacleManager.printObstacleFixedList();
+		mObstacleManager.printObstacleFixedList();
 	}
 	
 	/**
