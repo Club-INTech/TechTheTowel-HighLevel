@@ -288,7 +288,7 @@ public class ObstacleManager
     			 + (discCenter.y-mMobileObstacles.get(i).getPosition().y)*(discCenter.y-mMobileObstacles.get(i).getPosition().y))
     		{
     			log.debug("Disque obstructed avec l'obstacle "+mMobileObstacles.get(i).getPosition()+"de rayon"+mMobileObstacles.get(i).radius, this);
-    			log.debug("Disque en "+discCenter+"de rayon"+radius, this);
+    			log.debug("Disque en "+discCenter+" de rayon "+radius, this);
     			isDiscObstructed=true;
     			
     		}

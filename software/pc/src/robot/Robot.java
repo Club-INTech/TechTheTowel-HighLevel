@@ -395,7 +395,15 @@ public abstract class Robot implements Service
     		obstacleConsidered = EnumSet.noneOf(ObstacleGroups.class);
     	}
     	
-		path = pathDingDing.computePath(getPosition(),aim.toVec2(),obstacleConsidered);
+    	try 
+    	{
+    		path = pathDingDing.computePath(getPosition(),aim.toVec2(),obstacleConsidered);
+    	}
+    	catch (InObstacleException e)
+    	{
+    		log.debug("Probleme en allant en "+aim+" InObstacleException", this);
+    		throw e;
+    	}
 		
     	//retire une distance egale au rayon du cercle au dernier point du chemin (le centre du cercle)
     	
@@ -456,8 +464,19 @@ public abstract class Robot implements Service
     		actualNumberOfTries++;
 			try
 			{
+				ArrayList<Vec2> newPath;
 				// On le recaclule, et on essaye de le suivre 
-				ArrayList<Vec2> newPath = pathDingDing.computePath(getPosition(),aim, EnumSet.of(ObstacleGroups.ENNEMY_ROBOTS));
+				
+				try 
+				{
+					 newPath = pathDingDing.computePath(getPosition(),aim, EnumSet.of(ObstacleGroups.ENNEMY_ROBOTS));
+				}
+				catch (InObstacleException e)
+		    	{
+		    		log.debug("Probleme en allant en "+aim+" InObstacleException", this);
+		    		throw e;
+		    	}
+				
 				log.debug("Nouveau Path recalculé: "+newPath, this);
 				followPath(newPath , hooksToConsider);
 				//on reinitialise actualNumberOfTries puisque le mouvement a reussi

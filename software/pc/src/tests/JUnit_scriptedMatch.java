@@ -56,9 +56,6 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		real_state.robot.updateConfig();
         sensors.updateConfig();
 
-//		container.getService(ServiceNames.THREAD_SENSOR);
-		container.getService(ServiceNames.THREAD_TIMER);
-
 		emptyHook = new ArrayList<Hook> ();  
 		
 		real_state.robot.setPosition(Table.entryPosition);
@@ -124,15 +121,16 @@ public class JUnit_scriptedMatch extends JUnit_Test
 	public void startMatch()
 	{
 		//configColor();
-		container.startAllThreads();
 		waitMatchBegin();
+
 		
 		//////////////////////////////////////////////////////
 		//	Début du match
 		//////////////////////////////////////////////////////
 		
-		long timeMatchBegin=System.currentTimeMillis();
+		container.startAllThreads();
 		
+		long timeMatchBegin=System.currentTimeMillis();
 		System.out.println("Debut du match");
 				
 		//////////////////////////////////////////////////////
