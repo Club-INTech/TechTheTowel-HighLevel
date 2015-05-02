@@ -157,7 +157,8 @@ public class GetPlot extends AbstractScript
 				}
 				if(versionToExecute==0 || versionToExecute==2 )
 				{
-					eatPlot(false, isChoosenArmLeft, stateToConsider, true);
+					// isSecondtry est a true car 2 essais sont inutiles (statistiquement, le 1er fonctionne)
+					eatPlot(true, isChoosenArmLeft, stateToConsider, true);
 					stateToConsider.table.eatPlotX(versionToExecute);
 				}
 

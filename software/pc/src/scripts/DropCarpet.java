@@ -188,7 +188,7 @@ public class DropCarpet extends AbstractScript
 			}
 		}
 		//version 2 du script : débute au point de départ du robot, attrape le gobelet en passant.
-		//Attention : ne doit pas être appelé via goToThenExec
+		//Attention : ne doit pas être appelé via goToThenExec (car l'executions commence dans la zone de départ)
 		else if(versionToExecute == 2)
 		{
 			try

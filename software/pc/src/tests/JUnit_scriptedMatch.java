@@ -125,6 +125,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 	{
 		//configColor();
 		// TODO : container.startInstanciedThreads();
+		container.startAllThreads();
 		waitMatchBegin();
 		//premiere action du match
 		
@@ -161,7 +162,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après etre sorti");//On s'attend  (881,1000)
 				
 		//////////////////////////////////////////////////////
-		//	script drop carpet 0
+		//	script drop carpet 2
 		//////////////////////////////////////////////////////
 		
 		try 

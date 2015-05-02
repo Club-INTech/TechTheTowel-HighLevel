@@ -258,6 +258,9 @@ public class CloseClap extends AbstractScript
 		
 		//on met le robot en vitesse lente
 		stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
+		
+		
+		stateToConsider.robot.turn(Math.PI * 0.75f, null, false);
 				
 		stateToConsider.robot.turn(Math.PI * 0.75, hooksToConsider, false);
 		
