@@ -630,7 +630,7 @@ public class Locomotion implements Service
 			}
 			else
 			{
-				System.out.println("correction en abandon; delta :"+delta);
+				log.debug("correction en abandon; delta :"+delta, this);
 				return;
 			}
 		}
