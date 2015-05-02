@@ -555,7 +555,7 @@ public class Locomotion implements Service
         	// en cas de détection d'ennemi, une exception est levée
         	if(mustDetect)
         		//detectEnemyInFrontDisk(isMovementForward, turnOnly, aim);
-        		detectEnemyAtDistance(85);	// laisse 85mm de large entre notre robot et le robot adverse
+        		detectEnemyAtDistance(85, aim);	// laisse 85mm de large entre notre robot et le robot adverse
         	else 
         		log.debug("Pas de detection demandée", this); 
         	
@@ -729,7 +729,7 @@ public class Locomotion implements Service
                 while(!isMotionEnded()) 
                 {
                 	if(mustDetect)
-                		detectEnemyInFrontDisk(true, true, highLevelPosition);
+                		detectEnemyInDisk(true, true, highLevelPosition);
                 	//TODO : ce sleep ne pose-t-il pas de problèmes?
                     Sleep.sleep(feedbackLoopDelay);
                 }
@@ -799,7 +799,7 @@ public class Locomotion implements Service
      * @param aim 
      * @throws UnexpectedObstacleOnPathException si obstacle sur le chemin
      */
-    public void detectEnemyInFrontDisk(boolean front, boolean isTurnOnly, Vec2 aim) throws UnexpectedObstacleOnPathException
+    public void detectEnemyInDisk(boolean front, boolean isTurnOnly, Vec2 aim) throws UnexpectedObstacleOnPathException
     {
         int signe = -1;
         if(front)
@@ -829,13 +829,16 @@ public class Locomotion implements Service
     /**
      * Lance une exception si un ennemi se trouve a une distance inférieur a celle spécifiée
      * @param distance distance jusqu'a un ennemi en mm en dessous de laquelle on doit abandonner le mouvement
+     * @param movementDirection direction de mouvment du robot
+     * @param isMovementForward vrai si on va en avant et faux si on va en arriere
      * @throws UnexpectedObstacleOnPathException si obstacle sur le chemin
      */
-    public void detectEnemyAtDistance(int distance) throws UnexpectedObstacleOnPathException
+    public void detectEnemyAtDistance(int distance, Vec2 movementDirection) throws UnexpectedObstacleOnPathException
     {
-        if(table.getObstacleManager().distanceToClosestEnemy(highLevelPosition, Direction.Forward) <= distance)
+    	
+        if(table.getObstacleManager().distanceToClosestEnemy(highLevelPosition, movementDirection) <= distance)
         {
-        	log.debug("DetectEnemyAtDistance voit un ennemi trop proche pour continuer le déplacement (distance de" + table.getObstacleManager().distanceToClosestEnemy(highLevelPosition, Direction.Forward) +" mm)", this);
+        	log.debug("DetectEnemyAtDistance voit un ennemi trop proche pour continuer le déplacement (distance de" + table.getObstacleManager().distanceToClosestEnemy(highLevelPosition, movementDirection) +" mm)", this);
         	immobilise();
         	throw new UnexpectedObstacleOnPathException();
         }
