@@ -363,7 +363,7 @@ public class Locomotion implements Service
             	
                 log.critical("Haut : Catch de "+e+" dans moveToPointException", this);
                 
-                if (!headingToWall) // si on s'y attendaiq, on ne faais rien.
+                if (!headingToWall) // si on s'y attendaiq, on ne fais rien.
                 {
 	                if(maxRetriesIfBlocked!=0)
 	                {
@@ -581,7 +581,6 @@ public class Locomotion implements Service
         {
            Vec2 vectorTranslation = aimSymmetrized;
            vectorTranslation.minus( givenPosition );
-           log.debug("Distance to aim : "+vectorTranslation.length(),this);
            if( (  vectorTranslation.length() >  maxLengthCorrectionThreeshold )) 
 	        	moveToPointSerialOrder(aimSymmetrized, givenPosition, angle, distance, mustDetect, turnOnly, isCorrection);
 	        else 
@@ -628,12 +627,10 @@ public class Locomotion implements Service
 			{
 				//on active la correction (on attendra pas d'avoir fini de tourner (le robot) pour reprendre le programme)
 				trajectoire_courbe = true;
-				//FIXME supr
-				System.out.println("correction en cours; angle : "+angle+" pour un delta "+delta);
 			}
 			else
 			{
-				System.out.println("correction en abandon; delta :"+delta);
+				log.debug("correction en abandon; delta :"+delta, this);
 				return;
 			}
 		}
@@ -646,7 +643,7 @@ public class Locomotion implements Service
                 
         		deplacements.turn(angle);  // On ne tourne que si on est assez loin de l'orientation voulu
               
-        		log.debug("Angle corrigé", this);
+//        		log.debug("Angle corrigé", this);
         	}
         	else if(!isCorrection)// Si ca n'est pas  une correction
         	{
@@ -665,6 +662,7 @@ public class Locomotion implements Service
                 {
                 	if(mustDetect)
                 		detectEnemy(true, true, highLevelPosition);
+                	//TODO : ce sleep ne pose-t-il pas de problèmes?
                     Sleep.sleep(feedbackLoopDelay);
                 }
             
@@ -756,14 +754,6 @@ public class Locomotion implements Service
             log.warning("Lancement de UnexpectedObstacleOnPathException dans detectEnemy", this);
             throw new UnexpectedObstacleOnPathException();
         }
-        else
-        {
-        	if(table.getObstacleManager().getMobileObstaclesCount()==0)
-        		log.debug("Pas d'ennemi en memoire", this);
-        	else 
-        		log.debug("Pas d'ennemi vu", this);
-		}
-
     }
 
     /**

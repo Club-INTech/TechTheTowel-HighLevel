@@ -35,28 +35,7 @@ public class TakeTennisBall extends AbstractScript
 	}
 	
 	@Override
-	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, boolean shouldRetryIfBlocked, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, InObstacleException
-	{
-		EnumSet<ObstacleGroups> obstacleNotConsidered = EnumSet.noneOf(ObstacleGroups.class);
-		if (versionToExecute == 1)
-		{
-			obstacleNotConsidered.add(ObstacleGroups.ENNEMY_ZONE);
-		}
-		else 
-		{
-			log.debug("version de Script inconnue de TakeTennisBall :"+versionToExecute, this);
-			return;
-		}
-			
-		// va jusqu'au point d'entrée de la version demandée
-		actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.robotRay), hooksToConsider, actualState.table,obstacleNotConsidered);
-		
-		// exécute la version demandée
-		execute(versionToExecute, actualState, hooksToConsider, shouldRetryIfBlocked);
-	}
-	
-	@Override
-	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider,boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException, SerialFinallyException
+	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, SerialFinallyException
 	{
 		try
 		{
@@ -99,7 +78,7 @@ public class TakeTennisBall extends AbstractScript
 		}
 		catch(UnableToMoveException | SerialConnexionException e)
 		{
-			finalise(stateToConsider);
+			finalize(stateToConsider);
 			throw e;
 		}
 	}
@@ -133,7 +112,7 @@ public class TakeTennisBall extends AbstractScript
 	}
 	
 	@Override
-	protected void finalise(GameState<?> stateToConsider) throws SerialFinallyException 
+	public void finalize(GameState<?> stateToConsider) throws SerialFinallyException 
 	{
 		try 
 		{

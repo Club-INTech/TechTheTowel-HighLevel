@@ -9,15 +9,18 @@ import org.junit.Before;
 import org.junit.After;
 
 import robot.Robot;
+import robot.cardsWrappers.SensorsCardWrapper;
 import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
+import threads.ThreadTimer;
 import utils.Log;
 import utils.Config;
 import container.Container;
 import enums.ActuatorOrder;
 import enums.ObstacleGroups;
 import enums.ServiceNames;
+import enums.Speed;
 import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -56,9 +59,29 @@ public abstract class JUnit_Test
 	 * @param robot le robot a setuper
 	 * @throws SerialConnexionException si l'ordinateur n'arrive pas a communiquer avec les cartes
 	 */
+	
+	public void waitMatchBegin(SensorsCardWrapper sensorsCard, Robot robot)
+	{
+
+		System.out.println("Robot pret pour le match, attente du retrait du jumper");
+		
+		// attends que le jumper soit retiré du robot
+		
+		boolean jumperWasAbsent = sensorsCard.isJumperAbsent();
+		while(jumperWasAbsent || !sensorsCard.isJumperAbsent())
+		{
+			jumperWasAbsent = sensorsCard.isJumperAbsent();
+			 robot.sleep(100);
+		}
+
+		// maintenant que le jumper est retiré, le match a commencé
+		ThreadTimer.matchStarted = true;
+	}
 
 	public void matchSetUp(Robot robot) throws SerialConnexionException
 	{
+		robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+		
 		robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
 
 		robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, false);
@@ -79,6 +102,8 @@ public abstract class JUnit_Test
 		robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 		
 		robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+		
+		robot.setLocomotionSpeed(Speed.BETWEEN_SCRIPTS);
 	}
 	
 	public void setBeginPosition(Robot robot)

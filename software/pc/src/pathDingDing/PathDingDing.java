@@ -101,7 +101,7 @@ public class PathDingDing implements Service
 		//on detache le dernier noeud du graphe
 		mGraph.unlinkNode(endNode);
 		
-		System.out.println("Path trouvé : "+pathVec2 );
+		// System.out.println("Path trouvé : "+pathVec2 );
 		
 		return pathVec2;
 	}
