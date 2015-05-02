@@ -210,7 +210,8 @@ public class Table implements Service
 		else if(x==7)
 			mObstacleManager.removeFixedObstacle(ObstacleGroups.GREEN_PLOT_7);	
 	
-		mObstacleManager.printObstacleFixedList();
+		// Pourquoi, M. Anderson, Pourquoi !? Pourquoi spammez vous mon log avec du caca ? 
+		//mObstacleManager.printObstacleFixedList();
 
 	}
 	
@@ -276,7 +277,8 @@ public class Table implements Service
 		else if(x==4)
 			mObstacleManager.removeFixedObstacle(ObstacleGroups.GOBLET_4);
 		
-		mObstacleManager.printObstacleFixedList();
+		// Pourquoi, M. Anderson, Pourquoi !? Pourquoi spammez vous mon log avec du caca ? 
+		//mObstacleManager.printObstacleFixedList();
 	}
 	
 	/**
