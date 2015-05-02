@@ -242,6 +242,64 @@ public class Locomotion implements Service
 		
 		actualRetriesIfBlocked=0;// on reinitialise
     }
+    
+    /**
+     * Méthode permettant de se déplacer en ligne droite vers un ennemi, même si il est très proche :
+     * ignore le cercle de détection
+     * Doit être appelée avec la vitesse la plus lente possible
+     * 
+     * 
+     * @param distance
+     * @param hooks
+     * @throws UnableToMoveException
+     * @throws BlockedException
+     * @throws UnexpectedObstacleOnPathException si l'on est trop proche de l'ennemi
+     */
+    public void moveTowardEnnemy(int distance, ArrayList<Hook> hooks) throws UnableToMoveException, BlockedException, UnexpectedObstacleOnPathException
+    {    
+    	// FIXME : tester cette méthode avant de l'utiliser
+    	
+    	// si l'on s'approche trop d'un ennemi, on lance une exception du type UnexpectedObstacleOnPathException
+    	int MinDistanceToStop = 100;
+    	
+		updateCurrentPositionAndOrientation();
+
+        log.debug("Avancer de "+Integer.toString(distance) + "vers un ennemi", this);
+        
+        /**
+         * aim est la visée du haut niveau, qui commence toujours à droite
+         */
+        Vec2 aim = new Vec2(); 
+        
+        aim.x = (int) (highLevelPosition.x + distance*Math.cos(highLevelOrientation));
+        aim.y = (int) (highLevelPosition.y + distance*Math.sin(highLevelOrientation));      
+        finalAim = aim;
+		
+        try
+        {
+        	moveToPointSymmetry(aim, distance >= 0, false, false, false);
+        }
+        catch(UnexpectedObstacleOnPathException e)
+        {
+        	log.debug("moveToPointSymmetry a renvoyé une UnexpectedObstacleOnPathException alors que la détection d'obstacle était désactivée", this);
+        }
+        do 
+        {
+            updateCurrentPositionAndOrientation();
+            
+            // si l'ennemi le plus proche est trop proche
+            if(table.getObstacleManager().closestEnemy(highLevelPosition) <= MinDistanceToStop)
+            	throw new UnexpectedObstacleOnPathException();
+
+            //on evalue les hooks (non null !)
+            if(hooks != null)
+	            for(Hook hook : hooks)
+	                hook.evaluate();
+        } 
+        while(!isMotionEnded());
+		
+		actualRetriesIfBlocked=0;// on reinitialise
+    }
         
     /**
      * Suit un chemin en ligne brisee
