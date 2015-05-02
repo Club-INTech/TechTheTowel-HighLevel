@@ -296,33 +296,37 @@ public class ObstacleManager
 
     /**
      * retourne la distance à l'ennemi le plus proche (en mm)
+     * Les ennemis ne sont pris en compte que si ils sont dans la direstion donnée, a 90° près
      * si l'ennemi le plus proche est tangent à notre robot, ou plus proche, on retourne 0
      * @param position la position a laquelle on doit mesurer la proximité des ennemis
+     * @param direction direction selon laquelle on doit prendre en compte les ennemis
      * @return la distance à l'ennemi le plus proche (>= 0)
      */
-    public synchronized int distanceToClosestEnemy(Vec2 position, Direction restrictToDirection)
+    public synchronized int distanceToClosestEnemy(Vec2 position, Vec2 direction)
     {
     	//si aucun ennemi n'est détecté, on suppose que l'ennemi le plus proche est à 1m)
     	if(mMobileObstacles.size() == 0)
     		return 1000;
     	
-    	int distanceToClosestEnemy = (mMobileObstacles.get(0).position.x - position.x)*(mMobileObstacles.get(0).position.x - position.x)
-    					 + (mMobileObstacles.get(0).position.y - position.y)*(mMobileObstacles.get(0).position.y - position.y);
+    	int squaredDistanceToClosestEnemy = 10000000;
     	
     	int indexOfClosestEnnemy = 0;
-    	for(int i=1; i<mMobileObstacles.size(); i++)
+    	for(int i=0; i<mMobileObstacles.size(); i++)
     	{
-    		int distanceToEnemy = (mMobileObstacles.get(i).position.x - position.x)*(mMobileObstacles.get(i).position.x - position.x)
-					 			+ (mMobileObstacles.get(i).position.y - position.y)*(mMobileObstacles.get(i).position.y - position.y); 
-    		if(distanceToEnemy < distanceToClosestEnemy)
+    		Vec2 ennemyRelativeCoords = new Vec2((mMobileObstacles.get(i).position.x - position.x), mMobileObstacles.get(i).position.y - position.y);
+    		if(direction.dot(ennemyRelativeCoords) > 0)
     		{
-    			distanceToClosestEnemy = distanceToEnemy;
-    			indexOfClosestEnnemy = i;
+	    		int squaredDistanceToEnemy = ennemyRelativeCoords.squaredLength(); 
+	    		if(squaredDistanceToEnemy < squaredDistanceToClosestEnemy)
+	    		{
+	    			squaredDistanceToClosestEnemy = squaredDistanceToEnemy;
+	    			indexOfClosestEnnemy = i;
+	    		}
     		}
     	}
-    	if(distanceToClosestEnemy <= 0)
+    	if(squaredDistanceToClosestEnemy <= 0)
     		return 0;
-    	return (int)Math.sqrt((double)distanceToClosestEnemy) - mRobotRadius - mMobileObstacles.get(indexOfClosestEnnemy).radius;
+    	return (int)Math.sqrt((double)squaredDistanceToClosestEnemy) - mRobotRadius - mMobileObstacles.get(indexOfClosestEnnemy).radius;
     }
 
     /**
