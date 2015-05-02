@@ -401,7 +401,7 @@ public abstract class Robot implements Service
     	}
     	catch (InObstacleException e)
     	{
-    		log.debug("Probleme en allant en "+aim+" InObstacleException", this);
+    		log.debug("Probleme en allant en "+aim.toVec2()+" InObstacleException", this);
     		throw e;
     	}
 		

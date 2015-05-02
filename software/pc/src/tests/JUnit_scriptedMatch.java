@@ -121,6 +121,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 	public void startMatch()
 	{
 		//configColor();
+		container.startAllThreads();
 		waitMatchBegin();
 
 		
@@ -128,7 +129,6 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		//	Début du match
 		//////////////////////////////////////////////////////
 		
-		container.startAllThreads();
 		
 		long timeMatchBegin=System.currentTimeMillis();
 		System.out.println("Debut du match");
@@ -142,7 +142,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant les tapis");
 			// ce script sert désormais également à sortir de la zone de départ!!!
 			scriptmanager.getScript(ScriptNames.DROP_CARPET).execute(2, real_state, emptyHook);
-			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition()+" après les tapis");
+			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après les tapis");
 		}
 		catch (UnableToMoveException | SerialConnexionException | SerialFinallyException e) 
 		{

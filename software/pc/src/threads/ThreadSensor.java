@@ -169,7 +169,6 @@ class ThreadSensor extends AbstractThread
 		log.debug("Lancement du thread de capteurs", this);
 		updateConfig();
 		
-		
 		// boucle d'attente de début de match
 		while(!ThreadTimer.matchStarted)
 		{
@@ -180,7 +179,6 @@ class ThreadSensor extends AbstractThread
 			}
 			Sleep.sleep(50);
 		}
-		
 		
 		// boucle principale, celle qui dure tout le match
 		log.debug("Activation des capteurs", this);

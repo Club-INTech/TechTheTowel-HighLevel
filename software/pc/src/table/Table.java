@@ -36,13 +36,13 @@ public class Table implements Service
 	private Config config;
 	
 	//claps fermés ou non
-	private boolean isClap1Closed;
-	private boolean isClap2Closed;
-	private boolean isClap3Closed;
+	private boolean isClap1Closed=false;
+	private boolean isClap2Closed=false;
+	private boolean isClap3Closed=false;
 
 	//tapis posés ou non
-	private boolean isLeftCarpetDropped;
-	private boolean isRightCarpetDropped;
+	private boolean isLeftCarpetDropped=false;
+	private boolean isRightCarpetDropped=false;
 	
 	/**
 	 * le nombre de points que valent les piles posées dans la zone de depart (0) ou sur l'estrade (1)
