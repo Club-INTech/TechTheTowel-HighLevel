@@ -16,6 +16,7 @@ import table.Table;
 import threads.ThreadTimer;
 import utils.Log;
 import utils.Config;
+import utils.Sleep;
 import container.Container;
 import enums.ActuatorOrder;
 import enums.ObstacleGroups;
@@ -59,6 +60,8 @@ public abstract class JUnit_Test
 	 * @param robot le robot a setuper
 	 * @throws SerialConnexionException si l'ordinateur n'arrive pas a communiquer avec les cartes
 	 */
+	
+
 	
 	public void waitMatchBegin(SensorsCardWrapper sensorsCard, Robot robot)
 	{
@@ -106,6 +109,18 @@ public abstract class JUnit_Test
 		robot.setLocomotionSpeed(Speed.BETWEEN_SCRIPTS);
 	}
 	
+	public void putTennisBall(Robot robot) throws SerialConnexionException
+	{
+		robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+		robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
+		
+		log.debug("Veuillez mettre la Balle de Tennis", this);
+		Sleep.sleep(3000);
+		
+		robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+		robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+	}
+
 	public void setBeginPosition(Robot robot)
 	{
 		robot.setPosition(Table.entryPosition);

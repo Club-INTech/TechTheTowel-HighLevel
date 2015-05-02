@@ -236,8 +236,10 @@ public class ObstacleManager
       */
     public synchronized void addObstacle(final Vec2 position, final int radius)
     {
-    	//si la position est dans la table on continue les tests
-    	if (position.x>-1500-radius && position.x<1500+radius && position.y>0-radius && position.y<2000+radius)
+    	//si la position est dans la table on continue les tests 
+    	// si la position est dans notre zone de depart, ca ne peut etre qu'une main 
+    	if (position.x>-1500-radius && position.x<1500+radius && position.y>0-radius && position.y<2000+radius
+    		&& !(position.x>1200 && position.y<1200 && position.y>800))
     	{
     		/*on ne test pas si la position est dans un obstcle deja existant 
     		 *on ne detecte pas les plots ni les goblets (et si on les detectes on prefere ne pas prendre le risque et on les evites)
@@ -326,6 +328,8 @@ public class ObstacleManager
     	}
     	if(squaredDistanceToClosestEnemy <= 0)
     		return 0;
+    	
+		log.debug("Position de l'ennemi le plus proche proche d'après distanceToClosestEnnemy: "+mMobileObstacles.get(indexOfClosestEnnemy).getPosition(), this);
     	return (int)Math.sqrt((double)squaredDistanceToClosestEnemy) - mRobotRadius - mMobileObstacles.get(indexOfClosestEnnemy).radius;
     }
 

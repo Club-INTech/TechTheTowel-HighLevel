@@ -265,7 +265,7 @@ public class Locomotion implements Service
     	
 		updateCurrentPositionAndOrientation();
 
-        log.debug("Avancer de "+Integer.toString(distance) + "vers un ennemi", this);
+        log.debug("Avancer de "+Integer.toString(distance) + " vers un ennemi", this);
         
         /**
          * aim est la visée du haut niveau, qui commence toujours à droite
@@ -290,9 +290,9 @@ public class Locomotion implements Service
         {
             updateCurrentPositionAndOrientation();
 
-        	log.debug("table.getObstacleManager().distanceToClosestEnemy(highLevelPosition) :" + table.getObstacleManager().distanceToClosestEnemy(highLevelPosition) , this);
+        	log.debug("table.getObstacleManager().distanceToClosestEnemy(highLevelPosition) : " + table.getObstacleManager().distanceToClosestEnemy(highLevelPosition, aim) , this);
             // si l'ennemi le plus proche est trop proche
-            if(table.getObstacleManager().distanceToClosestEnemy(highLevelPosition) <= MinDistanceToStop)
+            if(table.getObstacleManager().distanceToClosestEnemy(highLevelPosition, aim) <= MinDistanceToStop)
             {
             	log.debug("moveTowardEnnemy voit que l'ennemei est trop proche", this);
             	immobilise();
@@ -838,7 +838,7 @@ public class Locomotion implements Service
     	
         if(table.getObstacleManager().distanceToClosestEnemy(highLevelPosition, movementDirection) <= distance)
         {
-        	log.debug("DetectEnemyAtDistance voit un ennemi trop proche pour continuer le déplacement (distance de" + table.getObstacleManager().distanceToClosestEnemy(highLevelPosition, movementDirection) +" mm)", this);
+        	log.debug("DetectEnemyAtDistance voit un ennemi trop proche pour continuer le déplacement (distance de " + table.getObstacleManager().distanceToClosestEnemy(highLevelPosition, movementDirection) +" mm)", this);
         	immobilise();
         	throw new UnexpectedObstacleOnPathException();
         }

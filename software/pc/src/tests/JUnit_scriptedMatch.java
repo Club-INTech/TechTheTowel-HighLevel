@@ -67,6 +67,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		try 
 		{
 			matchSetUp(real_state.robot);
+			putTennisBall(real_state.robot);
 		} 
 		catch (SerialConnexionException e) 
 		{

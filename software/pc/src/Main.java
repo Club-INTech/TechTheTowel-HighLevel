@@ -250,7 +250,7 @@ public class Main
 	 */
 	private static void testSensors(Locomotion mLocomotion) throws UnexpectedObstacleOnPathException 
 	{
-		mLocomotion.detectEnemy(true, false, new Vec2 (0,0));
+		mLocomotion.detectEnemyInDisk(true, false, new Vec2 (0,0));
 	}
 
 	/**
