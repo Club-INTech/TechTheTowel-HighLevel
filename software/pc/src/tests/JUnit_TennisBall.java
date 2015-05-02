@@ -119,7 +119,7 @@ public class JUnit_TennisBall extends JUnit_Test
 		try 
 		{
 			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
-			exitScript.execute(0, real_state, emptyHook, true );
+			exitScript.execute(0, real_state, emptyHook );
 		} 
 		catch (SerialConnexionException  e) 
 		{
@@ -139,7 +139,7 @@ public class JUnit_TennisBall extends JUnit_Test
 		//premier script
 		try 
 		{
-			scriptmanager.getScript(ScriptNames.TAKE_TENNIS_BALL).goToThenExec(1, real_state, true, emptyHook );
+			scriptmanager.getScript(ScriptNames.TAKE_TENNIS_BALL).goToThenExec(1, real_state, emptyHook );
 		}
 		catch (UnableToMoveException | SerialConnexionException e) 
 		{
@@ -171,7 +171,7 @@ public class JUnit_TennisBall extends JUnit_Test
 		try
 		{
 			//real_state.robot.moveLengthwise(-450,emptyHook);
-			scriptmanager.getScript(ScriptNames.TAKE_TENNIS_BALL).execute(1, real_state, emptyHook, true );
+			scriptmanager.getScript(ScriptNames.TAKE_TENNIS_BALL).execute(1, real_state, emptyHook );
 		} 
 		catch (UnableToMoveException | SerialConnexionException e) 
 		{

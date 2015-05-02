@@ -22,7 +22,7 @@ SensorMgr::SensorMgr():
 	rightBackUS()
 {
 	lastRefreshTime = 0;
-	refreshDelay = 25;//(ms)
+	refreshDelay = 13;//(ms)
 
 	/* Set variables used */
 	GPIO_InitTypeDef GPIO_InitStruct;
@@ -325,19 +325,19 @@ void SensorMgr::leftBackUSInterrupt(){
  * Fonctions de récupération de la distance mesurée
  */
 
-int SensorMgr::getRightFrontValue() const{
+int SensorMgr::getRightFrontValue() {
 	return rightFrontUS.value();
 }
 
-int SensorMgr::getLeftFrontValue() const{
+int SensorMgr::getLeftFrontValue() {
 	return leftFrontUS.value();
 }
 
-int SensorMgr::getRightBackValue() const{
+int SensorMgr::getRightBackValue() {
 	return rightBackUS.value();
 }
 
-int SensorMgr::getLeftBackValue() const{
+int SensorMgr::getLeftBackValue() {
 	return leftBackUS.value();
 }
 

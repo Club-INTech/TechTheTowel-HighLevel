@@ -43,7 +43,7 @@ public class GetPlot extends AbstractScript
 	}
 	
 	@Override
-	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, boolean shouldRetryIfBlocked, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, InObstacleException
+	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, InObstacleException
 	{
 		EnumSet<ObstacleGroups> obstacleNotConsidered = EnumSet.noneOf(ObstacleGroups.class);
 		if (versionToExecute == 0)
@@ -113,11 +113,11 @@ public class GetPlot extends AbstractScript
 		actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.robotRay), hooksToConsider, actualState.table,obstacleNotConsidered);
 		
 		// exécute la version demandée
-		execute(versionToExecute, actualState, hooksToConsider, shouldRetryIfBlocked);
+		execute(versionToExecute, actualState, hooksToConsider);
 	}
 	
 	@Override
-	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider, boolean shouldRetryIfBlocked) throws UnableToMoveException, SerialConnexionException, SerialFinallyException
+	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, SerialFinallyException
 	{
 		//version circulaire
 		if (versionToExecute == 0 || versionToExecute == 1 || versionToExecute == 2 || versionToExecute == 7)
@@ -157,7 +157,8 @@ public class GetPlot extends AbstractScript
 				}
 				if(versionToExecute==0 || versionToExecute==2 )
 				{
-					eatPlot(false, isChoosenArmLeft, stateToConsider, true);
+					// isSecondtry est a true car 2 essais sont inutiles (statistiquement, le 1er fonctionne)
+					eatPlot(true, isChoosenArmLeft, stateToConsider, true);
 					stateToConsider.table.eatPlotX(versionToExecute);
 				}
 
@@ -177,7 +178,7 @@ public class GetPlot extends AbstractScript
 				//on a pas reussi a manger, on le dit et on termine le script
 				stateToConsider.table.eatPlotX(versionToExecute);
 				log.debug("impossible de manger le plot n°"+versionToExecute+" mangeage echoue", this);
-				finalise(stateToConsider);
+				finalize(stateToConsider);
 				return;
 			}			
 		}
@@ -193,9 +194,9 @@ public class GetPlot extends AbstractScript
 				if (!stateToConsider.robot.isGlassStoredLeft)
 				{
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);					
-					stateToConsider.robot.moveLengthwise(140, hooksToConsider);
+					stateToConsider.robot.moveLengthwise(120, hooksToConsider);
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
-					stateToConsider.robot.moveLengthwise(180, hooksToConsider);
+					stateToConsider.robot.moveLengthwise(190, hooksToConsider);
 					stateToConsider.robot.isGlassStoredLeft = true;
 				}
 				else if(!stateToConsider.robot.isGlassStoredRight)
@@ -224,7 +225,7 @@ public class GetPlot extends AbstractScript
 				}
 				catch (UnableToEatPlot e) 
 				{
-					finalise(stateToConsider);
+					finalize(stateToConsider);
 					stateToConsider.robot.moveLengthwise(-150, hooksToConsider);
 					return;
 				}
@@ -237,7 +238,7 @@ public class GetPlot extends AbstractScript
 				}
 				catch (UnableToEatPlot e) 
 				{
-					finalise(stateToConsider);
+					finalize(stateToConsider);
 					stateToConsider.robot.moveLengthwise(-150, hooksToConsider);
 					return;
 				}
@@ -261,7 +262,7 @@ public class GetPlot extends AbstractScript
 					} 
 					catch (UnableToEatPlot e1) 
 					{
-						finalise(stateToConsider);
+						finalize(stateToConsider);
 						e1.printStackTrace();
 					}
 					
@@ -273,7 +274,7 @@ public class GetPlot extends AbstractScript
 					} 
 					catch (UnableToEatPlot e) 
 					{
-						finalise(stateToConsider);
+						finalize(stateToConsider);
 						e.printStackTrace();
 					}
 				}
@@ -291,7 +292,7 @@ public class GetPlot extends AbstractScript
 					} 
 					catch (UnableToEatPlot e) 
 					{
-						finalise(stateToConsider);
+						finalize(stateToConsider);
 						e.printStackTrace();
 					}
 				}
@@ -357,7 +358,7 @@ public class GetPlot extends AbstractScript
 	}
 
 	@Override
-	protected void finalise(GameState<?> stateToConsider) throws SerialFinallyException 
+	public void finalize(GameState<?> stateToConsider) throws SerialFinallyException 
 	{
 		try 
 		{

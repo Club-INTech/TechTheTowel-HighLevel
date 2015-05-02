@@ -47,7 +47,7 @@ public class DropGlass extends AbstractScript
 	}
 
 	@Override
-	public void execute(int version, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider,boolean shouldRetryIfBlocke) throws UnableToMoveException, SerialConnexionException, SerialFinallyException
+	public void execute(int version, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, SerialFinallyException
 	{
 		try
 		{
@@ -143,7 +143,7 @@ public class DropGlass extends AbstractScript
 		}
 		catch(UnableToMoveException | SerialConnexionException e)
 		{
-			finalise(stateToConsider);
+			finalize(stateToConsider);
 			throw e;
 		}
 		
@@ -190,7 +190,7 @@ public class DropGlass extends AbstractScript
 	}
 
 	@Override
-	protected void finalise(GameState<?> stateToConsider) throws SerialFinallyException
+	public void finalize(GameState<?> stateToConsider) throws SerialFinallyException
 	{
 		try 
 		{

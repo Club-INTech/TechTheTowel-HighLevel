@@ -3,7 +3,6 @@ package strategie;
 import hook.Hook;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 
 import pathDingDing.PathDingDing;
 import container.Container;
@@ -119,7 +118,7 @@ public class Strategie implements Service
 		GameState<Robot> gameState = new GameState<Robot>(config, log, table, robotReal);
 		try 
 		{
-			scriptmanager.getScript(ScriptNames.EXIT_START_ZONE).execute(0, gameState, hookRobot, true);
+			scriptmanager.getScript(ScriptNames.EXIT_START_ZONE).execute(0, gameState, hookRobot);
 		} 
 		catch (UnableToMoveException | SerialConnexionException | SerialFinallyException e1) 
 		{
@@ -129,35 +128,105 @@ public class Strategie implements Service
 			return;
 		}
 		
-		//TODO mettre le script du match en entier et en cas d'exeption lancer takeDecision
-		
-		
-		//tant que le match n'est pas fini, on prend des decisions :
-		while(realGameState.timeEllapsed   <  Integer.parseInt(config.getProperty("temps_match")))
+		try 
 		{
-			log.debug("======choix script======", this);
-			System.out.println();
-			
-			updateConfig();
-			takeDecision();
-			
-			log.debug("script choisit :"+nextScript.getClass().getName(), this);
-			log.debug("version :"+nextScriptVersion, this);
-			
-			try 
+			scriptedMatch(gameState);
+		} 
+		catch (PathNotFoundException | InObstacleException| UnableToMoveException e1) 
+		{
+					
+			//tant que le match n'est pas fini, on prend des decisions :
+			while(realGameState.timeEllapsed   <  Integer.parseInt(config.getProperty("temps_match")))
 			{
-				nextScript.goToThenExec(nextScriptVersion, gameState, true, hookRobot);
-			} 
-			catch (UnableToMoveException | SerialConnexionException
-					| PathNotFoundException | SerialFinallyException | InObstacleException e) 
-			{
-				// FIXME choix de l'IA face a un imprevu
-				e.printStackTrace();
+				log.debug("======choix script======", this);
+				System.out.println();
+				
+				updateConfig();
+				takeDecision();
+				
+				log.debug("script choisit :"+nextScript.getClass().getName(), this);
+				log.debug("version :"+nextScriptVersion, this);
+				
+				try 
+				{
+					nextScript.goToThenExec(nextScriptVersion, gameState, hookRobot);
+				} 
+				catch (UnableToMoveException | SerialConnexionException
+						| PathNotFoundException | SerialFinallyException | InObstacleException e) 
+				{
+					// FIXME choix de l'IA face a un imprevu
+					e.printStackTrace();
+				}
 			}
 		}
 	}
 	
 	
+	private void scriptedMatch(GameState<Robot> gameState) throws PathNotFoundException, InObstacleException, UnableToMoveException 
+	{
+		//FIXME ajouter les scripts ainsi que leur version au match scripté
+		ArrayList<AbstractScript> scriptArray = new ArrayList<AbstractScript>();
+		ArrayList<Integer> versionArray = new ArrayList<Integer>();
+
+		
+		scriptArray.add(scriptmanager.getScript(ScriptNames.DROP_CARPET));
+		versionArray.add(1);
+		
+		scriptArray.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
+		versionArray.add(2);
+		
+		scriptArray.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
+		versionArray.add(34);
+		
+		scriptArray.add(scriptmanager.getScript(ScriptNames.CLOSE_CLAP));
+		versionArray.add(-12);
+		
+		scriptArray.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
+		versionArray.add(1);
+		
+		scriptArray.add(scriptmanager.getScript(ScriptNames.FREE_STACK));
+		versionArray.add(0);
+		
+		
+		while(!scriptArray.isEmpty())
+		{
+			try 
+			{
+				scriptArray.get(0).goToThenExec(versionArray.get(0), gameState, hookRobot);
+				scriptArray.remove(0);
+				versionArray.remove(0);
+			}
+			catch (IndexOutOfBoundsException e)
+			{
+				log.debug("out of bound, IA's scripted match", this);
+				return;
+			}
+			catch (SerialConnexionException | SerialFinallyException e) 
+			{
+				while (true)
+				{
+					//on attends 3 secondes pour (re)tenter un finalise
+					gameState.robot.sleep(3000);
+					try 
+					{
+						scriptArray.get(0).finalize(gameState);
+					} 
+					catch (IndexOutOfBoundsException e1)
+					{
+						log.debug("out of bound, IA's scripted match", this);
+						//on ajoute le script de depart pour lancer son finalize (puisqu'il n'y avait pas de script prevu apres c'est pas grave)
+						scriptArray.add(scriptmanager.getScript(ScriptNames.EXIT_START_ZONE));
+					}
+					catch (SerialFinallyException e1)
+					{
+						log.critical("enchainement de SerialFinallyException", this);
+					}
+				}
+			}
+		}
+		
+	}
+
 	/** Fonction principale : prend une decision en prenant tout en compte */
 	private void takeDecision()
 	{
@@ -205,7 +274,7 @@ public class Strategie implements Service
 		robotChrono.resetChrono();
 		try 
 		{
-			script.goToThenExec(version, chronoState, true, hookRobot);
+			script.goToThenExec(version, chronoState, hookRobot);
 			durationScript = robotChrono.getCurrentChrono();
 		} 
 		catch (UnableToMoveException | SerialConnexionException
@@ -221,7 +290,7 @@ public class Strategie implements Service
 				try 
 				{
 					robotChrono.resetChrono();
-					script.goToThenExec(version, chronoState, true, hookRobot,e.getObstacleGroup());
+					script.goToThenExec(version, chronoState, hookRobot, e.getObstacleGroup());
 					durationScript = robotChrono.getCurrentChrono();
 				}
 				catch (UnableToMoveException | SerialConnexionException
