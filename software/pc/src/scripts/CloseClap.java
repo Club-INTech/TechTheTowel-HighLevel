@@ -12,6 +12,8 @@ import hook.Callback;
 import hook.Hook;
 import hook.methods.OpenClapLeftHighExe;
 import hook.methods.OpenClapLeftMiddleExe;
+import hook.methods.OpenClapRightHighExe;
+import hook.methods.OpenClapRightMiddleExe;
 import hook.types.HookFactory;
 import robot.Robot;
 import smartMath.Circle;
@@ -214,6 +216,8 @@ public class CloseClap extends AbstractScript
 	
 	public void closeFirstAndSecondClap (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException
 	{
+		//FIXME : gérer la symétrie
+		
 		//on met le robot en vitesse lente
 		stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
 		
@@ -221,52 +225,41 @@ public class CloseClap extends AbstractScript
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
 		
 		//on commence en (1295,230), on se tourne dans le bon sens
-		stateToConsider.robot.turn(Math.PI, hooksToConsider, false);
+		//stateToConsider.robot.moveLengthwise(80, hooksToConsider, false);
 		
-		//on recule pour se mettre en (1350,230)
-		stateToConsider.robot.moveLengthwise(-80, hooksToConsider, true);
+		stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
+		
+		stateToConsider.robot.turn(0, hooksToConsider, false);
 		
 		//ajout de hooks
 		Hook hook1 = hookFactory.newHookXisLesser(1250, 10);
 		Hook hook2 = hookFactory.newHookXisLesser(1000, 10);
 		
 		// ajoute un callback au hook de position qui ouvre / ferme le bras
-		hook1.addCallback(	new Callback(new OpenClapLeftHighExe(),true, stateToConsider)	);
-		hook2.addCallback(	new Callback(new OpenClapLeftMiddleExe(),true, stateToConsider)	);
+		hook1.addCallback(	new Callback(new OpenClapRightHighExe(),true, stateToConsider)	);
+		hook2.addCallback(	new Callback(new OpenClapRightMiddleExe(),true, stateToConsider)	);
 		
 		// ajoute le hook a la liste a passer a la locomotion
 		hooksToConsider.add(hook1);
 		hooksToConsider.add(hook2);
-	
-		//On ouvre le bras puis on avance de 300mm pour se retrouver en (1050,231)
-		if(stateToConsider.robot.getSymmetry())
-		{
-			//Coté jaune
-			stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
-		}
-		else //coté vert
-		{
-			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
-		}
 		
 		//on met le robot en vitesse moyenne
 		stateToConsider.robot.setLocomotionSpeed(Speed.BETWEEN_SCRIPTS_SLOW);
 		
-		stateToConsider.robot.moveLengthwise(700, hooksToConsider, false);
+		stateToConsider.robot.moveLengthwise(-400, hooksToConsider, false);
 		stateToConsider.table.clapXClosed(1);
 		stateToConsider.table.clapXClosed(2);
 		
 		//on met le robot en vitesse lente
 		stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
-		
-		
-		stateToConsider.robot.turn(Math.PI * 0.75f, null, false);
 				
-		stateToConsider.robot.turn(Math.PI * 0.75, hooksToConsider, false);
+		stateToConsider.robot.turn(-Math.PI * 0.5, hooksToConsider, false);
 		
 		//On ferme tout pour finir
 		stateToConsider.robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
 		stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
+		
+		stateToConsider.robot.moveLengthwise(-80, hooksToConsider, false);
 	}
 	
 	public void closeAllOurClaps(GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException  //Ferme tous les Claps, depuis le  debut

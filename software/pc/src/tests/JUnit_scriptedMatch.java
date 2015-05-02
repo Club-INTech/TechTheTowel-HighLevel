@@ -124,10 +124,8 @@ public class JUnit_scriptedMatch extends JUnit_Test
 	public void startMatch()
 	{
 		//configColor();
-		// TODO : container.startInstanciedThreads();
 		container.startAllThreads();
 		waitMatchBegin();
-		//premiere action du match
 		
 		//////////////////////////////////////////////////////
 		//	Début du match
