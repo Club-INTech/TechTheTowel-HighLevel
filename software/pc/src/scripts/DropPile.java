@@ -86,9 +86,12 @@ public class DropPile extends AbstractScript
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
 				stateToConsider.robot.moveLengthwise(20, hooksToConsider, true);//On peux avancer bien pluss avec la machoire ouverte
 
-
+				
 				stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_GUIDE, false);
 				stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_GUIDE, true);
+				
+
+				Sleep.sleep(700);	// attente pour que la pile retrouve son équilibre
 				
 				//puis beaucoup
 				//Ya... Yamete  ! #O_o#
@@ -134,14 +137,11 @@ public class DropPile extends AbstractScript
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
 				//on ouvre le guide un peu
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
-				
-
-				Sleep.sleep(500);	// 1000ms d'attente pour que la pile retrouve son équilibre
-				
+								
 				stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_GUIDE, false);
 				stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_GUIDE, true);
 				
-				Sleep.sleep(500);	// 1000ms d'attente pour que la pile retrouve son équilibre
+				Sleep.sleep(700);	// attente pour que la pile retrouve son équilibre
 				
 				//puis beaucoup
 				stateToConsider.robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, false);

@@ -37,7 +37,10 @@ public class PathDingDing implements Service
 	 * methode a appeler, avec la liste des obstacles � considerer
 	 * @param start le point de depart
 	 * @param end le point d'arrivee
+	 * @param obstaclesToConsider 
 	 * @return un chemin optimise liant depart et arrivee
+	 * @throws PathNotFoundException 
+	 * @throws InObstacleException 
 	 * @throws Exception pas encore implemente
 	 */
 	public ArrayList<Vec2> computePath(Vec2 start, Vec2 end, EnumSet<ObstacleGroups> obstaclesToConsider) throws PathNotFoundException, InObstacleException
