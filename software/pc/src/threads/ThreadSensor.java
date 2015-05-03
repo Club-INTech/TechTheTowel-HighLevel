@@ -214,11 +214,6 @@ class ThreadSensor extends AbstractThread
 				addObstacleBack(distanceBack);
 				
 			}
-				
-			
-			log.debug("Distance selon ultrasons avant : "+distanceFront[0]+";"+distanceFront[1], this); 
-			log.debug("Distance selon ultrasons arriere: "+distanceBack[0]+";"+distanceBack[1], this);
-			
 			if (distanceFront[1] > 0 && distanceFront[1] < 70 || distanceFront[0] > 0 && distanceFront[0] < 70)
 				log.debug("obstacle detecte a moins de 7 cm en avant !", this);
 			if (distanceBack[1] > 0 && distanceBack[1] < 70 || distanceBack[0] > 0 && distanceBack[0] < 70)
@@ -290,6 +285,9 @@ class ThreadSensor extends AbstractThread
 				positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
 				
 				mTable.getObstacleManager().addObstacle(positionEnnemi_1);
+	    		log.debug("Valeur des capteurs brute : "+realSensorValuesFront[0]+";"+realSensorValuesFront[1], this);
+	    		log.debug("Ennemi avant ajouté en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
+
 				
 				obstacleAddedLeft=true;
 				
@@ -305,6 +303,9 @@ class ThreadSensor extends AbstractThread
 				positionEnnemi_2=changeReference(relativePosEnnemi2, positionRobot, orientation );
 				
 				mTable.getObstacleManager().addObstacle(positionEnnemi_2);
+	    		log.debug("Valeur des capteurs brute : "+realSensorValuesFront[0]+";"+realSensorValuesFront[1], this);
+	    		log.debug("Ennemi avant ajouté en "+positionEnnemi_2.x+";"+positionEnnemi_2.y, this);
+
 				
 				obstacleAddedRight=true;
 			}
@@ -327,6 +328,9 @@ class ThreadSensor extends AbstractThread
 				positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
 
 				mTable.getObstacleManager().addObstacle(positionEnnemi_1);
+	    		log.debug("Valeur des capteurs brute : "+realSensorValuesFront[0]+";"+realSensorValuesFront[1], this);
+	    		log.debug("Ennemi avant ajouté en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
+
 
 				obstacleAddedRight=true;
 				obstacleAddedLeft=true;
@@ -349,6 +353,9 @@ class ThreadSensor extends AbstractThread
 			positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
 			
 			mTable.getObstacleManager().addObstacle(positionEnnemi_1);
+    		log.debug("Valeur des capteurs brute : "+realSensorValuesFront[0]+";"+realSensorValuesFront[1], this);
+    		log.debug("Ennemi avant ajouté en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
+
 			
 			obstacleAddedLeft=true;
 
@@ -368,7 +375,9 @@ class ThreadSensor extends AbstractThread
 			positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
 			
 			mTable.getObstacleManager().addObstacle(positionEnnemi_1);
-			
+    		log.debug("Valeur des capteurs brute : "+realSensorValuesFront[0]+";"+realSensorValuesFront[1], this);
+    		log.debug("Ennemi avant ajouté en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
+
 			obstacleAddedRight=true;
 		}
 		obstacleAdded[0]=obstacleAddedLeft;
@@ -436,6 +445,9 @@ class ThreadSensor extends AbstractThread
 				positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
 				
 				mTable.getObstacleManager().addObstacle(positionEnnemi_1);
+	    		log.debug("Valeur des capteurs brute : "+realSensorValuesBack[0]+";"+realSensorValuesBack[1], this);
+	    		log.debug("Ennemi arriere ajouté en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
+
 				
 				obstacleAddedLeft=true;
 				
@@ -451,6 +463,9 @@ class ThreadSensor extends AbstractThread
 				positionEnnemi_2=changeReference(relativePosEnnemi2, positionRobot, orientation );
 				
 				mTable.getObstacleManager().addObstacle(positionEnnemi_2);
+	    		log.debug("Valeur des capteurs brute : "+realSensorValuesBack[0]+";"+realSensorValuesBack[1], this);
+	    		log.debug("Ennemi arriere ajouté en "+positionEnnemi_2.x+";"+positionEnnemi_2.y, this);
+
 				
 				obstacleAddedRight=true;
 			}
@@ -473,6 +488,9 @@ class ThreadSensor extends AbstractThread
 				positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
 
 				mTable.getObstacleManager().addObstacle(positionEnnemi_1);
+	    		log.debug("Valeur des capteurs brute : "+realSensorValuesBack[0]+";"+realSensorValuesBack[1], this);
+	    		log.debug("Ennemi arriere ajouté en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
+
 
 				obstacleAddedRight=true;
 				obstacleAddedLeft=true;
@@ -495,6 +513,9 @@ class ThreadSensor extends AbstractThread
 			positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
 			
 			mTable.getObstacleManager().addObstacle(positionEnnemi_1);
+    		log.debug("Valeur des capteurs brute : "+realSensorValuesBack[0]+";"+realSensorValuesBack[1], this);
+    		log.debug("Ennemi arriere ajouté en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
+
 			
 			obstacleAddedLeft=true;
 
@@ -514,7 +535,9 @@ class ThreadSensor extends AbstractThread
 			positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
 			
 			mTable.getObstacleManager().addObstacle(positionEnnemi_1);
-			
+    		log.debug("Valeur des capteurs brute : "+realSensorValuesBack[0]+";"+realSensorValuesBack[1], this);
+    		log.debug("Ennemi arriere ajouté en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
+
 			obstacleAddedRight=true;
 		}
 		obstacleAdded[0]=obstacleAddedLeft;
@@ -536,7 +559,6 @@ class ThreadSensor extends AbstractThread
 		{
 			distanceFront = (int[]) mSensorsCardWrapper.getSensorValue(SensorNames.ULTRASOUND_FRONT_SENSOR);
 			
-			log.debug("Distance selon ultrasons avant traitement : "+distanceFront[0]+";"+distanceFront[1], this);
 			if(symetry) // On inverse capteur droit et gauche : en effet, on traite les obstacles et les capteurs comme si on etait verts
 			{
 				int svg=distanceFront[0];

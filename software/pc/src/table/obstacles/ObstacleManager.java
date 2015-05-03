@@ -246,7 +246,6 @@ public class ObstacleManager
     		 * et si on detecte une deuxieme fois l'ennemi on rajoute un obstacle sur lui
     		 */
     		mMobileObstacles.add(new ObstacleProximity(position, radius, ObstacleGroups.ENNEMY_ROBOTS));
-    		log.debug("Ennemi ajouté en "+position.x+";"+position.y, this);
     	}
     	else
     	{

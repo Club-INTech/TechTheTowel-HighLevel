@@ -269,6 +269,7 @@ public class Graph
 			 + (position.y - mTable.getObstacleManager().getMobileObstacles().get(i).getPosition().y)*(position.y - mTable.getObstacleManager().getMobileObstacles().get(i).getPosition().y)
 			 < (mTable.getObstacleManager().getMobileObstacles().get(i).getRadius() + mTable.getObstacleManager().getRobotRadius())*(mTable.getObstacleManager().getMobileObstacles().get(i).getRadius() + mTable.getObstacleManager().getRobotRadius()))
 			{
+				System.out.println("Obstacle posant probleme : "+mTable.getObstacleManager().getMobileObstacles().get(i).getPosition());
 				obstacleGroups.add(mTable.getObstacleManager().getMobileObstacles().get(i).getObstacleGroup());
 				break;
 			}
@@ -276,7 +277,10 @@ public class Graph
 			if((position.x - mTable.getObstacleManager().getFixedObstacles().get(i).getPosition().x)*(position.x - mTable.getObstacleManager().getFixedObstacles().get(i).getPosition().x)
 					 + (position.y - mTable.getObstacleManager().getFixedObstacles().get(i).getPosition().y)*(position.y - mTable.getObstacleManager().getFixedObstacles().get(i).getPosition().y)
 					 < (mTable.getObstacleManager().getFixedObstacles().get(i).getRadius() + mTable.getObstacleManager().getRobotRadius())*(mTable.getObstacleManager().getFixedObstacles().get(i).getRadius() + mTable.getObstacleManager().getRobotRadius()))
+			{
+				System.out.println("Obstacle posant probleme : "+mTable.getObstacleManager().getFixedObstacles().get(i).getPosition());
 				obstacleGroups.add(mTable.getObstacleManager().getFixedObstacles().get(i).getObstacleGroup());
+			}
     	return obstacleGroups;
     }
 	
