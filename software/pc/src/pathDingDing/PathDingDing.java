@@ -49,7 +49,8 @@ public class PathDingDing implements Service
 		if(!mGraph.isOnTable(new Node(end.x, end.y)))
 		{
 			EnumSet<ObstacleGroups> obstacleGroupsInPosition = mGraph.obstacleGroupsInPosition(end);
-				obstacleGroupsInPosition.retainAll(mObstaclesToConsider);
+			System.out.println("Obstacles bloquants : "+ obstacleGroupsInPosition.toString() );
+			obstacleGroupsInPosition.retainAll(mObstaclesToConsider);
 			throw new InObstacleException(obstacleGroupsInPosition);
 		}
 		
