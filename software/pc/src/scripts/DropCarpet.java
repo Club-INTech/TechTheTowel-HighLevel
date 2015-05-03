@@ -270,8 +270,9 @@ public class DropCarpet extends AbstractScript
 	@Override
 	public Circle entryPosition(int id, int radius)
 	{
+		//taille totale des escaliers : 1066 / on divisse par 4; 266.5
 		if (id==1)
-			return new Circle(261,1400-distanceBetweenEntryAndStairs);//point de depose - distance de deplacement jusqua ce point - rayon robot (distance arriere - roues))
+			return new Circle(266,1400-distanceBetweenEntryAndStairs);//point de depose - distance de deplacement jusqua ce point - rayon robot (distance arriere - roues))
 		else if (id == 0)
 			return new Circle (1500-320-77-250,1000);
 		else if (id == 2)
