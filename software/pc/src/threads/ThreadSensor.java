@@ -285,7 +285,7 @@ class ThreadSensor extends AbstractThread
 				positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
 				
 				mTable.getObstacleManager().addObstacle(positionEnnemi_1);
-	    		log.debug("Valeur des capteurs brute : "+realSensorValuesFront[0]+";"+realSensorValuesFront[1], this);
+	    		log.debug("Valeur des capteurs avant brute : "+realSensorValuesFront[0]+";"+realSensorValuesFront[1], this);
 	    		log.debug("Ennemi avant ajouté en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
 
 				
@@ -303,7 +303,7 @@ class ThreadSensor extends AbstractThread
 				positionEnnemi_2=changeReference(relativePosEnnemi2, positionRobot, orientation );
 				
 				mTable.getObstacleManager().addObstacle(positionEnnemi_2);
-	    		log.debug("Valeur des capteurs brute : "+realSensorValuesFront[0]+";"+realSensorValuesFront[1], this);
+	    		log.debug("Valeur des capteurs avant brute : "+realSensorValuesFront[0]+";"+realSensorValuesFront[1], this);
 	    		log.debug("Ennemi avant ajouté en "+positionEnnemi_2.x+";"+positionEnnemi_2.y, this);
 
 				
@@ -328,7 +328,7 @@ class ThreadSensor extends AbstractThread
 				positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
 
 				mTable.getObstacleManager().addObstacle(positionEnnemi_1);
-	    		log.debug("Valeur des capteurs brute : "+realSensorValuesFront[0]+";"+realSensorValuesFront[1], this);
+	    		log.debug("Valeur des capteurs avant brute : "+realSensorValuesFront[0]+";"+realSensorValuesFront[1], this);
 	    		log.debug("Ennemi avant ajouté en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
 
 
@@ -353,7 +353,7 @@ class ThreadSensor extends AbstractThread
 			positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
 			
 			mTable.getObstacleManager().addObstacle(positionEnnemi_1);
-    		log.debug("Valeur des capteurs brute : "+realSensorValuesFront[0]+";"+realSensorValuesFront[1], this);
+    		log.debug("Valeur des capteurs avant brute : "+realSensorValuesFront[0]+";"+realSensorValuesFront[1], this);
     		log.debug("Ennemi avant ajouté en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
 
 			
@@ -375,7 +375,7 @@ class ThreadSensor extends AbstractThread
 			positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
 			
 			mTable.getObstacleManager().addObstacle(positionEnnemi_1);
-    		log.debug("Valeur des capteurs brute : "+realSensorValuesFront[0]+";"+realSensorValuesFront[1], this);
+    		log.debug("Valeur des capteurs avant brute : "+realSensorValuesFront[0]+";"+realSensorValuesFront[1], this);
     		log.debug("Ennemi avant ajouté en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
 
 			obstacleAddedRight=true;
@@ -445,7 +445,7 @@ class ThreadSensor extends AbstractThread
 				positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
 				
 				mTable.getObstacleManager().addObstacle(positionEnnemi_1);
-	    		log.debug("Valeur des capteurs brute : "+realSensorValuesBack[0]+";"+realSensorValuesBack[1], this);
+	    		log.debug("Valeur des capteurs arrieres brute : "+realSensorValuesBack[0]+";"+realSensorValuesBack[1], this);
 	    		log.debug("Ennemi arriere ajouté en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
 
 				
@@ -463,7 +463,7 @@ class ThreadSensor extends AbstractThread
 				positionEnnemi_2=changeReference(relativePosEnnemi2, positionRobot, orientation );
 				
 				mTable.getObstacleManager().addObstacle(positionEnnemi_2);
-	    		log.debug("Valeur des capteurs brute : "+realSensorValuesBack[0]+";"+realSensorValuesBack[1], this);
+	    		log.debug("Valeur des capteurs arrieres brute : "+realSensorValuesBack[0]+";"+realSensorValuesBack[1], this);
 	    		log.debug("Ennemi arriere ajouté en "+positionEnnemi_2.x+";"+positionEnnemi_2.y, this);
 
 				
@@ -488,7 +488,7 @@ class ThreadSensor extends AbstractThread
 				positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
 
 				mTable.getObstacleManager().addObstacle(positionEnnemi_1);
-	    		log.debug("Valeur des capteurs brute : "+realSensorValuesBack[0]+";"+realSensorValuesBack[1], this);
+	    		log.debug("Valeur des capteurs arrieres brute : "+realSensorValuesBack[0]+";"+realSensorValuesBack[1], this);
 	    		log.debug("Ennemi arriere ajouté en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
 
 
@@ -513,7 +513,7 @@ class ThreadSensor extends AbstractThread
 			positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
 			
 			mTable.getObstacleManager().addObstacle(positionEnnemi_1);
-    		log.debug("Valeur des capteurs brute : "+realSensorValuesBack[0]+";"+realSensorValuesBack[1], this);
+    		log.debug("Valeur des capteurs arrieres brute : "+realSensorValuesBack[0]+";"+realSensorValuesBack[1], this);
     		log.debug("Ennemi arriere ajouté en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
 
 			
@@ -535,7 +535,7 @@ class ThreadSensor extends AbstractThread
 			positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
 			
 			mTable.getObstacleManager().addObstacle(positionEnnemi_1);
-    		log.debug("Valeur des capteurs brute : "+realSensorValuesBack[0]+";"+realSensorValuesBack[1], this);
+    		log.debug("Valeur des capteurs arrieres brute : "+realSensorValuesBack[0]+";"+realSensorValuesBack[1], this);
     		log.debug("Ennemi arriere ajouté en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
 
 			obstacleAddedRight=true;
