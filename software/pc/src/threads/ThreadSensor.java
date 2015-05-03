@@ -191,6 +191,8 @@ class ThreadSensor extends AbstractThread
 				return;
 			}
 			
+			
+			
 			/* recupere la distance mesurée par l'ultrason
 			 * on met la distance detecte, a l'avant et a l'arriere, dans deux variables int[] de taille deux
 			 * si la carte ne repond pas on revoie la valeur par default
@@ -209,9 +211,11 @@ class ThreadSensor extends AbstractThread
 
 				//ajout d'obstacles mobiles dans l'obstacleManager
 				// Analyse des capteurs avant, avec gestion des angles
-				addObstacleFront(distanceFront);
+				if(mRobot.getIsRobotMovingForward())
+					addObstacleFront(distanceFront);
 				// Analyse des capteurs arrieres, avec gestion des angles
-				addObstacleBack(distanceBack);
+				if(mRobot.getIsRobotMovingBackward())
+					addObstacleBack(distanceBack);
 				
 			}
 			if (distanceFront[1] > 0 && distanceFront[1] < 70 || distanceFront[0] > 0 && distanceFront[0] < 70)

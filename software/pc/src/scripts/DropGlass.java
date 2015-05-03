@@ -114,7 +114,6 @@ public class DropGlass extends AbstractScript
 				stateToConsider.robot.turn(Math.PI);
 				stateToConsider.robot.moveLengthwise(300, hooksToConsider, true);
 				
-				
 				stateToConsider.robot.turn(Math.PI*3/4); // On se tourne aux 3/4 afin de pouvoir mettre l'un ou l'autre des verres
 	
 				if(isThereGlassLeft)
