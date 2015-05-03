@@ -18,6 +18,7 @@ import smartMath.Circle;
 import strategie.GameState;
 import utils.Config;
 import utils.Log;
+import utils.Sleep;
 
 
 /**
@@ -134,8 +135,13 @@ public class DropPile extends AbstractScript
 				//on ouvre le guide un peu
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
 				
+
+				Sleep.sleep(500);	// 1000ms d'attente pour que la pile retrouve son équilibre
+				
 				stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_GUIDE, false);
 				stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_GUIDE, true);
+				
+				Sleep.sleep(500);	// 1000ms d'attente pour que la pile retrouve son équilibre
 				
 				//puis beaucoup
 				stateToConsider.robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, false);
