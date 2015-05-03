@@ -194,17 +194,17 @@ public class GetPlot extends AbstractScript
 				if (!stateToConsider.robot.isGlassStoredLeft)
 				{
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);					
-					stateToConsider.robot.moveLengthwise(140, hooksToConsider);
+					stateToConsider.robot.moveLengthwise(130, hooksToConsider);
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
-					stateToConsider.robot.moveLengthwise(180, hooksToConsider);
+					stateToConsider.robot.moveLengthwise(190, hooksToConsider);
 					stateToConsider.robot.isGlassStoredLeft = true;
 				}
 				else if(!stateToConsider.robot.isGlassStoredRight)
 				{
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);					
-					stateToConsider.robot.moveLengthwise(140, hooksToConsider);
+					stateToConsider.robot.moveLengthwise(130, hooksToConsider);
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
-					stateToConsider.robot.moveLengthwise(180, hooksToConsider);
+					stateToConsider.robot.moveLengthwise(190, hooksToConsider);
 					stateToConsider.robot.isGlassStoredRight = true;
 				}
 				stateToConsider.table.removeGlassX(0);
