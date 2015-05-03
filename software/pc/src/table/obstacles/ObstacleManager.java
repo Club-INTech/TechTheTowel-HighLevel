@@ -534,6 +534,21 @@ public class ObstacleManager
     }
     
     /**
+     *  On enleve les obstacles qui sont en confrontation avec nous :
+     *  Cela evite de se retrouver dans un obstacle
+     */
+    public void removeObstacleInUs(Vec2 position)
+    {
+    	for(int i=0; i<mMobileObstacles.size(); i++)
+    	{ 
+    		if( (   (position.x-mMobileObstacles.get(i).getPosition().x)*(position.x-mMobileObstacles.get(i).getPosition().x)
+    	    	+   (position.y-mMobileObstacles.get(i).getPosition().y)*(position.y-mMobileObstacles.get(i).getPosition().y) ) 
+    	    	<=( (mRobotRadius+mMobileObstacles.get(i).radius)*(mRobotRadius+mMobileObstacles.get(i).radius)) ) 	    	
+    			mMobileObstacles.remove(mMobileObstacles.get(i));
+    	}
+    }
+    
+    /**
      * supprime les obstacles fixes dans le disque
      * 
      * @param position
@@ -544,7 +559,7 @@ public class ObstacleManager
     	for(int i=0; i<mFixedObstacles.size(); i++)
     		if((position.x-mFixedObstacles.get(i).getPosition().x)*(position.x-mFixedObstacles.get(i).getPosition().x)
     		 + (position.y-mFixedObstacles.get(i).getPosition().y)*(position.y-mFixedObstacles.get(i).getPosition().y)
-    		 <= radius*radius)
+    		 <= mRobotRadius*mRobotRadius)
     			mFixedObstacles.remove(mFixedObstacles.get(i));
     }
     
