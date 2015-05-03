@@ -2,6 +2,7 @@ package pathDingDing;
 
 import smartMath.*;
 import table.Table;
+import utils.Log;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -21,13 +22,15 @@ public class Graph
 	public ArrayList<Area> mAreas; // TODO : private (utilise par graphics)
 	private Table mTable;
 	private EnumSet<ObstacleGroups> mObstaclesToConsider;
+    private Log mLog;
 	
-	public Graph(Table table, EnumSet<ObstacleGroups> obstaclesToConsider)
+	public Graph(Table table, EnumSet<ObstacleGroups> obstaclesToConsider, Log log)
 	{
 		mNodes = new ArrayList<Node>();
 		mAreas = new ArrayList<Area>();
 		mTable = table;
 		mObstaclesToConsider = obstaclesToConsider;
+		mLog=log;
 		buildGraph();
 	}
 	
@@ -269,7 +272,7 @@ public class Graph
 			 + (position.y - mTable.getObstacleManager().getMobileObstacles().get(i).getPosition().y)*(position.y - mTable.getObstacleManager().getMobileObstacles().get(i).getPosition().y)
 			 < (mTable.getObstacleManager().getMobileObstacles().get(i).getRadius() + mTable.getObstacleManager().getRobotRadius())*(mTable.getObstacleManager().getMobileObstacles().get(i).getRadius() + mTable.getObstacleManager().getRobotRadius()))
 			{
-				System.out.println("Obstacle posant probleme : "+mTable.getObstacleManager().getMobileObstacles().get(i).getPosition());
+				mLog.debug("Obstacle posant probleme : "+mTable.getObstacleManager().getMobileObstacles().get(i).getPosition(),mTable);
 				obstacleGroups.add(mTable.getObstacleManager().getMobileObstacles().get(i).getObstacleGroup());
 				break;
 			}
@@ -278,7 +281,7 @@ public class Graph
 					 + (position.y - mTable.getObstacleManager().getFixedObstacles().get(i).getPosition().y)*(position.y - mTable.getObstacleManager().getFixedObstacles().get(i).getPosition().y)
 					 < (mTable.getObstacleManager().getFixedObstacles().get(i).getRadius() + mTable.getObstacleManager().getRobotRadius())*(mTable.getObstacleManager().getFixedObstacles().get(i).getRadius() + mTable.getObstacleManager().getRobotRadius()))
 			{
-				System.out.println("Obstacle posant probleme : "+mTable.getObstacleManager().getFixedObstacles().get(i).getPosition());
+				mLog.debug("Obstacle posant probleme : "+mTable.getObstacleManager().getFixedObstacles().get(i).getPosition(),mTable);
 				obstacleGroups.add(mTable.getObstacleManager().getFixedObstacles().get(i).getObstacleGroup());
 			}
     	return obstacleGroups;
