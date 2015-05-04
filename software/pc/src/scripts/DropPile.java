@@ -131,17 +131,15 @@ public class DropPile extends AbstractScript
 			//version zone de depart
 			else if (version==0)
 			{
-				stateToConsider.robot.turn(0, hooksToConsider, false);
-				stateToConsider.robot.moveLengthwise(200, hooksToConsider, true);
+				stateToConsider.robot.turn(Math.PI/4, hooksToConsider, false);
+				stateToConsider.robot.moveLengthwise(350, hooksToConsider, true);
 				
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
 				//on ouvre le guide un peu
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
-								
+				
 				stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_GUIDE, false);
 				stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_GUIDE, true);
-				
-				Sleep.sleep(700);	// attente pour que la pile retrouve son équilibre
 				
 				//puis beaucoup
 				stateToConsider.robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, false);
@@ -160,8 +158,8 @@ public class DropPile extends AbstractScript
 				
 			
 				//Puis on finit
+				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, false);
 				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
-				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 					
 				//on remet l'ascenceur en position de deplacement
@@ -186,7 +184,6 @@ public class DropPile extends AbstractScript
 						stateToConsider.table.areaXFilled(0);
 					}
 				}
-				
 			}
 			else
 			{
@@ -212,7 +209,7 @@ public class DropPile extends AbstractScript
 		}
 		else if (id==0)
 		{
-			return new Circle(800, 1000); 
+			return new Circle(750,800); 
 		}
 		else
 		{
