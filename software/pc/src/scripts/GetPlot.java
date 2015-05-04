@@ -310,7 +310,7 @@ public class GetPlot extends AbstractScript
 		else if (id==2)
 			return new Circle (630,645,200);
 		else if (id==34)
-			return new Circle (900,220,0);
+			return new Circle (900,200,0);
 		else if (id==56)
 			return new Circle (780,1620,0); // Position devant le plot 5, on longeant l'escalier
 		else if (id==7)
