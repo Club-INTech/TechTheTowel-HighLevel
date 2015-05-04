@@ -18,6 +18,7 @@ import strategie.Strategie;
 import threads.ThreadTimer;
 import enums.ActuatorOrder;
 import enums.ServiceNames;
+import enums.Speed;
 import exceptions.serial.SerialConnexionException;
 
 public class JUnit_Strategia extends JUnit_Test 
@@ -135,7 +136,8 @@ public class JUnit_Strategia extends JUnit_Test
 	public void desisionTest()
 	{
 		configColor();
-		container.startAllThreads();
+		real_state.robot.setLocomotionSpeed(Speed.BETWEEN_SCRIPTS_SLOW);
+//		container.startAllThreads();
 		waitMatchBegin();
 		strategos.updateConfig();
 		strategos.IA();

@@ -39,6 +39,7 @@ public class DropCarpet extends AbstractScript
 	public DropCarpet(HookFactory hookFactory, Config config, Log log)
 	{
 		super(hookFactory, config, log);
+		// ne pas mettre la version 2 (l'IA ne dois pas être au courant)
 		versions = new Integer[]{0,1}; 
 		//definition du tableau des versions, a modifier a chaque ajout d'une version
 	}
@@ -126,22 +127,13 @@ public class DropCarpet extends AbstractScript
 				//le 2.98 a ete testé de façon experimentale (ainsi que le 606), a modifier si quelqu'un veut le calculer
 				stateToConsider.robot.turn(2.98);
 
-				//vitesse mise à 10 pour attrapper le gobelet
-				Speed oldSpeed = stateToConsider.robot.getSpeed();
-				Speed speed = Speed.SLOW;
-				stateToConsider.robot.setLocomotionSpeed(speed);
-				
-				stateToConsider.robot.moveLengthwise(606, hooksToConsider);
+				stateToConsider.robot.moveLengthwise(606, hooksToConsider, false, true, Speed.SLOW);
 				stateToConsider.table.removeGlassX(1);
-				
-				
-				//vitesse remise à sa valeur précédante
-				stateToConsider.robot.setLocomotionSpeed(oldSpeed);
 				
 				//on presente ses arrieres a l'escalier
 				stateToConsider.robot.turn(-0.5*Math.PI, hooksToConsider, false);
 				// on avance vers ces demoiselles (les marches) (attention impact possible)
-				stateToConsider.robot.moveLengthwiseWithoutDetection(-distanceBetweenEntryAndStairs, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwiseTowardWall(-distanceBetweenEntryAndStairs*2, hooksToConsider);
 
 				
 				//verification de la position : on n'effectue l'action que si on est assez proche (ie pas d'obstacle)
@@ -205,19 +197,19 @@ public class DropCarpet extends AbstractScript
 				else
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, false);
 
-				//vitesse mise à 10 pour attrapper le gobelet
-				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
-				
 				//le 3.05 a ete testé de façon experimentale (ainsi que le 850), a modifier si quelqu'un veut le calculer
 				stateToConsider.robot.turn(3.05);
 				//stateToConsider.robot.moveTowardEnnemy(850, hooksToConsider);
-				stateToConsider.robot.moveLengthwise(850, hooksToConsider);
+				stateToConsider.robot.moveLengthwise(850, hooksToConsider, false, true, Speed.SLOW);
 				stateToConsider.table.removeGlassX(1);
 				
 				//on presente ses arrieres a l'escalier
 				stateToConsider.robot.turn(-0.5*Math.PI, hooksToConsider, false);
 				// on avance vers ces demoiselles (les marches) (attention impact possible)
 				stateToConsider.robot.moveLengthwiseWithoutDetection(-250, hooksToConsider, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
+
 
 				
 				//verification de la position : on n'effectue l'action que si on est assez proche (ie pas d'obstacle)

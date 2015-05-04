@@ -12,6 +12,7 @@ import utils.Log;
 import utils.Sleep;
 import container.Service;
 import enums.Direction;
+import enums.Speed;
 import enums.UnableToMoveReason;
 import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -207,16 +208,40 @@ public class Locomotion implements Service
 
     }
     
+  
     /**
-     * Fait avancer le robot de "distance" (en mm).
+     * Fait avancer le robot de "distance" (en mm). attention modifie la vitesse du robot
      * @param distance la distance dont le robot doit se deplacer
-     * @param hooks les potentiels hooks a prendre en compte (ne pas mettre null !)
+     * @param hooks les potetniels hooks a prendre en compte (ne pas mettre null !)
      * @param wall vrai si on supppose qu'on vas se cogner dans un mur (et qu'il ne faut pas pousser dessus)
      * @throws UnableToMoveException si le robot a un bloquage mecanique
      */
     public void moveLengthwise(int distance, ArrayList<Hook> hooks, boolean wall) throws UnableToMoveException
-    {  
-        moveLengthwise(distance, hooks, wall, true);
+    {
+    	moveLengthwise(distance, hooks, wall, true);
+    }
+    
+    
+    /**
+     * Fait avancer le robot de "distance" (en mm). attention modifie la vitesse du robot
+     * @param distance la distance dont le robot doit se deplacer
+     * @param hooks les potetniels hooks a prendre en compte (ne pas mettre null !)
+     * @param wall vrai si on supppose qu'on vas se cogner dans un mur (et qu'il ne faut pas pousser dessus)
+     * @param mustDetect true si on veut detecter, false sinon.
+     * @throws UnableToMoveException si le robot a un bloquage mecanique
+     */
+    public void moveLengthwise(int distance, ArrayList<Hook> hooks, boolean wall, boolean mustDetect) throws UnableToMoveException
+    {
+    	Speed newSpeed;
+    	if (distance<150)
+    		newSpeed = Speed.SLOW;
+    	else if (distance <1000)
+    		newSpeed = Speed.BETWEEN_SCRIPTS_SLOW;
+    	else
+    		newSpeed = Speed.BETWEEN_SCRIPTS;
+    	
+    	
+    	moveLengthwise(distance, hooks, wall, mustDetect, newSpeed);
     }
     
     /**
@@ -225,9 +250,10 @@ public class Locomotion implements Service
      * @param hooks les potetniels hooks a prendre en compte (ne pas mettre null !)
      * @param wall vrai si on supppose qu'on vas se cogner dans un mur (et qu'il ne faut pas pousser dessus)
      * @param mustDetect true si on veut detecter, false sinon.
+     * @param speed la vitesse que doit prendre le robot pedant le deplacement (a donner imperativement si on utilise un hook)
      * @throws UnableToMoveException si le robot a un bloquage mecanique
      */
-    public void moveLengthwise(int distance, ArrayList<Hook> hooks, boolean wall, boolean mustDetect) throws UnableToMoveException
+    public void moveLengthwise(int distance, ArrayList<Hook> hooks, boolean wall, boolean mustDetect, Speed speed) throws UnableToMoveException
     {    
     	actualRetriesIfBlocked=0;
     	
