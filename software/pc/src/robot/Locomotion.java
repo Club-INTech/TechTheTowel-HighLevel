@@ -219,8 +219,7 @@ public class Locomotion implements Service
     public void moveLengthwise(int distance, ArrayList<Hook> hooks, boolean wall) throws UnableToMoveException
     {
     	moveLengthwise(distance, hooks, wall, true);
-    }
-    
+    }    
     
     /**
      * Fait avancer le robot de "distance" (en mm). attention modifie la vitesse du robot
@@ -240,7 +239,6 @@ public class Locomotion implements Service
     	else
     		newSpeed = Speed.BETWEEN_SCRIPTS;
     	
-    	
     	moveLengthwise(distance, hooks, wall, mustDetect, newSpeed);
     }
     
@@ -255,6 +253,7 @@ public class Locomotion implements Service
      */
     public void moveLengthwise(int distance, ArrayList<Hook> hooks, boolean wall, boolean mustDetect, Speed speed) throws UnableToMoveException
     {    
+
     	actualRetriesIfBlocked=0;
     	
 		updateCurrentPositionAndOrientation();
@@ -279,7 +278,7 @@ public class Locomotion implements Service
         	isRobotMovingForward=true;
         else 
         	isRobotMovingBackward=true;
-		moveToPointException(aim, hooks, distance >= 0, wall, false, mustDetect);
+		moveToPointException(aim, hooks, distance >= 0, wall, false, mustDetect, speed);
 		
 		isRobotMovingForward=false;
     	isRobotMovingBackward=false;
@@ -332,6 +331,7 @@ public class Locomotion implements Service
     }
 
 
+    
     /**
      * Bloquant. Gère la marche arrière automatique selon la stratégie demandée.
      * @param aim le point visé sur la table (consigne donné par plus haut niveau donc non symetrise)
@@ -380,6 +380,12 @@ public class Locomotion implements Service
 		actualRetriesIfBlocked=0;// on reinitialise
 
     }
+   
+    private void moveToPointException(Vec2 aim, ArrayList<Hook> hooks, boolean isMovementForward, boolean headingToWall, boolean turnOnly, boolean mustDetect) throws UnableToMoveException
+    {
+    	moveToPointException(aim,hooks,isMovementForward, headingToWall, turnOnly, mustDetect,Speed.BETWEEN_SCRIPTS_SLOW);
+    }
+
     
     /**
      * bloquant
@@ -393,8 +399,18 @@ public class Locomotion implements Service
      * @param mustDetect true si on veut detecter, false sinon.
      * @throws UnableToMoveException si le robot a un bloquage mecanique
      */
-    private void moveToPointException(Vec2 aim, ArrayList<Hook> hooks, boolean isMovementForward, boolean headingToWall, boolean turnOnly, boolean mustDetect) throws UnableToMoveException
+    private void moveToPointException(Vec2 aim, ArrayList<Hook> hooks, boolean isMovementForward, boolean headingToWall, boolean turnOnly, boolean mustDetect, Speed speed) throws UnableToMoveException
     {
+    	try
+    	{
+			setTranslationnalSpeed(speed.PWMTranslation);
+			setRotationnalSpeed(speed.PWMRotation);
+		} 
+    	catch (SerialConnexionException e2)
+    	{
+            log.critical("On ne fait rien après ceci: Catch de "+e2+" dans moveToPointException", this);
+		}
+    	
         //int maxTimeToWaitForEnemyToLeave = 600; // combien de temps attendre que l'ennemi parte avant d'abandonner
         int unexpectedWallImpactCounter = 2; // combien de fois on réessayer si on se prend un mur (si wall est a true alors les impacts sont attendus donc on s'en fout)
         boolean doItAgain;
