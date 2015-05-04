@@ -413,23 +413,7 @@ public class GetPlot extends AbstractScript
 			{
 				stateToConsider.robot.moveLengthwise(150);
 				//premiere verif (avant les bras)
-				try 
-				{
-					sensorAnswer = ((Boolean) stateToConsider.robot.getSensorValue(SensorNames.JAW_SENSOR));
-				} 
-				catch (SerialConnexionException e1) 
-				{
-					stateToConsider.robot.sleep(500);
-					try 
-					{
-						sensorAnswer = ((Boolean) stateToConsider.robot.getSensorValue(SensorNames.JAW_SENSOR));
-					}
-					catch (SerialConnexionException e2) 
-					{
-						//si impossible de communiquer avec le capteur on suppose qu'on a attrape le plot
-						sensorAnswer = ((Boolean) SensorNames.JAW_SENSOR.getDefaultValue());
-					}
-				}
+				sensorAnswer = checkSensor(stateToConsider);
 					
 			}
 			catch (UnableToMoveException e1) 
@@ -445,34 +429,18 @@ public class GetPlot extends AbstractScript
 				{
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_MIDDLE, true);
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
+					sensorAnswer = checkSensor(stateToConsider);
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
 				}
 				else
 				{
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_MIDDLE, true);
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN_SLOW, true);
+					sensorAnswer = checkSensor(stateToConsider);
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
 				}
 				//si on a attrape qqc on termine sinon on essaie avec l'autre bras (si isSecondTry == false)
 				//si deuxieme essai ecrire dans le log qu'on a essaye de manger un plot et on jette une exeption impossible de manger
-				
-				try 
-				{
-					sensorAnswer = ((Boolean) stateToConsider.robot.getSensorValue(SensorNames.JAW_SENSOR));
-				} 
-				catch (SerialConnexionException e1) 
-				{
-					stateToConsider.robot.sleep(40);
-					try 
-					{
-						sensorAnswer = ((Boolean) stateToConsider.robot.getSensorValue(SensorNames.JAW_SENSOR));
-					}
-					catch (SerialConnexionException e2) 
-					{
-						//si impossible de communiquer avec le capteur on suppose qu'on a attrape le plot
-						sensorAnswer = ((Boolean) SensorNames.JAW_SENSOR.getDefaultValue());
-					}
-				}
 		
 				if (!sensorAnswer)
 				{
@@ -496,23 +464,7 @@ public class GetPlot extends AbstractScript
 		// si l'usage des bras est interdit, on vérifie si le plot a été mangé
 		if ( (!sensorAnswer && isSecondTry) || forbidArmUsage)
 		{
-			try 
-			{
-				sensorAnswer = ((Boolean) stateToConsider.robot.getSensorValue(SensorNames.JAW_SENSOR));
-			} 
-			catch (SerialConnexionException e1) 
-			{
-				stateToConsider.robot.sleep(500);
-				try 
-				{
-					sensorAnswer = ((Boolean) stateToConsider.robot.getSensorValue(SensorNames.JAW_SENSOR));
-				}
-				catch (SerialConnexionException e2) 
-				{
-					//si impossible de communiquer avec le capteur on suppose qu'on a attrape le plot
-					sensorAnswer = ((Boolean) SensorNames.JAW_SENSOR.getDefaultValue());
-				}
-			}
+			sensorAnswer = checkSensor(stateToConsider);
 			if (!sensorAnswer)
 			{
 				log.debug("impossible de manger le plot", this);
@@ -524,6 +476,35 @@ public class GetPlot extends AbstractScript
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
 		
 		stateToConsider.robot.aMiamiam();
+	}
+	
+	/**
+	 * check le capteur des machoires pour voir si il est actionné
+	 * 
+	 * @param stateToConsider l'étate de la table a checker
+	 * @return vrai si le robot a un object qui actionne le capteur des machoires
+	 */
+	private boolean checkSensor (GameState<Robot> stateToConsider)
+	{
+		boolean sensorAnswer;
+		try 
+		{
+			sensorAnswer = ((Boolean) stateToConsider.robot.getSensorValue(SensorNames.JAW_SENSOR));
+		} 
+		catch (SerialConnexionException e1) 
+		{
+			stateToConsider.robot.sleep(40);
+			try 
+			{
+				sensorAnswer = ((Boolean) stateToConsider.robot.getSensorValue(SensorNames.JAW_SENSOR));
+			}
+			catch (SerialConnexionException e2) 
+			{
+				//si impossible de communiquer avec le capteur on suppose qu'on a attrape le plot
+				sensorAnswer = ((Boolean) SensorNames.JAW_SENSOR.getDefaultValue());
+			}
+		}
+		return sensorAnswer;
 	}
 
 
