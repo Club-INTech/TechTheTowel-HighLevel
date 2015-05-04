@@ -476,9 +476,9 @@ class ThreadSensor extends AbstractThread
 				
 				
 				
-				positionEnnemi_1.x =  -(int)(	rightBackSensorPosition.x + Math.sqrt( 
-																(distanceObstacleBack[1]*distanceObstacleBack[1])-
-														        (positionEnnemi_1.y-distanceBetweenBackSensors/2)*(positionEnnemi_1.y-distanceBetweenBackSensors/2)));	//position de l'obstacle en fonction du robot
+				positionEnnemi_1.x =  -(int)(	-rightBackSensorPosition.x + Math.sqrt( 
+												(distanceObstacleBack[1]*distanceObstacleBack[1])+
+											    (positionEnnemi_1.y+distanceBetweenBackSensors/2)*(positionEnnemi_1.y+distanceBetweenBackSensors/2)));	//position de l'obstacle en fonction du robot
 
 				relativePosEnnemi1.x=positionEnnemi_1.x;
 				relativePosEnnemi1.y=positionEnnemi_1.y;
@@ -746,7 +746,7 @@ class ThreadSensor extends AbstractThread
 		
 		sensorPosition=changeReference(leftBackSensorPosition, position, orientation); // passage de la position du capteur en absolu
 		if(mTable.getObstacleManager().removeNonDetectedObstacles(sensorPosition, (orientation+leftBackSensorAngle), (detectionDistance), detectionAngle) )
-			log.debug("Obstacle enlevé avec le capteur gauche", this);
+			log.debug("Obstacle enlevé avec le capteur gauche arriere", this);
 	}
 	
 	private void removeObstacleRightBack(int detectionDistance)

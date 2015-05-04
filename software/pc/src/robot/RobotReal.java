@@ -139,15 +139,6 @@ public class RobotReal extends Robot
 		speed = oldSpeed;
 	}	
 	
-	
-
-	@Override
-    public void moveTowardEnnemy(int distance, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, BlockedException, UnexpectedObstacleOnPathException
-	{	
-		
-		mLocomotion.moveTowardEnnemy(distance, hooksToConsider);
-	}	
-	
 	@Override
     public void moveLengthwiseWithoutDetection(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
 	{	

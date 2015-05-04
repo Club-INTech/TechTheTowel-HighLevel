@@ -342,21 +342,6 @@ public abstract class Robot implements Service
         moveLengthwise(distance, hooksToConsider, false);
     }
 
-
-	/**
-	 * Fait avancer le robot de la distance spécifiée. Le robot garde son orientation actuelle et va simplement avancer.
-	 * Cette méthode permet de s'approcher plus d'un ennemi que moveLengthwise.
-	 * Attention, cette méthode suppose que l'on est pas sensé percuter un mur.
-	 * Cette méthode est bloquante: son exécution ne se termine que lorsque le robot a atteint le point d'arrivée
-	 *
-	 * @param distance en mm que le robot doit franchir. Si cette distance est négative, le robot va reculer. Attention, en cas de distance négative, cette méthode ne vérifie pas s'il y a un système d'évitement a l'arrère du robot
-	 * @param hooksToConsider les hooks déclenchables durant ce mouvement
-	 * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
-	 * @throws BlockedException en cas de bloquage mécanique immobilisant le robot
-	 * @throws UnexpectedObstacleOnPathException en cas d'obstace très proche percu par les capteurs
-	 */
-    public abstract void moveTowardEnnemy(int distance, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, BlockedException, UnexpectedObstacleOnPathException;
-
 	/**
 	 * Fait avancer le robot de la distance spécifiée. Le robot garde son orientation actuelle et va simplement avancer.
 	 * Attention, cette méthode suppose qu'il n'y a pas de hooks a considérer, et que l'on est sensé percuter un mur. La vitesse du robor est alors réduite a Speed.INTO_WALL.
