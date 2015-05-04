@@ -238,7 +238,7 @@ public class ObstacleManager
     {
     	//si la position est dans la table on continue les tests 
     	// si la position est dans notre zone de depart, ca ne peut etre qu'une main 
-    	if (position.x>-1500-radius && position.x<1500+radius && position.y>0-radius && position.y<2000+radius
+    	if (position.x>-1500 && position.x<1500 && position.y>0 && position.y<2000
     		&& !(position.x>1200 && position.y<1200 && position.y>800))
     	{
     		/*on ne test pas si la position est dans un obstcle deja existant 
