@@ -328,7 +328,7 @@ public class ObstacleManager
     	if(squaredDistanceToClosestEnemy <= 0)
     		return 0;
     	
-		log.debug("Position de l'ennemi le plus proche proche d'après distanceToClosestEnnemy: "+mMobileObstacles.get(indexOfClosestEnnemy).getPosition(), this);
+		//log.debug("Position de l'ennemi le plus proche proche d'après distanceToClosestEnnemy: "+mMobileObstacles.get(indexOfClosestEnnemy).getPosition(), this);
     	return (int)Math.sqrt((double)squaredDistanceToClosestEnemy) - mRobotRadius - mMobileObstacles.get(indexOfClosestEnnemy).radius;
     }
 

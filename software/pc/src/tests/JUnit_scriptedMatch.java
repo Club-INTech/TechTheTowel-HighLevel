@@ -259,9 +259,16 @@ public class JUnit_scriptedMatch extends JUnit_Test
 //		{
 //			e.printStackTrace();
 //		}*/
+		
+
+		//////////////////////////////////////////////////////
+		//	script drop gobelet
+		//////////////////////////////////////////////////////
+		
 		try
 		{
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant de deposer le verre");
+			real_state.robot.moveLengthwise(-50, null, true); // prend un peu de recul pour ne pas shooter la pile que l'on vient de déposer
 			scriptmanager.getScript(ScriptNames.DROP_GLASS).execute(0, real_state, emptyHook );//On depose 1 verre dans notre zone
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après deposer le verre");
 		}

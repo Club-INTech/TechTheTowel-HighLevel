@@ -150,7 +150,7 @@ public class DropGlass extends AbstractScript
 	{
 		if (id==0)
 		{
-			return new Circle(820,1000,0); // endroit de depart -50 cm en x
+			return new Circle(780,1000,0); // endroit de depart -90 cm en x
 		}
 		else if (id==1)
 		{

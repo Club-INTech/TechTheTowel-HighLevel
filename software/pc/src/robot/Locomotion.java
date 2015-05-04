@@ -580,7 +580,7 @@ public class Locomotion implements Service
         	// en cas de détection d'ennemi, une exception est levée
         	if(mustDetect)
         		//detectEnemyInFrontDisk(isMovementForward, turnOnly, aim);
-        		detectEnemyAtDistance(85, aim);	// laisse 85mm de large entre notre robot et le robot adverse
+        		detectEnemyAtDistance(70, aim);	// 85 mm est une bonne distance pour être safe.
         	else 
         		log.debug("Pas de detection demandée", this); 
         	
