@@ -262,4 +262,14 @@ public class RobotReal extends Robot
 	{
 		return mLocomotion.isRobotTurning;
 	}
+	
+	public boolean getIsRobotMovingForward()
+	{
+		return mLocomotion.isRobotMovingForward;
+	}
+	
+	public boolean getIsRobotMovingBackward()
+	{
+		return mLocomotion.isRobotMovingBackward;
+	}
 }

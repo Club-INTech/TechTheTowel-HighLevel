@@ -132,6 +132,10 @@ public class Locomotion implements Service
 	/** nombre d'essais maximum après une BlockedException*/
     private int maxRetriesIfBlocked=5;
     private int actualRetriesIfBlocked=0;
+    
+    /** Utile pour l'activation dees capteurs*/
+    public boolean isRobotMovingForward;
+    public boolean isRobotMovingBackward;
 
 
     
@@ -194,7 +198,10 @@ public class Locomotion implements Service
         );
     	finalAim = aim;
 
+        isRobotMovingForward=true;
 		moveToPointException(aim, hooks, true, false, true, mustDetect);
+        isRobotMovingBackward=false;
+
     	actualRetriesIfBlocked=0;
 
 
@@ -240,8 +247,17 @@ public class Locomotion implements Service
         // l'appel à cette méthode sous-entend que le robot ne tourne pas
         // il va donc en avant si la distance est positive, en arrière si elle est négative
         // si on est à 90°, on privilégie la marche avant
+        
+        // Ôur les capteurs
+        if(distance>=0)
+        	isRobotMovingForward=true;
+        else 
+        	isRobotMovingBackward=true;
 		moveToPointException(aim, hooks, distance >= 0, wall, false, mustDetect);
 		
+		isRobotMovingForward=false;
+    	isRobotMovingBackward=false;
+
 		actualRetriesIfBlocked=0;// on reinitialise
     }
     
@@ -259,7 +275,6 @@ public class Locomotion implements Service
      */
     public void moveTowardEnnemy(int distance, ArrayList<Hook> hooks) throws UnableToMoveException, BlockedException, UnexpectedObstacleOnPathException
     {    
-    	
     	// si l'on s'approche trop d'un ennemi, on lance une exception du type UnexpectedObstacleOnPathException
     	int MinDistanceToStop = 85;
     	
@@ -373,11 +388,15 @@ public class Locomotion implements Service
     	// on avance en fonction de ce que nous dit la strategie
     	if(strategy == DirectionStrategy.FORCE_BACK_MOTION)
     	{
+            isRobotMovingForward=true;
             moveToPointException(aim, hooks, false, mur, turnOnly, mustDetect);
+            isRobotMovingForward=false;
     	}
     	else if(strategy == DirectionStrategy.FORCE_FORWARD_MOTION)
-    	{
+    	{ 
+            isRobotMovingBackward=true;
             moveToPointException(aim, hooks, true, mur, turnOnly, mustDetect);
+            isRobotMovingBackward=false;
     	}
     	else //if(strategy == DirectionStrategy.FASTEST)
     	{
@@ -437,7 +456,13 @@ public class Locomotion implements Service
 		                {
 		                	actualRetriesIfBlocked++;
 		                    log.critical("Tentative "+actualRetriesIfBlocked+" de deplacement ", this);
+		                    if(isMovementForward)
+		                    	isRobotMovingForward=true;
+		                    else 
+		                    	isRobotMovingBackward=true;
 		                	moveToPointException(aim, hooks, isMovementForward, headingToWall, turnOnly, mustDetect); // on rentente s'il a y eu un probleme
+		                	isRobotMovingForward=false;
+		                	isRobotMovingBackward=false;
 		                }
 	                }
 	                else
@@ -838,7 +863,8 @@ public class Locomotion implements Service
     	
         if(table.getObstacleManager().distanceToClosestEnemy(highLevelPosition, movementDirection) <= distance)
         {
-        	log.debug("DetectEnemyAtDistance voit un ennemi trop proche pour continuer le déplacement (distance de " + table.getObstacleManager().distanceToClosestEnemy(highLevelPosition, movementDirection) +" mm)", this);
+        	log.debug("DetectEnemyAtDistance voit un ennemi trop proche pour continuer le déplacement (distance de " 
+        			 + table.getObstacleManager().distanceToClosestEnemy(highLevelPosition, movementDirection) +" mm)", this);
         	immobilise();
         	throw new UnexpectedObstacleOnPathException();
         }

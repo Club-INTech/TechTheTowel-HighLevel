@@ -56,23 +56,21 @@ public class DropGlass extends AbstractScript
 	
 			if (version==0)
 			{
-				stateToConsider.robot.turn(0);//On se tourne dans le bon sens
-				
-				//On avance
-				stateToConsider.robot.moveLengthwise(350, hooksToConsider, true);
 				
 				if(isThereGlassLeft)
 				{
+					stateToConsider.robot.turn(- Math.PI/4);//On se tourne dans le bon sens
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);
 				}
 				else if (isThereGlassRight)
 				{
+					stateToConsider.robot.turn( Math.PI/4);//On se tourne dans le bon sens
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);
 				}
 				
 				//On recule en laissant notre gobelet
 				stateToConsider.robot.moveLengthwise(-50, hooksToConsider, true);//TODO doucement pour eviter de faire tomber le gobelet (en envoyant 350, le gobelet vacille donc bof niveau fiabilité..											 sinon vive les commentaires de 2m de long ! Et oui c'est voulu, surtout ssi tu t'es fais chmir à tout lire <3
-				stateToConsider.robot.moveLengthwise(-300, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(-200, hooksToConsider, true);
 				
 				//On met à jour la table 
 				stateToConsider.table.areaXFilled(1);
@@ -81,7 +79,6 @@ public class DropGlass extends AbstractScript
 				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
 				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
 				
-				stateToConsider.robot.turn(Math.PI);//On se tourne dans le bon sens
 			}
 			else if (version==1)
 			{
@@ -116,7 +113,6 @@ public class DropGlass extends AbstractScript
 				//-900 -> -1200 pour eviter la PathNotFound Exception
 				stateToConsider.robot.turn(Math.PI);
 				stateToConsider.robot.moveLengthwise(300, hooksToConsider, true);
-				
 				
 				stateToConsider.robot.turn(Math.PI*3/4); // On se tourne aux 3/4 afin de pouvoir mettre l'un ou l'autre des verres
 	
@@ -154,7 +150,7 @@ public class DropGlass extends AbstractScript
 	{
 		if (id==0)
 		{
-			return new Circle(881,1000,0); // endroit de depart -50 cm en x
+			return new Circle(820,1000,0); // endroit de depart -50 cm en x
 		}
 		else if (id==1)
 		{

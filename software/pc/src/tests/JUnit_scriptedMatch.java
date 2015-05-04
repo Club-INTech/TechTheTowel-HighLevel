@@ -103,7 +103,6 @@ public class JUnit_scriptedMatch extends JUnit_Test
 	 */
 	void configColor()
 	{
-
 		String couleur = "";
 		while(!couleur.contains("jaune") && !couleur.contains("vert"))
 		{
@@ -132,7 +131,6 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		container.startAllThreads();
 		waitMatchBegin();
 
-		
 		//////////////////////////////////////////////////////
 		//	Début du match
 		//////////////////////////////////////////////////////
@@ -235,10 +233,10 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		
 		try 
 		{			
-			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant de deposer la pile sur l'estrade");
-			// On lache notree pile devnt (bientot sur l'estrade
+			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant de deposé la pile sur l'estrade");
+			// On lache notre pile dans notre zone 
 			scriptmanager.getScript(ScriptNames.FREE_STACK).goToThenExec(0, real_state, emptyHook );
-			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après deposer la pile sur l'estrade");
+			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après deposé la pile sur l'estrade");
 
 		}
 		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e) 
@@ -256,26 +254,23 @@ public class JUnit_scriptedMatch extends JUnit_Test
 //			// TODO : resoudre laa PathNotFound Exeption
 //			scriptmanager.getScript(ScriptNames.TAKE_TENNIS_BALL).goToThenExec(1, real_state, true, emptyHook );
 //			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après prendre la balle");
-//
-//			
 //		}
 //		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException e) 
 //		{
 //			e.printStackTrace();
 //		}*/
-//		try
-//		{
-//			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant de deposer le verre");
-//			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(0, real_state, emptyHook );//On depose 1 verre dans notre zone
-//			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après deposer le verre");
-//
-//		}
-//		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e) 
-//		{
-//			e.printStackTrace();
-//		}
-//		
-//		System.out.println("Verre deposé");
+		try
+		{
+			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant de deposer le verre");
+			scriptmanager.getScript(ScriptNames.DROP_GLASS).execute(0, real_state, emptyHook );//On depose 1 verre dans notre zone
+			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après deposer le verre");
+		}
+		catch (UnableToMoveException | SerialConnexionException | SerialFinallyException  e) 
+		{
+			e.printStackTrace();
+		}
+		
+		System.out.println("Verre deposé");
 //		
 //		try
 //		{

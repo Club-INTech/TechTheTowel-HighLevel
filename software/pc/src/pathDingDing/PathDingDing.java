@@ -3,6 +3,7 @@ package pathDingDing;
 import smartMath.*;
 import sun.util.logging.resources.logging;
 import table.Table;
+import utils.Log;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -21,16 +22,19 @@ public class PathDingDing implements Service
 	private Table mTable;
 	private Graph mGraph;
 	private EnumSet<ObstacleGroups> mObstaclesToConsider;
+    private Log mLog;
 	
 	/**
 	 * constructeur
 	 * @param table
 	 */
-	public PathDingDing(Table table)
+	public PathDingDing(Table table, Log log)
 	{
 		mTable = table;
 		mObstaclesToConsider = EnumSet.noneOf(ObstacleGroups.class);
-		mGraph = new Graph(mTable, mObstaclesToConsider);
+		mLog=log;
+		mGraph = new Graph(mTable, mObstaclesToConsider, mLog);
+		mLog=log;
 	}
 	
 	/**
@@ -52,7 +56,7 @@ public class PathDingDing implements Service
 		if(!mGraph.isOnTable(new Node(end.x, end.y)))
 		{
 			EnumSet<ObstacleGroups> obstacleGroupsInPosition = mGraph.obstacleGroupsInPosition(end);
-			System.out.println("Obstacles bloquants : "+ obstacleGroupsInPosition.toString() );
+			mLog.debug("Obstacles bloquants : "+ obstacleGroupsInPosition.toString() ,this);
 			obstacleGroupsInPosition.retainAll(mObstaclesToConsider);
 			throw new InObstacleException(obstacleGroupsInPosition);
 		}
@@ -63,7 +67,7 @@ public class PathDingDing implements Service
 		directPath.add(end);
 		if(isPathCorrect(directPath))
 		{
-			System.out.println("Path correct, direct : "+directPath );
+			mLog.debug("Path correct, direct : "+directPath ,this);
 			return directPath;
 		}
 		

@@ -191,9 +191,35 @@ public class JUnit_Sensors extends JUnit_Test
 		}
 	}
 	
+	@Test
+	public void testMoveForwardBackward()
+	{
+		
+		try 
+		{
+			state.robot.moveLengthwiseWithoutDetection(500);
+		} 
+		catch (UnableToMoveException e1)
+		{
+			log.critical("!!!!! Catch de"+e1+" dans testDetectionTournante !!!!!" , this);
+		}
+		while (true)
+		{
+			try 
+			{
+				state.robot.moveLengthwiseWithoutDetection(500);
+				state.robot.moveLengthwiseWithoutDetection(-500);
+			} 
+			catch (UnableToMoveException e1)
+			{
+				log.critical("!!!!! Catch de"+e1+" dans testDetectionTournante !!!!!" , this);
+			}
+		}
+	}
+	
 
 		
-	@Test
+	//@Test
 	public void testCapteurFixe()
 	{
 		log.debug("Test d'évitement fixe", this);

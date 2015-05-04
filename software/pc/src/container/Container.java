@@ -227,7 +227,8 @@ public class Container
 																);
 		else if(serviceRequested == ServiceNames.PATHDINGDING)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new PathDingDing(
-																	(Table)getService(ServiceNames.TABLE)
+																	(Table)getService(ServiceNames.TABLE),
+																	(Log)getService(ServiceNames.LOG)
 																);
 		
 		// si le service demandé n'est pas connu, alors on log une erreur.
