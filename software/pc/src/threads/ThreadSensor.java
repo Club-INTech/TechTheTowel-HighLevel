@@ -57,7 +57,7 @@ class ThreadSensor extends AbstractThread
 	/**
 	 * Distance minimale à laquelle on peut se fier aux capteurs : ne pas detecter notre propre root par exemple
 	 */
-	double minSensorRange = 0;
+	double minSensorRange = 20;
 	
 	/**
 	 *  Booleen explicitant si addObstacle a en effet ajouté un obstacle
@@ -319,8 +319,8 @@ class ThreadSensor extends AbstractThread
 				
 				
 				positionEnnemi_1.x =  (int)(	rightFrontSensorPosition.x + Math.sqrt( 
-																(distanceObstacleFront[1]*distanceObstacleFront[1])-
-														        (positionEnnemi_1.y-distanceBetweenFrontSensors/2)*(positionEnnemi_1.y-distanceBetweenFrontSensors/2)));	//position de l'obstacle en fonction du robot
+												(distanceObstacleFront[1]*distanceObstacleFront[1])-
+												(positionEnnemi_1.y-distanceBetweenFrontSensors/2)*(positionEnnemi_1.y-distanceBetweenFrontSensors/2)));	//position de l'obstacle en fonction du robot
 
 				relativePosEnnemi1.x=positionEnnemi_1.x;
 				relativePosEnnemi1.y=positionEnnemi_1.y;
@@ -477,7 +477,7 @@ class ThreadSensor extends AbstractThread
 				
 				
 				positionEnnemi_1.x =  -(int)(	-rightBackSensorPosition.x + Math.sqrt( 
-												(distanceObstacleBack[1]*distanceObstacleBack[1])+
+												(distanceObstacleBack[1]*distanceObstacleBack[1])-
 											    (positionEnnemi_1.y+distanceBetweenBackSensors/2)*(positionEnnemi_1.y+distanceBetweenBackSensors/2)));	//position de l'obstacle en fonction du robot
 
 				relativePosEnnemi1.x=positionEnnemi_1.x;
