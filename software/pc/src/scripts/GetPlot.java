@@ -158,7 +158,7 @@ public class GetPlot extends AbstractScript
 				if(versionToExecute==0 || versionToExecute==2 )
 				{
 					// isSecondtry est a true car 2 essais sont inutiles (statistiquement, le 1er fonctionne)
-					eatPlot(true, isChoosenArmLeft, stateToConsider, true, true);
+					eatPlot(true, isChoosenArmLeft, stateToConsider, true, false);
 					stateToConsider.table.eatPlotX(versionToExecute);
 				}
 
@@ -226,6 +226,7 @@ public class GetPlot extends AbstractScript
 				catch (UnableToEatPlot e) 
 				{
 					finalize(stateToConsider);
+					stateToConsider.table.eatPlotX(4);
 					stateToConsider.robot.moveLengthwise(-150, hooksToConsider);
 					return;
 				}
@@ -239,6 +240,7 @@ public class GetPlot extends AbstractScript
 				catch (UnableToEatPlot e) 
 				{
 					finalize(stateToConsider);
+					stateToConsider.table.eatPlotX(3);
 					stateToConsider.robot.moveLengthwise(-150, hooksToConsider);
 					return;
 				}

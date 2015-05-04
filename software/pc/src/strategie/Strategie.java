@@ -56,7 +56,7 @@ public class Strategie implements Service
 	protected Container container;
 	
 	/** Les hooks des deux robots*/
-	ArrayList<Hook> hookRobot;
+	ArrayList<Hook> hookRobot = new ArrayList<Hook>();
 
 	/**
 	 * le prochain script que l'IA executera mis a jour dans takeDecision
@@ -170,7 +170,7 @@ public class Strategie implements Service
 
 		
 		scriptArray.add(scriptmanager.getScript(ScriptNames.DROP_CARPET));
-		versionArray.add(1);
+		versionArray.add(0);
 		
 		scriptArray.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
 		versionArray.add(2);

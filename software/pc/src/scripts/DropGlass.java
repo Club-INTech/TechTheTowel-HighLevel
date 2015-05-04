@@ -173,6 +173,7 @@ public class DropGlass extends AbstractScript
 		int toReturn=4;
 		//si la zone a remplir n'est pas deja remplie
 		if (!stateToConsider.table.isAreaXFilled(version))
+		{
 			//si on a un gobelet stocke
 			if (stateToConsider.robot.isGlassStoredLeft || stateToConsider.robot.isGlassStoredRight)
 			{
@@ -182,7 +183,20 @@ public class DropGlass extends AbstractScript
 											stateToConsider.table.numberOfPlotLeft());
 				return toReturn;
 			}
-		return 0;
+		}
+		else
+		{
+			toReturn -=4;
+		}
+		
+		
+		if (version == 0)
+		{
+			toReturn -= stateToConsider.table.getPileValue(0);
+		}
+		
+		
+		return toReturn;
 	}
 
 	@Override

@@ -72,6 +72,8 @@ public abstract class Robot implements Service
 
 	/** Booleen explicitant si on a un plot dans les machoires mais pas encore dans le tube */
 	private boolean hasNonDigestedPlot=false;
+
+	private float aimThresold = 15;
 	
 	
 	/**
@@ -277,7 +279,7 @@ public abstract class Robot implements Service
 	 */
     public void moveLengthwise(int distance) throws UnableToMoveException
     {
-        moveLengthwise(distance, null, false);
+        moveLengthwise(distance, new ArrayList<Hook>(), false);
     }
     
     public abstract void moveLengthwiseWithoutDetection(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException;
@@ -288,6 +290,44 @@ public abstract class Robot implements Service
     	moveLengthwiseWithoutDetection(distance, null, false);
     }
 
+    /**
+	 * Fait avancer le robot de la distance spécifiée. Le robot garde son orientation actuelle et va simplement avancer
+	 * Cette méthode est bloquante: son exécution ne se termine que lorsque le robot a atteint le point d'arrivée
+	 * @param distance en mm que le robot doit franchir
+	 * @param hooksToConsider hooks a considérer lors de ce déplacement. Le hook n'est déclenché que s'il est dans cette liste et que sa condition d'activation est remplie	 
+	 * @param expectsWallImpact true si le robot doit s'attendre a percuter un mur au cours du déplacement. false si la route est sensée être dégagée.
+	 * @param mustDetect vrai si le robot doit detecter les obstacles sur son chemin
+	 * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
+	 */
+	public abstract void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact, Boolean mustDetect) throws UnableToMoveException;
+
+	
+	/**
+	 * Fait avancer le robot de la distance spécifiée. Le robot garde son orientation actuelle et va simplement avancer
+	 * Cette méthode est bloquante: son exécution ne se termine que lorsque le robot a atteint le point d'arrivée
+	 * @param distance en mm que le robot doit franchir
+	 * @param hooksToConsider hooks a considérer lors de ce déplacement. Le hook n'est déclenché que s'il est dans cette liste et que sa condition d'activation est remplie	 
+	 * @param expectsWallImpact true si le robot doit s'attendre a percuter un mur au cours du déplacement. false si la route est sensée être dégagée.
+	 * @param mustDetect vrai si le robot doit detecter les obstacles sur son chemin
+	 * @param speed la vitesse du robot lors de son parcours
+	 * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
+	 */
+	 public abstract void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact, Boolean mustDetect, Speed speed) throws UnableToMoveException;
+	
+	 
+	 /**
+		 * Fait avancer le robot de la distance spécifiée. Le robot garde son orientation actuelle et va simplement avancer
+		 * Cette méthode est bloquante: son exécution ne se termine que lorsque le robot a atteint le point d'arrivée
+		 * @param distance en mm que le robot doit franchir
+		 * @param hooksToConsider hooks a considérer lors de ce déplacement. Le hook n'est déclenché que s'il est dans cette liste et que sa condition d'activation est remplie	 
+		 * @param speed la vitesse du robot lors de son parcours
+		 * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
+		 */
+		 public void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, Speed speed) throws UnableToMoveException
+		 {
+			 moveLengthwise(distance, hooksToConsider, false, true, speed);
+		 }
+	 
 	/**
 	 * Fait avancer le robot de la distance spécifiée. Le robot garde son orientation actuelle et va simplement avancer.
 	 * Attention, cette méthode suppose que l'on est pas sensé percuter un mur.
@@ -327,7 +367,7 @@ public abstract class Robot implements Service
     public void moveLengthwiseTowardWall(int distance, ArrayList<Hook> hooksToConsider) throws UnableToMoveException
     {
         Speed oldSpeed = speed; 
-        setLocomotionSpeed(Speed.FAST);
+        setLocomotionSpeed(Speed.SLOW);
         moveLengthwise(distance, hooksToConsider, true);
         setLocomotionSpeed(oldSpeed);
     }
@@ -435,6 +475,9 @@ public abstract class Robot implements Service
     	 */
     	path.add(movementVector.dotFloat( (movementVector.length()-aim.radius)/movementVector.length() ).plusNewVector(precedentPathPoint));
 
+    	//si on est trop proche du point d'arrivee on le retire
+	    	if (path.get(1).distance(getPosition())<aimThresold)
+	    		path.remove(1);
     	
     	try 
     	{
@@ -542,4 +585,5 @@ public abstract class Robot implements Service
 	{
 		return hasNonDigestedPlot;
 	}
+
 }

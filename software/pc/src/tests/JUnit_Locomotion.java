@@ -110,7 +110,7 @@ public class JUnit_Locomotion extends JUnit_Test
 		log.debug("en position : x="+position.x+"; y="+position.y, this);
 		try 
 		{
-			mLocomotion.moveLengthwise(2000,null, false);
+			mLocomotion.moveLengthwise(2000,new ArrayList<Hook>(), false, false);
 		} 
 		catch (UnableToMoveException e) 
 		{

@@ -96,9 +96,47 @@ public class RobotReal extends Robot
 	 * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
 	 */
 	@Override
-    public void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
+	public void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
 	{	
+		Speed oldSpeed = speed;
 		mLocomotion.moveLengthwise(distance, hooksToConsider, expectsWallImpact);
+		speed = oldSpeed;
+	}	
+	
+	
+	/**
+	 * Fait avancer le robot de la distance spécifiée. Le robot garde son orientation actuelle et va simplement avancer
+	 * Cette méthode est bloquante: son exécution ne se termine que lorsque le robot a atteint le point d'arrivée
+	 * @param distance en mm que le robot doit franchir
+	 * @param hooksToConsider hooks a considérer lors de ce déplacement. Le hook n'est déclenché que s'il est dans cette liste et que sa condition d'activation est remplie	 
+	 * @param expectsWallImpact true si le robot doit s'attendre a percuter un mur au cours du déplacement. false si la route est sensée être dégagée.
+	 * @param mustDetect vrai si le robot doit detecter les obstacles sur son chemin
+	 * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
+	 */
+	@Override
+	 public void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact, Boolean mustDetect) throws UnableToMoveException
+	{	
+		Speed oldSpeed = speed;
+		mLocomotion.moveLengthwise(distance, hooksToConsider, expectsWallImpact, mustDetect);
+		speed = oldSpeed;
+	}	
+	 
+	/**
+	 * Fait avancer le robot de la distance spécifiée. Le robot garde son orientation actuelle et va simplement avancer
+	 * Cette méthode est bloquante: son exécution ne se termine que lorsque le robot a atteint le point d'arrivée
+	 * @param distance en mm que le robot doit franchir
+	 * @param hooksToConsider hooks a considérer lors de ce déplacement. Le hook n'est déclenché que s'il est dans cette liste et que sa condition d'activation est remplie	 
+	 * @param expectsWallImpact true si le robot doit s'attendre a percuter un mur au cours du déplacement. false si la route est sensée être dégagée.
+	 * @param mustDetect vrai si le robot doit detecter les obstacles sur son chemin
+	 * @param speed la vitesse du robot lors de son parcours
+	 * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
+	 */
+	@Override
+	 public void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact, Boolean mustDetect, Speed speed) throws UnableToMoveException
+	{	
+		Speed oldSpeed = speed;
+		mLocomotion.moveLengthwise(distance, hooksToConsider, expectsWallImpact, mustDetect, speed);
+		speed = oldSpeed;
 	}	
 	
 	
@@ -106,13 +144,16 @@ public class RobotReal extends Robot
 	@Override
     public void moveTowardEnnemy(int distance, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, BlockedException, UnexpectedObstacleOnPathException
 	{	
+		
 		mLocomotion.moveTowardEnnemy(distance, hooksToConsider);
 	}	
 	
 	@Override
     public void moveLengthwiseWithoutDetection(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
 	{	
+		Speed oldSpeed = speed;
 		mLocomotion.moveLengthwise(distance, hooksToConsider, expectsWallImpact, false);
+		speed = oldSpeed;
 	}	
 	
 
