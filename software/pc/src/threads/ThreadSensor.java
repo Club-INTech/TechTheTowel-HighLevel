@@ -57,7 +57,7 @@ class ThreadSensor extends AbstractThread
 	/**
 	 * Distance minimale à laquelle on peut se fier aux capteurs : ne pas detecter notre propre root par exemple
 	 */
-	double minSensorRange = 80;
+	double minSensorRange = 0;
 	
 	/**
 	 *  Booleen explicitant si addObstacle a en effet ajouté un obstacle
@@ -210,10 +210,10 @@ class ThreadSensor extends AbstractThread
 
 				//ajout d'obstacles mobiles dans l'obstacleManager
 				// Analyse des capteurs avant, avec gestion des angles
-				if(mRobot.getIsRobotMovingForward())
+				//if(mRobot.getIsRobotMovingForward())//FIXME
 					addObstacleFront(distanceFront);
 				// Analyse des capteurs arrieres, avec gestion des angles
-				if(mRobot.getIsRobotMovingBackward())
+				//if(mRobot.getIsRobotMovingBackward())//FIXME
 					addObstacleBack(distanceBack);
 				
 			}
@@ -243,7 +243,6 @@ class ThreadSensor extends AbstractThread
 		boolean[] obstacleAdded={false,false};
 		obstacleAddedRight=false;
 		obstacleAddedLeft=false;
-
 		
 		/** Zones de detection : 0;1;2 capteurs dans leurs zones respectives
 		 * 
@@ -290,7 +289,6 @@ class ThreadSensor extends AbstractThread
 				mTable.getObstacleManager().addObstacle(positionEnnemi_1);
 	    		log.debug("Valeur des capteurs avant brute : "+realSensorValuesFront[0]+";"+realSensorValuesFront[1], this);
 	    		log.debug("Ennemi avant ajouté en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
-
 				
 				obstacleAddedLeft=true;
 				
@@ -386,7 +384,6 @@ class ThreadSensor extends AbstractThread
 		obstacleAdded[0]=obstacleAddedLeft;
 		obstacleAdded[1]=obstacleAddedRight;
 
-		
 		return obstacleAdded;
 	}
 
@@ -403,7 +400,6 @@ class ThreadSensor extends AbstractThread
 		boolean[] obstacleAdded={false,false};
 		obstacleAddedRight=false;
 		obstacleAddedLeft=false;
-
 		
 		/** Zones de detection : 0;1;2 capteurs dans leurs zones respectives
 		 * 

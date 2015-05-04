@@ -140,7 +140,8 @@ public class DropPile extends AbstractScript
 				
 				stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_GUIDE, false);
 				stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_GUIDE, true);
-				
+				Sleep.sleep(700);	// attente pour que la pile retrouve son équilibre
+
 				//puis beaucoup
 				stateToConsider.robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, false);
 				stateToConsider.robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, true);
