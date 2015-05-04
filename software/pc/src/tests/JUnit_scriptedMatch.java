@@ -15,6 +15,7 @@ import threads.ThreadTimer;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.JUnitCore;
 
 import pathDingDing.PathDingDing;
 import enums.ScriptNames;
@@ -39,6 +40,13 @@ public class JUnit_scriptedMatch extends JUnit_Test
 	SensorsCardWrapper  mSensorsCardWrapper;
 	PathDingDing pathDingDing;
 	SensorsCardWrapper sensors;
+	
+	
+	public static void main(String[] args) throws Exception
+	{                    
+	       JUnitCore.main("tests.JUnit_scriptedMatch");
+	}
+	
 	
 	@SuppressWarnings("unchecked")
 	@Before
@@ -366,7 +374,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 //			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le deposage de la pile dans notre zone");
 //			scriptmanager.getScript(ScriptNames.FREE_STACK).goToThenExec(2, real_state, emptyHook ); // On libere la pile ans notre zone
 //			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le deposage de la pile dans notre zone");
-//
+//type filter text
 //		}
 //		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e) 
 //		{
