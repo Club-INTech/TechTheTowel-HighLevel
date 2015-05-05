@@ -38,6 +38,7 @@ public class JUnit_Strategia extends JUnit_Test
 		real_state = (GameState<Robot>) container.getService(ServiceNames.GAME_STATE);
 		strategos = (Strategie) container.getService(ServiceNames.STRATEGIE);
         
+		
 		emptyHook = new ArrayList<Hook> ();  
 
 		real_state.robot.setPosition(new Vec2 (1099,1000));
@@ -137,7 +138,7 @@ public class JUnit_Strategia extends JUnit_Test
 	{
 		configColor();
 		real_state.robot.setLocomotionSpeed(Speed.BETWEEN_SCRIPTS_SLOW);
-//		container.startAllThreads();
+		container.startAllThreads();
 		waitMatchBegin();
 		strategos.updateConfig();
 		strategos.IA();

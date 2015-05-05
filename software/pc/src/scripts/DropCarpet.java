@@ -9,6 +9,7 @@ import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import hook.Callback;
 import hook.Hook;
+import hook.methods.CloseLeftArmExe;
 import hook.methods.CloseRightArmExe;
 import hook.types.HookFactory;
 import robot.Robot;
@@ -192,7 +193,10 @@ public class DropCarpet extends AbstractScript
 				
 				//mise en place d'un hook pour attraper le gobelet 1.75 secondes après le début du script
 				Hook hookGoblet = hookFactory.newHookTimer(System.currentTimeMillis() + 2250, 500);
-				hookGoblet.addCallback(new Callback(new CloseRightArmExe(),true, stateToConsider));
+				if(stateToConsider.robot.getSymmetry())
+					hookGoblet.addCallback(new Callback(new CloseLeftArmExe(),true, stateToConsider));
+				else
+					hookGoblet.addCallback(new Callback(new CloseRightArmExe(),true, stateToConsider));
 				hooksToConsider.add(hookGoblet);
 				
 				if (!stateToConsider.robot.getSymmetry())
