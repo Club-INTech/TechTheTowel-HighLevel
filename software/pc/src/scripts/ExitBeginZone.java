@@ -9,6 +9,7 @@ import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialFinallyException;
 import robot.Robot;
 import smartMath.Circle;
+import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
 import utils.Config;
@@ -30,7 +31,7 @@ public class ExitBeginZone extends AbstractScript
 	}
 
 	@Override
-	public Circle entryPosition(int id, int ray)
+	public Circle entryPosition(int id, int ray, Vec2 robotPosition)
 	{
 		return new Circle(Table.entryPosition);
 	}

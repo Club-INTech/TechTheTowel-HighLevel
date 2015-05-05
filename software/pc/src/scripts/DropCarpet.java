@@ -4,9 +4,7 @@ import java.util.ArrayList;
 
 import enums.ActuatorOrder;
 import enums.Speed;
-import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
-import exceptions.Locomotion.UnexpectedObstacleOnPathException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import hook.Callback;
@@ -269,7 +267,7 @@ public class DropCarpet extends AbstractScript
 	}
 	
 	@Override
-	public Circle entryPosition(int id, int radius)
+	public Circle entryPosition(int id, int radius, Vec2 robotPosition)
 	{
 		//taille totale des escaliers : 1066 / on divisse par 4; 266.5
 		if (id==1)

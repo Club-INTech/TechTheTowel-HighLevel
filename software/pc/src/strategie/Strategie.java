@@ -7,8 +7,10 @@ import java.util.ArrayList;
 import pathDingDing.PathDingDing;
 import container.Container;
 import container.Service;
+import enums.ActuatorOrder;
 import enums.ScriptNames;
 import enums.ObstacleGroups;
+import enums.Speed;
 import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -112,27 +114,60 @@ public class Strategie implements Service
 	
 	/**
 	 * on suppose que tout les AX-12 sont initialisés avant de lancer l'IA
+	 * et que la position du robot est la position de depart
 	 */
 	public void IA()
 	{
 		GameState<Robot> gameState = new GameState<Robot>(config, log, table, robotReal);
+		
+		
+		//premier script pour sortir de la zone, on essaye en premier de sortir en deposant les tapis et en recuperant le gobelet
 		try 
 		{
-			scriptmanager.getScript(ScriptNames.EXIT_START_ZONE).execute(0, gameState, hookRobot);
+			scriptmanager.getScript(ScriptNames.DROP_CARPET).execute(2, gameState, hookRobot);
 		} 
-		catch (UnableToMoveException | SerialConnexionException | SerialFinallyException e1) 
+		catch (UnableToMoveException e)
 		{
-			log.critical("impossible de sortir de la zone de depart", this);
-			Sleep.sleep(500);
-			IA();
-			return;
+			while (robotReal.getPosition().distance(Table.entryPosition)<250)
+			{
+				try 
+				{
+					scriptmanager.getScript(ScriptNames.EXIT_START_ZONE).execute(0, gameState, hookRobot);
+				} 
+				catch (UnableToMoveException | SerialConnexionException | SerialFinallyException e1) 
+				{
+					log.critical("impossible de sortir de la zone de depart", this);
+					Sleep.sleep(500);
+				}
+			}
+				
+		}
+		catch (SerialConnexionException e) 
+		{
+			initInMatch();
+		}
+		catch (SerialFinallyException e)
+		{
+			while (true)
+			{
+				try 
+				{
+					scriptmanager.getScript(ScriptNames.DROP_CARPET).finalize(gameState);
+					break;
+				} 
+				catch (UnableToMoveException | SerialFinallyException e1) 
+				{
+				}
+			}
 		}
 		
+		
+		// match scripté de l'IA
 		try 
 		{
 			scriptedMatch(gameState);
 		} 
-		catch (PathNotFoundException | InObstacleException| UnableToMoveException e1) 
+		catch (PathNotFoundException | InObstacleException| UnableToMoveException e) 
 		{
 					
 			//tant que le match n'est pas fini, on prend des decisions :
@@ -151,17 +186,168 @@ public class Strategie implements Service
 				{
 					nextScript.goToThenExec(nextScriptVersion, gameState, hookRobot);
 				} 
-				catch (UnableToMoveException | SerialConnexionException
-						| PathNotFoundException | SerialFinallyException | InObstacleException e) 
+				catch (UnableToMoveException |  PathNotFoundException e1) 
 				{
 					// FIXME choix de l'IA face a un imprevu
 					e.printStackTrace();
+				}
+				catch (InObstacleException e1)
+				{
+					//TODO gerer cette exception en cours de match (pas uniquement pour le debug)
+					log.debug("le script "+nextScript.getClass()+"emmet un inObstacleException", this);
+				}
+				catch (SerialConnexionException e1)
+				{
+					initInMatch();
+				}
+				catch (SerialFinallyException e1)
+				{
+					while (true)
+					{
+						try 
+						{
+							nextScript.finalize(gameState);
+							break;
+						} 
+						catch (UnableToMoveException | SerialFinallyException e2) 
+						{
+							log.critical("multiple finalize exceptions", this);
+						}
+					}
 				}
 			}
 		}
 	}
 	
-	
+	/**
+	 * initialize the real robot during a match (because of a SerialConnexionException)
+	 * se relance tant qu'il y a des SerialConnexionException (pour preserver la meca)
+	 */
+	private void initInMatch() 
+	{
+		try 
+		{
+			robotReal.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+		} 
+		catch (SerialConnexionException e) 
+		{
+			log.warning("elevator ne reponds pas (ground)", this);
+			initInMatch();
+			return;
+		}
+		
+		try 
+		{
+			robotReal.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
+		} 
+		catch (SerialConnexionException e)
+		{
+			log.warning("le bras gauche ne reponds pas", this);
+			initInMatch();
+			return;
+		}
+		
+		try 
+		{
+			robotReal.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
+		} catch (SerialConnexionException e) 
+		{
+			log.warning("le bras droit ne reponds pas", this);
+			initInMatch();
+			return;
+		}
+		
+		try 
+		{
+			robotReal.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
+		} 
+		catch (SerialConnexionException e) 
+		{
+			log.warning("le guide droit ne reponds pas", this);
+			initInMatch();
+			return;
+		}
+		
+		try 
+		{
+			robotReal.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);
+		} 
+		catch (SerialConnexionException e) 
+		{
+			log.warning("le guide gauche ne reponds pas", this);
+			initInMatch();
+			return;
+		}
+		
+		try 
+		{
+			robotReal.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
+		}
+		catch (SerialConnexionException e) 
+		{
+			log.warning("le tapis gauche ne reponds pas", this);
+			initInMatch();
+			return;
+		}
+		
+		try 
+		{
+			robotReal.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
+		}
+		catch (SerialConnexionException e)
+		{
+			log.warning("le tapis droit ne reponds pas", this);
+			initInMatch();
+			return;
+		}
+		
+		try
+		{
+			robotReal.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
+		} 
+		catch (SerialConnexionException e) 
+		{
+			log.warning("le clap gauche ne reponds pas", this);
+			initInMatch();
+			return;
+		}
+		
+		try 
+		{
+			robotReal.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
+		}
+		catch (SerialConnexionException e2) 
+		{
+			log.warning("le clap droit ne reponds pas", this);
+			initInMatch();
+			return;
+		}
+		
+		try
+		{
+			robotReal.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+		} 
+		catch (SerialConnexionException e) 
+		{
+			log.warning("les machoires ne repondent pas", this);
+			initInMatch();
+			return;
+		}
+		
+		try 
+		{
+			robotReal.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+		}
+		catch (SerialConnexionException e) 
+		{
+			log.warning("elevator ne reponds pas (low)", this);
+			initInMatch();
+			return;
+		}
+		
+		robotReal.setLocomotionSpeed(Speed.BETWEEN_SCRIPTS);
+	}
+
 	private void scriptedMatch(GameState<Robot> gameState) throws PathNotFoundException, InObstacleException, UnableToMoveException 
 	{
 		//FIXME ajouter les scripts ainsi que leur version au match scripté
@@ -210,6 +396,7 @@ public class Strategie implements Service
 					try 
 					{
 						scriptArray.get(0).finalize(gameState);
+						break;
 					} 
 					catch (IndexOutOfBoundsException e1)
 					{
