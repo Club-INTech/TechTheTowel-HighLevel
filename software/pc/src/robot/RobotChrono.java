@@ -316,4 +316,10 @@ public class RobotChrono extends Robot
 		
 	}
 
+	@Override
+	public Speed getLocomotionSpeed() {
+
+		return null;
+	}
+
 }

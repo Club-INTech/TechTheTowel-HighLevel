@@ -17,6 +17,7 @@ import hook.methods.OpenClapRightMiddleExe;
 import hook.types.HookFactory;
 import robot.Robot;
 import smartMath.Circle;
+import smartMath.Vec2;
 import strategie.GameState;
 import utils.Config;
 import utils.Log;
@@ -457,7 +458,7 @@ public class CloseClap extends AbstractScript
 	
 	
 	@Override
-	public Circle entryPosition(int version, int ray)
+	public Circle entryPosition(int version, int ray, Vec2 robotPosition)
 	{		
 		if (version == 1)
 			return new Circle(1290,230); //point d'entrée : bord de la table, robot devant le clap 1

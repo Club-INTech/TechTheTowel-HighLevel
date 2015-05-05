@@ -14,9 +14,7 @@ import java.util.ArrayList;
 import enums.ActuatorOrder;
 import enums.SensorNames;
 import enums.Speed;
-import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
-import exceptions.Locomotion.UnexpectedObstacleOnPathException;
 import exceptions.serial.SerialConnexionException;
 
 /**
@@ -31,7 +29,7 @@ public class RobotReal extends Robot
 	
 	/** Système de locomotion a utiliser pour déplacer le robot */
 	private Locomotion mLocomotion;
-
+	
 	// Constructeur
 	public RobotReal( Locomotion deplacements, ActuatorCardWrapper mActuatorCardWrapper, Config config, Log log, PathDingDing pathDingDing, SensorsCardWrapper mSensorsCardWrapper)
  	{
@@ -98,11 +96,22 @@ public class RobotReal extends Robot
 	@Override
 	public void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
 	{	
-		Speed oldSpeed = speed;
-		mLocomotion.moveLengthwise(distance, hooksToConsider, expectsWallImpact);
-		speed = oldSpeed;
+		moveLengthwise(distance, hooksToConsider, expectsWallImpact, true);
 	}	
 	
+	@Override
+    public void moveLengthwiseWithoutDetection(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
+	{	
+		Speed newSpeed;
+    	if (distance<150)
+    		newSpeed = Speed.SLOW;
+    	else if (distance <1000)
+    		newSpeed = Speed.BETWEEN_SCRIPTS_SLOW;
+    	else
+    		newSpeed = Speed.BETWEEN_SCRIPTS;
+    	
+		moveLengthwise(distance, hooksToConsider, expectsWallImpact, false, newSpeed);
+	}	
 	
 	/**
 	 * Fait avancer le robot de la distance spécifiée. Le robot garde son orientation actuelle et va simplement avancer
@@ -116,10 +125,17 @@ public class RobotReal extends Robot
 	@Override
 	 public void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact, Boolean mustDetect) throws UnableToMoveException
 	{	
-		Speed oldSpeed = speed;
-		mLocomotion.moveLengthwise(distance, hooksToConsider, expectsWallImpact, mustDetect);
-		speed = oldSpeed;
+		Speed newSpeed;
+    	if (distance<150)
+    		newSpeed = Speed.SLOW;
+    	else if (distance <1000)
+    		newSpeed = Speed.BETWEEN_SCRIPTS_SLOW;
+    	else
+    		newSpeed = Speed.BETWEEN_SCRIPTS;
+    	
+		moveLengthwise(distance, hooksToConsider, expectsWallImpact, mustDetect, newSpeed);
 	}	
+
 	 
 	/**
 	 * Fait avancer le robot de la distance spécifiée. Le robot garde son orientation actuelle et va simplement avancer
@@ -132,20 +148,22 @@ public class RobotReal extends Robot
 	 * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
 	 */
 	@Override
-	 public void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact, Boolean mustDetect, Speed speed) throws UnableToMoveException
+	 public void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact, Boolean mustDetect, Speed newSpeed) throws UnableToMoveException
 	{	
 		Speed oldSpeed = speed;
-		mLocomotion.moveLengthwise(distance, hooksToConsider, expectsWallImpact, mustDetect, speed);
+		speed = newSpeed;
+		mLocomotion.moveLengthwise(distance, hooksToConsider, expectsWallImpact, mustDetect);
 		speed = oldSpeed;
 	}	
-	
+
+	/* TODO nexiste pas ?
 	@Override
-    public void moveLengthwiseWithoutDetection(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
+    public void moveTowardEnnemy(int distance, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, BlockedException, UnexpectedObstacleOnPathException
 	{	
-		Speed oldSpeed = speed;
-		mLocomotion.moveLengthwise(distance, hooksToConsider, expectsWallImpact, false);
-		speed = oldSpeed;
-	}	
+		
+		mLocomotion.moveTowardEnnemy(distance, hooksToConsider);
+	}
+	*/
 	
 
 
@@ -283,11 +301,20 @@ public class RobotReal extends Robot
         {
 			mLocomotion.setTranslationnalSpeed(vitesse.PWMTranslation);
 	        mLocomotion.setRotationnalSpeed(vitesse.PWMRotation);
+	        
+	        speed = vitesse;
 		} 
         catch (SerialConnexionException e)
         {
 			e.printStackTrace();
 		}
+	}
+	
+
+	@Override
+	public Speed getLocomotionSpeed()
+	{
+		return speed;
 	}
 	
 	public boolean getIsRobotTurning()
