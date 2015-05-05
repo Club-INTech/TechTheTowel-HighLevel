@@ -123,7 +123,7 @@ public abstract class AbstractScript implements Service
 	 * Retourne la position d'entrée associée à la version.
 	 *
 	 * @param version version dont on veut le point d'entrée
-	 * @param robotPosition TODO
+	 * @param robotPosition la position du robot actuelle
 	 * @param la taille du robot
 	 * @return la position du point d'entrée
 	 */

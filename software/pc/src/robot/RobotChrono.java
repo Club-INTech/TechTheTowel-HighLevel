@@ -311,9 +311,9 @@ public class RobotChrono extends Robot
 	}
 
 	@Override
-	public void turnWithoutDetection(double angle, ArrayList<Hook> hooks) {
-		// TODO Auto-generated method stub
-		
+	public void turnWithoutDetection(double angle, ArrayList<Hook> hooks) throws UnableToMoveException 
+	{
+		turn(angle);		
 	}
 
 	@Override

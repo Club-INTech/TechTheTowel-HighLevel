@@ -381,7 +381,6 @@ public class Strategie implements Service
 
 	private void scriptedMatch(GameState<Robot> gameState) throws PathNotFoundException, InObstacleException, UnableToMoveException 
 	{
-		//FIXME ajouter les scripts ainsi que leur version au match scripté
 		ArrayList<AbstractScript> scriptArray = new ArrayList<AbstractScript>();
 		ArrayList<Integer> versionArray = new ArrayList<Integer>();
 

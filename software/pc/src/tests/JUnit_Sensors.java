@@ -31,7 +31,6 @@ import utils.Sleep;
 
 /**
  * Test des capteurs : les obstacles doivent être détectés
- * TODO : comprendre l'utilité du test desactivation_capteur et faux_test.
  *
  * @author marsu
  */
@@ -77,6 +76,7 @@ public class JUnit_Sensors extends JUnit_Test
 
 	/**
 	 * Desactivation_capteur.
+	 * verifie que la desactivation des capteurs avants est efficace
 	 *
 	 * @throws Exception the exception
 	 */
@@ -303,7 +303,10 @@ public class JUnit_Sensors extends JUnit_Test
     	}
 	}
 
-	
+	/**
+	 * le thread principal ne se deplace pas mais les capterus sont ON donc on detecte les ennemis
+	 * @throws Exception
+	 */
     //@Test
     public void faux_test() throws Exception
     {
