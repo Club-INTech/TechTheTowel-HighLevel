@@ -21,7 +21,6 @@ public class ThreadTimer extends AbstractThread
 	/** La table sur laquelle le thread doit croire évoluer */
 	private Table table;
 	
-	//TODO : le robot, à supprimer eventuellement
 	private RobotReal robot;
 
 	/** La carte capteurs avec laquelle on doit communiquer */
@@ -40,7 +39,7 @@ public class ThreadTimer extends AbstractThread
 	public static long matchStartTimestamp;
 	
 	/** Durée en miliseconde d'un match recupéré de la config */
-	public static long matchDuration =90000000;//FIXME 90.000
+	public static long matchDuration =90000;
 	
 	/** Temps en ms qui s'écoule entre deux mise a jour de la liste des obstacle périmables. Lors de chaque mise a jour, les obstacles périmés sont détruits. */
 	public static int obstacleRefreshInterval = 0;
@@ -50,7 +49,7 @@ public class ThreadTimer extends AbstractThread
 	
 	/**
 	 * Crée le thread timer.
-	 * TODO : enlever le robot eventuellement
+	 * TODO : enlever le robot eventuellement (si on arrete d'afficher l'interface)
 	 *
 	 * @param table La table sur laquelle le thread doit croire évoluer
 	 * @param sensorsCardWrapper La carte capteurs avec laquelle on doit communiquer

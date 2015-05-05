@@ -12,6 +12,7 @@ import hook.Hook;
 import hook.types.HookFactory;
 import robot.Robot;
 import smartMath.Circle;
+import smartMath.Vec2;
 import strategie.GameState;
 import utils.Config;
 import utils.Log;
@@ -146,7 +147,7 @@ public class DropGlass extends AbstractScript
 	}
 	
 	@Override
-	public Circle entryPosition(int id, int ray) 
+	public Circle entryPosition(int id, int ray, Vec2 robotPosition) 
 	{
 		if (id==0)
 		{

@@ -30,11 +30,23 @@ import robot.cardsWrappers.SensorsCardWrapper;
  */
 public class JUnit_GetPlot extends JUnit_Test 
 {
-	// TODO doc
+
+	/**
+	 * les hooks pour le test
+	 */
 	ArrayList<Hook> emptyHook;
+	/**
+	 * le gameState reel pur le test
+	 */
 	GameState<Robot> real_state;
+	/**
+	 * pour obtenir les scripts
+	 */
 	ScriptManager scriptmanager;
 	SensorsCardWrapper  mSensorsCardWrapper;
+	/**
+	 * liste des plots a attraper
+	 */
 	ArrayList<Integer> listToGrab = new ArrayList<Integer>();
 	
 		

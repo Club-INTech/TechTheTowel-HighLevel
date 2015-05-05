@@ -4,9 +4,7 @@ import java.util.ArrayList;
 
 import enums.ActuatorOrder;
 import enums.Speed;
-import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
-import exceptions.Locomotion.UnexpectedObstacleOnPathException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import hook.Callback;
@@ -187,6 +185,11 @@ public class DropCarpet extends AbstractScript
 		{
 			try
 			{
+				// Ralenti le robot pour ce script
+				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
+				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
+				
+				
 				//mise en place d'un hook pour attraper le gobelet 1.75 secondes après le début du script
 				Hook hookGoblet = hookFactory.newHookTimer(System.currentTimeMillis() + 2250, 500);
 				hookGoblet.addCallback(new Callback(new CloseRightArmExe(),true, stateToConsider));
@@ -231,6 +234,10 @@ public class DropCarpet extends AbstractScript
 						stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
 					}
 					
+					
+				// on peut reprendre la vitesse que nous avions avant l'éxécution de ce script puisque les tapis sont largués (si on va trop vite avec les tapis ils masquent les capteurs)
+				stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
+					
 				//on s'eloigne de l'escalier
 				try 
 				{
@@ -260,7 +267,7 @@ public class DropCarpet extends AbstractScript
 	}
 	
 	@Override
-	public Circle entryPosition(int id, int radius)
+	public Circle entryPosition(int id, int radius, Vec2 robotPosition)
 	{
 		//taille totale des escaliers : 1066 / on divisse par 4; 266.5
 		if (id==1)

@@ -210,10 +210,10 @@ class ThreadSensor extends AbstractThread
 
 				//ajout d'obstacles mobiles dans l'obstacleManager
 				// Analyse des capteurs avant, avec gestion des angles
-				//if(mRobot.getIsRobotMovingForward())//FIXME
+				if(mRobot.getIsRobotMovingForward())
 					addObstacleFront(distanceFront);
 				// Analyse des capteurs arrieres, avec gestion des angles
-				//if(mRobot.getIsRobotMovingBackward())//FIXME
+				if(mRobot.getIsRobotMovingBackward())
 					addObstacleBack(distanceBack);
 				
 			}

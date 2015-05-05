@@ -15,6 +15,7 @@ import hook.Hook;
 import hook.types.HookFactory;
 import robot.Robot;
 import smartMath.Circle;
+import smartMath.Vec2;
 import strategie.GameState;
 import utils.Config;
 import utils.Log;
@@ -54,7 +55,7 @@ public class DropPile extends AbstractScript
 			obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_2);
 		
 		// va jusqu'au point d'entrée de la version demandée
-		actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.robotRay), hooksToConsider, actualState.table,obstacleNotConsidered);
+		actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.robotRay, actualState.robot.getPosition()), hooksToConsider, actualState.table,obstacleNotConsidered);
 		
 		// exécute la version demandée
 		execute(versionToExecute, actualState, hooksToConsider);
@@ -202,7 +203,7 @@ public class DropPile extends AbstractScript
 	
 	
 	@Override
-	public Circle entryPosition(int id,int robotRay) 
+	public Circle entryPosition(int id,int robotRay, Vec2 robotPosition) 
 	{
 		if (id==1)
 		{

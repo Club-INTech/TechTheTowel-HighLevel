@@ -17,6 +17,7 @@ import hook.Hook;
 import hook.types.HookFactory;
 import robot.Robot;
 import smartMath.Circle;
+import smartMath.Vec2;
 import strategie.GameState;
 import utils.Config;
 import utils.Log;
@@ -110,7 +111,7 @@ public class GetPlot extends AbstractScript
 		}
 			
 		// va jusqu'au point d'entrée de la version demandée
-		actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.robotRay), hooksToConsider, actualState.table,obstacleNotConsidered);
+		actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.robotRay, actualState.robot.getPosition()), hooksToConsider, actualState.table,obstacleNotConsidered);
 		
 		// exécute la version demandée
 		execute(versionToExecute, actualState, hooksToConsider);
@@ -303,7 +304,7 @@ public class GetPlot extends AbstractScript
 	}
 
 	@Override
-	public Circle entryPosition(int id, int ray)
+	public Circle entryPosition(int id, int ray, Vec2 robotPosition)
 	{
 		if (id==0)
 			return new Circle (200,600,200);

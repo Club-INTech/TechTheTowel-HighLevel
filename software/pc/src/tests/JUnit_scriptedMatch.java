@@ -251,7 +251,6 @@ public class JUnit_scriptedMatch extends JUnit_Test
 //		{
 //			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant de prendre la balle");
 //			//Le robot n'en est pas encore capable mais ca va venir avec le bas niveau et les fonctions "bras au milieu" etc
-//			// TODO : resoudre laa PathNotFound Exeption
 //			scriptmanager.getScript(ScriptNames.TAKE_TENNIS_BALL).goToThenExec(1, real_state, true, emptyHook );
 //			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après prendre la balle");
 //		}

@@ -55,7 +55,7 @@ public class PathDingDing implements Service
 		//si le noeud d'arrivée n'est pas sur la table, on jette une exception
 		if(!mGraph.isOnTable(new Node(end.x, end.y)))
 		{
-			EnumSet<ObstacleGroups> obstacleGroupsInPosition = mGraph.obstacleGroupsInPosition(end);
+			EnumSet<ObstacleGroups> obstacleGroupsInPosition = mGraph.obstacleGroupsInThePosition(end);
 			mLog.debug("Obstacles bloquants : "+ obstacleGroupsInPosition.toString() ,this);
 			obstacleGroupsInPosition.retainAll(mObstaclesToConsider);
 			throw new InObstacleException(obstacleGroupsInPosition);

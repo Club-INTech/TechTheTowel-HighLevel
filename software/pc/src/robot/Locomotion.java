@@ -13,8 +13,6 @@ import utils.Config;
 import utils.Log;
 import utils.Sleep;
 import container.Service;
-import enums.Direction;
-import enums.Speed;
 import enums.UnableToMoveReason;
 import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -212,7 +210,7 @@ public class Locomotion implements Service
     
   
     /**
-     * Fait avancer le robot de "distance" (en mm). attention modifie la vitesse du robot
+     * Fait avancer le robot de "distance" (en mm).
      * @param distance la distance dont le robot doit se deplacer
      * @param hooks les potetniels hooks a prendre en compte (ne pas mettre null !)
      * @param wall vrai si on supppose qu'on vas se cogner dans un mur (et qu'il ne faut pas pousser dessus)
@@ -221,27 +219,6 @@ public class Locomotion implements Service
     public void moveLengthwise(int distance, ArrayList<Hook> hooks, boolean wall) throws UnableToMoveException
     {
     	moveLengthwise(distance, hooks, wall, true);
-    }    
-    
-    /**
-     * Fait avancer le robot de "distance" (en mm). attention modifie la vitesse du robot
-     * @param distance la distance dont le robot doit se deplacer
-     * @param hooks les potetniels hooks a prendre en compte (ne pas mettre null !)
-     * @param wall vrai si on supppose qu'on vas se cogner dans un mur (et qu'il ne faut pas pousser dessus)
-     * @param mustDetect true si on veut detecter, false sinon.
-     * @throws UnableToMoveException si le robot a un bloquage mecanique
-     */
-    public void moveLengthwise(int distance, ArrayList<Hook> hooks, boolean wall, boolean mustDetect) throws UnableToMoveException
-    {
-    	Speed newSpeed;
-    	if (distance<150)
-    		newSpeed = Speed.SLOW;
-    	else if (distance <1000)
-    		newSpeed = Speed.BETWEEN_SCRIPTS_SLOW;
-    	else
-    		newSpeed = Speed.BETWEEN_SCRIPTS;
-    	
-    	moveLengthwise(distance, hooks, wall, mustDetect, newSpeed);
     }
     
     /**
@@ -253,7 +230,7 @@ public class Locomotion implements Service
      * @param speed la vitesse que doit prendre le robot pedant le deplacement (a donner imperativement si on utilise un hook)
      * @throws UnableToMoveException si le robot a un bloquage mecanique
      */
-    public void moveLengthwise(int distance, ArrayList<Hook> hooks, boolean wall, boolean mustDetect, Speed speed) throws UnableToMoveException
+    public void moveLengthwise(int distance, ArrayList<Hook> hooks, boolean wall, boolean mustDetect) throws UnableToMoveException
     {    
 
     	actualRetriesIfBlocked=0;
@@ -280,7 +257,7 @@ public class Locomotion implements Service
         	isRobotMovingForward=true;
         else 
         	isRobotMovingBackward=true;
-		moveToPointException(aim, hooks, distance >= 0, wall, false, mustDetect, speed);
+		moveToPointException(aim, hooks, distance >= 0, wall, false, mustDetect);
 		
 		isRobotMovingForward=false;
     	isRobotMovingBackward=false;
@@ -382,11 +359,6 @@ public class Locomotion implements Service
 		actualRetriesIfBlocked=0;// on reinitialise
 
     }
-   
-    private void moveToPointException(Vec2 aim, ArrayList<Hook> hooks, boolean isMovementForward, boolean headingToWall, boolean turnOnly, boolean mustDetect) throws UnableToMoveException
-    {
-    	moveToPointException(aim,hooks,isMovementForward, headingToWall, turnOnly, mustDetect,Speed.BETWEEN_SCRIPTS_SLOW);
-    }
 
     
     /**
@@ -401,18 +373,8 @@ public class Locomotion implements Service
      * @param mustDetect true si on veut detecter, false sinon.
      * @throws UnableToMoveException si le robot a un bloquage mecanique
      */
-    private void moveToPointException(Vec2 aim, ArrayList<Hook> hooks, boolean isMovementForward, boolean headingToWall, boolean turnOnly, boolean mustDetect, Speed speed) throws UnableToMoveException
+    private void moveToPointException(Vec2 aim, ArrayList<Hook> hooks, boolean isMovementForward, boolean headingToWall, boolean turnOnly, boolean mustDetect) throws UnableToMoveException
     {
-    	try
-    	{
-			setTranslationnalSpeed(speed.PWMTranslation);
-			setRotationnalSpeed(speed.PWMRotation);
-		} 
-    	catch (SerialConnexionException e2)
-    	{
-            log.critical("On ne fait rien après ceci: Catch de "+e2+" dans moveToPointException", this);
-		}
-    	
         //int maxTimeToWaitForEnemyToLeave = 600; // combien de temps attendre que l'ennemi parte avant d'abandonner
         int unexpectedWallImpactCounter = 2; // combien de fois on réessayer si on se prend un mur (si wall est a true alors les impacts sont attendus donc on s'en fout)
         boolean doItAgain;
