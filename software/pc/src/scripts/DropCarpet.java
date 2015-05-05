@@ -192,7 +192,7 @@ public class DropCarpet extends AbstractScript
 				
 				
 				//mise en place d'un hook pour attraper le gobelet 1.75 secondes après le début du script
-				Hook hookGoblet = hookFactory.newHookTimer(System.currentTimeMillis() + 2250, 500);
+				Hook hookGoblet = hookFactory.newHookTimer(System.currentTimeMillis() + 2250,500);
 				if(stateToConsider.robot.getSymmetry())
 					hookGoblet.addCallback(new Callback(new CloseLeftArmExe(),true, stateToConsider));
 				else
@@ -206,7 +206,6 @@ public class DropCarpet extends AbstractScript
 
 				//le 3.05 a ete testé de façon experimentale (ainsi que le 850), a modifier si quelqu'un veut le calculer
 				stateToConsider.robot.turn(3.05);
-				//stateToConsider.robot.moveTowardEnnemy(850, hooksToConsider);
 				stateToConsider.robot.moveLengthwise(850, hooksToConsider, false, true, Speed.SLOW);
 				stateToConsider.table.removeGlassX(1);
 				

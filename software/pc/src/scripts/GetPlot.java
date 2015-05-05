@@ -129,19 +129,7 @@ public class GetPlot extends AbstractScript
 				System.out.println("Trop de plots !");//Why Can't I Hold All These Limes ?
 				return;
 			}
-			
-			//TODO: trouver le bon bras pour manger
-			//on choisi le bras le plus adapte (assez dificile)
-			boolean isChoosenArmLeft = true;
-			if (versionToExecute == 1)
-					isChoosenArmLeft = false;
-			
-			//On change le bras choisi suivant la symetrie : à voir si l'IA s'en occupera, mais pour les tests ca reste là
-			if(stateToConsider.robot.getSymmetry())
-			{
-				isChoosenArmLeft=!isChoosenArmLeft;
-			}
-						
+									
 			//le robot est deja en face du plot puisqu'on a appele goToThenExec (qui met en face du centre du script) si un jour on autorise de lancer exec il faudra remettre ces lignes (et les debugger)
 			//stateToConsider.robot.turn(Math.atan2(	entryPosition(versionToExecute).center.y - stateToConsider.robot.getPosition().y,	// position voulue - position actuelle
 			//			 							entryPosition(versionToExecute).center.x - stateToConsider.robot.getPosition().x	// de meme
@@ -159,18 +147,18 @@ public class GetPlot extends AbstractScript
 				if(versionToExecute==0 || versionToExecute==2 )
 				{
 					// isSecondtry est a true car 2 essais sont inutiles (statistiquement, le 1er fonctionne)
-					eatPlot(true, isChoosenArmLeft, stateToConsider, true, false);
+					eatPlot(true, true, stateToConsider, true, false);
 					stateToConsider.table.eatPlotX(versionToExecute);
 				}
 
 				if(versionToExecute==7)
 				{
 					System.out.println("en position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") avant la rectification du PF");
-					stateToConsider.robot.turn(Math.PI);// On se tourne pour sauver le PF
+					stateToConsider.robot.turn(0);// On se tourne pour sauver le PF
 					stateToConsider.robot.moveLengthwise(300);
-					stateToConsider.robot.turn(-Math.PI/2);
+					stateToConsider.robot.turn(Math.PI/2);
 					stateToConsider.robot.moveLengthwise(300);
-					eatPlot(false, isChoosenArmLeft, stateToConsider, true, true);
+					eatPlot(false, true, stateToConsider, true, true);
 					stateToConsider.table.eatPlotX(versionToExecute);
 				}
 			} 
@@ -191,22 +179,44 @@ public class GetPlot extends AbstractScript
 			
 			if (!stateToConsider.table.isGlassXTaken(0))
 			{
-				// On ne ramasse pas l verre si on en a deja 2
-				if (!stateToConsider.robot.isGlassStoredLeft)
+				if(!stateToConsider.robot.getSymmetry()) // On prefere utiliser le bras droit quand on est jaune / le gauche quand on est verts
 				{
-					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);					
-					stateToConsider.robot.moveLengthwise(130, hooksToConsider);
-					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
-					stateToConsider.robot.moveLengthwise(190, hooksToConsider);
-					stateToConsider.robot.isGlassStoredLeft = true;
+					// On ne ramasse pas l verre si on en a deja 2
+					if (!stateToConsider.robot.isGlassStoredLeft)
+					{
+						stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);					
+						stateToConsider.robot.moveLengthwise(130, hooksToConsider);
+						stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
+						stateToConsider.robot.moveLengthwise(190, hooksToConsider);
+						stateToConsider.robot.isGlassStoredLeft = true;
+					}
+					else if(!stateToConsider.robot.isGlassStoredRight)
+					{
+						stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);					
+						stateToConsider.robot.moveLengthwise(130, hooksToConsider);
+						stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
+						stateToConsider.robot.moveLengthwise(190, hooksToConsider);
+						stateToConsider.robot.isGlassStoredRight = true;
+					}
 				}
-				else if(!stateToConsider.robot.isGlassStoredRight)
+				else // On prefere utiliser le bras droit quand on est jaune / le gauche quand on est verts
 				{
-					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);					
-					stateToConsider.robot.moveLengthwise(130, hooksToConsider);
-					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
-					stateToConsider.robot.moveLengthwise(190, hooksToConsider);
-					stateToConsider.robot.isGlassStoredRight = true;
+					if(!stateToConsider.robot.isGlassStoredRight)
+					{
+						stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);					
+						stateToConsider.robot.moveLengthwise(130, hooksToConsider);
+						stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
+						stateToConsider.robot.moveLengthwise(190, hooksToConsider);
+						stateToConsider.robot.isGlassStoredRight = true;
+					}
+					else if (!stateToConsider.robot.isGlassStoredLeft)
+					{
+						stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);					
+						stateToConsider.robot.moveLengthwise(130, hooksToConsider);
+						stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
+						stateToConsider.robot.moveLengthwise(190, hooksToConsider);
+						stateToConsider.robot.isGlassStoredLeft = true;
+					}
 				}
 				stateToConsider.table.removeGlassX(0);
 			}
@@ -219,7 +229,6 @@ public class GetPlot extends AbstractScript
 			if(stateToConsider.robot.storedPlotCount < 3)
 			{
 				//on mange le plot 4
-
 				try 
 				{
 					eatPlot(true, true, stateToConsider, false, false);
@@ -398,12 +407,14 @@ public class GetPlot extends AbstractScript
 		if (stateToConsider.robot.storedPlotCount >= 4)
 			throw new UnableToEatPlot();
 		
-		
-		//On change le bras choisi suivant la symetrie :TODO à voir si l'IA s'en occupera, mais pour les tests ca reste là
+		//On change le bras choisi suivant la symetrie
 		if(stateToConsider.robot.getSymmetry())
 		{
 			isArmChosenLeft=!isArmChosenLeft;
 		}
+		
+		//On change le bras choisi suivant la symetrie :TODO à voir si l'IA s'en occupera, mais pour les tests ca reste là
+	
 		if (stateToConsider.robot.hasRobotNonDigestedPlot())
 		{
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_HIGH, true);
@@ -417,7 +428,6 @@ public class GetPlot extends AbstractScript
 				stateToConsider.robot.moveLengthwise(150);
 				//premiere verif (avant les bras)
 				sensorAnswer = checkSensor(stateToConsider);
-					
 			}
 			catch (UnableToMoveException e1) 
 			{
