@@ -11,6 +11,7 @@ import enums.ActuatorOrder;
 import enums.ScriptNames;
 import enums.ObstacleGroups;
 import enums.Speed;
+import enums.UnableToMoveReason;
 import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -186,10 +187,40 @@ public class Strategie implements Service
 				{
 					nextScript.goToThenExec(nextScriptVersion, gameState, hookRobot);
 				} 
-				catch (UnableToMoveException |  PathNotFoundException e1) 
+				catch (PathNotFoundException e1)
 				{
-					// FIXME choix de l'IA face a un imprevu
-					e.printStackTrace();
+					//un obstacle a été ajouté depuis le calcul de robot chrono donc il faut relancher la prise de decision
+				}
+				catch (UnableToMoveException e1) 
+				{
+					//si le robot se cogne sans detecter l'obstacle
+					if (e1.reason.compareTo(UnableToMoveReason.PHYSICALLY_BLOCKED)==0)
+					{
+						//on ajoute cet obstacle
+						table.getObstacleManager().addObstacle(robotReal.getPosition());
+						//on essaye de se degager
+						int numberOfTry = 0;
+						while (numberOfTry<5)
+						{
+							try
+							{
+								if (robotReal.getIsRobotMovingBackward())
+									robotReal.moveLengthwise(250, hookRobot, false, false);
+								else // si on tourne ou qu'on avancais on recule pour se degager
+									robotReal.moveLengthwise(-250, hookRobot, false, false);
+								break;
+							} 
+							catch (UnableToMoveException e2)
+							{
+								log.warning("impossible de se degager de l'obstacle : tentative n°"+numberOfTry, this);
+								numberOfTry++;
+							}
+						}
+						//qu'on ai reussi ou non a se degager on fait autre chose
+					}
+					//puis on relance la prise de decision
+					
+					//sinon on relance la pise de decision
 				}
 				catch (InObstacleException e1)
 				{
@@ -227,7 +258,7 @@ public class Strategie implements Service
 	{
 		try 
 		{
-			robotReal.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+			robotReal.useActuator(ActuatorOrder.ELEVATOR_GROUND, false);
 		} 
 		catch (SerialConnexionException e) 
 		{
@@ -259,7 +290,7 @@ public class Strategie implements Service
 		
 		try 
 		{
-			robotReal.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
+			robotReal.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, false);
 		} 
 		catch (SerialConnexionException e) 
 		{
@@ -270,7 +301,7 @@ public class Strategie implements Service
 		
 		try 
 		{
-			robotReal.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);
+			robotReal.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, false);
 		} 
 		catch (SerialConnexionException e) 
 		{
@@ -354,9 +385,6 @@ public class Strategie implements Service
 		ArrayList<AbstractScript> scriptArray = new ArrayList<AbstractScript>();
 		ArrayList<Integer> versionArray = new ArrayList<Integer>();
 
-		
-		scriptArray.add(scriptmanager.getScript(ScriptNames.DROP_CARPET));
-		versionArray.add(0);
 		
 		scriptArray.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
 		versionArray.add(2);
