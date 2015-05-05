@@ -272,11 +272,10 @@ public class DropPile extends AbstractScript
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
-			
 		} 
 		catch (SerialConnexionException | UnableToMoveException e) 
 		{
-			throw new SerialFinallyException ();
+			throw new SerialFinallyException();
 		}
 	}
 
@@ -296,6 +295,5 @@ public class DropPile extends AbstractScript
 	    }
 	    return retour;
 	}
-
 }
 

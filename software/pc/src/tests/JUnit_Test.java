@@ -115,7 +115,7 @@ public abstract class JUnit_Test
 		robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
 		
 		log.debug("Veuillez mettre la Balle de Tennis", this);
-		Sleep.sleep(3000);
+		Sleep.sleep(1500);
 		
 		robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 		robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
