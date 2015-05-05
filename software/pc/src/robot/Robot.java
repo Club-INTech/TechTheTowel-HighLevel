@@ -396,20 +396,7 @@ public abstract class Robot implements Service
     {
     	ArrayList<Vec2> path;
     	//si on est jaune on retire les plots verts de la liste des obstacles
-    	if (symmetry)
-    	{
-    		obstaclesNotConsidered.add(ObstacleGroups.GREEN_PLOT_0);
-    		obstaclesNotConsidered.add(ObstacleGroups.GREEN_PLOT_1);
-    		obstaclesNotConsidered.add(ObstacleGroups.GREEN_PLOT_2);
-    		obstaclesNotConsidered.add(ObstacleGroups.GREEN_PLOT_3);
-    		obstaclesNotConsidered.add(ObstacleGroups.GREEN_PLOT_4);
-    		obstaclesNotConsidered.add(ObstacleGroups.GREEN_PLOT_5);
-    		obstaclesNotConsidered.add(ObstacleGroups.GREEN_PLOT_6);
-    		obstaclesNotConsidered.add(ObstacleGroups.GREEN_PLOT_7);
-    	}
-    	//si on est vert on retire les plots jaunes de la liste des obstacles
-    	else
-    	{
+    
     		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_0);
     		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_1);
     		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_2);
@@ -418,7 +405,7 @@ public abstract class Robot implements Service
     		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_5);
     		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_6);
     		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_7);
-    	}
+    	
     	
     	EnumSet<ObstacleGroups> obstacleConsidered = EnumSet.complementOf(obstaclesNotConsidered);
     	if (obstacleConsidered == null)
