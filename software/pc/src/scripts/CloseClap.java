@@ -216,7 +216,6 @@ public class CloseClap extends AbstractScript
 	
 	public void closeFirstAndSecondClap (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException
 	{
-		//FIXME : gérer la symétrie
 		
 		//on met le robot en vitesse lente
 		stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
@@ -227,7 +226,10 @@ public class CloseClap extends AbstractScript
 		//on commence en (1295,230), on se tourne dans le bon sens
 		//stateToConsider.robot.moveLengthwise(80, hooksToConsider, false);
 		
-		stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
+		if(stateToConsider.robot.getSymmetry())//TODO verifier le sens
+			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
+		else
+			stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
 		
 		stateToConsider.robot.turn(0, hooksToConsider, false);
 		
@@ -236,8 +238,16 @@ public class CloseClap extends AbstractScript
 		Hook hook2 = hookFactory.newHookXisLesser(1000, 10);
 		
 		// ajoute un callback au hook de position qui ouvre / ferme le bras
-		hook1.addCallback(	new Callback(new OpenClapRightHighExe(),true, stateToConsider)	);
-		hook2.addCallback(	new Callback(new OpenClapRightMiddleExe(),true, stateToConsider)	);
+		if(stateToConsider.robot.getSymmetry())
+		{
+			hook1.addCallback(	new Callback(new OpenClapLeftHighExe(),true, stateToConsider)	);
+			hook2.addCallback(	new Callback(new OpenClapLeftMiddleExe(),true, stateToConsider)	);
+		}
+		else
+		{
+			hook1.addCallback(	new Callback(new OpenClapRightHighExe(),true, stateToConsider)	);
+			hook2.addCallback(	new Callback(new OpenClapRightMiddleExe(),true, stateToConsider)	);
+		}
 		
 		// ajoute le hook a la liste a passer a la locomotion
 		hooksToConsider.add(hook1);
