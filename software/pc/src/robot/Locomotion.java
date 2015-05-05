@@ -11,8 +11,6 @@ import utils.Config;
 import utils.Log;
 import utils.Sleep;
 import container.Service;
-import enums.Direction;
-import enums.Speed;
 import enums.UnableToMoveReason;
 import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -210,7 +208,7 @@ public class Locomotion implements Service
     
   
     /**
-     * Fait avancer le robot de "distance" (en mm). attention modifie la vitesse du robot
+     * Fait avancer le robot de "distance" (en mm).
      * @param distance la distance dont le robot doit se deplacer
      * @param hooks les potetniels hooks a prendre en compte (ne pas mettre null !)
      * @param wall vrai si on supppose qu'on vas se cogner dans un mur (et qu'il ne faut pas pousser dessus)
@@ -232,6 +230,7 @@ public class Locomotion implements Service
      */
     public void moveLengthwise(int distance, ArrayList<Hook> hooks, boolean wall, boolean mustDetect) throws UnableToMoveException
     {    
+
     	actualRetriesIfBlocked=0;
     	
 		updateCurrentPositionAndOrientation();
@@ -261,69 +260,6 @@ public class Locomotion implements Service
 		isRobotMovingForward=false;
     	isRobotMovingBackward=false;
 
-		actualRetriesIfBlocked=0;// on reinitialise
-    }
-    
-    /**
-     * Méthode permettant de se déplacer en ligne droite vers un ennemi, même si il est très proche :
-     * ignore le cercle de détection
-     * Doit être appelée avec la vitesse la plus lente possible
-     * 
-     * 
-     * @param distance
-     * @param hooks
-     * @throws UnableToMoveException
-     * @throws BlockedException
-     * @throws UnexpectedObstacleOnPathException si l'on est trop proche de l'ennemi
-     */
-    public void moveTowardEnnemy(int distance, ArrayList<Hook> hooks) throws UnableToMoveException, BlockedException, UnexpectedObstacleOnPathException
-    {    
-    	// si l'on s'approche trop d'un ennemi, on lance une exception du type UnexpectedObstacleOnPathException
-    	int MinDistanceToStop = 85;
-    	
-		updateCurrentPositionAndOrientation();
-
-        log.debug("Avancer de "+Integer.toString(distance) + " vers un ennemi", this);
-        
-        /**
-         * aim est la visée du haut niveau, qui commence toujours à droite
-         * TODO; trouver ce que veut dire ce commentaire
-         */
-        Vec2 aim = new Vec2(); 
-        
-        aim.x = (int) (highLevelPosition.x + distance*Math.cos(highLevelOrientation));
-        aim.y = (int) (highLevelPosition.y + distance*Math.sin(highLevelOrientation));      
-        finalAim = aim;
-		
-        try
-        {
-        	moveToPointSymmetry(aim, distance >= 0, false, false, false);
-        }
-        catch(UnexpectedObstacleOnPathException e)
-        {
-        	log.debug("moveTowardEnnemy a renvoyé une UnexpectedObstacleOnPathException alors que la détection d'obstacle était désactivée", this);
-        }
-        
-        do 
-        {
-            updateCurrentPositionAndOrientation();
-
-        	log.debug("table.getObstacleManager().distanceToClosestEnemy(highLevelPosition) : " + table.getObstacleManager().distanceToClosestEnemy(highLevelPosition, aim) , this);
-            // si l'ennemi le plus proche est trop proche
-            if(table.getObstacleManager().distanceToClosestEnemy(highLevelPosition, aim) <= MinDistanceToStop)
-            {
-            	log.debug("moveTowardEnnemy voit que l'ennemei est trop proche", this);
-            	immobilise();
-            	throw new UnexpectedObstacleOnPathException();
-            }
-
-            //on evalue les hooks (non null !)
-            if(hooks != null)
-	            for(Hook hook : hooks)
-	                hook.evaluate();
-        } 
-        while(!isMotionEnded());
-		
 		actualRetriesIfBlocked=0;// on reinitialise
     }
         
@@ -372,6 +308,7 @@ public class Locomotion implements Service
     }
 
 
+    
     /**
      * Bloquant. Gère la marche arrière automatique selon la stratégie demandée.
      * @param aim le point visé sur la table (consigne donné par plus haut niveau donc non symetrise)
@@ -420,6 +357,7 @@ public class Locomotion implements Service
 		actualRetriesIfBlocked=0;// on reinitialise
 
     }
+
     
     /**
      * bloquant

@@ -194,6 +194,12 @@ public abstract class Robot implements Service
 	public abstract void setLocomotionSpeed(Speed speed);
 	
 	/**
+	 * Donne la vitesse a laquelle le robot est configurée pour avancer et tourner sur lui-même.
+	 * @return La vitesse du robot configurée actuellement
+	 */
+	public abstract Speed getLocomotionSpeed();
+	
+	/**
 	 * Change dans l'asservissement la position du robot sur la table .
 	 * Après appel de cette méthode, le robot considèrera qu'il se trouve sur la table aux coordonnées fournies.
 	 * Cette fonction n'est pas instantannée, un petit délai (de 300ms) pour que la communication série se fasse est nécéssaire.
@@ -341,21 +347,6 @@ public abstract class Robot implements Service
     {
         moveLengthwise(distance, hooksToConsider, false);
     }
-
-
-	/**
-	 * Fait avancer le robot de la distance spécifiée. Le robot garde son orientation actuelle et va simplement avancer.
-	 * Cette méthode permet de s'approcher plus d'un ennemi que moveLengthwise.
-	 * Attention, cette méthode suppose que l'on est pas sensé percuter un mur.
-	 * Cette méthode est bloquante: son exécution ne se termine que lorsque le robot a atteint le point d'arrivée
-	 *
-	 * @param distance en mm que le robot doit franchir. Si cette distance est négative, le robot va reculer. Attention, en cas de distance négative, cette méthode ne vérifie pas s'il y a un système d'évitement a l'arrère du robot
-	 * @param hooksToConsider les hooks déclenchables durant ce mouvement
-	 * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
-	 * @throws BlockedException en cas de bloquage mécanique immobilisant le robot
-	 * @throws UnexpectedObstacleOnPathException en cas d'obstace très proche percu par les capteurs
-	 */
-    public abstract void moveTowardEnnemy(int distance, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, BlockedException, UnexpectedObstacleOnPathException;
 
 	/**
 	 * Fait avancer le robot de la distance spécifiée. Le robot garde son orientation actuelle et va simplement avancer.

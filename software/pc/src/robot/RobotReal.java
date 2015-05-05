@@ -14,9 +14,7 @@ import java.util.ArrayList;
 import enums.ActuatorOrder;
 import enums.SensorNames;
 import enums.Speed;
-import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
-import exceptions.Locomotion.UnexpectedObstacleOnPathException;
 import exceptions.serial.SerialConnexionException;
 
 /**
@@ -31,7 +29,7 @@ public class RobotReal extends Robot
 	
 	/** Système de locomotion a utiliser pour déplacer le robot */
 	private Locomotion mLocomotion;
-
+	
 	// Constructeur
 	public RobotReal( Locomotion deplacements, ActuatorCardWrapper mActuatorCardWrapper, Config config, Log log, PathDingDing pathDingDing, SensorsCardWrapper mSensorsCardWrapper)
  	{
@@ -157,17 +155,15 @@ public class RobotReal extends Robot
 		mLocomotion.moveLengthwise(distance, hooksToConsider, expectsWallImpact, mustDetect);
 		speed = oldSpeed;
 	}	
-	
-	
 
+	/* TODO nexiste pas ?
 	@Override
     public void moveTowardEnnemy(int distance, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, BlockedException, UnexpectedObstacleOnPathException
 	{	
 		
 		mLocomotion.moveTowardEnnemy(distance, hooksToConsider);
-	}	
-	
-	
+	}
+	*/
 	
 
 
@@ -305,11 +301,20 @@ public class RobotReal extends Robot
         {
 			mLocomotion.setTranslationnalSpeed(vitesse.PWMTranslation);
 	        mLocomotion.setRotationnalSpeed(vitesse.PWMRotation);
+	        
+	        speed = vitesse;
 		} 
         catch (SerialConnexionException e)
         {
 			e.printStackTrace();
 		}
+	}
+	
+
+	@Override
+	public Speed getLocomotionSpeed()
+	{
+		return speed;
 	}
 	
 	public boolean getIsRobotTurning()

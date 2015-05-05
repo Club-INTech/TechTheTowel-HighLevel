@@ -317,11 +317,9 @@ public class RobotChrono extends Robot
 	}
 
 	@Override
-	public void moveTowardEnnemy(int distance, ArrayList<Hook> hooksToConsider)
-			throws UnableToMoveException, BlockedException,
-			UnexpectedObstacleOnPathException {
-		// TODO Auto-generated method stub
-		
+	public Speed getLocomotionSpeed() {
+
+		return null;
 	}
 
 }

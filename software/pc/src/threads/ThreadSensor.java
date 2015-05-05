@@ -57,7 +57,7 @@ class ThreadSensor extends AbstractThread
 	/**
 	 * Distance minimale à laquelle on peut se fier aux capteurs : ne pas detecter notre propre root par exemple
 	 */
-	double minSensorRange = 80;
+	double minSensorRange = 0;
 	
 	/**
 	 *  Booleen explicitant si addObstacle a en effet ajouté un obstacle
@@ -210,10 +210,10 @@ class ThreadSensor extends AbstractThread
 
 				//ajout d'obstacles mobiles dans l'obstacleManager
 				// Analyse des capteurs avant, avec gestion des angles
-				if(mRobot.getIsRobotMovingForward())
+				//if(mRobot.getIsRobotMovingForward())//FIXME
 					addObstacleFront(distanceFront);
 				// Analyse des capteurs arrieres, avec gestion des angles
-				if(mRobot.getIsRobotMovingBackward())
+				//if(mRobot.getIsRobotMovingBackward())//FIXME
 					addObstacleBack(distanceBack);
 				
 			}
@@ -243,7 +243,6 @@ class ThreadSensor extends AbstractThread
 		boolean[] obstacleAdded={false,false};
 		obstacleAddedRight=false;
 		obstacleAddedLeft=false;
-
 		
 		/** Zones de detection : 0;1;2 capteurs dans leurs zones respectives
 		 * 
@@ -290,7 +289,6 @@ class ThreadSensor extends AbstractThread
 				mTable.getObstacleManager().addObstacle(positionEnnemi_1);
 	    		log.debug("Valeur des capteurs avant brute : "+realSensorValuesFront[0]+";"+realSensorValuesFront[1], this);
 	    		log.debug("Ennemi avant ajouté en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
-
 				
 				obstacleAddedLeft=true;
 				
@@ -386,7 +384,6 @@ class ThreadSensor extends AbstractThread
 		obstacleAdded[0]=obstacleAddedLeft;
 		obstacleAdded[1]=obstacleAddedRight;
 
-		
 		return obstacleAdded;
 	}
 
@@ -403,7 +400,6 @@ class ThreadSensor extends AbstractThread
 		boolean[] obstacleAdded={false,false};
 		obstacleAddedRight=false;
 		obstacleAddedLeft=false;
-
 		
 		/** Zones de detection : 0;1;2 capteurs dans leurs zones respectives
 		 * 
@@ -480,9 +476,9 @@ class ThreadSensor extends AbstractThread
 				
 				
 				
-				positionEnnemi_1.x =  -(int)(	rightBackSensorPosition.x + Math.sqrt( 
-																(distanceObstacleBack[1]*distanceObstacleBack[1])-
-														        (positionEnnemi_1.y-distanceBetweenBackSensors/2)*(positionEnnemi_1.y-distanceBetweenBackSensors/2)));	//position de l'obstacle en fonction du robot
+				positionEnnemi_1.x =  -(int)(	-rightBackSensorPosition.x + Math.sqrt( 
+												(distanceObstacleBack[1]*distanceObstacleBack[1])+
+											    (positionEnnemi_1.y+distanceBetweenBackSensors/2)*(positionEnnemi_1.y+distanceBetweenBackSensors/2)));	//position de l'obstacle en fonction du robot
 
 				relativePosEnnemi1.x=positionEnnemi_1.x;
 				relativePosEnnemi1.y=positionEnnemi_1.y;
@@ -750,7 +746,7 @@ class ThreadSensor extends AbstractThread
 		
 		sensorPosition=changeReference(leftBackSensorPosition, position, orientation); // passage de la position du capteur en absolu
 		if(mTable.getObstacleManager().removeNonDetectedObstacles(sensorPosition, (orientation+leftBackSensorAngle), (detectionDistance), detectionAngle) )
-			log.debug("Obstacle enlevé avec le capteur gauche", this);
+			log.debug("Obstacle enlevé avec le capteur gauche arriere", this);
 	}
 	
 	private void removeObstacleRightBack(int detectionDistance)
