@@ -29,7 +29,7 @@ public enum ActuatorOrder
 	
 	// Consignes guide-plot ouvrable
 	OPEN_RIGHT_GUIDE("ogd",265),
-	OPEN_LEFT_GUIDE("ogg",265),
+	OPEN_LEFT_GUIDE("ogg",65),
 	MID_RIGHT_GUIDE("gdi",125),
 	MID_LEFT_GUIDE("ggi",125),
 	CLOSE_RIGHT_GUIDE("fgd",265),
@@ -44,11 +44,11 @@ public enum ActuatorOrder
 	
 	// Consignes machoires de l'ascenseur monte-plot
 	ELEVATOR_OPEN_JAW("om",615),		// mesures de la machoires effectuées a 515ms/mouvments, mais cela génère des bugs, on prends 100ms de sécurité
-	ELEVATOR_CLOSE_JAW("fm",615),
-	ELEVATOR_OPEN_JAW_RIGHT("omd",615),
-	ELEVATOR_OPEN_JAW_LEFT("omg",615),
-	ELEVATOR_CLOSE_JAW_RIGHT("fmd",615),
-	ELEVATOR_CLOSE_JAW_LEFT("fmg",615),
+	ELEVATOR_CLOSE_JAW("fm",915),		// et parfois 400ms
+	ELEVATOR_OPEN_JAW_RIGHT("omd",915),
+	ELEVATOR_OPEN_JAW_LEFT("omg",915),
+	ELEVATOR_CLOSE_JAW_RIGHT("fmd",915),
+	ELEVATOR_CLOSE_JAW_LEFT("fmg",915),
 	
 	// Consignes Bras ramène-goblelets
 	ARM_RIGHT_OPEN("obd",781),

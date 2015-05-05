@@ -31,7 +31,7 @@ public class RobotReal extends Robot
 	
 	/** Système de locomotion a utiliser pour déplacer le robot */
 	private Locomotion mLocomotion;
-
+	
 	// Constructeur
 	public RobotReal( Locomotion deplacements, ActuatorCardWrapper mActuatorCardWrapper, Config config, Log log, PathDingDing pathDingDing, SensorsCardWrapper mSensorsCardWrapper)
  	{
@@ -283,11 +283,20 @@ public class RobotReal extends Robot
         {
 			mLocomotion.setTranslationnalSpeed(vitesse.PWMTranslation);
 	        mLocomotion.setRotationnalSpeed(vitesse.PWMRotation);
+	        
+	        speed = vitesse;
 		} 
         catch (SerialConnexionException e)
         {
 			e.printStackTrace();
 		}
+	}
+	
+
+	@Override
+	public Speed getLocomotionSpeed()
+	{
+		return speed;
 	}
 	
 	public boolean getIsRobotTurning()

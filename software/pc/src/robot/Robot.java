@@ -194,6 +194,12 @@ public abstract class Robot implements Service
 	public abstract void setLocomotionSpeed(Speed speed);
 	
 	/**
+	 * Donne la vitesse a laquelle le robot est configurée pour avancer et tourner sur lui-même.
+	 * @return La vitesse du robot configurée actuellement
+	 */
+	public abstract Speed getLocomotionSpeed();
+	
+	/**
 	 * Change dans l'asservissement la position du robot sur la table .
 	 * Après appel de cette méthode, le robot considèrera qu'il se trouve sur la table aux coordonnées fournies.
 	 * Cette fonction n'est pas instantannée, un petit délai (de 300ms) pour que la communication série se fasse est nécéssaire.
