@@ -99,6 +99,19 @@ public class RobotReal extends Robot
 		moveLengthwise(distance, hooksToConsider, expectsWallImpact, true);
 	}	
 	
+	@Override
+    public void moveLengthwiseWithoutDetection(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
+	{	
+		Speed newSpeed;
+    	if (distance<150)
+    		newSpeed = Speed.SLOW;
+    	else if (distance <1000)
+    		newSpeed = Speed.BETWEEN_SCRIPTS_SLOW;
+    	else
+    		newSpeed = Speed.BETWEEN_SCRIPTS;
+    	
+		moveLengthwise(distance, hooksToConsider, expectsWallImpact, false, newSpeed);
+	}	
 	
 	/**
 	 * Fait avancer le robot de la distance spécifiée. Le robot garde son orientation actuelle et va simplement avancer
@@ -122,20 +135,7 @@ public class RobotReal extends Robot
     	
 		moveLengthwise(distance, hooksToConsider, expectsWallImpact, mustDetect, newSpeed);
 	}	
-	
-	@Override
-    public void moveLengthwiseWithoutDetection(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
-	{	
-		Speed newSpeed;
-    	if (distance<150)
-    		newSpeed = Speed.SLOW;
-    	else if (distance <1000)
-    		newSpeed = Speed.BETWEEN_SCRIPTS_SLOW;
-    	else
-    		newSpeed = Speed.BETWEEN_SCRIPTS;
-    	
-		moveLengthwise(distance, hooksToConsider, expectsWallImpact, false, newSpeed);
-	}	
+
 	 
 	/**
 	 * Fait avancer le robot de la distance spécifiée. Le robot garde son orientation actuelle et va simplement avancer
