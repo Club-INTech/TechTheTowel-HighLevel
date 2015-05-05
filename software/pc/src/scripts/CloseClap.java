@@ -85,7 +85,7 @@ public class CloseClap extends AbstractScript
 			else if (versionToExecute == 3)
 				closeThirdClap(stateToConsider, hooksToConsider);
 			else if (versionToExecute == 12)
-				closeFirstAndSecondClap(stateToConsider, hooksToConsider);
+				closeFirstAndSecondClapBackwardWithHooks(stateToConsider, hooksToConsider);
 			else if (versionToExecute == -1)
 				closeFirstClapBackward(stateToConsider, hooksToConsider);
 			else if (versionToExecute == -12)
@@ -198,15 +198,11 @@ public class CloseClap extends AbstractScript
 		stateToConsider.robot.moveLengthwise(200, hooksToConsider, false);//(-850,231) 
 		stateToConsider.table.clapXClosed(3);
 		
-		if(!stateToConsider.robot.getSymmetry())
-		{
-			//Coté jaune
+		if(!stateToConsider.robot.getSymmetry())//Coté jaune
 			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, true);
-		}
 		else //coté vert
-		{
 			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, true);
-		}		
+		
 		//On s'echape
 		stateToConsider.robot.turn(Math.PI/2, hooksToConsider, false);
 				
@@ -215,7 +211,7 @@ public class CloseClap extends AbstractScript
 		stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
 	}
 	
-	public void closeFirstAndSecondClap (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException
+	public void closeFirstAndSecondClapBackwardWithHooks (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException
 	{
 		
 		//on met le robot en vitesse lente
@@ -257,7 +253,7 @@ public class CloseClap extends AbstractScript
 		//on met le robot en vitesse moyenne
 		stateToConsider.robot.setLocomotionSpeed(Speed.BETWEEN_SCRIPTS_SLOW);
 		
-		stateToConsider.robot.moveLengthwise(-400, hooksToConsider, false);
+		stateToConsider.robot.moveLengthwise(-400, hooksToConsider, Speed.BETWEEN_SCRIPTS_SLOW);
 		stateToConsider.table.clapXClosed(1);
 		stateToConsider.table.clapXClosed(2);
 		
@@ -291,9 +287,8 @@ public class CloseClap extends AbstractScript
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
 		}
 		else //coté vert
-		{
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
-		}
+
 		stateToConsider.robot.moveLengthwise(250, hooksToConsider, false);
 		stateToConsider.table.clapXClosed(1);
 	
@@ -304,9 +299,8 @@ public class CloseClap extends AbstractScript
 			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, true);
 		}
 		else //coté vert
-		{
 			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, true);
-		}
+
 		stateToConsider.robot.moveLengthwise(250, hooksToConsider, false);
 
 		//On ouvre le bras puis on avance de 220mm pour se retrouver en (400,231)
@@ -316,23 +310,19 @@ public class CloseClap extends AbstractScript
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
 		}
 		else //coté vert
-		{
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
-		}
+
 		stateToConsider.robot.moveLengthwise(220, hooksToConsider, false);
 		stateToConsider.table.clapXClosed(2);	
 
 		//on baisse notre bras
 		stateToConsider.robot.turn(0.5*Math.PI, hooksToConsider, false);
-		if(stateToConsider.robot.getSymmetry())
-		{
-			//Coté jaune
+		
+		if(stateToConsider.robot.getSymmetry())//Coté jaune
 			stateToConsider.robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, true);
-		}
 		else //coté vert
-		{
 			stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, true);
-		}		
+	
 		//on vas au 3eme clap donc en (-1340,231)
 		stateToConsider.robot.moveLengthwise(distanceToDodgeEstrade, hooksToConsider, false);
 		stateToConsider.robot.turn(Math.PI, hooksToConsider, false);
@@ -362,9 +352,8 @@ public class CloseClap extends AbstractScript
 			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, true);
 		}
 		else //coté vert
-		{
 			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, true);
-		}		//On s'echape
+		//On s'echape
 		stateToConsider.robot.turn(Math.PI/2, hooksToConsider, false);
 		
 		//On ferme tout pour finir
@@ -391,9 +380,7 @@ public class CloseClap extends AbstractScript
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
 		}
 		else //coté vert
-		{
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
-		}
 		
 		stateToConsider.robot.moveLengthwise(-250, hooksToConsider, false);
 		stateToConsider.table.clapXClosed(1);
@@ -404,9 +391,8 @@ public class CloseClap extends AbstractScript
 			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, true);
 		}
 		else //coté vert
-		{
 			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, true);
-		}	
+
 		//On s'echape dans le sens normal
 		stateToConsider.robot.turn(Math.PI/2, hooksToConsider, false);
 		
