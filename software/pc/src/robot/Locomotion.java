@@ -4,6 +4,8 @@ import hook.Hook;
 
 import java.util.ArrayList;
 
+import javax.sql.rowset.serial.SerialException;
+
 import robot.cardsWrappers.LocomotionCardWrapper;
 import smartMath.Vec2;
 import table.Table;
@@ -487,6 +489,10 @@ public class Locomotion implements Service
                     throw new UnableToMoveException(finalAim, UnableToMoveReason.OBSTACLE_DETECTED);
                 }
 			}
+            catch(SerialConnexionException e)
+            {
+            	// FIXME : gérer cette exception
+            }
 
         } 
         while(doItAgain)
@@ -510,7 +516,7 @@ public class Locomotion implements Service
      * @throws BlockedException si le robot a un bloquage mecanique
      * @throws UnexpectedObstacleOnPathException si le robot rencontre un obstacle innatendu sur son chemin (par les capteurs)
      */
-    private void moveToPointCorrectAngleAndDetectEnnemy(Vec2 aim, ArrayList<Hook> hooks, boolean isMovementForward, boolean turnOnly, boolean mustDetect) throws UnexpectedObstacleOnPathException, BlockedException
+    private void moveToPointCorrectAngleAndDetectEnnemy(Vec2 aim, ArrayList<Hook> hooks, boolean isMovementForward, boolean turnOnly, boolean mustDetect) throws UnexpectedObstacleOnPathException, BlockedException, SerialConnexionException
     {         	
     	//double time=System.currentTimeMillis();
         moveToPointSymmetry(aim, isMovementForward, mustDetect, turnOnly, false);
@@ -520,10 +526,29 @@ public class Locomotion implements Service
             
         	// en cas de détection d'ennemi, une exception est levée
         	if(mustDetect)
+        	{
         		//detectEnemyInFrontDisk(isMovementForward, turnOnly, aim);
         		detectEnemyAtDistance(70, aim);	// 85 mm est une bonne distance pour être safe.
+        		
+        		//si un ennemi est détecté à moins de 200, on diminue au minimum la vitesse
+            	/*
+        		try
+            	{
+            		if(mustDetect)
+            			detectEnemyAtDistance(150, aim);
+            	}
+            	catch(UnexpectedObstacleOnPathException e)
+            	{
+            		//setTranslationnalSpeed(3);
+            		
+            		//debug
+            		log.debug("diminution de la vitesse suite à la détection d'un ennemi proche", this);
+            	}
+            	*/
+        	}
         	else 
         		log.debug("Pas de detection demandée", this); 
+
         	
 
             //on evalue les hooks (non null !)
@@ -793,7 +818,7 @@ public class Locomotion implements Service
     
 
     /**
-     * Lance une exception si un ennemi se trouve a une distance inférieur a celle spécifiée
+     * Lance une exception si un ennemi se trouve a une distance inférieure a celle spécifiée
      * @param distance distance jusqu'a un ennemi en mm en dessous de laquelle on doit abandonner le mouvement
      * @param movementDirection direction de mouvment du robot
      * @param isMovementForward vrai si on va en avant et faux si on va en arriere

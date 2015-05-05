@@ -38,11 +38,11 @@ public class PathDingDing implements Service
 	}
 	
 	/**
-	 * methode a appeler, avec la liste des obstacles � considerer
+	 * methode a appeler, avec la liste des obstacles à considerer
 	 * @param start le point de depart
 	 * @param end le point d'arrivee
 	 * @param obstaclesToConsider 
-	 * @return un chemin optimise liant depart et arrivee
+	 * @return un chemin optimise liant depart et arrivee (comprend les points de départ et d'arrivée)
 	 * @throws PathNotFoundException 
 	 * @throws InObstacleException 
 	 * @throws Exception pas encore implemente
@@ -90,7 +90,7 @@ public class PathDingDing implements Service
 		Node endNode = new Node(end.x, end.y);
 		mGraph.setEndNode(endNode);
 		
-		//calcul du chemin via computeGraph, convertion, et simplification.
+		//calcul du chemin via computeGraph, conversion, et simplification.
 		try
 		{
 			pathNode = computeGraph(mGraph);
