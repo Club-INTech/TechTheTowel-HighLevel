@@ -421,8 +421,7 @@ public class ObstacleManager
      * @param position
      * @return les groupes d'obstacles dans lesquels est le point
      */
-    //TODO : trouver un meilleur nom?
-    public EnumSet<ObstacleGroups> obstacleGroupsInPosition(Vec2 position)
+    public EnumSet<ObstacleGroups> obstacleGroupsInThePosition(Vec2 position)
     {
     	EnumSet<ObstacleGroups> obstacleGroups = EnumSet.noneOf(ObstacleGroups.class);
     	for(int i = 0; i < mMobileObstacles.size(); i++)

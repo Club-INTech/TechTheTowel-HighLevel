@@ -263,8 +263,7 @@ public class Graph
      * @param position
      * @return les groupes d'obstacles dans lesquels est le point, en y ajoutant le rayon du robot
      */
-    //TODO : trouver un meilleur nom?
-    public EnumSet<ObstacleGroups> obstacleGroupsInPosition(Vec2 position)
+    public EnumSet<ObstacleGroups> obstacleGroupsInThePosition(Vec2 position)
     {
     	EnumSet<ObstacleGroups> obstacleGroups = EnumSet.noneOf(ObstacleGroups.class);
     	for(int i = 0; i < mTable.getObstacleManager().getMobileObstacles().size(); i++)
