@@ -221,29 +221,6 @@ public class Locomotion implements Service
     	moveLengthwise(distance, hooks, wall, true);
     }
     
-    
-    /**
-     * Fait avancer le robot de "distance" (en mm). attention modifie la vitesse du robot
-     * @param distance la distance dont le robot doit se deplacer
-     * @param hooks les potetniels hooks a prendre en compte (ne pas mettre null !)
-     * @param wall vrai si on supppose qu'on vas se cogner dans un mur (et qu'il ne faut pas pousser dessus)
-     * @param mustDetect true si on veut detecter, false sinon.
-     * @throws UnableToMoveException si le robot a un bloquage mecanique
-     */
-    public void moveLengthwise(int distance, ArrayList<Hook> hooks, boolean wall, boolean mustDetect) throws UnableToMoveException
-    {
-    	Speed newSpeed;
-    	if (distance<150)
-    		newSpeed = Speed.SLOW;
-    	else if (distance <1000)
-    		newSpeed = Speed.BETWEEN_SCRIPTS_SLOW;
-    	else
-    		newSpeed = Speed.BETWEEN_SCRIPTS;
-    	
-    	
-    	moveLengthwise(distance, hooks, wall, mustDetect, newSpeed);
-    }
-    
     /**
      * Fait avancer le robot de "distance" (en mm).
      * @param distance la distance dont le robot doit se deplacer
@@ -253,7 +230,7 @@ public class Locomotion implements Service
      * @param speed la vitesse que doit prendre le robot pedant le deplacement (a donner imperativement si on utilise un hook)
      * @throws UnableToMoveException si le robot a un bloquage mecanique
      */
-    public void moveLengthwise(int distance, ArrayList<Hook> hooks, boolean wall, boolean mustDetect, Speed speed) throws UnableToMoveException
+    public void moveLengthwise(int distance, ArrayList<Hook> hooks, boolean wall, boolean mustDetect) throws UnableToMoveException
     {    
     	actualRetriesIfBlocked=0;
     	

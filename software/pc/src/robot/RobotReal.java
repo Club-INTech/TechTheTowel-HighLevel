@@ -98,9 +98,7 @@ public class RobotReal extends Robot
 	@Override
 	public void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
 	{	
-		Speed oldSpeed = speed;
-		mLocomotion.moveLengthwise(distance, hooksToConsider, expectsWallImpact);
-		speed = oldSpeed;
+		moveLengthwise(distance, hooksToConsider, expectsWallImpact, true);
 	}	
 	
 	
@@ -116,9 +114,29 @@ public class RobotReal extends Robot
 	@Override
 	 public void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact, Boolean mustDetect) throws UnableToMoveException
 	{	
-		Speed oldSpeed = speed;
-		mLocomotion.moveLengthwise(distance, hooksToConsider, expectsWallImpact, mustDetect);
-		speed = oldSpeed;
+		Speed newSpeed;
+    	if (distance<150)
+    		newSpeed = Speed.SLOW;
+    	else if (distance <1000)
+    		newSpeed = Speed.BETWEEN_SCRIPTS_SLOW;
+    	else
+    		newSpeed = Speed.BETWEEN_SCRIPTS;
+    	
+		moveLengthwise(distance, hooksToConsider, expectsWallImpact, mustDetect, newSpeed);
+	}	
+	
+	@Override
+    public void moveLengthwiseWithoutDetection(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
+	{	
+		Speed newSpeed;
+    	if (distance<150)
+    		newSpeed = Speed.SLOW;
+    	else if (distance <1000)
+    		newSpeed = Speed.BETWEEN_SCRIPTS_SLOW;
+    	else
+    		newSpeed = Speed.BETWEEN_SCRIPTS;
+    	
+		moveLengthwise(distance, hooksToConsider, expectsWallImpact, false, newSpeed);
 	}	
 	 
 	/**
@@ -132,10 +150,11 @@ public class RobotReal extends Robot
 	 * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
 	 */
 	@Override
-	 public void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact, Boolean mustDetect, Speed speed) throws UnableToMoveException
+	 public void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact, Boolean mustDetect, Speed newSpeed) throws UnableToMoveException
 	{	
 		Speed oldSpeed = speed;
-		mLocomotion.moveLengthwise(distance, hooksToConsider, expectsWallImpact, mustDetect, speed);
+		speed = newSpeed;
+		mLocomotion.moveLengthwise(distance, hooksToConsider, expectsWallImpact, mustDetect);
 		speed = oldSpeed;
 	}	
 	
@@ -148,13 +167,7 @@ public class RobotReal extends Robot
 		mLocomotion.moveTowardEnnemy(distance, hooksToConsider);
 	}	
 	
-	@Override
-    public void moveLengthwiseWithoutDetection(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
-	{	
-		Speed oldSpeed = speed;
-		mLocomotion.moveLengthwise(distance, hooksToConsider, expectsWallImpact, false);
-		speed = oldSpeed;
-	}	
+	
 	
 
 
