@@ -97,9 +97,9 @@ public class GetPlot extends AbstractScript
 		if (versionToExecute == 0 || versionToExecute == 1 || versionToExecute == 2 || versionToExecute == 7)
 		{
 			//si on a plus de place dans la pile on termine
-			if (stateToConsider.robot.storedPlotCount == 4)
+			if (stateToConsider.robot.storedPlotCount >= 4)
 			{
-				System.out.println("Trop de plots !");//Why Can't I Hold All These Limes ?
+				log.debug("Trop de plots !",this);//Why Can't I Hold All These Limes ?
 				return;
 			}
 									
@@ -113,9 +113,12 @@ public class GetPlot extends AbstractScript
 			{
 				if (versionToExecute == 1)
 				{
-					stateToConsider.robot.turn(Math.PI);
-					eatPlot(false, true, stateToConsider, true, false);
-					stateToConsider.table.eatPlotX(versionToExecute);
+					if (stateToConsider.robot.storedPlotCount<4)
+					{
+						stateToConsider.robot.turn(Math.PI);
+						eatPlot(false, true, stateToConsider, true, false);
+						stateToConsider.table.eatPlotX(versionToExecute);
+					}
 				}
 				if(versionToExecute==0 || versionToExecute==2 )
 				{
@@ -127,11 +130,11 @@ public class GetPlot extends AbstractScript
 				if(versionToExecute==7)
 				{
 					System.out.println("en position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") avant la rectification du PF");
-					stateToConsider.robot.turn(0);// On se tourne pour sauver le PF
+					stateToConsider.robot.turn(Math.PI/2);// On se tourne pour sauver le PF
 					stateToConsider.robot.moveLengthwise(300);
-					stateToConsider.robot.turn(Math.PI/2);
+					stateToConsider.robot.turn(0);
 					stateToConsider.robot.moveLengthwise(300);
-					eatPlot(false, true, stateToConsider, true, true);
+					eatPlot(true, true, stateToConsider, false, false);
 					stateToConsider.table.eatPlotX(versionToExecute);
 				}
 			} 
@@ -235,7 +238,6 @@ public class GetPlot extends AbstractScript
 		else if (versionToExecute == 56)
 		{
 			stateToConsider.robot.turn(Math.PI/2);
-			
 			if (!stateToConsider.table.isPlotXEaten(5))
 			{//plot 5 pas mangé
 				if(!stateToConsider.table.isPlotXEaten(6))
@@ -243,7 +245,7 @@ public class GetPlot extends AbstractScript
 					//plot 5 et 6 pas mangé, on mange les deux avec notre bras gauche (celui du coté de l'ascenceur)
 					try 
 					{
-						eatPlot(true, true, stateToConsider, false, false);
+						eatPlot(false, true, stateToConsider, false, false);
 					} 
 					catch (UnableToEatPlot e1) 
 					{
@@ -251,18 +253,21 @@ public class GetPlot extends AbstractScript
 						finalize(stateToConsider);
 						e1.printStackTrace();
 					}
-					
-					stateToConsider.robot.moveLengthwise(100); // On avance vers le suivant
-					
-					try 
+					//si on est suffisamment vide on mange le plot suivant
+					if (stateToConsider.robot.storedPlotCount<4)
 					{
-						eatPlot(true, true, stateToConsider, false, false);
-					} 
-					catch (UnableToEatPlot e) 
-					{
-						stateToConsider.table.eatPlotX(versionToExecute);
-						finalize(stateToConsider);
-						e.printStackTrace();
+						stateToConsider.robot.moveLengthwise(100); // On avance vers le suivant
+						
+						try 
+						{
+							eatPlot(false, true, stateToConsider, false, false);
+						} 
+						catch (UnableToEatPlot e) 
+						{
+							stateToConsider.table.eatPlotX(versionToExecute);
+							finalize(stateToConsider);
+							e.printStackTrace();
+						}
 					}
 				}
 			}
@@ -275,7 +280,7 @@ public class GetPlot extends AbstractScript
 					
 					try 
 					{
-						eatPlot(true, false, stateToConsider, false, false);
+						eatPlot(false, false, stateToConsider, false, false);
 					} 
 					catch (UnableToEatPlot e) 
 					{

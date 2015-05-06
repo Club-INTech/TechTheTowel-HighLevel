@@ -157,15 +157,18 @@ public class DropPile extends AbstractScript
 				stateToConsider.robot.isBallStored = false;
 				
 				stateToConsider.robot.moveLengthwise(-180, hooksToConsider, false);
+				//Puis on finit
+				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+				
+				
 				stateToConsider.robot.turn(-Math.PI/4);
 				//TODO valeur a tester
 				stateToConsider.robot.moveLengthwise(180, hooksToConsider, false);
 				
 			
-				//Puis on finit
-				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
-				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);
-				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+				
 					
 				//on remet l'ascenceur en position de deplacement
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
@@ -268,7 +271,7 @@ public class DropPile extends AbstractScript
 		}
 		else if (id==0)
 		{
-			return new Circle(750,800); 
+			return new Circle(770,800); 
 		}
 		else if (id == 2)
 			return new Circle(1100,1250);

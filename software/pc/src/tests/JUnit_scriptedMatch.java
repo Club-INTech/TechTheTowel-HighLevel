@@ -248,6 +248,31 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		System.out.println("Pile vidée");
 		
 		try 
+		{
+			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le plot 5 et 6");
+			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(56, real_state, emptyHook );//On recupere les 2 plots a droite de l'escalier
+			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le plot 5 et 6");
+
+		}
+		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e) 
+		{
+			e.printStackTrace();
+		}
+				
+		try 
+		{
+			real_state.robot.turn(0);	
+			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le plot 7");
+			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(7, real_state, emptyHook );//On recupere le dernier plot
+			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le plot 7");
+
+		}
+		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e) 
+		{
+			e.printStackTrace();
+//		}
+		
+		try 
 		{			
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant de deposé la pile sur l'estrade");
 			// On lache notre pile dans notre zone 
@@ -293,31 +318,6 @@ public class JUnit_scriptedMatch extends JUnit_Test
 //			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le deposage en zone haute enemie");	
 //			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(2, real_state, emptyHook ); // On depose le verre chez les ennemis, en haut.
 //			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le deposage en zone haute enemie");	
-//
-//		}
-//		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e) 
-//		{
-//			e.printStackTrace();
-//		}
-//		
-//		try 
-//		{
-//			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le plot 5 et 6");
-//			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(56, real_state, emptyHook );//On recupere les 2 plots a droite de l'escalier
-//			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le plot 5 et 6");
-//
-//		}
-//		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e) 
-//		{
-//			e.printStackTrace();
-//		}
-//				
-//		try 
-//		{
-//			real_state.robot.turn(0);	
-//			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le plot 7");
-//			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(7, real_state, emptyHook );//On recupere le dernier plot
-//			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le plot 7");
 //
 //		}
 //		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e) 
