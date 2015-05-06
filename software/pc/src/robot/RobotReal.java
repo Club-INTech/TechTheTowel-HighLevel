@@ -44,7 +44,7 @@ public class RobotReal extends Robot
 		this.mActuatorCardWrapper = mActuatorCardWrapper;
 		this.mLocomotion = deplacements;
 		updateConfig();
-		speed = Speed.BETWEEN_SCRIPTS;		
+		speed = Speed.SLOW;		
 	}
 	
     public void copy(RobotChrono rc)
@@ -111,13 +111,15 @@ public class RobotReal extends Robot
 	@Override
     public void moveLengthwiseWithoutDetection(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
 	{	
-		Speed newSpeed;
+		Speed newSpeed = Speed.SLOW;
+		/*
     	if (distance<150)
     		newSpeed = Speed.SLOW;
     	else if (distance <1000)
     		newSpeed = Speed.BETWEEN_SCRIPTS_SLOW;
     	else
     		newSpeed = Speed.BETWEEN_SCRIPTS;
+    		*/
     	
 		moveLengthwise(distance, hooksToConsider, expectsWallImpact, false, newSpeed);
 	}	
@@ -134,13 +136,15 @@ public class RobotReal extends Robot
 	@Override
 	 public void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact, Boolean mustDetect) throws UnableToMoveException
 	{	
-		Speed newSpeed;
+		Speed newSpeed = Speed.SLOW;
+		/*
     	if (distance<150)
     		newSpeed = Speed.SLOW;
     	else if (distance <1000)
     		newSpeed = Speed.BETWEEN_SCRIPTS_SLOW;
     	else
     		newSpeed = Speed.BETWEEN_SCRIPTS;
+    		*/
     	
 		moveLengthwise(distance, hooksToConsider, expectsWallImpact, mustDetect, newSpeed);
 	}	

@@ -106,7 +106,7 @@ public abstract class JUnit_Test
 		
 		robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
 		
-		robot.setLocomotionSpeed(Speed.BETWEEN_SCRIPTS);
+		robot.setLocomotionSpeed(Speed.SLOW);
 	}
 	
 	public void putTennisBall(Robot robot) throws SerialConnexionException

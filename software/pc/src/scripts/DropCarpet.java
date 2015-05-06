@@ -187,7 +187,6 @@ public class DropCarpet extends AbstractScript
 				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
 				
-				
 				//mise en place d'un hook pour attraper le gobelet 1.75 secondes après le début du script
 				Hook hookGoblet = hookFactory.newHookTimer(System.currentTimeMillis() + 2250,500);
 				hookGoblet.addCallback(new Callback(new CloseRightArmExe(),true, stateToConsider));
@@ -203,7 +202,7 @@ public class DropCarpet extends AbstractScript
 				//on presente ses arrieres a l'escalier
 				stateToConsider.robot.turn(-0.5*Math.PI, hooksToConsider, false);
 				// on avance vers ces demoiselles (les marches) (attention impact possible)
-				stateToConsider.robot.moveLengthwiseTowardWall(-250*2, hooksToConsider);
+				stateToConsider.robot.moveLengthwiseTowardWall(-250, hooksToConsider);
 				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
 				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
 

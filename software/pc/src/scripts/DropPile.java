@@ -42,7 +42,7 @@ public class DropPile extends AbstractScript
 		super(hookFactory, config, log);
 		
 		//on initialise le membre versions
-		versions=new Integer[]{0,1};
+		versions=new Integer[]{0,1,2};
 	}
 
 	@Override
@@ -92,7 +92,7 @@ public class DropPile extends AbstractScript
 				stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_GUIDE, true);
 				
 
-				Sleep.sleep(700);	// attente pour que la pile retrouve son équilibre
+				stateToConsider.robot.sleep(700);	// attente pour que la pile retrouve son équilibre
 				
 				//puis beaucoup
 				//Ya... Yamete  ! #O_o#
@@ -141,7 +141,7 @@ public class DropPile extends AbstractScript
 				
 				stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_GUIDE, false);
 				stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_GUIDE, true);
-				Sleep.sleep(700);	// attente pour que la pile retrouve son équilibre
+				stateToConsider.robot.sleep(700);	// attente pour que la pile retrouve son équilibre
 
 				//puis beaucoup
 				stateToConsider.robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, false);
@@ -155,17 +155,20 @@ public class DropPile extends AbstractScript
 				stateToConsider.table.setPileValue(0, valuePoints);
 				stateToConsider.robot.storedPlotCount = 0;
 				stateToConsider.robot.isBallStored = false;
+				stateToConsider.robot.digestPlot();
 				
 				stateToConsider.robot.moveLengthwise(-180, hooksToConsider, false);
-				
-			
 				//Puis on finit
 				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
 				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
-					
+				
 				//on remet l'ascenceur en position de deplacement
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
+				
+				stateToConsider.robot.turn(-Math.PI/4);
+				stateToConsider.robot.moveLengthwise(100, hooksToConsider, false);
+				
 				
 				if (!stateToConsider.table.isAreaXFilled(0))
 				{
@@ -186,6 +189,56 @@ public class DropPile extends AbstractScript
 						stateToConsider.table.areaXFilled(0);
 					}
 				}
+				else
+				{
+					stateToConsider.robot.moveLengthwise(-250, hooksToConsider);
+				}
+			}
+			else if (version == 2)
+			{
+				stateToConsider.robot.turn(-Math.PI/2);
+				stateToConsider.robot.moveLengthwise(200, hooksToConsider, true);
+				
+				
+				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+				//on ouvre le guide un peu
+				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
+				
+				stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_GUIDE, false);
+				stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_GUIDE, true);
+				stateToConsider.robot.sleep(700);	// attente pour que la pile retrouve son équilibre
+
+				//puis beaucoup
+				stateToConsider.robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, false);
+				stateToConsider.robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, true);
+				//on se vide de nos plots et on met a jour les points
+				int ball = 0;
+				if (stateToConsider.robot.isBallStored)
+					ball = 1;
+				int valuePoints = (2*ball+3)*stateToConsider.robot.storedPlotCount;
+				stateToConsider.obtainedPoints += (2*ball+3)*stateToConsider.robot.storedPlotCount;
+				stateToConsider.table.setPileValue(0, stateToConsider.table.getPileValue(0)+valuePoints);
+				stateToConsider.robot.storedPlotCount = 0;
+				stateToConsider.robot.isBallStored = false;
+				
+				if (!stateToConsider.robot.getSymmetry())
+					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_MIDDLE, true);
+				else
+					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_MIDDLE, true);
+
+
+				
+				stateToConsider.robot.moveLengthwise(-600, hooksToConsider, false);
+				
+				if (!stateToConsider.robot.getSymmetry())
+					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
+				else
+					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
+				//Puis on finit
+				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
 			}
 			else
 			{
@@ -211,8 +264,10 @@ public class DropPile extends AbstractScript
 		}
 		else if (id==0)
 		{
-			return new Circle(750,800); 
+			return new Circle(770,800); 
 		}
+		else if (id == 2)
+			return new Circle(850,1300);
 		else
 		{
 			log.debug("erreur DropPile script : out of bound id", this);
@@ -236,6 +291,9 @@ public class DropPile extends AbstractScript
 				if (!stateToConsider.table.isAreaXFilled(0) && (stateToConsider.robot.isGlassStoredLeft || stateToConsider.robot.isGlassStoredRight))
 					toReturn += 4;
 			}
+			//on retire les points deja faits (que l'on va casser)
+			if (version != 2)
+				toReturn -= stateToConsider.table.getPileValue(version);
 			return toReturn;
 	}
 

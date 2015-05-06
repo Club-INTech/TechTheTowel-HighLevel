@@ -77,6 +77,12 @@ public class GetPlot extends AbstractScript
 		
 			obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_6);
 		}
+		else if (versionToExecute == 567)
+		{
+			obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_5);
+		
+			obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_6);
+		}
 		else 
 		{
 			log.debug("version de Script inconnue de GetPlot :"+versionToExecute, this);
@@ -94,12 +100,12 @@ public class GetPlot extends AbstractScript
 	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, SerialFinallyException
 	{
 		//version circulaire
-		if (versionToExecute == 0 || versionToExecute == 1 || versionToExecute == 2 || versionToExecute == 7)
+		if (versionToExecute == 0 || versionToExecute == 1 || versionToExecute == 2)
 		{
 			//si on a plus de place dans la pile on termine
-			if (stateToConsider.robot.storedPlotCount == 4)
+			if (stateToConsider.robot.storedPlotCount >= 4)
 			{
-				System.out.println("Trop de plots !");//Why Can't I Hold All These Limes ?
+				log.debug("Trop de plots !",this);//Why Can't I Hold All These Limes ?
 				return;
 			}
 									
@@ -113,9 +119,12 @@ public class GetPlot extends AbstractScript
 			{
 				if (versionToExecute == 1)
 				{
-					stateToConsider.robot.turn(Math.PI);
-					eatPlot(false, true, stateToConsider, true, false);
-					stateToConsider.table.eatPlotX(versionToExecute);
+					if (stateToConsider.robot.storedPlotCount<4)
+					{
+						stateToConsider.robot.turn(Math.PI);
+						eatPlot(false, true, stateToConsider, true, false);
+						stateToConsider.table.eatPlotX(versionToExecute);
+					}
 				}
 				if(versionToExecute==0 || versionToExecute==2 )
 				{
@@ -124,16 +133,7 @@ public class GetPlot extends AbstractScript
 					stateToConsider.table.eatPlotX(versionToExecute);
 				}
 
-				if(versionToExecute==7)
-				{
-					System.out.println("en position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") avant la rectification du PF");
-					stateToConsider.robot.turn(0);// On se tourne pour sauver le PF
-					stateToConsider.robot.moveLengthwise(300);
-					stateToConsider.robot.turn(Math.PI/2);
-					stateToConsider.robot.moveLengthwise(300);
-					eatPlot(false, true, stateToConsider, true, true);
-					stateToConsider.table.eatPlotX(versionToExecute);
-				}
+				
 			} 
 			catch (UnableToEatPlot e) 
 			{
@@ -211,56 +211,78 @@ public class GetPlot extends AbstractScript
 			}
 			
 		}
-		//TODO derniere version a traiter + traiter le cas où on a trois plots stockés et qu'on ne veut pas manger n°6
+		//attention version hardcodée ne pas utilser hors du match scripté
 		else if (versionToExecute == 56)
 		{
-			stateToConsider.robot.turn(Math.PI/2);
+			//FIXME please
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
+			if (!stateToConsider.robot.getSymmetry())
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
+			else
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN_SLOW, true);
+
+			if (checkSensor(stateToConsider))
+				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 			
-			if (!stateToConsider.table.isPlotXEaten(5))
-			{//plot 5 pas mangé
-				if(!stateToConsider.table.isPlotXEaten(6))
-				{
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
+			stateToConsider.robot.moveLengthwise(100); // On avance vers le suivant
+			if (!stateToConsider.robot.getSymmetry())
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
+			else
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
+
+		}
+		else if(versionToExecute==567)
+		{
+			stateToConsider.robot.turn(Math.PI/2);
 					//plot 5 et 6 pas mangé, on mange les deux avec notre bras gauche (celui du coté de l'ascenceur)
-					try 
-					{
-						eatPlot(true, true, stateToConsider, false, false);
-					} 
-					catch (UnableToEatPlot e1) 
-					{
-						finalize(stateToConsider);
-						e1.printStackTrace();
-					}
-					
-					stateToConsider.robot.moveLengthwise(100); // On avance vers le suivant
-					
-					try 
-					{
-						eatPlot(true, true, stateToConsider, false, false);
-					} 
-					catch (UnableToEatPlot e) 
-					{
-						finalize(stateToConsider);
-						e.printStackTrace();
-					}
+			try 
+			{
+				eatPlot(false, true, stateToConsider, false, false);
+			} 
+			catch (UnableToEatPlot e1) 
+			{
+				stateToConsider.table.eatPlotX(5);
+				finalize(stateToConsider);
+				e1.printStackTrace();
+			}
+			//si on est suffisamment vide on mange le plot suivant
+			if (stateToConsider.robot.storedPlotCount<4)
+			{
+				stateToConsider.robot.moveLengthwise(100); // On avance vers le suivant
+				
+				try 
+				{
+					eatPlot(false, true, stateToConsider, false, false);
+				} 
+				catch (UnableToEatPlot e) 
+				{
+					stateToConsider.table.eatPlotX(6);
+					finalize(stateToConsider);
+					e.printStackTrace();
 				}
 			}
-			else
-			{	//Plot 5 mangé
-				if(!stateToConsider.table.isPlotXEaten(6))
+				
+			if (stateToConsider.robot.storedPlotCount<4)
+			{
+				stateToConsider.robot.turn(0);
+				//TODO valeur a tester
+				stateToConsider.robot.moveLengthwise(420);
+				try
 				{
-					//plot 6 pas mangé, on ne mange que le 6
-					stateToConsider.robot.moveLengthwise(100);
-					
-					try 
-					{
-						eatPlot(true, false, stateToConsider, false, false);
-					} 
-					catch (UnableToEatPlot e) 
-					{
-						finalize(stateToConsider);
-						e.printStackTrace();
-					}
+					eatPlot(true, true, stateToConsider, false, false);
+					stateToConsider.table.eatPlotX(7);
 				}
+				catch (UnableToEatPlot e)
+				{
+					stateToConsider.table.eatPlotX(7);
+					finalize(stateToConsider);
+					e.printStackTrace();
+				}
+				stateToConsider.robot.moveLengthwise(-200);
+				stateToConsider.robot.turn(Math.PI/4);
+				stateToConsider.robot.moveLengthwise(-300);
 			}
 		}
 	}
@@ -277,6 +299,8 @@ public class GetPlot extends AbstractScript
 		else if (id==34)
 			return new Circle (900,200,0);
 		else if (id==56)
+			return new Circle (780,1620,0); // Position devant le plot 5, on longeant l'escalier
+		else if (id==567)
 			return new Circle (780,1620,0); // Position devant le plot 5, on longeant l'escalier
 		else if (id==7)
 			return new Circle (1410,1800,200);//Point d'entrée dangereux mais (1280,1700) passe (On est à 166 du centre (1410,1800) )
@@ -380,48 +404,66 @@ public class GetPlot extends AbstractScript
 				log.debug("mouvement impossible, script GetPlot", this);
 				sensorAnswer = false;
 			}
-		if(!forbidArmUsage)
-		{
+		
+			//si on a pas reussi a chopper le plot en avancant (ou si interdit) on essaye avec les bras
 			if (!sensorAnswer)
 			{
-				if (isArmChosenLeft) 
+				if(!forbidArmUsage)
 				{
-					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_MIDDLE, true);
-					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
-					sensorAnswer = checkSensor(stateToConsider);
-				}
-				else
-				{
-					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_MIDDLE, true);
-					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN_SLOW, true);
-					sensorAnswer = checkSensor(stateToConsider);
-				}
-				//si on a attrape qqc on termine sinon on essaie avec l'autre bras (si isSecondTry == false)
-				//si deuxieme essai ecrire dans le log qu'on a essaye de manger un plot et on jette une exeption impossible de manger
-		
-				if (!sensorAnswer)
-				{
-					if (isSecondTry)
+					if (isArmChosenLeft) 
 					{
-						log.debug("impossible d'attraper le plot, tentative en fermant les machoires", this);	
+						stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
+						sensorAnswer = checkSensor(stateToConsider);
 					}
 					else
 					{
-						eatPlot(true,!isArmChosenLeft, stateToConsider, false, false);
-						return;
+						stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN_SLOW, true);
+						sensorAnswer = checkSensor(stateToConsider);
+					}
+					//si on a attrape qqc on termine sinon on essaie avec l'autre bras (si isSecondTry == false)
+					//si deuxieme essai ecrire dans le log qu'on a essaye de manger un plot et on jette une exeption impossible de manger
+					if (sensorAnswer)
+					{
+							stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+						if (isArmChosenLeft) 
+							stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
+						else 
+							stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
+					}
+					else
+					{
+						if (isArmChosenLeft) 
+							stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
+						else 
+							stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
+						
+						if (isSecondTry)
+						{
+							
+							log.debug("impossible d'attraper le plot, tentative en fermant les machoires", this);	
+							stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+						}
+						else
+						{
+							
+							eatPlot(true,!isArmChosenLeft, stateToConsider, false, forbidArmUsage);
+							return;
+						}
 					}
 				}
+				else
+				{
+					stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+				}
 				
-				if (isArmChosenLeft) 
-					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
-				else 
-					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
 			}
-
-		}
-			
-		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
-
+			//si on a reussi a chopper le plot en avancant on ferme les machoires
+			else
+			{
+				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+			}
+		
+	
 		//si la reponse etait fausse et que c'est le deuxieme essai jusque là on reverifie une fois les machoires fermées
 		// si l'usage des bras est interdit, on vérifie si le plot a été mangé
 		if ( (!sensorAnswer && isSecondTry) || forbidArmUsage)

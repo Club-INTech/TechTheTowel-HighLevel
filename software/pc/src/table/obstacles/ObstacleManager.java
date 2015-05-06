@@ -237,7 +237,7 @@ public class ObstacleManager
     	// si la position est dans notre zone de depart, ca ne peut etre qu'une main 
     	if (position.x>-1500 && position.x<1500 && position.y>0 && position.y<2000 //la table
     		&& !(position.x>1200 && position.y<1200 && position.y>800) //notre position de depart
-    		&& !(position.x > 1420 && position.y < 533 && position.y > -533)) // les marches
+    		&& !(position.y > 1420 && position.x < 533 && position.x > -533)) // les marches
     	{
     		/*on ne test pas si la position est dans un obstcle deja existant 
     		 *on ne detecte pas les plots ni les goblets (et si on les detectes on prefere ne pas prendre le risque et on les evites)
