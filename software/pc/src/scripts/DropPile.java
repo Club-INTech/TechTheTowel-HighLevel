@@ -224,7 +224,10 @@ public class DropPile extends AbstractScript
 				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_MIDDLE, true);
 				
 				stateToConsider.robot.moveLengthwise(-600, hooksToConsider);
-				
+				//Puis on finit
+				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
 			}
 			else
