@@ -203,7 +203,7 @@ public class CloseClap extends AbstractScript
 		
 		try
 		{
-			stateToConsider.robot.moveLengthwise(-400, hooksToConsider);
+			stateToConsider.robot.moveLengthwise(-450, hooksToConsider);
 			stateToConsider.table.clapXClosed(1);
 		}
 		catch(UnableToMoveException e)
