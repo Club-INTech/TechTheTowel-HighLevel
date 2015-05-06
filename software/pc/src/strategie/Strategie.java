@@ -376,7 +376,7 @@ public class Strategie implements Service
 			return;
 		}
 		
-		robotReal.setLocomotionSpeed(Speed.BETWEEN_SCRIPTS);
+		robotReal.setLocomotionSpeed(Speed.BETWEEN_SCRIPTS_SLOW);
 	}
 
 	private void scriptedMatch(GameState<Robot> gameState) throws PathNotFoundException, InObstacleException, UnableToMoveException 
