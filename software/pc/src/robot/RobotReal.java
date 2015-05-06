@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import enums.ActuatorOrder;
 import enums.SensorNames;
 import enums.Speed;
+import enums.SymmetrizedActuatorOrderMap;
+import enums.SymmetrizedSensorNamesMap;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 
@@ -26,6 +28,10 @@ public class RobotReal extends Robot
 {
 	private ActuatorCardWrapper mActuatorCardWrapper;
 	private SensorsCardWrapper mSensorsCardWrapper;
+	
+	private SymmetrizedActuatorOrderMap mActuatorCorrespondenceMap = new SymmetrizedActuatorOrderMap();
+	private SymmetrizedSensorNamesMap mSensorCorrespondenceMap = new SymmetrizedSensorNamesMap();
+	
 	
 	/** Système de locomotion a utiliser pour déplacer le robot */
 	private Locomotion mLocomotion;
@@ -56,19 +62,22 @@ public class RobotReal extends Robot
 	@Override
 	public void useActuator(ActuatorOrder order, boolean waitForCompletion) throws SerialConnexionException
 	{
+		if(symmetry)
+			order = mActuatorCorrespondenceMap.getSymmetrizedActuatorOrder(order);
 		mActuatorCardWrapper.useActuator(order);
 		
 		if(waitForCompletion)
-			sleep(order.getDuration());		
+			sleep(order.getDuration());
 	}
 	
 	@Override
-	public Object getSensorValue (SensorNames captor) throws SerialConnexionException
+	public Object getSensorValue (SensorNames sensor) throws SerialConnexionException
 	{
-		return mSensorsCardWrapper.getSensorValue(captor);
+		if(symmetry)
+			sensor = mSensorCorrespondenceMap.getSymmetrizedSensorName(sensor);
+		return mSensorsCardWrapper.getSensorValue(sensor);
 	}
 
-	
 	@Override	
 	public void sleep(long duree)
 	{

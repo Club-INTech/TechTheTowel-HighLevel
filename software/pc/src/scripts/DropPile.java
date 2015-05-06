@@ -169,43 +169,21 @@ public class DropPile extends AbstractScript
 				
 				if (!stateToConsider.table.isAreaXFilled(0))
 				{
-					if(stateToConsider.robot.getSymmetry())
+					if (stateToConsider.robot.isGlassStoredLeft)
 					{
-						if (stateToConsider.robot.isGlassStoredRight)
-						{
-							stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);
-							stateToConsider.robot.moveLengthwise(-250, hooksToConsider);
-							stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
-							stateToConsider.robot.isGlassStoredRight = false;
-							stateToConsider.table.areaXFilled(0);
-						}
-						else if (stateToConsider.robot.isGlassStoredLeft)
-						{
-							stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);
-							stateToConsider.robot.moveLengthwise(-250, hooksToConsider);
-							stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
-							stateToConsider.robot.isGlassStoredLeft = false;
-							stateToConsider.table.areaXFilled(0);
-						}
-					}
-					else 
+						stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);
+						stateToConsider.robot.moveLengthwise(-250, hooksToConsider);
+						stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
+						stateToConsider.robot.isGlassStoredLeft = false;
+						stateToConsider.table.areaXFilled(0);
+					}	
+					else if (stateToConsider.robot.isGlassStoredRight)
 					{
-						if (stateToConsider.robot.isGlassStoredLeft)
-						{
-							stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);
-							stateToConsider.robot.moveLengthwise(-250, hooksToConsider);
-							stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
-							stateToConsider.robot.isGlassStoredLeft = false;
-							stateToConsider.table.areaXFilled(0);
-						}	
-						else if (stateToConsider.robot.isGlassStoredRight)
-						{
-							stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);
-							stateToConsider.robot.moveLengthwise(-250, hooksToConsider);
-							stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
-							stateToConsider.robot.isGlassStoredRight = false;
-							stateToConsider.table.areaXFilled(0);
-						}
+						stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);
+						stateToConsider.robot.moveLengthwise(-250, hooksToConsider);
+						stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
+						stateToConsider.robot.isGlassStoredRight = false;
+						stateToConsider.table.areaXFilled(0);
 					}
 				}
 			}

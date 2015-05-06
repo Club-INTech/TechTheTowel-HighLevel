@@ -179,8 +179,7 @@ public class GetPlot extends AbstractScript
 			
 			if (!stateToConsider.table.isGlassXTaken(0))
 			{
-				if(!stateToConsider.robot.getSymmetry()) // On prefere utiliser le bras droit quand on est jaune / le gauche quand on est verts
-				{
+				
 					// On ne ramasse pas l verre si on en a deja 2
 					if (!stateToConsider.robot.isGlassStoredLeft)
 					{
@@ -198,26 +197,7 @@ public class GetPlot extends AbstractScript
 						stateToConsider.robot.moveLengthwise(190, hooksToConsider);
 						stateToConsider.robot.isGlassStoredRight = true;
 					}
-				}
-				else // On prefere utiliser le bras droit quand on est jaune / le gauche quand on est verts
-				{
-					if(!stateToConsider.robot.isGlassStoredRight)
-					{
-						stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);					
-						stateToConsider.robot.moveLengthwise(130, hooksToConsider);
-						stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
-						stateToConsider.robot.moveLengthwise(190, hooksToConsider);
-						stateToConsider.robot.isGlassStoredRight = true;
-					}
-					else if (!stateToConsider.robot.isGlassStoredLeft)
-					{
-						stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);					
-						stateToConsider.robot.moveLengthwise(130, hooksToConsider);
-						stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
-						stateToConsider.robot.moveLengthwise(190, hooksToConsider);
-						stateToConsider.robot.isGlassStoredLeft = true;
-					}
-				}
+
 				stateToConsider.table.removeGlassX(0);
 			}
 			else
@@ -407,14 +387,7 @@ public class GetPlot extends AbstractScript
 		if (stateToConsider.robot.storedPlotCount >= 4)
 			throw new UnableToEatPlot();
 		
-		//On change le bras choisi suivant la symetrie
-		if(stateToConsider.robot.getSymmetry())
-		{
-			isArmChosenLeft=!isArmChosenLeft;
-		}
 		
-		//On change le bras choisi suivant la symetrie :TODO à voir si l'IA s'en occupera, mais pour les tests ca reste là
-	
 		if (stateToConsider.robot.hasRobotNonDigestedPlot())
 		{
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_HIGH, true);

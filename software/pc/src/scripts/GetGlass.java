@@ -207,12 +207,7 @@ public class GetGlass extends AbstractScript
 	
 	//attrape le plot (ouvre / avance / ferme )
 	private void takeGlass (GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider, boolean isSecondTry , boolean isArmChosenLeft) throws SerialConnexionException, UnableToMoveException
-	{	
-		//On change le bras choisi suivant la symetrie : à voir si l'IA s'en occupera, mais pour les tests ca reste là
-		if(stateToConsider.robot.getSymmetry())
-		{
-			isArmChosenLeft=!isArmChosenLeft;
-		}
+	{
 		//On ouvre le bras
 		if(isArmChosenLeft)
 		{

@@ -118,10 +118,7 @@ public class DropCarpet extends AbstractScript
 				hookGoblet.addCallback(new Callback(new CloseRightArmExe(),true, stateToConsider));
 				hooksToConsider.add(hookGoblet);
 				
-				if (!stateToConsider.robot.getSymmetry())
-					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, false);
-				else
-					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, false);
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, false);
 
 				//le 2.98 a ete testé de façon experimentale (ainsi que le 606), a modifier si quelqu'un veut le calculer
 				stateToConsider.robot.turn(2.98);
@@ -193,16 +190,10 @@ public class DropCarpet extends AbstractScript
 				
 				//mise en place d'un hook pour attraper le gobelet 1.75 secondes après le début du script
 				Hook hookGoblet = hookFactory.newHookTimer(System.currentTimeMillis() + 2250,500);
-				if(stateToConsider.robot.getSymmetry())
-					hookGoblet.addCallback(new Callback(new CloseLeftArmExe(),true, stateToConsider));
-				else
-					hookGoblet.addCallback(new Callback(new CloseRightArmExe(),true, stateToConsider));
+				hookGoblet.addCallback(new Callback(new CloseRightArmExe(),true, stateToConsider));
 				hooksToConsider.add(hookGoblet);
 				
-				if (!stateToConsider.robot.getSymmetry())
-					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, false);
-				else
-					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, false);
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, false);
 
 				//le 3.05 a ete testé de façon experimentale (ainsi que le 850), a modifier si quelqu'un veut le calculer
 				stateToConsider.robot.turn(3.05);

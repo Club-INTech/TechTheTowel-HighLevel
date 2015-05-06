@@ -112,27 +112,11 @@ public class CloseClap extends AbstractScript
 		stateToConsider.robot.moveLengthwise(-120, hooksToConsider, true);//-100
 			
 		//On ouvre le bras puis on avance pour se retrouver en (1010,231)
-		if(stateToConsider.robot.getSymmetry())
-		{
-			//Coté jaune
-			stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
-		}
-		else //coté vert
-		{
-			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
-		}
+		stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
 		stateToConsider.robot.moveLengthwise(250, hooksToConsider, false);
 		stateToConsider.table.clapXClosed(1);
 	
-		if(stateToConsider.robot.getSymmetry())
-		{
-			//Coté jaune
-			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, true);
-		}
-		else //coté vert
-		{
-			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, true);
-		}	
+		stateToConsider.robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, true);
 		//On s'echape
 		stateToConsider.robot.turn(Math.PI/2, hooksToConsider, false);
 		
@@ -150,15 +134,7 @@ public class CloseClap extends AbstractScript
 		stateToConsider.robot.turn(Math.PI, hooksToConsider, false);
 		
 		//On ouvre le bras puis on avance de 300mm pour se retrouver en (400,231)
-		if(stateToConsider.robot.getSymmetry())
-		{
-			//Coté jaune
-			stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
-		}
-		else //coté vert
-		{
-			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
-		}	
+		stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
 		
 		//On s'echape
 		stateToConsider.robot.turn(Math.PI/2, hooksToConsider, false);
@@ -186,22 +162,11 @@ public class CloseClap extends AbstractScript
 		
 		stateToConsider.robot.turn(0, hooksToConsider, false);
 		//on ouvre notre bras puis on avance de 200mm pour se retrouver en 
-		if(!stateToConsider.robot.getSymmetry())
-		{
-			//Coté jaune
-			stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
-		}
-		else //coté vert
-		{
-			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
-		}			
+		stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);		
 		stateToConsider.robot.moveLengthwise(200, hooksToConsider, false);//(-850,231) 
 		stateToConsider.table.clapXClosed(3);
 		
-		if(!stateToConsider.robot.getSymmetry())//Coté jaune
-			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, true);
-		else //coté vert
-			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, true);
+		stateToConsider.robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, true);
 		
 		//On s'echape
 		stateToConsider.robot.turn(Math.PI/2, hooksToConsider, false);
@@ -223,10 +188,7 @@ public class CloseClap extends AbstractScript
 		//on commence en (1295,230), on se tourne dans le bon sens
 		//stateToConsider.robot.moveLengthwise(80, hooksToConsider, false);
 		
-		if(stateToConsider.robot.getSymmetry())//TODO verifier le sens
-			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
-		else
-			stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
+		stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
 		
 		stateToConsider.robot.turn(0, hooksToConsider, false);
 		
@@ -235,16 +197,8 @@ public class CloseClap extends AbstractScript
 		Hook hook2 = hookFactory.newHookXisLesser(1000, 10);
 		
 		// ajoute un callback au hook de position qui ouvre / ferme le bras
-		if(stateToConsider.robot.getSymmetry())
-		{
-			hook1.addCallback(	new Callback(new OpenClapLeftHighExe(),true, stateToConsider)	);
-			hook2.addCallback(	new Callback(new OpenClapLeftMiddleExe(),true, stateToConsider)	);
-		}
-		else
-		{
-			hook1.addCallback(	new Callback(new OpenClapRightHighExe(),true, stateToConsider)	);
-			hook2.addCallback(	new Callback(new OpenClapRightMiddleExe(),true, stateToConsider)	);
-		}
+		hook1.addCallback(	new Callback(new OpenClapRightHighExe(),true, stateToConsider)	);
+		hook2.addCallback(	new Callback(new OpenClapRightMiddleExe(),true, stateToConsider)	);
 		
 		// ajoute le hook a la liste a passer a la locomotion
 		hooksToConsider.add(hook1);
@@ -281,36 +235,18 @@ public class CloseClap extends AbstractScript
 		stateToConsider.robot.moveLengthwise(-120, hooksToConsider, true);//-100
 	
 		//On ouvre le bras puis on avance de 250mm pour se retrouver en (1010,231)
-		if(stateToConsider.robot.getSymmetry())
-		{
-			//Coté jaune
-			stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
-		}
-		else //coté vert
-			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
+		stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
 
 		stateToConsider.robot.moveLengthwise(250, hooksToConsider, false);
 		stateToConsider.table.clapXClosed(1);
 	
 		//On monte notre bras pour passer au dessus du clap ennemi notre bras et on avance de 250mm pour se retrouver en (660,231)
-		if(stateToConsider.robot.getSymmetry())
-		{
-			//Coté jaune
-			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, true);
-		}
-		else //coté vert
-			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, true);
+		stateToConsider.robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, true);
 
 		stateToConsider.robot.moveLengthwise(250, hooksToConsider, false);
 
 		//On ouvre le bras puis on avance de 220mm pour se retrouver en (400,231)
-		if(stateToConsider.robot.getSymmetry())
-		{
-			//Coté jaune
-			stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
-		}
-		else //coté vert
-			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
+		stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
 
 		stateToConsider.robot.moveLengthwise(220, hooksToConsider, false);
 		stateToConsider.table.clapXClosed(2);	
@@ -318,10 +254,7 @@ public class CloseClap extends AbstractScript
 		//on baisse notre bras
 		stateToConsider.robot.turn(0.5*Math.PI, hooksToConsider, false);
 		
-		if(stateToConsider.robot.getSymmetry())//Coté jaune
-			stateToConsider.robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, true);
-		else //coté vert
-			stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, true);
+		stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, true);
 	
 		//on vas au 3eme clap donc en (-1340,231)
 		stateToConsider.robot.moveLengthwise(distanceToDodgeEstrade, hooksToConsider, false);
@@ -334,25 +267,11 @@ public class CloseClap extends AbstractScript
 		stateToConsider.robot.turn(0, hooksToConsider, false);
 		
 		//on ouvre notre bras puis on avance de 200mm pour se retrouver en (-1140,231) 
-		if(!stateToConsider.robot.getSymmetry())
-		{
-			//Coté jaune
-			stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
-		}
-		else //coté vert
-		{
-			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
-		}	
+		stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
 		stateToConsider.robot.moveLengthwise(200, hooksToConsider, false);
 		stateToConsider.table.clapXClosed(3);
 		
-		if(!stateToConsider.robot.getSymmetry())
-		{
-			//Coté jaune
-			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, true);
-		}
-		else //coté vert
-			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, true);
+		stateToConsider.robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, true);
 		//On s'echape
 		stateToConsider.robot.turn(Math.PI/2, hooksToConsider, false);
 		
@@ -374,24 +293,12 @@ public class CloseClap extends AbstractScript
 		stateToConsider.robot.moveLengthwise(120, hooksToConsider, true);//-100
 			
 		//On ouvre le bras puis on recule pour se retrouver en (1010,231)
-		if(!stateToConsider.robot.getSymmetry())
-		{
-			//Coté jaune
-			stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
-		}
-		else //coté vert
-			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
+		stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
 		
 		stateToConsider.robot.moveLengthwise(-250, hooksToConsider, false);
 		stateToConsider.table.clapXClosed(1);
 	
-		if(!stateToConsider.robot.getSymmetry())
-		{
-			//Coté jaune
-			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, true);
-		}
-		else //coté vert
-			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, true);
+		stateToConsider.robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, true);
 
 		//On s'echape dans le sens normal
 		stateToConsider.robot.turn(Math.PI/2, hooksToConsider, false);
@@ -407,28 +314,16 @@ public class CloseClap extends AbstractScript
 		{
 			stateToConsider.robot.turn (Math.PI*0.25);
 			
-			if (stateToConsider.robot.getSymmetry())
-				stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
-			else
-				stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
 			
 			stateToConsider.robot.turn (0);
-			if (stateToConsider.robot.getSymmetry())
-				stateToConsider.robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, true);
-			else
-				stateToConsider.robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, true);
 			
 			stateToConsider.robot.moveLengthwise(-400);
-			if (stateToConsider.robot.getSymmetry())
-				stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_CLAP, true);
-			else
-				stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
 			
 			stateToConsider.robot.turn(Math.PI*-0.5);
-			if (stateToConsider.robot.getSymmetry())
-				stateToConsider.robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, true);
-			else
-				stateToConsider.robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, true);
 			
 			stateToConsider.robot.turn (Math.PI);
 			

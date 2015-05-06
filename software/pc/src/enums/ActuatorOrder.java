@@ -78,7 +78,7 @@ public enum ActuatorOrder
 	private ActuatorOrder(String serialString)
 	{
 		this.serialOrder = serialString;
-		this.duration = 700;	// valaur par défaut de la durée de mouvement d'un actionneur
+		this.duration = 700;	// valeur par défaut de la durée de mouvement d'un actionneur
 	}
 
 	/**
