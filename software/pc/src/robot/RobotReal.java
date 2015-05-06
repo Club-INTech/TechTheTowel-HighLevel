@@ -38,7 +38,7 @@ public class RobotReal extends Robot
 		this.mActuatorCardWrapper = mActuatorCardWrapper;
 		this.mLocomotion = deplacements;
 		updateConfig();
-		speed = Speed.BETWEEN_SCRIPTS;		
+		speed = Speed.BETWEEN_SCRIPTS_SLOW;		
 	}
 	
     public void copy(RobotChrono rc)
