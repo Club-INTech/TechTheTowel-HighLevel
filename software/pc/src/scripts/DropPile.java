@@ -155,6 +155,7 @@ public class DropPile extends AbstractScript
 				stateToConsider.table.setPileValue(0, valuePoints);
 				stateToConsider.robot.storedPlotCount = 0;
 				stateToConsider.robot.isBallStored = false;
+				stateToConsider.robot.digestPlot();
 				
 				stateToConsider.robot.moveLengthwise(-180, hooksToConsider, false);
 				//Puis on finit
@@ -162,16 +163,12 @@ public class DropPile extends AbstractScript
 				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 				
-				
-				stateToConsider.robot.turn(-Math.PI/4);
-				//TODO valeur a tester
-				stateToConsider.robot.moveLengthwise(150, hooksToConsider, false);
-				
-			
-				
-					
 				//on remet l'ascenceur en position de deplacement
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
+				
+				stateToConsider.robot.turn(-Math.PI/4);
+				stateToConsider.robot.moveLengthwise(100, hooksToConsider, false);
+				
 				
 				if (!stateToConsider.table.isAreaXFilled(0))
 				{
@@ -222,9 +219,7 @@ public class DropPile extends AbstractScript
 			else if (version == 2)
 			{
 				stateToConsider.robot.turn(-Math.PI/2);
-				//TODO tester la valeur
 				stateToConsider.robot.moveLengthwise(200, hooksToConsider, true);
-				stateToConsider.robot.turn(0);
 				
 				
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
@@ -248,11 +243,24 @@ public class DropPile extends AbstractScript
 				stateToConsider.robot.storedPlotCount = 0;
 				stateToConsider.robot.isBallStored = false;
 				
-				stateToConsider.robot.moveLengthwise(-180, hooksToConsider, false);
+				if (!stateToConsider.robot.getSymmetry())
+					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_MIDDLE, true);
+				else
+					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_MIDDLE, true);
+
+
+				
+				stateToConsider.robot.moveLengthwise(-600, hooksToConsider, false);
+				
+				if (!stateToConsider.robot.getSymmetry())
+					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
+				else
+					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
 				//Puis on finit
 				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
 				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
 			}
 			else
 			{

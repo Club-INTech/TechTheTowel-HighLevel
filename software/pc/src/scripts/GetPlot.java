@@ -77,6 +77,12 @@ public class GetPlot extends AbstractScript
 		
 			obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_6);
 		}
+		else if (versionToExecute == 567)
+		{
+			obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_5);
+		
+			obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_6);
+		}
 		else 
 		{
 			log.debug("version de Script inconnue de GetPlot :"+versionToExecute, this);
@@ -225,62 +231,27 @@ public class GetPlot extends AbstractScript
 			}
 			
 		}
-		//TODO derniere version a traiter + traiter le cas où on a trois plots stockés et qu'on ne veut pas manger n°6
+		//attention version hardcodée ne pas utilser hors du match scripté
 		else if (versionToExecute == 56)
 		{
-			stateToConsider.robot.turn(Math.PI/2);
-			if (!stateToConsider.table.isPlotXEaten(5))
-			{//plot 5 pas mangé
-				if(!stateToConsider.table.isPlotXEaten(6))
-				{
-					//plot 5 et 6 pas mangé, on mange les deux avec notre bras gauche (celui du coté de l'ascenceur)
-					try 
-					{
-						eatPlot(false, true, stateToConsider, false, false);
-					} 
-					catch (UnableToEatPlot e1) 
-					{
-						stateToConsider.table.eatPlotX(5);
-						finalize(stateToConsider);
-						e1.printStackTrace();
-					}
-					//si on est suffisamment vide on mange le plot suivant
-					if (stateToConsider.robot.storedPlotCount<4)
-					{
-						stateToConsider.robot.moveLengthwise(100); // On avance vers le suivant
-						
-						try 
-						{
-							eatPlot(false, true, stateToConsider, false, false);
-						} 
-						catch (UnableToEatPlot e) 
-						{
-							stateToConsider.table.eatPlotX(6);
-							finalize(stateToConsider);
-							e.printStackTrace();
-						}
-					}
-				}
-			}
+			//FIXME please
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
+			if (!stateToConsider.robot.getSymmetry())
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
 			else
-			{	//Plot 5 mangé
-				if(!stateToConsider.table.isPlotXEaten(6))
-				{
-					//plot 6 pas mangé, on ne mange que le 6
-					stateToConsider.robot.moveLengthwise(100);
-					
-					try 
-					{
-						eatPlot(false, false, stateToConsider, false, false);
-					} 
-					catch (UnableToEatPlot e) 
-					{
-						stateToConsider.table.eatPlotX(6);
-						finalize(stateToConsider);
-						e.printStackTrace();
-					}
-				}
-			}
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN_SLOW, true);
+
+			if (checkSensor(stateToConsider))
+				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+			
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
+			stateToConsider.robot.moveLengthwise(100); // On avance vers le suivant
+			if (!stateToConsider.robot.getSymmetry())
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
+			else
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
+
 		}
 		else if(versionToExecute==567)
 		{
@@ -315,8 +286,9 @@ public class GetPlot extends AbstractScript
 				
 			if (stateToConsider.robot.storedPlotCount<4)
 			{
+				stateToConsider.robot.turn(0);
 				//TODO valeur a tester
-				stateToConsider.robot.moveLengthwise(500);
+				stateToConsider.robot.moveLengthwise(420);
 				try
 				{
 					eatPlot(true, true, stateToConsider, false, false);
@@ -329,8 +301,8 @@ public class GetPlot extends AbstractScript
 					e.printStackTrace();
 				}
 				stateToConsider.robot.moveLengthwise(-200);
-				stateToConsider.robot.turn(3*Math.PI/4);
-				stateToConsider.robot.moveLengthwise(200);
+				stateToConsider.robot.turn(Math.PI/4);
+				stateToConsider.robot.moveLengthwise(-300);
 			}
 		}
 	}
@@ -347,6 +319,8 @@ public class GetPlot extends AbstractScript
 		else if (id==34)
 			return new Circle (900,200,0);
 		else if (id==56)
+			return new Circle (780,1620,0); // Position devant le plot 5, on longeant l'escalier
+		else if (id==567)
 			return new Circle (780,1620,0); // Position devant le plot 5, on longeant l'escalier
 		else if (id==7)
 			return new Circle (1410,1800,200);//Point d'entrée dangereux mais (1280,1700) passe (On est à 166 du centre (1410,1800) )

@@ -217,9 +217,6 @@ public class CloseClap extends AbstractScript
 		//on met le robot en vitesse lente
 		stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
 		
-		//pour ne pas frotter l'ascenceur
-		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
-		
 		//on commence en (1295,230), on se tourne dans le bon sens
 		//stateToConsider.robot.moveLengthwise(80, hooksToConsider, false);
 		
@@ -250,15 +247,27 @@ public class CloseClap extends AbstractScript
 		hooksToConsider.add(hook1);
 		hooksToConsider.add(hook2);
 		
+		try
+		{
+			stateToConsider.robot.moveLengthwise(-400, hooksToConsider);
+			stateToConsider.table.clapXClosed(1);
+		}
+		catch(UnableToMoveException e)
+		{
+			if(stateToConsider.robot.getPosition().x < 1200)
+				stateToConsider.table.clapXClosed(1); 
+			
+			// On essaye quand meme d'aller en X = 880
+			stateToConsider.robot.moveLengthwise(Math.abs(stateToConsider.robot.getPosition().x - 880), hooksToConsider);
+			
+		}
 		
-		stateToConsider.robot.moveLengthwise(-400, hooksToConsider);
-		stateToConsider.table.clapXClosed(1);
-		stateToConsider.table.clapXClosed(2);
 		
 		//on met le robot en vitesse lente
 		stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
 				
 		stateToConsider.robot.turn(-Math.PI * 0.5, hooksToConsider, false);
+		stateToConsider.table.clapXClosed(2);
 		
 		//On ferme tout pour finir
 		stateToConsider.robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
