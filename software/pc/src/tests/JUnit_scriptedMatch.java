@@ -250,21 +250,8 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		try 
 		{
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le plot 5 et 6");
-			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(56, real_state, emptyHook );//On recupere les 2 plots a droite de l'escalier
+			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(567, real_state, emptyHook );//On recupere les 2 plots a droite de l'escalier
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le plot 5 et 6");
-
-		}
-		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e) 
-		{
-			e.printStackTrace();
-		}
-				
-		try 
-		{
-			real_state.robot.turn(0);	
-			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le plot 7");
-			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(7, real_state, emptyHook );//On recupere le dernier plot
-			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le plot 7");
 
 		}
 		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e) 
