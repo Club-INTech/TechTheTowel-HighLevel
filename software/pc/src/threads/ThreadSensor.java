@@ -222,6 +222,20 @@ class ThreadSensor extends AbstractThread
 			if (distanceBack[1] > 0 && distanceBack[1] < 70 || distanceBack[0] > 0 && distanceBack[0] < 70)
 				log.debug("obstacle detecte a moins de 7 cm en arriere !", this);
 				
+			try
+			{
+				// TODO à tester asap suivant la symetrie
+				if(! (boolean) mSensorsCardWrapper.getSensorValue(SensorNames.LEFT_ZONE_SENSOR))
+					mRobot.isGlassStoredLeft=false;
+				if(! (boolean) mSensorsCardWrapper.getSensorValue(SensorNames.RIGHT_ZONE_SENSOR))
+					mRobot.isGlassStoredRight=false;
+				
+			} 
+			catch (SerialConnexionException e) 
+			{
+				e.printStackTrace();
+			}
+
 			Sleep.sleep((long)(1000./sensorFrequency));
 
 			

@@ -358,7 +358,7 @@ public abstract class Robot implements Service
     {
         Speed oldSpeed = speed; 
         setLocomotionSpeed(Speed.SLOW);
-        moveLengthwise(distance, hooksToConsider, true);
+        moveLengthwise(distance, hooksToConsider, true, false);
         setLocomotionSpeed(oldSpeed);
     }
     
