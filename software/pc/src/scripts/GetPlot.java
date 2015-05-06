@@ -247,6 +247,7 @@ public class GetPlot extends AbstractScript
 					} 
 					catch (UnableToEatPlot e1) 
 					{
+						stateToConsider.table.eatPlotX(versionToExecute);
 						finalize(stateToConsider);
 						e1.printStackTrace();
 					}
@@ -259,6 +260,7 @@ public class GetPlot extends AbstractScript
 					} 
 					catch (UnableToEatPlot e) 
 					{
+						stateToConsider.table.eatPlotX(versionToExecute);
 						finalize(stateToConsider);
 						e.printStackTrace();
 					}
@@ -277,6 +279,7 @@ public class GetPlot extends AbstractScript
 					} 
 					catch (UnableToEatPlot e) 
 					{
+						stateToConsider.table.eatPlotX(versionToExecute);
 						finalize(stateToConsider);
 						e.printStackTrace();
 					}
@@ -425,7 +428,11 @@ public class GetPlot extends AbstractScript
 				}
 				//si on a attrape qqc on termine sinon on essaie avec l'autre bras (si isSecondTry == false)
 				//si deuxieme essai ecrire dans le log qu'on a essaye de manger un plot et on jette une exeption impossible de manger
-		
+				if (isArmChosenLeft) 
+					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
+				else 
+					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
+				
 				if (!sensorAnswer)
 				{
 					if (isSecondTry)
@@ -438,17 +445,11 @@ public class GetPlot extends AbstractScript
 						return;
 					}
 				}
-				
-				if (isArmChosenLeft) 
-					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
-				else 
-					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
 			}
 
 		}
-			
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
-
+	
 		//si la reponse etait fausse et que c'est le deuxieme essai jusque là on reverifie une fois les machoires fermées
 		// si l'usage des bras est interdit, on vérifie si le plot a été mangé
 		if ( (!sensorAnswer && isSecondTry) || forbidArmUsage)
