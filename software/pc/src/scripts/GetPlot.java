@@ -285,73 +285,53 @@ public class GetPlot extends AbstractScript
 		else if(versionToExecute==567)
 		{
 			stateToConsider.robot.turn(Math.PI/2);
-			if (!stateToConsider.table.isPlotXEaten(5))
-			{//plot 5 pas mangé
-				if(!stateToConsider.table.isPlotXEaten(6))
-				{
 					//plot 5 et 6 pas mangé, on mange les deux avec notre bras gauche (celui du coté de l'ascenceur)
-					try 
-					{
-						eatPlot(false, true, stateToConsider, false, false);
-					} 
-					catch (UnableToEatPlot e1) 
-					{
-						stateToConsider.table.eatPlotX(5);
-						finalize(stateToConsider);
-						e1.printStackTrace();
-					}
-					//si on est suffisamment vide on mange le plot suivant
-					if (stateToConsider.robot.storedPlotCount<4)
-					{
-						stateToConsider.robot.moveLengthwise(100); // On avance vers le suivant
-						
-						try 
-						{
-							eatPlot(false, true, stateToConsider, false, false);
-						} 
-						catch (UnableToEatPlot e) 
-						{
-							stateToConsider.table.eatPlotX(6);
-							finalize(stateToConsider);
-							e.printStackTrace();
-						}
-					}
-				}
-			}
-			else
-			{	//Plot 5 mangé
-				if(!stateToConsider.table.isPlotXEaten(6))
-				{
-					//plot 6 pas mangé, on ne mange que le 6
-					stateToConsider.robot.moveLengthwise(100);
-					
-					try 
-					{
-						eatPlot(false, false, stateToConsider, false, false);
-					} 
-					catch (UnableToEatPlot e) 
-					{
-						stateToConsider.table.eatPlotX(6);
-						finalize(stateToConsider);
-						e.printStackTrace();
-					}
-				}
-			}
-			stateToConsider.robot.moveLengthwise(300);
-			try
+			try 
 			{
-				eatPlot(true, true, stateToConsider, false, false);
-				stateToConsider.table.eatPlotX(7);
-			}
-			catch (UnableToEatPlot e)
+				eatPlot(false, true, stateToConsider, false, false);
+			} 
+			catch (UnableToEatPlot e1) 
 			{
-				stateToConsider.table.eatPlotX(7);
+				stateToConsider.table.eatPlotX(5);
 				finalize(stateToConsider);
-				e.printStackTrace();
+				e1.printStackTrace();
 			}
-			stateToConsider.robot.moveLengthwise(-200);
-			stateToConsider.robot.turn(3*Math.PI/4);
-			stateToConsider.robot.moveLengthwise(200);
+			//si on est suffisamment vide on mange le plot suivant
+			if (stateToConsider.robot.storedPlotCount<4)
+			{
+				stateToConsider.robot.moveLengthwise(100); // On avance vers le suivant
+				
+				try 
+				{
+					eatPlot(false, true, stateToConsider, false, false);
+				} 
+				catch (UnableToEatPlot e) 
+				{
+					stateToConsider.table.eatPlotX(6);
+					finalize(stateToConsider);
+					e.printStackTrace();
+				}
+			}
+				
+			if (stateToConsider.robot.storedPlotCount<4)
+			{
+				//TODO valeur a tester
+				stateToConsider.robot.moveLengthwise(300);
+				try
+				{
+					eatPlot(true, true, stateToConsider, false, false);
+					stateToConsider.table.eatPlotX(7);
+				}
+				catch (UnableToEatPlot e)
+				{
+					stateToConsider.table.eatPlotX(7);
+					finalize(stateToConsider);
+					e.printStackTrace();
+				}
+				stateToConsider.robot.moveLengthwise(-200);
+				stateToConsider.robot.turn(3*Math.PI/4);
+				stateToConsider.robot.moveLengthwise(200);
+			}
 		}
 	}
 
