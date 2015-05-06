@@ -527,12 +527,6 @@ public abstract class Robot implements Service
 	 */
     public abstract void disableTranslationnalFeedbackLoop();
 
-	
-	public boolean getSymmetry()
-	{
-		return symmetry;
-	}
-
 	public void setMaxNumberTriesRecalculation(int numberOfTries)
 	{
 		maxNumberTriesRecalculation=numberOfTries;
