@@ -41,10 +41,9 @@ public class JUnit_scriptedMatch extends JUnit_Test
 	PathDingDing pathDingDing;
 	SensorsCardWrapper sensors;
 	
-	
 	public static void main(String[] args) throws Exception
 	{                    
-	       JUnitCore.main("tests.JUnit_scriptedMatch");
+	   JUnitCore.main("tests.JUnit_scriptedMatch");
 	}
 	
 	
@@ -143,10 +142,12 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		//	script drop carpet 2 (sortie de zone de départ + gobelet + tapis)
 		//////////////////////////////////////////////////////
 		
+		
 		try 
 		{
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant les tapis");
 			// ce script sert désormais également à sortir de la zone de départ!!!
+			//scriptmanager.getScript(ScriptNames.EXIT_START_ZONE).execute(0, real_state, emptyHook);
 			scriptmanager.getScript(ScriptNames.DROP_CARPET).execute(2, real_state, emptyHook);
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après les tapis");
 		}
@@ -214,7 +215,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		//////////////////////////////////////////////////////
 		
 		try 
-		{//TODO PathNotFound Exception
+		{
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le plot 1");
 			// On prend le plot a cote de l'estrade
 			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(1, real_state, emptyHook );
@@ -331,7 +332,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 //		{
 //			e.printStackTrace();
 //		}
-//		
+//	
 //		try 
 //		{
 //			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le deposage en zone haute enemie");	
