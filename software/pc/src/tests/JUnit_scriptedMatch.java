@@ -247,6 +247,20 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		
 		System.out.println("Pile vidée");
 		
+		try 
+		{			
+			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant de deposé la pile sur l'estrade");
+			// On lache notre pile dans notre zone 
+			scriptmanager.getScript(ScriptNames.FREE_STACK).goToThenExec(2, real_state, emptyHook );
+			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après deposé la pile sur l'estrade");
+
+		}
+		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		System.out.println("Pile vidée");
 	
 //		try 
 //		{			
