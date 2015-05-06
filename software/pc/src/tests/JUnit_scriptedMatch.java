@@ -247,66 +247,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		
 		System.out.println("Pile vidée");
 		
-//			/*	
-//		try 
-//		{
-//			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant de prendre la balle");
-//			//Le robot n'en est pas encore capable mais ca va venir avec le bas niveau et les fonctions "bras au milieu" etc
-//			scriptmanager.getScript(ScriptNames.TAKE_TENNIS_BALL).goToThenExec(1, real_state, true, emptyHook );
-//			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après prendre la balle");
-//		}
-//		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException e) 
-//		{
-//			e.printStackTrace();
-//		}*/
-		
-
-		//////////////////////////////////////////////////////
-		//	script drop gobelet
-		//////////////////////////////////////////////////////
-		
-		try
-		{
-			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant de deposer le verre");
-			real_state.robot.moveLengthwise(-50, null, true); // prend un peu de recul pour ne pas shooter la pile que l'on vient de déposer
-			scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(0, real_state, emptyHook );//On depose 1 verre dans notre zone
-			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après deposer le verre");
-		}
-		catch (UnableToMoveException | SerialConnexionException | SerialFinallyException | InObstacleException | PathNotFoundException  e) 
-		{
-			e.printStackTrace();
-		}
-		
-		System.out.println("Verre deposé");
-//		
-//		try
-//		{
-//			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le plot 0");
-//			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(0, real_state, emptyHook ); // On recupere le plot en face de l'escalier
-//			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le plot 0");
-//
-//		}
-//		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e) 
-//		{
-//			e.printStackTrace();
-//		}
-//
-//		System.out.println("Plot 0 pris");
-//		
-//		try 
-//		{
-//			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le verre 2");
-//			scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(2, real_state, emptyHook ); // ON recupere le verre devant l'estrade
-//			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le verre 2");
-//
-//		}
-//		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e) 
-//		{
-//			e.printStackTrace();
-//		}
-//		
-//		System.out.println("Verre 2 pris");
-//		
+	
 //		try 
 //		{			
 //			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le clap 3");
