@@ -201,7 +201,7 @@ class ThreadSensor extends AbstractThread
 			if(! (distanceFront[0]==-1 || 
 				  distanceFront[1]==-1 ||
 				   distanceBack[0]==-1 ||
-				   distanceBack[1]==-1 )) // si on n'a pas spammé
+				   distanceBack[1]==-1 )	) // si on n'a pas spammé
 			{										
 				// on enleve les obstacles 
 				removeObstacleFront(distanceFront);
@@ -497,48 +497,50 @@ class ThreadSensor extends AbstractThread
 		}
 		else // Sinon, un seul des deux capteurs detecte quelque chose
 		
-		// Capteur du cote gauche
-		if (minSensorRange<distanceBack[0] && distanceBack[0]<maxSensorRange)
-		{			
-			// relatif
-			positionEnnemi_1.x=   (int) (distanceObstacleBack[0]*Math.cos(leftBackSensorAngle) +leftBackSensorPosition.x);
-			positionEnnemi_1.y=  -(int) (distanceObstacleBack[0]*Math.sin(leftBackSensorAngle) +distanceBetweenBackSensors/2);
-			
-			// sauvegarde de la position relative
-			relativePosEnnemi1.x=positionEnnemi_1.x;
-			relativePosEnnemi1.y=positionEnnemi_1.y;
-			
-			// On change de repere 
-			positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
-			
-			mTable.getObstacleManager().addObstacle(positionEnnemi_1);
-    		log.debug("Valeur des capteurs arrieres brute : "+realSensorValuesBack[0]+";"+realSensorValuesBack[1], this);
-    		log.debug("Ennemi arriere ajouté en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
-
-			
-			obstacleAddedLeft=true;
-
-		}
-		// Capteur de coté droit
-		else if (minSensorRange<distanceBack[1] && distanceBack[1]<maxSensorRange)
-		{			
-			// relatif au robot
-			positionEnnemi_1.x=  (int) (distanceObstacleBack[1]*Math.cos(rightBackSensorAngle) +rightBackSensorPosition.x);
-			positionEnnemi_1.y=  (int) (distanceObstacleBack[1]*Math.sin(rightBackSensorAngle) +distanceBetweenBackSensors/2);
-			
-			// sauvegarde de la position relative
-			relativePosEnnemi1.x=positionEnnemi_1.x;
-			relativePosEnnemi1.y=positionEnnemi_1.y;
-			
-			// On change de repere 
-			positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
-			
-			mTable.getObstacleManager().addObstacle(positionEnnemi_1);
-    		log.debug("Valeur des capteurs arrieres brute : "+realSensorValuesBack[0]+";"+realSensorValuesBack[1], this);
-    		log.debug("Ennemi arriere ajouté en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
-
-			obstacleAddedRight=true;
-		}
+			// Capteur du cote gauche
+			if (minSensorRange<distanceBack[0] && distanceBack[0]<maxSensorRange)
+			{			
+				// relatif
+				positionEnnemi_1.x=   (int) (distanceObstacleBack[0]*Math.cos(leftBackSensorAngle) +leftBackSensorPosition.x);
+				positionEnnemi_1.y=  -(int) (distanceObstacleBack[0]*Math.sin(leftBackSensorAngle) +distanceBetweenBackSensors/2);
+				
+				// sauvegarde de la position relative
+				relativePosEnnemi1.x=positionEnnemi_1.x;
+				relativePosEnnemi1.y=positionEnnemi_1.y;
+				
+				// On change de repere 
+				positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
+				
+				mTable.getObstacleManager().addObstacle(positionEnnemi_1);
+	    		log.debug("Valeur des capteurs arrieres brute : "+realSensorValuesBack[0]+";"+realSensorValuesBack[1], this);
+	    		log.debug("Ennemi arriere ajouté en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
+	
+				
+				obstacleAddedLeft=true;
+	
+			}
+			// Capteur de coté droit
+			else if (minSensorRange<distanceBack[1] && distanceBack[1]<maxSensorRange)
+			{			
+				// relatif au robot
+				positionEnnemi_1.x=  (int) (distanceObstacleBack[1]*Math.cos(rightBackSensorAngle) +rightBackSensorPosition.x);
+				positionEnnemi_1.y=  (int) (distanceObstacleBack[1]*Math.sin(rightBackSensorAngle) +distanceBetweenBackSensors/2);
+				
+				// sauvegarde de la position relative
+				relativePosEnnemi1.x=positionEnnemi_1.x;
+				relativePosEnnemi1.y=positionEnnemi_1.y;
+				
+				// On change de repere 
+				positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
+				
+				mTable.getObstacleManager().addObstacle(positionEnnemi_1);
+	    		log.debug("Valeur des capteurs arrieres brute : "+realSensorValuesBack[0]+";"+realSensorValuesBack[1], this);
+	    		log.debug("Ennemi arriere ajouté en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
+	
+				obstacleAddedRight=true;
+			}
+		
+		
 		obstacleAdded[0]=obstacleAddedLeft;
 		obstacleAdded[1]=obstacleAddedRight;
 
