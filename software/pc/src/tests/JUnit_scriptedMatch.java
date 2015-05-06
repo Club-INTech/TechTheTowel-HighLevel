@@ -127,7 +127,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 	public void startMatch()
 	{
 		//configColor();
-		//container.startAllThreads();
+		container.startAllThreads();
 		waitMatchBegin();
 
 		//////////////////////////////////////////////////////
@@ -265,7 +265,6 @@ public class JUnit_scriptedMatch extends JUnit_Test
 			// On lache notre pile dans notre zone 
 			scriptmanager.getScript(ScriptNames.FREE_STACK).goToThenExec(2, real_state, emptyHook );
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après deposé la pile sur l'estrade");
-
 		}
 		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e) 
 		{
@@ -314,7 +313,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 //		
 //		try 
 //		{
-//			
+//
 //			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le deposage de la pile dans notre zone");
 //			scriptmanager.getScript(ScriptNames.FREE_STACK).goToThenExec(2, real_state, emptyHook ); // On libere la pile ans notre zone
 //			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le deposage de la pile dans notre zone");
