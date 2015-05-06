@@ -8,20 +8,23 @@ package enums;
 
 public enum Speed
 {
+	
 	/** vitesse très lente */
-	SLOW(3, 3),
-	
-	/** vitesse en temps normal (pour des distances de 200mm à 1000 mm) */
-	BETWEEN_SCRIPTS_SLOW(10, 10),
-	
-	/** vitesse en temps normal (distances de 1000+ mm) */
-	BETWEEN_SCRIPTS(20, 20),
-    
-    /** vitesse rapide */
-    FAST(60,60),
-	
-    /** vitesse très rapide */
-	VERY_FAST(100, 100);
+	SLOW(3, 3);
+	// Buggé jusqu'a nouvel ordre
+//
+//	/** vitesse en temps normal (pour des distances de 200mm à 1000 mm) */
+//	BETWEEN_SCRIPTS_SLOW(10, 10),
+//	
+//	/** vitesse en temps normal (distances de 1000+ mm) */
+//	BETWEEN_SCRIPTS(20, 20),
+//    
+//    /** vitesse rapide */
+//    FAST(60,60),
+//	
+//    /** vitesse très rapide */
+//	VERY_FAST(100, 100);
+
     
     /** PWM des moteurs lors d'une translation, ce sont ces valeurs qui seront envoyées à la carte d'asserv */
     public int PWMTranslation;

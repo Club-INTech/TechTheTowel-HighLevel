@@ -250,10 +250,8 @@ public class CloseClap extends AbstractScript
 		hooksToConsider.add(hook1);
 		hooksToConsider.add(hook2);
 		
-		//on met le robot en vitesse moyenne
-		stateToConsider.robot.setLocomotionSpeed(Speed.BETWEEN_SCRIPTS_SLOW);
 		
-		stateToConsider.robot.moveLengthwise(-400, hooksToConsider, Speed.BETWEEN_SCRIPTS_SLOW);
+		stateToConsider.robot.moveLengthwise(-400, hooksToConsider);
 		stateToConsider.table.clapXClosed(1);
 		stateToConsider.table.clapXClosed(2);
 		
