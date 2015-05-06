@@ -214,17 +214,24 @@ public class GetPlot extends AbstractScript
 		//attention version hardcodée ne pas utilser hors du match scripté
 		else if (versionToExecute == 56)
 		{
-			//FIXME please
-			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
-			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
+			if(stateToConsider.robot.storedPlotCount < 3)
+			{
+				//FIXME please
+				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
 
-			if (checkSensor(stateToConsider))
-				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+				if (checkSensor(stateToConsider))
+					stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 			
-			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
-			stateToConsider.robot.moveLengthwise(100); // On avance vers le suivant
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
+				
+				if(stateToConsider.robot.storedPlotCount<4)
+				{
+					stateToConsider.robot.moveLengthwise(100); // On avance vers le suivant
+					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
+				}
+			}
 
 		}
 		else if(versionToExecute==567)
