@@ -2,7 +2,6 @@ package robot;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
-
 import pathDingDing.PathDingDing;
 import hook.Hook;
 import smartMath.Circle;
@@ -466,7 +465,7 @@ public abstract class Robot implements Service
     	{
 			log.critical("Catch de "+unableToMoveException+" dans moveToCircle" , this);
 			actualNumberOfTries=0;
-			recalculate(path.get(path.size()-1), hooksToConsider); // on recalcule le path
+			recalculate(path.get(path.size()-1), hooksToConsider, unableToMoveException.reason); // on recalcule le path
 		}
     }
     
@@ -474,11 +473,12 @@ public abstract class Robot implements Service
      * 	Fonction recalculant le path à suivre, à utiliser pour l'evitement
      * 	Elle s'appelle elle-meme tant qu'on a pas reussi.
      *  Avant d'apeller cette méthode remettre actualNumberOfTries à 0
+     * @param reason TODO
      * 	@throws PathNotFoundException 
      *  @throws InObstacleException lorqsque le robot veut aller dans un obstacle
      */
     
-    public void recalculate(Vec2 aim, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, PathNotFoundException, InObstacleException
+    public void recalculate(Vec2 aim, ArrayList<Hook> hooksToConsider, UnableToMoveReason reason) throws UnableToMoveException, PathNotFoundException, InObstacleException
     {
     	if(actualNumberOfTries < maxNumberTriesRecalculation)
 		{
@@ -507,12 +507,12 @@ public abstract class Robot implements Service
 			{
 				//si cela echoue, on recalcule encore en tenant compte du nouvel obstacle
 				if (unableToMoveException.reason.compareTo(UnableToMoveReason.OBSTACLE_DETECTED)==0)
-					recalculate(unableToMoveException.aim, hooksToConsider);
+					recalculate(unableToMoveException.aim, hooksToConsider, unableToMoveException.reason);
 			}
     	}
     	else // On a depassé le nombre maximal d'essais :
     	{
-			;             
+			throw new UnableToMoveException(aim, reason);       
 		}
     }
     
