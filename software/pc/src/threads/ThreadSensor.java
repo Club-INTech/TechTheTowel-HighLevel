@@ -429,47 +429,47 @@ class ThreadSensor extends AbstractThread
 		// si les 2 capteurs detectent quelque chose
 		if ((minSensorRange<distanceBack[0] && distanceBack[0]<maxSensorRange) && (minSensorRange<distanceBack[1] && distanceBack[1]<maxSensorRange) )
 		{
-			// Si on voit 2 ennemis distincts
-			if(Math.abs(distanceBack[1]-distanceBack[0]) > distanceBetweenFrontSensors)
-			{
-				// relatif
-				positionEnnemi_1.x=   (int) (distanceObstacleBack[0]*Math.cos(leftBackSensorAngle) +leftBackSensorPosition.x);
-				positionEnnemi_1.y=  -(int) (distanceObstacleBack[0]*Math.sin(leftBackSensorAngle) +distanceBetweenBackSensors/2);
-				
-				// sauvegarde de la position relative
-				relativePosEnnemi1.x=positionEnnemi_1.x;
-				relativePosEnnemi1.y=positionEnnemi_1.y;
-				
-				// On change de repere 
-				positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
-				
-				mTable.getObstacleManager().addObstacle(positionEnnemi_1);
-	    		log.debug("Valeur des capteurs arrieres brute : "+realSensorValuesBack[0]+";"+realSensorValuesBack[1], this);
-	    		log.debug("Ennemi arriere ajouté en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
-
-				
-				obstacleAddedLeft=true;
-				
-				// relatif au robot
-				positionEnnemi_2.x=  (int) (distanceObstacleBack[1]*Math.cos(rightBackSensorAngle) +rightBackSensorPosition.x);
-				positionEnnemi_2.y=  (int) (distanceObstacleBack[1]*Math.sin(rightBackSensorAngle) +distanceBetweenBackSensors/2);
-				
-				// sauvegarde de la position relative
-				relativePosEnnemi2.x=positionEnnemi_2.x;
-				relativePosEnnemi2.y=positionEnnemi_2.y;
-				
-				// On change de repere 
-				positionEnnemi_2=changeReference(relativePosEnnemi2, positionRobot, orientation );
-				
-				mTable.getObstacleManager().addObstacle(positionEnnemi_2);
-	    		log.debug("Valeur des capteurs arrieres brute : "+realSensorValuesBack[0]+";"+realSensorValuesBack[1], this);
-	    		log.debug("Ennemi arriere ajouté en "+positionEnnemi_2.x+";"+positionEnnemi_2.y, this);
-
-				
-				obstacleAddedRight=true;
-			}
-			// sinon, on voit un seul et meme ennemi
-			else  
+//			// Si on voit 2 ennemis distincts
+//			if(Math.abs(distanceBack[1]-distanceBack[0]) > distanceBetweenFrontSensors)
+//			{
+//				// relatif
+//				positionEnnemi_1.x=   (int) (distanceObstacleBack[0]*Math.cos(leftBackSensorAngle) +leftBackSensorPosition.x);
+//				positionEnnemi_1.y=  -(int) (distanceObstacleBack[0]*Math.sin(leftBackSensorAngle) +distanceBetweenBackSensors/2);
+//				
+//				// sauvegarde de la position relative
+//				relativePosEnnemi1.x=positionEnnemi_1.x;
+//				relativePosEnnemi1.y=positionEnnemi_1.y;
+//				
+//				// On change de repere 
+//				positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
+//				
+//				mTable.getObstacleManager().addObstacle(positionEnnemi_1);
+//	    		log.debug("Valeur des capteurs arrieres brute : "+realSensorValuesBack[0]+";"+realSensorValuesBack[1], this);
+//	    		log.debug("Ennemi arriere ajouté en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
+//
+//				
+//				obstacleAddedLeft=true;
+//				
+//				// relatif au robot
+//				positionEnnemi_2.x=  (int) (distanceObstacleBack[1]*Math.cos(rightBackSensorAngle) +rightBackSensorPosition.x);
+//				positionEnnemi_2.y=  (int) (distanceObstacleBack[1]*Math.sin(rightBackSensorAngle) +distanceBetweenBackSensors/2);
+//				
+//				// sauvegarde de la position relative
+//				relativePosEnnemi2.x=positionEnnemi_2.x;
+//				relativePosEnnemi2.y=positionEnnemi_2.y;
+//				
+//				// On change de repere 
+//				positionEnnemi_2=changeReference(relativePosEnnemi2, positionRobot, orientation );
+//				
+//				mTable.getObstacleManager().addObstacle(positionEnnemi_2);
+//	    		log.debug("Valeur des capteurs arrieres brute : "+realSensorValuesBack[0]+";"+realSensorValuesBack[1], this);
+//	    		log.debug("Ennemi arriere ajouté en "+positionEnnemi_2.x+";"+positionEnnemi_2.y, this);
+//
+//				
+//				obstacleAddedRight=true;
+//			}
+//			// sinon, on voit un seul et meme ennemi
+//			else  
 			{			
 				positionEnnemi_1.y =  (int)( 	(Math.pow(distanceObstacleBack[0],2)-Math.pow(distanceObstacleBack[1],2))
 												/(2 * distanceBetweenBackSensors));	//position de l'obstacle en fonction du robot

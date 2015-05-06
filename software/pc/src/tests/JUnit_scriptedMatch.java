@@ -270,7 +270,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e) 
 		{
 			e.printStackTrace();
-//		}
+		}
 		
 		try 
 		{			
