@@ -316,7 +316,7 @@ public class GetPlot extends AbstractScript
 			if (stateToConsider.robot.storedPlotCount<4)
 			{
 				//TODO valeur a tester
-				stateToConsider.robot.moveLengthwise(300);
+				stateToConsider.robot.moveLengthwise(500);
 				try
 				{
 					eatPlot(true, true, stateToConsider, false, false);

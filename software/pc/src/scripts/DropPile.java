@@ -165,7 +165,7 @@ public class DropPile extends AbstractScript
 				
 				stateToConsider.robot.turn(-Math.PI/4);
 				//TODO valeur a tester
-				stateToConsider.robot.moveLengthwise(180, hooksToConsider, false);
+				stateToConsider.robot.moveLengthwise(150, hooksToConsider, false);
 				
 			
 				
@@ -223,7 +223,7 @@ public class DropPile extends AbstractScript
 			{
 				stateToConsider.robot.turn(-Math.PI/2);
 				//TODO tester la valeur
-				stateToConsider.robot.moveLengthwise(100, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(200, hooksToConsider, true);
 				stateToConsider.robot.turn(0);
 				
 				
@@ -249,6 +249,10 @@ public class DropPile extends AbstractScript
 				stateToConsider.robot.isBallStored = false;
 				
 				stateToConsider.robot.moveLengthwise(-180, hooksToConsider, false);
+				//Puis on finit
+				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 			}
 			else
 			{
@@ -277,7 +281,7 @@ public class DropPile extends AbstractScript
 			return new Circle(770,800); 
 		}
 		else if (id == 2)
-			return new Circle(900,1300);
+			return new Circle(850,1300);
 		else
 		{
 			log.debug("erreur DropPile script : out of bound id", this);
