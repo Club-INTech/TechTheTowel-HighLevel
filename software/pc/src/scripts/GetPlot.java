@@ -49,60 +49,33 @@ public class GetPlot extends AbstractScript
 		EnumSet<ObstacleGroups> obstacleNotConsidered = EnumSet.noneOf(ObstacleGroups.class);
 		if (versionToExecute == 0)
 		{
-			if (actualState.robot.getSymmetry())
-				obstacleNotConsidered.add(ObstacleGroups.YELLOW_PLOT_0);
-			else
-				obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_0);
+			obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_0);
 		}
 		else if (versionToExecute == 1)
 		{
-			if (actualState.robot.getSymmetry())
-				obstacleNotConsidered.add(ObstacleGroups.YELLOW_PLOT_1);
-			else
-				obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_1);
+			obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_1);
 		}
 		else if (versionToExecute == 2)
 		{
-			if (actualState.robot.getSymmetry())
-				obstacleNotConsidered.add(ObstacleGroups.YELLOW_PLOT_2);
-			else
-				obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_2);
+			obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_2);
 		}
 		else if (versionToExecute == 7)
 		{
-			if (actualState.robot.getSymmetry())
-				obstacleNotConsidered.add(ObstacleGroups.YELLOW_PLOT_7);
-			else
-				obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_7);
+			obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_7);
 		}
 		else if (versionToExecute == 34)
 		{
-			if (actualState.robot.getSymmetry())
-				obstacleNotConsidered.add(ObstacleGroups.YELLOW_PLOT_3);
-			else
-				obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_3);
-			
-			if (actualState.robot.getSymmetry())
-				obstacleNotConsidered.add(ObstacleGroups.YELLOW_PLOT_4);
-			else
-				obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_4);
-			
-			if (actualState.robot.getSymmetry())
-				obstacleNotConsidered.add(ObstacleGroups.GOBLET_4);
-			else
-				obstacleNotConsidered.add(ObstacleGroups.GOBLET_0);
+			obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_3);
+		
+			obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_4);
+	
+			obstacleNotConsidered.add(ObstacleGroups.GOBLET_0);
 		}
 		else if (versionToExecute == 56)
 		{
-			if (actualState.robot.getSymmetry())
-				obstacleNotConsidered.add(ObstacleGroups.YELLOW_PLOT_5);
-			else
-				obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_5);
-			
-			if (actualState.robot.getSymmetry())
-				obstacleNotConsidered.add(ObstacleGroups.YELLOW_PLOT_6);
-			else
-				obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_6);
+			obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_5);
+		
+			obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_6);
 		}
 		else 
 		{
@@ -416,14 +389,12 @@ public class GetPlot extends AbstractScript
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_MIDDLE, true);
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
 					sensorAnswer = checkSensor(stateToConsider);
-					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
 				}
 				else
 				{
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_MIDDLE, true);
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN_SLOW, true);
 					sensorAnswer = checkSensor(stateToConsider);
-					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
 				}
 				//si on a attrape qqc on termine sinon on essaie avec l'autre bras (si isSecondTry == false)
 				//si deuxieme essai ecrire dans le log qu'on a essaye de manger un plot et on jette une exeption impossible de manger
@@ -440,6 +411,11 @@ public class GetPlot extends AbstractScript
 						return;
 					}
 				}
+				
+				if (isArmChosenLeft) 
+					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
+				else 
+					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
 			}
 
 		}
