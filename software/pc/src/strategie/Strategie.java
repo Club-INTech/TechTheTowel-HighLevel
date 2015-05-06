@@ -400,6 +400,12 @@ public class Strategie implements Service
 		scriptArray.add(scriptmanager.getScript(ScriptNames.FREE_STACK));
 		versionArray.add(0);
 		
+		scriptArray.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
+		versionArray.add(56);
+		
+		scriptArray.add(scriptmanager.getScript(ScriptNames.FREE_STACK));
+		versionArray.add(2);
+		
 		
 		while(!scriptArray.isEmpty())
 		{
