@@ -131,8 +131,8 @@ public class DropPile extends AbstractScript
 			//version zone de depart
 			else if (version==0)
 			{
-				stateToConsider.robot.turn(Math.PI/4, hooksToConsider, false);
-				stateToConsider.robot.moveLengthwise(350, hooksToConsider, true);
+				stateToConsider.robot.turnWithoutDetection(Math.PI/4, hooksToConsider);
+				stateToConsider.robot.moveLengthwiseWithoutDetection(350);
 				
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
 				//on ouvre le guide un peu
@@ -156,7 +156,7 @@ public class DropPile extends AbstractScript
 				stateToConsider.robot.isBallStored = false;
 				stateToConsider.robot.digestPlot();
 				
-				stateToConsider.robot.moveLengthwise(-180, hooksToConsider, false);
+				stateToConsider.robot.moveLengthwiseWithoutDetection(-180);
 				//Puis on finit
 				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
 				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);
@@ -166,7 +166,7 @@ public class DropPile extends AbstractScript
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
 				
 				stateToConsider.robot.turn(-Math.PI/4);
-				stateToConsider.robot.moveLengthwise(100, hooksToConsider, false);
+				stateToConsider.robot.moveLengthwiseWithoutDetection(100);
 				
 				// On ne depose que si la zone est vide de gobelets ET qu'on en a au moins un verre
 				if ( !stateToConsider.table.isAreaXFilled(0) 
@@ -176,7 +176,7 @@ public class DropPile extends AbstractScript
 					if (stateToConsider.robot.isGlassStoredLeft)
 					{
 						stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);
-						stateToConsider.robot.moveLengthwise(-250, hooksToConsider);
+						stateToConsider.robot.moveLengthwiseWithoutDetection(-250);
 						stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
 						stateToConsider.robot.isGlassStoredLeft = false;
 						stateToConsider.table.areaXFilled(0);
@@ -185,7 +185,7 @@ public class DropPile extends AbstractScript
 					{
 						stateToConsider.robot.turn(0);
 						stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);
-						stateToConsider.robot.moveLengthwise(-250, hooksToConsider);
+						stateToConsider.robot.moveLengthwiseWithoutDetection(-250);
 						stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
 						stateToConsider.robot.isGlassStoredRight = false;
 						stateToConsider.table.areaXFilled(0);
