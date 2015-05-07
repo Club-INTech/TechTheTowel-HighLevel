@@ -228,10 +228,30 @@ class ThreadSensor extends AbstractThread
 				// Systeme enlevant un gobelet de la memoire du robot si il ne touche plus le contacteur 
 				// ( concretement, si il eest tombé alors qu'on prenait un plot )
 				// Ca evite de tenter de deposer... kedal.
-				if(! (boolean) mSensorsCardWrapper.getSensorValue(SensorNames.LEFT_ZONE_SENSOR))
+				
+				if(mRobot.isGlassStoredLeft && ! (boolean) mSensorsCardWrapper.getSensorValue(SensorNames.LEFT_ZONE_SENSOR))
+				{
+					log.critical("Verre gauche tombé", this);
 					mRobot.isGlassStoredLeft=false;
-				if(! (boolean) mSensorsCardWrapper.getSensorValue(SensorNames.RIGHT_ZONE_SENSOR))
+				}
+				if(mRobot.isGlassStoredRight && ! (boolean) mSensorsCardWrapper.getSensorValue(SensorNames.RIGHT_ZONE_SENSOR))
+				{
+					log.critical("Verre droit tombé", this);
 					mRobot.isGlassStoredRight=false;
+				}
+				
+				// On verifie aussi le clic  si on a rien et que ca clique, on a quelque chose
+				if(!mRobot.isGlassStoredLeft &&  (boolean) mSensorsCardWrapper.getSensorValue(SensorNames.LEFT_ZONE_SENSOR))
+				{
+					log.critical("Verre gauche mis", this);
+					mRobot.isGlassStoredLeft=true;
+				}
+				if(!mRobot.isGlassStoredRight &&  (boolean) mSensorsCardWrapper.getSensorValue(SensorNames.RIGHT_ZONE_SENSOR))
+				{
+					log.critical("Verre droit mis", this);
+					mRobot.isGlassStoredRight=true;
+				}
+				
 			
 			} 
 			catch (SerialConnexionException e) 
@@ -324,7 +344,6 @@ class ThreadSensor extends AbstractThread
 	    		log.debug("Valeur des capteurs avant brute : "+realSensorValuesFront[0]+";"+realSensorValuesFront[1], this);
 	    		log.debug("Ennemi avant ajouté en "+positionEnnemi_2.x+";"+positionEnnemi_2.y, this);
 
-				
 				obstacleAddedRight=true;
 			}
 			// sinon, on voit un seul et meme ennemi
