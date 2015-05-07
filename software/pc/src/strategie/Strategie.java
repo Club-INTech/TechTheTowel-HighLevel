@@ -141,7 +141,7 @@ public class Strategie implements Service
 			if (robotReal.getPosition().distance(Table.entryPosition)<250)
 			{
 				matchScriptArray.add(scriptmanager.getScript(ScriptNames.DROP_CARPET));
-				matchVersionArray.add(1);
+				matchVersionArray.add(0);
 			}
 			
 			while (robotReal.getPosition().distance(Table.entryPosition)<250)
