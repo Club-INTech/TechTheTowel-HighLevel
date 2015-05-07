@@ -7,6 +7,7 @@ import com.sun.org.apache.xpath.internal.axes.OneStepIterator;
 
 import enums.Direction;
 import enums.ObstacleGroups;
+import exceptions.ConfigPropertyNotFoundException;
 import pathDingDing.PathDingDing;
 import smartMath.*;
 import utils.Log;
@@ -63,9 +64,8 @@ public class ObstacleManager
         mLines = new ArrayList<Segment>();
 		mRectangles = new ArrayList<ObstacleRectangular>();
 		
-        mRobotRadius = Integer.parseInt(config.getProperty("rayon_robot"));
-        defaultObstacleRadius = Integer.parseInt(config.getProperty("rayon_robot_adverse"));
-        
+		updateConfig();
+       
         //par defaut
         //mEnnemyRobot1 = new ObstacleCircular(new Vec2(0, 0), 200 + robotRadius);
       	//mEnnemyRobot2 = new ObstacleCircular(new Vec2(0, 0), 200 + robotRadius);
@@ -197,7 +197,6 @@ public class ObstacleManager
 	}
 	
 	/**
-	 * 
 	 * @return la liste des rectangles formant les obstacles rectangulaires
 	 */
 	public ArrayList<ObstacleRectangular> getRectangles()
@@ -565,4 +564,17 @@ public class ObstacleManager
     	for(int i=0; i<mFixedObstacles.size(); i++)
     		mFixedObstacles.get(i).printObstacleMemory();
     }
+    
+    public void updateConfig()
+	{
+		try 
+		{
+			mRobotRadius = Integer.parseInt(config.getProperty("rayon_robot"));
+		    defaultObstacleRadius = Integer.parseInt(config.getProperty("rayon_robot_adverse"));
+		}
+	    catch (ConfigPropertyNotFoundException e)
+    	{
+    		log.debug("Revoir le code : impossible de trouver la propriété "+e.getPropertyNotFound(), this);;
+    	}
+	}
 }

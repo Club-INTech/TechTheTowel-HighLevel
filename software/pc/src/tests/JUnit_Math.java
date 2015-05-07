@@ -7,8 +7,6 @@ import org.junit.Assert;
 
 import smartMath.Matrn;
 import smartMath.Vec2;
-
-// TODO: Auto-generated Javadoc
 /**
  * Tests unitaires pour le package smartMath.
  *

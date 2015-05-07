@@ -12,6 +12,7 @@ import enums.ScriptNames;
 import enums.ObstacleGroups;
 import enums.Speed;
 import enums.UnableToMoveReason;
+import exceptions.ConfigPropertyNotFoundException;
 import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -112,7 +113,8 @@ public class Strategie implements Service
         this.robotReal = state.robot;
         this.scriptmanager = scriptManager;
         this.pathDingDing = trouveurDeChemin;
-        matchDuration = Integer.parseInt(config.getProperty("temps_match"));
+		updateConfig();
+
         robotChrono = new RobotChrono(config, log, pathDingDing);
 	}
 
@@ -120,6 +122,15 @@ public class Strategie implements Service
 	{
 		table.updateConfig();
         robotReal.updateConfig();
+        try
+        {
+            matchDuration = Integer.parseInt(config.getProperty("temps_match"));
+		}
+        catch (ConfigPropertyNotFoundException e)
+        {
+        	log.debug("Revoir le code : impossible de trouver la propriété "+e.getPropertyNotFound(), this);
+		}
+
 	}
 	
 	/**
@@ -182,79 +193,78 @@ public class Strategie implements Service
 		// match scripté de l'IA
 		scriptedMatch(gameState);
 					
-			//tant que le match n'est pas fini, on prend des decisions :
-			while(realGameState.timeEllapsed   <  Integer.parseInt(config.getProperty("temps_match")))
+		//tant que le match n'est pas fini, on prend des decisions :
+		while(realGameState.timeEllapsed   <  matchDuration )
+		{
+			log.debug("======choix script======", this);
+			System.out.println();
+			
+			updateConfig();
+			takeDecision();
+			
+			log.debug("script choisit :"+nextScript.getClass().getName(), this);
+			log.debug("version :"+nextScriptVersion, this);
+			
+			try 
 			{
-				log.debug("======choix script======", this);
-				System.out.println();
-				
-				updateConfig();
-				takeDecision();
-				
-				log.debug("script choisit :"+nextScript.getClass().getName(), this);
-				log.debug("version :"+nextScriptVersion, this);
-				
-				try 
+				nextScript.goToThenExec(nextScriptVersion, gameState, hookRobot);
+			} 
+			catch (PathNotFoundException e1)
+			{
+				//un obstacle a été ajouté depuis le calcul de robot chrono donc il faut relancher la prise de decision
+			}
+			catch (UnableToMoveException e1) 
+			{
+				//si le robot se cogne sans detecter l'obstacle
+				if (e1.reason.compareTo(UnableToMoveReason.PHYSICALLY_BLOCKED)==0)
 				{
-					nextScript.goToThenExec(nextScriptVersion, gameState, hookRobot);
-				} 
-				catch (PathNotFoundException e1)
-				{
-					//un obstacle a été ajouté depuis le calcul de robot chrono donc il faut relancher la prise de decision
-				}
-				catch (UnableToMoveException e1) 
-				{
-					//si le robot se cogne sans detecter l'obstacle
-					if (e1.reason.compareTo(UnableToMoveReason.PHYSICALLY_BLOCKED)==0)
+					//on ajoute cet obstacle
+					table.getObstacleManager().addObstacle(robotReal.getPosition());
+					//on essaye de se degager
+					int numberOfTry = 0;
+					while (numberOfTry<5)
 					{
-						//on ajoute cet obstacle
-						table.getObstacleManager().addObstacle(robotReal.getPosition());
-						//on essaye de se degager
-						int numberOfTry = 0;
-						while (numberOfTry<5)
+						try
 						{
-							try
-							{
-								if (robotReal.getIsRobotMovingBackward())
-									robotReal.moveLengthwise(250, hookRobot, false, false);
-								else // si on tourne ou qu'on avancais on recule pour se degager
-									robotReal.moveLengthwise(-250, hookRobot, false, false);
-								break;
-							} 
-							catch (UnableToMoveException e2)
-							{
-								log.warning("impossible de se degager de l'obstacle : tentative n°"+numberOfTry, this);
-								numberOfTry++;
-							}
-						}
-						//qu'on ai reussi ou non a se degager on fait autre chose
-					}
-					//puis on relance la prise de decision
-					
-					//sinon on relance la pise de decision
-				}
-				catch (InObstacleException e1)
-				{
-					//TODO gerer cette exception en cours de match (pas uniquement pour le debug)
-					log.debug("le script "+nextScript.getClass()+"emmet un inObstacleException", this);
-				}
-				catch (SerialConnexionException e1)
-				{
-					initInMatch();
-				}
-				catch (SerialFinallyException e1)
-				{
-					while (true)
-					{
-						try 
-						{
-							nextScript.finalize(gameState);
+							if (robotReal.getIsRobotMovingBackward())
+								robotReal.moveLengthwise(250, hookRobot, false, false);
+							else // si on tourne ou qu'on avancais on recule pour se degager
+								robotReal.moveLengthwise(-250, hookRobot, false, false);
 							break;
 						} 
-						catch (UnableToMoveException | SerialFinallyException e2) 
+						catch (UnableToMoveException e2)
 						{
-							log.critical("multiple finalize exceptions", this);
+							log.warning("impossible de se degager de l'obstacle : tentative n°"+numberOfTry, this);
+							numberOfTry++;
 						}
+					}
+					//qu'on ai reussi ou non a se degager on fait autre chose
+				}
+				//puis on relance la prise de decision
+				
+				//sinon on relance la pise de decision
+			}
+			catch (InObstacleException e1)
+			{
+				//TODO gerer cette exception en cours de match (pas uniquement pour le debug)
+				log.debug("le script "+nextScript.getClass()+"emmet un inObstacleException", this);
+			}
+			catch (SerialConnexionException e1)
+			{
+				initInMatch();
+			}
+			catch (SerialFinallyException e1)
+			{
+				while (true)
+				{
+					try 
+					{
+						nextScript.finalize(gameState);
+						break;
+					} 
+					catch (UnableToMoveException | SerialFinallyException e2) 
+					{
+						log.critical("multiple finalize exceptions", this);
 					}
 				}
 			}

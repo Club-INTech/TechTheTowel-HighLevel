@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 
 import enums.ObstacleGroups;
+import exceptions.ConfigPropertyNotFoundException;
 
 /**
  * graphe definissant les liens entre les noeuds
@@ -23,6 +24,8 @@ public class Graph
 	private Table mTable;
 	private EnumSet<ObstacleGroups> mObstaclesToConsider;
     private Log mLog;
+    
+    private int robotRadius;
 	
 	public Graph(Table table, EnumSet<ObstacleGroups> obstaclesToConsider, Log log)
 	{
@@ -39,7 +42,7 @@ public class Graph
 	 */
 	private void buildGraph()
 	{
-		int robotRadius = Integer.parseInt(mTable.getConfig().getProperty("rayon_robot"));
+		updateConfig();
 		//ajout des noeuds fixes
 		mNodes.add(new Node(-1100 + robotRadius, 1222 + robotRadius));//noeud 0
 		mNodes.add(new Node(-1100 + robotRadius, 778 - robotRadius));//noeud 1
@@ -302,5 +305,17 @@ public class Graph
 			}
 		}
 		return closestNode;
+	}
+	
+	public void updateConfig()
+	{
+		try 
+		{
+			robotRadius = Integer.parseInt(mTable.getConfig().getProperty("rayon_robot"));
+		}
+	    catch (ConfigPropertyNotFoundException e)
+    	{
+	    	mTable.getLog().debug("Revoir le code : propriete non trouvee "+e.getPropertyNotFound(), this);;
+    	}
 	}
 }

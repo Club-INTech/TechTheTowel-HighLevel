@@ -83,6 +83,7 @@ public class PathDingDing implements Service
 			pathVec2.add(start);
 			Node closestNode = mGraph.closestNode(startNode.toVec2());
 			mGraph.setStartNode(new Node(closestNode.x, closestNode.y));
+			//System.out.println("Depart hors - Pathfinding");
 		}
 		else
 			//ajout du noeud de depart au graphe

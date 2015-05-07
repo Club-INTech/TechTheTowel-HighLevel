@@ -168,8 +168,10 @@ public class DropPile extends AbstractScript
 				stateToConsider.robot.turn(-Math.PI/4);
 				stateToConsider.robot.moveLengthwise(100, hooksToConsider, false);
 				
-				
-				if (!stateToConsider.table.isAreaXFilled(0))
+				// On ne depose que si la zone est vide de gobelets ET qu'on en a
+				if ( !stateToConsider.table.isAreaXFilled(0) 
+					&& 
+				     (stateToConsider.robot.isGlassStoredLeft || stateToConsider.robot.isGlassStoredRight) )
 				{
 					if (stateToConsider.robot.isGlassStoredLeft)
 					{
@@ -238,6 +240,7 @@ public class DropPile extends AbstractScript
 		}
 		catch (UnableToMoveException | SerialConnexionException e) 
 		{
+			log.debug("Catch de "+e+" dans le script" , this);
 			finalize(stateToConsider);
 			throw e;
 		}

@@ -132,7 +132,8 @@ public class Container
 		else if(serviceRequested == ServiceNames.LOCOMOTION_CARD_WRAPPER)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new LocomotionCardWrapper(
 																	(Log)getService(ServiceNames.LOG),
-																	(SerialConnexion)getService(ServiceNames.STM_CARD)
+																	(SerialConnexion)getService(ServiceNames.STM_CARD),
+																	(Config)getService(ServiceNames.CONFIG)
 																);
 		else if(serviceRequested == ServiceNames.SENSORS_CARD_WRAPPER)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new SensorsCardWrapper(

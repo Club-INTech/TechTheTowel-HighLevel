@@ -5,6 +5,7 @@ import utils.Log;
 import utils.Config;
 import container.Service;
 import enums.SensorNames;
+import exceptions.ConfigPropertyNotFoundException;
 import exceptions.serial.SerialConnexionException;
 
 /**
@@ -44,7 +45,14 @@ public class SensorsCardWrapper implements Service
 	
 	public void updateConfig()
 	{
-		areSensorsActive = Boolean.parseBoolean(config.getProperty("capteurs_on"));
+		try
+		{
+			areSensorsActive = Boolean.parseBoolean(config.getProperty("capteurs_on"));
+		}
+		catch (ConfigPropertyNotFoundException e)
+		{
+    		log.debug("Revoir le code : impossible de trouver la propriété "+e.getPropertyNotFound(), this);
+		}
 	}
 
 	/**

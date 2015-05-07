@@ -1,6 +1,7 @@
 package threads;
 
 import enums.SensorNames;
+import exceptions.ConfigPropertyNotFoundException;
 import exceptions.serial.SerialConnexionException;
 import robot.cardsWrappers.SensorsCardWrapper;
 import table.Table;
@@ -28,7 +29,7 @@ class ThreadSensor extends AbstractThread
 	// Valeurs par défaut s'il y a un problème de config
 	
 	/** fréquence de mise a jour des valeurs renvoyés par les capteurs. Valeurs par défaut de 5 fois par seconde s'il y a un problème de config */
-	private int sensorFrequency = 17;
+	private int sensorFrequency = 16;
 	
 	/**
 	 * distance en mm entre les capteur ultrasond et le guide en plastique, 
@@ -222,6 +223,43 @@ class ThreadSensor extends AbstractThread
 			if (distanceBack[1] > 0 && distanceBack[1] < 70 || distanceBack[0] > 0 && distanceBack[0] < 70)
 				log.debug("obstacle detecte a moins de 7 cm en arriere !", this);
 				
+			try
+			{
+				// TODO à tester asap suivant la symetrie
+				// Systeme enlevant un gobelet de la memoire du robot si il ne touche plus le contacteur 
+				// ( concretement, si il eest tombé alors qu'on prenait un plot )
+				// Ca evite de tenter de deposer... kedal.
+				
+				if(mRobot.isGlassStoredLeft && ! (boolean) mSensorsCardWrapper.getSensorValue(SensorNames.LEFT_ZONE_SENSOR))
+				{
+					log.critical("Verre gauche tombé", this);
+					mRobot.isGlassStoredLeft=false;
+				}
+				if(mRobot.isGlassStoredRight && ! (boolean) mSensorsCardWrapper.getSensorValue(SensorNames.RIGHT_ZONE_SENSOR))
+				{
+					log.critical("Verre droit tombé", this);
+					mRobot.isGlassStoredRight=false;
+				}
+				
+				// On verifie aussi le clic  si on a rien et que ca clique, on a quelque chose
+				if(!mRobot.isGlassStoredLeft &&  (boolean) mSensorsCardWrapper.getSensorValue(SensorNames.LEFT_ZONE_SENSOR))
+				{
+					log.debug("Verre gauche mis", this);
+					mRobot.isGlassStoredLeft=true;
+				}
+				if(!mRobot.isGlassStoredRight &&  (boolean) mSensorsCardWrapper.getSensorValue(SensorNames.RIGHT_ZONE_SENSOR))
+				{
+					log.debug("Verre droit mis", this);
+					mRobot.isGlassStoredRight=true;
+				}
+				
+			
+			} 
+			catch (SerialConnexionException e) 
+			{
+				e.printStackTrace();
+			}
+
 			Sleep.sleep((long)(1000./sensorFrequency));
 
 			
@@ -307,7 +345,6 @@ class ThreadSensor extends AbstractThread
 	    		log.debug("Valeur des capteurs avant brute : "+realSensorValuesFront[0]+";"+realSensorValuesFront[1], this);
 	    		log.debug("Ennemi avant ajouté en "+positionEnnemi_2.x+";"+positionEnnemi_2.y, this);
 
-				
 				obstacleAddedRight=true;
 			}
 			// sinon, on voit un seul et meme ennemi
@@ -643,20 +680,26 @@ class ThreadSensor extends AbstractThread
 	 */
 	public void updateConfig()
 	{
-		sensorFrequency = Integer.parseInt(config.getProperty("capteurs_frequence"));
-		radius = Integer.parseInt(config.getProperty("rayon_robot_adverse"));
-		
-		//plus que cette distance (environ 50cm) on est beaucoup moins precis sur la position adverse (donc on ne l'ecrit pas !)
-		maxSensorRange = Integer.parseInt(config.getProperty("largeur_robot"))
-						 / Math.sin(Float.parseFloat(config.getProperty("angle_capteur")));
-		
-		detectionAngle=Float.parseFloat(config.getProperty("angle_capteur"));
-		
-		robotWidth = Integer.parseInt(config.getProperty("largeur_robot"));
-		robotLenght = Integer.parseInt(config.getProperty("longueur_robot"));
-		
-		symetry = config.getProperty("couleur").replaceAll(" ","").equals("jaune");
-
+		try
+		{
+			sensorFrequency = Integer.parseInt(config.getProperty("capteurs_frequence"));
+			radius = Integer.parseInt(config.getProperty("rayon_robot_adverse"));
+			
+			//plus que cette distance (environ 50cm) on est beaucoup moins precis sur la position adverse (donc on ne l'ecrit pas !)
+			maxSensorRange = Integer.parseInt(config.getProperty("largeur_robot"))
+							 / Math.sin(Float.parseFloat(config.getProperty("angle_capteur")));
+			
+			detectionAngle=Float.parseFloat(config.getProperty("angle_capteur"));
+			
+			robotWidth = Integer.parseInt(config.getProperty("largeur_robot"));
+			robotLenght = Integer.parseInt(config.getProperty("longueur_robot"));
+			
+			symetry = config.getProperty("couleur").replaceAll(" ","").equals("jaune");
+		}
+		catch (ConfigPropertyNotFoundException e)
+		{
+    		log.debug("Revoir le code : impossible de trouver la propriété "+e.getPropertyNotFound(), this);;
+		}
 	}
 	
 	/**

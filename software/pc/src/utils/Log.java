@@ -1,5 +1,6 @@
 package utils;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -58,6 +59,9 @@ public class Log implements Service
 			{
 				java.util.GregorianCalendar calendar = new GregorianCalendar();
 				String heure = calendar.get(Calendar.HOUR)+":"+calendar.get(Calendar.MINUTE)+":"+calendar.get(Calendar.SECOND);
+				File testRepertoire = new File("logs");
+				if(!testRepertoire.exists())
+					testRepertoire.mkdir();
 				writer = new FileWriter("logs/LOG-"+heure+".txt", true); 
 			}
 			catch(Exception e)
