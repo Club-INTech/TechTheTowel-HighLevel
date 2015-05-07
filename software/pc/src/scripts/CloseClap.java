@@ -340,7 +340,7 @@ public class CloseClap extends AbstractScript
 		}
 		catch (UnableToMoveException e1) 
 		{
-			e1.printStackTrace();
+			log.debug( e1.logStack(), this);
 		} 
 	}
 	

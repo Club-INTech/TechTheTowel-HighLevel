@@ -1,5 +1,8 @@
 package exceptions;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 /**
  * exception levee si aucun chemin n'est trouve par le pathfinding
  * @author Etienne
@@ -19,5 +22,16 @@ public class ConfigPropertyNotFoundException extends Exception
 	public String getPropertyNotFound()
 	{
 		return nameOfProperty;
+	}
+	
+	public String logStack()
+	{
+		StringWriter sw = new StringWriter();
+		this.printStackTrace(new PrintWriter(sw));
+		
+		String exceptionAsString = sw.toString();	
+		exceptionAsString = exceptionAsString.replaceAll("(\r\n|\n\r|\r|\n)", " -> ");
+		
+		return exceptionAsString;
 	}
 }

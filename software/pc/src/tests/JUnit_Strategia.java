@@ -52,7 +52,7 @@ public class JUnit_Strategia extends JUnit_Test
 		} 
 		catch (SerialConnexionException e) 
 		{
-			e.printStackTrace();
+			log.debug( e.logStack(), this);
 		}		
 	}
 	

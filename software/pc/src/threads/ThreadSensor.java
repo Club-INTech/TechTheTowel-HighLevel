@@ -257,7 +257,7 @@ class ThreadSensor extends AbstractThread
 			} 
 			catch (SerialConnexionException e) 
 			{
-				e.printStackTrace();
+				log.critical( e.logStack(), this);
 			}
 
 			Sleep.sleep((long)(1000./sensorFrequency));
@@ -630,7 +630,7 @@ class ThreadSensor extends AbstractThread
 		catch(SerialConnexionException e)
 		{
 			log.critical("La carte capteurs ne répond pas !", this);
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 			distanceFront = (int[]) SensorNames.ULTRASOUND_FRONT_SENSOR.getDefaultValue();
 		}
 		return distanceFront;
@@ -668,7 +668,7 @@ class ThreadSensor extends AbstractThread
 		catch (SerialConnexionException e)
 		{
 			log.critical("La carte capteurs ne répond pas !", this);
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 			distanceBack = (int[]) SensorNames.ULTRASOUND_BACK_SENSOR.getDefaultValue();
 		}
 		return distanceBack;

@@ -145,7 +145,7 @@ public class JUnit_Sensors extends JUnit_Test
 		} 
 		catch (UnableToMoveException e) 
 		{
-			log.critical("!!!!!! Catch de"+e+" dans testWithoutDetecting !!!!!!" , this);
+			log.critical( e.logStack(), this);
 		}
 		
 		while(true)
@@ -160,8 +160,7 @@ public class JUnit_Sensors extends JUnit_Test
 		try {
 			state.robot.moveLengthwise(250);
 		} catch (UnableToMoveException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 		}
 		
 		while(true)
@@ -179,7 +178,7 @@ public class JUnit_Sensors extends JUnit_Test
 			} 
 			catch (UnableToMoveException e1)
 			{
-				log.critical("!!!!! Catch de"+e1+" dans testDetectionTournante !!!!!" , this);
+				log.critical( e1.logStack(), this);
 			}
 		}
 	}
@@ -195,7 +194,7 @@ public class JUnit_Sensors extends JUnit_Test
 		} 
 		catch (UnableToMoveException e1)
 		{
-			log.critical("!!!!! Catch de"+e1+" dans testDetectionTournante !!!!!" , this);
+			log.critical( e1.logStack(), this);
 		}
 		while (true)
 		{
@@ -213,7 +212,7 @@ public class JUnit_Sensors extends JUnit_Test
 		} 
 		catch (UnableToMoveException e1)
 		{
-			log.critical("!!!!! Catch de"+e1+" dans testDetectionTournante !!!!!" , this);
+			log.critical( e1.logStack(), this);
 		}
 		while (true)
 		{
@@ -224,7 +223,7 @@ public class JUnit_Sensors extends JUnit_Test
 			} 
 			catch (UnableToMoveException e1)
 			{
-				log.critical("!!!!! Catch de"+e1+" dans testDetectionTournante !!!!!" , this);
+				log.critical( e1.logStack(), this);
 			}
 		}
 	}
@@ -275,7 +274,7 @@ public class JUnit_Sensors extends JUnit_Test
             		}
             		catch(UnexpectedObstacleOnPathException e2)
             		{
-                        log.critical("Catch de "+e2+" dans moveToPointException", this);
+            			log.critical( e2.logStack(), this);
             		}
             	}
 			}
@@ -293,7 +292,7 @@ public class JUnit_Sensors extends JUnit_Test
 		} 
     	catch (UnableToMoveException e2) 
     	{
-			e2.printStackTrace();
+    		log.critical( e2.logStack(), this);
 		}
 		log.debug("Test d'évitement", this);
 		Random rand = new Random();

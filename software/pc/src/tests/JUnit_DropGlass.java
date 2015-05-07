@@ -75,7 +75,7 @@ public class JUnit_DropGlass extends JUnit_Test {
 		catch (UnableToMoveException e) 
 		{
 			log.critical("CRITICAL : Chemin bloque, enlevez votre main", this);
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 		}
 		
 		// libère le verre
@@ -97,19 +97,19 @@ public class JUnit_DropGlass extends JUnit_Test {
 		catch (UnableToMoveException e) 
 		{
 			log.critical("CRITICAL : Chemin bloque, enlevez votre main", this);
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 		} 
 		catch (SerialConnexionException e) 
 		{
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 		} 
 		catch (PathNotFoundException e)
 		{
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 		} 
 		catch (SerialFinallyException e) 
 		{
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 		}
 		
 	}

@@ -169,7 +169,7 @@ public class DropPile extends AbstractScript
 				stateToConsider.robot.turn(-Math.PI/4);
 				stateToConsider.robot.moveLengthwise(100, hooksToConsider, false);
 				
-				// On ne depose que si la zone est vide de gobelets ET qu'on en a
+				// On ne depose que si la zone est vide de gobelets ET qu'on en a au moins un verre
 				if ( !stateToConsider.table.isAreaXFilled(0) 
 					&& 
 				     (stateToConsider.robot.isGlassStoredLeft || stateToConsider.robot.isGlassStoredRight) )

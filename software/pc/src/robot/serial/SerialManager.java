@@ -75,7 +75,7 @@ public class SerialManager
 		} 
 		catch (ServiceTypeException e1)
 		{
-			e1.printStackTrace();
+			log.critical( e1.logStack(), this);
 		}
 
 		checkSerial();
@@ -234,7 +234,7 @@ public class SerialManager
 		}
 		catch (ServiceTypeException e)
 		{
-			e.printStackTrace();
+			log.debug( e.logStack(), this);
 		}
 		return serieAsservissement;
 	}

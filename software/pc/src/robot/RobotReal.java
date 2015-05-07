@@ -200,6 +200,7 @@ public class RobotReal extends Robot
     	}
     	catch (UnableToMoveException e)
     	{
+			log.critical( e.logStack(), this);
     		throw e;
     	}
     }
@@ -213,6 +214,7 @@ public class RobotReal extends Robot
     	}
     	catch (UnableToMoveException e)
     	{
+			log.critical( e.logStack(), this);
             throw e;
     	}
     }
@@ -225,6 +227,7 @@ public class RobotReal extends Robot
     	}
     	catch (UnableToMoveException e)
     	{
+			log.critical( e.logStack(), this);
             throw e;
     	}// le robot s'est arreté de tourner qu'il y ait catch ou non.
     }
@@ -263,7 +266,7 @@ public class RobotReal extends Robot
 		}
 		catch (SerialConnexionException e)
 		{
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 		}
 	}
 
@@ -276,7 +279,7 @@ public class RobotReal extends Robot
 		}
 		catch (SerialConnexionException e)
 		{
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 		}
 	}
 	
@@ -319,7 +322,7 @@ public class RobotReal extends Robot
 		} 
         catch (SerialConnexionException e)
         {
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 		}
 	}
 	

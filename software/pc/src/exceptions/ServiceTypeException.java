@@ -3,6 +3,9 @@
  */
 package exceptions;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 /**
  * 
  * Exception lancée lorsque l'on demande une information a un Service dont le type ne permet pas de fournir l'information demandée
@@ -59,6 +62,17 @@ public class ServiceTypeException extends Exception
 			boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 		// TODO Auto-generated constructor stub
+	}
+	
+	public String logStack()
+	{
+		StringWriter sw = new StringWriter();
+		this.printStackTrace(new PrintWriter(sw));
+		
+		String exceptionAsString = sw.toString();	
+		exceptionAsString = exceptionAsString.replaceAll("(\r\n|\n\r|\r|\n)", " -> ");
+		
+		return exceptionAsString;
 	}
 
 }

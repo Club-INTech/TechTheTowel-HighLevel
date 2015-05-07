@@ -152,7 +152,7 @@ public class ThreadTimer extends AbstractThread
 		try {
 			mLocomotionCardWrapper.immobilise();
 		} catch (SerialConnexionException e) {
-			e.printStackTrace();
+			log.debug( e.logStack(), this);
 		}
 
 		// fin du match : désasser
@@ -163,7 +163,7 @@ public class ThreadTimer extends AbstractThread
 		}
 		catch (SerialConnexionException e)
 		{
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 		}
 		
 		// et on coupe la connexion avec la carte d'asser comme ca on est sur qu'aucune partie du code ne peut faire quoi que ce soit pour faire bouger le robot

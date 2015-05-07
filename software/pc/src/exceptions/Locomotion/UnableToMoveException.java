@@ -1,5 +1,8 @@
 package exceptions.Locomotion;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import enums.UnableToMoveReason;
 import smartMath.Vec2;
 
@@ -48,6 +51,17 @@ public class UnableToMoveException extends Exception
 		super(m);
 		this.aim = aim;
 		this.reason=reason;
+	}
+	
+	public String logStack()
+	{
+		StringWriter sw = new StringWriter();
+		this.printStackTrace(new PrintWriter(sw));
+		
+		String exceptionAsString = sw.toString();	
+		exceptionAsString = exceptionAsString.replaceAll("(\r\n|\n\r|\r|\n)", " -> ");
+		
+		return exceptionAsString;
 	}
 	
 }
