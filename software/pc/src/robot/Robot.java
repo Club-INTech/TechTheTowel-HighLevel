@@ -512,6 +512,8 @@ public abstract class Robot implements Service
     	}
     	else // On a depassé le nombre maximal d'essais :
     	{
+    		log.debug("Recalculate a depasse son nombre max d'essais, "+maxNumberTriesRecalculation+" lancement de UnableToMoveExeception", this);
+    		log.debug("Raison : "+reason+ " / aim : "+aim, this);
 			throw new UnableToMoveException(aim, reason);       
 		}
     }

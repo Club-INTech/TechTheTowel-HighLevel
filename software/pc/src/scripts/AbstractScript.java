@@ -90,7 +90,16 @@ public abstract class AbstractScript implements Service
 	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, ArrayList<Hook> hooksToConsider, EnumSet<ObstacleGroups> enumObstacle) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, InObstacleException
 	{
 		// va jusqu'au point d'entrée de la version demandée
-		actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.robotRay, actualState.robot.getPosition()), hooksToConsider, actualState.table, enumObstacle);
+		try 
+		{
+			actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.robotRay, actualState.robot.getPosition()), hooksToConsider, actualState.table, enumObstacle);
+		}
+		catch (UnableToMoveException | InObstacleException | PathNotFoundException e)
+		{
+			log.debug("Catch de "+e+" Impossible de goToThenExec : abandon d'exec, throw de "+e, this);
+			throw e;
+		}
+		
 		
 		// exécute la version demandée
 		execute(versionToExecute, actualState, hooksToConsider);

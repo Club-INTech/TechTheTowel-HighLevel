@@ -186,6 +186,8 @@ public class Locomotion implements Service
      */
     public void turn(double angle, ArrayList<Hook> hooks, boolean mustDetect) throws UnableToMoveException
     {
+        log.debug("Tourner de "+Double.toString(angle), this);
+
     	actualRetriesIfBlocked=0;
 		updateCurrentPositionAndOrientation();
 
@@ -204,8 +206,6 @@ public class Locomotion implements Service
         isRobotMovingBackward=false;
 
     	actualRetriesIfBlocked=0;
-
-
     }
     
   
@@ -354,7 +354,7 @@ public class Locomotion implements Service
 	        moveToPointException(aim, hooks, direction, mur, turnOnly, mustDetect);
     	}
     	
-    	log.debug("Arrivés en "+aim, this);
+    	log.debug("Arrivés en "+aim+" vraie position : "+lowLevelPosition, this);
     	
 		actualRetriesIfBlocked=0;// on reinitialise
 
@@ -407,6 +407,12 @@ public class Locomotion implements Service
 		                	isRobotMovingForward=false;
 		                	isRobotMovingBackward=false;
 		                }
+		                else 
+		                {
+	                        log.warning("On arrive pas à se degager, nombre max d'essais depassé, lancement de UnableToMOveEXception", this);
+	                        throw new UnableToMoveException(aim, UnableToMoveReason.PHYSICALLY_BLOCKED);
+		                }
+
 	                }
 	                else
 	                {
@@ -457,6 +463,10 @@ public class Locomotion implements Service
 		                        throw new UnableToMoveException(finalAim, UnableToMoveReason.PHYSICALLY_BLOCKED);
 		                    }
 		                }
+		                else 
+		                {
+	                        log.warning("On s'attendait à ce mur.", this);
+						}
 	                }
                 }
             }

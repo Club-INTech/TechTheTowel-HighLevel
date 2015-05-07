@@ -239,6 +239,7 @@ public class DropPile extends AbstractScript
 		}
 		catch (UnableToMoveException | SerialConnexionException e) 
 		{
+			log.debug("Catch de "+e+" dans le script" , this);
 			finalize(stateToConsider);
 			throw e;
 		}
