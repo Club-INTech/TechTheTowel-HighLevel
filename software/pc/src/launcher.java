@@ -132,7 +132,7 @@ public class launcher
 			
 			robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
 			
-			robot.setLocomotionSpeed(Speed.BETWEEN_SCRIPTS);
+			robot.setLocomotionSpeed(Speed.SLOW);
 		}
 	    /**
 	     * Permet la mise en place de la balle de tennis
