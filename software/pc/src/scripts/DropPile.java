@@ -183,6 +183,7 @@ public class DropPile extends AbstractScript
 					}	
 					else if (stateToConsider.robot.isGlassStoredRight)
 					{
+						stateToConsider.robot.turn(0);
 						stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);
 						stateToConsider.robot.moveLengthwise(-250, hooksToConsider);
 						stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
