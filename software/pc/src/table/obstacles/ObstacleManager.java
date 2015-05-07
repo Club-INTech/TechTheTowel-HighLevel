@@ -197,7 +197,6 @@ public class ObstacleManager
 	}
 	
 	/**
-	 * 
 	 * @return la liste des rectangles formant les obstacles rectangulaires
 	 */
 	public ArrayList<ObstacleRectangular> getRectangles()
