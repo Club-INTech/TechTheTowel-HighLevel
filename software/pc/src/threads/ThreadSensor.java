@@ -225,11 +225,14 @@ class ThreadSensor extends AbstractThread
 			try
 			{
 				// TODO à tester asap suivant la symetrie
+				// Systeme enlevant un gobelet de la memoire du robot si il ne touche plus le contacteur 
+				// ( concretement, si il eest tombé alors qu'on prenait un plot )
+				// Ca evite de tenter de deposer... kedal.
 				if(! (boolean) mSensorsCardWrapper.getSensorValue(SensorNames.LEFT_ZONE_SENSOR))
 					mRobot.isGlassStoredLeft=false;
 				if(! (boolean) mSensorsCardWrapper.getSensorValue(SensorNames.RIGHT_ZONE_SENSOR))
 					mRobot.isGlassStoredRight=false;
-				
+			
 			} 
 			catch (SerialConnexionException e) 
 			{
