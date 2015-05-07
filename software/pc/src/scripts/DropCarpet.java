@@ -60,7 +60,7 @@ public class DropCarpet extends AbstractScript
 		
 				
 				//verification de la position : on n'effectue l'action que si on est assez proche (ie pas d'obstacle)
-				if(Math.abs((stateToConsider.robot.getPosition().y-1340))<50) // position- position du centre parfait<marge d'erreur
+			//	if(Math.abs((stateToConsider.robot.getPosition().y-1340))<50) // position- position du centre parfait<marge d'erreur
 				
 				{
 					//on depose le tapis gauche (si celui-ci n'est pas deja depose)
