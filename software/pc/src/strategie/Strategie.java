@@ -268,7 +268,6 @@ public class Strategie implements Service
 					}
 				}
 			}
-		}
 	}
 	
 	/**
