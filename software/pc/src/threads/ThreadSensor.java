@@ -28,7 +28,7 @@ class ThreadSensor extends AbstractThread
 	// Valeurs par défaut s'il y a un problème de config
 	
 	/** fréquence de mise a jour des valeurs renvoyés par les capteurs. Valeurs par défaut de 5 fois par seconde s'il y a un problème de config */
-	private int sensorFrequency = 17;
+	private int sensorFrequency = 16;
 	
 	/**
 	 * distance en mm entre les capteur ultrasond et le guide en plastique, 

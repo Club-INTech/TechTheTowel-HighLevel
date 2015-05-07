@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.Assert;
 
+import enums.ActuatorOrder;
 import enums.ObstacleGroups;
 import enums.SensorNames;
 import enums.ServiceNames;
@@ -133,7 +134,7 @@ public class JUnit_Sensors extends JUnit_Test
 		}
 	}
 	
-	@Test
+	//@Test
 	public void testDetecting()
 	{
 		log.debug("Test d'évitement", this);
@@ -229,6 +230,25 @@ public class JUnit_Sensors extends JUnit_Test
 	}
 	
 
+	@Test 
+	public void testContactGlasses()
+	{
+		try 
+		{
+			state.robot.useActuator(ActuatorOrder.ARM_LEFT_MIDDLE, false);
+			state.robot.useActuator(ActuatorOrder.ARM_RIGHT_MIDDLE, false);
+		} 
+		catch (Exception e) 
+		{
+			;		
+		}
+
+		while(true)
+		{
+			log.debug("Gauche : "+state.robot.isGlassStoredLeft+" | Droit : "+state.robot.isGlassStoredRight, this);
+			state.robot.sleep(50);
+		}
+	}
 		
 	//@Test
 	public void testCapteurFixe()
