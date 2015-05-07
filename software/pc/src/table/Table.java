@@ -407,5 +407,10 @@ public class Table implements Service
 	{
 		return config;
 	}
+
+	public Log getLog()
+	{
+		return log;
+	}
 }
 

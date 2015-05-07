@@ -12,6 +12,7 @@ import enums.ScriptNames;
 import enums.ObstacleGroups;
 import enums.Speed;
 import enums.UnableToMoveReason;
+import exceptions.ConfigPropertyNotFoundException;
 import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -103,8 +104,16 @@ public class Strategie implements Service
         this.robotReal = state.robot;
         this.scriptmanager = scriptManager;
         this.pathDingDing = trouveurDeChemin;
-        matchDuration = Integer.parseInt(config.getProperty("temps_match"));
-        robotChrono = new RobotChrono(config, log, pathDingDing);
+        
+        try
+        {	
+	        matchDuration = Integer.parseInt(config.getProperty("temps_match"));
+	        robotChrono = new RobotChrono(config, log, pathDingDing);
+		}
+		catch (ConfigPropertyNotFoundException e)
+    	{
+    		log.debug("Revoir le code : impossible de trouver la propriété "+e.getPropertyNotFound(), this);;
+    	}
 	}
 
 	public void updateConfig() 
@@ -172,7 +181,7 @@ public class Strategie implements Service
 		{
 					
 			//tant que le match n'est pas fini, on prend des decisions :
-			while(realGameState.timeEllapsed   <  Integer.parseInt(config.getProperty("temps_match")))
+			while(realGameState.timeEllapsed   <  matchDuration)
 			{
 				log.debug("======choix script======", this);
 				System.out.println();

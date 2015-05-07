@@ -1,6 +1,7 @@
 package threads;
 
 import enums.SensorNames;
+import exceptions.ConfigPropertyNotFoundException;
 import exceptions.serial.SerialConnexionException;
 import robot.cardsWrappers.SensorsCardWrapper;
 import table.Table;
@@ -243,12 +244,12 @@ class ThreadSensor extends AbstractThread
 				// On verifie aussi le clic  si on a rien et que ca clique, on a quelque chose
 				if(!mRobot.isGlassStoredLeft &&  (boolean) mSensorsCardWrapper.getSensorValue(SensorNames.LEFT_ZONE_SENSOR))
 				{
-					log.critical("Verre gauche mis", this);
+					log.debug("Verre gauche mis", this);
 					mRobot.isGlassStoredLeft=true;
 				}
 				if(!mRobot.isGlassStoredRight &&  (boolean) mSensorsCardWrapper.getSensorValue(SensorNames.RIGHT_ZONE_SENSOR))
 				{
-					log.critical("Verre droit mis", this);
+					log.debug("Verre droit mis", this);
 					mRobot.isGlassStoredRight=true;
 				}
 				
@@ -679,20 +680,26 @@ class ThreadSensor extends AbstractThread
 	 */
 	public void updateConfig()
 	{
-		sensorFrequency = Integer.parseInt(config.getProperty("capteurs_frequence"));
-		radius = Integer.parseInt(config.getProperty("rayon_robot_adverse"));
-		
-		//plus que cette distance (environ 50cm) on est beaucoup moins precis sur la position adverse (donc on ne l'ecrit pas !)
-		maxSensorRange = Integer.parseInt(config.getProperty("largeur_robot"))
-						 / Math.sin(Float.parseFloat(config.getProperty("angle_capteur")));
-		
-		detectionAngle=Float.parseFloat(config.getProperty("angle_capteur"));
-		
-		robotWidth = Integer.parseInt(config.getProperty("largeur_robot"));
-		robotLenght = Integer.parseInt(config.getProperty("longueur_robot"));
-		
-		symetry = config.getProperty("couleur").replaceAll(" ","").equals("jaune");
-
+		try
+		{
+			sensorFrequency = Integer.parseInt(config.getProperty("capteurs_frequence"));
+			radius = Integer.parseInt(config.getProperty("rayon_robot_adverse"));
+			
+			//plus que cette distance (environ 50cm) on est beaucoup moins precis sur la position adverse (donc on ne l'ecrit pas !)
+			maxSensorRange = Integer.parseInt(config.getProperty("largeur_robot"))
+							 / Math.sin(Float.parseFloat(config.getProperty("angle_capteur")));
+			
+			detectionAngle=Float.parseFloat(config.getProperty("angle_capteur"));
+			
+			robotWidth = Integer.parseInt(config.getProperty("largeur_robot"));
+			robotLenght = Integer.parseInt(config.getProperty("longueur_robot"));
+			
+			symetry = config.getProperty("couleur").replaceAll(" ","").equals("jaune");
+		}
+		catch (ConfigPropertyNotFoundException e)
+		{
+    		log.debug("Revoir le code : impossible de trouver la propriété "+e.getPropertyNotFound(), this);;
+		}
 	}
 	
 	/**

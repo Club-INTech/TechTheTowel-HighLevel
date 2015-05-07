@@ -7,6 +7,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import exceptions.ConfigPropertyNotFoundException;
+
 /**
  * Service de configuration du robot.
  * Cette classe lit le fichier  /pc/config/config.ini pour en extraire les informations de configuration et les redistribuer a qui les demandera
@@ -74,22 +76,21 @@ public class Config implements Service
 		}	
 		printConfigFile();
 	}
-	
-	// TODO: configPropertyNotFoundException pour prévenir l'utilisateur quand il essaye d'obtenir une propriété du fichier de config qui n'existe pas
-	// TODO: encore mieux, faire une enummération de tout ce qui peut être appelleé comme property, et changer le type du paramètre de getProperty en cette enum
-	/**
+		/**
 	 * Méthode que tout le monde utilise de récupération des paramètres de configuration.
 	 *
 	 * @param nom nom de la propriété a récupérer
-	 * @return Leparamètre coresspondant a ce nom
+	 * @return Le paramètre coresspondant a ce nom
+	 * @throws ConfigPropertyNotFoundException 
 	 */
-	public String getProperty(String nom)
+	public String getProperty(String nom) throws ConfigPropertyNotFoundException
 	{		
 		String out = null;
 		out = configProperties.getProperty(nom);
 		if(out == null)
 		{
 			System.out.println("Erreur config, la propriété nommée '"+nom+"' est introuvable.");
+			throw new ConfigPropertyNotFoundException(nom);
 		}
 		return out;
 	}

@@ -2,6 +2,7 @@ package robot;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+
 import pathDingDing.PathDingDing;
 import hook.Hook;
 import smartMath.Circle;
@@ -13,6 +14,7 @@ import enums.ObstacleGroups;
 import enums.SensorNames;
 import enums.Speed;
 import enums.UnableToMoveReason;
+import exceptions.ConfigPropertyNotFoundException;
 import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.BlockedException;
@@ -97,8 +99,15 @@ public abstract class Robot implements Service
 	 */
 	public void updateConfig()
 	{
-		symmetry = config.getProperty("couleur").replaceAll(" ","").equals("jaune");
-        robotRay = Integer.parseInt(config.getProperty("rayon_robot"));
+		try 
+		{
+			symmetry = config.getProperty("couleur").replaceAll(" ","").equals("jaune");
+	        robotRay = Integer.parseInt(config.getProperty("rayon_robot"));
+		}
+	    catch (ConfigPropertyNotFoundException e)
+    	{
+    		log.debug("Revoir le code : impossible de trouver la propriété "+e.getPropertyNotFound(), this);;
+    	}
 	}
 
 	/**
