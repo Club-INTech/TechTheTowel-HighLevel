@@ -12,7 +12,6 @@ import enums.ScriptNames;
 import enums.ObstacleGroups;
 import enums.Speed;
 import enums.UnableToMoveReason;
-import exceptions.ConfigPropertyNotFoundException;
 import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -86,6 +85,15 @@ public class Strategie implements Service
 
 	private int matchDuration;
 	
+	/**
+	 * la liste des scripts a executer pour le match scripté
+	 */
+	private ArrayList<AbstractScript> matchScriptArray = new ArrayList<AbstractScript>();
+	/**
+	 * la liste des versions a executer pour le match scripté
+	 */
+	private ArrayList<Integer> matchVersionArray = new ArrayList<Integer>();
+	
 	
 /**
  * Crée la strategie, l'IA decisionnelle
@@ -104,16 +112,8 @@ public class Strategie implements Service
         this.robotReal = state.robot;
         this.scriptmanager = scriptManager;
         this.pathDingDing = trouveurDeChemin;
-        
-        try
-        {	
-	        matchDuration = Integer.parseInt(config.getProperty("temps_match"));
-	        robotChrono = new RobotChrono(config, log, pathDingDing);
-		}
-		catch (ConfigPropertyNotFoundException e)
-    	{
-    		log.debug("Revoir le code : impossible de trouver la propriété "+e.getPropertyNotFound(), this);;
-    	}
+        matchDuration = Integer.parseInt(config.getProperty("temps_match"));
+        robotChrono = new RobotChrono(config, log, pathDingDing);
 	}
 
 	public void updateConfig() 
@@ -138,8 +138,15 @@ public class Strategie implements Service
 		} 
 		catch (UnableToMoveException e)
 		{
+			if (robotReal.getPosition().distance(Table.entryPosition)<250)
+			{
+				matchScriptArray.add(scriptmanager.getScript(ScriptNames.DROP_CARPET));
+				matchVersionArray.add(0);
+			}
+			
 			while (robotReal.getPosition().distance(Table.entryPosition)<250)
 			{
+				
 				try 
 				{
 					scriptmanager.getScript(ScriptNames.EXIT_START_ZONE).execute(0, gameState, hookRobot);
@@ -153,7 +160,7 @@ public class Strategie implements Service
 				
 		}
 		catch (SerialConnexionException e) 
-		{
+		{		
 			initInMatch();
 		}
 		catch (SerialFinallyException e)
@@ -173,15 +180,10 @@ public class Strategie implements Service
 		
 		
 		// match scripté de l'IA
-		try 
-		{
-			scriptedMatch(gameState);
-		} 
-		catch (PathNotFoundException | InObstacleException| UnableToMoveException e) 
-		{
+		scriptedMatch(gameState);
 					
 			//tant que le match n'est pas fini, on prend des decisions :
-			while(realGameState.timeEllapsed   <  matchDuration)
+			while(realGameState.timeEllapsed   <  Integer.parseInt(config.getProperty("temps_match")))
 			{
 				log.debug("======choix script======", this);
 				System.out.println();
@@ -256,7 +258,6 @@ public class Strategie implements Service
 					}
 				}
 			}
-		}
 	}
 	
 	/**
@@ -388,41 +389,78 @@ public class Strategie implements Service
 		robotReal.setLocomotionSpeed(Speed.SLOW);
 	}
 
-	private void scriptedMatch(GameState<Robot> gameState) throws PathNotFoundException, InObstacleException, UnableToMoveException 
+	private void scriptedMatch(GameState<Robot> gameState)
 	{
-		ArrayList<AbstractScript> scriptArray = new ArrayList<AbstractScript>();
-		ArrayList<Integer> versionArray = new ArrayList<Integer>();
+		
 
 		
-		scriptArray.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
-		versionArray.add(2);
+		matchScriptArray.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
+		matchVersionArray.add(2);
 		
-		scriptArray.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
-		versionArray.add(34);
+		matchScriptArray.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
+		matchVersionArray.add(34);
 		
-		scriptArray.add(scriptmanager.getScript(ScriptNames.CLOSE_CLAP));
-		versionArray.add(-12);
+		matchScriptArray.add(scriptmanager.getScript(ScriptNames.CLOSE_CLAP));
+		matchVersionArray.add(-12);
 		
-		scriptArray.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
-		versionArray.add(1);
+		matchScriptArray.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
+		matchVersionArray.add(1);
 		
-		scriptArray.add(scriptmanager.getScript(ScriptNames.FREE_STACK));
-		versionArray.add(0);
+		matchScriptArray.add(scriptmanager.getScript(ScriptNames.FREE_STACK));
+		matchVersionArray.add(0);
 		
-		scriptArray.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
-		versionArray.add(56);
+		matchScriptArray.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
+		matchVersionArray.add(56);
 		
-		scriptArray.add(scriptmanager.getScript(ScriptNames.FREE_STACK));
-		versionArray.add(2);
+		matchScriptArray.add(scriptmanager.getScript(ScriptNames.FREE_STACK));
+		matchVersionArray.add(2);
 		
 		
-		while(!scriptArray.isEmpty())
+		while(!matchScriptArray.isEmpty())
 		{
 			try 
 			{
-				scriptArray.get(0).goToThenExec(versionArray.get(0), gameState, hookRobot);
-				scriptArray.remove(0);
-				versionArray.remove(0);
+				boolean tryAgain = true;
+				while (tryAgain)
+				{
+					try 
+					{
+						matchScriptArray.get(0).goToThenExec(matchVersionArray.get(0), gameState, hookRobot);
+						tryAgain = false;
+					}
+					catch (UnableToMoveException e) 
+					{
+						if (e.reason.compareTo(UnableToMoveReason.PHYSICALLY_BLOCKED)==0)
+						{
+							//FIXME degager (ne pas bouger tryAgain)
+						}
+					} 
+					catch (PathNotFoundException e) 
+					{
+						//on ajoute le script dans le tableau un peu plus loin
+						matchScriptArray.add(Math.max(0,matchScriptArray.size()-4), matchScriptArray.get(0));
+						matchVersionArray.add(Math.max(0,matchVersionArray.size()-4), matchVersionArray.get(0));
+						//et on abandonne le script pour le moment
+						tryAgain = false;
+					} 
+					catch (InObstacleException e) 
+					{
+						for (ObstacleGroups obstacle : e.getObstacleGroup())
+						{
+							log.warning("attention, obstacle : "+obstacle.getClass(),this);
+							if(obstacle.compareTo(ObstacleGroups.ENNEMY_ROBOTS)==0)
+							{
+								//on ajoute le script dans le tableau un peu plus loin
+								matchScriptArray.add(Math.max(0,matchScriptArray.size()-4), matchScriptArray.get(0));
+								matchVersionArray.add(Math.max(0,matchVersionArray.size()-4), matchVersionArray.get(0));
+								//et on abandonne le script pour le moment
+								tryAgain = false;
+							}
+						}
+					}
+				}
+				matchScriptArray.remove(0);
+				matchVersionArray.remove(0);
 			}
 			catch (IndexOutOfBoundsException e)
 			{
@@ -437,16 +475,16 @@ public class Strategie implements Service
 					gameState.robot.sleep(3000);
 					try 
 					{
-						scriptArray.get(0).finalize(gameState);
+						matchScriptArray.get(0).finalize(gameState);
 						break;
 					} 
 					catch (IndexOutOfBoundsException e1)
 					{
 						log.debug("out of bound, IA's scripted match", this);
 						//on ajoute le script de depart pour lancer son finalize (puisqu'il n'y avait pas de script prevu apres c'est pas grave)
-						scriptArray.add(scriptmanager.getScript(ScriptNames.EXIT_START_ZONE));
+						matchScriptArray.add(scriptmanager.getScript(ScriptNames.EXIT_START_ZONE));
 					}
-					catch (SerialFinallyException e1)
+					catch (SerialFinallyException | UnableToMoveException e1)
 					{
 						log.critical("enchainement de SerialFinallyException", this);
 					}

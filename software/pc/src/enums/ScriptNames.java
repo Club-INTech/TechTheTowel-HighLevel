@@ -15,5 +15,6 @@ public enum ScriptNames
 	EXIT_START_ZONE,
 	TAKE_TENNIS_BALL,
 	GRAB_GLASS,
-	GRAB_PLOT;
+	GRAB_PLOT,
+	WAIT;
 }

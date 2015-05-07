@@ -27,7 +27,6 @@ class ThreadLaser extends AbstractThread
 	/** La table sur laquelle le thread doit croire évoluer */
 	private Table table;
 
-	// TODO: le threadLaser ne doit pas mémoriser par lui même la taille de la table. Il doit la demander au ficheir de config, ou a la table.
 	/** Taille de la table selon l'axe X */
 	private int sizeTableX;
 
@@ -154,7 +153,6 @@ class ThreadLaser extends AbstractThread
 	}
 
 	
-	// TODO: gestion propre de ces exceptions
 	/* (non-Javadoc)
 	 * @see threads.AbstractThread#updateConfig()
 	 */
