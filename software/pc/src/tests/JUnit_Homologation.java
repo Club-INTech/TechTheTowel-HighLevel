@@ -185,7 +185,7 @@ public class JUnit_Homologation extends JUnit_Test
 		//	Retour Maison
 		//////////////////////////////////////////////////////
 		
-		while(! real_state.table.isAreaXFilled(0))
+		while(! real_state.table.isAreaXFilled(1))
 		{
 			try 
 			{

@@ -143,6 +143,8 @@ class ThreadSensor extends AbstractThread
 	int[] realSensorValuesFront = new int[2];
 	int[] realSensorValuesBack = new int[2];
 	
+	public boolean homologation;
+	
 	
 	/**
 	 * Crée un nouveau thread de capteurs
@@ -156,9 +158,8 @@ class ThreadSensor extends AbstractThread
 		this.mSensorsCardWrapper = sensorsCardWrapper;
 		Thread.currentThread().setPriority(2);
 		mTable = table;
-		mRobot = robot;
-		
-		
+		mRobot = robot;		
+		homologation=false;
 	}
 	
 	/* (non-Javadoc)
@@ -205,17 +206,30 @@ class ThreadSensor extends AbstractThread
 				   distanceBack[1]==-1 )	) // si on n'a pas spammé
 			{										
 				// on enleve les obstacles 
-				removeObstacleFront(distanceFront);
-				removeObstacleBack(distanceBack);
+				if(!homologation)
+				{
+					removeObstacleFront(distanceFront);
+					removeObstacleBack(distanceBack);
+				}
+				
 				mTable.getObstacleManager().removeObstacleInUs(mRobot.getPosition());
 
-				//ajout d'obstacles mobiles dans l'obstacleManager
-				// Analyse des capteurs avant, avec gestion des angles
-				if(mRobot.getIsRobotMovingForward())
+				
+				if(!homologation)
+				{
+					//ajout d'obstacles mobiles dans l'obstacleManager
+					// Analyse des capteurs avant, avec gestion des angles
+					if(mRobot.getIsRobotMovingForward())
+						addObstacleFront(distanceFront);
+					// Analyse des capteurs arrieres, avec gestion des angles
+					if(mRobot.getIsRobotMovingBackward())
+						addObstacleBack(distanceBack);
+				}
+				else 
+				{
 					addObstacleFront(distanceFront);
-				// Analyse des capteurs arrieres, avec gestion des angles
-				if(mRobot.getIsRobotMovingBackward())
 					addObstacleBack(distanceBack);
+				}
 				
 			}
 			if (distanceFront[1] > 0 && distanceFront[1] < 70 || distanceFront[0] > 0 && distanceFront[0] < 70)
@@ -694,6 +708,8 @@ class ThreadSensor extends AbstractThread
 			robotLenght = Integer.parseInt(config.getProperty("longueur_robot"));
 			
 			symetry = config.getProperty("couleur").replaceAll(" ","").equals("jaune");
+			
+			homologation=Boolean.parseBoolean(config.getProperty("homologation"));
 		}
 		catch (ConfigPropertyNotFoundException e)
 		{
