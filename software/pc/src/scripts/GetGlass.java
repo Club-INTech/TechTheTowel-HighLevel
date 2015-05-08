@@ -68,6 +68,10 @@ public class GetGlass extends AbstractScript
 		// va jusqu'au point d'entrée de la version demandée
 		actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.robotRay, actualState.robot.getPosition()), hooksToConsider, actualState.table,obstacleNotConsidered);
 		
+		//	le robot est deja en face du plot puisqu'on a appele goToThenExec (qui met en face du centre du script) si un jour on autorise de lancer exec il faudra remettre ces lignes (et les debugger)
+		actualState.robot.turn(Math.atan2(	entryPosition(versionToExecute,actualState.robot.robotRay, actualState.robot.getPosition()).position.y - actualState.robot.getPosition().y,	// position voulue - position actuelle
+					 							entryPosition(versionToExecute,actualState.robot.robotRay, actualState.robot.getPosition()).position.x - actualState.robot.getPosition().x	// de meme
+					 						 ));
 		// exécute la version demandée
 			execute(versionToExecute, actualState, hooksToConsider);
 }

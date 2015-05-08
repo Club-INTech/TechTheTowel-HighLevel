@@ -110,8 +110,8 @@ public abstract class Robot implements Service
 		{
 			symmetry = config.getProperty("couleur").replaceAll(" ","").equals("jaune");
 	        robotRay = Integer.parseInt(config.getProperty("rayon_robot"));
-	        position = getPosition();
-	        orientation = getOrientation();
+	        position = Table.entryPosition;
+	        orientation = Math.PI;
 		}
 	    catch (ConfigPropertyNotFoundException e)
     	{

@@ -2,12 +2,8 @@ package tests;
 
 import hook.Hook;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-import scripts.AbstractScript;
 import scripts.ScriptManager;
 import strategie.GameState;
 import table.Table;
@@ -27,6 +23,7 @@ import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import robot.Robot;
+import robot.RobotReal;
 import robot.cardsWrappers.SensorsCardWrapper;
 
 /**
@@ -41,6 +38,7 @@ public class JUnit_Homologation extends JUnit_Test
 	SensorsCardWrapper  mSensorsCardWrapper;
 	PathDingDing pathDingDing;
 	SensorsCardWrapper sensors;
+	RobotReal robotReal;
 	
 	public static void main(String[] args) throws Exception
 	{                    
@@ -59,6 +57,7 @@ public class JUnit_Homologation extends JUnit_Test
 		mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
         pathDingDing = (PathDingDing)container.getService(ServiceNames.PATHDINGDING);
         sensors = (SensorsCardWrapper)container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
+        
         
 		real_state.robot.updateConfig();
         sensors.updateConfig();
@@ -80,7 +79,7 @@ public class JUnit_Homologation extends JUnit_Test
 	
 	public void waitMatchBegin()
 	{
-		System.out.println("Robot pret pour le match, attente du retrait du jumper");
+		log.debug("Robot pret pour le match, attente du retrait du jumper",this);
 		
 		// attends que le jumper soit retiré du robot
 		
@@ -106,7 +105,7 @@ public class JUnit_Homologation extends JUnit_Test
 		//	Début du match
 		//////////////////////////////////////////////////////
 		
-		System.out.println("Debut du match d'homologation");
+		log.debug("Debut du match d'homologation",this);
 				
 		//////////////////////////////////////////////////////
 		//	Sortie
@@ -114,7 +113,7 @@ public class JUnit_Homologation extends JUnit_Test
 		
 		
 
-		System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant la sortie");
+		log.debug("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant la sortie",this);
 		
 		// tant qu'on est pas sortis
 		while (real_state.robot.getPosition().distance(Table.entryPosition)<250)
@@ -131,7 +130,7 @@ public class JUnit_Homologation extends JUnit_Test
 			}
 		}
 		
-		System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après la sortie");
+		log.debug("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après la sortie",this);
 
 	
 		
@@ -145,13 +144,19 @@ public class JUnit_Homologation extends JUnit_Test
 		{
 			try 
 			{
-				System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le verre 1");
-				scriptmanager.getScript(ScriptNames.GRAB_GLASS).execute(1, real_state, emptyHook);
-				System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le verre 1");
+				log.debug("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le verre 1",this);
+				scriptmanager.getScript(ScriptNames.GRAB_GLASS).goToThenExec(1, real_state, emptyHook);
+				log.debug("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le verre 1",this);
 			}
 			catch (UnableToMoveException e){log.debug(e.logStack(), this);}
 			catch (SerialConnexionException e){log.debug(e.logStack(), this);}
+			catch (PathNotFoundException e){log.debug(e.logStack(), this);}
 			catch (SerialFinallyException e){log.debug(e.logStack(), this);}
+			catch (InObstacleException e){log.debug(e.logStack(), this);}
+			
+			if(! real_state.table.isGlassXTaken(1))
+				log.debug("On retente d'attraper le verre",this);
+				
 		}
 		
 		//////////////////////////////////////////////////////
@@ -162,13 +167,18 @@ public class JUnit_Homologation extends JUnit_Test
 		{
 			try 
 			{
-				System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant les tapis");
-				scriptmanager.getScript(ScriptNames.DROP_CARPET).execute(1, real_state, emptyHook);
-				System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après les tapis");
+				log.debug("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant les tapis",this);
+				scriptmanager.getScript(ScriptNames.DROP_CARPET).goToThenExec(1, real_state, emptyHook);
+				log.debug("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après les tapis",this);
 			}
 			catch (UnableToMoveException e){log.debug(e.logStack(), this);}
 			catch (SerialConnexionException e){log.debug(e.logStack(), this);}
+			catch (PathNotFoundException e){log.debug(e.logStack(), this);}
 			catch (SerialFinallyException e){log.debug(e.logStack(), this);}
+			catch (InObstacleException e){log.debug(e.logStack(), this);}
+			
+			if(! real_state.table.getIsLeftCarpetDropped() && ! real_state.table.getIsRightCarpetDropped())
+				log.debug("On retente de depose les tapis",this);
 		}
 		
 		//////////////////////////////////////////////////////
@@ -179,13 +189,18 @@ public class JUnit_Homologation extends JUnit_Test
 		{
 			try 
 			{
-			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le depose verre");
-			scriptmanager.getScript(ScriptNames.DROP_GLASS).execute(0, real_state, emptyHook);
-			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le depose verre");
+				log.debug("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant le depose verre",this);
+				scriptmanager.getScript(ScriptNames.DROP_GLASS).goToThenExec(0, real_state, emptyHook);
+				log.debug("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le depose verre",this);
 			}
 			catch (UnableToMoveException e){log.debug(e.logStack(), this);}
 			catch (SerialConnexionException e){log.debug(e.logStack(), this);}
+			catch (PathNotFoundException e){log.debug(e.logStack(), this);}
 			catch (SerialFinallyException e){log.debug(e.logStack(), this);}
+			catch (InObstacleException e){log.debug(e.logStack(), this);}
+			
+			if(! real_state.table.isAreaXFilled(1))
+				log.debug("On retente de depose le verre",this);
 		}
 		
 		
@@ -193,7 +208,7 @@ public class JUnit_Homologation extends JUnit_Test
 		//	Fin du match
 		//////////////////////////////////////////////////////
 		
-		System.out.println("match fini !");
+		log.debug("match fini !",this);
 
 		//Le match s'arrête
 		container.destructor();
