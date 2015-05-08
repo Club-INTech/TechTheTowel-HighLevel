@@ -107,7 +107,7 @@ public class JUnit_Strategia extends JUnit_Test
 	@Test
 	public void desisionTest()
 	{
-		configColor();
+		//configColor();
 		real_state.robot.setLocomotionSpeed(Speed.SLOW);
 		container.startAllThreads();
 		waitMatchBegin();

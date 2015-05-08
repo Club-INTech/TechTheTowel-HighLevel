@@ -432,7 +432,7 @@ public class Strategie implements Service
 		scriptedMatchCustomExceptionHandlers.add(Strategie.class.getDeclaredMethod(new String("scriptedMatchHandePile0Plot"),null));
 		
 		scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.CLOSE_CLAP));
-		scriptedMatchVersions.add(-12);
+		scriptedMatchVersions.add(12);
 		scriptedMatchCustomExceptionHandlers.add(null);
 		
 		scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
