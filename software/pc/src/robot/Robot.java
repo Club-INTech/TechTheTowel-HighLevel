@@ -506,20 +506,24 @@ public abstract class Robot implements Service
 			log.critical("Catch de "+unableToMoveException+" dans moveToCircle" , this);
 			log.critical( unableToMoveException.logStack(), this);
 			actualNumberOfTries=0;
-			recalculate(path.get(path.size()-1), hooksToConsider, unableToMoveException.reason); // on recalcule le path
+			retryNewPath(path.get(path.size()-1), hooksToConsider, unableToMoveException.reason); // on recalcule le path
+			throw unableToMoveException;
 		}
     }
     
     /**
-     * 	Fonction recalculant le path à suivre, à utiliser pour l'evitement
+     * 	Fonction recalculant le path à suivre et le fait suivre, à utiliser pour l'evitement
      * 	Elle s'appelle elle-meme tant qu'on a pas reussi.
      *  Avant d'apeller cette méthode remettre actualNumberOfTries à 0
-     * @param reason TODO
+     * @param aim 
+     * @param hooksToConsider 
+     * @param reason rason pour laquelle un auttre essai de déplacement est nécéssaire
+     * @throws UnableToMoveException 
      * 	@throws PathNotFoundException 
      *  @throws InObstacleException lorqsque le robot veut aller dans un obstacle
      */
     
-    public void recalculate(Vec2 aim, ArrayList<Hook> hooksToConsider, UnableToMoveReason reason) throws UnableToMoveException, PathNotFoundException, InObstacleException
+    public void retryNewPath(Vec2 aim, ArrayList<Hook> hooksToConsider, UnableToMoveReason reason) throws UnableToMoveException, PathNotFoundException, InObstacleException
     {
     	if(actualNumberOfTries < maxNumberTriesRecalculation)
 		{
@@ -532,6 +536,7 @@ public abstract class Robot implements Service
 				try 
 				{
 					 newPath = pathDingDing.computePath(getPosition(),aim, EnumSet.of(ObstacleGroups.ENNEMY_ROBOTS));
+						log.debug("Nouveau Path recalculé: "+newPath, this);
 				}
 				catch (InObstacleException e)
 		    	{
@@ -540,8 +545,10 @@ public abstract class Robot implements Service
 		    		throw e;
 		    	}
 				
-				log.debug("Nouveau Path recalculé: "+newPath, this);
+				
+				
 				followPath(newPath , hooksToConsider);
+				
 				//on reinitialise actualNumberOfTries puisque le mouvement a reussi
 				actualNumberOfTries=0;
 			} 
@@ -549,7 +556,7 @@ public abstract class Robot implements Service
 			{
 				//si cela echoue, on recalcule encore en tenant compte du nouvel obstacle
 				if (unableToMoveException.reason.compareTo(UnableToMoveReason.OBSTACLE_DETECTED)==0)
-					recalculate(unableToMoveException.aim, hooksToConsider, unableToMoveException.reason);
+					retryNewPath(unableToMoveException.aim, hooksToConsider, unableToMoveException.reason);
 			}
     	}
     	else // On a depassé le nombre maximal d'essais :

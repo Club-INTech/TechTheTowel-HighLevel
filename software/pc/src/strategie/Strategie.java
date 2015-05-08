@@ -22,6 +22,7 @@ import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import robot.*;
 import scripts.AbstractScript;
+import scripts.GetPlot;
 import scripts.ScriptManager;
 import table.Table;
 import utils.Log;
@@ -428,11 +429,13 @@ public class Strategie implements Service
 		try {
 		scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
 		scriptedMatchVersions.add(2);
-		scriptedMatchCustomExceptionHandlers.add(Strategie.class.getDeclaredMethod(new String("scriptedMatchHandePile0Plot"),(Class[])null));	// si quelqu'un se demande ce que c'est que ce délire, c'est un "pointeur sur fonction" en mode hack de java
+//		scriptedMatchCustomExceptionHandlers.add(Strategie.class.getDeclaredMethod(new String("scriptedMatchHandePile0Plot"),(Class[])null));	// si quelqu'un se demande ce que c'est que ce délire, c'est un "pointeur sur fonction" en mode hack de java
+		scriptedMatchCustomExceptionHandlers.add(null);
 		
 		scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
 		scriptedMatchVersions.add(34);
-		scriptedMatchCustomExceptionHandlers.add(Strategie.class.getDeclaredMethod(new String("scriptedMatchHandePile0Plot"),(Class[])null));
+//		scriptedMatchCustomExceptionHandlers.add(Strategie.class.getDeclaredMethod(new String("scriptedMatchHandePile0Plot"),(Class[])null));
+		scriptedMatchCustomExceptionHandlers.add(null);
 		
 		scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.CLOSE_CLAP));
 		scriptedMatchVersions.add(12);
@@ -452,9 +455,9 @@ public class Strategie implements Service
 		
 		scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.FREE_STACK));
 		scriptedMatchVersions.add(2);
-		} catch (NoSuchMethodException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
+//		} catch (NoSuchMethodException e2) {
+//			// TODO Auto-generated catch block
+//			e2.printStackTrace();
 		} catch (SecurityException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
@@ -471,12 +474,22 @@ public class Strategie implements Service
 				{
 					try 
 					{
-						tryAgain = false;
 						
 						try
 						{
+							
+							// si le temps presse, on n'attends pas pour faire les scripts
+							if (realGameState.timeEllapsed > 50000)
+								tryAgain = false;
+								
 							// exécute le prochain script sur la liste
 							scriptedMatchScripts.get(0).goToThenExec(scriptedMatchVersions.get(0), gameState, hookRobot);
+
+							tryAgain = false;
+
+							scriptedMatchScripts.remove(0);
+							scriptedMatchVersions.remove(0);
+							scriptedMatchCustomExceptionHandlers.remove(0);
 						}
 						catch (Exception e) 
 						{
@@ -506,10 +519,13 @@ public class Strategie implements Service
 					catch (PathNotFoundException e)
 					{
 						//on ajoute le script dans le tableau un peu plus loin
-						scriptedMatchScripts.add(Math.max(0,scriptedMatchScripts.size()-4), scriptedMatchScripts.get(0));
-						scriptedMatchVersions.add(Math.max(0,scriptedMatchVersions.size()-4), scriptedMatchVersions.get(0));
-						
+						scriptedMatchScripts.add(Math.max(0,scriptedMatchScripts.size()-3), scriptedMatchScripts.get(0));
+						scriptedMatchVersions.add(Math.max(0,scriptedMatchVersions.size()-3), scriptedMatchVersions.get(0));
+						scriptedMatchCustomExceptionHandlers.add(Math.max(0,scriptedMatchScripts.size()-3), null);
 						//et on abandonne le script pour le moment
+						scriptedMatchScripts.remove(0);
+						scriptedMatchVersions.remove(0);
+						scriptedMatchCustomExceptionHandlers.remove(0);
 						tryAgain = false;
 					} 
 					catch (InObstacleException e) 
@@ -522,16 +538,51 @@ public class Strategie implements Service
 							// on reporte a plus tard le script si c'est un robot ennemi qui empèche l'accès au point d'entrée
 							if(obstacle.compareTo(ObstacleGroups.ENNEMY_ROBOTS)==0)
 							{
-								scriptedMatchScripts.add(Math.max(0,scriptedMatchScripts.size()-4), scriptedMatchScripts.get(0));
-								scriptedMatchVersions.add(Math.max(0,scriptedMatchVersions.size()-4), scriptedMatchVersions.get(0));
+								scriptedMatchScripts.add(Math.max(0,scriptedMatchScripts.size()-3), scriptedMatchScripts.get(0));
+								scriptedMatchVersions.add(Math.max(0,scriptedMatchVersions.size()-3), scriptedMatchVersions.get(0));
+								scriptedMatchCustomExceptionHandlers.add(Math.max(0,scriptedMatchScripts.size()-3), null);
 								//et on abandonne le script pour le moment
+								scriptedMatchScripts.remove(0);
+								scriptedMatchVersions.remove(0);
+								scriptedMatchCustomExceptionHandlers.remove(0);
 								tryAgain = false;
-							} // FIXME reflechir si il n'y a aucun robot ennemi bloquant
+							}
+							//si on est bloqué par les plots 3, 4 ou le gobelet 0 on execute immediatement le script pour les recuperer (ces scripts sont critiques)
+							else if (obstacle.compareTo(ObstacleGroups.GREEN_PLOT_3)==0 || obstacle.compareTo(ObstacleGroups.GREEN_PLOT_3)==0 || obstacle.compareTo(ObstacleGroups.GOBLET_0)==0)
+							{
+								//on enleve le script de get plot version 34 le plus proche (le seul)
+								for (int i = 0 ; i<scriptedMatchScripts.size(); i++)
+								{
+									if ((scriptedMatchScripts.get(i)) instanceof GetPlot && scriptedMatchVersions.get(i)==34)
+									{
+										scriptedMatchScripts.remove(i);
+										scriptedMatchVersions.remove(i);
+										scriptedMatchCustomExceptionHandlers.remove(i);
+										break;
+									}
+								}
+								
+								//et on le remet en position 0
+								scriptedMatchScripts.add(0, scriptmanager.getScript(ScriptNames.GRAB_PLOT));
+								scriptedMatchVersions.add(0, 34);
+								
+								try 
+								{
+									scriptedMatchCustomExceptionHandlers.add(Strategie.class.getDeclaredMethod(new String("scriptedMatchHandePile0Plot"),(Class[])null));
+								} 
+								catch (NoSuchMethodException | SecurityException e1)
+								{
+									e1.printStackTrace();
+								}
+							}
+							//sinon (pas sensé arriver) on arrete d'essayer le script
+							else
+							{
+								tryAgain = false;
+							}
 						}
 					}
 				}
-				scriptedMatchScripts.remove(0);
-				scriptedMatchVersions.remove(0);
 			}
 			catch (IndexOutOfBoundsException e)
 			{

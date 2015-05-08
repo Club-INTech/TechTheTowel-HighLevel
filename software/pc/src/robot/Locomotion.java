@@ -457,12 +457,14 @@ public class Locomotion implements Service
 		                        log.critical("Catch de "+e1+" dans moveToPointException", this);
 		                    	immobilise();                       
 		                        log.critical("On n'arrive pas à se dégager", this);
+		                        
+
+			                    if(!doItAgain)
+			                    {
+			                        log.critical("Lancement de UnableToMoveException dans MoveToPointException, visant "+finalAim.x+" :: "+finalAim.y+" cause physique", this);
+			                        throw new UnableToMoveException(finalAim, UnableToMoveReason.PHYSICALLY_BLOCKED);
+			                    }
 							}
-		                    if(!doItAgain)
-		                    {
-		                        log.critical("Lancement de UnableToMoveException dans MoveToPointException, visant "+finalAim.x+" :: "+finalAim.y+" cause physique", this);
-		                        throw new UnableToMoveException(finalAim, UnableToMoveReason.PHYSICALLY_BLOCKED);
-		                    }
 		                }
 		                else 
 		                {

@@ -75,7 +75,25 @@ public class RobotReal extends Robot
 	{
 		if(symmetry)
 			sensor = mSensorCorrespondenceMap.getSymmetrizedSensorName(sensor);
-		return mSensorsCardWrapper.getSensorValue(sensor);
+		
+
+		// si il n'y a pas de symétrie, on renvois la valeur brute du bas niveau, sinon, on échange les valeurs des ultrasons (l'ultrason droit devien l'ultrason gauche et réciproquement)
+		if(!symmetry) 
+			return mSensorsCardWrapper.getSensorValue(sensor);
+		else
+		{
+			if(sensor == SensorNames.ULTRASOUND_FRONT_SENSOR || sensor == SensorNames.ULTRASOUND_FRONT_SENSOR)
+			{
+				int[] invertedOut = (int[])mSensorsCardWrapper.getSensorValue(sensor);
+				int[] out = new int[2];
+				out[0] = invertedOut[1];
+				return out;
+			}
+		}
+		 
+		 
+		// n'arrivera jamais (juste pour contenter eclipse)
+		return null;
 	}
 
 	@Override	

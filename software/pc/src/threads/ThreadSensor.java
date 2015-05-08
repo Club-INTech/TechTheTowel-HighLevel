@@ -197,6 +197,7 @@ class ThreadSensor extends AbstractThread
 			 * on met la distance detecte, a l'avant et a l'arriere, dans deux variables int[] de taille deux
 			 * si la carte ne repond pas on revoie la valeur par default
 			 */
+			// distanceFront[0] = US gauche
 			int[] distanceFront = getDistanceFront();
 			int[] distanceBack = getDistanceBack();
 			
@@ -212,12 +213,22 @@ class ThreadSensor extends AbstractThread
 					removeObstacleBack(distanceBack);
 				}
 				
-				mTable.getObstacleManager().removeObstacleInUs(mRobot.getPosition());
+				//mTable.getObstacleManager().removeObstacleInUs(mRobot.getPosition());
 
 				
 				if(!homologation)
 				{
 					//ajout d'obstacles mobiles dans l'obstacleManager
+					
+					// si on est immobile
+					if(!mRobot.getIsRobotMovingForward() && !mRobot.getIsRobotMovingBackward())
+					{
+						addObstacleFront(distanceFront);
+						addObstacleBack(distanceBack);
+					}
+					
+					//si on bouge
+					
 					// Analyse des capteurs avant, avec gestion des angles
 					if(mRobot.getIsRobotMovingForward())
 						addObstacleFront(distanceFront);
@@ -626,7 +637,7 @@ class ThreadSensor extends AbstractThread
 			{
 				if(distanceFront[i]==0)
 				{
-					log.critical("ARRETEZ DE SPAMMER LES CAPTEURS !", this);
+					//log.critical("ARRETEZ DE SPAMMER LES CAPTEURS !", this);
 					distanceFront[i]=-1;
 				}
 				if ( distanceFront[i] <distanceBetweenGuideAndUltrasound && 
@@ -673,7 +684,7 @@ class ThreadSensor extends AbstractThread
 			for (int i=0; i<distanceBack.length; i++)
 			{
 				if(distanceBack[i]==0)
-					log.critical("ARRETEZ DE SPAMMER LES CAPTEURS !", this);
+				;//	log.critical("ARRETEZ DE SPAMMER LES CAPTEURS !", this);
 				if (distanceBack[i] > maxSensorRange) 
 					distanceBack[i]=0;
 			}
