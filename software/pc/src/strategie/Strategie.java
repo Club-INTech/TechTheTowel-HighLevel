@@ -413,7 +413,7 @@ public class Strategie implements Service
 			matchScriptArray.add(scriptmanager.getScript(ScriptNames.DROP_CARPET));
 			matchVersionArray.add(1);
 		}
-		
+		 
 		matchScriptArray.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
 		matchVersionArray.add(2);
 		

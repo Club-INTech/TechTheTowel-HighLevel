@@ -96,7 +96,7 @@ public class CloseClap extends AbstractScript
 		catch (UnableToMoveException | SerialConnexionException e)
 		{
 			finalize(stateToConsider);
-			throw e ;
+			throw e;
 		}
 	}
 	

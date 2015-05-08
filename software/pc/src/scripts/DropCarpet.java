@@ -44,7 +44,7 @@ public class DropCarpet extends AbstractScript
 	}
 
 	@Override
-	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider) throws SerialFinallyException
+	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, SerialFinallyException
 	{
 		if (versionToExecute == 1)
 			try 
@@ -108,6 +108,7 @@ public class DropCarpet extends AbstractScript
 			catch (UnableToMoveException | SerialConnexionException e)
 			{
 				finalize(stateToConsider);
+				throw e;
 			}
 		else if(versionToExecute == 0)
 		{
@@ -175,6 +176,7 @@ public class DropCarpet extends AbstractScript
 			catch(UnableToMoveException | SerialConnexionException e)
 			{
 				finalize(stateToConsider);
+				throw e;
 			}
 		}
 		//version 2 du script : débute au point de départ du robot, attrape le gobelet en passant.
@@ -255,6 +257,7 @@ public class DropCarpet extends AbstractScript
 			catch(UnableToMoveException | SerialConnexionException e)
 			{
 				finalize(stateToConsider);
+				throw e;
 			}
 		}
 	}
