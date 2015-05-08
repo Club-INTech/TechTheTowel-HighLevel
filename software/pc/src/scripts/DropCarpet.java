@@ -9,7 +9,6 @@ import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import hook.Callback;
 import hook.Hook;
-import hook.methods.CloseLeftArmExe;
 import hook.methods.CloseRightArmExe;
 import hook.types.HookFactory;
 import robot.Robot;

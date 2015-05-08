@@ -7,13 +7,7 @@ import java.io.InputStreamReader;
 
 import strategie.GameState;
 import robot.cardsWrappers.SensorsCardWrapper;
-import robot.cardsWrappers.LocomotionCardWrapper;
-import robot.RobotReal;
-import robot.Locomotion;
-import scripts.AbstractScript;
 import scripts.ScriptManager;
-import smartMath.Vec2;
-import strategie.GameState;
 import strategie.Strategie;
 //import tests.JUnit_StrategieThreadTest;
 //import sun.rmi.runtime.Log;
@@ -25,14 +19,9 @@ import container.Container;
 import enums.ServiceNames;
 import hook.Hook;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-import scripts.AbstractScript;
-import scripts.ScriptManager;
-import strategie.GameState;
 import table.Table;
 import threads.ThreadTimer;
 

@@ -1,12 +1,8 @@
 package scripts;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 
 import enums.ActuatorOrder;
-import enums.ObstacleGroups;
-import exceptions.InObstacleException;
-import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;

@@ -4,8 +4,6 @@ import hook.Hook;
 
 import java.util.ArrayList;
 
-import javax.sql.rowset.serial.SerialException;
-
 import robot.cardsWrappers.LocomotionCardWrapper;
 import smartMath.Vec2;
 import table.Table;

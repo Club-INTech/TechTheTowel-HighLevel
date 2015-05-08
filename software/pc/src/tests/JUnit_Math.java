@@ -2,7 +2,6 @@ package tests;
 
 import java.util.Random;
 
-import org.junit.Test;
 import org.junit.Assert;
 
 import smartMath.Matrn;

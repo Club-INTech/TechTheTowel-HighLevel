@@ -15,7 +15,6 @@ import robot.DirectionStrategy;
 import robot.Locomotion;
 import robot.cardsWrappers.LocomotionCardWrapper;
 import smartMath.Vec2;
-import utils.Sleep;
 
 /**
  * Tests unitaires pour Deplacements.

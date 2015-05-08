@@ -428,11 +428,11 @@ public class Strategie implements Service
 		try {
 		scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
 		scriptedMatchVersions.add(2);
-		scriptedMatchCustomExceptionHandlers.add(Strategie.class.getDeclaredMethod(new String("scriptedMatchHandePile0Plot"),null));	// si quelqu'un se demande ce que c'est que ce délire, c'est un "pointeur sur fonction" en mode hack de java
+		scriptedMatchCustomExceptionHandlers.add(Strategie.class.getDeclaredMethod(new String("scriptedMatchHandePile0Plot"),(Class[])null));	// si quelqu'un se demande ce que c'est que ce délire, c'est un "pointeur sur fonction" en mode hack de java
 		
 		scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
 		scriptedMatchVersions.add(34);
-		scriptedMatchCustomExceptionHandlers.add(Strategie.class.getDeclaredMethod(new String("scriptedMatchHandePile0Plot"),null));
+		scriptedMatchCustomExceptionHandlers.add(Strategie.class.getDeclaredMethod(new String("scriptedMatchHandePile0Plot"),(Class[])null));
 		
 		scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.CLOSE_CLAP));
 		scriptedMatchVersions.add(12);
@@ -483,9 +483,12 @@ public class Strategie implements Service
 							// en cas d'erreur d'exécution, demande la gestion de l'erreur par le gestionnaire custom s'il y en a un, sinon applique la politique par défaut.
 							if(scriptedMatchCustomExceptionHandlers.get(0) != null) 
 							{
-								try {
-									scriptedMatchCustomExceptionHandlers.get(0).invoke(this, null);
-								} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
+								try 
+								{
+									scriptedMatchCustomExceptionHandlers.get(0).invoke(this, (Object[])null);
+								} 
+								catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) 
+								{
 									e1.printStackTrace();
 								}
 							}

@@ -10,8 +10,6 @@ import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import hook.Callback;
 import hook.Hook;
-import hook.methods.OpenClapLeftHighExe;
-import hook.methods.OpenClapLeftMiddleExe;
 import hook.methods.OpenClapRightHighExe;
 import hook.methods.OpenClapRightMiddleExe;
 import hook.types.HookFactory;
