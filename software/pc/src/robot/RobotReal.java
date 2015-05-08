@@ -295,7 +295,8 @@ public class RobotReal extends Robot
     @Override
 	public Vec2 getPosition()
 	{
-	    return mLocomotion.getPosition();
+    	position = mLocomotion.getPosition();
+	    return position;
 	}
 	
 	@Override

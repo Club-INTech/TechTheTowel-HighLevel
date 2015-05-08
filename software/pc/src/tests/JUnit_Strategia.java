@@ -16,7 +16,6 @@ import smartMath.Vec2;
 import strategie.GameState;
 import strategie.Strategie;
 import threads.ThreadTimer;
-import enums.ActuatorOrder;
 import enums.ServiceNames;
 import enums.Speed;
 import exceptions.serial.SerialConnexionException;

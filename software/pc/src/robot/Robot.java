@@ -17,9 +17,7 @@ import enums.UnableToMoveReason;
 import exceptions.ConfigPropertyNotFoundException;
 import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
-import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
-import exceptions.Locomotion.UnexpectedObstacleOnPathException;
 import exceptions.serial.SerialConnexionException;
 import utils.Log;
 import utils.Config;
@@ -48,6 +46,11 @@ public abstract class Robot implements Service
 	
 	/**  vitesse du robot sur la table. */
 	protected Speed speed;
+	
+	/**
+	 * la position du robot
+	 */
+	protected Vec2 position;
 
 	/** nombre de plots stockes dans le robot (mis a jour et utlisé par les scripts) */
 	public int storedPlotCount;
@@ -103,6 +106,7 @@ public abstract class Robot implements Service
 		{
 			symmetry = config.getProperty("couleur").replaceAll(" ","").equals("jaune");
 	        robotRay = Integer.parseInt(config.getProperty("rayon_robot"));
+	        position = getPosition();
 		}
 	    catch (ConfigPropertyNotFoundException e)
     	{
@@ -232,6 +236,16 @@ public abstract class Robot implements Service
 	 * @return la position courante du robot sur la table
 	 */
     public abstract Vec2 getPosition();
+    
+    /**
+     * donne la dernière position connue du robot sur la table
+     * cette methode est rapide et ne déclenche pas d'appel série
+     * @return la dernière position connue du robot
+     */
+    public Vec2 getPositionFast()
+    {
+    	return position;
+    }
     
 	/**
 	 * Donne l'orientation du robot sur la table.
@@ -567,7 +581,10 @@ public abstract class Robot implements Service
 	{
 		hasNonDigestedPlot=true;
 	}	
-	
+	/**
+	 * getter de hasNonDigestedPlot
+	 * @return vra si on a un plot dans les machoires, faux sinon
+	 */
 	public boolean hasRobotNonDigestedPlot()
 	{
 		return hasNonDigestedPlot;

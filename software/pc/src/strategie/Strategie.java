@@ -281,11 +281,13 @@ public class Strategie implements Service
 	}
 	
 	/**
-	 * initialize the real robot during a match (because of a SerialConnexionException)
+	 * initialize le robot real pendant un match (suite a une SerialConnexionException)
 	 * se relance tant qu'il y a des SerialConnexionException (pour preserver la meca)
 	 */
 	private void initInMatch() 
 	{
+		robotReal.setPosition(robotReal.getPositionFast());
+		
 		try 
 		{
 			robotReal.useActuator(ActuatorOrder.ELEVATOR_GROUND, false);
