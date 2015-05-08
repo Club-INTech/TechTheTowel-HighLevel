@@ -51,6 +51,10 @@ public abstract class Robot implements Service
 	 * la position du robot
 	 */
 	protected Vec2 position;
+	/**
+	 * l'orientation du robot
+	 */
+	protected double orientation;
 
 	/** nombre de plots stockes dans le robot (mis a jour et utlisé par les scripts) */
 	public int storedPlotCount;
@@ -107,6 +111,7 @@ public abstract class Robot implements Service
 			symmetry = config.getProperty("couleur").replaceAll(" ","").equals("jaune");
 	        robotRay = Integer.parseInt(config.getProperty("rayon_robot"));
 	        position = getPosition();
+	        orientation = getOrientation();
 		}
 	    catch (ConfigPropertyNotFoundException e)
     	{
@@ -253,6 +258,16 @@ public abstract class Robot implements Service
 	 * @return l'orientation en radiants courante du robot sur la table
 	 */
     public abstract double getOrientation();
+    
+    /**
+     * Donne la derniere orientation connue du robot sur la table
+     * Cette méthode est rapide et ne déclenche pas d'appel série
+     * @return la derniere orientation connue du robot
+     */
+    public double getOrientationFast() 
+    {
+		return orientation;
+	}
     
 	/**
 	 * Fait tourner le robot (méthode bloquante)

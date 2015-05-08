@@ -308,7 +308,8 @@ public class RobotReal extends Robot
     @Override
     public double getOrientation()
     {
-        return mLocomotion.getOrientation();
+    	orientation =  mLocomotion.getOrientation();
+        return orientation;
     }
 
 	@Override
@@ -348,4 +349,6 @@ public class RobotReal extends Robot
 	{
 		return mLocomotion.isRobotMovingBackward;
 	}
+
+	
 }

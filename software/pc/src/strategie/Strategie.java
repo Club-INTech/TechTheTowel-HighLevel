@@ -287,6 +287,7 @@ public class Strategie implements Service
 	private void initInMatch() 
 	{
 		robotReal.setPosition(robotReal.getPositionFast());
+		robotReal.setOrientation(robotReal.getOrientationFast());
 		
 		try 
 		{

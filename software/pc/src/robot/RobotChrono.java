@@ -23,10 +23,6 @@ import exceptions.Locomotion.UnableToMoveException;
 
 public class RobotChrono extends Robot
 {
-	
-	/** orientation du robot virtuel sur la table. Utile pour calculer le temps nécéssaire pour atteindre un autre point de la table */
-	protected double orientation;
-	
 	/** Chronomètre du robot en millisecondes */
 	private int chrono = 0;
 	
