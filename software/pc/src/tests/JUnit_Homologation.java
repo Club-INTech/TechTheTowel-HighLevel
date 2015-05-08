@@ -93,7 +93,6 @@ public class JUnit_Homologation extends JUnit_Test
 		// maintenant que le jumper est retiré, le match a commencé
 		ThreadTimer.matchStarted = true;
 	}
-	
 
 	@Test
 	public void startMatch()
