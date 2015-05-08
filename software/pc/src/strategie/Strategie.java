@@ -149,15 +149,16 @@ public class Strategie implements Service
 		} 
 		catch (UnableToMoveException e)
 		{
+			// Si on s'est raté mais qu'on est proches, on ajoute le script de depose tapis simplement 
 			if (robotReal.getPosition().distance(Table.entryPosition)<250)
 			{
 				matchScriptArray.add(scriptmanager.getScript(ScriptNames.DROP_CARPET));
 				matchVersionArray.add(0);
 			}
 			
+			// On tente de sortir à tout prix ! On retente tant qu'on a pas reussi
 			while (robotReal.getPosition().distance(Table.entryPosition)<250)
 			{
-				
 				try 
 				{
 					scriptmanager.getScript(ScriptNames.EXIT_START_ZONE).execute(0, gameState, hookRobot);
@@ -179,12 +180,13 @@ public class Strategie implements Service
 			while (true)
 			{
 				try 
-				{
+				{	// On lancee le finalize en brute
 					scriptmanager.getScript(ScriptNames.DROP_CARPET).finalize(gameState);
-					break;
+					break; // sortie du while
 				} 
 				catch (UnableToMoveException | SerialFinallyException e1) 
 				{
+					;
 				}
 			}
 		}
@@ -268,6 +270,7 @@ public class Strategie implements Service
 					}
 				}
 			}
+		}
 	}
 	
 	/**
@@ -399,11 +402,18 @@ public class Strategie implements Service
 		robotReal.setLocomotionSpeed(Speed.SLOW);
 	}
 
+	/**
+	 * 	Lance le match scripté de l'IA, suite de scripts
+	 * @param gameState l'etat de la table
+	 */
 	private void scriptedMatch(GameState<Robot> gameState)
 	{
-		
-
-		
+		if(! gameState.table.getIsLeftCarpetDropped() || !gameState.table.getIsRightCarpetDropped())
+		{
+			matchScriptArray.add(scriptmanager.getScript(ScriptNames.DROP_CARPET));
+			matchVersionArray.add(1);
+		}
+		 
 		matchScriptArray.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
 		matchVersionArray.add(2);
 		
@@ -425,7 +435,7 @@ public class Strategie implements Service
 		matchScriptArray.add(scriptmanager.getScript(ScriptNames.FREE_STACK));
 		matchVersionArray.add(2);
 		
-		
+		// tant qu'on a pas tout fait
 		while(!matchScriptArray.isEmpty())
 		{
 			try 
@@ -465,7 +475,7 @@ public class Strategie implements Service
 								matchVersionArray.add(Math.max(0,matchVersionArray.size()-4), matchVersionArray.get(0));
 								//et on abandonne le script pour le moment
 								tryAgain = false;
-							}
+							} // FIXME reflechir si il n'y a aucun robot ennemi bloquant
 						}
 					}
 				}

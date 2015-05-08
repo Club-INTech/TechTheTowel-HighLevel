@@ -44,7 +44,7 @@ public class DropCarpet extends AbstractScript
 	}
 
 	@Override
-	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider) throws SerialFinallyException
+	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, SerialFinallyException
 	{
 		if (versionToExecute == 1)
 			try 
@@ -60,7 +60,7 @@ public class DropCarpet extends AbstractScript
 		
 				
 				//verification de la position : on n'effectue l'action que si on est assez proche (ie pas d'obstacle)
-				if(Math.abs((stateToConsider.robot.getPosition().y-1340))<50) // position- position du centre parfait<marge d'erreur
+			//	if(Math.abs((stateToConsider.robot.getPosition().y-1340))<50) // position- position du centre parfait<marge d'erreur
 				
 				{
 					//on depose le tapis gauche (si celui-ci n'est pas deja depose)
@@ -108,6 +108,7 @@ public class DropCarpet extends AbstractScript
 			catch (UnableToMoveException | SerialConnexionException e)
 			{
 				finalize(stateToConsider);
+				throw e;
 			}
 		else if(versionToExecute == 0)
 		{
@@ -175,6 +176,7 @@ public class DropCarpet extends AbstractScript
 			catch(UnableToMoveException | SerialConnexionException e)
 			{
 				finalize(stateToConsider);
+				throw e;
 			}
 		}
 		//version 2 du script : débute au point de départ du robot, attrape le gobelet en passant.
@@ -255,6 +257,7 @@ public class DropCarpet extends AbstractScript
 			catch(UnableToMoveException | SerialConnexionException e)
 			{
 				finalize(stateToConsider);
+				throw e;
 			}
 		}
 	}
