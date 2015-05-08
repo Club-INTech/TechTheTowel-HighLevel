@@ -31,8 +31,7 @@ public class CheckUp implements Service
 		this.log = log;
 	}
 	
-	// TODO check-up du robot
-	/**
+		/**
 	 * Effectue un check-up du robot
 	 */
 	public void doCheckUp()

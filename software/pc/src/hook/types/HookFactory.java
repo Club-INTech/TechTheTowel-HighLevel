@@ -2,6 +2,7 @@ package hook.types;
 
 import hook.Hook;
 import container.Service;
+import exceptions.ConfigPropertyNotFoundException;
 import robot.RobotReal;
 import smartMath.Vec2;
 import strategie.GameState;
@@ -55,11 +56,20 @@ public class HookFactory implements Service
 	 */
 	public void updateConfig()
 	{
-		// demande la couleur du robot pour ce match
-		color = config.getProperty("couleur");
-		
-		// demande avec quelle tolérance sur la précision on déclenche les hooks
-		positionTolerancy = Integer.parseInt(this.config.getProperty("hooks_tolerance_mm"));		
+		try
+		{
+			
+			// demande la couleur du robot pour ce match
+			color = config.getProperty("couleur");
+			
+			// demande avec quelle tolérance sur la précision on déclenche les hooks
+			positionTolerancy = Integer.parseInt(this.config.getProperty("hooks_tolerance_mm"));		
+	
+		}
+		catch (ConfigPropertyNotFoundException e)
+		{
+    		log.debug("Revoir le code : impossible de trouver la propriété "+e.getPropertyNotFound(), this);;
+		}
 	}
 	
 	/* ======================================================================

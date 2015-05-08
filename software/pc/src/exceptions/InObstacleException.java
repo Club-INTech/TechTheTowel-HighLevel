@@ -1,6 +1,9 @@
 package exceptions;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.EnumSet;
+
 import enums.ObstacleGroups;
 
 /**
@@ -33,5 +36,16 @@ public class InObstacleException extends Exception
 	public EnumSet<ObstacleGroups> getObstacleGroup()
 	{
 		return mObstacleGroups;
+	}
+	
+	public String logStack()
+	{
+		StringWriter sw = new StringWriter();
+		this.printStackTrace(new PrintWriter(sw));
+		
+		String exceptionAsString = sw.toString();	
+		exceptionAsString = exceptionAsString.replaceAll("(\r\n|\n\r|\r|\n)", " -> ");
+		
+		return exceptionAsString;
 	}
 }

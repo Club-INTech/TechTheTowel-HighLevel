@@ -8,18 +8,23 @@ package enums;
 
 public enum Speed
 {
-	/** vitesse en temps normal */
-    // BETWEEN_SCRIPTS(100, 100), // valeurs des anciens asservissements
-	BETWEEN_SCRIPTS(10, 10), // valeurs des anciens asservissements
-    
-    /** vitesse a avoir si l'on veut percuter un mur. Celle ci est plus faible pour prendre soin de la méca du robot */
-//    INTO_WALL(90, 160),
-    
-    /** vitesse lente pour ne pas percuter des objects et les perdre */
-    SLOW(60,60);
-    
-    /** Vitesse a avoir en cours de recalage du robot sur la table. Le recalage nous fais percuter dans les murs, donc on avance pas trop vite */
-//    READJUSTMENT(90, 90);
+	
+	/** vitesse très lente */
+	SLOW(3, 3);
+	// Buggé jusqu'a nouvel ordre
+//
+//	/** vitesse en temps normal (pour des distances de 200mm à 1000 mm) */
+//	BETWEEN_SCRIPTS_SLOW(10, 10),
+//	
+//	/** vitesse en temps normal (distances de 1000+ mm) */
+//	BETWEEN_SCRIPTS(20, 20),
+//    
+//    /** vitesse rapide */
+//    FAST(60,60),
+//	
+//    /** vitesse très rapide */
+//	VERY_FAST(100, 100);
+
     
     /** PWM des moteurs lors d'une translation, ce sont ces valeurs qui seront envoyées à la carte d'asserv */
     public int PWMTranslation;

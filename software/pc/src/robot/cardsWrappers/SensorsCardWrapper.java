@@ -5,6 +5,7 @@ import utils.Log;
 import utils.Config;
 import container.Service;
 import enums.SensorNames;
+import exceptions.ConfigPropertyNotFoundException;
 import exceptions.serial.SerialConnexionException;
 
 /**
@@ -44,7 +45,14 @@ public class SensorsCardWrapper implements Service
 	
 	public void updateConfig()
 	{
-		areSensorsActive = Boolean.parseBoolean(config.getProperty("capteurs_on"));
+		try
+		{
+			areSensorsActive = Boolean.parseBoolean(config.getProperty("capteurs_on"));
+		}
+		catch (ConfigPropertyNotFoundException e)
+		{
+    		log.debug("Revoir le code : impossible de trouver la propriété "+e.getPropertyNotFound(), this);
+		}
 	}
 
 	/**
@@ -68,7 +76,7 @@ public class SensorsCardWrapper implements Service
 		catch(SerialConnexionException e)
 		{
 			log.critical("La carte capteurs ne répond pas !", this);
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 			return 3000; // valeur considérée comme infinie
 		}
 
@@ -97,7 +105,7 @@ public class SensorsCardWrapper implements Service
 		catch (SerialConnexionException e)
 		{
 			log.critical(" Problème de communication avec la carte capteurs en essayent de parler au jumper.", this);
-			e.printStackTrace();
+			log.debug( e.logStack(), this);
 			return false;
 		}
     }

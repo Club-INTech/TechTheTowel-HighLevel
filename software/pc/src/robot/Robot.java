@@ -14,9 +14,12 @@ import enums.ObstacleGroups;
 import enums.SensorNames;
 import enums.Speed;
 import enums.UnableToMoveReason;
+import exceptions.ConfigPropertyNotFoundException;
 import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
+import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
+import exceptions.Locomotion.UnexpectedObstacleOnPathException;
 import exceptions.serial.SerialConnexionException;
 import utils.Log;
 import utils.Config;
@@ -70,6 +73,8 @@ public abstract class Robot implements Service
 
 	/** Booleen explicitant si on a un plot dans les machoires mais pas encore dans le tube */
 	private boolean hasNonDigestedPlot=false;
+
+	private float aimThresold = 15;
 	
 	
 	/**
@@ -94,8 +99,16 @@ public abstract class Robot implements Service
 	 */
 	public void updateConfig()
 	{
-		symmetry = config.getProperty("couleur").replaceAll(" ","").equals("jaune");
-        robotRay = Integer.parseInt(config.getProperty("rayon_robot"));
+		try 
+		{
+			symmetry = config.getProperty("couleur").replaceAll(" ","").equals("jaune");
+	        robotRay = Integer.parseInt(config.getProperty("rayon_robot"));
+		}
+	    catch (ConfigPropertyNotFoundException e)
+    	{
+			log.critical( e.logStack(), this);
+    		log.debug("Revoir le code : impossible de trouver la propriété "+e.getPropertyNotFound(), this);;
+    	}
 	}
 
 	/**
@@ -190,6 +203,12 @@ public abstract class Robot implements Service
 	public abstract void setLocomotionSpeed(Speed speed);
 	
 	/**
+	 * Donne la vitesse a laquelle le robot est configurée pour avancer et tourner sur lui-même.
+	 * @return La vitesse du robot configurée actuellement
+	 */
+	public abstract Speed getLocomotionSpeed();
+	
+	/**
 	 * Change dans l'asservissement la position du robot sur la table .
 	 * Après appel de cette méthode, le robot considèrera qu'il se trouve sur la table aux coordonnées fournies.
 	 * Cette fonction n'est pas instantannée, un petit délai (de 300ms) pour que la communication série se fasse est nécéssaire.
@@ -275,7 +294,7 @@ public abstract class Robot implements Service
 	 */
     public void moveLengthwise(int distance) throws UnableToMoveException
     {
-        moveLengthwise(distance, null, false);
+        moveLengthwise(distance, new ArrayList<Hook>(), false);
     }
     
     public abstract void moveLengthwiseWithoutDetection(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException;
@@ -286,6 +305,44 @@ public abstract class Robot implements Service
     	moveLengthwiseWithoutDetection(distance, null, false);
     }
 
+    /**
+	 * Fait avancer le robot de la distance spécifiée. Le robot garde son orientation actuelle et va simplement avancer
+	 * Cette méthode est bloquante: son exécution ne se termine que lorsque le robot a atteint le point d'arrivée
+	 * @param distance en mm que le robot doit franchir
+	 * @param hooksToConsider hooks a considérer lors de ce déplacement. Le hook n'est déclenché que s'il est dans cette liste et que sa condition d'activation est remplie	 
+	 * @param expectsWallImpact true si le robot doit s'attendre a percuter un mur au cours du déplacement. false si la route est sensée être dégagée.
+	 * @param mustDetect vrai si le robot doit detecter les obstacles sur son chemin
+	 * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
+	 */
+	public abstract void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact, Boolean mustDetect) throws UnableToMoveException;
+
+	
+	/**
+	 * Fait avancer le robot de la distance spécifiée. Le robot garde son orientation actuelle et va simplement avancer
+	 * Cette méthode est bloquante: son exécution ne se termine que lorsque le robot a atteint le point d'arrivée
+	 * @param distance en mm que le robot doit franchir
+	 * @param hooksToConsider hooks a considérer lors de ce déplacement. Le hook n'est déclenché que s'il est dans cette liste et que sa condition d'activation est remplie	 
+	 * @param expectsWallImpact true si le robot doit s'attendre a percuter un mur au cours du déplacement. false si la route est sensée être dégagée.
+	 * @param mustDetect vrai si le robot doit detecter les obstacles sur son chemin
+	 * @param speed la vitesse du robot lors de son parcours
+	 * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
+	 */
+	 public abstract void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact, Boolean mustDetect, Speed speed) throws UnableToMoveException;
+	
+	 
+	 /**
+		 * Fait avancer le robot de la distance spécifiée. Le robot garde son orientation actuelle et va simplement avancer
+		 * Cette méthode est bloquante: son exécution ne se termine que lorsque le robot a atteint le point d'arrivée
+		 * @param distance en mm que le robot doit franchir
+		 * @param hooksToConsider hooks a considérer lors de ce déplacement. Le hook n'est déclenché que s'il est dans cette liste et que sa condition d'activation est remplie	 
+		 * @param speed la vitesse du robot lors de son parcours
+		 * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
+		 */
+		 public void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, Speed speed) throws UnableToMoveException
+		 {
+			 moveLengthwise(distance, hooksToConsider, false, true, speed);
+		 }
+	 
 	/**
 	 * Fait avancer le robot de la distance spécifiée. Le robot garde son orientation actuelle et va simplement avancer.
 	 * Attention, cette méthode suppose que l'on est pas sensé percuter un mur.
@@ -311,7 +368,7 @@ public abstract class Robot implements Service
     {
         Speed oldSpeed = speed; 
         setLocomotionSpeed(Speed.SLOW);
-        moveLengthwise(distance, hooksToConsider, true);
+        moveLengthwise(distance, hooksToConsider, true, false);
         setLocomotionSpeed(oldSpeed);
     }
     
@@ -348,29 +405,16 @@ public abstract class Robot implements Service
     {
     	ArrayList<Vec2> path;
     	//si on est jaune on retire les plots verts de la liste des obstacles
-    	if (symmetry)
-    	{
-    		obstaclesNotConsidered.add(ObstacleGroups.GREEN_PLOT_0);
-    		obstaclesNotConsidered.add(ObstacleGroups.GREEN_PLOT_1);
-    		obstaclesNotConsidered.add(ObstacleGroups.GREEN_PLOT_2);
-    		obstaclesNotConsidered.add(ObstacleGroups.GREEN_PLOT_3);
-    		obstaclesNotConsidered.add(ObstacleGroups.GREEN_PLOT_4);
-    		obstaclesNotConsidered.add(ObstacleGroups.GREEN_PLOT_5);
-    		obstaclesNotConsidered.add(ObstacleGroups.GREEN_PLOT_6);
-    		obstaclesNotConsidered.add(ObstacleGroups.GREEN_PLOT_7);
-    	}
-    	//si on est vert on retire les plots jaunes de la liste des obstacles
-    	else
-    	{
-    		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_0);
-    		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_1);
-    		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_2);
-    		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_3);
-    		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_4);
-    		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_5);
-    		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_6);
-    		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_7);
-    	}
+    
+		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_0);
+		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_1);
+		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_2);
+		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_3);
+		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_4);
+		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_5);
+		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_6);
+		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_7);
+    	
     	
     	EnumSet<ObstacleGroups> obstacleConsidered = EnumSet.complementOf(obstaclesNotConsidered);
     	if (obstacleConsidered == null)
@@ -378,7 +422,16 @@ public abstract class Robot implements Service
     		obstacleConsidered = EnumSet.noneOf(ObstacleGroups.class);
     	}
     	
-		path = pathDingDing.computePath(getPosition(),aim.toVec2(),obstacleConsidered);
+    	try 
+    	{
+    		path = pathDingDing.computePath(getPosition(),aim.toVec2(),obstacleConsidered);
+    	}
+    	catch (InObstacleException e)
+    	{
+			log.critical( e.logStack(), this);
+    		log.debug("Probleme en allant en "+aim.toVec2()+" InObstacleException", this);
+    		throw e;
+    	}
 		
     	//retire une distance egale au rayon du cercle au dernier point du chemin (le centre du cercle)
     	
@@ -410,6 +463,9 @@ public abstract class Robot implements Service
     	 */
     	path.add(movementVector.dotFloat( (movementVector.length()-aim.radius)/movementVector.length() ).plusNewVector(precedentPathPoint));
 
+    	//si on est trop proche du point d'arrivee on le retire
+	    	if (path.get(1).distance(getPosition())<aimThresold)
+	    		path.remove(1);
     	
     	try 
     	{
@@ -419,8 +475,9 @@ public abstract class Robot implements Service
     	catch (UnableToMoveException unableToMoveException) 
     	{
 			log.critical("Catch de "+unableToMoveException+" dans moveToCircle" , this);
+			log.critical( unableToMoveException.logStack(), this);
 			actualNumberOfTries=0;
-			recalculate(path.get(path.size()-1), hooksToConsider); // on recalcule le path
+			recalculate(path.get(path.size()-1), hooksToConsider, unableToMoveException.reason); // on recalcule le path
 		}
     }
     
@@ -428,19 +485,32 @@ public abstract class Robot implements Service
      * 	Fonction recalculant le path à suivre, à utiliser pour l'evitement
      * 	Elle s'appelle elle-meme tant qu'on a pas reussi.
      *  Avant d'apeller cette méthode remettre actualNumberOfTries à 0
+     * @param reason TODO
      * 	@throws PathNotFoundException 
      *  @throws InObstacleException lorqsque le robot veut aller dans un obstacle
      */
     
-    public void recalculate(Vec2 aim, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, PathNotFoundException, InObstacleException
+    public void recalculate(Vec2 aim, ArrayList<Hook> hooksToConsider, UnableToMoveReason reason) throws UnableToMoveException, PathNotFoundException, InObstacleException
     {
     	if(actualNumberOfTries < maxNumberTriesRecalculation)
 		{
     		actualNumberOfTries++;
 			try
 			{
+				ArrayList<Vec2> newPath;
 				// On le recaclule, et on essaye de le suivre 
-				ArrayList<Vec2> newPath = pathDingDing.computePath(getPosition(),aim, EnumSet.of(ObstacleGroups.ENNEMY_ROBOTS));
+				
+				try 
+				{
+					 newPath = pathDingDing.computePath(getPosition(),aim, EnumSet.of(ObstacleGroups.ENNEMY_ROBOTS));
+				}
+				catch (InObstacleException e)
+		    	{
+		    		log.debug("Probleme en allant en "+aim+" InObstacleException", this);
+					log.critical( e.logStack(), this);
+		    		throw e;
+		    	}
+				
 				log.debug("Nouveau Path recalculé: "+newPath, this);
 				followPath(newPath , hooksToConsider);
 				//on reinitialise actualNumberOfTries puisque le mouvement a reussi
@@ -450,12 +520,14 @@ public abstract class Robot implements Service
 			{
 				//si cela echoue, on recalcule encore en tenant compte du nouvel obstacle
 				if (unableToMoveException.reason.compareTo(UnableToMoveReason.OBSTACLE_DETECTED)==0)
-					recalculate(unableToMoveException.aim, hooksToConsider);
+					recalculate(unableToMoveException.aim, hooksToConsider, unableToMoveException.reason);
 			}
     	}
     	else // On a depassé le nombre maximal d'essais :
     	{
-			;             
+    		log.debug("Recalculate a depasse son nombre max d'essais, "+maxNumberTriesRecalculation+" lancement de UnableToMoveExeception", this);
+    		log.debug("Raison : "+reason+ " / aim : "+aim, this);
+			throw new UnableToMoveException(aim, reason);       
 		}
     }
     
@@ -469,12 +541,6 @@ public abstract class Robot implements Service
 	 * Active l'asservissement en translation du robot.
 	 */
     public abstract void disableTranslationnalFeedbackLoop();
-
-	
-	public boolean getSymmetry()
-	{
-		return symmetry;
-	}
 
 	public void setMaxNumberTriesRecalculation(int numberOfTries)
 	{
@@ -506,4 +572,5 @@ public abstract class Robot implements Service
 	{
 		return hasNonDigestedPlot;
 	}
+
 }

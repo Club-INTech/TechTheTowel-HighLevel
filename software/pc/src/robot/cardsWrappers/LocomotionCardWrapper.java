@@ -4,6 +4,7 @@ package robot.cardsWrappers;
 import robot.serial.SerialConnexion;
 import utils.*;
 import container.Service;
+import exceptions.ConfigPropertyNotFoundException;
 import exceptions.serial.SerialConnexionException;
 
 /**
@@ -24,15 +25,19 @@ public class LocomotionCardWrapper implements Service
 	 * connexion série avec la carte d'asservissement
 	 */
 	private SerialConnexion locomotionCardSerial;
+	
+	/**
+	 * Le fichier de configuration
+	 */
+	private Config config;
 		
 	/**
 	 *  nombre de miliseconde de tolérance entre la détection d'un patinage et la levée de l'exeption. Trop basse il y aura des faux positifs, trop haute on va forcer dans les murs pendant longtemps
 	 */
-	int blockedTolerancy = 200;//TODO: mettre dans le fichier de config
+	int blockedTolerancy;
 	
 	/**
-	 * 
-	 * Temps d'attentee entre deux envois à la serie en ms
+	 * Temps d'attente entre deux envois à la serie en ms
 	 */
 	
 	private int delayBetweenSend = 100; 
@@ -43,15 +48,25 @@ public class LocomotionCardWrapper implements Service
 	 * Construit la surchouche de la carte d'asservissement
 	 * @param log le système de log ou écrire  
 	 * @param serial la connexion série avec la carte d'asservissement
+	 * @param config 
 	 */
-	public LocomotionCardWrapper(Log log, SerialConnexion serial)
+	public LocomotionCardWrapper(Log log, SerialConnexion serial, Config config)
 	{
 		this.log = log;
 		this.locomotionCardSerial = serial;		
+		this.config = config;
 	}
 	
 	public void updateConfig()
 	{
+		try
+		{
+			blockedTolerancy=(Integer.parseInt(config.getProperty("tolerance_patinage_ms")));
+		} 
+		catch (ConfigPropertyNotFoundException e)
+		{
+			log.debug("Code à revoir  : impossible de ttrouver la propriete "+e.getPropertyNotFound(), this);
+		}
 	}	
 	
 	/** 
@@ -63,7 +78,7 @@ public class LocomotionCardWrapper implements Service
 
 	public boolean isRobotMoving() throws SerialConnexionException
 	{
-	        return isRobotMovingAndAbnormal()[0];       	
+	   return isRobotMovingAndAbnormal()[0];       	
 	}
 	
 	/** 

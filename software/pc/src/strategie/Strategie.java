@@ -7,8 +7,12 @@ import java.util.ArrayList;
 import pathDingDing.PathDingDing;
 import container.Container;
 import container.Service;
+import enums.ActuatorOrder;
 import enums.ScriptNames;
 import enums.ObstacleGroups;
+import enums.Speed;
+import enums.UnableToMoveReason;
+import exceptions.ConfigPropertyNotFoundException;
 import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -56,7 +60,7 @@ public class Strategie implements Service
 	protected Container container;
 	
 	/** Les hooks des deux robots*/
-	ArrayList<Hook> hookRobot;
+	ArrayList<Hook> hookRobot = new ArrayList<Hook>();
 
 	/**
 	 * le prochain script que l'IA executera mis a jour dans takeDecision
@@ -82,6 +86,15 @@ public class Strategie implements Service
 
 	private int matchDuration;
 	
+	/**
+	 * la liste des scripts a executer pour le match scripté
+	 */
+	private ArrayList<AbstractScript> matchScriptArray = new ArrayList<AbstractScript>();
+	/**
+	 * la liste des versions a executer pour le match scripté
+	 */
+	private ArrayList<Integer> matchVersionArray = new ArrayList<Integer>();
+	
 	
 /**
  * Crée la strategie, l'IA decisionnelle
@@ -100,7 +113,8 @@ public class Strategie implements Service
         this.robotReal = state.robot;
         this.scriptmanager = scriptManager;
         this.pathDingDing = trouveurDeChemin;
-        matchDuration = Integer.parseInt(config.getProperty("temps_match"));
+		updateConfig();
+
         robotChrono = new RobotChrono(config, log, pathDingDing);
 	}
 
@@ -108,93 +122,365 @@ public class Strategie implements Service
 	{
 		table.updateConfig();
         robotReal.updateConfig();
+        try
+        {
+            matchDuration = Integer.parseInt(config.getProperty("temps_match"));
+		}
+        catch (ConfigPropertyNotFoundException e)
+        {
+        	log.debug("Revoir le code : impossible de trouver la propriété "+e.getPropertyNotFound(), this);
+		}
+
 	}
 	
 	/**
 	 * on suppose que tout les AX-12 sont initialisés avant de lancer l'IA
+	 * et que la position du robot est la position de depart
 	 */
 	public void IA()
 	{
 		GameState<Robot> gameState = new GameState<Robot>(config, log, table, robotReal);
-		try 
-		{
-			scriptmanager.getScript(ScriptNames.EXIT_START_ZONE).execute(0, gameState, hookRobot);
-		} 
-		catch (UnableToMoveException | SerialConnexionException | SerialFinallyException e1) 
-		{
-			log.critical("impossible de sortir de la zone de depart", this);
-			Sleep.sleep(500);
-			IA();
-			return;
-		}
 		
+		
+		//premier script pour sortir de la zone, on essaye en premier de sortir en deposant les tapis et en recuperant le gobelet
 		try 
 		{
-			scriptedMatch(gameState);
+			scriptmanager.getScript(ScriptNames.DROP_CARPET).execute(2, gameState, hookRobot);
 		} 
-		catch (PathNotFoundException | InObstacleException| UnableToMoveException e1) 
+		catch (UnableToMoveException e)
 		{
-					
-			//tant que le match n'est pas fini, on prend des decisions :
-			while(realGameState.timeEllapsed   <  Integer.parseInt(config.getProperty("temps_match")))
+			// Si on s'est raté mais qu'on est proches, on ajoute le script de depose tapis simplement 
+			if (robotReal.getPosition().distance(Table.entryPosition)<250)
 			{
-				log.debug("======choix script======", this);
-				System.out.println();
-				
-				updateConfig();
-				takeDecision();
-				
-				log.debug("script choisit :"+nextScript.getClass().getName(), this);
-				log.debug("version :"+nextScriptVersion, this);
-				
+				matchScriptArray.add(scriptmanager.getScript(ScriptNames.DROP_CARPET));
+				matchVersionArray.add(0);
+			}
+			
+			// On tente de sortir à tout prix ! On retente tant qu'on a pas reussi
+			while (robotReal.getPosition().distance(Table.entryPosition)<250)
+			{
 				try 
 				{
-					nextScript.goToThenExec(nextScriptVersion, gameState, hookRobot);
+					scriptmanager.getScript(ScriptNames.EXIT_START_ZONE).execute(0, gameState, hookRobot);
 				} 
-				catch (UnableToMoveException | SerialConnexionException
-						| PathNotFoundException | SerialFinallyException | InObstacleException e) 
+				catch (UnableToMoveException | SerialConnexionException | SerialFinallyException e1) 
 				{
-					// FIXME choix de l'IA face a un imprevu
-					e.printStackTrace();
+					log.critical("impossible de sortir de la zone de depart", this);
+					Sleep.sleep(500);
+				}
+			}
+				
+		}
+		catch (SerialConnexionException e) 
+		{		
+			initInMatch();
+		}
+		catch (SerialFinallyException e)
+		{
+			while (true)
+			{
+				try 
+				{	// On lancee le finalize en brute
+					scriptmanager.getScript(ScriptNames.DROP_CARPET).finalize(gameState);
+					break; // sortie du while
+				} 
+				catch (UnableToMoveException | SerialFinallyException e1) 
+				{
+					;
+				}
+			}
+		}
+		
+		
+		// match scripté de l'IA
+		scriptedMatch(gameState);
+					
+		//tant que le match n'est pas fini, on prend des decisions :
+		while(realGameState.timeEllapsed   <  matchDuration )
+		{
+			log.debug("======choix script======", this);
+			System.out.println();
+			
+			updateConfig();
+			takeDecision();
+			
+			log.debug("script choisit :"+nextScript.getClass().getName(), this);
+			log.debug("version :"+nextScriptVersion, this);
+			
+			try 
+			{
+				nextScript.goToThenExec(nextScriptVersion, gameState, hookRobot);
+			} 
+			catch (PathNotFoundException e1)
+			{
+				//un obstacle a été ajouté depuis le calcul de robot chrono donc il faut relancher la prise de decision
+			}
+			catch (UnableToMoveException e1) 
+			{
+				//si le robot se cogne sans detecter l'obstacle
+				if (e1.reason.compareTo(UnableToMoveReason.PHYSICALLY_BLOCKED)==0)
+				{
+					//on ajoute cet obstacle
+					table.getObstacleManager().addObstacle(robotReal.getPosition());
+					//on essaye de se degager
+					int numberOfTry = 0;
+					while (numberOfTry<5)
+					{
+						try
+						{
+							if (robotReal.getIsRobotMovingBackward())
+								robotReal.moveLengthwise(250, hookRobot, false, false);
+							else // si on tourne ou qu'on avancais on recule pour se degager
+								robotReal.moveLengthwise(-250, hookRobot, false, false);
+							break;
+						} 
+						catch (UnableToMoveException e2)
+						{
+							log.warning("impossible de se degager de l'obstacle : tentative n°"+numberOfTry, this);
+							numberOfTry++;
+						}
+					}
+					//qu'on ai reussi ou non a se degager on fait autre chose
+				}
+				//puis on relance la prise de decision
+				
+				//sinon on relance la pise de decision
+			}
+			catch (InObstacleException e1)
+			{
+				//TODO gerer cette exception en cours de match (pas uniquement pour le debug)
+				log.debug("le script "+nextScript.getClass()+"emmet un inObstacleException", this);
+			}
+			catch (SerialConnexionException e1)
+			{
+				initInMatch();
+			}
+			catch (SerialFinallyException e1)
+			{
+				while (true)
+				{
+					try 
+					{
+						nextScript.finalize(gameState);
+						break;
+					} 
+					catch (UnableToMoveException | SerialFinallyException e2) 
+					{
+						log.critical("multiple finalize exceptions", this);
+					}
 				}
 			}
 		}
 	}
 	
-	
-	private void scriptedMatch(GameState<Robot> gameState) throws PathNotFoundException, InObstacleException, UnableToMoveException 
+	/**
+	 * initialize the real robot during a match (because of a SerialConnexionException)
+	 * se relance tant qu'il y a des SerialConnexionException (pour preserver la meca)
+	 */
+	private void initInMatch() 
 	{
-		//FIXME ajouter les scripts ainsi que leur version au match scripté
-		ArrayList<AbstractScript> scriptArray = new ArrayList<AbstractScript>();
-		ArrayList<Integer> versionArray = new ArrayList<Integer>();
+		try 
+		{
+			robotReal.useActuator(ActuatorOrder.ELEVATOR_GROUND, false);
+		} 
+		catch (SerialConnexionException e) 
+		{
+			log.warning("elevator ne reponds pas (ground)", this);
+			initInMatch();
+			return;
+		}
+		
+		try 
+		{
+			robotReal.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
+		} 
+		catch (SerialConnexionException e)
+		{
+			log.warning("le bras gauche ne reponds pas", this);
+			initInMatch();
+			return;
+		}
+		
+		try 
+		{
+			robotReal.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
+		} catch (SerialConnexionException e) 
+		{
+			log.warning("le bras droit ne reponds pas", this);
+			initInMatch();
+			return;
+		}
+		
+		try 
+		{
+			robotReal.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, false);
+		} 
+		catch (SerialConnexionException e) 
+		{
+			log.warning("le guide droit ne reponds pas", this);
+			initInMatch();
+			return;
+		}
+		
+		try 
+		{
+			robotReal.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, false);
+		} 
+		catch (SerialConnexionException e) 
+		{
+			log.warning("le guide gauche ne reponds pas", this);
+			initInMatch();
+			return;
+		}
+		
+		try 
+		{
+			robotReal.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
+		}
+		catch (SerialConnexionException e) 
+		{
+			log.warning("le tapis gauche ne reponds pas", this);
+			initInMatch();
+			return;
+		}
+		
+		try 
+		{
+			robotReal.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
+		}
+		catch (SerialConnexionException e)
+		{
+			log.warning("le tapis droit ne reponds pas", this);
+			initInMatch();
+			return;
+		}
+		
+		try
+		{
+			robotReal.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
+		} 
+		catch (SerialConnexionException e) 
+		{
+			log.warning("le clap gauche ne reponds pas", this);
+			initInMatch();
+			return;
+		}
+		
+		try 
+		{
+			robotReal.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
+		}
+		catch (SerialConnexionException e2) 
+		{
+			log.warning("le clap droit ne reponds pas", this);
+			initInMatch();
+			return;
+		}
+		
+		try
+		{
+			robotReal.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+		} 
+		catch (SerialConnexionException e) 
+		{
+			log.warning("les machoires ne repondent pas", this);
+			initInMatch();
+			return;
+		}
+		
+		try 
+		{
+			robotReal.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+		}
+		catch (SerialConnexionException e) 
+		{
+			log.warning("elevator ne reponds pas (low)", this);
+			initInMatch();
+			return;
+		}
+		
+		robotReal.setLocomotionSpeed(Speed.SLOW);
+	}
 
+	/**
+	 * 	Lance le match scripté de l'IA, suite de scripts
+	 * @param gameState l'etat de la table
+	 */
+	private void scriptedMatch(GameState<Robot> gameState)
+	{
+		if(! gameState.table.getIsLeftCarpetDropped() || !gameState.table.getIsRightCarpetDropped())
+		{
+			matchScriptArray.add(scriptmanager.getScript(ScriptNames.DROP_CARPET));
+			matchVersionArray.add(1);
+		}
+		 
+		matchScriptArray.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
+		matchVersionArray.add(2);
 		
-		scriptArray.add(scriptmanager.getScript(ScriptNames.DROP_CARPET));
-		versionArray.add(1);
+		matchScriptArray.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
+		matchVersionArray.add(34);
 		
-		scriptArray.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
-		versionArray.add(2);
+		matchScriptArray.add(scriptmanager.getScript(ScriptNames.CLOSE_CLAP));
+		matchVersionArray.add(-12);
 		
-		scriptArray.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
-		versionArray.add(34);
+		matchScriptArray.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
+		matchVersionArray.add(1);
 		
-		scriptArray.add(scriptmanager.getScript(ScriptNames.CLOSE_CLAP));
-		versionArray.add(-12);
+		matchScriptArray.add(scriptmanager.getScript(ScriptNames.FREE_STACK));
+		matchVersionArray.add(0);
 		
-		scriptArray.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
-		versionArray.add(1);
+		matchScriptArray.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
+		matchVersionArray.add(56);
 		
-		scriptArray.add(scriptmanager.getScript(ScriptNames.FREE_STACK));
-		versionArray.add(0);
+		matchScriptArray.add(scriptmanager.getScript(ScriptNames.FREE_STACK));
+		matchVersionArray.add(2);
 		
-		
-		while(!scriptArray.isEmpty())
+		// tant qu'on a pas tout fait
+		while(!matchScriptArray.isEmpty())
 		{
 			try 
 			{
-				scriptArray.get(0).goToThenExec(versionArray.get(0), gameState, hookRobot);
-				scriptArray.remove(0);
-				versionArray.remove(0);
+				boolean tryAgain = true;
+				while (tryAgain)
+				{
+					try 
+					{
+						matchScriptArray.get(0).goToThenExec(matchVersionArray.get(0), gameState, hookRobot);
+						tryAgain = false;
+					}
+					catch (UnableToMoveException e) 
+					{
+						if (e.reason.compareTo(UnableToMoveReason.PHYSICALLY_BLOCKED)==0)
+						{
+							//FIXME degager (ne pas bouger tryAgain)
+						}
+					} 
+					catch (PathNotFoundException e) 
+					{
+						//on ajoute le script dans le tableau un peu plus loin
+						matchScriptArray.add(Math.max(0,matchScriptArray.size()-4), matchScriptArray.get(0));
+						matchVersionArray.add(Math.max(0,matchVersionArray.size()-4), matchVersionArray.get(0));
+						//et on abandonne le script pour le moment
+						tryAgain = false;
+					} 
+					catch (InObstacleException e) 
+					{
+						for (ObstacleGroups obstacle : e.getObstacleGroup())
+						{
+							log.warning("attention, obstacle : "+obstacle.getClass(),this);
+							if(obstacle.compareTo(ObstacleGroups.ENNEMY_ROBOTS)==0)
+							{
+								//on ajoute le script dans le tableau un peu plus loin
+								matchScriptArray.add(Math.max(0,matchScriptArray.size()-4), matchScriptArray.get(0));
+								matchVersionArray.add(Math.max(0,matchVersionArray.size()-4), matchVersionArray.get(0));
+								//et on abandonne le script pour le moment
+								tryAgain = false;
+							} // FIXME reflechir si il n'y a aucun robot ennemi bloquant
+						}
+					}
+				}
+				matchScriptArray.remove(0);
+				matchVersionArray.remove(0);
 			}
 			catch (IndexOutOfBoundsException e)
 			{
@@ -209,15 +495,16 @@ public class Strategie implements Service
 					gameState.robot.sleep(3000);
 					try 
 					{
-						scriptArray.get(0).finalize(gameState);
+						matchScriptArray.get(0).finalize(gameState);
+						break;
 					} 
 					catch (IndexOutOfBoundsException e1)
 					{
 						log.debug("out of bound, IA's scripted match", this);
 						//on ajoute le script de depart pour lancer son finalize (puisqu'il n'y avait pas de script prevu apres c'est pas grave)
-						scriptArray.add(scriptmanager.getScript(ScriptNames.EXIT_START_ZONE));
+						matchScriptArray.add(scriptmanager.getScript(ScriptNames.EXIT_START_ZONE));
 					}
-					catch (SerialFinallyException e1)
+					catch (SerialFinallyException | UnableToMoveException e1)
 					{
 						log.critical("enchainement de SerialFinallyException", this);
 					}

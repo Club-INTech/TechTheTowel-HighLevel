@@ -13,7 +13,9 @@ import enums.ActuatorOrder;
 import enums.ObstacleGroups;
 import enums.SensorNames;
 import enums.Speed;
+import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
+import exceptions.Locomotion.UnexpectedObstacleOnPathException;
 
 /**
  * Robot virtuel ne faisant pas bouger le robot réel, mais détermine la durée des actions.
@@ -110,20 +112,44 @@ public class RobotChrono extends Robot
 		this.chrono += approximateSerialLatency;
 	}
 
+
+	
 	@Override
-    public void moveLengthwise(int distance, ArrayList<Hook> hooks, boolean mur) throws UnableToMoveException
+	 public void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact, Boolean mustDetect, Speed newSpeed) throws UnableToMoveException
+	 {
+		// prsise en considération de la latence de la liaison série
+				this.chrono += approximateSerialLatency;
+				
+				// rajoute au compteur le temps de trajet
+				chrono += Math.abs(distance)*newSpeed.invertedTranslationnalSpeed;
+
+				// déplace le robot virtuel
+				position.plus( new Vec2( 	(int)(distance*Math.cos(orientation)),
+											(int)(distance*Math.sin(orientation))  ) 
+							 );
+	 }
+	
+	@Override
+	public void moveLengthwise(int distance, ArrayList<Hook> hooks, boolean mur) throws UnableToMoveException
 	{
-
-    	// prsise en considération de la latence de la liaison série
-		this.chrono += approximateSerialLatency;
+		moveLengthwise(distance, hooks, mur, true);
+	}
+	
+	@Override
+	public void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact, Boolean mustDetect) throws UnableToMoveException
+	{
+		Speed newSpeed = Speed.SLOW;
 		
-		// rajoute au compteur le temps de trajet
-		chrono += Math.abs(distance)*speed.invertedTranslationnalSpeed;
-
-		// déplace le robot virtuel
-		position.plus( new Vec2( 	(int)(distance*Math.cos(orientation)),
-									(int)(distance*Math.sin(orientation))  ) 
-					 );
+		/*
+    	if (distance<150)
+    		newSpeed = Speed.SLOW;
+    	else if (distance <1000)
+    		newSpeed = Speed.BETWEEN_SCRIPTS_SLOW;
+    	else
+    		newSpeed = Speed.BETWEEN_SCRIPTS;
+    	*/
+    	
+		moveLengthwise(distance, hooksToConsider, expectsWallImpact, mustDetect, newSpeed);
 	}
 	
     protected void followPath(ArrayList<Vec2> path, ArrayList<Hook> hooks, DirectionStrategy direction) throws UnableToMoveException
@@ -288,9 +314,15 @@ public class RobotChrono extends Robot
 	}
 
 	@Override
-	public void turnWithoutDetection(double angle, ArrayList<Hook> hooks) {
-		// TODO Auto-generated method stub
-		
+	public void turnWithoutDetection(double angle, ArrayList<Hook> hooks) throws UnableToMoveException 
+	{
+		turn(angle);		
+	}
+
+	@Override
+	public Speed getLocomotionSpeed() {
+
+		return null;
 	}
 
 }

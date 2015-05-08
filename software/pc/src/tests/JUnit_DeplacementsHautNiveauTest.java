@@ -170,7 +170,7 @@ public class JUnit_DeplacementsHautNiveauTest extends JUnit_Test
         */
     	while(true)
     	{
-            robot.moveLengthwise(100, null, false);
+            robot.moveLengthwise(100, new ArrayList<Hook>(), false, false);
             Sleep.sleep(500);
     	}
     }

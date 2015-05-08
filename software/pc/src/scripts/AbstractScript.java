@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 
 import smartMath.Circle;
+import smartMath.Vec2;
 import strategie.GameState;
 import robot.Robot;
 import utils.Log;
@@ -53,10 +54,10 @@ public abstract class AbstractScript implements Service
 	}	
 	
 	/**
-	 * IMPORTANT : Tout les scripts voulant retirer des obstacles particuliers lors du calcul de chemin doivent reecrire cette methode et retirer ces obstacles dans leur propre calcul du pathfinding
-	 * (on suppose qu'on prends en compte tout les obstacles hors plots adverses)
 	 * Va au point d'entrée du script (en utilisant le Pathfinding), puis l'exécute
 	 * En fournissant un GameState<RobotChrono>, il est possible de chronométrer le temps que l'on metterait a exécuter ce script sans réellement l'exécuter
+	 * IMPORTANT : Tout les scripts voulant retirer des obstacles particuliers lors du calcul de chemin doivent reecrire cette methode et retirer ces obstacles dans leur propre calcul du pathfinding
+	 * (on suppose qu'on prends en compte tout les obstacles hors plots adverses)
 	 *
 	 * @param versionToExecute la version du
 	 * @param actualState l'état courrant du match.
@@ -89,7 +90,16 @@ public abstract class AbstractScript implements Service
 	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, ArrayList<Hook> hooksToConsider, EnumSet<ObstacleGroups> enumObstacle) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, InObstacleException
 	{
 		// va jusqu'au point d'entrée de la version demandée
-		actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.robotRay), hooksToConsider, actualState.table, enumObstacle);
+		try 
+		{
+			actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.robotRay, actualState.robot.getPosition()), hooksToConsider, actualState.table, enumObstacle);
+		}
+		catch (UnableToMoveException | InObstacleException | PathNotFoundException e)
+		{
+			log.debug("Catch de "+e+" Impossible de goToThenExec : abandon d'exec, throw de "+e, this);
+			throw e;
+		}
+		
 		
 		// exécute la version demandée
 		execute(versionToExecute, actualState, hooksToConsider);
@@ -122,10 +132,11 @@ public abstract class AbstractScript implements Service
 	 * Retourne la position d'entrée associée à la version.
 	 *
 	 * @param version version dont on veut le point d'entrée
+	 * @param robotPosition la position du robot actuelle
 	 * @param la taille du robot
 	 * @return la position du point d'entrée
 	 */
-	public abstract Circle entryPosition(int version, int ray);
+	public abstract Circle entryPosition(int version, int ray, Vec2 robotPosition);
 	
 	/**
 	 * Méthode toujours appelée à la fin du script via un finally. On des donc certain  que son exécution aura lieu.

@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.Assert;
 
+import enums.ActuatorOrder;
 import enums.ObstacleGroups;
 import enums.SensorNames;
 import enums.ServiceNames;
@@ -31,7 +32,6 @@ import utils.Sleep;
 
 /**
  * Test des capteurs : les obstacles doivent être détectés
- * TODO : comprendre l'utilité du test desactivation_capteur et faux_test.
  *
  * @author marsu
  */
@@ -77,6 +77,7 @@ public class JUnit_Sensors extends JUnit_Test
 
 	/**
 	 * Desactivation_capteur.
+	 * verifie que la desactivation des capteurs avants est efficace
 	 *
 	 * @throws Exception the exception
 	 */
@@ -140,17 +141,27 @@ public class JUnit_Sensors extends JUnit_Test
 		try 
 		{	
 			state.robot.moveLengthwise(500);
+			state.robot.turn(Math.PI/2);
 		} 
 		catch (UnableToMoveException e) 
 		{
-			log.critical("!!!!!! Catch de"+e+" dans testWithoutDetecting !!!!!!" , this);;
+			log.critical( e.logStack(), this);
 		}
+		
+		while(true)
+			;
 	}
 	
 	//@Test
 	public void testDetectionTournante()
 	{
 		log.debug("Test d'évitement", this);
+		
+		try {
+			state.robot.moveLengthwise(250);
+		} catch (UnableToMoveException e) {
+			log.critical( e.logStack(), this);
+		}
 		
 		while(true)
 		{
@@ -167,7 +178,7 @@ public class JUnit_Sensors extends JUnit_Test
 			} 
 			catch (UnableToMoveException e1)
 			{
-				log.critical("!!!!! Catch de"+e1+" dans testDetectionTournante !!!!!" , this);
+				log.critical( e1.logStack(), this);
 			}
 		}
 	}
@@ -183,7 +194,7 @@ public class JUnit_Sensors extends JUnit_Test
 		} 
 		catch (UnableToMoveException e1)
 		{
-			log.critical("!!!!! Catch de"+e1+" dans testDetectionTournante !!!!!" , this);
+			log.critical( e1.logStack(), this);
 		}
 		while (true)
 		{
@@ -191,9 +202,54 @@ public class JUnit_Sensors extends JUnit_Test
 		}
 	}
 	
-
+	//@Test
+	public void testMoveForwardBackward()
+	{
 		
-	@Test
+		try 
+		{
+			state.robot.moveLengthwiseWithoutDetection(500);
+		} 
+		catch (UnableToMoveException e1)
+		{
+			log.critical( e1.logStack(), this);
+		}
+		while (true)
+		{
+			try 
+			{
+				state.robot.moveLengthwiseWithoutDetection(500);
+				state.robot.moveLengthwiseWithoutDetection(-500);
+			} 
+			catch (UnableToMoveException e1)
+			{
+				log.critical( e1.logStack(), this);
+			}
+		}
+	}
+	
+
+	@Test 
+	public void testContactGlasses()
+	{
+		try 
+		{
+			state.robot.useActuator(ActuatorOrder.ARM_LEFT_MIDDLE, false);
+			state.robot.useActuator(ActuatorOrder.ARM_RIGHT_MIDDLE, false);
+		} 
+		catch (Exception e) 
+		{
+			;		
+		}
+
+		while(true)
+		{
+			log.debug("Gauche : "+state.robot.isGlassStoredLeft+" | Droit : "+state.robot.isGlassStoredRight, this);
+			state.robot.sleep(50);
+		}
+	}
+		
+	//@Test
 	public void testCapteurFixe()
 	{
 		log.debug("Test d'évitement fixe", this);
@@ -201,7 +257,7 @@ public class JUnit_Sensors extends JUnit_Test
 		{
 			try
 			{
-				mLocomotion.detectEnemy(true, false, state.robot.getPosition());
+				mLocomotion.detectEnemyInDisk(true, false, state.robot.getPosition());
 			}
 			catch (UnexpectedObstacleOnPathException unexpectedObstacle)
 	        {
@@ -213,12 +269,12 @@ public class JUnit_Sensors extends JUnit_Test
             	{
             		try
             		{
-            			mLocomotion.detectEnemy(true, false, state.robot.getPosition());
+            			mLocomotion.detectEnemyInDisk(true, false, state.robot.getPosition());
             			break;
             		}
             		catch(UnexpectedObstacleOnPathException e2)
             		{
-                        log.critical("Catch de "+e2+" dans moveToPointException", this);
+            			log.critical( e2.logStack(), this);
             		}
             	}
 			}
@@ -236,7 +292,7 @@ public class JUnit_Sensors extends JUnit_Test
 		} 
     	catch (UnableToMoveException e2) 
     	{
-			e2.printStackTrace();
+    		log.critical( e2.logStack(), this);
 		}
 		log.debug("Test d'évitement", this);
 		Random rand = new Random();
@@ -266,7 +322,10 @@ public class JUnit_Sensors extends JUnit_Test
     	}
 	}
 
-	
+	/**
+	 * le thread principal ne se deplace pas mais les capterus sont ON donc on detecte les ennemis
+	 * @throws Exception
+	 */
     //@Test
     public void faux_test() throws Exception
     {

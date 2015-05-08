@@ -8,18 +8,20 @@ import java.io.StringWriter;
  * @author Etienne
  *
  */
-public class PathNotFoundException extends Exception
+public class ConfigPropertyNotFoundException extends Exception
 {
 	private static final long serialVersionUID = -7968975910907981869L;
+	private String nameOfProperty;
 	
-	public PathNotFoundException()
-	{
-		super();
-	}
-	
-	public PathNotFoundException(String m)
+	public ConfigPropertyNotFoundException(String m)
 	{
 		super(m);
+		nameOfProperty=m;
+	}
+	
+	public String getPropertyNotFound()
+	{
+		return nameOfProperty;
 	}
 	
 	public String logStack()
@@ -32,5 +34,4 @@ public class PathNotFoundException extends Exception
 		
 		return exceptionAsString;
 	}
-
 }

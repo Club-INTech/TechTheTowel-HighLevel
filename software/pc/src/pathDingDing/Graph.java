@@ -2,11 +2,13 @@ package pathDingDing;
 
 import smartMath.*;
 import table.Table;
+import utils.Log;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
 
 import enums.ObstacleGroups;
+import exceptions.ConfigPropertyNotFoundException;
 
 /**
  * graphe definissant les liens entre les noeuds
@@ -21,13 +23,17 @@ public class Graph
 	public ArrayList<Area> mAreas; // TODO : private (utilise par graphics)
 	private Table mTable;
 	private EnumSet<ObstacleGroups> mObstaclesToConsider;
+    private Log mLog;
+    
+    private int robotRadius;
 	
-	public Graph(Table table, EnumSet<ObstacleGroups> obstaclesToConsider)
+	public Graph(Table table, EnumSet<ObstacleGroups> obstaclesToConsider, Log log)
 	{
 		mNodes = new ArrayList<Node>();
 		mAreas = new ArrayList<Area>();
 		mTable = table;
 		mObstaclesToConsider = obstaclesToConsider;
+		mLog=log;
 		buildGraph();
 	}
 	
@@ -36,7 +42,7 @@ public class Graph
 	 */
 	private void buildGraph()
 	{
-		int robotRadius = Integer.parseInt(mTable.getConfig().getProperty("rayon_robot"));
+		updateConfig();
 		//ajout des noeuds fixes
 		mNodes.add(new Node(-1100 + robotRadius, 1222 + robotRadius));//noeud 0
 		mNodes.add(new Node(-1100 + robotRadius, 778 - robotRadius));//noeud 1
@@ -260,8 +266,7 @@ public class Graph
      * @param position
      * @return les groupes d'obstacles dans lesquels est le point, en y ajoutant le rayon du robot
      */
-    //TODO : trouver un meilleur nom?
-    public EnumSet<ObstacleGroups> obstacleGroupsInPosition(Vec2 position)
+    public EnumSet<ObstacleGroups> obstacleGroupsInThePosition(Vec2 position)
     {
     	EnumSet<ObstacleGroups> obstacleGroups = EnumSet.noneOf(ObstacleGroups.class);
     	for(int i = 0; i < mTable.getObstacleManager().getMobileObstacles().size(); i++)
@@ -269,6 +274,7 @@ public class Graph
 			 + (position.y - mTable.getObstacleManager().getMobileObstacles().get(i).getPosition().y)*(position.y - mTable.getObstacleManager().getMobileObstacles().get(i).getPosition().y)
 			 < (mTable.getObstacleManager().getMobileObstacles().get(i).getRadius() + mTable.getObstacleManager().getRobotRadius())*(mTable.getObstacleManager().getMobileObstacles().get(i).getRadius() + mTable.getObstacleManager().getRobotRadius()))
 			{
+				mLog.debug("Obstacle posant probleme : "+mTable.getObstacleManager().getMobileObstacles().get(i).getPosition(),mTable);
 				obstacleGroups.add(mTable.getObstacleManager().getMobileObstacles().get(i).getObstacleGroup());
 				break;
 			}
@@ -276,7 +282,10 @@ public class Graph
 			if((position.x - mTable.getObstacleManager().getFixedObstacles().get(i).getPosition().x)*(position.x - mTable.getObstacleManager().getFixedObstacles().get(i).getPosition().x)
 					 + (position.y - mTable.getObstacleManager().getFixedObstacles().get(i).getPosition().y)*(position.y - mTable.getObstacleManager().getFixedObstacles().get(i).getPosition().y)
 					 < (mTable.getObstacleManager().getFixedObstacles().get(i).getRadius() + mTable.getObstacleManager().getRobotRadius())*(mTable.getObstacleManager().getFixedObstacles().get(i).getRadius() + mTable.getObstacleManager().getRobotRadius()))
+			{
+				mLog.debug("Obstacle posant probleme : "+mTable.getObstacleManager().getFixedObstacles().get(i).getPosition(),mTable);
 				obstacleGroups.add(mTable.getObstacleManager().getFixedObstacles().get(i).getObstacleGroup());
+			}
     	return obstacleGroups;
     }
 	
@@ -296,5 +305,17 @@ public class Graph
 			}
 		}
 		return closestNode;
+	}
+	
+	public void updateConfig()
+	{
+		try 
+		{
+			robotRadius = Integer.parseInt(mTable.getConfig().getProperty("rayon_robot"));
+		}
+	    catch (ConfigPropertyNotFoundException e)
+    	{
+	    	mTable.getLog().debug("Revoir le code : propriete non trouvee "+e.getPropertyNotFound(), this);;
+    	}
 	}
 }

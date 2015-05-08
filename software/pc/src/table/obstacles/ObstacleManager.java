@@ -5,7 +5,9 @@ import java.util.EnumSet;
 
 import com.sun.org.apache.xpath.internal.axes.OneStepIterator;
 
+import enums.Direction;
 import enums.ObstacleGroups;
+import exceptions.ConfigPropertyNotFoundException;
 import pathDingDing.PathDingDing;
 import smartMath.*;
 import utils.Log;
@@ -62,9 +64,8 @@ public class ObstacleManager
         mLines = new ArrayList<Segment>();
 		mRectangles = new ArrayList<ObstacleRectangular>();
 		
-        mRobotRadius = Integer.parseInt(config.getProperty("rayon_robot"));
-        defaultObstacleRadius = Integer.parseInt(config.getProperty("rayon_robot_adverse"));
-        
+		updateConfig();
+       
         //par defaut
         //mEnnemyRobot1 = new ObstacleCircular(new Vec2(0, 0), 200 + robotRadius);
       	//mEnnemyRobot2 = new ObstacleCircular(new Vec2(0, 0), 200 + robotRadius);
@@ -137,10 +138,7 @@ public class ObstacleManager
 	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-1250, 250), 48, ObstacleGroups.GOBLET_4));
 	    
       	//la zone ennemie
-	    if(config.getProperty("couleur").equals("jaune"))
-	    	mFixedObstacles.add(new ObstacleCircular(new Vec2(1100, 1000), 200, ObstacleGroups.ENNEMY_ZONE));
-	    else
-	    	mFixedObstacles.add(new ObstacleCircular(new Vec2(-1100, 1000), 200, ObstacleGroups.ENNEMY_ZONE));
+	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-1100, 1000), 200, ObstacleGroups.ENNEMY_ZONE));
     }    
 
     /**
@@ -199,7 +197,6 @@ public class ObstacleManager
 	}
 	
 	/**
-	 * 
 	 * @return la liste des rectangles formant les obstacles rectangulaires
 	 */
 	public ArrayList<ObstacleRectangular> getRectangles()
@@ -235,15 +232,17 @@ public class ObstacleManager
       */
     public synchronized void addObstacle(final Vec2 position, final int radius)
     {
-    	//si la position est dans la table on continue les tests
-    	if (position.x>-1500-radius && position.x<1500+radius && position.y>0-radius && position.y<2000+radius)
+    	//si la position est dans la table on continue les tests 
+    	// si la position est dans notre zone de depart, ca ne peut etre qu'une main 
+    	if (position.x>-1500 && position.x<1500 && position.y>0 && position.y<2000 //la table
+    		&& !(position.x>1200 && position.y<1200 && position.y>800) //notre position de depart
+    		&& !(position.y > 1420 && position.x < 533 && position.x > -533)) // les marches
     	{
     		/*on ne test pas si la position est dans un obstcle deja existant 
     		 *on ne detecte pas les plots ni les goblets (et si on les detectes on prefere ne pas prendre le risque et on les evites)
     		 * et si on detecte une deuxieme fois l'ennemi on rajoute un obstacle sur lui
     		 */
     		mMobileObstacles.add(new ObstacleProximity(position, radius, ObstacleGroups.ENNEMY_ROBOTS));
-    		log.debug("Ennemi ajouté en "+position.x+";"+position.y, this);
     	}
     	else
     	{
@@ -285,13 +284,50 @@ public class ObstacleManager
     			 + (discCenter.y-mMobileObstacles.get(i).getPosition().y)*(discCenter.y-mMobileObstacles.get(i).getPosition().y))
     		{
     			log.debug("Disque obstructed avec l'obstacle "+mMobileObstacles.get(i).getPosition()+"de rayon"+mMobileObstacles.get(i).radius, this);
-    			log.debug("Disque en "+discCenter+"de rayon"+radius, this);
+    			log.debug("Disque en "+discCenter+" de rayon "+radius, this);
     			isDiscObstructed=true;
     			
     		}
     	}
     	return isDiscObstructed;
     }  
+
+    /**
+     * retourne la distance à l'ennemi le plus proche (en mm)
+     * Les ennemis ne sont pris en compte que si ils sont dans la direstion donnée, a 90° près
+     * si l'ennemi le plus proche est tangent à notre robot, ou plus proche, on retourne 0
+     * @param position la position a laquelle on doit mesurer la proximité des ennemis
+     * @param direction direction selon laquelle on doit prendre en compte les ennemis
+     * @return la distance à l'ennemi le plus proche (>= 0)
+     */
+    public synchronized int distanceToClosestEnemy(Vec2 position, Vec2 direction)
+    {
+    	//si aucun ennemi n'est détecté, on suppose que l'ennemi le plus proche est à 1m)
+    	if(mMobileObstacles.size() == 0)
+    		return 1000;
+    	
+    	int squaredDistanceToClosestEnemy = 10000000;
+    	
+    	int indexOfClosestEnnemy = 0;
+    	for(int i=0; i<mMobileObstacles.size(); i++)
+    	{
+    		Vec2 ennemyRelativeCoords = new Vec2((mMobileObstacles.get(i).position.x - position.x), mMobileObstacles.get(i).position.y - position.y);
+    		if(direction.dot(ennemyRelativeCoords) > 0)
+    		{
+	    		int squaredDistanceToEnemy = ennemyRelativeCoords.squaredLength(); 
+	    		if(squaredDistanceToEnemy < squaredDistanceToClosestEnemy)
+	    		{
+	    			squaredDistanceToClosestEnemy = squaredDistanceToEnemy;
+	    			indexOfClosestEnnemy = i;
+	    		}
+    		}
+    	}
+    	if(squaredDistanceToClosestEnemy <= 0)
+    		return 0;
+    	
+		log.debug("Position de l'ennemi le plus proche proche d'après distanceToClosestEnnemy: "+mMobileObstacles.get(indexOfClosestEnnemy).getPosition(), this);
+    	return (int)Math.sqrt((double)squaredDistanceToClosestEnemy) - mRobotRadius - mMobileObstacles.get(indexOfClosestEnnemy).radius;
+    }
 
     /**
      * Change le position d'un robot adverse.
@@ -310,6 +346,7 @@ public class ObstacleManager
     /**
      * Utilis� par le thread de stratégie. (pas implemente : NE PAS UTILISER!!!)
      * renvoie la position du robot ennemi voulu sur la table.
+     * @param ennemyID l'ennemi dont on veut la position
      *
      * @return la position de l'ennemi spécifié
      */
@@ -381,8 +418,7 @@ public class ObstacleManager
      * @param position
      * @return les groupes d'obstacles dans lesquels est le point
      */
-    //TODO : trouver un meilleur nom?
-    public EnumSet<ObstacleGroups> obstacleGroupsInPosition(Vec2 position)
+    public EnumSet<ObstacleGroups> obstacleGroupsInThePosition(Vec2 position)
     {
     	EnumSet<ObstacleGroups> obstacleGroups = EnumSet.noneOf(ObstacleGroups.class);
     	for(int i = 0; i < mMobileObstacles.size(); i++)
@@ -494,6 +530,21 @@ public class ObstacleManager
     }
     
     /**
+     *  On enleve les obstacles qui sont en confrontation avec nous :
+     *  Cela evite de se retrouver dans un obstacle
+     */
+    public void removeObstacleInUs(Vec2 position)
+    {
+    	for(int i=0; i<mMobileObstacles.size(); i++)
+    	{ 
+    		if( (   (position.x-mMobileObstacles.get(i).getPosition().x)*(position.x-mMobileObstacles.get(i).getPosition().x)
+    	    	+   (position.y-mMobileObstacles.get(i).getPosition().y)*(position.y-mMobileObstacles.get(i).getPosition().y) ) 
+    	    	<=( (mRobotRadius+mMobileObstacles.get(i).radius)*(mRobotRadius+mMobileObstacles.get(i).radius)) ) 	    	
+    			mMobileObstacles.remove(mMobileObstacles.get(i));
+    	}
+    }
+    
+    /**
      * supprime les obstacles fixes dans le disque
      * 
      * @param position
@@ -504,7 +555,7 @@ public class ObstacleManager
     	for(int i=0; i<mFixedObstacles.size(); i++)
     		if((position.x-mFixedObstacles.get(i).getPosition().x)*(position.x-mFixedObstacles.get(i).getPosition().x)
     		 + (position.y-mFixedObstacles.get(i).getPosition().y)*(position.y-mFixedObstacles.get(i).getPosition().y)
-    		 <= radius*radius)
+    		 <= mRobotRadius*mRobotRadius)
     			mFixedObstacles.remove(mFixedObstacles.get(i));
     }
     
@@ -513,4 +564,17 @@ public class ObstacleManager
     	for(int i=0; i<mFixedObstacles.size(); i++)
     		mFixedObstacles.get(i).printObstacleMemory();
     }
+    
+    public void updateConfig()
+	{
+		try 
+		{
+			mRobotRadius = Integer.parseInt(config.getProperty("rayon_robot"));
+		    defaultObstacleRadius = Integer.parseInt(config.getProperty("rayon_robot_adverse"));
+		}
+	    catch (ConfigPropertyNotFoundException e)
+    	{
+    		log.debug("Revoir le code : impossible de trouver la propriété "+e.getPropertyNotFound(), this);;
+    	}
+	}
 }

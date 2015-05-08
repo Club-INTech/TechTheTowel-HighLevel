@@ -132,7 +132,8 @@ public class Container
 		else if(serviceRequested == ServiceNames.LOCOMOTION_CARD_WRAPPER)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new LocomotionCardWrapper(
 																	(Log)getService(ServiceNames.LOG),
-																	(SerialConnexion)getService(ServiceNames.STM_CARD)
+																	(SerialConnexion)getService(ServiceNames.STM_CARD),
+																	(Config)getService(ServiceNames.CONFIG)
 																);
 		else if(serviceRequested == ServiceNames.SENSORS_CARD_WRAPPER)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new SensorsCardWrapper(
@@ -227,7 +228,8 @@ public class Container
 																);
 		else if(serviceRequested == ServiceNames.PATHDINGDING)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new PathDingDing(
-																	(Table)getService(ServiceNames.TABLE)
+																	(Table)getService(ServiceNames.TABLE),
+																	(Log)getService(ServiceNames.LOG)
 																);
 		
 		// si le service demandé n'est pas connu, alors on log une erreur.

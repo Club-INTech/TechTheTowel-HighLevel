@@ -1,8 +1,12 @@
 package scripts;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
 import enums.ActuatorOrder;
+import enums.ObstacleGroups;
+import exceptions.InObstacleException;
+import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
@@ -10,6 +14,7 @@ import hook.Hook;
 import hook.types.HookFactory;
 import robot.Robot;
 import smartMath.Circle;
+import smartMath.Vec2;
 import strategie.GameState;
 import utils.Config;
 import utils.Log;
@@ -80,7 +85,7 @@ public class TakeTennisBall extends AbstractScript
 	}
 	
 	@Override
-	public Circle entryPosition(int id, int ray) 
+	public Circle entryPosition(int id, int ray, Vec2 robotPosition) 
 	{
 		if(id==1)
 				return new Circle(-830,1000,0); //1500-400-270

@@ -59,7 +59,7 @@ public class JUnit_Hooks extends JUnit_Test
 		} 
 		catch (SerialConnexionException e) 
 		{
-			e.printStackTrace();
+			log.debug( e.logStack(), this);
 		}		
 	}
 
@@ -96,7 +96,7 @@ public class JUnit_Hooks extends JUnit_Test
 		}
 		catch (UnableToMoveException e) 
 		{
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 		}		
 		System.out.println("match fini !");
 
@@ -144,7 +144,7 @@ public class JUnit_Hooks extends JUnit_Test
 			real_state.robot.moveLengthwise(1500, testHookList);
 		} 
 		catch (UnableToMoveException e) {
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 		}
 	}
 	
@@ -187,7 +187,7 @@ public class JUnit_Hooks extends JUnit_Test
 		}
 		catch (UnableToMoveException e) 
 		{
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 		}		
 		System.out.println("match fini !");
 
@@ -232,7 +232,7 @@ public class JUnit_Hooks extends JUnit_Test
 		}
 		catch (UnableToMoveException e) 
 		{
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 		}		
 		System.out.println("match fini !");
 

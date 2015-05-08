@@ -55,7 +55,7 @@ public class JUnit_TennisBall extends JUnit_Test
 		} 
 		catch (SerialConnexionException e) 
 		{
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 		}		
 	}
 	
@@ -124,13 +124,13 @@ public class JUnit_TennisBall extends JUnit_Test
 		catch (SerialConnexionException  e) 
 		{
 			System.out.println("CRITICAL : Carte mal branchée. Match termine");
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 			return;
 		}
 		catch (UnableToMoveException e) 
 		{
 			System.out.println("CRITICAL : Chemin bloque, enlevez votre main");
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 		}
 		
 		//debut du match

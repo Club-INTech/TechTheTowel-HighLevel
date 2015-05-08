@@ -9,6 +9,7 @@ import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialFinallyException;
 import robot.Robot;
 import smartMath.Circle;
+import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
 import utils.Config;
@@ -30,13 +31,13 @@ public class ExitBeginZone extends AbstractScript
 	}
 
 	@Override
-	public Circle entryPosition(int id, int ray)
+	public Circle entryPosition(int id, int ray, Vec2 robotPosition)
 	{
 		return new Circle(Table.entryPosition);
 	}
 	
 	@Override
-	public void execute (int id_version, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider) throws SerialFinallyException
+	public void execute (int id_version, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider) throws SerialFinallyException, UnableToMoveException
 	{
 		try
 		{
@@ -47,6 +48,7 @@ public class ExitBeginZone extends AbstractScript
 		{
 			log.critical("erreur ExitBeginZone script : impossible de sortir de la zone de depart\n", this);
 			finalize(stateToConsider);
+			throw e;
 		}
 	}
 

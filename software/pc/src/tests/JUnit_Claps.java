@@ -47,7 +47,7 @@ public class JUnit_Claps extends JUnit_Test {
 		} 
 		catch (SerialConnexionException e) 
 		{
-			e.printStackTrace();
+			log.debug( e.logStack(), this);
 		}		
 	}
 	
@@ -86,9 +86,9 @@ public class JUnit_Claps extends JUnit_Test {
 
 			try {
 				scriptManager.getScript(ScriptNames.CLOSE_CLAP).goToThenExec(2, real_state, emptyHook);
-			} catch (PathNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (PathNotFoundException e) 
+			{
+				log.critical( e.logStack(), this);
 			}
 			
 		} catch (UnableToMoveException | SerialConnexionException | SerialFinallyException e) {

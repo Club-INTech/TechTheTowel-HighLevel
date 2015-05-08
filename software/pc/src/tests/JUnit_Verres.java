@@ -90,7 +90,7 @@ public class JUnit_Verres extends JUnit_Test
 		
 		catch (SerialConnexionException e1) 
 		{
-			e1.printStackTrace();
+			log.critical( e1.logStack(), this);
 		}
 		container.startAllThreads();
 		waitMatchBegin();		
@@ -103,19 +103,10 @@ public class JUnit_Verres extends JUnit_Test
 			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
 			exitScript.execute(0, real_state, emptyHook );
 		} 
-		catch (SerialConnexionException | SerialFinallyException e) 
-		{
-			System.out.println("CRITICAL : Carte mal branchée. Match termine");
-			e.printStackTrace();
-			return;
-		}
-		catch (UnableToMoveException e) 
-		{
-			System.out.println("CRITICAL : Chemin bloque, enlevez votre main");
-			e.printStackTrace();
-		}
-		
-		
+		catch (UnableToMoveException e){log.debug(e.logStack(), this);}
+		catch (SerialConnexionException e){log.debug(e.logStack(), this);}
+		catch (SerialFinallyException e){log.debug(e.logStack(), this);}
+
 		//debut du match
 		System.out.println("debut du match");
 		try 
@@ -139,19 +130,11 @@ public class JUnit_Verres extends JUnit_Test
 			System.out.println("Verre 4 attrapé");
 
 		}
-		catch (UnableToMoveException | SerialConnexionException e) 
-		{
-			e.printStackTrace();
-		} 
-		catch (PathNotFoundException e)
-		{
-			//TODO: le pathfinding ne trouve pas de chemin ?
-			e.printStackTrace();
-		} 
-		catch (SerialFinallyException e) 
-		{
-			e.printStackTrace();
-		}
+		catch (UnableToMoveException e){log.debug(e.logStack(), this);}
+		catch (SerialConnexionException e){log.debug(e.logStack(), this);}
+		catch (PathNotFoundException e){log.debug(e.logStack(), this);}
+		catch (SerialFinallyException e){log.debug(e.logStack(), this);}
+		catch (InObstacleException e){log.debug(e.logStack(), this);}
 		
 		
 		//Le match s'arrête

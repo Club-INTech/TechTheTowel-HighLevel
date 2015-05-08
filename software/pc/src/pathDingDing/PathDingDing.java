@@ -3,6 +3,7 @@ package pathDingDing;
 import smartMath.*;
 import sun.util.logging.resources.logging;
 import table.Table;
+import utils.Log;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -21,35 +22,44 @@ public class PathDingDing implements Service
 	private Table mTable;
 	private Graph mGraph;
 	private EnumSet<ObstacleGroups> mObstaclesToConsider;
+    private Log mLog;
 	
 	/**
 	 * constructeur
 	 * @param table
 	 */
-	public PathDingDing(Table table)
+	public PathDingDing(Table table, Log log)
 	{
 		mTable = table;
 		mObstaclesToConsider = EnumSet.noneOf(ObstacleGroups.class);
-		mGraph = new Graph(mTable, mObstaclesToConsider);
+		mLog=log;
+		mGraph = new Graph(mTable, mObstaclesToConsider, mLog);
+		mLog=log;
 	}
 	
 	/**
-	 * methode a appeler, avec la liste des obstacles � considerer
+	 * methode a appeler, avec la liste des obstacles à considerer
 	 * @param start le point de depart
 	 * @param end le point d'arrivee
-	 * @return un chemin optimise liant depart et arrivee
+	 * @param obstaclesToConsider 
+	 * @return un chemin optimise liant depart et arrivee (comprend les points de départ et d'arrivée)
+	 * @throws PathNotFoundException 
+	 * @throws InObstacleException 
 	 * @throws Exception pas encore implemente
 	 */
 	public ArrayList<Vec2> computePath(Vec2 start, Vec2 end, EnumSet<ObstacleGroups> obstaclesToConsider) throws PathNotFoundException, InObstacleException
 	{
 		this.mObstaclesToConsider = obstaclesToConsider;
+		mLog.debug("Obstacles à considerer : "+obstaclesToConsider.toString()  ,this);
+
 		mGraph.setObstaclesToConsider(mObstaclesToConsider);
 		
 		//si le noeud d'arrivée n'est pas sur la table, on jette une exception
 		if(!mGraph.isOnTable(new Node(end.x, end.y)))
 		{
-			EnumSet<ObstacleGroups> obstacleGroupsInPosition = mGraph.obstacleGroupsInPosition(end);
-				obstacleGroupsInPosition.retainAll(mObstaclesToConsider);
+			EnumSet<ObstacleGroups> obstacleGroupsInPosition = mGraph.obstacleGroupsInThePosition(end);
+			mLog.debug("Obstacles bloquants : "+ obstacleGroupsInPosition.toString() ,this);
+			obstacleGroupsInPosition.retainAll(mObstaclesToConsider);
 			throw new InObstacleException(obstacleGroupsInPosition);
 		}
 		
@@ -59,7 +69,7 @@ public class PathDingDing implements Service
 		directPath.add(end);
 		if(isPathCorrect(directPath))
 		{
-			System.out.println("Path correct, direct : "+directPath );
+			mLog.debug("Path correct, direct : "+directPath ,this);
 			return directPath;
 		}
 		
@@ -73,6 +83,7 @@ public class PathDingDing implements Service
 			pathVec2.add(start);
 			Node closestNode = mGraph.closestNode(startNode.toVec2());
 			mGraph.setStartNode(new Node(closestNode.x, closestNode.y));
+			//System.out.println("Depart hors - Pathfinding");
 		}
 		else
 			//ajout du noeud de depart au graphe
@@ -82,7 +93,7 @@ public class PathDingDing implements Service
 		Node endNode = new Node(end.x, end.y);
 		mGraph.setEndNode(endNode);
 		
-		//calcul du chemin via computeGraph, convertion, et simplification.
+		//calcul du chemin via computeGraph, conversion, et simplification.
 		try
 		{
 			pathNode = computeGraph(mGraph);

@@ -14,26 +14,26 @@ public enum ActuatorOrder
 	
 	
 	// Consignes dépose-tapis
-	LEFT_CARPET_DROP("ptg"),
-	RIGHT_CARPET_DROP("ptd"),
-	LEFT_CARPET_FOLDUP("rtg"),
-	RIGHT_CARPET_FOLDUP("rtd"),
+	LEFT_CARPET_DROP("ptg",312),
+	RIGHT_CARPET_DROP("ptd",312),
+	LEFT_CARPET_FOLDUP("rtg",375),
+	RIGHT_CARPET_FOLDUP("rtd",375),
 	
 	// Consignes ferme-clap
-	HIGH_LEFT_CLAP("cgh"),
-	HIGH_RIGHT_CLAP("cdh"),
-	MID_LEFT_CLAP("cgm"),
-	MID_RIGHT_CLAP("cdm"),
-	LOW_LEFT_CLAP("cgb"),
-	LOW_RIGHT_CLAP("cdb"),
+	HIGH_LEFT_CLAP("cgh",375),
+	HIGH_RIGHT_CLAP("cdh",375),
+	MID_LEFT_CLAP("cgm",218),
+	MID_RIGHT_CLAP("cdm",218),
+	LOW_LEFT_CLAP("cgb",375),
+	LOW_RIGHT_CLAP("cdb",375),
 	
 	// Consignes guide-plot ouvrable
-	OPEN_RIGHT_GUIDE("ogd"),
-	OPEN_LEFT_GUIDE("ogg"),
-	MID_RIGHT_GUIDE("gdi"),
-	MID_LEFT_GUIDE("ggi"),
-	CLOSE_RIGHT_GUIDE("fgd"),
-	CLOSE_LEFT_GUIDE("fgg"),
+	OPEN_RIGHT_GUIDE("ogd",265),
+	OPEN_LEFT_GUIDE("ogg",65),
+	MID_RIGHT_GUIDE("gdi",125),
+	MID_LEFT_GUIDE("ggi",125),
+	CLOSE_RIGHT_GUIDE("fgd",265),
+	CLOSE_LEFT_GUIDE("fgg",265),
 	
 	// Consignes de l'ascenseur monte-plot
 	ELEVATOR_HIGH("ah"),
@@ -43,24 +43,24 @@ public enum ActuatorOrder
 	ELEVATOR_GROUND("as"),
 	
 	// Consignes machoires de l'ascenseur monte-plot
-	ELEVATOR_OPEN_JAW("om"),
-	ELEVATOR_CLOSE_JAW("fm"),
-	ELEVATOR_OPEN_JAW_RIGHT("omd"),
-	ELEVATOR_OPEN_JAW_LEFT("omg"),
-	ELEVATOR_CLOSE_JAW_RIGHT("fmd"),
-	ELEVATOR_CLOSE_JAW_LEFT("fmg"),
+	ELEVATOR_OPEN_JAW("om",615),		// mesures de la machoires effectuées a 515ms/mouvments, mais cela génère des bugs, on prends 100ms de sécurité
+	ELEVATOR_CLOSE_JAW("fm",915),		// et parfois 400ms
+	ELEVATOR_OPEN_JAW_RIGHT("omd",915),
+	ELEVATOR_OPEN_JAW_LEFT("omg",915),
+	ELEVATOR_CLOSE_JAW_RIGHT("fmd",915),
+	ELEVATOR_CLOSE_JAW_LEFT("fmg",915),
 	
 	// Consignes Bras ramène-goblelets
-	ARM_RIGHT_OPEN("obd"),
-	ARM_LEFT_OPEN("obg"),
-	ARM_RIGHT_CLOSE("fbd"),
-	ARM_LEFT_CLOSE("fbg"),
-	ARM_RIGHT_OPEN_SLOW("obdl",1400),
-	ARM_LEFT_OPEN_SLOW("obgl",1400),
-	ARM_RIGHT_CLOSE_SLOW("fbdl",1400),
-	ARM_LEFT_CLOSE_SLOW("fbgl",1400),
-	ARM_RIGHT_MIDDLE("mbd"),
-	ARM_LEFT_MIDDLE("mbg");
+	ARM_RIGHT_OPEN("obd",781),
+	ARM_LEFT_OPEN("obg",781),
+	ARM_RIGHT_CLOSE("fbd",781),
+	ARM_LEFT_CLOSE("fbg",781),
+	ARM_RIGHT_OPEN_SLOW("obdl",1500),
+	ARM_LEFT_OPEN_SLOW("obgl",1500),
+	ARM_RIGHT_CLOSE_SLOW("fbdl",1500),
+	ARM_LEFT_CLOSE_SLOW("fbgl",1500),
+	ARM_RIGHT_MIDDLE("mbd",468),
+	ARM_LEFT_MIDDLE("mbg",468);
 
 	/**
 	 *  chaine de caractère envoyé au travers de la liaison série
@@ -78,7 +78,7 @@ public enum ActuatorOrder
 	private ActuatorOrder(String serialString)
 	{
 		this.serialOrder = serialString;
-		this.duration = 1000;
+		this.duration = 700;	// valeur par défaut de la durée de mouvement d'un actionneur
 	}
 
 	/**
