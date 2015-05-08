@@ -73,7 +73,7 @@ public class LaserCardWrapper implements Service {
 			serie.communiquer("motor_on", 0);
 			serie.communiquer("laser_on", 0);
 		} catch (SerialConnexionException e) {
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 		}
 	}
 
@@ -86,7 +86,7 @@ public class LaserCardWrapper implements Service {
 			serie.communiquer("motor_off", 0);
 			serie.communiquer("laser_off", 0);
 		} catch (SerialConnexionException e) {
-			e.printStackTrace();
+			log.debug( e.logStack(), this);
 		}
 	}
 
@@ -113,7 +113,7 @@ public class LaserCardWrapper implements Service {
 					//log.warning("balise n°"+b.id+" ne répond pas.", this);
 				}
 			} catch (SerialConnexionException e) {
-				e.printStackTrace();
+				log.debug( e.logStack(), this);
 			}
 		return beacons_ok;
 	}
@@ -330,9 +330,9 @@ public class LaserCardWrapper implements Service {
 						valeurs.add(angle);
 					}
 				}
-				catch(Exception e)
+				catch(SerialConnexionException e)
 				{
-					e.printStackTrace();
+					log.debug( e.logStack(), this);
 				}
 			}
 

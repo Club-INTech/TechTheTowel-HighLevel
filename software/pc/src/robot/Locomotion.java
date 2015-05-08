@@ -389,7 +389,7 @@ public class Locomotion implements Service
             }
             catch (BlockedException e)
             {
-            	
+    			log.critical( e.logStack(), this);
                 log.critical("Haut : Catch de "+e+" dans moveToPointException", this);
                 
                 if (!headingToWall) // si on s'y attendaiq, on ne fais rien.
@@ -450,10 +450,12 @@ public class Locomotion implements Service
 		                    } 
 		                    catch (SerialConnexionException e1)
 		                    {
+		            			log.critical( e1.logStack(), this);
 		                        log.critical("On ne fait rien après ceci: Catch de "+e1+" dans moveToPointException", this);
 		                    } 
 		                    catch (BlockedException e1)
 		                    {
+		            			log.critical( e1.logStack(), this);
 		                        log.critical("Catch de "+e1+" dans moveToPointException", this);
 		                    	immobilise();                       
 		                        log.critical("On n'arrive pas à se dégager", this);
@@ -475,6 +477,7 @@ public class Locomotion implements Service
             catch (UnexpectedObstacleOnPathException unexpectedObstacle)
             {
                 log.critical("Ennemi detecté : Catch de "+unexpectedObstacle, this); 
+    			log.critical( unexpectedObstacle.logStack(), this);
             	immobilise();
             	
                 //long detectionTime = System.currentTimeMillis();
@@ -502,6 +505,8 @@ public class Locomotion implements Service
 			}
             catch(SerialConnexionException e)
             {
+    			log.critical( e.logStack(), this);
+
             	// FIXME : gérer cette exception
             }
 
@@ -744,6 +749,7 @@ public class Locomotion implements Service
         catch (SerialConnexionException e)
         {
             log.critical("Catch de "+e+" dans moveToPointSerialOrder", this);
+			log.critical( e.logStack(), this);
             isRobotTurning=false; // Meme avec un catch, on a fini de tourner
         }
     }
@@ -789,6 +795,7 @@ public class Locomotion implements Service
         catch (SerialConnexionException e) 
         {
             log.critical("Catch de "+e+" dans isMotionEnded", this);
+			log.critical( e.logStack(), this);
             return false;
         }
     }
@@ -877,6 +884,7 @@ public class Locomotion implements Service
         catch(SerialConnexionException e)
         {
         	log.critical("Catch de "+e+" dans updateCurrentPositionAndOrientation", this);
+			log.critical( e.logStack(), this);
         }
     }
 
@@ -895,7 +903,8 @@ public class Locomotion implements Service
     	}
     	catch (ConfigPropertyNotFoundException e)
     	{
-    		log.debug("Revoir le code : impossible de trouver la propriété "+e.getPropertyNotFound(), this);;
+    		log.debug("Revoir le code : impossible de trouver la propriété "+e.getPropertyNotFound(), this);
+			log.critical( e.logStack(), this);
     	}
     }
 
@@ -913,6 +922,7 @@ public class Locomotion implements Service
         catch (SerialConnexionException e) 
         {
             log.critical("Catch de "+e+" dans immobilise", this);
+			log.critical( e.logStack(), this);
         }           
     }
 
@@ -935,6 +945,7 @@ public class Locomotion implements Service
 		catch (SerialConnexionException e)
 		{
             log.critical("Catch de "+e+" dans setPosition", this);
+			log.critical( e.logStack(), this);
 		}
 		Sleep.sleep(300);
     }
@@ -956,6 +967,7 @@ public class Locomotion implements Service
         catch (SerialConnexionException e) 
         {
             log.critical("Catch de "+e+" dans setOrientation", this);
+			log.critical( e.logStack(), this);
         }
     }
 
@@ -988,6 +1000,7 @@ public class Locomotion implements Service
         } catch (SerialConnexionException e)
         {
             log.critical("Catch de "+e+" dans desasservit", this);
+			log.critical( e.logStack(), this);
 
         }
     }

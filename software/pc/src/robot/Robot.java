@@ -106,6 +106,7 @@ public abstract class Robot implements Service
 		}
 	    catch (ConfigPropertyNotFoundException e)
     	{
+			log.critical( e.logStack(), this);
     		log.debug("Revoir le code : impossible de trouver la propriété "+e.getPropertyNotFound(), this);;
     	}
 	}
@@ -427,6 +428,7 @@ public abstract class Robot implements Service
     	}
     	catch (InObstacleException e)
     	{
+			log.critical( e.logStack(), this);
     		log.debug("Probleme en allant en "+aim.toVec2()+" InObstacleException", this);
     		throw e;
     	}
@@ -473,6 +475,7 @@ public abstract class Robot implements Service
     	catch (UnableToMoveException unableToMoveException) 
     	{
 			log.critical("Catch de "+unableToMoveException+" dans moveToCircle" , this);
+			log.critical( unableToMoveException.logStack(), this);
 			actualNumberOfTries=0;
 			recalculate(path.get(path.size()-1), hooksToConsider, unableToMoveException.reason); // on recalcule le path
 		}
@@ -504,6 +507,7 @@ public abstract class Robot implements Service
 				catch (InObstacleException e)
 		    	{
 		    		log.debug("Probleme en allant en "+aim+" InObstacleException", this);
+					log.critical( e.logStack(), this);
 		    		throw e;
 		    	}
 				

@@ -114,7 +114,7 @@ public class JUnit_Locomotion extends JUnit_Test
 		} 
 		catch (UnableToMoveException e) 
 		{
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 		}
 		position = mLocomotion.getPosition();
 		log.debug("en position : x="+position.x+"; y="+position.y, this);
@@ -129,8 +129,7 @@ public class JUnit_Locomotion extends JUnit_Test
 			} 
 			catch (UnableToMoveException e) 
 			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.critical( e.logStack(), this);
 			}
 		}
 	}

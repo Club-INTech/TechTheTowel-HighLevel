@@ -74,7 +74,7 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		} 
 		catch (SerialConnexionException e) 
 		{
-			e.printStackTrace();
+			log.debug(e.logStack(), this);
 		}
 	}
 	
@@ -150,10 +150,9 @@ public class JUnit_scriptedMatch extends JUnit_Test
 			scriptmanager.getScript(ScriptNames.DROP_CARPET).execute(2, real_state, emptyHook);
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après les tapis");
 		}
-		catch (UnableToMoveException | SerialConnexionException | SerialFinallyException e) 
-		{
-			e.printStackTrace();
-		}
+		catch (UnableToMoveException e){log.debug(e.logStack(), this);}
+		catch (SerialConnexionException e){log.debug(e.logStack(), this);}
+		catch (SerialFinallyException e){log.debug(e.logStack(), this);}
 		
 		//////////////////////////////////////////////////////
 		//	script grab plot 2
@@ -166,10 +165,12 @@ public class JUnit_scriptedMatch extends JUnit_Test
 			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(2, real_state, emptyHook );
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le plot 2");
 		} 
-		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e1) 
-		{
-			e1.printStackTrace();
-		}
+		catch (UnableToMoveException e){log.debug(e.logStack(), this);}
+		catch (SerialConnexionException e){log.debug(e.logStack(), this);}
+		catch (PathNotFoundException e){log.debug(e.logStack(), this);}
+		catch (SerialFinallyException e){log.debug(e.logStack(), this);}
+		catch (InObstacleException e){log.debug(e.logStack(), this);}
+		
 		
 		System.out.println("Plot 2 pris");
 		 
@@ -184,10 +185,11 @@ public class JUnit_scriptedMatch extends JUnit_Test
 			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(34, real_state, emptyHook );
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après les plots 3 et 4 et verre 0");
 		} 
-		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e1) 
-		{
-			e1.printStackTrace();
-		}
+		catch (UnableToMoveException e){log.debug(e.logStack(), this);}
+		catch (SerialConnexionException e){log.debug(e.logStack(), this);}
+		catch (PathNotFoundException e){log.debug(e.logStack(), this);}
+		catch (SerialFinallyException e){log.debug(e.logStack(), this);}
+		catch (InObstacleException e){log.debug(e.logStack(), this);}
 		
 		System.out.println("Plot 3, 4 et gobelet pris");
 		
@@ -202,10 +204,11 @@ public class JUnit_scriptedMatch extends JUnit_Test
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après les claps 1 et 2");
 
 		}
-		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e) 
-		{
-			e.printStackTrace();
-		}
+		catch (UnableToMoveException e){log.debug(e.logStack(), this);}
+		catch (SerialConnexionException e){log.debug(e.logStack(), this);}
+		catch (PathNotFoundException e){log.debug(e.logStack(), this);}
+		catch (SerialFinallyException e){log.debug(e.logStack(), this);}
+		catch (InObstacleException e){log.debug(e.logStack(), this);}
 		
 		System.out.println("Clap 1 et 2 Fermés");
 
@@ -220,10 +223,11 @@ public class JUnit_scriptedMatch extends JUnit_Test
 			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(1, real_state, emptyHook );
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le plot 1");
 		}
-		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e) 
-		{
-			e.printStackTrace();
-		}
+		catch (UnableToMoveException e){log.debug(e.logStack(), this);}
+		catch (SerialConnexionException e){log.debug(e.logStack(), this);}
+		catch (PathNotFoundException e){log.debug(e.logStack(), this);}
+		catch (SerialFinallyException e){log.debug(e.logStack(), this);}
+		catch (InObstacleException e){log.debug(e.logStack(), this);}
 		
 		System.out.println("Plot 1 pris");
 		
@@ -239,10 +243,11 @@ public class JUnit_scriptedMatch extends JUnit_Test
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après deposé la pile sur l'estrade");
 
 		}
-		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e) 
-		{
-			e.printStackTrace();
-		}
+		catch (UnableToMoveException e){log.debug(e.logStack(), this);}
+		catch (SerialConnexionException e){log.debug(e.logStack(), this);}
+		catch (PathNotFoundException e){log.debug(e.logStack(), this);}
+		catch (SerialFinallyException e){log.debug(e.logStack(), this);}
+		catch (InObstacleException e){log.debug(e.logStack(), this);}
 		
 		System.out.println("Pile vidée");
 		
@@ -253,10 +258,11 @@ public class JUnit_scriptedMatch extends JUnit_Test
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le plot 5 et 6");
 
 		}
-		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e) 
-		{
-			e.printStackTrace();
-		}
+		catch (UnableToMoveException e){log.debug(e.logStack(), this);}
+		catch (SerialConnexionException e){log.debug(e.logStack(), this);}
+		catch (PathNotFoundException e){log.debug(e.logStack(), this);}
+		catch (SerialFinallyException e){log.debug(e.logStack(), this);}
+		catch (InObstacleException e){log.debug(e.logStack(), this);}
 		
 		try 
 		{			
@@ -265,10 +271,11 @@ public class JUnit_scriptedMatch extends JUnit_Test
 			scriptmanager.getScript(ScriptNames.FREE_STACK).goToThenExec(2, real_state, emptyHook );
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après deposé la pile sur l'estrade");
 		}
-		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e) 
-		{
-			e.printStackTrace();
-		}
+		catch (UnableToMoveException e){log.debug(e.logStack(), this);}
+		catch (SerialConnexionException e){log.debug(e.logStack(), this);}
+		catch (PathNotFoundException e){log.debug(e.logStack(), this);}
+		catch (SerialFinallyException e){log.debug(e.logStack(), this);}
+		catch (InObstacleException e){log.debug(e.logStack(), this);}
 		
 		System.out.println("Pile vidée");
 	
@@ -279,10 +286,11 @@ public class JUnit_scriptedMatch extends JUnit_Test
 //			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le clap 3");
 //
 //		}
-//		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e) 
-//		{
-//			e.printStackTrace();
-//		}
+//		catch (UnableToMoveException e){log.debug(e.logStack(), this);}
+//		catch (SerialConnexionException e){log.debug(e.logStack(), this);}
+//		catch (PathNotFoundException e){log.debug(e.logStack(), this);}
+//		catch (SerialFinallyException e){log.debug(e.logStack(), this);}
+//		catch (InObstacleException e){log.debug(e.logStack(), this);}
 //		
 //		System.out.println("Clap 3 fermé");
 //
@@ -293,10 +301,11 @@ public class JUnit_scriptedMatch extends JUnit_Test
 //			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le deposage en zone basse enemie");
 //
 //		}
-//		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e) 
-//		{
-//			e.printStackTrace();
-//		}
+//		catch (UnableToMoveException e){log.debug(e.logStack(), this);}
+//		catch (SerialConnexionException e){log.debug(e.logStack(), this);}
+//		catch (PathNotFoundException e){log.debug(e.logStack(), this);}
+//		catch (SerialFinallyException e){log.debug(e.logStack(), this);}
+//		catch (InObstacleException e){log.debug(e.logStack(), this);}
 //	
 //		try 
 //		{
@@ -305,10 +314,11 @@ public class JUnit_scriptedMatch extends JUnit_Test
 //			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le deposage en zone haute enemie");	
 //
 //		}
-//		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e) 
-//		{
-//			e.printStackTrace();
-//		}
+//		catch (UnableToMoveException e){log.debug(e.logStack(), this);}
+//		catch (SerialConnexionException e){log.debug(e.logStack(), this);}
+//		catch (PathNotFoundException e){log.debug(e.logStack(), this);}
+//		catch (SerialFinallyException e){log.debug(e.logStack(), this);}
+//		catch (InObstacleException e){log.debug(e.logStack(), this);}
 //		
 //		try 
 //		{
@@ -318,10 +328,11 @@ public class JUnit_scriptedMatch extends JUnit_Test
 //			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le deposage de la pile dans notre zone");
 //type filter text
 //		}
-//		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e) 
-//		{
-//			e.printStackTrace();
-//		}
+//		catch (UnableToMoveException e){log.debug(e.logStack(), this);}
+//		catch (SerialConnexionException e){log.debug(e.logStack(), this);}
+//		catch (PathNotFoundException e){log.debug(e.logStack(), this);}
+//		catch (SerialFinallyException e){log.debug(e.logStack(), this);}
+//		catch (InObstacleException e){log.debug(e.logStack(), this);}
 		
 		//////////////////////////////////////////////////////
 		//	Fin du match

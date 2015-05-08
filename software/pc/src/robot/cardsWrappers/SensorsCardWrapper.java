@@ -76,7 +76,7 @@ public class SensorsCardWrapper implements Service
 		catch(SerialConnexionException e)
 		{
 			log.critical("La carte capteurs ne répond pas !", this);
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 			return 3000; // valeur considérée comme infinie
 		}
 
@@ -105,7 +105,7 @@ public class SensorsCardWrapper implements Service
 		catch (SerialConnexionException e)
 		{
 			log.critical(" Problème de communication avec la carte capteurs en essayent de parler au jumper.", this);
-			e.printStackTrace();
+			log.debug( e.logStack(), this);
 			return false;
 		}
     }

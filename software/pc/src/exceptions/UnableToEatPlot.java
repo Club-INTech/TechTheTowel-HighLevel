@@ -1,5 +1,8 @@
 package exceptions;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 /**
  * 
  * @author paul
@@ -35,6 +38,17 @@ public class UnableToEatPlot extends Exception {
 			boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 		// TODO Auto-generated constructor stub
+	}
+	
+	public String logStack()
+	{
+		StringWriter sw = new StringWriter();
+		this.printStackTrace(new PrintWriter(sw));
+		
+		String exceptionAsString = sw.toString();	
+		exceptionAsString = exceptionAsString.replaceAll("(\r\n|\n\r|\r|\n)", " -> ");
+		
+		return exceptionAsString;
 	}
 
 }

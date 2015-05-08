@@ -246,7 +246,7 @@ public class GetPlot extends AbstractScript
 			{
 				stateToConsider.table.eatPlotX(5);
 				finalize(stateToConsider);
-				e1.printStackTrace();
+				log.debug( e1.logStack(), this);
 			}
 			//si on est suffisamment vide on mange le plot suivant
 			if (stateToConsider.robot.storedPlotCount<4)
@@ -261,7 +261,7 @@ public class GetPlot extends AbstractScript
 				{
 					stateToConsider.table.eatPlotX(6);
 					finalize(stateToConsider);
-					e.printStackTrace();
+					log.debug( e.logStack(), this);
 				}
 			}
 				
@@ -279,7 +279,7 @@ public class GetPlot extends AbstractScript
 				{
 					stateToConsider.table.eatPlotX(7);
 					finalize(stateToConsider);
-					e.printStackTrace();
+					log.debug( e.logStack(), this);
 				}
 				stateToConsider.robot.moveLengthwise(-200);
 				stateToConsider.robot.turn(Math.PI/4);

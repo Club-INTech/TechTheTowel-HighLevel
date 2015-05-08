@@ -72,7 +72,7 @@ public class JUnit_DropPile extends JUnit_Test {
 		}
 		catch (UnableToMoveException e) 
 		{
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 			return;
 		}
 		
@@ -95,11 +95,11 @@ public class JUnit_DropPile extends JUnit_Test {
 		} 
 		catch (PathNotFoundException e)
 		{
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 		} 
 		catch (SerialFinallyException e) 
 		{
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 		}
 	}
 	
