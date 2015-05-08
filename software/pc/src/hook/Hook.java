@@ -19,7 +19,6 @@ abstract public class Hook
 	protected ArrayList<Callback> callbacks = new ArrayList<Callback>();
 
 	/** Système de log sur lequel écrire */
-	@SuppressWarnings("unused")
 	protected Log log;
 	
 	/** endroit ou lire la configuration du robot */

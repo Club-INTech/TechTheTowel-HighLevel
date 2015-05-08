@@ -1,6 +1,5 @@
 package table.obstacles;
 import smartMath.Vec2;
-import enums.ObstacleGroups;
 
 /**
  * classe abstraite pour les obstacles sur la table.

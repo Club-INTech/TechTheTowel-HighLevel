@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-import scripts.AbstractScript;
 import scripts.ScriptManager;
 import strategie.GameState;
 import table.Table;

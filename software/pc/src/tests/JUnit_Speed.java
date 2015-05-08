@@ -10,7 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import enums.ObstacleGroups;
-import enums.ScriptNames;
 import enums.ServiceNames;
 import enums.Speed;
 import exceptions.InObstacleException;

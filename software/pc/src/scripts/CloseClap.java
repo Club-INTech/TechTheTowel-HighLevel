@@ -10,8 +10,6 @@ import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import hook.Callback;
 import hook.Hook;
-import hook.methods.OpenClapLeftHighExe;
-import hook.methods.OpenClapLeftMiddleExe;
 import hook.methods.OpenClapRightHighExe;
 import hook.methods.OpenClapRightMiddleExe;
 import hook.types.HookFactory;
@@ -324,10 +322,12 @@ public class CloseClap extends AbstractScript
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
 			
 			stateToConsider.robot.turn (0);
+			stateToConsider.table.clapXClosed(1);
 			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, true);
 			
 			stateToConsider.robot.moveLengthwise(-400);
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
+			stateToConsider.table.clapXClosed(2);
 			
 			stateToConsider.robot.turn(Math.PI*-0.5);
 			stateToConsider.robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, true);
@@ -407,7 +407,6 @@ public class CloseClap extends AbstractScript
 		}
 	}
 
-
 	public Integer[] getVersion(GameState<?> stateToConsider)
 	{
 		ArrayList<Integer> versionList = new ArrayList<Integer>(Arrays.asList(versions));
@@ -435,12 +434,12 @@ public class CloseClap extends AbstractScript
 		
 		
 		//on convertit l'arrayList en Integer[]	
-				Integer[] retour = new Integer[versionList.size()];
-			    for (int i=0; i < retour.length; i++)
-			    {
-			    	retour[i] = versionList.get(i).intValue();
-			    }
-				return retour;
+		Integer[] retour = new Integer[versionList.size()];
+	    for (int i=0; i < retour.length; i++)
+	    {
+	    	retour[i] = versionList.get(i).intValue();
+	    }
+		return retour;
 	}
 }
 

@@ -109,10 +109,10 @@ public class GetPlot extends AbstractScript
 				return;
 			}
 									
-			//le robot est deja en face du plot puisqu'on a appele goToThenExec (qui met en face du centre du script) si un jour on autorise de lancer exec il faudra remettre ces lignes (et les debugger)
-			//stateToConsider.robot.turn(Math.atan2(	entryPosition(versionToExecute).center.y - stateToConsider.robot.getPosition().y,	// position voulue - position actuelle
-			//			 							entryPosition(versionToExecute).center.x - stateToConsider.robot.getPosition().x	// de meme
-			//			 						 ));
+//		//	le robot est deja en face du plot puisqu'on a appele goToThenExec (qui met en face du centre du script) si un jour on autorise de lancer exec il faudra remettre ces lignes (et les debugger)
+//			stateToConsider.robot.turn(Math.atan2(	entryPosition(versionToExecute,stateToConsider.robot.robotRay, stateToConsider.robot.getPosition()).position.y - stateToConsider.robot.getPosition().y,	// position voulue - position actuelle
+//						 							entryPosition(versionToExecute,stateToConsider.robot.robotRay, stateToConsider.robot.getPosition()).position.x - stateToConsider.robot.getPosition().x	// de meme
+//						 						 ));
 			
 			//on mange le plot
 			try 
@@ -223,6 +223,8 @@ public class GetPlot extends AbstractScript
 
 				if (checkSensor(stateToConsider))
 					stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+				stateToConsider.table.eatPlotX(5);
+
 			
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
 				
@@ -230,6 +232,7 @@ public class GetPlot extends AbstractScript
 				{
 					stateToConsider.robot.moveLengthwise(100); // On avance vers le suivant
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
+					stateToConsider.table.eatPlotX(6);
 				}
 			}
 

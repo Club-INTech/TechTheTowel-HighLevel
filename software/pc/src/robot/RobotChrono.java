@@ -13,9 +13,7 @@ import enums.ActuatorOrder;
 import enums.ObstacleGroups;
 import enums.SensorNames;
 import enums.Speed;
-import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
-import exceptions.Locomotion.UnexpectedObstacleOnPathException;
 
 /**
  * Robot virtuel ne faisant pas bouger le robot réel, mais détermine la durée des actions.
@@ -25,13 +23,6 @@ import exceptions.Locomotion.UnexpectedObstacleOnPathException;
 
 public class RobotChrono extends Robot
 {
-
-	/** position du robot virtuel sur la table. Utile pour calculer le temps nécéssaire pour atteindre un autre point de la table */
-	protected Vec2 position = new Vec2();
-	
-	/** orientation du robot virtuel sur la table. Utile pour calculer le temps nécéssaire pour atteindre un autre point de la table */
-	protected double orientation;
-	
 	/** Chronomètre du robot en millisecondes */
 	private int chrono = 0;
 	

@@ -2,7 +2,6 @@ package hook.methods;
 import robot.Robot;
 import strategie.GameState;
 import enums.ActuatorOrder;
-import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import hook.Executable;
 

@@ -3,9 +3,6 @@ package table.obstacles;
 import java.util.ArrayList;
 import java.util.EnumSet;
 
-import com.sun.org.apache.xpath.internal.axes.OneStepIterator;
-
-import enums.Direction;
 import enums.ObstacleGroups;
 import exceptions.ConfigPropertyNotFoundException;
 import pathDingDing.PathDingDing;
@@ -27,7 +24,6 @@ public class ObstacleManager
     private Log log;
 
 	/** endroit ou lire la configuration du robot */
-    @SuppressWarnings("unused")
 	private Config config;
 
     /** Ensemble des obstacles mobiles/temporaires se trouvant sur la table */

@@ -16,7 +16,6 @@ import smartMath.Vec2;
 import strategie.GameState;
 import strategie.Strategie;
 import threads.ThreadTimer;
-import enums.ActuatorOrder;
 import enums.ServiceNames;
 import enums.Speed;
 import exceptions.serial.SerialConnexionException;
@@ -48,7 +47,6 @@ public class JUnit_Strategia extends JUnit_Test
 		try 
 		{
 			matchSetUp(real_state.robot);
-			putTennisBall(real_state.robot);
 		} 
 		catch (SerialConnexionException e) 
 		{
@@ -108,7 +106,7 @@ public class JUnit_Strategia extends JUnit_Test
 	@Test
 	public void desisionTest()
 	{
-		configColor();
+		//configColor();
 		real_state.robot.setLocomotionSpeed(Speed.SLOW);
 		container.startAllThreads();
 		waitMatchBegin();

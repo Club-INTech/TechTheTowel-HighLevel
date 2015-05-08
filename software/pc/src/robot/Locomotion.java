@@ -4,8 +4,6 @@ import hook.Hook;
 
 import java.util.ArrayList;
 
-import javax.sql.rowset.serial.SerialException;
-
 import robot.cardsWrappers.LocomotionCardWrapper;
 import smartMath.Vec2;
 import table.Table;
@@ -132,7 +130,7 @@ public class Locomotion implements Service
 	public boolean isRobotTurning=false;	
 	
 	/** nombre d'essais maximum après une BlockedException*/
-    private int maxRetriesIfBlocked=5;
+    private int maxRetriesIfBlocked=2;
     private int actualRetriesIfBlocked=0;
     
     /** Utile pour l'activation dees capteurs*/

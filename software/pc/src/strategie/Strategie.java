@@ -2,6 +2,8 @@ package strategie;
 
 import hook.Hook;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import pathDingDing.PathDingDing;
@@ -89,12 +91,17 @@ public class Strategie implements Service
 	/**
 	 * la liste des scripts a executer pour le match scripté
 	 */
-	private ArrayList<AbstractScript> matchScriptArray = new ArrayList<AbstractScript>();
+	private ArrayList<AbstractScript> scriptedMatchScripts = new ArrayList<AbstractScript>();
 	/**
 	 * la liste des versions a executer pour le match scripté
 	 */
-	private ArrayList<Integer> matchVersionArray = new ArrayList<Integer>();
+	private ArrayList<Integer> scriptedMatchVersions = new ArrayList<Integer>();
 	
+
+	/**
+	 * la liste des fonctions qui gèrent de facon personalisées les exceptions durant le match scripté 
+	 */
+	private ArrayList<Method> scriptedMatchCustomExceptionHandlers = new ArrayList<Method>();
 	
 /**
  * Crée la strategie, l'IA decisionnelle
@@ -152,8 +159,8 @@ public class Strategie implements Service
 			// Si on s'est raté mais qu'on est proches, on ajoute le script de depose tapis simplement 
 			if (robotReal.getPosition().distance(Table.entryPosition)<250)
 			{
-				matchScriptArray.add(scriptmanager.getScript(ScriptNames.DROP_CARPET));
-				matchVersionArray.add(0);
+				scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.DROP_CARPET));
+				scriptedMatchVersions.add(0);
 			}
 			
 			// On tente de sortir à tout prix ! On retente tant qu'on a pas reussi
@@ -274,11 +281,14 @@ public class Strategie implements Service
 	}
 	
 	/**
-	 * initialize the real robot during a match (because of a SerialConnexionException)
+	 * initialize le robot real pendant un match (suite a une SerialConnexionException)
 	 * se relance tant qu'il y a des SerialConnexionException (pour preserver la meca)
 	 */
 	private void initInMatch() 
 	{
+		robotReal.setPosition(robotReal.getPositionFast());
+		robotReal.setOrientation(robotReal.getOrientationFast());
+		
 		try 
 		{
 			robotReal.useActuator(ActuatorOrder.ELEVATOR_GROUND, false);
@@ -410,33 +420,49 @@ public class Strategie implements Service
 	{
 		if(! gameState.table.getIsLeftCarpetDropped() || !gameState.table.getIsRightCarpetDropped())
 		{
-			matchScriptArray.add(scriptmanager.getScript(ScriptNames.DROP_CARPET));
-			matchVersionArray.add(1);
+			scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.DROP_CARPET));
+			scriptedMatchVersions.add(1);
+			scriptedMatchCustomExceptionHandlers.add(null);
 		}
-		 
-		matchScriptArray.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
-		matchVersionArray.add(2);
+
+		try {
+		scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
+		scriptedMatchVersions.add(2);
+		scriptedMatchCustomExceptionHandlers.add(Strategie.class.getDeclaredMethod(new String("scriptedMatchHandePile0Plot"),(Class[])null));	// si quelqu'un se demande ce que c'est que ce délire, c'est un "pointeur sur fonction" en mode hack de java
 		
-		matchScriptArray.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
-		matchVersionArray.add(34);
+		scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
+		scriptedMatchVersions.add(34);
+		scriptedMatchCustomExceptionHandlers.add(Strategie.class.getDeclaredMethod(new String("scriptedMatchHandePile0Plot"),(Class[])null));
 		
-		matchScriptArray.add(scriptmanager.getScript(ScriptNames.CLOSE_CLAP));
-		matchVersionArray.add(-12);
+		scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.CLOSE_CLAP));
+		scriptedMatchVersions.add(12);
+		scriptedMatchCustomExceptionHandlers.add(null);
 		
-		matchScriptArray.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
-		matchVersionArray.add(1);
+		scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
+		scriptedMatchVersions.add(1);
+		scriptedMatchCustomExceptionHandlers.add(null);
 		
-		matchScriptArray.add(scriptmanager.getScript(ScriptNames.FREE_STACK));
-		matchVersionArray.add(0);
+		scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.FREE_STACK));
+		scriptedMatchVersions.add(0);
+		scriptedMatchCustomExceptionHandlers.add(null);
 		
-		matchScriptArray.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
-		matchVersionArray.add(56);
+		scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
+		scriptedMatchVersions.add(56);
+		scriptedMatchCustomExceptionHandlers.add(null);
 		
-		matchScriptArray.add(scriptmanager.getScript(ScriptNames.FREE_STACK));
-		matchVersionArray.add(2);
+		scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.FREE_STACK));
+		scriptedMatchVersions.add(2);
+		} catch (NoSuchMethodException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		} catch (SecurityException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		
 		
 		// tant qu'on a pas tout fait
-		while(!matchScriptArray.isEmpty())
+		while(!scriptedMatchScripts.isEmpty())
 		{
 			try 
 			{
@@ -445,8 +471,30 @@ public class Strategie implements Service
 				{
 					try 
 					{
-						matchScriptArray.get(0).goToThenExec(matchVersionArray.get(0), gameState, hookRobot);
 						tryAgain = false;
+						
+						try
+						{
+							// exécute le prochain script sur la liste
+							scriptedMatchScripts.get(0).goToThenExec(scriptedMatchVersions.get(0), gameState, hookRobot);
+						}
+						catch (Exception e) 
+						{
+							// en cas d'erreur d'exécution, demande la gestion de l'erreur par le gestionnaire custom s'il y en a un, sinon applique la politique par défaut.
+							if(scriptedMatchCustomExceptionHandlers.get(0) != null) 
+							{
+								try 
+								{
+									scriptedMatchCustomExceptionHandlers.get(0).invoke(this, (Object[])null);
+								} 
+								catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) 
+								{
+									e1.printStackTrace();
+								}
+							}
+							else
+								throw e;
+						}
 					}
 					catch (UnableToMoveException e) 
 					{
@@ -455,11 +503,12 @@ public class Strategie implements Service
 							//FIXME degager (ne pas bouger tryAgain)
 						}
 					} 
-					catch (PathNotFoundException e) 
+					catch (PathNotFoundException e)
 					{
 						//on ajoute le script dans le tableau un peu plus loin
-						matchScriptArray.add(Math.max(0,matchScriptArray.size()-4), matchScriptArray.get(0));
-						matchVersionArray.add(Math.max(0,matchVersionArray.size()-4), matchVersionArray.get(0));
+						scriptedMatchScripts.add(Math.max(0,scriptedMatchScripts.size()-4), scriptedMatchScripts.get(0));
+						scriptedMatchVersions.add(Math.max(0,scriptedMatchVersions.size()-4), scriptedMatchVersions.get(0));
+						
 						//et on abandonne le script pour le moment
 						tryAgain = false;
 					} 
@@ -468,19 +517,21 @@ public class Strategie implements Service
 						for (ObstacleGroups obstacle : e.getObstacleGroup())
 						{
 							log.warning("attention, obstacle : "+obstacle.getClass(),this);
+							
+
+							// on reporte a plus tard le script si c'est un robot ennemi qui empèche l'accès au point d'entrée
 							if(obstacle.compareTo(ObstacleGroups.ENNEMY_ROBOTS)==0)
 							{
-								//on ajoute le script dans le tableau un peu plus loin
-								matchScriptArray.add(Math.max(0,matchScriptArray.size()-4), matchScriptArray.get(0));
-								matchVersionArray.add(Math.max(0,matchVersionArray.size()-4), matchVersionArray.get(0));
+								scriptedMatchScripts.add(Math.max(0,scriptedMatchScripts.size()-4), scriptedMatchScripts.get(0));
+								scriptedMatchVersions.add(Math.max(0,scriptedMatchVersions.size()-4), scriptedMatchVersions.get(0));
 								//et on abandonne le script pour le moment
 								tryAgain = false;
 							} // FIXME reflechir si il n'y a aucun robot ennemi bloquant
 						}
 					}
 				}
-				matchScriptArray.remove(0);
-				matchVersionArray.remove(0);
+				scriptedMatchScripts.remove(0);
+				scriptedMatchVersions.remove(0);
 			}
 			catch (IndexOutOfBoundsException e)
 			{
@@ -495,14 +546,14 @@ public class Strategie implements Service
 					gameState.robot.sleep(3000);
 					try 
 					{
-						matchScriptArray.get(0).finalize(gameState);
+						scriptedMatchScripts.get(0).finalize(gameState);
 						break;
 					} 
 					catch (IndexOutOfBoundsException e1)
 					{
 						log.debug("out of bound, IA's scripted match", this);
 						//on ajoute le script de depart pour lancer son finalize (puisqu'il n'y avait pas de script prevu apres c'est pas grave)
-						matchScriptArray.add(scriptmanager.getScript(ScriptNames.EXIT_START_ZONE));
+						scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.EXIT_START_ZONE));
 					}
 					catch (SerialFinallyException | UnableToMoveException e1)
 					{
@@ -539,6 +590,16 @@ public class Strategie implements Service
 				}
 			}
 		}
+	}
+	
+	@SuppressWarnings("unused")
+	private void scriptedMatchHandePile0Plot()
+	{
+		
+		log.debug("HAHAHA ! Pouet Mégatest !", this);
+		int a = this.scriptedMatchScripts.size();
+		a*=100;
+		return;
 	}
 
 	/**

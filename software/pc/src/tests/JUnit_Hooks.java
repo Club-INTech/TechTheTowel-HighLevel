@@ -6,9 +6,7 @@ import hook.methods.*;
 import hook.types.HookFactory;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 
-import scripts.AbstractScript;
 import scripts.ScriptManager;
 import smartMath.Vec2;
 import strategie.GameState;
@@ -40,6 +38,7 @@ public class JUnit_Hooks extends JUnit_Test
 	SensorsCardWrapper  mSensorsCardWrapper;
 	HookFactory hookFactory;
 	
+	@SuppressWarnings("unchecked")
 	@Before
 	public void setUp() throws Exception
 	{
@@ -126,7 +125,7 @@ public class JUnit_Hooks extends JUnit_Test
 		ArrayList<Hook> testHookList = new ArrayList<Hook> ();
 
 		
-	    Vec2 center = new Vec2(900,1000);
+	    
 		
 	    //TODO : à refaire
 	    /*

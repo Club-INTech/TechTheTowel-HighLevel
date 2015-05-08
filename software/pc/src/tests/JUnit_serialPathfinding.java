@@ -20,7 +20,6 @@ import exceptions.*;
 import exceptions.Locomotion.UnableToMoveException;
 import robot.*;
 import robot.cardsWrappers.ActuatorCardWrapper;
-import robot.cardsWrappers.SensorsCardWrapper;
 import pathDingDing.PathDingDing;
 
 import threads.ThreadTimer;

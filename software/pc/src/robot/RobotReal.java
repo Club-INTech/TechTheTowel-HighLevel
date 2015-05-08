@@ -295,7 +295,8 @@ public class RobotReal extends Robot
     @Override
 	public Vec2 getPosition()
 	{
-	    return mLocomotion.getPosition();
+    	position = mLocomotion.getPosition();
+	    return position;
 	}
 	
 	@Override
@@ -307,7 +308,8 @@ public class RobotReal extends Robot
     @Override
     public double getOrientation()
     {
-        return mLocomotion.getOrientation();
+    	orientation =  mLocomotion.getOrientation();
+        return orientation;
     }
 
 	@Override
@@ -347,4 +349,6 @@ public class RobotReal extends Robot
 	{
 		return mLocomotion.isRobotMovingBackward;
 	}
+
+	
 }

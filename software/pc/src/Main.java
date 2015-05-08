@@ -18,14 +18,11 @@ import utils.Config;
 import utils.Sleep;
 import container.Container;
 import enums.ActuatorOrder;
-import enums.ScriptNames;
 import enums.ServiceNames;
 import exceptions.ContainerException;
-import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.Locomotion.UnexpectedObstacleOnPathException;
 import exceptions.serial.SerialConnexionException;
-import exceptions.serial.SerialFinallyException;
 import exceptions.serial.SerialManagerException;
 
 
@@ -59,14 +56,12 @@ public class Main
 		int numberOfTryContainer=0;
 		int numberOfTrySerial=0;
 		int numberOfTrymatchSetup=0;
-		int numberOfTryMove=0;
 		
 		
 		//nombre maximum d'essai autorisee pour le container et la serie
 		int maximumOfTryContainer=5;
 		int maximumOfTrySerial=3;
 		int maximumOfmatchSetup=5;
-		int maximumOfTryMove=3;
 		
 		// booleen explicitant si on a reussi l'initialisation
 	    boolean isInitialisationDone = false;
@@ -169,8 +164,6 @@ public class Main
 			}
 			catch (UnableToMoveException e) 
 			{
-				numberOfTryMove++;
-
 				if(numberOfTrymatchSetup<maximumOfmatchSetup)
 					System.out.println ("erreur dans le testMove et le deplacement");
 				else 

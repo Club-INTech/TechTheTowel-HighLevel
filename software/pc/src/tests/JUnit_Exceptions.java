@@ -6,10 +6,7 @@ import java.io.StringWriter;
 
 import org.junit.Test;
 
-import com.sun.rmi.rmid.ExecOptionPermission;
-
 import exceptions.ConfigPropertyNotFoundException;
-import utils.Log;
 
 /**
  * classe des tests d'exceptions

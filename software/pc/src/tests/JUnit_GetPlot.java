@@ -7,12 +7,10 @@ import scripts.AbstractScript;
 import scripts.ScriptManager;
 import smartMath.Vec2;
 import strategie.GameState;
-import utils.Sleep;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import enums.ActuatorOrder;
 import enums.ScriptNames;
 import enums.ServiceNames;
 import exceptions.InObstacleException;

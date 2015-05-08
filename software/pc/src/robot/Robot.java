@@ -17,9 +17,7 @@ import enums.UnableToMoveReason;
 import exceptions.ConfigPropertyNotFoundException;
 import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
-import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
-import exceptions.Locomotion.UnexpectedObstacleOnPathException;
 import exceptions.serial.SerialConnexionException;
 import utils.Log;
 import utils.Config;
@@ -48,6 +46,15 @@ public abstract class Robot implements Service
 	
 	/**  vitesse du robot sur la table. */
 	protected Speed speed;
+	
+	/**
+	 * la position du robot
+	 */
+	protected Vec2 position;
+	/**
+	 * l'orientation du robot
+	 */
+	protected double orientation;
 
 	/** nombre de plots stockes dans le robot (mis a jour et utlisé par les scripts) */
 	public int storedPlotCount;
@@ -103,6 +110,8 @@ public abstract class Robot implements Service
 		{
 			symmetry = config.getProperty("couleur").replaceAll(" ","").equals("jaune");
 	        robotRay = Integer.parseInt(config.getProperty("rayon_robot"));
+	        position = Table.entryPosition;
+	        orientation = Math.PI;
 		}
 	    catch (ConfigPropertyNotFoundException e)
     	{
@@ -233,12 +242,32 @@ public abstract class Robot implements Service
 	 */
     public abstract Vec2 getPosition();
     
+    /**
+     * donne la dernière position connue du robot sur la table
+     * cette methode est rapide et ne déclenche pas d'appel série
+     * @return la dernière position connue du robot
+     */
+    public Vec2 getPositionFast()
+    {
+    	return position;
+    }
+    
 	/**
 	 * Donne l'orientation du robot sur la table.
 	 * Cette méthode est lente mais très précise: elle déclenche un appel a la série pour obtenir une orientation a jour.
 	 * @return l'orientation en radiants courante du robot sur la table
 	 */
     public abstract double getOrientation();
+    
+    /**
+     * Donne la derniere orientation connue du robot sur la table
+     * Cette méthode est rapide et ne déclenche pas d'appel série
+     * @return la derniere orientation connue du robot
+     */
+    public double getOrientationFast() 
+    {
+		return orientation;
+	}
     
 	/**
 	 * Fait tourner le robot (méthode bloquante)
@@ -567,7 +596,10 @@ public abstract class Robot implements Service
 	{
 		hasNonDigestedPlot=true;
 	}	
-	
+	/**
+	 * getter de hasNonDigestedPlot
+	 * @return vra si on a un plot dans les machoires, faux sinon
+	 */
 	public boolean hasRobotNonDigestedPlot()
 	{
 		return hasNonDigestedPlot;
