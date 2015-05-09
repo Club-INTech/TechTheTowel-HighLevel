@@ -248,6 +248,7 @@ public class ObstacleManager
     		&& !(position.y > 1420 && position.x < 533 && position.x > -533) // les marches
     		&& !(position.y > 1800 ) ) // les distributeurs de pop corn
     	{
+    		boolean isThereAnObstacleIntersecting=false;
     		for (int i = 0; i<mUntestedMobileObstacles.size(); i++)
     		{
     			ObstacleProximity obstacle = mUntestedMobileObstacles.get(i);
@@ -255,15 +256,35 @@ public class ObstacleManager
     			//si l'obstacle est deja dans la liste des obstacles non-testés on l'ajoute dans la liste des obstacles
 	    		if(obstacle.position.distance(position)<obstacle.radius+radius)
 	    		{
-	        		mMobileObstacles.add(new ObstacleProximity(position, radius, ObstacleGroups.ENNEMY_ROBOTS, lifetime));
-	    			mUntestedMobileObstacles.remove(i);
+    				mUntestedMobileObstacles.get(i).numberOfTimeDetected++;
+
+	    			// si on valide sa vision 
+	    			if(mUntestedMobileObstacles.get(i).numberOfTimeDetected >= mUntestedMobileObstacles.get(i).getMaxNumberOfTimeDetected())
+	    			{
+	    				isThereAnObstacleIntersecting=true;
+	    				mMobileObstacles.add(mUntestedMobileObstacles.get(i));
+	    				mUntestedMobileObstacles.remove(i);
+	    				
+	    			}
 	    		}
     		}
-			mUntestedMobileObstacles.add(new ObstacleProximity(position, radius, ObstacleGroups.ENNEMY_ROBOTS, timeToTestObstacle));
+    		for(int i = 0; i<mMobileObstacles.size(); i++)
+    		{
+    			ObstacleProximity obstacle = mMobileObstacles.get(i);
+    			if(obstacle.position.distance(position)<obstacle.radius+radius)
+    			{
+    				isThereAnObstacleIntersecting=true;
+    				mMobileObstacles.get(i).numberOfTimeDetected++;
+    				if (mMobileObstacles.get(i).numberOfTimeDetected > mMobileObstacles.get(i).getMaxNumberOfTimeDetected())
+    					mMobileObstacles.get(i).numberOfTimeDetected = mMobileObstacles.get(i).getMaxNumberOfTimeDetected();
+    			}
+    		}
+    		if (!isThereAnObstacleIntersecting)
+    			mUntestedMobileObstacles.add(new ObstacleProximity(position, radius, ObstacleGroups.ENNEMY_ROBOTS, timeToTestObstacle));
 
     			
     		/*on ne test pas si la position est dans un obstcle deja existant 
-    		 *on ne detecte pas les plots ni les goblets (et si on les detectes on prefere ne pas prendre le risque et on les evites)
+    		 *on ne detecte pas les plots ni les gobelets (et si on les detectes on prefere ne pas prendre le risque et on les evites)
     		 * et si on detecte une deuxieme fois l'ennemi on rajoute un obstacle sur lui
     		 */
     	}
@@ -505,9 +526,9 @@ public class ObstacleManager
     		    || ( PathDingDing.intersects(	coteDroitCone, 
     		    						   new Circle(positionEnnemy, ennemyRay))) )  )
     			{
-    				mMobileObstacles.get(i).numberOfTimeNotDetected++;
+    				mMobileObstacles.get(i).numberOfTimeDetected--;
     				
-    				if(mMobileObstacles.get(i).numberOfTimeNotDetected >= mMobileObstacles.get(i).getMaxNumberOfTimeNotDetected())
+    				if(mMobileObstacles.get(i).numberOfTimeDetected <= mMobileObstacles.get(i).getMaxNumberOfTimeNotDetected())
     				{
 	    				mMobileObstacles.remove(i--);
 	    				obstacleDeleted=true;
