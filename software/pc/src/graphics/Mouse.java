@@ -16,9 +16,9 @@ public class Mouse implements MouseListener
 	private Vec2 mMiddleClickPosition;
 	private Vec2 mLeftClickPosition;
 	private boolean mHasClicked;
-	private Panel mPanel;
+	private TablePanel mPanel;
 	
-	public Mouse(Panel pan)
+	public Mouse(TablePanel pan)
 	{
 		mPanel = pan;
 		mHasClicked = false;
