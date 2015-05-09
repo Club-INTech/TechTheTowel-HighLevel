@@ -252,7 +252,6 @@ public class ObstacleManager
     		for (int i = 0; i<mUntestedMobileObstacles.size(); i++)
     		{
     			ObstacleProximity obstacle = mUntestedMobileObstacles.get(i);
-    			//FIXME relire l'algo
     			//si l'obstacle est deja dans la liste des obstacles non-testés on l'ajoute dans la liste des obstacles
 	    		if(obstacle.position.distance(position)<obstacle.radius+radius)
 	    		{
@@ -262,6 +261,7 @@ public class ObstacleManager
 	    			if(mUntestedMobileObstacles.get(i).numberOfTimeDetected >= mUntestedMobileObstacles.get(i).getMaxNumberOfTimeDetected())
 	    			{
 	    				isThereAnObstacleIntersecting=true;
+	    				mUntestedMobileObstacles.get(i).addLifeTime(1000);
 	    				mMobileObstacles.add(mUntestedMobileObstacles.get(i));
 	    				mUntestedMobileObstacles.remove(i);
 	    				
@@ -532,6 +532,7 @@ public class ObstacleManager
     			
     				if(mMobileObstacles.get(i).numberOfTimeDetected < mMobileObstacles.get(i).getMaxNumberOfTimeNotDetected())
     				{
+    					mMobileObstacles.get(i).addLifeTime(1000);
         				mUntestedMobileObstacles.add(mMobileObstacles.get(i));
 	    				mMobileObstacles.remove(i--);
 	    				
@@ -651,4 +652,10 @@ public class ObstacleManager
     		log.debug("Revoir le code : impossible de trouver la propriété "+e.getPropertyNotFound(), this);;
     	}
 	}
+    
+    public ArrayList<ObstacleProximity> getUntestedArrayList()
+    {
+    	return mUntestedMobileObstacles;
+    }
+
 }

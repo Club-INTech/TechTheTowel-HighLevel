@@ -1,7 +1,5 @@
 package table.obstacles;
 
-import com.sun.org.apache.bcel.internal.generic.INEG;
-
 import smartMath.Vec2;
 import enums.ObstacleGroups;
 
@@ -25,8 +23,10 @@ public class ObstacleProximity extends ObstacleCircular
 	 */
 	public int numberOfTimeDetected;
 
+	//FIXME non explicite faire la doc !
 	private int maxNumberOfTimeNotDetected;
 	
+	//FIXME non explicite faire la doc !
 	private int maxNumberOfTimeDetected;
 
 	
@@ -47,10 +47,12 @@ public class ObstacleProximity extends ObstacleCircular
 		
 		this.lifetime = lifetime;
 		mOutDatedTime = System.currentTimeMillis() + lifetime;// la date de peremption = temps actuel + temps de peremption de l'obstacle
-		//TODO mettre dans le fichier de config le "tempsde peremption" de chaque obstacle 
-		numberOfTimeDetected=0;
-		maxNumberOfTimeNotDetected=0;
-		maxNumberOfTimeDetected=3;
+		//TODO mettre dans le fichier de config le "temps de peremption" de chaque obstacle 
+		numberOfTimeDetected=1;
+		
+		//FIXME canger les valeurs
+		maxNumberOfTimeNotDetected=3;
+		maxNumberOfTimeDetected=5;
 	}
 	
 	/* (non-Javadoc)
@@ -74,5 +76,14 @@ public class ObstacleProximity extends ObstacleCircular
 	public int getMaxNumberOfTimeDetected()
 	{
 		return maxNumberOfTimeDetected;
+	}
+	
+	/**
+	 * ajoute du temps de vie suplementaire a l'obstacle
+	 * @param time le temps de vie a ajouter
+	 */
+	public void addLifeTime(int time) 
+	{
+		lifetime += time;
 	}
 }
