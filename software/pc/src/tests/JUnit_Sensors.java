@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.Assert;
 
+import enums.ActuatorOrder;
 import enums.ObstacleGroups;
 import enums.SensorNames;
 import enums.ServiceNames;
@@ -67,8 +68,10 @@ public class JUnit_Sensors extends JUnit_Test
 		mLocomotion = (Locomotion)container.getService(ServiceNames.LOCOMOTION);
 		mLocomotion.updateConfig();
 
-		mLocomotion.setPosition(new Vec2 (1500-320-77,1000));
-		mLocomotion.setOrientation(Math.PI);
+		//mLocomotion.setPosition(new Vec2 (1500-320-77,1000));
+		mLocomotion.setPosition(new Vec2 (300,1000));
+		//mLocomotion.setOrientation(Math.PI);
+		mLocomotion.setOrientation(-Math.PI*0.5);
 		
 		container.startInstanciedThreads();
 
@@ -133,7 +136,7 @@ public class JUnit_Sensors extends JUnit_Test
 		}
 	}
 	
-	@Test
+	//@Test
 	public void testDetecting()
 	{
 		log.debug("Test d'évitement", this);
@@ -144,7 +147,7 @@ public class JUnit_Sensors extends JUnit_Test
 		} 
 		catch (UnableToMoveException e) 
 		{
-			log.critical("!!!!!! Catch de"+e+" dans testWithoutDetecting !!!!!!" , this);
+			log.critical( e.logStack(), this);
 		}
 		
 		while(true)
@@ -159,8 +162,7 @@ public class JUnit_Sensors extends JUnit_Test
 		try {
 			state.robot.moveLengthwise(250);
 		} catch (UnableToMoveException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 		}
 		
 		while(true)
@@ -178,7 +180,7 @@ public class JUnit_Sensors extends JUnit_Test
 			} 
 			catch (UnableToMoveException e1)
 			{
-				log.critical("!!!!! Catch de"+e1+" dans testDetectionTournante !!!!!" , this);
+				log.critical( e1.logStack(), this);
 			}
 		}
 	}
@@ -194,7 +196,7 @@ public class JUnit_Sensors extends JUnit_Test
 		} 
 		catch (UnableToMoveException e1)
 		{
-			log.critical("!!!!! Catch de"+e1+" dans testDetectionTournante !!!!!" , this);
+			log.critical( e1.logStack(), this);
 		}
 		while (true)
 		{
@@ -212,7 +214,7 @@ public class JUnit_Sensors extends JUnit_Test
 		} 
 		catch (UnableToMoveException e1)
 		{
-			log.critical("!!!!! Catch de"+e1+" dans testDetectionTournante !!!!!" , this);
+			log.critical( e1.logStack(), this);
 		}
 		while (true)
 		{
@@ -223,15 +225,34 @@ public class JUnit_Sensors extends JUnit_Test
 			} 
 			catch (UnableToMoveException e1)
 			{
-				log.critical("!!!!! Catch de"+e1+" dans testDetectionTournante !!!!!" , this);
+				log.critical( e1.logStack(), this);
 			}
 		}
 	}
 	
 
+	//@Test 
+	public void testContactGlasses()
+	{
+		try 
+		{
+			state.robot.useActuator(ActuatorOrder.ARM_LEFT_MIDDLE, false);
+			state.robot.useActuator(ActuatorOrder.ARM_RIGHT_MIDDLE, false);
+		} 
+		catch (Exception e) 
+		{
+			;		
+		}
+
+		while(true)
+		{
+			log.debug("Gauche : "+state.robot.isGlassStoredLeft+" | Droit : "+state.robot.isGlassStoredRight, this);
+			state.robot.sleep(50);
+		}
+	}
 		
 	//@Test
-	public void testCapteurFixe()
+	public void testSensorEnnemyInDiscWithoutMovement()
 	{
 		log.debug("Test d'évitement fixe", this);
 		while(true)
@@ -255,12 +276,24 @@ public class JUnit_Sensors extends JUnit_Test
             		}
             		catch(UnexpectedObstacleOnPathException e2)
             		{
-                        log.critical("Catch de "+e2+" dans moveToPointException", this);
+            			log.critical( e2.logStack(), this);
             		}
             	}
 			}
 		}
 	}
+	
+	
+	@Test
+	public void testSensorEnnemyWithoutMovement()
+	{
+		log.debug("Test des capteurs fixe", this);
+		while(true)
+		{
+			;
+		}
+	}
+	
 	
 	
    // @Test
@@ -273,7 +306,7 @@ public class JUnit_Sensors extends JUnit_Test
 		} 
     	catch (UnableToMoveException e2) 
     	{
-			e2.printStackTrace();
+    		log.critical( e2.logStack(), this);
 		}
 		log.debug("Test d'évitement", this);
 		Random rand = new Random();

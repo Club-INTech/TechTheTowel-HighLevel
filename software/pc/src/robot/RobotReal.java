@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import enums.ActuatorOrder;
 import enums.SensorNames;
 import enums.Speed;
+import enums.SymmetrizedActuatorOrderMap;
+import enums.SymmetrizedSensorNamesMap;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 
@@ -27,6 +29,10 @@ public class RobotReal extends Robot
 	private ActuatorCardWrapper mActuatorCardWrapper;
 	private SensorsCardWrapper mSensorsCardWrapper;
 	
+	private SymmetrizedActuatorOrderMap mActuatorCorrespondenceMap = new SymmetrizedActuatorOrderMap();
+	private SymmetrizedSensorNamesMap mSensorCorrespondenceMap = new SymmetrizedSensorNamesMap();
+	
+	
 	/** Système de locomotion a utiliser pour déplacer le robot */
 	private Locomotion mLocomotion;
 	
@@ -38,7 +44,7 @@ public class RobotReal extends Robot
 		this.mActuatorCardWrapper = mActuatorCardWrapper;
 		this.mLocomotion = deplacements;
 		updateConfig();
-		speed = Speed.BETWEEN_SCRIPTS;		
+		speed = Speed.SLOW;		
 	}
 	
     public void copy(RobotChrono rc)
@@ -56,19 +62,43 @@ public class RobotReal extends Robot
 	@Override
 	public void useActuator(ActuatorOrder order, boolean waitForCompletion) throws SerialConnexionException
 	{
+		if(symmetry)
+			order = mActuatorCorrespondenceMap.getSymmetrizedActuatorOrder(order);
 		mActuatorCardWrapper.useActuator(order);
 		
 		if(waitForCompletion)
-			sleep(order.getDuration());		
+			sleep(order.getDuration());
 	}
 	
 	@Override
-	public Object getSensorValue (SensorNames captor) throws SerialConnexionException
+	public Object getSensorValue (SensorNames sensor) throws SerialConnexionException
 	{
-		return mSensorsCardWrapper.getSensorValue(captor);
+
+		// si il n'y a pas de symétrie, on renvoie la valeur brute du bas niveau
+		if(!symmetry) 
+			return mSensorsCardWrapper.getSensorValue(sensor);
+		else
+		{
+			// on regarde les capteurs symetrisés (ex : contacteur du bras droit / gauche)
+			sensor = mSensorCorrespondenceMap.getSymmetrizedSensorName(sensor);
+
+			// capteurs ultrasons
+			// on échange les valeurs des ultrasons (l'ultrason droit devien l'ultrason gauche et réciproquement)
+			if(sensor == SensorNames.ULTRASOUND_FRONT_SENSOR || sensor == SensorNames.ULTRASOUND_FRONT_SENSOR)
+			{
+				 // On intervertit droite et gauche pour les capteurs	
+				int[] invertedOut = (int[])mSensorsCardWrapper.getSensorValue(sensor);
+				int[] out = new int[2];
+				out[0] = invertedOut[1];
+				return out;					
+			}
+			else // contacteurs
+			{
+				return mSensorsCardWrapper.getSensorValue(sensor);
+			}
+		}
 	}
 
-	
 	@Override	
 	public void sleep(long duree)
 	{
@@ -102,13 +132,15 @@ public class RobotReal extends Robot
 	@Override
     public void moveLengthwiseWithoutDetection(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
 	{	
-		Speed newSpeed;
+		Speed newSpeed = Speed.SLOW;
+		/*
     	if (distance<150)
     		newSpeed = Speed.SLOW;
     	else if (distance <1000)
     		newSpeed = Speed.BETWEEN_SCRIPTS_SLOW;
     	else
     		newSpeed = Speed.BETWEEN_SCRIPTS;
+    		*/
     	
 		moveLengthwise(distance, hooksToConsider, expectsWallImpact, false, newSpeed);
 	}	
@@ -125,13 +157,15 @@ public class RobotReal extends Robot
 	@Override
 	 public void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact, Boolean mustDetect) throws UnableToMoveException
 	{	
-		Speed newSpeed;
+		Speed newSpeed = Speed.SLOW;
+		/*
     	if (distance<150)
     		newSpeed = Speed.SLOW;
     	else if (distance <1000)
     		newSpeed = Speed.BETWEEN_SCRIPTS_SLOW;
     	else
     		newSpeed = Speed.BETWEEN_SCRIPTS;
+    		*/
     	
 		moveLengthwise(distance, hooksToConsider, expectsWallImpact, mustDetect, newSpeed);
 	}	
@@ -187,6 +221,7 @@ public class RobotReal extends Robot
     	}
     	catch (UnableToMoveException e)
     	{
+			log.critical( e.logStack(), this);
     		throw e;
     	}
     }
@@ -200,6 +235,7 @@ public class RobotReal extends Robot
     	}
     	catch (UnableToMoveException e)
     	{
+			log.critical( e.logStack(), this);
             throw e;
     	}
     }
@@ -212,6 +248,7 @@ public class RobotReal extends Robot
     	}
     	catch (UnableToMoveException e)
     	{
+			log.critical( e.logStack(), this);
             throw e;
     	}// le robot s'est arreté de tourner qu'il y ait catch ou non.
     }
@@ -250,7 +287,7 @@ public class RobotReal extends Robot
 		}
 		catch (SerialConnexionException e)
 		{
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 		}
 	}
 
@@ -263,7 +300,7 @@ public class RobotReal extends Robot
 		}
 		catch (SerialConnexionException e)
 		{
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 		}
 	}
 	
@@ -279,7 +316,8 @@ public class RobotReal extends Robot
     @Override
 	public Vec2 getPosition()
 	{
-	    return mLocomotion.getPosition();
+    	position = mLocomotion.getPosition();
+	    return position;
 	}
 	
 	@Override
@@ -291,7 +329,8 @@ public class RobotReal extends Robot
     @Override
     public double getOrientation()
     {
-        return mLocomotion.getOrientation();
+    	orientation =  mLocomotion.getOrientation();
+        return orientation;
     }
 
 	@Override
@@ -306,7 +345,7 @@ public class RobotReal extends Robot
 		} 
         catch (SerialConnexionException e)
         {
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 		}
 	}
 	
@@ -331,4 +370,6 @@ public class RobotReal extends Robot
 	{
 		return mLocomotion.isRobotMovingBackward;
 	}
+
+	
 }

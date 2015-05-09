@@ -1,7 +1,6 @@
 package pathDingDing;
 
 import smartMath.*;
-import sun.util.logging.resources.logging;
 import table.Table;
 import utils.Log;
 
@@ -27,6 +26,7 @@ public class PathDingDing implements Service
 	/**
 	 * constructeur
 	 * @param table
+	 * @param log 
 	 */
 	public PathDingDing(Table table, Log log)
 	{
@@ -50,6 +50,8 @@ public class PathDingDing implements Service
 	public ArrayList<Vec2> computePath(Vec2 start, Vec2 end, EnumSet<ObstacleGroups> obstaclesToConsider) throws PathNotFoundException, InObstacleException
 	{
 		this.mObstaclesToConsider = obstaclesToConsider;
+		//mLog.debug("Obstacles à considerer : "+obstaclesToConsider.toString()  ,this);
+
 		mGraph.setObstaclesToConsider(mObstaclesToConsider);
 		
 		//si le noeud d'arrivée n'est pas sur la table, on jette une exception
@@ -81,6 +83,7 @@ public class PathDingDing implements Service
 			pathVec2.add(start);
 			Node closestNode = mGraph.closestNode(startNode.toVec2());
 			mGraph.setStartNode(new Node(closestNode.x, closestNode.y));
+			//System.out.println("Depart hors - Pathfinding");
 		}
 		else
 			//ajout du noeud de depart au graphe

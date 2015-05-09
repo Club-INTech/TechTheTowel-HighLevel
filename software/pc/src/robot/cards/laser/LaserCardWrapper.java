@@ -53,7 +53,7 @@ public class LaserCardWrapper implements Service {
 
 	/**
 	 * Indique les balises considérées comme non opérationnelle pour le match
-	 * @return
+	 * @return sdf
 	 */
 	public ArrayList<Beacon> ignoredBeacons()//balises_ignorees()
 	{
@@ -73,7 +73,7 @@ public class LaserCardWrapper implements Service {
 			serie.communiquer("motor_on", 0);
 			serie.communiquer("laser_on", 0);
 		} catch (SerialConnexionException e) {
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 		}
 	}
 
@@ -86,7 +86,7 @@ public class LaserCardWrapper implements Service {
 			serie.communiquer("motor_off", 0);
 			serie.communiquer("laser_off", 0);
 		} catch (SerialConnexionException e) {
-			e.printStackTrace();
+			log.debug( e.logStack(), this);
 		}
 	}
 
@@ -113,7 +113,7 @@ public class LaserCardWrapper implements Service {
 					//log.warning("balise n°"+b.id+" ne répond pas.", this);
 				}
 			} catch (SerialConnexionException e) {
-				e.printStackTrace();
+				log.debug( e.logStack(), this);
 			}
 		return beacons_ok;
 	}
@@ -153,6 +153,7 @@ public class LaserCardWrapper implements Service {
 	 * Et renvoie la position relative de la balise dans le système de coordonnées du laser.
 	 * @param id
 	 * @return point
+	 * @throws SerialConnexionException 
 	 * @throws SerialException 
 	 */
 	public Vec2 position_balise_relative(int id) throws SerialConnexionException
@@ -197,7 +198,8 @@ public class LaserCardWrapper implements Service {
 	/**
 	 * Récupère la valeur (rayon, angle) d'une balise
 	 * @param id
-	 * @return
+	 * @return dfffrfrr
+	 * @throws SerialConnexionException 
 	 * @throws SerialException 
 	 */
 	public Vec2 position_balise(int id) throws SerialConnexionException
@@ -330,9 +332,9 @@ public class LaserCardWrapper implements Service {
 						valeurs.add(angle);
 					}
 				}
-				catch(Exception e)
+				catch(SerialConnexionException e)
 				{
-					e.printStackTrace();
+					log.debug( e.logStack(), this);
 				}
 			}
 

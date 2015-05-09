@@ -1,5 +1,8 @@
 package exceptions.serial;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 /**
  * Exception levée par les connexions séries
  * @author pf
@@ -20,5 +23,17 @@ public class SerialConnexionException extends Exception
 	public SerialConnexionException(String m)
 	{
 		super(m);
+	}
+
+	
+	public String logStack()
+	{
+		StringWriter sw = new StringWriter();
+		this.printStackTrace(new PrintWriter(sw));
+		
+		String exceptionAsString = sw.toString();	
+		exceptionAsString = exceptionAsString.replaceAll("(\r\n|\n\r|\r|\n)", " -> ");
+		
+		return exceptionAsString;
 	}
 }

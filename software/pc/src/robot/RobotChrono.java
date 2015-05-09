@@ -13,9 +13,7 @@ import enums.ActuatorOrder;
 import enums.ObstacleGroups;
 import enums.SensorNames;
 import enums.Speed;
-import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
-import exceptions.Locomotion.UnexpectedObstacleOnPathException;
 
 /**
  * Robot virtuel ne faisant pas bouger le robot réel, mais détermine la durée des actions.
@@ -25,13 +23,6 @@ import exceptions.Locomotion.UnexpectedObstacleOnPathException;
 
 public class RobotChrono extends Robot
 {
-
-	/** position du robot virtuel sur la table. Utile pour calculer le temps nécéssaire pour atteindre un autre point de la table */
-	protected Vec2 position = new Vec2();
-	
-	/** orientation du robot virtuel sur la table. Utile pour calculer le temps nécéssaire pour atteindre un autre point de la table */
-	protected double orientation;
-	
 	/** Chronomètre du robot en millisecondes */
 	private int chrono = 0;
 	
@@ -42,6 +33,7 @@ public class RobotChrono extends Robot
 	 *  Fais un nouveau Robot Chrono
 	 * @param config fichier de configuration ou lire la config du match
 	 * @param log système de log a utiliser pour écrire
+	 * @param pathDingDing 
 	 */
 	public RobotChrono(Config config, Log log, PathDingDing pathDingDing)
 	{
@@ -138,13 +130,16 @@ public class RobotChrono extends Robot
 	@Override
 	public void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact, Boolean mustDetect) throws UnableToMoveException
 	{
-		Speed newSpeed;
+		Speed newSpeed = Speed.SLOW;
+		
+		/*
     	if (distance<150)
     		newSpeed = Speed.SLOW;
     	else if (distance <1000)
     		newSpeed = Speed.BETWEEN_SCRIPTS_SLOW;
     	else
     		newSpeed = Speed.BETWEEN_SCRIPTS;
+    	*/
     	
 		moveLengthwise(distance, hooksToConsider, expectsWallImpact, mustDetect, newSpeed);
 	}

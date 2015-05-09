@@ -7,12 +7,10 @@ import scripts.AbstractScript;
 import scripts.ScriptManager;
 import smartMath.Vec2;
 import strategie.GameState;
-import utils.Sleep;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import enums.ActuatorOrder;
 import enums.ScriptNames;
 import enums.ServiceNames;
 import exceptions.InObstacleException;
@@ -99,12 +97,12 @@ public class JUnit_GetPlot extends JUnit_Test
 		catch (PathNotFoundException e)
 		{
 			//TODO: le pathfinding ne trouve pas de chemin
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 		} 
 		catch (SerialFinallyException e) 
 		{
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 		}
 		
 		System.out.println("match fini !");

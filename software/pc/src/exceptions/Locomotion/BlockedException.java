@@ -1,5 +1,8 @@
 package exceptions.Locomotion;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 
 /**
  * Exception lancée en cas de blocage mécanique du robot (les moteurs forcent sans que les codeuses ne tournent pas)
@@ -19,6 +22,17 @@ public class BlockedException extends Exception
 	public BlockedException(String m)
 	{
 		super(m);
+	}
+	
+	public String logStack()
+	{
+		StringWriter sw = new StringWriter();
+		this.printStackTrace(new PrintWriter(sw));
+		
+		String exceptionAsString = sw.toString();	
+		exceptionAsString = exceptionAsString.replaceAll("(\r\n|\n\r|\r|\n)", " -> ");
+		
+		return exceptionAsString;
 	}
 
 }

@@ -1,5 +1,8 @@
 package exceptions;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 /**
  * Exception levée par le container
  * @author pf
@@ -22,5 +25,15 @@ public class ContainerException extends Exception
 	{
 		super(m);
 	}
-
+	
+	public String logStack()
+	{
+		StringWriter sw = new StringWriter();
+		this.printStackTrace(new PrintWriter(sw));
+		
+		String exceptionAsString = sw.toString();	
+		exceptionAsString = exceptionAsString.replaceAll("(\r\n|\n\r|\r|\n)", " -> ");
+		
+		return exceptionAsString;
+	}
 }

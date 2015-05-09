@@ -16,7 +16,6 @@ import smartMath.Vec2;
 import strategie.GameState;
 import strategie.Strategie;
 import threads.ThreadTimer;
-import enums.ActuatorOrder;
 import enums.ServiceNames;
 import enums.Speed;
 import exceptions.serial.SerialConnexionException;
@@ -51,39 +50,10 @@ public class JUnit_Strategia extends JUnit_Test
 		} 
 		catch (SerialConnexionException e) 
 		{
-			e.printStackTrace();
+			log.debug( e.logStack(), this);
 		}		
-
 	}
 	
-	/**
-	 * le set up du match en cours (mise en place des actionneurs)
-	 * @param robot le robot a setuper
-	 * @throws SerialConnexionException si l'ordinateur n'arrive pas a communiquer avec les cartes
-	 */
-	public void matchSetUp(Robot robot) throws SerialConnexionException
-	{
-		robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
-
-		robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, false);
-		robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, true);
-		
-		robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
-		robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
-		
-		robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
-		robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);
-		
-		robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
-		robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
-		
-		robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
-		robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
-		
-		robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
-		
-		robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
-	}
 	
 	/**
 	 * Demande si la couleur est verte au jaune
@@ -136,13 +106,27 @@ public class JUnit_Strategia extends JUnit_Test
 	@Test
 	public void desisionTest()
 	{
-		configColor();
-		real_state.robot.setLocomotionSpeed(Speed.BETWEEN_SCRIPTS_SLOW);
+		//configColor();
+		real_state.robot.setLocomotionSpeed(Speed.SLOW);
 		container.startAllThreads();
 		waitMatchBegin();
+		
+		long timeMatchBegin=System.currentTimeMillis();
+
+		
 		strategos.updateConfig();
 		strategos.IA();
+		
+
+		//////////////////////////////////////////////////////
+		//	Fin du match
+		//////////////////////////////////////////////////////
+		
+		System.out.println("match fini !");
+
+		//Le match s'arrête
+		container.destructor();
+		
+		System.out.println(System.currentTimeMillis()-timeMatchBegin+" ms depuis le debut : < 90.000 ?");
 	}
-	
-	
 }

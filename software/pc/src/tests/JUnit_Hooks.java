@@ -6,9 +6,7 @@ import hook.methods.*;
 import hook.types.HookFactory;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 
-import scripts.AbstractScript;
 import scripts.ScriptManager;
 import smartMath.Vec2;
 import strategie.GameState;
@@ -40,6 +38,7 @@ public class JUnit_Hooks extends JUnit_Test
 	SensorsCardWrapper  mSensorsCardWrapper;
 	HookFactory hookFactory;
 	
+	@SuppressWarnings("unchecked")
 	@Before
 	public void setUp() throws Exception
 	{
@@ -59,7 +58,7 @@ public class JUnit_Hooks extends JUnit_Test
 		} 
 		catch (SerialConnexionException e) 
 		{
-			e.printStackTrace();
+			log.debug( e.logStack(), this);
 		}		
 	}
 
@@ -96,7 +95,7 @@ public class JUnit_Hooks extends JUnit_Test
 		}
 		catch (UnableToMoveException e) 
 		{
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 		}		
 		System.out.println("match fini !");
 
@@ -126,7 +125,7 @@ public class JUnit_Hooks extends JUnit_Test
 		ArrayList<Hook> testHookList = new ArrayList<Hook> ();
 
 		
-	    Vec2 center = new Vec2(900,1000);
+	    
 		
 	    //TODO : à refaire
 	    /*
@@ -144,7 +143,7 @@ public class JUnit_Hooks extends JUnit_Test
 			real_state.robot.moveLengthwise(1500, testHookList);
 		} 
 		catch (UnableToMoveException e) {
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 		}
 	}
 	
@@ -187,7 +186,7 @@ public class JUnit_Hooks extends JUnit_Test
 		}
 		catch (UnableToMoveException e) 
 		{
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 		}		
 		System.out.println("match fini !");
 
@@ -201,7 +200,7 @@ public class JUnit_Hooks extends JUnit_Test
 		//container.startAllThreads();
 		//premiere action du match
 		
-		real_state.robot.setLocomotionSpeed(Speed.FAST);
+		real_state.robot.setLocomotionSpeed(Speed.SLOW);
 		
 		real_state.robot.setPosition(new Vec2(0, 0));
 		
@@ -232,7 +231,7 @@ public class JUnit_Hooks extends JUnit_Test
 		}
 		catch (UnableToMoveException e) 
 		{
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 		}		
 		System.out.println("match fini !");
 

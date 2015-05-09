@@ -80,7 +80,7 @@ public class JUnit_Match extends JUnit_Test
 		catch (UnableToMoveException e) 
 		{
 			log.critical("Chemin bloque, enlevez votre main",this);
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 		}
 		
 		
@@ -91,7 +91,7 @@ public class JUnit_Match extends JUnit_Test
 		catch (UnableToMoveException e) 
 		{
 			log.debug("impossible de tourner",this);
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 		}
 		
 		try 
@@ -101,7 +101,7 @@ public class JUnit_Match extends JUnit_Test
 		catch (UnableToMoveException e) 
 		{
 			log.debug("impossible de tourner",this);
-			e.printStackTrace();
+			log.critical( e.logStack(), this);
 		}
 		
 	}

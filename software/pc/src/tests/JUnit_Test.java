@@ -57,6 +57,7 @@ public abstract class JUnit_Test
 	
 	/**
 	 * le set up du match en cours (mise en place des actionneurs)
+	 * @param sensorsCard 
 	 * @param robot le robot a setuper
 	 * @throws SerialConnexionException si l'ordinateur n'arrive pas a communiquer avec les cartes
 	 */
@@ -95,9 +96,18 @@ public abstract class JUnit_Test
 		
 		robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
 		robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);
+
+
+		robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, false);
+		robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, false);
+		
+		robot.useActuator(ActuatorOrder.LEFT_CARPET_DROP, false);
+		robot.useActuator(ActuatorOrder.RIGHT_CARPET_DROP, true);
 		
 		robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
 		robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
+		
+		robot.sleep(300);
 		
 		robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
 		robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
@@ -106,7 +116,7 @@ public abstract class JUnit_Test
 		
 		robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
 		
-		robot.setLocomotionSpeed(Speed.BETWEEN_SCRIPTS);
+		robot.setLocomotionSpeed(Speed.SLOW);
 	}
 	
 	public void putTennisBall(Robot robot) throws SerialConnexionException
@@ -115,7 +125,7 @@ public abstract class JUnit_Test
 		robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
 		
 		log.debug("Veuillez mettre la Balle de Tennis", this);
-		Sleep.sleep(3000);
+		Sleep.sleep(1500);
 		
 		robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 		robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);

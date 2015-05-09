@@ -42,18 +42,8 @@ public class JUnit_ActuatorManager extends JUnit_Test
         pathDingDing = (PathDingDing)container.getService(ServiceNames.PATHDINGDING);
 		emptyHook = new ArrayList<Hook> ();  
 
-		if (real_state.robot.getSymmetry())
-		{
-			real_state.robot.setPosition(new Vec2 (-1381,1000));
-			real_state.robot.setOrientation(0); 
-			//si on est jaune on est en 0 
-		}
-		else
-		{
-			real_state.robot.setPosition(new Vec2 (1381,1000));
-			real_state.robot.setOrientation(Math.PI);
-			//sinon on est vert donc on est en PI
-		}
+		real_state.robot.setPosition(new Vec2 (1381,1000));
+		real_state.robot.setOrientation(Math.PI);
 		
 		real_state.robot.updateConfig();
 		mRobot=real_state.robot;	
@@ -81,7 +71,6 @@ public class JUnit_ActuatorManager extends JUnit_Test
 	/**
 	 * Test des machoires du robot
 	 *
-	 * @return true, if successful
 	 * @throws Exception the exception
 	 */
 	@Test
@@ -107,7 +96,6 @@ public class JUnit_ActuatorManager extends JUnit_Test
 	/**
 	 * Test des claps du robot
 	 *
-	 * @return true, if successful
 	 * @throws Exception the exception
 	 */
 	@Test
@@ -130,7 +118,6 @@ public class JUnit_ActuatorManager extends JUnit_Test
 	/**
 	 * Test des tapis du robot
 	 *
-	 * @return true, if successful
 	 * @throws Exception the exception
 	 */
 	@Test
@@ -152,7 +139,6 @@ public class JUnit_ActuatorManager extends JUnit_Test
 	/**
 	 * Test de l'ascenceur du robot
 	 *
-	 * @return true, if successful
 	 * @throws Exception the exception
 	 */
 	@Test
@@ -168,7 +154,6 @@ public class JUnit_ActuatorManager extends JUnit_Test
 	/**
 	 * Test des bras
 	 *
-	 * @return true, if successful
 	 * @throws Exception the exception
 	 */
 	@Test
@@ -192,7 +177,6 @@ public class JUnit_ActuatorManager extends JUnit_Test
 	/**
 	 * Test du guide
 	 *
-	 * @return true, if successful
 	 * @throws Exception the exception
 	 */
 		

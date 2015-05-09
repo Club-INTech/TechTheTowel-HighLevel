@@ -9,7 +9,6 @@ import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import hook.Callback;
 import hook.Hook;
-import hook.methods.CloseLeftArmExe;
 import hook.methods.CloseRightArmExe;
 import hook.types.HookFactory;
 import robot.Robot;
@@ -44,7 +43,7 @@ public class DropCarpet extends AbstractScript
 	}
 
 	@Override
-	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider) throws SerialFinallyException
+	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, SerialFinallyException
 	{
 		if (versionToExecute == 1)
 			try 
@@ -53,14 +52,14 @@ public class DropCarpet extends AbstractScript
 				stateToConsider.robot.turn(-0.5*Math.PI, hooksToConsider, false);
 				// on avance vers ces demoiselles (les marches) (attention impact possible)
 				// TODO utiliser moveLengthwiseTorwardWalls
-				stateToConsider.robot.moveLengthwiseWithoutDetection(-distanceBetweenEntryAndStairs, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwiseWithoutDetection(-(1320 - stateToConsider.robot.getPositionFast().y), hooksToConsider, true);
 				
 				//TODO supr
 				System.out.println("en position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") avant depose-tapis");
 		
 				
 				//verification de la position : on n'effectue l'action que si on est assez proche (ie pas d'obstacle)
-				if(Math.abs((stateToConsider.robot.getPosition().y-1340))<50) // position- position du centre parfait<marge d'erreur
+			//	if(Math.abs((stateToConsider.robot.getPosition().y-1340))<50) // position- position du centre parfait<marge d'erreur
 				
 				{
 					//on depose le tapis gauche (si celui-ci n'est pas deja depose)
@@ -78,15 +77,13 @@ public class DropCarpet extends AbstractScript
 						stateToConsider.table.setIsRightCarpetDropped(true);
 						stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
 					}
-					//TODO supr
-					System.out.println("En position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") après avoir deposé les tapis");
 				}
 				
 				//on s'eloigne de l'escalier
 				try 
 				{
-					stateToConsider.robot.moveLengthwise(distanceBetweenEntryAndStairs, hooksToConsider, false);
-		
+					stateToConsider.robot.moveLengthwise( distanceBetweenEntryAndStairs, hooksToConsider, false);
+					
 				}
 				catch (UnableToMoveException e) 
 				{
@@ -108,6 +105,7 @@ public class DropCarpet extends AbstractScript
 			catch (UnableToMoveException | SerialConnexionException e)
 			{
 				finalize(stateToConsider);
+				throw e;
 			}
 		else if(versionToExecute == 0)
 		{
@@ -118,10 +116,7 @@ public class DropCarpet extends AbstractScript
 				hookGoblet.addCallback(new Callback(new CloseRightArmExe(),true, stateToConsider));
 				hooksToConsider.add(hookGoblet);
 				
-				if (!stateToConsider.robot.getSymmetry())
-					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, false);
-				else
-					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, false);
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, false);
 
 				//le 2.98 a ete testé de façon experimentale (ainsi que le 606), a modifier si quelqu'un veut le calculer
 				stateToConsider.robot.turn(2.98);
@@ -132,7 +127,7 @@ public class DropCarpet extends AbstractScript
 				//on presente ses arrieres a l'escalier
 				stateToConsider.robot.turn(-0.5*Math.PI, hooksToConsider, false);
 				// on avance vers ces demoiselles (les marches) (attention impact possible)
-				stateToConsider.robot.moveLengthwiseTowardWall(-distanceBetweenEntryAndStairs*2, hooksToConsider);
+				stateToConsider.robot.moveLengthwiseTowardWall(-(1320 - stateToConsider.robot.getPositionFast().y), hooksToConsider);
 
 				
 				//verification de la position : on n'effectue l'action que si on est assez proche (ie pas d'obstacle)
@@ -178,6 +173,7 @@ public class DropCarpet extends AbstractScript
 			catch(UnableToMoveException | SerialConnexionException e)
 			{
 				finalize(stateToConsider);
+				throw e;
 			}
 		}
 		//version 2 du script : débute au point de départ du robot, attrape le gobelet en passant.
@@ -190,19 +186,12 @@ public class DropCarpet extends AbstractScript
 				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
 				
-				
 				//mise en place d'un hook pour attraper le gobelet 1.75 secondes après le début du script
 				Hook hookGoblet = hookFactory.newHookTimer(System.currentTimeMillis() + 2250,500);
-				if(stateToConsider.robot.getSymmetry())
-					hookGoblet.addCallback(new Callback(new CloseLeftArmExe(),true, stateToConsider));
-				else
-					hookGoblet.addCallback(new Callback(new CloseRightArmExe(),true, stateToConsider));
+				hookGoblet.addCallback(new Callback(new CloseRightArmExe(),true, stateToConsider));
 				hooksToConsider.add(hookGoblet);
 				
-				if (!stateToConsider.robot.getSymmetry())
-					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, false);
-				else
-					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, false);
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, false);
 
 				//le 3.05 a ete testé de façon experimentale (ainsi que le 850), a modifier si quelqu'un veut le calculer
 				stateToConsider.robot.turn(3.05);
@@ -212,7 +201,7 @@ public class DropCarpet extends AbstractScript
 				//on presente ses arrieres a l'escalier
 				stateToConsider.robot.turn(-0.5*Math.PI, hooksToConsider, false);
 				// on avance vers ces demoiselles (les marches) (attention impact possible)
-				stateToConsider.robot.moveLengthwiseTowardWall(-250*2, hooksToConsider);
+				stateToConsider.robot.moveLengthwiseTowardWall( -(1320 - stateToConsider.robot.getPositionFast().y), hooksToConsider);
 				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
 				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
 
@@ -265,6 +254,7 @@ public class DropCarpet extends AbstractScript
 			catch(UnableToMoveException | SerialConnexionException e)
 			{
 				finalize(stateToConsider);
+				throw e;
 			}
 		}
 	}

@@ -1,12 +1,8 @@
 package scripts;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 
 import enums.ActuatorOrder;
-import enums.ObstacleGroups;
-import exceptions.InObstacleException;
-import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
@@ -106,7 +102,7 @@ public class TakeTennisBall extends AbstractScript
 		if (!stateToConsider.table.isBallTaken() && stateToConsider.table.getPileValue(0)==0 && !stateToConsider.table.isAreaXFilled(0))
 		{
 			//on revoie le nombre de points possible a fairre avec cette balle
-			return (5*Math.min((int)(90000-stateToConsider.timeEllapsed)/AverageTimeToGetPlot,
+			return (5*Math.min((int)(90000-stateToConsider.getTimeEllapsed())/AverageTimeToGetPlot,
 									stateToConsider.table.numberOfPlotLeft()));
 		}
 		return 0;

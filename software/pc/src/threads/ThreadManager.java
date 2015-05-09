@@ -53,6 +53,7 @@ public class ThreadManager
 	 * L'instancie si c'est la première fois qu'on le demande.
 	 *
 	 * @param table La table a l'intérieure de laquelle le thread doit croire évoluer
+	 * @param robot 
 	 * @param sensorsCardWrapper La carte capteurs avec laquelle le thread va parler
 	 * @param locomotionCardWrapper La carte d'asservissements avec laquelle le thread va parler
 	 * @param actuatorCardWrapper La carte actionneurs avec laquelle le thread va parler
@@ -71,6 +72,7 @@ public class ThreadManager
 	 * L'instancie si c'est la première fois qu'on le demande.
 	 * 
 	 * @param table La table a l'intérieure de laquelle le thread doit croire évoluer
+	 * @param robot 
 	 * @param sensorsCardWrapper La carte capteurs avec laquelle le thread va parler
 	 * @return le thread capteurs
 	 */

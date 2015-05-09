@@ -8,7 +8,6 @@ import robot.RobotReal;
 import scripts.ScriptManager;
 import smartMath.*;
 
-import java.awt.Robot;
 import java.util.EnumSet;
 
 import enums.ObstacleGroups;

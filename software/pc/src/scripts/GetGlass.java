@@ -68,6 +68,10 @@ public class GetGlass extends AbstractScript
 		// va jusqu'au point d'entrée de la version demandée
 		actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.robotRay, actualState.robot.getPosition()), hooksToConsider, actualState.table,obstacleNotConsidered);
 		
+		//	le robot est deja en face du plot puisqu'on a appele goToThenExec (qui met en face du centre du script) si un jour on autorise de lancer exec il faudra remettre ces lignes (et les debugger)
+		actualState.robot.turn(Math.atan2(	entryPosition(versionToExecute,actualState.robot.robotRay, actualState.robot.getPosition()).position.y - actualState.robot.getPosition().y,	// position voulue - position actuelle
+					 							entryPosition(versionToExecute,actualState.robot.robotRay, actualState.robot.getPosition()).position.x - actualState.robot.getPosition().x	// de meme
+					 						 ));
 		// exécute la version demandée
 			execute(versionToExecute, actualState, hooksToConsider);
 }
@@ -183,7 +187,7 @@ public class GetGlass extends AbstractScript
 	@Override
 	public int remainingScoreOfVersion(int id_version, GameState<?> state) 
 	{
-		if (!(state.robot.isGlassStoredRight && state.robot.isGlassStoredLeft) && state.table.isGlassXTaken(id_version) && (90000-state.timeEllapsed)>timeToDropGlass) 
+		if (!(state.robot.isGlassStoredRight && state.robot.isGlassStoredLeft) && state.table.isGlassXTaken(id_version) && (90000-state.getTimeEllapsed())>timeToDropGlass) 
 		{
 			return 4;
 		}
@@ -207,12 +211,7 @@ public class GetGlass extends AbstractScript
 	
 	//attrape le plot (ouvre / avance / ferme )
 	private void takeGlass (GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider, boolean isSecondTry , boolean isArmChosenLeft) throws SerialConnexionException, UnableToMoveException
-	{	
-		//On change le bras choisi suivant la symetrie : à voir si l'IA s'en occupera, mais pour les tests ca reste là
-		if(stateToConsider.robot.getSymmetry())
-		{
-			isArmChosenLeft=!isArmChosenLeft;
-		}
+	{
 		//On ouvre le bras
 		if(isArmChosenLeft)
 		{

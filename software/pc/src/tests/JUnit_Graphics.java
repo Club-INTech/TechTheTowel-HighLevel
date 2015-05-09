@@ -4,6 +4,8 @@ import org.junit.*;
 
 import graphics.*;
 import smartMath.Vec2;
+import utils.Sleep;
+
 import java.util.ArrayList;
 
 public class JUnit_Graphics extends JUnit_Test
@@ -19,7 +21,7 @@ public class JUnit_Graphics extends JUnit_Test
     }
     
     //test de l'intersection de deux segments
-    @Test
+    //@Test
     public void testPanel() throws InterruptedException
     {
     	ArrayList<Vec2> path = new ArrayList<Vec2>();
@@ -29,5 +31,16 @@ public class JUnit_Graphics extends JUnit_Test
     	path.add(new Vec2(-1400, 100));
     	win.getPanel().drawArrayList(path);
     	Thread.sleep(5000);
+    }
+    
+    @Test
+    public void testSensorPanel() throws InterruptedException
+    {
+    	win = new Window();
+    	for(int i = 10; i < 10000; i += 10)
+    	{
+    		win.drawInt((int)(10*Math.cos((double)i/10)), (int)(20*Math.cos((double)i/20)), (int)(30*Math.cos((double)i/40)), (int)(40*Math.cos((double)i/80)));
+    		Sleep.sleep(200);
+    	}
     }
 }

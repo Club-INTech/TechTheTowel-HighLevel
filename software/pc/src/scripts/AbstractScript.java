@@ -90,7 +90,16 @@ public abstract class AbstractScript implements Service
 	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, ArrayList<Hook> hooksToConsider, EnumSet<ObstacleGroups> enumObstacle) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, InObstacleException
 	{
 		// va jusqu'au point d'entrée de la version demandée
-		actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.robotRay, actualState.robot.getPosition()), hooksToConsider, actualState.table, enumObstacle);
+		try 
+		{
+			actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.robotRay, actualState.robot.getPosition()), hooksToConsider, actualState.table, enumObstacle);
+		}
+		catch (UnableToMoveException | InObstacleException | PathNotFoundException e)
+		{
+			log.debug("Catch de "+e+" Impossible de goToThenExec : abandon d'exec, throw de "+e, this);
+			throw e;
+		}
+		
 		
 		// exécute la version demandée
 		execute(versionToExecute, actualState, hooksToConsider);
@@ -123,6 +132,7 @@ public abstract class AbstractScript implements Service
 	 * Retourne la position d'entrée associée à la version.
 	 *
 	 * @param version version dont on veut le point d'entrée
+	 * @param ray 
 	 * @param robotPosition la position du robot actuelle
 	 * @param la taille du robot
 	 * @return la position du point d'entrée
@@ -136,6 +146,7 @@ public abstract class AbstractScript implements Service
 	 *
 	 * @param state Etat du jeu au sein duquel il faut finaliser le script
 	 * @throws UnableToMoveException losrque le robot veut se déplacer et que quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
+	 * @throws SerialFinallyException 
 	 * @throws SerialConnexionException s'il y a un problème de communication avec une des cartes électroniques
 	 */
 	public abstract void finalize(GameState<?> state) throws UnableToMoveException, SerialFinallyException;

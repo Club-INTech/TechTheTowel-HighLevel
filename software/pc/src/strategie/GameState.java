@@ -3,6 +3,7 @@ package strategie;
 import container.Service;
 import robot.Robot;
 import table.Table;
+import threads.ThreadTimer;
 import utils.Log;
 import utils.Config;
 
@@ -30,9 +31,9 @@ public class GameState<R extends Robot> implements Service
     public final R robot;
 
     /** Temps écoulé depuis le début du match en ms */
-    public long timeEllapsed;
+    private long timeEllapsed;
     
-    /** points marqués depus le debut du match */
+	/** points marqués depus le debut du match */
     public int obtainedPoints;
 
     /**
@@ -62,5 +63,19 @@ public class GameState<R extends Robot> implements Service
         table.updateConfig();
         robot.updateConfig();
     }
+    
+
+    
+    /**
+     * temps écoulé depuis le début du match en ms
+     * 
+	 * @return the time Ellapsed
+	 */
+	public long getTimeEllapsed()
+	{
+		timeEllapsed = ThreadTimer.ellapsedTimeSinceMatchStarted();
+		return timeEllapsed;
+	}
+
     
 }
