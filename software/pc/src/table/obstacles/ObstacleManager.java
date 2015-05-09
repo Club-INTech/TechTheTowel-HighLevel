@@ -494,61 +494,49 @@ public class ObstacleManager
     public synchronized boolean removeNonDetectedObstacles(Vec2 position, double orientation, double detectionRadius, double detectionAngle)
     {
 		boolean obstacleDeleted=false;
-
+		//check non testés ;--;et si <=0 remove
+		// check testés ; -- ; et si <maxnon goto nonteste  remove de testés
+		
+		
     	//parcours des obstacles
+		for(int i = 0; i < mUntestedMobileObstacles.size(); i++)
+    	{
+    		Vec2 positionEnnemy = mUntestedMobileObstacles.get(i).position;
+    		int ennemyRay = mUntestedMobileObstacles.get(i).radius;
+    		// On verifie que l'ennemi est dans le cercle de detection actuel
+    		if((positionEnnemy.distance(position) < (detectionRadius+ennemyRay)*(detectionRadius+ennemyRay)))
+    		{
+    			if(isEnnemyInCone(positionEnnemy, position, detectionRadius, orientation,  detectionAngle, ennemyRay) )
+    			{
+    				mUntestedMobileObstacles.get(i).numberOfTimeDetected--;
+    			
+    				if(mUntestedMobileObstacles.get(i).numberOfTimeDetected <= 0)
+    				{
+    					mUntestedMobileObstacles.remove(i--);
+	    				obstacleDeleted=true;
+	    				log.debug("Ennemi untested en "+positionEnnemy+" enlevé !", this);
+    				}
+    			}
+    		}
+    	}
     	for(int i = 0; i < mMobileObstacles.size(); i++)
     	{
     		Vec2 positionEnnemy = mMobileObstacles.get(i).position;
     		int ennemyRay = mMobileObstacles.get(i).radius;
     		// On verifie que l'ennemi est dans le cercle de detection actuel
-    		if((positionEnnemy.x - position.x)*(positionEnnemy.x - position.x)
-    		 + (positionEnnemy.y - position.y)*(positionEnnemy.y - position.y)
-    		 < (detectionRadius+ennemyRay)*(detectionRadius+ennemyRay))
+    		if((positionEnnemy.distance(position) < (detectionRadius+ennemyRay)*(detectionRadius+ennemyRay)))
     		{
-    			double ennemyAngle = Math.atan2(positionEnnemy.x - position.x, positionEnnemy.y - position.y);
-    			
-    			// si le centre de l'obstacle est dans le cone 
-    			// ou 
-    			// si on intersecte avec le coté gauche 
-    			// ou
-    			// si on interesecte avec le coté droit
-    			Segment coteGaucheCone = new Segment(position, 
-						new Vec2( position.x + (int)(detectionRadius*Math.cos(orientation + detectionAngle/2)), 
-								  position.y + (int)(detectionRadius*Math.sin(orientation + detectionAngle/2)) ) );
-    			Segment coteDroitCone = new Segment(position, 
-						new Vec2( position.x + (int)(detectionRadius*Math.cos(orientation - detectionAngle/2)), 
-								  position.y + (int)(detectionRadius*Math.sin(orientation - detectionAngle/2)) ) );
-    			
-    			if(ennemyAngle < (orientation + detectionAngle/2)
-    		    && ennemyAngle > (orientation - detectionAngle/2)
-    		    || ( ( PathDingDing.intersects( coteGaucheCone , 
-    		    						   new Circle(positionEnnemy, ennemyRay)) )
-    		    || ( PathDingDing.intersects(	coteDroitCone, 
-    		    						   new Circle(positionEnnemy, ennemyRay))) )  )
+    			if(isEnnemyInCone(positionEnnemy, position, detectionRadius, orientation,  detectionAngle, ennemyRay) )
     			{
     				mMobileObstacles.get(i).numberOfTimeDetected--;
-    				
-    				if(mMobileObstacles.get(i).numberOfTimeDetected <= mMobileObstacles.get(i).getMaxNumberOfTimeNotDetected())
+    			
+    				if(mMobileObstacles.get(i).numberOfTimeDetected < mMobileObstacles.get(i).getMaxNumberOfTimeNotDetected())
     				{
+        				mUntestedMobileObstacles.add(mMobileObstacles.get(i));
 	    				mMobileObstacles.remove(i--);
+	    				
 	    				obstacleDeleted=true;
 	    				log.debug("Ennemi en "+positionEnnemy+" enlevé !", this);
-	    				   				
-	
-	    				// TODO enlever, Pourle debug 
-	    				if(ennemyAngle < (orientation + detectionAngle/2)&& ennemyAngle > (orientation - detectionAngle/2) ) 
-	        				log.debug("Cause : dans l'angle du cone", this);
-		    			if(PathDingDing.intersects(coteGaucheCone ,
-	    		    						   new Circle(positionEnnemy, ennemyRay)) )
-		    			{
-	        				log.debug("Cause : intersectionne avec le coté gauche du cone", this);
-		    			}
-		    			
-	    		    	if( PathDingDing.intersects( coteDroitCone, 
-	    		    						   new Circle(positionEnnemy, ennemyRay)))
-	    		    	{
-	        				log.debug("Cause : intersectionne avec le coté droit du cone", this);   
-	    		    	}
     				}
     			}
     		}
@@ -556,6 +544,30 @@ public class ObstacleManager
     	return obstacleDeleted;
     }
     
+    
+    public boolean isEnnemyInCone(Vec2 positionEnnemy, Vec2 position, double detectionRadius, double orientation, double detectionAngle, int ennemyRay) 
+    {
+    	double ennemyAngle = Math.atan2(positionEnnemy.x - position.x, positionEnnemy.y - position.y);
+		
+		// si le centre de l'obstacle est dans le cone 
+		// ou 
+		// si on intersecte avec le coté gauche 
+		// ou
+		// si on interesecte avec le coté droit
+		Segment coteGaucheCone = new Segment(position, 
+				new Vec2( position.x + (int)(detectionRadius*Math.cos(orientation + detectionAngle/2)), 
+						  position.y + (int)(detectionRadius*Math.sin(orientation + detectionAngle/2)) ) );
+		Segment coteDroitCone = new Segment(position, 
+				new Vec2( position.x + (int)(detectionRadius*Math.cos(orientation - detectionAngle/2)), 
+						  position.y + (int)(detectionRadius*Math.sin(orientation - detectionAngle/2)) ) );
+		
+		return (ennemyAngle < (orientation + detectionAngle/2)
+	    && ennemyAngle > (orientation - detectionAngle/2)
+	    || ( ( PathDingDing.intersects( coteGaucheCone , 
+	    						   new Circle(positionEnnemy, ennemyRay)) )
+	    || ( PathDingDing.intersects(	coteDroitCone, 
+	    						   new Circle(positionEnnemy, ennemyRay))) )  );
+	}
     
     /**
      * Debug / interface graphique
