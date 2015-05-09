@@ -71,7 +71,7 @@ public class JUnit_Sensors extends JUnit_Test
 		//mLocomotion.setPosition(new Vec2 (1500-320-77,1000));
 		mLocomotion.setPosition(new Vec2 (300,1000));
 		//mLocomotion.setOrientation(Math.PI);
-		mLocomotion.setOrientation(-Math.PI*0.5);
+		mLocomotion.setOrientation(Math.PI);
 		
 		container.startInstanciedThreads();
 
@@ -283,9 +283,19 @@ public class JUnit_Sensors extends JUnit_Test
 		}
 	}
 	
-	
 	@Test
 	public void testSensorEnnemyWithoutMovement()
+	{
+		log.debug("Test des capteurs fixe", this);
+		while(true)
+		{
+			;
+		}
+	}
+	
+	
+	//@Test
+	public void testSensorEnnemyWithMovement()
 	{
 		log.debug("Test des capteurs fixe", this);
 		while(true)
@@ -293,13 +303,29 @@ public class JUnit_Sensors extends JUnit_Test
 			try 
 			{
 				state.robot.moveLengthwise(50);
-				state.robot.sleep(200);
-				state.robot.moveLengthwise(-50);
-				state.robot.sleep(200);
+				state.robot.sleep(5000);
 			} 
 			catch (UnableToMoveException e) 
 			{
-				e.printStackTrace();
+				try {
+					state.robot.moveLengthwise(-50);
+				} catch (UnableToMoveException e1) {
+					e1.printStackTrace();
+				}				
+			}
+			try 
+			{
+				state.robot.moveLengthwise(-50);
+				state.robot.sleep(5000);
+			} 
+			catch (UnableToMoveException e) 
+			{
+				try {
+					state.robot.moveLengthwise(50);
+				} catch (UnableToMoveException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		}
 	}

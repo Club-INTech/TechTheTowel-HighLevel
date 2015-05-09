@@ -63,7 +63,7 @@ public class ObstacleProximity extends ObstacleCircular
 		numberOfTimeDetected=1;
 		
 		
-		thresholdConfirmedOrUnconfirmed=1;
+		thresholdConfirmedOrUnconfirmed=3;
 		maxNumberOfTimeDetected=5;
 	}
 	
@@ -96,6 +96,6 @@ public class ObstacleProximity extends ObstacleCircular
 	 */
 	public void setLifeTime(int time) 
 	{
-		lifetime += time;
+		lifetime = time;
 	}
 }
