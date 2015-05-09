@@ -244,6 +244,8 @@ class ThreadSensor extends AbstractThread
 					// Analyse des capteurs arrieres, avec gestion des angles
 					if(mRobot.getIsRobotMovingBackward())
 						addObstacleBack(distanceBack);
+					
+					log.debug("FB : "+mRobot.getIsRobotMovingForward()+"  "+mRobot.getIsRobotMovingBackward(), this);
 				}
 				else 
 				{
