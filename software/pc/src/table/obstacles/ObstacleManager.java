@@ -530,7 +530,7 @@ public class ObstacleManager
     			{
     				mMobileObstacles.get(i).numberOfTimeDetected--;
     			
-    				if(mMobileObstacles.get(i).numberOfTimeDetected < mMobileObstacles.get(i).getMaxNumberOfTimeNotDetected())
+    				if(mMobileObstacles.get(i).numberOfTimeDetected < mMobileObstacles.get(i).getThresholdConfirmedOrUnconfirmed())
     				{
     					mMobileObstacles.get(i).addLifeTime(1000);
         				mUntestedMobileObstacles.add(mMobileObstacles.get(i));

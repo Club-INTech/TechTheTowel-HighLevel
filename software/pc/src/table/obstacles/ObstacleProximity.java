@@ -23,10 +23,22 @@ public class ObstacleProximity extends ObstacleCircular
 	 */
 	public int numberOfTimeDetected;
 
-	//FIXME non explicite faire la doc !
-	private int maxNumberOfTimeNotDetected;
+	/*
+	 * limite entre obstacle confirmé ou infirmé; x
+	 * 
+	 * 	    unconf   conf
+	 * 	 0 |------|x|-----|y
+	 * 
+	 */
+	private int thresholdConfirmedOrUnconfirmed;
 	
-	//FIXME non explicite faire la doc !
+	/*
+	 *  Maximum d'incrementation de numberOfTimeDetected; y
+	 * 
+	 * 	    unconf   conf
+	 * 	 0 |------|x|-----|y
+	 * 
+	 */
 	private int maxNumberOfTimeDetected;
 
 	
@@ -50,8 +62,8 @@ public class ObstacleProximity extends ObstacleCircular
 		//TODO mettre dans le fichier de config le "temps de peremption" de chaque obstacle 
 		numberOfTimeDetected=1;
 		
-		//FIXME canger les valeurs
-		maxNumberOfTimeNotDetected=3;
+		
+		thresholdConfirmedOrUnconfirmed=1;
 		maxNumberOfTimeDetected=5;
 	}
 	
@@ -68,9 +80,9 @@ public class ObstacleProximity extends ObstacleCircular
 		return mOutDatedTime;
 	}
 	
-	public int getMaxNumberOfTimeNotDetected()
+	public int getThresholdConfirmedOrUnconfirmed()
 	{
-		return maxNumberOfTimeNotDetected;
+		return thresholdConfirmedOrUnconfirmed;
 	}
 	
 	public int getMaxNumberOfTimeDetected()

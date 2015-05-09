@@ -290,7 +290,17 @@ public class JUnit_Sensors extends JUnit_Test
 		log.debug("Test des capteurs fixe", this);
 		while(true)
 		{
-			;
+			try 
+			{
+				state.robot.moveLengthwise(50);
+				state.robot.sleep(200);
+				state.robot.moveLengthwise(-50);
+				state.robot.sleep(200);
+			} 
+			catch (UnableToMoveException e) 
+			{
+				e.printStackTrace();
+			}
 		}
 	}
 	
