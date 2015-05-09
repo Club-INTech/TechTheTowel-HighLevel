@@ -30,6 +30,12 @@ public class ObstacleManager
     private ArrayList<ObstacleProximity> mMobileObstacles;
     private ArrayList<ObstacleCircular> mFixedObstacles;
     
+    /**
+     * Ensemble des obstacles mobiles/temporaires a tester pour les placer sur la table
+     */
+	private ArrayList<ObstacleProximity> mUntestedMobileObstacles;
+
+    
     //les bords de la table auxquels on ajoute le rayon du robot. Utilisé par le pathfinding.
     private ArrayList<Segment> mLines;
     //les obstacles rectangulaires de la table
@@ -42,6 +48,10 @@ public class ObstacleManager
 	// TODO virer : juste du debugg / interface graphique
 	private int radiusDetectionDisc=0;
 	private Vec2 positionDetectionDisc=new Vec2(0,0);
+
+	/**	le temps donné aux obstacles pour qu'ils soit vérifiés */
+	private int timeToTestObstacle = 1000;
+
 		
 	/**
      * Instancie un nouveau gestionnaire d'obstacle.
@@ -216,7 +226,7 @@ public class ObstacleManager
      */
     public synchronized void addObstacle(final Vec2 position)
     {
-    	addObstacle(position,defaultObstacleRadius);
+    	addObstacle(position,defaultObstacleRadius, 5000);
     }
 
     
@@ -225,20 +235,36 @@ public class ObstacleManager
      *
      * @param position position ou ajouter l'obstacle
      * @param radius rayon de l'obstacle a ajouter    
+     * @param lifetime durée de vie (en ms) de l'obstace a ajouter
       */
-    public synchronized void addObstacle(final Vec2 position, final int radius)
+    public synchronized void addObstacle(final Vec2 position, final int radius, final int lifetime)
     {
     	//si la position est dans la table on continue les tests 
     	// si la position est dans notre zone de depart, ca ne peut etre qu'une main 
     	if (position.x>-1500 && position.x<1500 && position.y>0 && position.y<2000 //la table
-    		&& !(position.x>1200 && position.y<1200 && position.y>800) //notre position de depart
-    		&& !(position.y > 1420 && position.x < 533 && position.x > -533)) // les marches
+    		&& !(position.x > 1200 && position.y<1200 && position.y>800) //notre position de depart
+    		&& !(position.y > 1420 && position.x < 533 && position.x > -533) // les marches
+    		&& !(position.y > 1800 ) ) // les distributeurs de pop corn
     	{
+    		for (int i = 0; i<mUntestedMobileObstacles.size(); i++)
+    		{
+    			ObstacleProximity obstacle = mUntestedMobileObstacles.get(i);
+    			//FIXME relire l'algo
+    			//si l'obstacle est deja dans la liste des obstacles non-testés on l'ajoute dans la liste des obstacles
+	    		if(obstacle.position.distance(position)<obstacle.radius+radius)
+	    		{
+	        		mMobileObstacles.add(new ObstacleProximity(position, radius, ObstacleGroups.ENNEMY_ROBOTS, lifetime));
+	    			mUntestedMobileObstacles.remove(i);
+	    			mUntestedMobileObstacles.add(new ObstacleProximity(position, radius, ObstacleGroups.ENNEMY_ROBOTS, timeToTestObstacle ));
+	    		}
+	    		else
+	    			mUntestedMobileObstacles.add(new ObstacleProximity(position, radius, ObstacleGroups.ENNEMY_ROBOTS, timeToTestObstacle));
+    		}
+    			
     		/*on ne test pas si la position est dans un obstcle deja existant 
     		 *on ne detecte pas les plots ni les goblets (et si on les detectes on prefere ne pas prendre le risque et on les evites)
     		 * et si on detecte une deuxieme fois l'ennemi on rajoute un obstacle sur lui
     		 */
-    		mMobileObstacles.add(new ObstacleProximity(position, radius, ObstacleGroups.ENNEMY_ROBOTS));
     	}
     	else
     	{
@@ -257,6 +283,12 @@ public class ObstacleManager
     		if(mMobileObstacles.get(i).getOutDatedTime() < System.currentTimeMillis())
     		{
     			mMobileObstacles.remove(i--);
+    		}
+    	
+    	for(int i = 0; i < mUntestedMobileObstacles.size(); i++)
+    		if(mUntestedMobileObstacles.get(i).getOutDatedTime() < System.currentTimeMillis())
+    		{
+    			mUntestedMobileObstacles.remove(i--);
     		}
     }
 
@@ -321,7 +353,7 @@ public class ObstacleManager
     	if(squaredDistanceToClosestEnemy <= 0)
     		return 0;
     	
-		log.debug("Position de l'ennemi le plus proche proche d'après distanceToClosestEnnemy: "+mMobileObstacles.get(indexOfClosestEnnemy).getPosition(), this);
+//		log.debug("Position de l'ennemi le plus proche proche d'après distanceToClosestEnnemy: "+mMobileObstacles.get(indexOfClosestEnnemy).getPosition(), this);
     	return (int)Math.sqrt((double)squaredDistanceToClosestEnemy) - mRobotRadius - mMobileObstacles.get(indexOfClosestEnnemy).radius;
     }
 
@@ -431,6 +463,10 @@ public class ObstacleManager
     
     /**
      *  On enleve les obstacles presents sur la table virtuelle mais non detectés
+     * @param position 
+     * @param orientation 
+     * @param detectionRadius 
+     * @param detectionAngle 
      *  @return true si on a enlevé un obstacle, false sinon
      */
     public synchronized boolean removeNonDetectedObstacles(Vec2 position, double orientation, double detectionRadius, double detectionAngle)
@@ -496,8 +532,10 @@ public class ObstacleManager
     
     /**
      * Debug / interface graphique
+     * @return 
      */
-    public int getDiscRadius()
+    @SuppressWarnings("javadoc")
+	public int getDiscRadius()
     {
     	return radiusDetectionDisc;
     }
@@ -528,6 +566,7 @@ public class ObstacleManager
     /**
      *  On enleve les obstacles qui sont en confrontation avec nous :
      *  Cela evite de se retrouver dans un obstacle
+     * @param position 
      */
     public void removeObstacleInUs(Vec2 position)
     {

@@ -73,27 +73,30 @@ public class RobotReal extends Robot
 	@Override
 	public Object getSensorValue (SensorNames sensor) throws SerialConnexionException
 	{
-		if(symmetry)
-			sensor = mSensorCorrespondenceMap.getSymmetrizedSensorName(sensor);
-		
 
-		// si il n'y a pas de symétrie, on renvois la valeur brute du bas niveau, sinon, on échange les valeurs des ultrasons (l'ultrason droit devien l'ultrason gauche et réciproquement)
+		// si il n'y a pas de symétrie, on renvoie la valeur brute du bas niveau
 		if(!symmetry) 
 			return mSensorsCardWrapper.getSensorValue(sensor);
 		else
 		{
+			// on regarde les capteurs symetrisés (ex : contacteur du bras droit / gauche)
+			sensor = mSensorCorrespondenceMap.getSymmetrizedSensorName(sensor);
+
+			// capteurs ultrasons
+			// on échange les valeurs des ultrasons (l'ultrason droit devien l'ultrason gauche et réciproquement)
 			if(sensor == SensorNames.ULTRASOUND_FRONT_SENSOR || sensor == SensorNames.ULTRASOUND_FRONT_SENSOR)
 			{
+				 // On intervertit droite et gauche pour les capteurs	
 				int[] invertedOut = (int[])mSensorsCardWrapper.getSensorValue(sensor);
 				int[] out = new int[2];
 				out[0] = invertedOut[1];
-				return out;
+				return out;					
+			}
+			else // contacteurs
+			{
+				return mSensorsCardWrapper.getSensorValue(sensor);
 			}
 		}
-		 
-		 
-		// n'arrivera jamais (juste pour contenter eclipse)
-		return null;
 	}
 
 	@Override	

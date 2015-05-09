@@ -229,7 +229,7 @@ public class JUnit_Sensors extends JUnit_Test
 	}
 	
 
-	@Test 
+	//@Test 
 	public void testContactGlasses()
 	{
 		try 
@@ -250,7 +250,7 @@ public class JUnit_Sensors extends JUnit_Test
 	}
 		
 	//@Test
-	public void testCapteurFixe()
+	public void testSensorEnnemyInDiscWithoutMovement()
 	{
 		log.debug("Test d'évitement fixe", this);
 		while(true)
@@ -280,6 +280,18 @@ public class JUnit_Sensors extends JUnit_Test
 			}
 		}
 	}
+	
+	
+	@Test
+	public void testSensorEnnemyWithoutMovement()
+	{
+		log.debug("Test des capteurs fixe", this);
+		while(true)
+		{
+			;
+		}
+	}
+	
 	
 	
    // @Test

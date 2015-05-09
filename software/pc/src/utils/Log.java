@@ -83,7 +83,7 @@ public class Log implements Service
 		mutedClasses = new ArrayList<String>();
 		//mutedClasses.add("threads.ThreadSensor");
 		//mutedClasses.add("table.obstacles.ObstacleManager");
-		mutedClasses.add("strategie.Strategie");
+		//mutedClasses.add("strategie.Strategie");
 	}
 		
 	/**

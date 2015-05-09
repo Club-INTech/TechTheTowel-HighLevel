@@ -3,6 +3,7 @@ package tests;
 import hook.Hook;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,6 +14,7 @@ import robot.cardsWrappers.SensorsCardWrapper;
 import scripts.ScriptManager;
 import smartMath.Vec2;
 import strategie.GameState;
+import enums.ObstacleGroups;
 import enums.ServiceNames;
 
 public class JUnit_Symetry extends JUnit_Test
@@ -43,7 +45,7 @@ public class JUnit_Symetry extends JUnit_Test
 	}
 	
 
-	@Test
+	//@Test
 	public void testDeplacement()
 	{
 		try 
@@ -59,5 +61,23 @@ public class JUnit_Symetry extends JUnit_Test
 		}
 		
 		
+	}
+	
+	/**
+	 * Verifie si le robot en a quelque chose à faire des plots ennemis 
+	 */
+	@Test 
+	public void testObstaclesColor()
+	{
+		try 
+		{
+			real_state.robot.moveLengthwise(500);
+			real_state.robot.moveToLocation(new Vec2(-500,800), emptyHook, real_state.table, EnumSet.noneOf(ObstacleGroups.class) );
+			real_state.robot.moveToLocation(new Vec2(-500,400), emptyHook, real_state.table, EnumSet.noneOf(ObstacleGroups.class));
+		}
+		catch (Exception e)
+		{
+			log.critical(e, this);
+		}
 	}
 }

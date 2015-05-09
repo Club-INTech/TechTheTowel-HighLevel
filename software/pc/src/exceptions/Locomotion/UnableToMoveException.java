@@ -43,6 +43,7 @@ public class UnableToMoveException extends Exception
 	}
 	
 	/**
+	 * @param m 
 	 * @param aim  position où on voulais aller au moment de l'exception
 	 * @param reason raison de l'exception
 	 */

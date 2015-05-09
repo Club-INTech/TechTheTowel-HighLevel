@@ -71,7 +71,6 @@ public class JUnit_ActuatorManager extends JUnit_Test
 	/**
 	 * Test des machoires du robot
 	 *
-	 * @return true, if successful
 	 * @throws Exception the exception
 	 */
 	@Test
@@ -97,7 +96,6 @@ public class JUnit_ActuatorManager extends JUnit_Test
 	/**
 	 * Test des claps du robot
 	 *
-	 * @return true, if successful
 	 * @throws Exception the exception
 	 */
 	@Test
@@ -120,7 +118,6 @@ public class JUnit_ActuatorManager extends JUnit_Test
 	/**
 	 * Test des tapis du robot
 	 *
-	 * @return true, if successful
 	 * @throws Exception the exception
 	 */
 	@Test
@@ -142,7 +139,6 @@ public class JUnit_ActuatorManager extends JUnit_Test
 	/**
 	 * Test de l'ascenceur du robot
 	 *
-	 * @return true, if successful
 	 * @throws Exception the exception
 	 */
 	@Test
@@ -158,7 +154,6 @@ public class JUnit_ActuatorManager extends JUnit_Test
 	/**
 	 * Test des bras
 	 *
-	 * @return true, if successful
 	 * @throws Exception the exception
 	 */
 	@Test
@@ -182,7 +177,6 @@ public class JUnit_ActuatorManager extends JUnit_Test
 	/**
 	 * Test du guide
 	 *
-	 * @return true, if successful
 	 * @throws Exception the exception
 	 */
 		

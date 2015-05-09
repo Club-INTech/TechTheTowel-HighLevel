@@ -53,7 +53,7 @@ public class LaserCardWrapper implements Service {
 
 	/**
 	 * Indique les balises considérées comme non opérationnelle pour le match
-	 * @return
+	 * @return sdf
 	 */
 	public ArrayList<Beacon> ignoredBeacons()//balises_ignorees()
 	{
@@ -153,6 +153,7 @@ public class LaserCardWrapper implements Service {
 	 * Et renvoie la position relative de la balise dans le système de coordonnées du laser.
 	 * @param id
 	 * @return point
+	 * @throws SerialConnexionException 
 	 * @throws SerialException 
 	 */
 	public Vec2 position_balise_relative(int id) throws SerialConnexionException
@@ -197,7 +198,8 @@ public class LaserCardWrapper implements Service {
 	/**
 	 * Récupère la valeur (rayon, angle) d'une balise
 	 * @param id
-	 * @return
+	 * @return dfffrfrr
+	 * @throws SerialConnexionException 
 	 * @throws SerialException 
 	 */
 	public Vec2 position_balise(int id) throws SerialConnexionException

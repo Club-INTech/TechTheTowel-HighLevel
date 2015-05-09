@@ -95,6 +95,8 @@ public class launcher
 	}
 	/**
 	 * Permet de tester et de préparer le robot pour un match
+	 * @param robot 
+	 * @throws SerialConnexionException 
 	 */
 	    static public void matchSetUp(Robot robot) throws SerialConnexionException
 		{

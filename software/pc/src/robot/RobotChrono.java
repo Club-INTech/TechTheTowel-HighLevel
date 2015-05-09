@@ -33,6 +33,7 @@ public class RobotChrono extends Robot
 	 *  Fais un nouveau Robot Chrono
 	 * @param config fichier de configuration ou lire la config du match
 	 * @param log système de log a utiliser pour écrire
+	 * @param pathDingDing 
 	 */
 	public RobotChrono(Config config, Log log, PathDingDing pathDingDing)
 	{

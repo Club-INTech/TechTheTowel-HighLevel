@@ -75,7 +75,7 @@ public abstract class Robot implements Service
 	public ArrayList<Vec2> cheminSuivi= new ArrayList<Vec2>();
 	
 	/** Nombre d'essais maximal de tentative de calcul de PathDingDing */
-	private int maxNumberTriesRecalculation = 4;
+	private int maxNumberTriesRecalculation = 2;
 	private int actualNumberOfTries=0;
 
 	/** Booleen explicitant si on a un plot dans les machoires mais pas encore dans le tube */
@@ -391,6 +391,7 @@ public abstract class Robot implements Service
 	 * Attention, cette méthode suppose qu'il n'y a pas de hooks a considérer, et que l'on est sensé percuter un mur. La vitesse du robor est alors réduite a Speed.INTO_WALL.
 	 * Cette méthode est bloquante: son exécution ne se termine que lorsque le robot a atteint le point d'arrivée
 	 * @param distance en mm que le robot doit franchir. Si cette distance est négative, le robot va reculer. Attention, en cas de distance négative, cette méthode ne vérifie pas s'il y a un système d'évitement a l'arrère du robot
+	 * @param hooksToConsider les hooks déclenchables durant ce mouvement
 	 * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
 	 */
     public void moveLengthwiseTowardWall(int distance, ArrayList<Hook> hooksToConsider) throws UnableToMoveException
@@ -408,6 +409,7 @@ public abstract class Robot implements Service
      * @param aim le point de destination du mouvement
      * @param hooksToConsider les hooks déclenchables durant ce mouvement
      * @param table la table sur laquelle le robot se deplace
+     * @param obstaclesNotConsiderd 
      * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
      * @throws PathNotFoundException lorsque le pathdingding ne trouve pas de chemin 
      * @throws InObstacleException lorqsque le robot veut aller dans un obstacle

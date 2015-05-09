@@ -19,6 +19,7 @@ public class ObstacleBeacon extends ObstacleCircular
 	 *
 	 * @param position endroit de la table ou faire cet obstacle
 	 * @param rad orientation de l'obstacle, même si cet obstacle est supposé de forme circulaire, son orientation est mémorisé pour en déduire son vecteur vitesse
+	 * @param obstacleGroup 
 	 * @param speed vitesse d'évolution de cet obstacle sur la table
 	 */
 	public ObstacleBeacon (Vec2 position, int rad, ObstacleGroups obstacleGroup, Vec2 speed)
