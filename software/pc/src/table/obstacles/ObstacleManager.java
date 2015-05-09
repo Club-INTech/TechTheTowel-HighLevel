@@ -70,6 +70,8 @@ public class ObstacleManager
         mLines = new ArrayList<Segment>();
 		mRectangles = new ArrayList<ObstacleRectangular>();
 		
+		mUntestedMobileObstacles= new ArrayList<ObstacleProximity>();
+		
 		updateConfig();
        
         //par defaut
@@ -255,11 +257,10 @@ public class ObstacleManager
 	    		{
 	        		mMobileObstacles.add(new ObstacleProximity(position, radius, ObstacleGroups.ENNEMY_ROBOTS, lifetime));
 	    			mUntestedMobileObstacles.remove(i);
-	    			mUntestedMobileObstacles.add(new ObstacleProximity(position, radius, ObstacleGroups.ENNEMY_ROBOTS, timeToTestObstacle ));
 	    		}
-	    		else
-	    			mUntestedMobileObstacles.add(new ObstacleProximity(position, radius, ObstacleGroups.ENNEMY_ROBOTS, timeToTestObstacle));
     		}
+			mUntestedMobileObstacles.add(new ObstacleProximity(position, radius, ObstacleGroups.ENNEMY_ROBOTS, timeToTestObstacle));
+
     			
     		/*on ne test pas si la position est dans un obstcle deja existant 
     		 *on ne detecte pas les plots ni les goblets (et si on les detectes on prefere ne pas prendre le risque et on les evites)
