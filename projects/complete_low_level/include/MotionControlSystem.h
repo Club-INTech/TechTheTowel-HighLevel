@@ -156,6 +156,7 @@ public:
 	float getY() const;
 	void setX(float);
 	void setY(float);
+	void resetPosition(void);
 	float getBalance() const;
 	void setBalance(float newBalance);
 	int16_t getMaxPWMtranslation() const;
@@ -183,6 +184,8 @@ public:
 	void testTranslation(int);
 	void testRotation(float);
 	void testPID(void);
+	void testVariableSpeed(void);
+	void testSpeed();
 };
 
 #endif /* MOTION_CONTROL_H_ */

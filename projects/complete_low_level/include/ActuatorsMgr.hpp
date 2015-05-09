@@ -27,10 +27,10 @@ extern Uart<1> serial;
 #define tgPose 160
 #define tgRange 222
 #define cdHaut 65
-#define cdMilieu 90
+#define cdMilieu 100
 #define cdBas 148
 #define cgHaut 237
-#define cgMilieu 207
+#define cgMilieu 200
 #define cgBas 152
 #define ggOuvert 180
 #define ggFerme 143
@@ -248,7 +248,7 @@ public:
 	}
 
 	void e(uint16_t angle){
-		brasGauche->goTo(angle);
+		clapGauche->goTo(angle);
 	}
 	void setAllID(){
 		int i;
@@ -463,6 +463,110 @@ public:
 		serial.printfln("done");
 	}
 
+	void testSpeed()
+	{
+		serial.printfln("Test vitesse actionneurs");
+
+		serial.printfln("Machoire droite");
+		findTimeEllapsed(&ActuatorsMgr::fmd, &ActuatorsMgr::omd);
+
+		serial.printfln("Bras droit 1");
+		findTimeEllapsed(&ActuatorsMgr::fbd, &ActuatorsMgr::obd);
+
+		serial.printfln("Bras droit 2");
+		findTimeEllapsed(&ActuatorsMgr::fbd, &ActuatorsMgr::mbd);
+
+		serial.printfln("Bras droit 3");
+		findTimeEllapsed(&ActuatorsMgr::mbd, &ActuatorsMgr::obd);
+
+		serial.printfln("Bras droit lentement");
+		findTimeEllapsed(&ActuatorsMgr::fbdl, &ActuatorsMgr::obdl);
+
+		serial.printfln("Clap droit 1");
+		findTimeEllapsed(&ActuatorsMgr::cdb, &ActuatorsMgr::cdh);
+
+		serial.printfln("Clap droit 2");
+		findTimeEllapsed(&ActuatorsMgr::cdb, &ActuatorsMgr::cdm);
+
+		serial.printfln("Clap droit 3");
+		findTimeEllapsed(&ActuatorsMgr::cdm, &ActuatorsMgr::cdh);
+
+		serial.printfln("Clap droit 4");
+		findTimeEllapsed(&ActuatorsMgr::cdh, &ActuatorsMgr::cdb);
+
+		serial.printfln("Clap droit 5");
+		findTimeEllapsed(&ActuatorsMgr::cdm, &ActuatorsMgr::cdb);
+
+		serial.printfln("Clap droit 6");
+		findTimeEllapsed(&ActuatorsMgr::cdh, &ActuatorsMgr::cdm);
+
+		serial.printfln("Tapis droit descente");
+		findTimeEllapsed(&ActuatorsMgr::rtd, &ActuatorsMgr::ptd);
+
+		serial.printfln("Tapis droit montee");
+		findTimeEllapsed(&ActuatorsMgr::ptd, &ActuatorsMgr::rtd);
+
+		omd();
+		serial.printfln("Guide droit 1");
+		findTimeEllapsed(&ActuatorsMgr::fgg, &ActuatorsMgr::ogg);
+
+		serial.printfln("Guide droit 2");
+		findTimeEllapsed(&ActuatorsMgr::fgg, &ActuatorsMgr::ggi);
+
+		serial.printfln("Guide droit 3");
+		findTimeEllapsed(&ActuatorsMgr::ggi, &ActuatorsMgr::ogg);
+	}
+
+	void testSpeedElevator()
+	{
+		serial.printfln("Test vitesse de l'ascenseur");
+	}
+
+
+
+private:
+	void findTimeEllapsed(void (ActuatorsMgr::*gotoPositionA)(void), void (ActuatorsMgr::*gotoPositionB)(void))
+	{
+		char userSay[64];
+		int delai = 1000, delai_trop_court = 0, delai_trop_long = 2000;
+		(this->*gotoPositionA)();
+		Delay(delai);
+
+		while(delai_trop_long - delai_trop_court > 50)
+		{
+			serial.printf("Test avec %d ms", delai);
+			serial.read(userSay);
+			(this->*gotoPositionB)();
+			Delay(delai);
+			(this->*gotoPositionA)();
+			bool redemander = true;
+			while(redemander)
+			{
+				serial.printfln("Temps d'attente ? (+ augmenter ; - diminuer ; o OK)");
+				serial.read(userSay);
+				if(!strcmp("+",userSay))
+				{
+					delai_trop_court = delai;
+					delai = (delai + delai_trop_long)/2;
+					redemander = false;
+				}
+				else if (!strcmp("-",userSay))
+				{
+					delai_trop_long = delai;
+					delai = (delai_trop_court + delai)/2;
+					redemander = false;
+				}
+				else if (!strcmp("o",userSay))
+				{
+					delai_trop_court = delai;
+					delai_trop_long = delai;
+					redemander = false;
+				}
+			}
+		}
+		serial.printfln("Delai optimal : %d ms", delai);
+		serial.read(userSay);
+	}
 };
 
 #endif /* ACTUATORSMGR_HPP */

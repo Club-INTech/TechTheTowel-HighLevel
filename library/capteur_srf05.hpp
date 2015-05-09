@@ -110,6 +110,8 @@ public:
 			risingEdgeTrigger = true;
 			EXTI_sensor.EXTI_LineCmd = DISABLE;					//On a reçu la réponse qui nous intéressait, on désactive donc les lectures d'interruptions sur ce capteur
 			EXTI_Init(&EXTI_sensor);
+			GPIO_sensor.GPIO_Mode = GPIO_Mode_OUT;
+			GPIO_Init(GPIOx, &GPIO_sensor);
 		}
 	}
 

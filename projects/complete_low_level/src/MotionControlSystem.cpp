@@ -499,6 +499,14 @@ void MotionControlSystem::setY(float newY){
 	this->y = newY;
 }
 
+void MotionControlSystem::resetPosition()
+{
+	x = 0;
+	y = 0;
+	setOriginalAngle(0);
+	stop();
+}
+
 float MotionControlSystem::getBalance() const{
 	return balance;
 }
@@ -644,5 +652,81 @@ void MotionControlSystem::testPID()
 			i=0;
 			Delay(5000);
 		}
+	}
+}
+
+void MotionControlSystem::testVariableSpeed()
+{
+	//Vitesse = 10
+	setMaxPWMtranslation(10);
+	setSmartTranslationTunings();
+	setMaxPWMrotation(10);
+	setSmartRotationTunings();
+
+	resetPosition();
+
+	orderTranslation(1000);
+	while(x<200){}
+
+	setMaxPWMrotation(3);
+	setSmartRotationTunings();
+	setMaxPWMtranslation(3);
+	setSmartTranslationTunings();
+
+	while(x<400){}
+
+	setMaxPWMrotation(10);
+	setSmartRotationTunings();
+	setMaxPWMtranslation(10);
+	setSmartTranslationTunings();
+
+
+	//Retour au point de départ
+	while(moving){}
+	orderRotation(3.141592654);
+	while(moving){}
+	orderTranslation(1000);
+	while(moving){}
+	orderRotation(0);
+}
+
+void MotionControlSystem::testSpeed()
+{
+	serial.printfln("Test de vitesse du robot");
+
+	int16_t pwm[3] = {3, 10, 20};
+	int32_t longueur[6] = {100, 200, 300, 400, 600, 1200};//en mm
+
+	uint32_t resultats[6][3];
+	uint32_t instant_t;
+
+	for(int i_longueur = 0; i_longueur < 6; i_longueur++)
+	{
+		for(int i_pwm = 0; i_pwm < 3; i_pwm++)
+		{
+//			serial.printfln("\n");
+//			serial.printfln("PWMmax = %d", pwm[i_pwm]);
+//			serial.printfln("Longueur = %d mm", longueur[i_longueur]);
+//			serial.print("\n");
+
+			setMaxPWMrotation(pwm[i_pwm]);
+			setSmartRotationTunings();
+			setMaxPWMtranslation(pwm[i_pwm]);
+			setSmartTranslationTunings();
+
+			instant_t = Millis();
+			for(int i=0; i < 1200/longueur[i_longueur]; i++)
+			{
+				orderTranslation(longueur[i_longueur]);
+				while(moving){}
+			}
+			resultats[i_longueur][i_pwm] = Millis() - instant_t;
+
+			orderRotation(getAngleRadian() + 3.141592654);
+			while(moving){}
+
+			serial.printfln("%d\t", resultats[i_longueur][i_pwm]);
+		}
+		serial.print("\n");
 	}
 }

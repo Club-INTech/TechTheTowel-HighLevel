@@ -146,7 +146,7 @@ int main(void)
 			}
 			else if(!strcmp("ctv",order))		//Régler le PWM max en translation
 			{
-				int pwmMaxTranslation = 100;
+				int pwmMaxTranslation = 10;
 				serial.read(pwmMaxTranslation);
 				serial.printfln("_");
 				motionControlSystem->setMaxPWMtranslation(pwmMaxTranslation);
@@ -154,7 +154,7 @@ int main(void)
 			}
 			else if(!strcmp("crv",order))		//Régler le PWM max en rotation
 			{
-				int pwmMaxRotation = 100;
+				int pwmMaxRotation = 10;
 				serial.read(pwmMaxRotation);
 				serial.printfln("_");
 				motionControlSystem->setMaxPWMrotation(pwmMaxRotation);
@@ -255,15 +255,28 @@ int main(void)
 			}
 			else if(!strcmp("rp",order))//Reset position
 			{
-				motionControlSystem->setX(0);
-				motionControlSystem->setY(0);
-				motionControlSystem->setOriginalAngle(0);
-				motionControlSystem->stop();
+				motionControlSystem->resetPosition();
+				serial.printfln("Reset position");
 			}
 			else if(!strcmp("testPID",order))
 			{
+				serial.printfln("Test d'observation du PID");
 				motionControlSystem->testPID();
 			}
+			else if(!strcmp("testVV",order))
+			{
+				serial.printfln("Test de changement de vitesse");
+				motionControlSystem->testVariableSpeed();
+			}
+			else if(!strcmp("testV",order))
+			{
+				motionControlSystem->testSpeed();
+			}
+			else if(!strcmp("testVA",order))
+			{
+				actuatorsMgr->testSpeed();
+			}
+
 
 
 
