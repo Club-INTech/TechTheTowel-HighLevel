@@ -117,6 +117,16 @@ public class JUnit_Strategia extends JUnit_Test
 		strategos.updateConfig();
 		strategos.IA();
 		
+
+		//////////////////////////////////////////////////////
+		//	Fin du match
+		//////////////////////////////////////////////////////
+		
+		System.out.println("match fini !");
+
+		//Le match s'arrête
+		container.destructor();
+		
 		System.out.println(System.currentTimeMillis()-timeMatchBegin+" ms depuis le debut : < 90.000 ?");
 	}
 }

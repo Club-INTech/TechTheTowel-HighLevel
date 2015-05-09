@@ -75,7 +75,7 @@ public abstract class Robot implements Service
 	public ArrayList<Vec2> cheminSuivi= new ArrayList<Vec2>();
 	
 	/** Nombre d'essais maximal de tentative de calcul de PathDingDing */
-	private int maxNumberTriesRecalculation = 4;
+	private int maxNumberTriesRecalculation = 2;
 	private int actualNumberOfTries=0;
 
 	/** Booleen explicitant si on a un plot dans les machoires mais pas encore dans le tube */

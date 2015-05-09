@@ -329,13 +329,13 @@ public class Locomotion implements Service
     	// on avance en fonction de ce que nous dit la strategie
     	if(strategy == DirectionStrategy.FORCE_BACK_MOTION)
     	{
-            isRobotMovingForward=true;
+            isRobotMovingBackward=true;
             moveToPointException(aim, hooks, false, mur, turnOnly, mustDetect);
-            isRobotMovingForward=false;
+            isRobotMovingBackward=false;
     	}
     	else if(strategy == DirectionStrategy.FORCE_FORWARD_MOTION)
     	{ 
-            isRobotMovingBackward=true;
+            isRobotMovingForward=true;
             moveToPointException(aim, hooks, true, mur, turnOnly, mustDetect);
             isRobotMovingForward=false;
     	}
@@ -460,7 +460,7 @@ public class Locomotion implements Service
 		                }
 		                else 
 		                {
-	                        log.warning("On arrive pas à se degager, nombre max d'essais depassé, lancement de UnableToMOveEXception", this);
+	                        log.warning("On arrive pas à se degager, nombre max d'essais depassé, lancement de UnableToMoveException", this);
 	                        throw new UnableToMoveException(aim, UnableToMoveReason.PHYSICALLY_BLOCKED);
 		                }
 
@@ -559,7 +559,7 @@ public class Locomotion implements Service
             {
     			log.critical( e.logStack(), this);
 
-            	// FIXME : gérer cette exception
+            	// TODO : gérer cette exception
             }
 
         } 

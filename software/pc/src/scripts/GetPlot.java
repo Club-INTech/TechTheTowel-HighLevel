@@ -240,7 +240,7 @@ public class GetPlot extends AbstractScript
 		else if(versionToExecute==567)
 		{
 			stateToConsider.robot.turn(Math.PI/2);
-					//plot 5 et 6 pas mangé, on mange les deux avec notre bras gauche (celui du coté de l'ascenceur)
+					//plot 5 et 6 pas mangé, on mange les deux avec notre bras gauche (celui du coté de l'estrade)
 			try 
 			{
 				eatPlot(false, true, stateToConsider, false, false);

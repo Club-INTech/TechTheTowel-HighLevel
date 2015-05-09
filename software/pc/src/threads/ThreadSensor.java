@@ -207,12 +207,12 @@ class ThreadSensor extends AbstractThread
 				   distanceBack[1]==-1 )	) // si on n'a pas spammé
 			{										
 				// on enleve les obstacles 
-//				if(!homologation)
-//				{
-//					removeObstacleFront(distanceFront);
-//					removeObstacleBack(distanceBack);
-//				}
-//				
+				if(!homologation)
+				{
+					removeObstacleFront(distanceFront);
+					removeObstacleBack(distanceBack);
+				}
+				
 				//mTable.getObstacleManager().removeObstacleInUs(mRobot.getPosition());
 
 				
@@ -761,7 +761,7 @@ class ThreadSensor extends AbstractThread
 	}
 	
 	
-	@SuppressWarnings("unused")
+//	@SuppressWarnings("unused")
 	private void removeObstacleFront(int[] distanceFront)
 	{
 		// On limite les obstacles supprimés, pour eviter les problemes liés aux reflexions
@@ -770,7 +770,7 @@ class ThreadSensor extends AbstractThread
 
 	}
 	
-	@SuppressWarnings("unused")
+//	@SuppressWarnings("unused")
 	private void removeObstacleBack(int[] distanceFront)
 	{
 		// On limite les obstacles supprimés, pour eviter les problemes liés aux reflexions
