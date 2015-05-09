@@ -505,9 +505,9 @@ public class ObstacleManager
     		    || ( PathDingDing.intersects(	coteDroitCone, 
     		    						   new Circle(positionEnnemy, ennemyRay))) )  )
     			{
-    				mMobileObstacles.get(i).numberOfTimeNotDetected++;
+    				mMobileObstacles.get(i).numberOfTimeDetected--;
     				
-    				if(mMobileObstacles.get(i).numberOfTimeNotDetected >= mMobileObstacles.get(i).getMaxNumberOfTimeNotDetected())
+    				if(mMobileObstacles.get(i).numberOfTimeDetected <= mMobileObstacles.get(i).getMaxNumberOfTimeNotDetected())
     				{
 	    				mMobileObstacles.remove(i--);
 	    				obstacleDeleted=true;
