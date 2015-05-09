@@ -1,0 +1,199 @@
+package graphics;
+
+import java.awt.Graphics;
+
+import javax.swing.JPanel;
+
+import java.awt.Color; 
+import java.util.ArrayList;
+
+import table.Table;
+import smartMath.*;
+import pathDingDing.*;
+import robot.*;
+import table.obstacles.*;
+
+/**
+ * panneau sur lequel est dessine la table
+ * @author Etienne
+ *
+ */
+public class SensorPanel extends JPanel
+{	
+	/** numéro pour la serialisation	 */
+	private static final long serialVersionUID = -3033815690221481964L;
+	
+	long startTime = System.currentTimeMillis();
+	int captureTime = 20000;
+	private ArrayList<Integer> values1 = new ArrayList<Integer>();
+	private ArrayList<Integer> values2 = new ArrayList<Integer>();
+	private ArrayList<Integer> values3 = new ArrayList<Integer>();
+	private ArrayList<Integer> values4 = new ArrayList<Integer>();
+	private ArrayList<Integer> times = new ArrayList<Integer>();
+	
+	public SensorPanel()
+	{
+	}
+	
+	public void paintComponent(Graphics g)
+	{
+		g.setColor(Color.white);
+	    g.fillRect(0, 0, this.getWidth(), this.getHeight());
+	    
+	    ///////////////////////////////////////////////
+	    // Graphe 1
+	    ///////////////////////////////////////////////
+	    
+	    int x = 10, y = 10, width = (int)(this.getWidth()/2.1), height = (int)(this.getHeight()/2.1);
+	    
+	    g.setColor(Color.black);
+	    g.drawLine(x,  y + height, x + width, y + height);
+	    g.drawLine(x,  y + height, x, y);
+	    
+	    g.setColor(Color.blue);
+	    if(values1.size() > 1)
+	    {
+	    	//recherche d'extremum pour values
+	    	int min = values1.get(0), max = values1.get(0);
+	    	for(int i = 0; i < values1.size(); i++)
+	    	{
+	    		if(values1.get(i) < min)
+	    			min = values1.get(i);
+	    		if(values1.get(i) > max)
+	    			max = values1.get(i);
+	    	}
+	    	
+	    	g.drawString(""+min, x, y + height);
+	    	g.drawString(""+max, x, y + 10);
+	    	
+	    	double a = (height)/(double)(min-max);
+	    	double b = y + height - a * min;
+	    	double aT = (width)/(double)(captureTime);
+	    	double bT = x - aT * (System.currentTimeMillis() - startTime - captureTime);
+	    	for(int i = 0; i < values1.size() - 1; i++)
+	    		g.drawLine((int)(times.get(i)*aT + bT), (int)(values1.get(i)*a + b), (int)(times.get(i+1)*aT + bT), (int)(values1.get(i+1)*a + b));
+	    }
+	    
+	    ///////////////////////////////////////////////
+	    // Graphe 2
+	    ///////////////////////////////////////////////
+	    
+	    x = 10 + width; y = 10;
+	    
+	    g.setColor(Color.black);
+	    g.drawLine(x,  y + height, x + width, y + height);
+	    g.drawLine(x,  y + height, x, y);
+	    
+	    g.setColor(Color.green);
+	    if(values2.size() > 1)
+	    {
+	    	//recherche d'extremum pour values
+	    	int min = values2.get(0), max = values2.get(0);
+	    	for(int i = 0; i < values1.size(); i++)
+	    	{
+	    		if(values2.get(i) < min)
+	    			min = values2.get(i);
+	    		if(values2.get(i) > max)
+	    			max = values2.get(i);
+	    	}
+	    	
+	    	g.drawString(""+min, x, y + height);
+	    	g.drawString(""+max, x, y + 10);
+	    	
+	    	double a = (height)/(double)(min-max);
+	    	double b = y + height - a * min;
+	    	double aT = (width)/(double)(captureTime);
+	    	double bT = x - aT * (System.currentTimeMillis() - startTime - captureTime);
+	    	for(int i = 0; i < values2.size() - 1; i++)
+	    		g.drawLine((int)(times.get(i)*aT + bT), (int)(values2.get(i)*a + b), (int)(times.get(i+1)*aT + bT), (int)(values2.get(i+1)*a + b));
+	    }
+	    
+	    ///////////////////////////////////////////////
+	    // Graphe 3
+	    ///////////////////////////////////////////////
+	    
+	    x = 10; y = 10 + height;
+	    
+	    g.setColor(Color.black);
+	    g.drawLine(x,  y + height, x + width, y + height);
+	    g.drawLine(x,  y + height, x, y);
+	    
+	    g.setColor(Color.red);
+	    if(values3.size() > 1)
+	    {
+	    	//recherche d'extremum pour values
+	    	int min = values3.get(0), max = values3.get(0);
+	    	for(int i = 0; i < values3.size(); i++)
+	    	{
+	    		if(values3.get(i) < min)
+	    			min = values3.get(i);
+	    		if(values3.get(i) > max)
+	    			max = values3.get(i);
+	    	}
+	    	
+	    	g.drawString(""+min, x, y + height);
+	    	g.drawString(""+max, x, y + 10);
+	    	
+	    	double a = (height)/(double)(min-max);
+	    	double b = y + height - a * min;
+	    	double aT = (width)/(double)(captureTime);
+	    	double bT = x - aT * (System.currentTimeMillis() - startTime - captureTime);
+	    	for(int i = 0; i < values3.size() - 1; i++)
+	    		g.drawLine((int)(times.get(i)*aT + bT), (int)(values3.get(i)*a + b), (int)(times.get(i+1)*aT + bT), (int)(values3.get(i+1)*a + b));
+	    }
+	    
+	    ///////////////////////////////////////////////
+	    // Graphe 4
+	    ///////////////////////////////////////////////
+	    
+	    x = 10 + width; y = 10 + height;
+	    
+	    g.setColor(Color.black);
+	    g.drawLine(x,  y + height, x + width, y + height);
+	    g.drawLine(x,  y + height, x, y);
+	    
+	    g.setColor(Color.cyan);
+	    if(values4.size() > 1)
+	    {
+	    	//recherche d'extremum pour values
+	    	int min = values4.get(0), max = values4.get(0);
+	    	for(int i = 0; i < values4.size(); i++)
+	    	{
+	    		if(values4.get(i) < min)
+	    			min = values4.get(i);
+	    		if(values4.get(i) > max)
+	    			max = values4.get(i);
+	    	}
+	    	
+	    	g.drawString(""+min, x, y + height);
+	    	g.drawString(""+max, x, y + 10);
+	    	
+	    	double a = (height)/(double)(min-max);
+	    	double b = y + height - a * min;
+	    	double aT = (width)/(double)(captureTime);
+	    	double bT = x - aT * (System.currentTimeMillis() - startTime - captureTime);
+	    	for(int i = 0; i < values4.size() - 1; i++)
+	    		g.drawLine((int)(times.get(i)*aT + bT), (int)(values4.get(i)*a + b), (int)(times.get(i+1)*aT + bT), (int)(values4.get(i+1)*a + b));
+	    }
+	    
+	    
+	}
+	
+	public void drawInteger(Integer value1, Integer value2, Integer value3, Integer value4)
+	{
+		values1.add(value1);
+		times.add(new Integer((int)(System.currentTimeMillis() - startTime)));
+		values2.add(value2);
+		values3.add(value3);
+		values4.add(value4);
+		if(values1.size() > 100)
+		{
+			values1.remove(0);
+			values2.remove(0);
+			values3.remove(0);
+			values4.remove(0);
+			times.remove(0);
+		}
+		this.repaint();
+	}
+}
