@@ -40,7 +40,7 @@ public class JUnit_Graphics extends JUnit_Test
     	for(int i = 10; i < 10000; i += 10)
     	{
     		win.drawInt((int)(10*Math.cos((double)i/10)), (int)(20*Math.cos((double)i/20)), (int)(30*Math.cos((double)i/40)), (int)(40*Math.cos((double)i/80)));
-    		Sleep.sleep(50);
+    		Sleep.sleep(200);
     	}
     }
 }

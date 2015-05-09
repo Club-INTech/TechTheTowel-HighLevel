@@ -24,7 +24,7 @@ public class SensorPanel extends JPanel
 	private static final long serialVersionUID = -3033815690221481964L;
 	
 	long startTime = System.currentTimeMillis();
-	int captureTime = 20000;
+	int captureTime = 10000;
 	private ArrayList<Integer> values1 = new ArrayList<Integer>();
 	private ArrayList<Integer> values2 = new ArrayList<Integer>();
 	private ArrayList<Integer> values3 = new ArrayList<Integer>();
@@ -202,10 +202,6 @@ public class SensorPanel extends JPanel
 		values2.add(value2);
 		values3.add(value3);
 		values4.add(value4);
-		if(values1.size() > 100)
-		{
-;
-		}
 		for(int i = 0; i < times.size() && times.get(i) < System.currentTimeMillis() - startTime - captureTime; i++)
 		{
 			values1.remove(i);
