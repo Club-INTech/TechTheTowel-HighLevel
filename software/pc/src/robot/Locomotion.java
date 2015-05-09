@@ -808,6 +808,7 @@ public class Locomotion implements Service
      * @param mustDetect true si on veut detecter, false sinon.
      * @throws BlockedException si le robot a un bloquage mecanique
      * @throws UnexpectedObstacleOnPathException si le robot rencontre un obstacle inattendu sur son chemin (par les capteurs)
+     * @throws SerialConnexionException 
      */
     public void JUNIT_moveToPointCorrectAngleAndDetectEnnemy(Vec2 aim, ArrayList<Hook> hooks, boolean isMovementForward, boolean turnOnly, boolean mustDetect) throws UnexpectedObstacleOnPathException, BlockedException, SerialConnexionException
     {         	
@@ -882,6 +883,7 @@ public class Locomotion implements Service
      *FONCTION COPIE POUR JUNIT
      * @param aim la point vise (non symetrisee)
      * @param isMovementForward vrai si on va en avant et faux si on va en arriere
+     * @param mustDetect 
      * @throws BlockedException si le robot a un bloquage mecanique
      * @throws UnexpectedObstacleOnPathException 
      */
@@ -1114,6 +1116,7 @@ public class Locomotion implements Service
      * @param givenPosition la position de depart du deplacement
      * @param angle l'angle dont il faut tourner (ordre pour la serie)
      * @param distance la distance dont il faut avancer (ordre pour la serie)
+     * @param mustDetect 
      * @param turnOnly vrai si on veut uniquement tourner (et pas avancer)
      * @param isCorrection vrai si la consigne est une correction et pas un ordre de deplacement
      * @throws BlockedException si le robot rencontre un obstacle innatendu sur son chemin (par les capteurs)
