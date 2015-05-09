@@ -505,25 +505,30 @@ public class ObstacleManager
     		    || ( PathDingDing.intersects(	coteDroitCone, 
     		    						   new Circle(positionEnnemy, ennemyRay))) )  )
     			{
-    				mMobileObstacles.remove(i--);
-    				obstacleDeleted=true;
-    				log.debug("Ennemi en "+positionEnnemy+" enlevé !", this);
+    				mMobileObstacles.get(i).numberOfTimeNotDetected++;
     				
-
-    				// TODO enlever, Pourle debug 
-    				if(ennemyAngle < (orientation + detectionAngle/2)&& ennemyAngle > (orientation - detectionAngle/2) ) 
-        				log.debug("Cause : dans l'angle du cone", this);
-	    			if(PathDingDing.intersects(coteGaucheCone ,
-    		    						   new Circle(positionEnnemy, ennemyRay)) )
-	    			{
-        				log.debug("Cause : intersectionne avec le coté gauche du cone", this);
-	    			}
-	    			
-    		    	if( PathDingDing.intersects( coteDroitCone, 
-    		    						   new Circle(positionEnnemy, ennemyRay)))
-    		    	{
-        				log.debug("Cause : intersectionne avec le coté droit du cone", this);   
-    		    	}
+    				if(mMobileObstacles.get(i).numberOfTimeNotDetected >= mMobileObstacles.get(i).getMaxNumberOfTimeNotDetected())
+    				{
+	    				mMobileObstacles.remove(i--);
+	    				obstacleDeleted=true;
+	    				log.debug("Ennemi en "+positionEnnemy+" enlevé !", this);
+	    				   				
+	
+	    				// TODO enlever, Pourle debug 
+	    				if(ennemyAngle < (orientation + detectionAngle/2)&& ennemyAngle > (orientation - detectionAngle/2) ) 
+	        				log.debug("Cause : dans l'angle du cone", this);
+		    			if(PathDingDing.intersects(coteGaucheCone ,
+	    		    						   new Circle(positionEnnemy, ennemyRay)) )
+		    			{
+	        				log.debug("Cause : intersectionne avec le coté gauche du cone", this);
+		    			}
+		    			
+	    		    	if( PathDingDing.intersects( coteDroitCone, 
+	    		    						   new Circle(positionEnnemy, ennemyRay)))
+	    		    	{
+	        				log.debug("Cause : intersectionne avec le coté droit du cone", this);   
+	    		    	}
+    				}
     			}
     		}
     	}

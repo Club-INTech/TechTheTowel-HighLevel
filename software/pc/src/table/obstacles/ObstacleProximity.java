@@ -1,5 +1,7 @@
 package table.obstacles;
 
+import com.sun.org.apache.bcel.internal.generic.INEG;
+
 import smartMath.Vec2;
 import enums.ObstacleGroups;
 
@@ -15,6 +17,10 @@ public class ObstacleProximity extends ObstacleCircular
 	private long mOutDatedTime;
 	
 	private int lifetime;
+
+	public int numberOfTimeNotDetected;
+	
+	private int maxNumberOfTimeNotDetected;
 	
 	/**
 	 * Crée un nouvel obstacle détecté a proximité du robot.
@@ -34,6 +40,8 @@ public class ObstacleProximity extends ObstacleCircular
 		this.lifetime = lifetime;
 		mOutDatedTime = System.currentTimeMillis() + lifetime;// la date de peremption = temps actuel + temps de peremption de l'obstacle
 		//TODO mettre dans le fichier de config le "tempsde peremption" de chaque obstacle 
+		numberOfTimeNotDetected=0;
+		maxNumberOfTimeNotDetected=5;
 	}
 	
 	/* (non-Javadoc)
@@ -47,5 +55,10 @@ public class ObstacleProximity extends ObstacleCircular
 	public long getOutDatedTime()
 	{
 		return mOutDatedTime;
+	}
+	
+	public int getMaxNumberOfTimeNotDetected()
+	{
+		return maxNumberOfTimeNotDetected;
 	}
 }
