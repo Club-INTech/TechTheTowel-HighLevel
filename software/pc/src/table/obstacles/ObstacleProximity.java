@@ -94,7 +94,7 @@ public class ObstacleProximity extends ObstacleCircular
 	 * ajoute du temps de vie suplementaire a l'obstacle
 	 * @param time le temps de vie a ajouter
 	 */
-	public void addLifeTime(int time) 
+	public void setLifeTime(int time) 
 	{
 		lifetime += time;
 	}
