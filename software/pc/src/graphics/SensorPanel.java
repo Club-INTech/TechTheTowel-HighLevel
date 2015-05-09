@@ -37,7 +37,7 @@ public class SensorPanel extends JPanel
 	
 	public void paintComponent(Graphics g)
 	{
-		g.setColor(Color.white);
+		g.setColor(Color.black);
 	    g.fillRect(0, 0, this.getWidth(), this.getHeight());
 	    
 	    ///////////////////////////////////////////////
@@ -46,7 +46,7 @@ public class SensorPanel extends JPanel
 	    
 	    int x = 10, y = 10, width = (int)(this.getWidth()/2.1), height = (int)(this.getHeight()/2.1);
 	    
-	    g.setColor(Color.black);
+	    g.setColor(Color.white);
 	    g.drawLine(x,  y + height, x + width, y + height);
 	    g.drawLine(x,  y + height, x, y);
 	    
@@ -62,6 +62,10 @@ public class SensorPanel extends JPanel
 	    		if(values1.get(i) > max)
 	    			max = values1.get(i);
 	    	}
+	    	
+	    	//echelle fixe
+	    	min = 0;
+	    	max = 500;
 	    	
 	    	g.drawString(""+min, x, y + height);
 	    	g.drawString(""+max, x, y + 10);
@@ -80,7 +84,7 @@ public class SensorPanel extends JPanel
 	    
 	    x = 10 + width; y = 10;
 	    
-	    g.setColor(Color.black);
+	    g.setColor(Color.white);
 	    g.drawLine(x,  y + height, x + width, y + height);
 	    g.drawLine(x,  y + height, x, y);
 	    
@@ -96,6 +100,10 @@ public class SensorPanel extends JPanel
 	    		if(values2.get(i) > max)
 	    			max = values2.get(i);
 	    	}
+	    	
+	    	//echelle fixe
+	    	min = 0;
+	    	max = 500;
 	    	
 	    	g.drawString(""+min, x, y + height);
 	    	g.drawString(""+max, x, y + 10);
@@ -114,11 +122,11 @@ public class SensorPanel extends JPanel
 	    
 	    x = 10; y = 10 + height;
 	    
-	    g.setColor(Color.black);
+	    g.setColor(Color.white);
 	    g.drawLine(x,  y + height, x + width, y + height);
 	    g.drawLine(x,  y + height, x, y);
 	    
-	    g.setColor(Color.red);
+	    g.setColor(new Color(255, 100, 100));
 	    if(values3.size() > 1)
 	    {
 	    	//recherche d'extremum pour values
@@ -130,6 +138,10 @@ public class SensorPanel extends JPanel
 	    		if(values3.get(i) > max)
 	    			max = values3.get(i);
 	    	}
+	    	
+	    	//echelle fixe
+	    	min = 0;
+	    	max = 500;
 	    	
 	    	g.drawString(""+min, x, y + height);
 	    	g.drawString(""+max, x, y + 10);
@@ -148,7 +160,7 @@ public class SensorPanel extends JPanel
 	    
 	    x = 10 + width; y = 10 + height;
 	    
-	    g.setColor(Color.black);
+	    g.setColor(Color.white);
 	    g.drawLine(x,  y + height, x + width, y + height);
 	    g.drawLine(x,  y + height, x, y);
 	    
@@ -164,6 +176,10 @@ public class SensorPanel extends JPanel
 	    		if(values4.get(i) > max)
 	    			max = values4.get(i);
 	    	}
+	    	
+	    	//echelle fixe
+	    	min = 0;
+	    	max = 500;
 	    	
 	    	g.drawString(""+min, x, y + height);
 	    	g.drawString(""+max, x, y + 10);
