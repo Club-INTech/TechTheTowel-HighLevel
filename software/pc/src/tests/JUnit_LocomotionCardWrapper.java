@@ -14,7 +14,7 @@ import utils.Sleep;
  *
  * @author pf
  */
-public class JUnit_LocomotionCardWapper extends JUnit_Test
+public class JUnit_LocomotionCardWrapper extends JUnit_Test
 {
 
 	/** The deplacements. */
