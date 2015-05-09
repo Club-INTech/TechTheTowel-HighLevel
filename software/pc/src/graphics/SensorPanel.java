@@ -204,11 +204,15 @@ public class SensorPanel extends JPanel
 		values4.add(value4);
 		if(values1.size() > 100)
 		{
-			values1.remove(0);
-			values2.remove(0);
-			values3.remove(0);
-			values4.remove(0);
-			times.remove(0);
+;
+		}
+		for(int i = 0; i < times.size() && times.get(i) < System.currentTimeMillis() - startTime - captureTime; i++)
+		{
+			values1.remove(i);
+			values2.remove(i);
+			values3.remove(i);
+			values4.remove(i);
+			times.remove(i);
 		}
 		this.repaint();
 	}
