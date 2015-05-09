@@ -54,14 +54,17 @@ public class Graph
 		mNodes.add(new Node(-533 - robotRadius, 1420 - robotRadius));//noeud 7
 		//noeuds additionnels
 		//TODO : rajouter des noeuds intelligemment
-		mNodes.add(new Node(-1100 + robotRadius, 896));// noeud 8
-		mNodes.add(new Node(0, 100 + robotRadius));// noeud 9
-		mNodes.add(new Node(1100 - robotRadius, 896));// noeud 10
-		mNodes.add(new Node(0, 896));// noeud 11
-		mNodes.add(new Node(-400, 896));// noeud 12
-		mNodes.add(new Node(400, 896));// noeud 13
-		mNodes.add(new Node(-1100 + robotRadius, 100 + robotRadius));//noeud 14
-		mNodes.add(new Node(1100 - robotRadius, 100 + robotRadius));//noeud 15
+		mNodes.add(new Node(-1100 + robotRadius, 896));
+		mNodes.add(new Node(0, 100 + robotRadius));
+		mNodes.add(new Node(1100 - robotRadius, 896));
+		mNodes.add(new Node(0, 896));
+		mNodes.add(new Node(-400, 896));
+		mNodes.add(new Node(400, 896));
+		mNodes.add(new Node(-1100 + robotRadius, 100 + robotRadius));
+		mNodes.add(new Node(1100 - robotRadius, 100 + robotRadius));
+		mNodes.add(new Node(0, 1420 - robotRadius));
+		mNodes.add(new Node(425, 495));
+		
 
 		
 		//obstacles circulaires
@@ -125,22 +128,8 @@ public class Graph
 		mAreas.add(area);
 		
 		area = new Area(-1100 + robotRadius, 100 + robotRadius, 2200 - 2*robotRadius, 1320 - 2*robotRadius);//zone 10
-		area.attachNode(mNodes.get(0));
-		area.attachNode(mNodes.get(1));
-		area.attachNode(mNodes.get(2));
-		area.attachNode(mNodes.get(3));
-		area.attachNode(mNodes.get(4));
-		area.attachNode(mNodes.get(5));
-		area.attachNode(mNodes.get(6));
-		area.attachNode(mNodes.get(7));
-		area.attachNode(mNodes.get(8));
-		area.attachNode(mNodes.get(9));
-		area.attachNode(mNodes.get(10));
-		area.attachNode(mNodes.get(11));
-		area.attachNode(mNodes.get(12));
-		area.attachNode(mNodes.get(13));
-		area.attachNode(mNodes.get(14));
-		area.attachNode(mNodes.get(15));
+		for(int i = 0; i < mNodes.size(); i++)
+			area.attachNode(mNodes.get(i));
 		mAreas.add(area);
 	}
 	

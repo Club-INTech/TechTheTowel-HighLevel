@@ -3,6 +3,7 @@ package threads;
 import enums.SensorNames;
 import exceptions.ConfigPropertyNotFoundException;
 import exceptions.serial.SerialConnexionException;
+import graphics.Window;
 import robot.cardsWrappers.SensorsCardWrapper;
 import table.Table;
 import robot.RobotReal;
@@ -25,6 +26,9 @@ class ThreadSensor extends AbstractThread
 
 	/** La carte capteurs avec laquelle on doit communiquer */
 	private SensorsCardWrapper mSensorsCardWrapper;
+	
+	//TODO : interface graphique à enlever eventuellement (necessaire pour les tests)
+	public Window window;
 	
 	// Valeurs par défaut s'il y a un problème de config
 	
@@ -160,6 +164,9 @@ class ThreadSensor extends AbstractThread
 		mTable = table;
 		mRobot = robot;		
 		homologation=false;
+		
+		//TODO : interface graphique à enlever (necessaire pour les tests)
+		window = new Window();
 	}
 	
 	/* (non-Javadoc)
@@ -215,6 +222,8 @@ class ThreadSensor extends AbstractThread
 				
 				//mTable.getObstacleManager().removeObstacleInUs(mRobot.getPosition());
 
+				//TODO : interface graphique, à supprimer sur la raspi
+				window.drawInt(distanceFront[0], distanceFront[1], distanceBack[0], distanceBack[1]);
 				
 				if(!homologation)
 				{
