@@ -65,7 +65,7 @@ public class JUnit_Strategia extends JUnit_Test
 		String couleur = "";
 		while(!couleur.contains("jaune") && !couleur.contains("vert"))
 		{
-			System.out.println("Rentrez \"vert\" ou \"jaune\" : ");
+			log.debug("Rentrez \"vert\" ou \"jaune\" : ",this);
 			BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in)); 
 			 
 			try 
@@ -74,21 +74,19 @@ public class JUnit_Strategia extends JUnit_Test
 			}
 			catch (IOException e) 
 			{
-				System.out.println("Erreur IO: le clavier est il bien branché ?");
+				log.debug("Erreur IO: le clavier est il bien branché ?",this);
 			} 
 			if(couleur.contains("jaune"))
 				config.set("couleur", "jaune");
 			else if(couleur.contains("vert"))
 				config.set("couleur", "vert");
-			
 		}
-		
 	}
 	
 	public void waitMatchBegin()
 	{
 
-		System.out.println("Robot pret pour le match, attente du retrait du jumper");
+		log.debug("Robot pret pour le match, attente du retrait du jumper",this);
 		
 		// attends que le jumper soit retiré du robot
 		
@@ -117,16 +115,15 @@ public class JUnit_Strategia extends JUnit_Test
 		strategos.updateConfig();
 		strategos.IA();
 		
-
 		//////////////////////////////////////////////////////
 		//	Fin du match
 		//////////////////////////////////////////////////////
 		
-		System.out.println("match fini !");
+		log.debug("match fini !",this);
 
 		//Le match s'arrête
 		container.destructor();
 		
-		System.out.println(System.currentTimeMillis()-timeMatchBegin+" ms depuis le debut : < 90.000 ?");
+		log.debug(System.currentTimeMillis()-timeMatchBegin+" ms depuis le debut : < 90.000 ?",this);
 	}
 }

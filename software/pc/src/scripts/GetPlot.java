@@ -214,9 +214,9 @@ public class GetPlot extends AbstractScript
 		//attention version hardcodée ne pas utilser hors du match scripté
 		else if (versionToExecute == 56)
 		{
-			if(stateToConsider.robot.storedPlotCount < 3)
+			stateToConsider.robot.turn(Math.PI/2);
+			if(stateToConsider.robot.storedPlotCount < 4)
 			{
-				//FIXME please
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
 				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
@@ -228,13 +228,14 @@ public class GetPlot extends AbstractScript
 			
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
 				
-				if(stateToConsider.robot.storedPlotCount<4)
+				if(!stateToConsider.robot.isGlassStoredLeft)
 				{
 					stateToConsider.robot.moveLengthwise(100); // On avance vers le suivant
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
 					stateToConsider.table.eatPlotX(6);
 				}
 			}
+			stateToConsider.robot.moveLengthwise(-300, hooksToConsider, false);
 
 		}
 		else if(versionToExecute==567)
