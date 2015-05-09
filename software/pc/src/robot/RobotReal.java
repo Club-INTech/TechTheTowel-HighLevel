@@ -82,18 +82,20 @@ public class RobotReal extends Robot
 			return mSensorsCardWrapper.getSensorValue(sensor);
 		else
 		{
+			// capteurs ultrasons
 			if(sensor == SensorNames.ULTRASOUND_FRONT_SENSOR || sensor == SensorNames.ULTRASOUND_FRONT_SENSOR)
 			{
+				 // On intervertit droite et gauche pour les capteurs	
 				int[] invertedOut = (int[])mSensorsCardWrapper.getSensorValue(sensor);
 				int[] out = new int[2];
 				out[0] = invertedOut[1];
-				return out;
+				return out;					
+			}
+			else // contacteurs
+			{
+				return mSensorsCardWrapper.getSensorValue(sensor);
 			}
 		}
-		 
-		 
-		// n'arrivera jamais (juste pour contenter eclipse)
-		return null;
 	}
 
 	@Override	
