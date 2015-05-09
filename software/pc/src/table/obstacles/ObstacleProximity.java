@@ -14,6 +14,8 @@ public class ObstacleProximity extends ObstacleCircular
 	/** temps ou l'obstacle sera perime en ms */
 	private long mOutDatedTime;
 	
+	private int lifetime;
+	
 	/**
 	 * Crée un nouvel obstacle détecté a proximité du robot.
 	 * Ces obstacles sont supposés circulaires: on les définit par leur centre et leur rayon
@@ -22,11 +24,15 @@ public class ObstacleProximity extends ObstacleCircular
 	 *
 	 * @param position position du centre du disque représentant l'obstacle circulaire
 	 * @param radius rayon du disque représentant l'obstacle circulaire 
+	 * @param obstacleGroup 
+	 * @param lifetime la durée de vie (en ms) de l'objet a créer
 	 */
-	public ObstacleProximity (Vec2 position, int radius, ObstacleGroups obstacleGroup)
+	public ObstacleProximity (Vec2 position, int radius, ObstacleGroups obstacleGroup, int lifetime)
 	{
 		super(position,radius, obstacleGroup);
-		mOutDatedTime = System.currentTimeMillis() + 8000;// la date de peremption = temps actuel + temps de peremption de l'obstacle
+		
+		this.lifetime = lifetime;
+		mOutDatedTime = System.currentTimeMillis() + lifetime;// la date de peremption = temps actuel + temps de peremption de l'obstacle
 		//TODO mettre dans le fichier de config le "tempsde peremption" de chaque obstacle 
 	}
 	
@@ -35,7 +41,7 @@ public class ObstacleProximity extends ObstacleCircular
 	 */
 	public ObstacleProximity clone()
 	{
-		return new ObstacleProximity(position.clone(), getRadius(), obstacleGroup);
+		return new ObstacleProximity(position.clone(), getRadius(), obstacleGroup, lifetime);
 	}
 	
 	public long getOutDatedTime()

@@ -122,7 +122,10 @@ public class Table implements Service
 		return mObstacleManager;
 	}
 	
-	/** Fonction explicitant si le clap "numberOfClap" est fermé*/
+	/** Fonction explicitant si le clap "numberOfClap" est fermé
+	 * @param numberOfClap 
+	 * @return */
+	@SuppressWarnings("javadoc")
 	public boolean isClapXClosed(int numberOfClap)
 	{
 		if( numberOfClap==1)
@@ -139,7 +142,8 @@ public class Table implements Service
 	}
 
 	
-	/** Fonction a appeler quand le clap x est fermé*/
+	/** Fonction a appeler quand le clap x est fermé
+	 * @param numberOfClap */
 	public void clapXClosed(int numberOfClap)
 	{
 		if( numberOfClap==1)
@@ -284,7 +288,9 @@ public class Table implements Service
 	/**
 	 * dis si le verre x a été pris
 	 * @param x le numero du verre doit etre dans [0..4]
+	 * @return 
 	 */
+	@SuppressWarnings("javadoc")
 	public boolean isGlassXTaken (int x)
 	{
 		if (0<=x && x<=5)

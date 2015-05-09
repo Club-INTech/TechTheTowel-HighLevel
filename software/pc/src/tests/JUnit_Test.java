@@ -57,6 +57,7 @@ public abstract class JUnit_Test
 	
 	/**
 	 * le set up du match en cours (mise en place des actionneurs)
+	 * @param sensorsCard 
 	 * @param robot le robot a setuper
 	 * @throws SerialConnexionException si l'ordinateur n'arrive pas a communiquer avec les cartes
 	 */

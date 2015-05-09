@@ -337,7 +337,7 @@ public class Locomotion implements Service
     	{ 
             isRobotMovingBackward=true;
             moveToPointException(aim, hooks, true, mur, turnOnly, mustDetect);
-            isRobotMovingBackward=false;
+            isRobotMovingForward=false;
     	}
     	else //if(strategy == DirectionStrategy.FASTEST)
     	{
@@ -348,9 +348,13 @@ public class Locomotion implements Service
 	        Vec2 orientationVec = new Vec2((int)(1000*Math.cos(lowLevelOrientation)), (int)(1000*Math.sin(lowLevelOrientation)));
 	     
 	        // On regarde le produit scalaire; si c'est positif, alors on est dans le bon sens, et inversement
-	        boolean direction = delta.dot(orientationVec) >= 0;
+	        boolean isFastestDirectionForward = delta.dot(orientationVec) >= 0;
 	        
-	        moveToPointException(aim, hooks, direction, mur, turnOnly, mustDetect);
+	        isRobotMovingForward = isFastestDirectionForward;
+	        isRobotMovingBackward = !isFastestDirectionForward;
+	        moveToPointException(aim, hooks, isFastestDirectionForward, mur, turnOnly, mustDetect);
+	        isRobotMovingForward = false;
+	        isRobotMovingBackward = false;
     	}
     	
     	log.debug("Arrivés en "+aim+" vraie position : "+lowLevelPosition, this);

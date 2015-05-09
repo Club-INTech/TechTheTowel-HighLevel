@@ -26,6 +26,7 @@ public class PathDingDing implements Service
 	/**
 	 * constructeur
 	 * @param table
+	 * @param log 
 	 */
 	public PathDingDing(Table table, Log log)
 	{

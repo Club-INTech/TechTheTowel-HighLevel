@@ -21,6 +21,7 @@ public class ObstacleCircular extends Obstacle
 	 *
 	 * @param position position du centre de l'obstacle a créer
 	 * @param radius rayon de l'obstacle a créer 
+	 * @param obstacleGroup 
 	 */
 	public ObstacleCircular(Vec2 position, int radius, ObstacleGroups obstacleGroup)
 	{
@@ -82,6 +83,7 @@ public class ObstacleCircular extends Obstacle
 	 * 
 	 * @return
 	 */
+	@SuppressWarnings("javadoc")
 	public Circle toCircle()
 	{
 		return new Circle(position, radius);

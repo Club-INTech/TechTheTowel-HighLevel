@@ -204,7 +204,7 @@ public class Strategie implements Service
 		scriptedMatch(gameState);
 					
 		//tant que le match n'est pas fini, on prend des decisions :
-		while(realGameState.timeEllapsed   <  matchDuration )
+		while(realGameState.getTimeEllapsed()   <  matchDuration )
 		{
 			log.debug("======choix script======", this);
 			System.out.println();
@@ -479,7 +479,7 @@ public class Strategie implements Service
 						{
 							
 							// si le temps presse, on n'attends pas pour faire les scripts
-							if (realGameState.timeEllapsed > 50000)
+							if (realGameState.getTimeEllapsed() > 50000)
 								tryAgain = false;
 								
 							// exécute le prochain script sur la liste
@@ -513,7 +513,23 @@ public class Strategie implements Service
 					{
 						if (e.reason.compareTo(UnableToMoveReason.PHYSICALLY_BLOCKED)==0)
 						{
-							//FIXME degager (ne pas bouger tryAgain)
+							// attention: ne pas bouger tryAgain dans ce catch
+							//TODO: test
+							try
+							{
+								realGameState.robot.moveLengthwise(-100);
+							}
+							catch (UnableToMoveException e1)
+							{
+								try 
+								{
+									realGameState.robot.moveLengthwise(100);
+								} 
+								catch (UnableToMoveException e2)
+								{
+									log.critical("Le robot est complètent bloqué et n'arrive pas a se dégader", this);
+								}
+							}
 						}
 					} 
 					catch (PathNotFoundException e)
@@ -565,15 +581,16 @@ public class Strategie implements Service
 								//et on le remet en position 0
 								scriptedMatchScripts.add(0, scriptmanager.getScript(ScriptNames.GRAB_PLOT));
 								scriptedMatchVersions.add(0, 34);
+								scriptedMatchCustomExceptionHandlers.add(null);
 								
-								try 
-								{
-									scriptedMatchCustomExceptionHandlers.add(Strategie.class.getDeclaredMethod(new String("scriptedMatchHandePile0Plot"),(Class[])null));
-								} 
-								catch (NoSuchMethodException | SecurityException e1)
-								{
-									e1.printStackTrace();
-								}
+//								try 
+//								{
+//									scriptedMatchCustomExceptionHandlers.add(Strategie.class.getDeclaredMethod(new String("scriptedMatchHandePile0Plot"),(Class[])null));
+//								} 
+//								catch (NoSuchMethodException | SecurityException e1)
+//								{
+//									e1.printStackTrace();
+//								}
 							}
 							//sinon (pas sensé arriver) on arrete d'essayer le script
 							else
@@ -756,7 +773,7 @@ public class Strategie implements Service
 		
 		
 		points += script.remainingScoreOfVersion(version, realGameState);
-		points *= ((matchDuration-realGameState.timeEllapsed)-durationScript)/durationScript;
+		points *= ((matchDuration-realGameState.getTimeEllapsed())-durationScript)/durationScript;
 		log.debug("points :"+points, this);
 		//points = (pointsScript+malus) * (tempsRestant - duree)/duree
 		return points;

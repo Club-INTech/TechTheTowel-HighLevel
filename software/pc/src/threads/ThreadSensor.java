@@ -207,12 +207,12 @@ class ThreadSensor extends AbstractThread
 				   distanceBack[1]==-1 )	) // si on n'a pas spammé
 			{										
 				// on enleve les obstacles 
-				if(!homologation)
-				{
-					removeObstacleFront(distanceFront);
-					removeObstacleBack(distanceBack);
-				}
-				
+//				if(!homologation)
+//				{
+//					removeObstacleFront(distanceFront);
+//					removeObstacleBack(distanceBack);
+//				}
+//				
 				//mTable.getObstacleManager().removeObstacleInUs(mRobot.getPosition());
 
 				
@@ -385,6 +385,9 @@ class ThreadSensor extends AbstractThread
 
 				relativePosEnnemi1.x=positionEnnemi_1.x;
 				relativePosEnnemi1.y=positionEnnemi_1.y;
+				
+				// considéère que l'obstacle est plus devant nous qu'il ne l'est vraiment
+				relativePosEnnemi1.y /=2;
 				
 				// Maintenant, on le remet dans le repere du robot
 				positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
@@ -758,6 +761,7 @@ class ThreadSensor extends AbstractThread
 	}
 	
 	
+	@SuppressWarnings("unused")
 	private void removeObstacleFront(int[] distanceFront)
 	{
 		// On limite les obstacles supprimés, pour eviter les problemes liés aux reflexions
@@ -766,6 +770,7 @@ class ThreadSensor extends AbstractThread
 
 	}
 	
+	@SuppressWarnings("unused")
 	private void removeObstacleBack(int[] distanceFront)
 	{
 		// On limite les obstacles supprimés, pour eviter les problemes liés aux reflexions

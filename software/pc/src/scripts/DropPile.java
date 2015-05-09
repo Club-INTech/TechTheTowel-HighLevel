@@ -166,7 +166,6 @@ public class DropPile extends AbstractScript
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
 				
 				stateToConsider.robot.turn(-Math.PI/4);
-				stateToConsider.robot.moveLengthwiseWithoutDetection(100);
 				
 				// On ne depose que si la zone est vide de gobelets ET qu'on en a au moins un verre
 				if ( !stateToConsider.table.isAreaXFilled(0) 
@@ -175,6 +174,7 @@ public class DropPile extends AbstractScript
 				{
 					if (stateToConsider.robot.isGlassStoredLeft)
 					{
+						stateToConsider.robot.moveLengthwiseWithoutDetection(100);
 						stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);
 						stateToConsider.robot.moveLengthwiseWithoutDetection(-250);
 						stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
@@ -183,6 +183,7 @@ public class DropPile extends AbstractScript
 					}	
 					else if (stateToConsider.robot.isGlassStoredRight)
 					{
+						stateToConsider.robot.moveLengthwiseWithoutDetection(50);
 						stateToConsider.robot.turn(Math.PI/4);
 						stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);
 						stateToConsider.robot.moveLengthwiseWithoutDetection(-250);
@@ -279,7 +280,7 @@ public class DropPile extends AbstractScript
 			if (version == 0)
 			{
 				if (!stateToConsider.table.isBallTaken())
-					toReturn -= 5*Math.min((int)(90000-stateToConsider.timeEllapsed)/AverageTimeToGetPlot,
+					toReturn -= 5*Math.min((int)(90000-stateToConsider.getTimeEllapsed())/AverageTimeToGetPlot,
 												stateToConsider.table.numberOfPlotLeft());
 				if (!stateToConsider.table.isAreaXFilled(0) && (stateToConsider.robot.isGlassStoredLeft || stateToConsider.robot.isGlassStoredRight))
 					toReturn += 4;

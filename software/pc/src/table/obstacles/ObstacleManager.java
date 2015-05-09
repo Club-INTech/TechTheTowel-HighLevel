@@ -216,7 +216,7 @@ public class ObstacleManager
      */
     public synchronized void addObstacle(final Vec2 position)
     {
-    	addObstacle(position,defaultObstacleRadius);
+    	addObstacle(position,defaultObstacleRadius, 5000);
     }
 
     
@@ -225,8 +225,9 @@ public class ObstacleManager
      *
      * @param position position ou ajouter l'obstacle
      * @param radius rayon de l'obstacle a ajouter    
+     * @param lifetime durée de vie (en ms) de l'obstace a ajouter
       */
-    public synchronized void addObstacle(final Vec2 position, final int radius)
+    public synchronized void addObstacle(final Vec2 position, final int radius, final int lifetime)
     {
     	//si la position est dans la table on continue les tests 
     	// si la position est dans notre zone de depart, ca ne peut etre qu'une main 
@@ -238,7 +239,7 @@ public class ObstacleManager
     		 *on ne detecte pas les plots ni les goblets (et si on les detectes on prefere ne pas prendre le risque et on les evites)
     		 * et si on detecte une deuxieme fois l'ennemi on rajoute un obstacle sur lui
     		 */
-    		mMobileObstacles.add(new ObstacleProximity(position, radius, ObstacleGroups.ENNEMY_ROBOTS));
+    		mMobileObstacles.add(new ObstacleProximity(position, radius, ObstacleGroups.ENNEMY_ROBOTS, lifetime));
     	}
     	else
     	{
@@ -321,7 +322,7 @@ public class ObstacleManager
     	if(squaredDistanceToClosestEnemy <= 0)
     		return 0;
     	
-		log.debug("Position de l'ennemi le plus proche proche d'après distanceToClosestEnnemy: "+mMobileObstacles.get(indexOfClosestEnnemy).getPosition(), this);
+//		log.debug("Position de l'ennemi le plus proche proche d'après distanceToClosestEnnemy: "+mMobileObstacles.get(indexOfClosestEnnemy).getPosition(), this);
     	return (int)Math.sqrt((double)squaredDistanceToClosestEnemy) - mRobotRadius - mMobileObstacles.get(indexOfClosestEnnemy).radius;
     }
 
@@ -431,6 +432,10 @@ public class ObstacleManager
     
     /**
      *  On enleve les obstacles presents sur la table virtuelle mais non detectés
+     * @param position 
+     * @param orientation 
+     * @param detectionRadius 
+     * @param detectionAngle 
      *  @return true si on a enlevé un obstacle, false sinon
      */
     public synchronized boolean removeNonDetectedObstacles(Vec2 position, double orientation, double detectionRadius, double detectionAngle)
@@ -496,8 +501,10 @@ public class ObstacleManager
     
     /**
      * Debug / interface graphique
+     * @return 
      */
-    public int getDiscRadius()
+    @SuppressWarnings("javadoc")
+	public int getDiscRadius()
     {
     	return radiusDetectionDisc;
     }
@@ -528,6 +535,7 @@ public class ObstacleManager
     /**
      *  On enleve les obstacles qui sont en confrontation avec nous :
      *  Cela evite de se retrouver dans un obstacle
+     * @param position 
      */
     public void removeObstacleInUs(Vec2 position)
     {

@@ -44,6 +44,8 @@ public class JUnit_College extends JUnit_Test {
 	 * ouvre les deux bras, tourne en 0, ferme les deux bras;
 	 * (avance de distance-50, ouvre les machoires, avance de 50, mange le plot et le remonte) *4;
 	 * ouvre le guide et la machoire et recule de distance; 
+	 * @throws UnableToMoveException 
+	 * @throws SerialConnexionException 
 	 */
 	@Test
 	public void demonstration() throws UnableToMoveException, SerialConnexionException 

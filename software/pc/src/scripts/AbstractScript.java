@@ -132,6 +132,7 @@ public abstract class AbstractScript implements Service
 	 * Retourne la position d'entrée associée à la version.
 	 *
 	 * @param version version dont on veut le point d'entrée
+	 * @param ray 
 	 * @param robotPosition la position du robot actuelle
 	 * @param la taille du robot
 	 * @return la position du point d'entrée
@@ -145,6 +146,7 @@ public abstract class AbstractScript implements Service
 	 *
 	 * @param state Etat du jeu au sein duquel il faut finaliser le script
 	 * @throws UnableToMoveException losrque le robot veut se déplacer et que quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
+	 * @throws SerialFinallyException 
 	 * @throws SerialConnexionException s'il y a un problème de communication avec une des cartes électroniques
 	 */
 	public abstract void finalize(GameState<?> state) throws UnableToMoveException, SerialFinallyException;
