@@ -107,9 +107,9 @@ public class Strategie implements Service
 	
 	
 	/**
-	 * Temps en ms qui doit s'écouler dans le match avant que le rnont arrete de réessayer ses scripts
+	 * Temps en ms qui doit s'écouler dans le match avant que le robnt arrete de réessayer ses scripts
 	 */
-	private int timeBeforeRushMode = 30000;
+	private int timeBeforeRushMode = 50000;
 	
 /**
  * Crée la strategie, l'IA decisionnelle
@@ -434,40 +434,42 @@ public class Strategie implements Service
 			scriptedMatchCustomExceptionHandlers.add(null);
 		}
 
-		try {
-		scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
-		scriptedMatchVersions.add(2);
-//		scriptedMatchCustomExceptionHandlers.add(Strategie.class.getDeclaredMethod(new String("scriptedMatchHandePile0Plot"),(Class[])null));	// si quelqu'un se demande ce que c'est que ce délire, c'est un "pointeur sur fonction" en mode hack de java
-		scriptedMatchCustomExceptionHandlers.add(null);
-		
-		scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
-		scriptedMatchVersions.add(34);
-//		scriptedMatchCustomExceptionHandlers.add(Strategie.class.getDeclaredMethod(new String("scriptedMatchHandePile0Plot"),(Class[])null));
-		scriptedMatchCustomExceptionHandlers.add(null);
-		
-		scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.CLOSE_CLAP));
-		scriptedMatchVersions.add(12);
-		scriptedMatchCustomExceptionHandlers.add(null);
-		
-		scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
-		scriptedMatchVersions.add(1);
-		scriptedMatchCustomExceptionHandlers.add(null);
-		
-		scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.FREE_STACK));
-		scriptedMatchVersions.add(0);
-		scriptedMatchCustomExceptionHandlers.add(null);
-		
-		scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
-		scriptedMatchVersions.add(56);
-		scriptedMatchCustomExceptionHandlers.add(null);
-		
-		scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.FREE_STACK));
-		scriptedMatchVersions.add(2);
+		try 
+		{
+			scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
+			scriptedMatchVersions.add(2);
+	//		scriptedMatchCustomExceptionHandlers.add(Strategie.class.getDeclaredMethod(new String("scriptedMatchHandePile0Plot"),(Class[])null));	// si quelqu'un se demande ce que c'est que ce délire, c'est un "pointeur sur fonction" en mode hack de java
+			scriptedMatchCustomExceptionHandlers.add(null);
+			
+			scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
+			scriptedMatchVersions.add(34);
+	//		scriptedMatchCustomExceptionHandlers.add(Strategie.class.getDeclaredMethod(new String("scriptedMatchHandePile0Plot"),(Class[])null));
+			scriptedMatchCustomExceptionHandlers.add(null);
+			
+			scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.CLOSE_CLAP));
+			scriptedMatchVersions.add(12);
+			scriptedMatchCustomExceptionHandlers.add(null);
+			
+			scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
+			scriptedMatchVersions.add(1);
+			scriptedMatchCustomExceptionHandlers.add(null);
+			
+			scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.FREE_STACK));
+			scriptedMatchVersions.add(0);
+			scriptedMatchCustomExceptionHandlers.add(null);
+			
+			scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
+			scriptedMatchVersions.add(56);
+			scriptedMatchCustomExceptionHandlers.add(null);
+			
+			scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.FREE_STACK));
+			scriptedMatchVersions.add(2);
 //		} catch (NoSuchMethodException e2) {
 //			// TODO Auto-generated catch block
 //			e2.printStackTrace();
-		} catch (SecurityException e2) {
-			// TODO Auto-generated catch block
+		} 
+		catch (SecurityException e2) 
+		{
 			e2.printStackTrace();
 		}
 		
@@ -557,16 +559,14 @@ public class Strategie implements Service
 					{
 						for (ObstacleGroups obstacle : e.getObstacleGroup())
 						{
-							log.warning("attention, obstacle : "+obstacle.getClass(),this);
+							log.warning("attention, obstacle : "+obstacle.getClass().toString(),this);
 							
-
 							// si c'est un robot ennemi qui empèche l'accès au point d'entrée, alors on reporte a plus tard ce script
-							if(obstacle.compareTo(ObstacleGroups.ENNEMY_ROBOTS)==0  && realGameState.getTimeEllapsed() < timeBeforeRushMode)
+							if(obstacle.equals(ObstacleGroups.ENNEMY_ROBOTS) && realGameState.getTimeEllapsed() < timeBeforeRushMode)
 							{
 								scriptedMatchScripts.add(Math.max(0,scriptedMatchScripts.size()-3), scriptedMatchScripts.get(0));
 								scriptedMatchVersions.add(Math.max(0,scriptedMatchVersions.size()-3), scriptedMatchVersions.get(0));
 								scriptedMatchCustomExceptionHandlers.add(Math.max(0,scriptedMatchScripts.size()-3), null);
-								
 								
 								//et on abandonne le script pour le moment
 								scriptedMatchScripts.remove(0);

@@ -159,7 +159,7 @@ public class GetPlot extends AbstractScript
 						stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);					
 						stateToConsider.robot.moveLengthwise(130, hooksToConsider);
 						stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
-						stateToConsider.robot.moveLengthwise(190, hooksToConsider);
+						stateToConsider.robot.moveLengthwise(170, hooksToConsider);
 						stateToConsider.robot.isGlassStoredLeft = true;
 					}
 					else if(!stateToConsider.robot.isGlassStoredRight)
@@ -167,7 +167,7 @@ public class GetPlot extends AbstractScript
 						stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);					
 						stateToConsider.robot.moveLengthwise(130, hooksToConsider);
 						stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
-						stateToConsider.robot.moveLengthwise(190, hooksToConsider);
+						stateToConsider.robot.moveLengthwise(170, hooksToConsider);
 						stateToConsider.robot.isGlassStoredRight = true;
 					}
 
@@ -214,9 +214,9 @@ public class GetPlot extends AbstractScript
 		//attention version hardcodée ne pas utilser hors du match scripté
 		else if (versionToExecute == 56)
 		{
-			if(stateToConsider.robot.storedPlotCount < 3)
+			stateToConsider.robot.turn(Math.PI/2);
+			if(stateToConsider.robot.storedPlotCount < 4)
 			{
-				//FIXME please
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
 				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
@@ -228,14 +228,17 @@ public class GetPlot extends AbstractScript
 			
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
 				
-				if(stateToConsider.robot.storedPlotCount<4)
+				if(!stateToConsider.robot.isGlassStoredLeft)
 				{
 					stateToConsider.robot.moveLengthwise(100); // On avance vers le suivant
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
 					stateToConsider.table.eatPlotX(6);
 				}
 			}
-
+			stateToConsider.robot.moveLengthwise(-300, hooksToConsider, false);
+			
+			// Dans tous les cas, on ferme la machoire 
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, false);
 		}
 		else if(versionToExecute==567)
 		{

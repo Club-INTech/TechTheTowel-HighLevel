@@ -113,6 +113,15 @@ public class TablePanel extends JPanel
 		    		(2 * ennemyRobots.get(i).getRadius()) * this.getWidth() / 3000,
 					(2 * ennemyRobots.get(i).getRadius()) * this.getHeight() / 2000);
 	    
+	    //les robots ennemis non confirmés
+	    g.setColor(new Color(0, 100, 100));
+	    ennemyRobots = mTable.getObstacleManager().getUntestedArrayList();
+	    for(int i = 0; i < ennemyRobots.size(); i++)
+		    g.drawOval((ennemyRobots.get(i).getPosition().x - ennemyRobots.get(i).getRadius() + 1500) * this.getWidth() / 3000,
+		    		-(ennemyRobots.get(i).getPosition().y + ennemyRobots.get(i).getRadius()) * this.getHeight() / 2000 + this.getHeight(),
+		    		(2 * ennemyRobots.get(i).getRadius()) * this.getWidth() / 3000,
+					(2 * ennemyRobots.get(i).getRadius()) * this.getHeight() / 2000);
+	    
 		// Notre robot
 	    if(isRobotPresent)
 	    {
