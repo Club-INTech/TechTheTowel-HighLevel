@@ -215,7 +215,7 @@ public class LocomotionCardWrapper implements Service
 	 */
 	public void setTranslationnalSpeed(int pwmMax) throws SerialConnexionException
 	{
-		// envois a la carte d'asservissement le nouveau maximum du pwm
+		// envoie a la carte d'asservissement le nouveau maximum du pwm
 		String chaines[] = {"ctv", Integer.toString(pwmMax)};
 		locomotionCardSerial.communiquer(chaines, 0);			
 	}
@@ -227,7 +227,7 @@ public class LocomotionCardWrapper implements Service
 	 */
 	public void setRotationnalSpeed(int pwmMax) throws SerialConnexionException
 	{
-		// envois a la carte d'asservissement le nouveau maximum du pwm
+		// envoie a la carte d'asservissement le nouveau maximum du pwm
 		String chaines[] = {"crv", Integer.toString(pwmMax)};
 		locomotionCardSerial.communiquer(chaines, 0);
 	}
@@ -246,7 +246,7 @@ public class LocomotionCardWrapper implements Service
 	}
 
 	/**
-	 * envois a la carte d'asservissement de nouvelles valeurs pour les correcteurs et un nouveau maximum pour les pwm lors d'une rotation
+	 * envoie a la carte d'asservissement de nouvelles valeurs pour les correcteurs et un nouveau maximum pour les pwm lors d'une rotation
 	 * @param kp nouvelle valeur du correcteur proportionnel
 	 * @param kd nouvelle valeur du correcteur dérivé 
 	 * @param pwm_max a nouvelle valeur maximum que peut prenvent prendre les pwm des moteurs lors d'une rotation
