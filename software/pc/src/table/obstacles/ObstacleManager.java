@@ -365,31 +365,71 @@ public class ObstacleManager
      */
     public synchronized int distanceToClosestEnemy(Vec2 position, Vec2 direction)
     {
-    	//si aucun ennemi n'est détecté, on suppose que l'ennemi le plus proche est à 1m)
-    	if(mMobileObstacles.size() == 0)
-    		return 1000;
-    	
-    	int squaredDistanceToClosestEnemy = 10000000;
-    	
-    	int indexOfClosestEnnemy = 0;
-    	for(int i=0; i<mMobileObstacles.size(); i++)
+    	try
     	{
-    		Vec2 ennemyRelativeCoords = new Vec2((mMobileObstacles.get(i).position.x - position.x), mMobileObstacles.get(i).position.y - position.y);
-    		if(direction.dot(ennemyRelativeCoords) > 0)
-    		{
-	    		int squaredDistanceToEnemy = ennemyRelativeCoords.squaredLength(); 
-	    		if(squaredDistanceToEnemy < squaredDistanceToClosestEnemy)
+			
+	    	//si aucun ennemi n'est détecté, on suppose que l'ennemi le plus proche est à 1m)
+	    	
+	    	int squaredDistanceToClosestEnemy = 10000000;
+	    	
+	    	int indexOfClosestEnnemyTested = 0;
+	    	int indexOfClosestEnnemyUntested = 0;
+	    	
+	    	int squaredDistanceToEnemyUntested=0;
+	    	int squaredDistanceToEnemyTested=0 ;
+	
+	     	if(mMobileObstacles.size() == 0 && mUntestedMobileObstacles.size()==0)
+	    		return 1000;
+	     	
+	    	for(int i=0; i<mMobileObstacles.size(); i++)
+	    	{
+	    		Vec2 ennemyRelativeCoords = new Vec2((mMobileObstacles.get(i).position.x - position.x), 
+	    											  mMobileObstacles.get(i).position.y - position.y);
+	    		if(direction.dot(ennemyRelativeCoords) > 0)
 	    		{
-	    			squaredDistanceToClosestEnemy = squaredDistanceToEnemy;
-	    			indexOfClosestEnnemy = i;
+		    		squaredDistanceToEnemyTested = ennemyRelativeCoords.squaredLength(); 
+		    		if(squaredDistanceToEnemyTested < squaredDistanceToClosestEnemy)
+		    		{
+		    			squaredDistanceToClosestEnemy = squaredDistanceToEnemyTested;
+		    			indexOfClosestEnnemyTested = i;
+		    		}
 	    		}
-    		}
+	    	}
+	    	
+	    	for(int i=0; i<mUntestedMobileObstacles.size(); i++)
+	    	{
+	    		Vec2 ennemyRelativeCoords = new Vec2((mUntestedMobileObstacles.get(i).position.x - position.x), 
+	    											  mUntestedMobileObstacles.get(i).position.y - position.y);
+	    		if(direction.dot(ennemyRelativeCoords) > 0)
+	    		{
+		    		squaredDistanceToEnemyUntested = ennemyRelativeCoords.squaredLength(); 
+		    		if(squaredDistanceToEnemyUntested < squaredDistanceToClosestEnemy)
+		    		{
+		    			squaredDistanceToClosestEnemy = squaredDistanceToEnemyUntested;
+		    			indexOfClosestEnnemyUntested = i;
+		    		}
+	    		}
+	    	}
+	    	
+	    	if(squaredDistanceToClosestEnemy <= 0)
+	    		return 0;
+	    	
+	    	if(squaredDistanceToEnemyUntested > squaredDistanceToEnemyTested) 
+	    	{
+	    		//log.debug("Position de l'ennemi le plus proche , testé, d'après distanceToClosestEnnemy: "+mMobileObstacles.get(indexOfClosestEnnemy).getPosition(), this);
+		    	return (int)Math.sqrt((double)squaredDistanceToClosestEnemy) - mRobotRadius - mMobileObstacles.get(indexOfClosestEnnemyTested).radius;
+	    	}
+	    	else 
+	    	{	    	
+	    		//log.debug("Position de l'ennemi le plus proche, non testé, d'après distanceToClosestEnnemy: "+mUntestedMobileObstacles.get(indexOfClosestEnnemy).getPosition(), this);
+		    	return (int)Math.sqrt((double)squaredDistanceToClosestEnemy) - mRobotRadius - mUntestedMobileObstacles.get(indexOfClosestEnnemyUntested).radius;
+			}
     	}
-    	if(squaredDistanceToClosestEnemy <= 0)
-    		return 0;
-    	
-//		log.debug("Position de l'ennemi le plus proche proche d'après distanceToClosestEnnemy: "+mMobileObstacles.get(indexOfClosestEnnemy).getPosition(), this);
-    	return (int)Math.sqrt((double)squaredDistanceToClosestEnemy) - mRobotRadius - mMobileObstacles.get(indexOfClosestEnnemy).radius;
+    	catch(IndexOutOfBoundsException e)
+    	{
+    		log.critical("Ah bah oui, out of bound", this);
+    		throw e;
+    	}
     }
 
     /**
