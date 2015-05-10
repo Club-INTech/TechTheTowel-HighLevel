@@ -892,12 +892,19 @@ int main(void)
 #if DEBUG
 		else if(tailleBuffer == RX_BUFFER_SIZE - 1)
 		{
-			serial.printfln("CRITICAL OVERFLOW !");
-			motionControlSystem->enableTranslationControl(false);
-			motionControlSystem->enableRotationControl(false);
-			actuatorsMgr->cdm();
-			while(true)
-				;
+			if(robotEnable)
+			{
+				serial.printfln("CRITICAL OVERFLOW !");
+				motionControlSystem->enableTranslationControl(false);
+				motionControlSystem->enableRotationControl(false);
+				actuatorsMgr->cdm();
+				while(true)
+					;
+			}
+			else
+			{
+				serial.flush();
+			}
 		}
 #endif
 	}
