@@ -62,7 +62,8 @@ public class RobotReal extends Robot
 	@Override
 	public void useActuator(ActuatorOrder order, boolean waitForCompletion) throws SerialConnexionException
 	{
-		log.debug("appel de RobotReal.useActuator(" + order + "," + waitForCompletion + ")", this);
+		//redondance avec useActuator qui log.debug deja
+		//log.debug("appel de RobotReal.useActuator(" + order + "," + waitForCompletion + ")", this);
 		if(symmetry)
 			order = mActuatorCorrespondenceMap.getSymmetrizedActuatorOrder(order);
 		mActuatorCardWrapper.useActuator(order);
