@@ -283,15 +283,24 @@ public class JUnit_Sensors extends JUnit_Test
 		}
 	}
 	
-	@Test
+	//@Test
 	public void testSensorEnnemyWithoutMovement()
 	{
 		log.debug("Test des capteurs fixe", this);
 		while(true)
 		{
-			;
+			;	
 		}
 	}
+	
+	@Test
+	public void testDistaanceToClosestEnnemy()
+	{
+		while(true)
+		{
+			state.table.getObstacleManager().distanceToClosestEnemy(state.robot.getPosition(), new Vec2(500,500));
+		}
+	} 
 	
 	
 	//@Test

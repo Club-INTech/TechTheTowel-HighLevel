@@ -367,7 +367,6 @@ public class ObstacleManager
     {
     	try
     	{
-			
 	    	//si aucun ennemi n'est détecté, on suppose que l'ennemi le plus proche est à 1m)
 	    	
 	    	int squaredDistanceToClosestEnemy = 10000000;
@@ -375,8 +374,8 @@ public class ObstacleManager
 	    	int indexOfClosestEnnemyTested = 0;
 	    	int indexOfClosestEnnemyUntested = 0;
 	    	
-	    	int squaredDistanceToEnemyUntested=0;
-	    	int squaredDistanceToEnemyTested=0 ;
+	    	int squaredDistanceToEnemyUntested=1000;
+	    	int squaredDistanceToEnemyTested=1000 ;
 	
 	     	if(mMobileObstacles.size() == 0 && mUntestedMobileObstacles.size()==0)
 	    		return 1000;
@@ -414,16 +413,19 @@ public class ObstacleManager
 	    	if(squaredDistanceToClosestEnemy <= 0)
 	    		return 0;
 	    	
-	    	if(squaredDistanceToEnemyUntested > squaredDistanceToEnemyTested) 
+	    	if(squaredDistanceToEnemyUntested >= squaredDistanceToEnemyTested && squaredDistanceToEnemyTested!=1000) 
 	    	{
 	    		//log.debug("Position de l'ennemi le plus proche , testé, d'après distanceToClosestEnnemy: "+mMobileObstacles.get(indexOfClosestEnnemy).getPosition(), this);
 		    	return (int)Math.sqrt((double)squaredDistanceToClosestEnemy) - mRobotRadius - mMobileObstacles.get(indexOfClosestEnnemyTested).radius;
 	    	}
-	    	else 
+	    	else if(squaredDistanceToEnemyUntested < squaredDistanceToEnemyTested && squaredDistanceToEnemyUntested!=1000) 
+
 	    	{	    	
 	    		//log.debug("Position de l'ennemi le plus proche, non testé, d'après distanceToClosestEnnemy: "+mUntestedMobileObstacles.get(indexOfClosestEnnemy).getPosition(), this);
 		    	return (int)Math.sqrt((double)squaredDistanceToClosestEnemy) - mRobotRadius - mUntestedMobileObstacles.get(indexOfClosestEnnemyUntested).radius;
 			}
+	    	else 
+				return 1000;
     	}
     	catch(IndexOutOfBoundsException e)
     	{
