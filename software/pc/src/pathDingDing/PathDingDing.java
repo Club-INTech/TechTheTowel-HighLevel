@@ -26,6 +26,7 @@ public class PathDingDing implements Service
 	/**
 	 * constructeur
 	 * @param table
+	 * @param log 
 	 */
 	public PathDingDing(Table table, Log log)
 	{
@@ -49,7 +50,7 @@ public class PathDingDing implements Service
 	public ArrayList<Vec2> computePath(Vec2 start, Vec2 end, EnumSet<ObstacleGroups> obstaclesToConsider) throws PathNotFoundException, InObstacleException
 	{
 		this.mObstaclesToConsider = obstaclesToConsider;
-		mLog.debug("Obstacles à considerer : "+obstaclesToConsider.toString()  ,this);
+		//mLog.debug("Obstacles à considerer : "+obstaclesToConsider.toString()  ,this);
 
 		mGraph.setObstaclesToConsider(mObstaclesToConsider);
 		

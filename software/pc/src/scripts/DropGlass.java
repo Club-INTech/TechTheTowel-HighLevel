@@ -180,7 +180,7 @@ public class DropGlass extends AbstractScript
 			{
 				//si on gene la future prise de balle on retire des points
 				if(stateToConsider.table.isBallTaken() && version == 0)
-					toReturn -= 5*Math.min((int)(90000-stateToConsider.timeEllapsed)/AverageTimeToGetPlot,
+					toReturn -= 5*Math.min((int)(90000-stateToConsider.getTimeEllapsed())/AverageTimeToGetPlot,
 											stateToConsider.table.numberOfPlotLeft());
 				return toReturn;
 			}

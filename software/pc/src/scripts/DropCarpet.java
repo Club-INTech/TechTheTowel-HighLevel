@@ -52,7 +52,7 @@ public class DropCarpet extends AbstractScript
 				stateToConsider.robot.turn(-0.5*Math.PI, hooksToConsider, false);
 				// on avance vers ces demoiselles (les marches) (attention impact possible)
 				// TODO utiliser moveLengthwiseTorwardWalls
-				stateToConsider.robot.moveLengthwiseWithoutDetection(-distanceBetweenEntryAndStairs, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwiseWithoutDetection(-(1320 - stateToConsider.robot.getPositionFast().y), hooksToConsider, true);
 				
 				//TODO supr
 				System.out.println("en position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") avant depose-tapis");
@@ -77,15 +77,13 @@ public class DropCarpet extends AbstractScript
 						stateToConsider.table.setIsRightCarpetDropped(true);
 						stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
 					}
-					//TODO supr
-					System.out.println("En position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") après avoir deposé les tapis");
 				}
 				
 				//on s'eloigne de l'escalier
 				try 
 				{
-					stateToConsider.robot.moveLengthwise(distanceBetweenEntryAndStairs, hooksToConsider, false);
-		
+					stateToConsider.robot.moveLengthwise( distanceBetweenEntryAndStairs, hooksToConsider, false);
+					
 				}
 				catch (UnableToMoveException e) 
 				{
@@ -129,7 +127,7 @@ public class DropCarpet extends AbstractScript
 				//on presente ses arrieres a l'escalier
 				stateToConsider.robot.turn(-0.5*Math.PI, hooksToConsider, false);
 				// on avance vers ces demoiselles (les marches) (attention impact possible)
-				stateToConsider.robot.moveLengthwiseTowardWall(-distanceBetweenEntryAndStairs*2, hooksToConsider);
+				stateToConsider.robot.moveLengthwiseTowardWall(-(1320 - stateToConsider.robot.getPositionFast().y), hooksToConsider);
 
 				
 				//verification de la position : on n'effectue l'action que si on est assez proche (ie pas d'obstacle)
@@ -203,7 +201,7 @@ public class DropCarpet extends AbstractScript
 				//on presente ses arrieres a l'escalier
 				stateToConsider.robot.turn(-0.5*Math.PI, hooksToConsider, false);
 				// on avance vers ces demoiselles (les marches) (attention impact possible)
-				stateToConsider.robot.moveLengthwiseTowardWall(-250, hooksToConsider);
+				stateToConsider.robot.moveLengthwiseTowardWall( -(1320 - stateToConsider.robot.getPositionFast().y), hooksToConsider);
 				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
 				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
 

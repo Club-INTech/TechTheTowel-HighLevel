@@ -304,7 +304,11 @@ public class SerialConnexion implements SerialPortEventListener, Service
 
 	/**
 	 * Fonction verifiant si on recoit bien de l'ascii etendu : sinon, bah le bas niveau deconne.
+	 * @param inputLines 
+	 * @return 
+	 * @throws Exception 
 	 */
+	@SuppressWarnings("javadoc")
 	public boolean isAsciiExtended(String inputLines) throws Exception
 	{
 		Boolean isAsciiExtended=true;

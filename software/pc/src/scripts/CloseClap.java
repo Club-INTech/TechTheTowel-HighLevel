@@ -381,11 +381,11 @@ public class CloseClap extends AbstractScript
 		if(stateToConsider.table.isClapXClosed(3) || version == 1 || version == 2 || version == 12 || version == -1 || version == -12)
 			score -= 5;
 		if(!stateToConsider.table.isGlassXTaken(0) && (version ==1 || version == 12 || version == -1 || version == -12))
-			score -=Math.min((int)(90000-stateToConsider.timeEllapsed)/AverageTimeToPlaceGlass, 4);
+			score -=Math.min((int)(90000-stateToConsider.getTimeEllapsed())/AverageTimeToPlaceGlass, 4);
 		if(!stateToConsider.table.isPlotXEaten(3) && (version ==1 || version == 12 || version == -1 || version == -12))
-			score -= Math.min((int)(90000-stateToConsider.timeEllapsed)/AverageTimeToPlacePlot, 5);
+			score -= Math.min((int)(90000-stateToConsider.getTimeEllapsed())/AverageTimeToPlacePlot, 5);
 		if(!stateToConsider.table.isPlotXEaten(4) && (version ==1 || version == 12 || version == -1 || version == -12))
-			score -=Math.min((int)(90000-stateToConsider.timeEllapsed)/AverageTimeToPlacePlot,5);
+			score -=Math.min((int)(90000-stateToConsider.getTimeEllapsed())/AverageTimeToPlacePlot,5);
 		return score;
 	}
 

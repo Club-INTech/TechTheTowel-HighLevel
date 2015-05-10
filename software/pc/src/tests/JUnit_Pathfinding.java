@@ -1,6 +1,7 @@
 package tests;
 
 import org.junit.*;
+import org.junit.runner.JUnitCore;
 
 import pathDingDing.*;
 import table.Table;
@@ -18,6 +19,12 @@ public class JUnit_Pathfinding extends JUnit_Test
 	Window win;
 	Table table;
 	PathDingDing pf;
+	
+
+	public static void main(String[] args) throws Exception
+	{                    
+	   JUnitCore.main("tests.JUnit_Pathfinding");
+	}
 	
     @Before
     public void setUp() throws Exception

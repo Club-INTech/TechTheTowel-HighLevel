@@ -5,16 +5,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-import org.junit.Before;
-import org.junit.Test;
-
 import pathDingDing.PathDingDing;
 import container.Container;
-
 import robot.Robot;
 import robot.cardsWrappers.SensorsCardWrapper;
 import scripts.ScriptManager;
-import smartMath.Vec2;
 import strategie.GameState;
 import strategie.Strategie;
 import table.Table;
@@ -45,6 +40,7 @@ public class strategy_launcher {
 
 
 	
+	@SuppressWarnings("unchecked")
 	public static void main(String[] args) throws Exception
 	{
 	
@@ -115,6 +111,8 @@ public class strategy_launcher {
 
 	/**
 	 * Permet de tester et de préparer le robot pour un match
+	 * @param robot 
+	 * @throws SerialConnexionException 
 	 */
     static public void matchSetUp(Robot robot) throws SerialConnexionException
 	{

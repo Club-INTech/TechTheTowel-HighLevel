@@ -17,7 +17,8 @@ public class Window extends JFrame
 	private static final long serialVersionUID = -3140220993568124763L;
 	
 	
-	private Panel mPanel;
+	private TablePanel mPanel;
+	private SensorPanel mSensorPanel;
 	private Mouse mMouse;
 	
 	public Window(Table table, RobotReal robot)
@@ -27,7 +28,7 @@ public class Window extends JFrame
 	    this.setSize(600, 400);
 	    this.setLocationRelativeTo(null);
 	    
-	    mPanel = new Panel(table, robot);
+	    mPanel = new TablePanel(table, robot);
 	    this.setContentPane(mPanel);
 	    
 	    mMouse = new Mouse(mPanel);
@@ -41,20 +42,36 @@ public class Window extends JFrame
 	    this.setSize(600, 400);
 	    this.setLocationRelativeTo(null);
 	    
-	    mPanel = new Panel(table);
+	    mPanel = new TablePanel(table);
 	    this.setContentPane(mPanel);
 	    
 	    mMouse = new Mouse(mPanel);
 	    addMouseListener(mMouse);
 	}
 	
+	public Window()
+	{
+		this.setVisible(true);
+		this.setTitle("sensorValues");
+	    this.setSize(1200, 800);
+	    this.setLocationRelativeTo(null);
+	    
+	    mSensorPanel = new SensorPanel();
+	    this.setContentPane(mSensorPanel);
+	}
+	
 	/**
 	 * 
 	 * @return le panneau
 	 */
-	public Panel getPanel()
+	public TablePanel getPanel()
 	{
 		return mPanel;
+	}
+	
+	public void drawInt(int value1, int value2, int value3, int value4)
+	{
+		mSensorPanel.drawInteger(new Integer(value1), new Integer(value2), new Integer(value3), new Integer(value4));
 	}
 	
 	public Mouse getMouse()

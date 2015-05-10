@@ -68,7 +68,9 @@ public class JUnit_Sensors extends JUnit_Test
 		mLocomotion = (Locomotion)container.getService(ServiceNames.LOCOMOTION);
 		mLocomotion.updateConfig();
 
-		mLocomotion.setPosition(new Vec2 (1500-320-77,1000));
+		//mLocomotion.setPosition(new Vec2 (1500-320-77,1000));
+		mLocomotion.setPosition(new Vec2 (300,1000));
+		//mLocomotion.setOrientation(Math.PI);
 		mLocomotion.setOrientation(Math.PI);
 		
 		container.startInstanciedThreads();
@@ -229,7 +231,7 @@ public class JUnit_Sensors extends JUnit_Test
 	}
 	
 
-	@Test 
+	//@Test 
 	public void testContactGlasses()
 	{
 		try 
@@ -250,7 +252,7 @@ public class JUnit_Sensors extends JUnit_Test
 	}
 		
 	//@Test
-	public void testCapteurFixe()
+	public void testSensorEnnemyInDiscWithoutMovement()
 	{
 		log.debug("Test d'évitement fixe", this);
 		while(true)
@@ -280,6 +282,63 @@ public class JUnit_Sensors extends JUnit_Test
 			}
 		}
 	}
+	
+	//@Test
+	public void testSensorEnnemyWithoutMovement()
+	{
+		log.debug("Test des capteurs fixe", this);
+		while(true)
+		{
+			;	
+		}
+	}
+	
+	@Test
+	public void testDistaanceToClosestEnnemy()
+	{
+		while(true)
+		{
+			state.table.getObstacleManager().distanceToClosestEnemy(state.robot.getPosition(), new Vec2(500,500));
+		}
+	} 
+	
+	
+	//@Test
+	public void testSensorEnnemyWithMovement()
+	{
+		log.debug("Test des capteurs fixe", this);
+		while(true)
+		{
+			try 
+			{
+				state.robot.moveLengthwise(50);
+				state.robot.sleep(500);
+			} 
+			catch (UnableToMoveException e) 
+			{
+				try {
+					state.robot.moveLengthwise(-50);
+				} catch (UnableToMoveException e1) {
+					e1.printStackTrace();
+				}				
+			}
+			try 
+			{
+				state.robot.moveLengthwise(-50);
+				state.robot.sleep(500);
+			} 
+			catch (UnableToMoveException e) 
+			{
+				try {
+					state.robot.moveLengthwise(50);
+				} catch (UnableToMoveException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		}
+	}
+	
 	
 	
    // @Test

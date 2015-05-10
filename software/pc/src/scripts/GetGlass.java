@@ -187,7 +187,7 @@ public class GetGlass extends AbstractScript
 	@Override
 	public int remainingScoreOfVersion(int id_version, GameState<?> state) 
 	{
-		if (!(state.robot.isGlassStoredRight && state.robot.isGlassStoredLeft) && state.table.isGlassXTaken(id_version) && (90000-state.timeEllapsed)>timeToDropGlass) 
+		if (!(state.robot.isGlassStoredRight && state.robot.isGlassStoredLeft) && state.table.isGlassXTaken(id_version) && (90000-state.getTimeEllapsed())>timeToDropGlass) 
 		{
 			return 4;
 		}

@@ -55,6 +55,18 @@ public class LocomotionCardWrapper implements Service
 		this.log = log;
 		this.locomotionCardSerial = serial;		
 		this.config = config;
+		
+		// comme l'asser n'est pas activé par défaut sur la STM, on l'active ici
+        try
+        {
+    		enableTranslationnalFeedbackLoop();
+			enableRotationnalFeedbackLoop();
+		} 
+        catch (SerialConnexionException e)
+        {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void updateConfig()
@@ -72,7 +84,7 @@ public class LocomotionCardWrapper implements Service
 	/** 
 	 * Regarde si le robot bouge effectivement.
 	 * Provoque un appel série pour avoir des information a jour. Cette méthode est demande donc un peu de temps. 
-	 * @return 
+	 * @return truz si le robot bouge
 	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
 	 */
 
@@ -289,6 +301,7 @@ public class LocomotionCardWrapper implements Service
 	 *  Verifie si le robot est arrivé et si c'est anormal
 	 *  @return Les informations sous forme d'un tableau de booleens
 	 *  lecture : [est ce qu'on bouge][est ce que c'est Anormal]
+	 * @throws SerialConnexionException 
 	 */
 	public boolean[] isRobotMovingAndAbnormal() throws SerialConnexionException
 	{

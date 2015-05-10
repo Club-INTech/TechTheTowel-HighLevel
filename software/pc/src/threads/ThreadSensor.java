@@ -3,6 +3,7 @@ package threads;
 import enums.SensorNames;
 import exceptions.ConfigPropertyNotFoundException;
 import exceptions.serial.SerialConnexionException;
+import graphics.Window;
 import robot.cardsWrappers.SensorsCardWrapper;
 import table.Table;
 import robot.RobotReal;
@@ -26,10 +27,13 @@ class ThreadSensor extends AbstractThread
 	/** La carte capteurs avec laquelle on doit communiquer */
 	private SensorsCardWrapper mSensorsCardWrapper;
 	
+	//TODO : interface graphique à enlever eventuellement (necessaire pour les tests)
+	public Window window;
+	
 	// Valeurs par défaut s'il y a un problème de config
 	
 	/** fréquence de mise a jour des valeurs renvoyés par les capteurs. Valeurs par défaut de 5 fois par seconde s'il y a un problème de config */
-	private int sensorFrequency = 16;
+	private int sensorFrequency = 15;
 	
 	/**
 	 * distance en mm entre les capteur ultrasond et le guide en plastique, 
@@ -160,6 +164,9 @@ class ThreadSensor extends AbstractThread
 		mTable = table;
 		mRobot = robot;		
 		homologation=false;
+		
+		//TODO : interface graphique à enlever (necessaire pour les tests)
+		window = new Window();
 	}
 	
 	/* (non-Javadoc)
@@ -201,10 +208,10 @@ class ThreadSensor extends AbstractThread
 			int[] distanceFront = getDistanceFront();
 			int[] distanceBack = getDistanceBack();
 			
-			if(! (distanceFront[0]==-1 || 
-				  distanceFront[1]==-1 ||
-				   distanceBack[0]==-1 ||
-				   distanceBack[1]==-1 )	) // si on n'a pas spammé
+			if(! (distanceFront[0]== -1 || 
+				  distanceFront[1]== -1 ||
+				   distanceBack[0]== -1 ||
+				   distanceBack[1]== -1 )	) // si on n'a pas spammé
 			{										
 				// on enleve les obstacles 
 				if(!homologation)
@@ -215,6 +222,8 @@ class ThreadSensor extends AbstractThread
 				
 				//mTable.getObstacleManager().removeObstacleInUs(mRobot.getPosition());
 
+				//TODO : interface graphique, à supprimer sur la raspi
+				window.drawInt(distanceFront[0], distanceFront[1], distanceBack[0], distanceBack[1]);
 				
 				if(!homologation)
 				{
@@ -232,9 +241,12 @@ class ThreadSensor extends AbstractThread
 					// Analyse des capteurs avant, avec gestion des angles
 					if(mRobot.getIsRobotMovingForward())
 						addObstacleFront(distanceFront);
+					
 					// Analyse des capteurs arrieres, avec gestion des angles
 					if(mRobot.getIsRobotMovingBackward())
 						addObstacleBack(distanceBack);
+					
+					log.debug("IsRobotMovingForward : "+mRobot.getIsRobotMovingForward()+" IsRobotMovingForward : "+mRobot.getIsRobotMovingBackward(), this);
 				}
 				else 
 				{
@@ -243,6 +255,8 @@ class ThreadSensor extends AbstractThread
 				}
 				
 			}
+			
+			
 			if (distanceFront[1] > 0 && distanceFront[1] < 70 || distanceFront[0] > 0 && distanceFront[0] < 70)
 				log.debug("obstacle detecte a moins de 7 cm en avant !", this);
 			if (distanceBack[1] > 0 && distanceBack[1] < 70 || distanceBack[0] > 0 && distanceBack[0] < 70)
@@ -386,6 +400,9 @@ class ThreadSensor extends AbstractThread
 				relativePosEnnemi1.x=positionEnnemi_1.x;
 				relativePosEnnemi1.y=positionEnnemi_1.y;
 				
+				// considéère que l'obstacle est plus devant nous qu'il ne l'est vraiment
+				relativePosEnnemi1.y /=2;
+				
 				// Maintenant, on le remet dans le repere du robot
 				positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
 
@@ -416,7 +433,7 @@ class ThreadSensor extends AbstractThread
 			
 			mTable.getObstacleManager().addObstacle(positionEnnemi_1);
     		log.debug("Valeur des capteurs avant brute : "+realSensorValuesFront[0]+";"+realSensorValuesFront[1], this);
-    		log.debug("Ennemi avant ajouté en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
+    		log.debug("Ennemi avant vu en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
 
 			
 			obstacleAddedLeft=true;
@@ -438,7 +455,7 @@ class ThreadSensor extends AbstractThread
 			
 			mTable.getObstacleManager().addObstacle(positionEnnemi_1);
     		log.debug("Valeur des capteurs avant brute : "+realSensorValuesFront[0]+";"+realSensorValuesFront[1], this);
-    		log.debug("Ennemi avant ajouté en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
+    		log.debug("Ennemi avant vu en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
 
 			obstacleAddedRight=true;
 		}
@@ -524,7 +541,7 @@ class ThreadSensor extends AbstractThread
 //				
 //				mTable.getObstacleManager().addObstacle(positionEnnemi_2);
 //	    		log.debug("Valeur des capteurs arrieres brute : "+realSensorValuesBack[0]+";"+realSensorValuesBack[1], this);
-//	    		log.debug("Ennemi arriere ajouté en "+positionEnnemi_2.x+";"+positionEnnemi_2.y, this);
+//	    		log.debug("Ennemi arriere vu en "+positionEnnemi_2.x+";"+positionEnnemi_2.y, this);
 //
 //				
 //				obstacleAddedRight=true;
@@ -549,7 +566,7 @@ class ThreadSensor extends AbstractThread
 
 				mTable.getObstacleManager().addObstacle(positionEnnemi_1);
 	    		log.debug("Valeur des capteurs arrieres brute : "+realSensorValuesBack[0]+";"+realSensorValuesBack[1], this);
-	    		log.debug("Ennemi arriere ajouté en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
+	    		log.debug("Ennemi arriere vu en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
 
 
 				obstacleAddedRight=true;
@@ -574,7 +591,7 @@ class ThreadSensor extends AbstractThread
 				
 				mTable.getObstacleManager().addObstacle(positionEnnemi_1);
 	    		log.debug("Valeur des capteurs arrieres brute : "+realSensorValuesBack[0]+";"+realSensorValuesBack[1], this);
-	    		log.debug("Ennemi arriere ajouté en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
+	    		log.debug("Ennemi arriere vu en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
 	
 				
 				obstacleAddedLeft=true;
@@ -596,7 +613,7 @@ class ThreadSensor extends AbstractThread
 				
 				mTable.getObstacleManager().addObstacle(positionEnnemi_1);
 	    		log.debug("Valeur des capteurs arrieres brute : "+realSensorValuesBack[0]+";"+realSensorValuesBack[1], this);
-	    		log.debug("Ennemi arriere ajouté en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
+	    		log.debug("Ennemi arriere vu en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
 	
 				obstacleAddedRight=true;
 			}
@@ -758,6 +775,7 @@ class ThreadSensor extends AbstractThread
 	}
 	
 	
+//	@SuppressWarnings("unused")
 	private void removeObstacleFront(int[] distanceFront)
 	{
 		// On limite les obstacles supprimés, pour eviter les problemes liés aux reflexions
@@ -766,6 +784,7 @@ class ThreadSensor extends AbstractThread
 
 	}
 	
+//	@SuppressWarnings("unused")
 	private void removeObstacleBack(int[] distanceFront)
 	{
 		// On limite les obstacles supprimés, pour eviter les problemes liés aux reflexions

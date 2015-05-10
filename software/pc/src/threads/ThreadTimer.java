@@ -39,7 +39,7 @@ public class ThreadTimer extends AbstractThread
 	public static long matchStartTimestamp;
 	
 	/** Durée en miliseconde d'un match recupéré de la config */
-	public static long matchDuration =90000;
+	public static long matchDuration = 90000;
 	
 	/** Temps en ms qui s'écoule entre deux mise a jour de la liste des obstacle périmables. Lors de chaque mise a jour, les obstacles périmés sont détruits. */
 	public static int obstacleRefreshInterval = 0;
@@ -130,6 +130,8 @@ public class ThreadTimer extends AbstractThread
 				log.warning(e.toString(), this);
 			}
 		}
+		log.debug("Fin des "+matchDuration+" ms de match, temps : "+matchStartTimestamp, this);
+
 
 		// actions de fin de match
 		onMatchEnded();
@@ -172,13 +174,24 @@ public class ThreadTimer extends AbstractThread
 	
 	
 	/**
-	 * Temps_restant.
+	 * Temps restant avant la fin du match.
 	 *
-	 * @return the long
+	 * @return le temps restant du match en milisecondes
 	 */
-	public long temps_restant()
+	public static long remainingTime()
 	{
 		return matchStartTimestamp + matchDuration - System.currentTimeMillis();
+	}
+	
+
+	/**
+	 * Temps écoulé depuis le début du match
+	 *
+	 * @return le temps écoulé du match en milisecondes
+	 */
+	public static long ellapsedTimeSinceMatchStarted()
+	{
+		return  System.currentTimeMillis() - matchStartTimestamp;
 	}
 	
 	/* (non-Javadoc)

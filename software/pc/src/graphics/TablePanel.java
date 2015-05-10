@@ -18,7 +18,7 @@ import table.obstacles.*;
  * @author Etienne
  *
  */
-public class Panel extends JPanel
+public class TablePanel extends JPanel
 {	
 	/** numéro pour la serialisation	 */
 	private static final long serialVersionUID = -3033815690221481964L;
@@ -30,7 +30,7 @@ public class Panel extends JPanel
 	private Graph mGraph;
 	private boolean isRobotPresent = true;
 	
-	public Panel(Table table, RobotReal robot)
+	public TablePanel(Table table, RobotReal robot)
 	{
 		mPath = new ArrayList<Vec2>();
 		mTable = table;
@@ -38,7 +38,7 @@ public class Panel extends JPanel
 		showGraph = false;
 	}
 	
-	public Panel(Table table)
+	public TablePanel(Table table)
 	{
 		mPath = new ArrayList<Vec2>();
 		mTable = table;
@@ -78,14 +78,21 @@ public class Panel extends JPanel
 	    
 	    
 	    //  Le graphe du pathdingding
-	    g.setColor(new Color(100, 60, 5));
 	    if(showGraph)
 	    {
 	    	//parcours des noeuds
 	    	for(int i = 0; i < mGraph.getNodes().size(); i++)
+	    	{
+	    		g.setColor(new Color(200, 120, 15));
+		    	g.fillOval( (mGraph.getNodes().get(i).x + 1500) * this.getWidth() / 3000 - 5,
+	    			    -mGraph.getNodes().get(i).y * this.getHeight() / 2000 + this.getHeight() - 5,
+	    			     10,
+	    			     10);
+		    	g.setColor(new Color(100, 60, 5));
 	    		//parcours des liens de chaque noeud
 	    		for(int j = 0; j < mGraph.getNodes().get(i).getLinkNumber(); j++)
 	    			g.drawLine((mGraph.getNodes().get(i).x + 1500) * this.getWidth() / 3000, -mGraph.getNodes().get(i).y * this.getHeight() / 2000 + this.getHeight(), (mGraph.getNodes().get(i).getLink(j).getDestination().x + 1500) * this.getWidth() / 3000, -mGraph.getNodes().get(i).getLink(j).getDestination().y * this.getHeight() / 2000 + this.getHeight());
+	    	}
 	    }
 	    
 	    
@@ -100,6 +107,15 @@ public class Panel extends JPanel
 	    //les robots ennemis
 	    g.setColor(Color.red);
 	    ArrayList<ObstacleProximity> ennemyRobots = mTable.getObstacleManager().getMobileObstacles();
+	    for(int i = 0; i < ennemyRobots.size(); i++)
+		    g.drawOval((ennemyRobots.get(i).getPosition().x - ennemyRobots.get(i).getRadius() + 1500) * this.getWidth() / 3000,
+		    		-(ennemyRobots.get(i).getPosition().y + ennemyRobots.get(i).getRadius()) * this.getHeight() / 2000 + this.getHeight(),
+		    		(2 * ennemyRobots.get(i).getRadius()) * this.getWidth() / 3000,
+					(2 * ennemyRobots.get(i).getRadius()) * this.getHeight() / 2000);
+	    
+	    //les robots ennemis non confirmés
+	    g.setColor(new Color(0, 100, 100));
+	    ennemyRobots = mTable.getObstacleManager().getUntestedArrayList();
 	    for(int i = 0; i < ennemyRobots.size(); i++)
 		    g.drawOval((ennemyRobots.get(i).getPosition().x - ennemyRobots.get(i).getRadius() + 1500) * this.getWidth() / 3000,
 		    		-(ennemyRobots.get(i).getPosition().y + ennemyRobots.get(i).getRadius()) * this.getHeight() / 2000 + this.getHeight(),

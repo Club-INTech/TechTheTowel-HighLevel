@@ -26,6 +26,7 @@ public class Callback
 	 * Constructeur d'un callback avec 2 paramètres: la méthode et si elle doit être exécutée une seule fois
 	 * @param methode
 	 * @param unique
+	 * @param stateToConsider 
 	 */
 	public Callback(Executable methode, boolean unique, GameState<Robot> stateToConsider)
 	{
