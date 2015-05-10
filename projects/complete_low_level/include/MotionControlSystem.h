@@ -35,6 +35,8 @@
 #define TRACKER_SIZE 1
 #endif
 
+enum MOVING_DIRECTION {FORWARD, BACKWARD, NONE};
+
 extern Uart<1> serial;
 
 class MotionControlSystem : public Singleton<MotionControlSystem> {
@@ -66,6 +68,7 @@ private:
 	volatile float x;
 	volatile float y;
 	volatile bool moving;
+	volatile MOVING_DIRECTION direction;
 	volatile bool moveAbnormal;
 	float translationTunings[NB_SPEED][NB_CTE_ASSERV];
 	float rotationTunings[NB_SPEED][NB_CTE_ASSERV];
@@ -177,6 +180,7 @@ public:
 
 	bool isMoving() const;
 	bool isMoveAbnormal() const;
+	MOVING_DIRECTION getMovingDirection() const;
 
 	/* Fonction permettant de Test de différents PWM, afin de connaître le PWM minimal mettant en mouvement le robot */
 	void testPWM(int16_t listePWM[], unsigned int nbPWM);

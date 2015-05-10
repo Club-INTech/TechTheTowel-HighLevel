@@ -417,6 +417,11 @@ void MotionControlSystem::orderTranslation(int32_t mmDistance) {
 		translationPID.resetErrors();
 		moving = true;
 	}
+	if ( mmDistance >= 0) {
+		direction = FORWARD;
+	} else {
+		direction = BACKWARD;
+	}
 	moveAbnormal = false;
 }
 
@@ -429,6 +434,7 @@ void MotionControlSystem::orderRotation(float angleRadian) {
 		rotationPID.resetErrors();
 		moving = true;
 	}
+	direction = NONE;
 	moveAbnormal = false;
 }
 
@@ -569,6 +575,10 @@ bool MotionControlSystem::isMoving() const{
 
 bool MotionControlSystem::isMoveAbnormal() const{
 	return moveAbnormal;
+}
+
+MOVING_DIRECTION MotionControlSystem::getMovingDirection() const{
+	return direction;
 }
 
 void MotionControlSystem::testPWM(int16_t listePWM[], unsigned int nbPWM)

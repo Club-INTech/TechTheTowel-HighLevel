@@ -25,7 +25,7 @@ int main(void)
 
 	while(1)
 	{
-		sensorMgr->refresh();
+		sensorMgr->refresh(motionControlSystem->getMovingDirection(), motionControlSystem->isMoving());
 
 		uint8_t tailleBuffer = serial.available();
 
