@@ -62,6 +62,7 @@ public class RobotReal extends Robot
 	@Override
 	public void useActuator(ActuatorOrder order, boolean waitForCompletion) throws SerialConnexionException
 	{
+		log.debug("appel de RobotReal.useActuator(" + order + "," + waitForCompletion + ")", this);
 		if(symmetry)
 			order = mActuatorCorrespondenceMap.getSymmetrizedActuatorOrder(order);
 		mActuatorCardWrapper.useActuator(order);
@@ -126,12 +127,14 @@ public class RobotReal extends Robot
 	@Override
 	public void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
 	{	
+		log.debug("appel de RobotReal.moveLengthwise(" + distance + "," + hooksToConsider + "," + expectsWallImpact + ")", this);
 		moveLengthwise(distance, hooksToConsider, expectsWallImpact, true);
 	}	
 	
 	@Override
     public void moveLengthwiseWithoutDetection(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
 	{	
+		log.debug("appel de RobotReal.moveLengthwiseWithoutDetection(" + distance + "," + hooksToConsider + "," + expectsWallImpact + ")", this);
 		Speed newSpeed = Speed.SLOW;
 		/*
     	if (distance<150)
@@ -157,6 +160,7 @@ public class RobotReal extends Robot
 	@Override
 	 public void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact, Boolean mustDetect) throws UnableToMoveException
 	{	
+		log.debug("appel de RobotReal.moveLengthwise(" + distance + "," + hooksToConsider + "," + expectsWallImpact + "," + mustDetect + ")", this);
 		Speed newSpeed = Speed.SLOW;
 		/*
     	if (distance<150)
@@ -184,6 +188,7 @@ public class RobotReal extends Robot
 	@Override
 	 public void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact, Boolean mustDetect, Speed newSpeed) throws UnableToMoveException
 	{	
+		log.debug("appel de RobotReal.moveLengthwise(" + distance + "," + hooksToConsider + "," + expectsWallImpact + "," + mustDetect + "," + newSpeed + ")", this);
 		Speed oldSpeed = speed;
 		speed = newSpeed;
 		mLocomotion.moveLengthwise(distance, hooksToConsider, expectsWallImpact, mustDetect);
@@ -205,19 +210,21 @@ public class RobotReal extends Robot
 	 * ATTENTION, la valeur "mur" est ignorée
 	 */
     @Override
-    public void turn(double angle, ArrayList<Hook> hooks, boolean mur, boolean isTurnRelative) throws UnableToMoveException
+    public void turn(double angle, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact, boolean isTurnRelative) throws UnableToMoveException
     {
+		log.debug("appel de RobotReal.turn(" + angle + "," + hooksToConsider + "," + expectsWallImpact + "," + isTurnRelative + ")", this);
     	if (isTurnRelative)
     		angle += getOrientation();
-        turn(angle, hooks);
+        turn(angle, hooksToConsider);
     }
     
     @Override
-    public void turnWithoutDetection(double angle, ArrayList<Hook> hooks) throws UnableToMoveException
+    public void turnWithoutDetection(double angle, ArrayList<Hook> hooksToConsider) throws UnableToMoveException
     {
+		log.debug("appel de RobotReal.turn(" + angle + "," + hooksToConsider + ")", this);
     	try
     	{
-    		mLocomotion.turn(angle, hooks, false);
+    		mLocomotion.turn(angle, hooksToConsider, false);
     	}
     	catch (UnableToMoveException e)
     	{
@@ -227,11 +234,12 @@ public class RobotReal extends Robot
     }
     
     @Override
-    public void turn(double angle, ArrayList<Hook> hooks, boolean mur) throws UnableToMoveException
+    public void turn(double angle, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
     {
+		log.debug("appel de RobotReal.turn(" + angle + "," + hooksToConsider + "," + expectsWallImpact + ")", this);
     	try
     	{
-    		turn(angle, hooks);
+    		turn(angle, hooksToConsider);
     	}
     	catch (UnableToMoveException e)
     	{
@@ -240,11 +248,12 @@ public class RobotReal extends Robot
     	}
     }
     
-    public void turn(double angle, ArrayList<Hook> hooks) throws UnableToMoveException
+    public void turn(double angle, ArrayList<Hook> hooksToConsider) throws UnableToMoveException
     {
+		log.debug("appel de RobotReal.turn(" + angle + "," + hooksToConsider + ")", this);
     	try
     	{
-    		mLocomotion.turn(angle, hooks);
+    		mLocomotion.turn(angle, hooksToConsider);
     	}
     	catch (UnableToMoveException e)
     	{
@@ -256,31 +265,35 @@ public class RobotReal extends Robot
     
     @SuppressWarnings("unchecked")
 	@Override
-    public void followPath(ArrayList<Vec2> chemin, ArrayList<Hook> hooks) throws UnableToMoveException
+    public void followPath(ArrayList<Vec2> chemin, ArrayList<Hook> hooksToConsider) throws UnableToMoveException
     {
+		log.debug("appel de RobotReal.followPath(" + chemin + "," + hooksToConsider + ")", this);
     	cheminSuivi=(ArrayList<Vec2>) chemin.clone();
 
-        mLocomotion.followPath(chemin, hooks, DirectionStrategy.getDefaultStrategy());
+        mLocomotion.followPath(chemin, hooksToConsider, DirectionStrategy.getDefaultStrategy());
     }
     
 
     @SuppressWarnings("unchecked")
 	@Override
-    protected void followPath(ArrayList<Vec2> chemin, ArrayList<Hook> hooks, DirectionStrategy direction) throws UnableToMoveException
+    protected void followPath(ArrayList<Vec2> chemin, ArrayList<Hook> hooksToConsider, DirectionStrategy direction) throws UnableToMoveException
     {
+		log.debug("appel de RobotReal.followPath(" + chemin + "," + hooksToConsider + "," + direction + ")", this);
     	cheminSuivi=(ArrayList<Vec2>) chemin.clone();
-        mLocomotion.followPath(chemin, hooks, direction);
+        mLocomotion.followPath(chemin, hooksToConsider, direction);
     }
 
     @Override
     public void immobilise()
     {
+		log.debug("appel de RobotReal.immobilise()", this);
         mLocomotion.immobilise();
     }
     
 	@Override
 	public void enableRotationnalFeedbackLoop()
 	{
+		log.debug("appel de RobotReal.enableRotationnalFeedbackLoop()", this);
 		try
 		{
 			mLocomotion.enableRotationnalFeedbackLoop();
@@ -294,6 +307,7 @@ public class RobotReal extends Robot
 	@Override
 	public void disableTranslationnalFeedbackLoop()
 	{
+		log.debug("appel de RobotReal.disableTranslationnalFeedbackLoop()", this);
 		try
 		{
 			mLocomotion.disableRotationnalFeedbackLoop();

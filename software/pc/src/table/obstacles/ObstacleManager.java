@@ -252,6 +252,7 @@ public class ObstacleManager
     		for (int i = 0; i<mUntestedMobileObstacles.size(); i++)
     		{
     			ObstacleProximity obstacle = mUntestedMobileObstacles.get(i);
+    			
     			//si l'obstacle est deja dans la liste des obstacles non-testés on l'ajoute dans la liste des obstacles
 	    		if(obstacle.position.distance(position)<(obstacle.radius+radius)/2)
 	    		{
@@ -314,12 +315,15 @@ public class ObstacleManager
      */
     public synchronized void removeOutdatedObstacles()
     {
+    	
+    	// enlève les obstacles confirmées s'ils sont périmés
     	for(int i = 0; i < mMobileObstacles.size(); i++)
     		if(mMobileObstacles.get(i).getOutDatedTime() < System.currentTimeMillis())
     		{
     			mMobileObstacles.remove(i--);
     		}
     	
+    	// enlève les obstacles en attente s'ils sont périmés
     	for(int i = 0; i < mUntestedMobileObstacles.size(); i++)
     		if(mUntestedMobileObstacles.get(i).getOutDatedTime() < System.currentTimeMillis())
     		{
@@ -371,15 +375,17 @@ public class ObstacleManager
 	    	
 	    	int squaredDistanceToClosestEnemy = 10000000;
 	    	
-	    	int indexOfClosestEnnemyTested = 0;
-	    	int indexOfClosestEnnemyUntested = 0;
 	    	
-	    	int squaredDistanceToEnemyUntested=1000;
-	    	int squaredDistanceToEnemyTested=1000 ;
+	    	int squaredDistanceToEnemyUntested=10000000;
+	    	int squaredDistanceToEnemyTested=10000000 ;
+	    	
+	    	ObstacleCircular closestEnnemy = null;
 	
 	     	if(mMobileObstacles.size() == 0 && mUntestedMobileObstacles.size()==0)
 	    		return 1000;
 	     	
+	     	
+	     	//trouve l'ennemi le plus proche parmis les obstacles confirmés
 	    	for(int i=0; i<mMobileObstacles.size(); i++)
 	    	{
 	    		Vec2 ennemyRelativeCoords = new Vec2((mMobileObstacles.get(i).position.x - position.x), 
@@ -390,11 +396,13 @@ public class ObstacleManager
 		    		if(squaredDistanceToEnemyTested < squaredDistanceToClosestEnemy)
 		    		{
 		    			squaredDistanceToClosestEnemy = squaredDistanceToEnemyTested;
-		    			indexOfClosestEnnemyTested = i;
+		    			closestEnnemy = mMobileObstacles.get(i);
 		    		}
 	    		}
 	    	}
-	    	
+	      	
+	     	//trouve l'ennemi non confirmé le plus proche parmis les obstacles 
+	    	// (et remplace la distance a l'ennemi le plus proche d'un ennemi confirmé par une distance a un ennemi non confirmé s'il est plus proche)
 	    	for(int i=0; i<mUntestedMobileObstacles.size(); i++)
 	    	{
 	    		Vec2 ennemyRelativeCoords = new Vec2((mUntestedMobileObstacles.get(i).position.x - position.x), 
@@ -405,27 +413,21 @@ public class ObstacleManager
 		    		if(squaredDistanceToEnemyUntested < squaredDistanceToClosestEnemy)
 		    		{
 		    			squaredDistanceToClosestEnemy = squaredDistanceToEnemyUntested;
-		    			indexOfClosestEnnemyUntested = i;
+		    			closestEnnemy = mUntestedMobileObstacles.get(i);
 		    		}
 	    		}
 	    	}
 	    	
 	    	if(squaredDistanceToClosestEnemy <= 0)
 	    		return 0;
-	    	
-	    	if(squaredDistanceToEnemyUntested >= squaredDistanceToEnemyTested && squaredDistanceToEnemyTested!=1000) 
-	    	{
-	    		//log.debug("Position de l'ennemi le plus proche , testé, d'après distanceToClosestEnnemy: "+mMobileObstacles.get(indexOfClosestEnnemy).getPosition(), this);
-		    	return (int)Math.sqrt((double)squaredDistanceToClosestEnemy) - mRobotRadius - mMobileObstacles.get(indexOfClosestEnnemyTested).radius;
-	    	}
-	    	else if(squaredDistanceToEnemyUntested < squaredDistanceToEnemyTested && squaredDistanceToEnemyUntested!=1000) 
 
-	    	{	    	
+	    	if(closestEnnemy != null)
+	    	{
 	    		//log.debug("Position de l'ennemi le plus proche, non testé, d'après distanceToClosestEnnemy: "+mUntestedMobileObstacles.get(indexOfClosestEnnemy).getPosition(), this);
-		    	return (int)Math.sqrt((double)squaredDistanceToClosestEnemy) - mRobotRadius - mUntestedMobileObstacles.get(indexOfClosestEnnemyUntested).radius;
-			}
-	    	else 
-				return 1000;
+		    	return (int)Math.sqrt((double)squaredDistanceToClosestEnemy) - mRobotRadius - closestEnnemy.radius;
+	    	}
+	    	else
+	    		return 10000;
     	}
     	catch(IndexOutOfBoundsException e)
     	{

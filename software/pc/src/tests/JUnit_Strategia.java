@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.JUnitCore;
 
 import robot.Robot;
 import robot.cardsWrappers.SensorsCardWrapper;
@@ -26,6 +27,12 @@ public class JUnit_Strategia extends JUnit_Test
 	Strategie strategos;
 	ArrayList<Hook> emptyHook;
 	SensorsCardWrapper  mSensorsCardWrapper;
+	
+
+	public static void main(String[] args) throws Exception
+	{                    
+	   JUnitCore.main("tests.JUnit_Strategia");
+	}
 	
 	
 	@SuppressWarnings("unchecked")

@@ -312,7 +312,7 @@ public class JUnit_Sensors extends JUnit_Test
 			try 
 			{
 				state.robot.moveLengthwise(50);
-				state.robot.sleep(5000);
+				state.robot.sleep(500);
 			} 
 			catch (UnableToMoveException e) 
 			{
@@ -325,7 +325,7 @@ public class JUnit_Sensors extends JUnit_Test
 			try 
 			{
 				state.robot.moveLengthwise(-50);
-				state.robot.sleep(5000);
+				state.robot.sleep(500);
 			} 
 			catch (UnableToMoveException e) 
 			{

@@ -55,6 +55,18 @@ public class LocomotionCardWrapper implements Service
 		this.log = log;
 		this.locomotionCardSerial = serial;		
 		this.config = config;
+		
+		// comme l'asser n'est pas activé par défaut sur la STM, on l'active ici
+        try
+        {
+    		enableTranslationnalFeedbackLoop();
+			enableRotationnalFeedbackLoop();
+		} 
+        catch (SerialConnexionException e)
+        {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void updateConfig()

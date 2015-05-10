@@ -6,6 +6,7 @@ import hook.types.HookFactory;
 import enums.ServiceNames;
 import enums.ServiceNames.ServiceType;
 import exceptions.ContainerException;
+import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialManagerException;
 import utils.*;
 import pathDingDing.PathDingDing;
@@ -58,9 +59,23 @@ public class Container
 	 */
 	public void destructor()
 	{
+		log.debug("Destruction de container", this);
+		
 		// stoppe les différents threads
 		stopAllThreads();
 		Sleep.sleep(700); // attends qu'ils soient bien tous arrètés
+		
+		// désasservit le robot
+		if(instanciedServices[ServiceNames.LOCOMOTION_CARD_WRAPPER.ordinal()] != null)
+			try
+			{
+				log.debug("Désasservissement du robot", this);
+				((LocomotionCardWrapper) instanciedServices[ServiceNames.LOCOMOTION_CARD_WRAPPER.ordinal()]).disableTranslationnalFeedbackLoop();
+				((LocomotionCardWrapper) instanciedServices[ServiceNames.LOCOMOTION_CARD_WRAPPER.ordinal()]).disableRotationnalFeedbackLoop();
+			} 
+			catch (SerialConnexionException e)
+			{
+			}
 		
 		// coupe les connexions séries
 		if(serialmanager != null)

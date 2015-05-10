@@ -402,7 +402,7 @@ public class Locomotion implements Service
     			log.critical( e.logStack(), this);
                 log.critical("Haut : Catch de "+e+" dans moveToPointException", this);
                 
-                if (!headingToWall) // si on s'y attendaiq, on ne fais rien.
+                if (!headingToWall) // si on s'y attendait, on ne fais rien.
                 {
 	                if(maxRetriesIfBlocked!=0)
 	                {
@@ -556,7 +556,7 @@ public class Locomotion implements Service
         	if(mustDetect)
         	{
         		//detectEnemyInFrontDisk(isMovementForward, turnOnly, aim);
-        		detectEnemyAtDistance(70, aim);	// 85 mm est une bonne distance pour être safe.
+        		detectEnemyAtDistance(85, aim);	// 85 mm est une bonne distance pour être safe.
         		
         		//si un ennemi est détecté à moins de 200, on diminue au minimum la vitesse
             	/*
@@ -574,8 +574,8 @@ public class Locomotion implements Service
             	}
             	*/
         	}
-        	else 
-        		log.debug("Pas de detection demandée", this); 
+//        	else 
+//        		log.debug("Pas de detection demandée", this); 
 
         	
 
@@ -1322,8 +1322,8 @@ public class Locomotion implements Service
             	}
             	*/
         	}
-        	else 
-        		log.debug("Pas de detection demandée", this); 
+//        	else 
+//        		log.debug("Pas de detection demandée", this); 
 
         	
 
