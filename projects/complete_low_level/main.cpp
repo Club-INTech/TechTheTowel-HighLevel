@@ -79,7 +79,7 @@ int main(void)
 			}
 			else if(!strcmp("stop",order))		//Ordre d'arrêt (asservissement à la position actuelle)
 			{
-				motionControlSystem->stop();
+				motionControlSystem->stopMotion();
 			}
 			else if(!strcmp("us_av",order))		//Indiquer les distances mesurées par les capteurs avant
 			{

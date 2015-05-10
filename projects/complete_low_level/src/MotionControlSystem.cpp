@@ -4,8 +4,8 @@ MotionControlSystem::MotionControlSystem(): leftMotor(Side::LEFT), rightMotor(Si
 	translationPID(&currentDistance, &pwmTranslation, &translationSetpoint),
 	rotationPID(&currentAngle, &pwmRotation, &rotationSetpoint)
 {
-	translationControlled = true;
-	rotationControlled = true;
+	translationControlled = false;
+	rotationControlled = false;
 	originalAngle = 0.0;
 	rotationSetpoint = 0;
 	translationSetpoint = 0;
@@ -443,6 +443,13 @@ void MotionControlSystem::orderRawPwm(Side side, int16_t pwm) {
 		leftMotor.run(pwm);
 	else
 		rightMotor.run(pwm);
+}
+
+void MotionControlSystem::stopMotion() {
+	translationSetpoint = currentDistance;
+	rotationSetpoint = currentAngle;
+	translationFinalSetpoint = currentDistance;
+	rotationFinalSetpoint = currentAngle;
 }
 
 void MotionControlSystem::stop() {
