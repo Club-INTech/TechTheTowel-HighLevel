@@ -253,9 +253,12 @@ public class ObstacleManager
     		{
     			ObstacleProximity obstacle = mUntestedMobileObstacles.get(i);
     			//si l'obstacle est deja dans la liste des obstacles non-testés on l'ajoute dans la liste des obstacles
-	    		if(obstacle.position.distance(position)<obstacle.radius+radius)
+	    		if(obstacle.position.distance(position)<(obstacle.radius+radius)/2)
 	    		{
     				mUntestedMobileObstacles.get(i).numberOfTimeDetected++;
+    				position.copy(mUntestedMobileObstacles.get(i).position);
+    				mUntestedMobileObstacles.get(i).radius=radius;
+    				mUntestedMobileObstacles.get(i).setLifeTime(lifetime);
     				
     				// si on l'a deja vu plin de fois
     				if(mUntestedMobileObstacles.get(i).numberOfTimeDetected >= mUntestedMobileObstacles.get(i).getMaxNumberOfTimeDetected())
@@ -265,7 +268,7 @@ public class ObstacleManager
 	    			if(mUntestedMobileObstacles.get(i).numberOfTimeDetected >= mUntestedMobileObstacles.get(i).getThresholdConfirmedOrUnconfirmed())
 	    			{
 	    				isThereAnObstacleIntersecting=true;
-	    				mUntestedMobileObstacles.get(i).setLifeTime(3000);
+	    				mUntestedMobileObstacles.get(i).setLifeTime(lifetime);
 	    				
 	    				mMobileObstacles.add(mUntestedMobileObstacles.get(i));
 	    				mUntestedMobileObstacles.remove(i);
@@ -280,6 +283,9 @@ public class ObstacleManager
     				isThereAnObstacleIntersecting=true;
     				
     				mMobileObstacles.get(i).numberOfTimeDetected++;
+    				position.copy(mMobileObstacles.get(i).position);
+    				mMobileObstacles.get(i).radius=radius;
+    				mMobileObstacles.get(i).setLifeTime(lifetime);
     				
     				// si on l'a deja vu plin de fois
     				if(mMobileObstacles.get(i).numberOfTimeDetected >= mMobileObstacles.get(i).getMaxNumberOfTimeDetected())
@@ -539,7 +545,7 @@ public class ObstacleManager
     			
     				if(mMobileObstacles.get(i).numberOfTimeDetected < mMobileObstacles.get(i).getThresholdConfirmedOrUnconfirmed())
     				{
-    					mMobileObstacles.get(i).setLifeTime(1000);
+    					mMobileObstacles.get(i).setLifeTime(5000);
         				mUntestedMobileObstacles.add(mMobileObstacles.get(i));
 	    				mMobileObstacles.remove(i--);
 	    				
