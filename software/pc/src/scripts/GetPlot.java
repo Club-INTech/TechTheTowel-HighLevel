@@ -236,7 +236,9 @@ public class GetPlot extends AbstractScript
 				}
 			}
 			stateToConsider.robot.moveLengthwise(-300, hooksToConsider, false);
-
+			
+			// Dans tous les cas, on ferme la machoire 
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, false);
 		}
 		else if(versionToExecute==567)
 		{

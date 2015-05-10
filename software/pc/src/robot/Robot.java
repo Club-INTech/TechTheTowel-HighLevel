@@ -587,6 +587,11 @@ public abstract class Robot implements Service
 		}
     }
     
+    /**
+     * Active tout l'asservissement
+     * @throws SerialConnexionException 
+     */
+    public abstract void asservit() throws SerialConnexionException;
 
 	/**
 	 * Active l'asservissement en rotation du robot.
@@ -596,7 +601,7 @@ public abstract class Robot implements Service
 	/**
 	 * Active l'asservissement en translation du robot.
 	 */
-    public abstract void disableTranslationnalFeedbackLoop();
+    public abstract void disableRotationnalFeedbackLoop();
 
 	public void setMaxNumberTriesRecalculation(int numberOfTries)
 	{

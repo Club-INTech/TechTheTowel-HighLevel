@@ -130,6 +130,8 @@ public class ThreadTimer extends AbstractThread
 				log.warning(e.toString(), this);
 			}
 		}
+		log.debug("Fin des "+matchDuration+" ms de match, temps : "+matchStartTimestamp, this);
+
 
 		// actions de fin de match
 		onMatchEnded();
