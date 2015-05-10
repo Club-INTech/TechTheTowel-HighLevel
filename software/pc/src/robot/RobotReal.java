@@ -308,7 +308,7 @@ public class RobotReal extends Robot
 	@Override
 	public void disableRotationnalFeedbackLoop()
 	{
-		log.debug("appel de RobotReal.disableTranslationnalFeedbackLoop()", this);
+		log.debug("appel de RobotReal.disableRotationnalFeedbackLoop()", this);
 		try
 		{
 			mLocomotion.disableRotationnalFeedbackLoop();
@@ -320,9 +320,9 @@ public class RobotReal extends Robot
 	}
 	
 	@Override
-	public void asservit() throws SerialConnexionException
+	public void enableFeedbackLoop() throws SerialConnexionException
 	{
-		mLocomotion.asservit();		
+		mLocomotion.enableFeedbackLoop();		
 	}
 	
 	/* 

@@ -206,7 +206,8 @@ public class DropPile extends AbstractScript
 				
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
 				//on ouvre le guide un peu
-				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_MIDDLE, false);
 				
 				stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_GUIDE, false);
 				stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_GUIDE, true);
@@ -225,7 +226,6 @@ public class DropPile extends AbstractScript
 				stateToConsider.robot.storedPlotCount = 0;
 				stateToConsider.robot.isBallStored = false;
 				
-				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_MIDDLE, true);
 				
 				stateToConsider.robot.moveLengthwise(-400, hooksToConsider);
 				//Puis on finit

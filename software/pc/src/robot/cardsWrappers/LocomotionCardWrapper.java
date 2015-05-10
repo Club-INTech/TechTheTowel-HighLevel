@@ -77,7 +77,7 @@ public class LocomotionCardWrapper implements Service
 		} 
 		catch (ConfigPropertyNotFoundException e)
 		{
-			log.debug("Code à revoir  : impossible de ttrouver la propriete "+e.getPropertyNotFound(), this);
+			log.debug("Code à revoir  : impossible de trouver la propriete "+e.getPropertyNotFound(), this);
 		}
 	}	
 	
@@ -131,20 +131,15 @@ public class LocomotionCardWrapper implements Service
 	 */
 	public void immobilise() throws SerialConnexionException
 	{
-		log.critical("Immobilisation du robot", this);
-		
-        disableTranslationnalFeedbackLoop();
-        disableRotationnalFeedbackLoop();
+		log.warning("Immobilisation du robot", this);
         
+        
+        locomotionCardSerial.communiquer("stop", 0);// On s'asservit sur la position actuelle
         while(isRobotMoving())
         {
         	Sleep.sleep(delayBetweenSend); // On attend d'etre arreté
         }
         
-        locomotionCardSerial.communiquer("stop", 0);// On s'asservit sur la position actuelle
-        
-        enableTranslationnalFeedbackLoop();
-        enableRotationnalFeedbackLoop();
 	}
 	
 	/**

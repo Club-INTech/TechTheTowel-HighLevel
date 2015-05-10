@@ -487,7 +487,15 @@ public class Strategie implements Service
 						
 						try
 						{
+
+							log.debug("================================== Nouvelle Tentative de script ========================================", this);
+							log.debug("================================== Liste actuelle:", this);
 							
+							for(int i = 0; i < scriptedMatchScripts.size(); ++i)
+								log.debug("scriptedMatchScripts(" + i + ") = " + scriptedMatchScripts.get(i).getClass().getCanonicalName() + " version " + scriptedMatchVersions.get(i), this);
+
+							log.debug("==================================", this);
+							 
 							// si le temps presse, on n'attends pas pour faire les scripts
 							if (realGameState.getTimeEllapsed() > timeBeforeRushMode)
 								tryAgain = false;
@@ -519,13 +527,15 @@ public class Strategie implements Service
 							else
 								throw e;
 						}
+						
 					}
 					catch (UnableToMoveException e) 
 					{
+						log.warning("Catch de UnableToMoveException dans Strategie", this);
+						
 //						if (e.reason.compareTo(UnableToMoveReason.PHYSICALLY_BLOCKED)==0)
 						{
 							// attention: ne pas bouger tryAgain dans ce catch
-							//TODO: test
 							try
 							{
 								realGameState.robot.moveLengthwise(-100);
@@ -545,6 +555,8 @@ public class Strategie implements Service
 					} 
 					catch (PathNotFoundException e)
 					{
+						log.warning("Catch de PathNotFoundException dans Strategie", this);
+						
 						//on ajoute le script dans le tableau un peu plus loin
 						scriptedMatchScripts.add(Math.max(0,scriptedMatchScripts.size()-3), scriptedMatchScripts.get(0));
 						scriptedMatchVersions.add(Math.max(0,scriptedMatchVersions.size()-3), scriptedMatchVersions.get(0));
@@ -557,6 +569,8 @@ public class Strategie implements Service
 					} 
 					catch (InObstacleException e) 
 					{
+						log.warning("Catch de InObstacleException dans Strategie", this);
+						
 						for (ObstacleGroups obstacle : e.getObstacleGroup())
 						{
 							log.warning("attention, obstacle : "+obstacle.getClass().toString(),this);

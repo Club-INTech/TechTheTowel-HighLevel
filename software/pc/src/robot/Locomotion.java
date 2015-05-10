@@ -329,10 +329,15 @@ public class Locomotion implements Service
     	if(strategy == DirectionStrategy.FORCE_BACK_MOTION)
     	{
             isRobotMovingBackward=true;
-            moveToPointException(aim, hooks, true, mur, turnOnly, mustDetect);
+            moveToPointException(aim, hooks, false, mur, turnOnly, mustDetect);
             isRobotMovingBackward=false;
     	}
-
+    	else if(strategy == DirectionStrategy.FORCE_FORWARD_MOTION)
+    	{ 
+            isRobotMovingForward=true;
+            moveToPointException(aim, hooks, true, mur, turnOnly, mustDetect);
+            isRobotMovingForward=false;
+    	}
     	else //if(strategy == DirectionStrategy.FASTEST)
     	{
     		// Calcul du moyen le plus rapide (on se sert d'un calcul de produit scalaire)
@@ -342,10 +347,13 @@ public class Locomotion implements Service
 	        Vec2 orientationVec = new Vec2((int)(1000*Math.cos(lowLevelOrientation)), (int)(1000*Math.sin(lowLevelOrientation)));
 	     
 	        // On regarde le produit scalaire; si c'est positif, alors on est dans le bon sens, et inversement
-
-	        boolean direction = delta.dot(orientationVec) >= 0;
+	        boolean isFastestDirectionForward = delta.dot(orientationVec) >= 0;
 	        
-	        moveToPointException(aim, hooks, direction, mur, turnOnly, mustDetect);
+	        isRobotMovingForward = isFastestDirectionForward;
+	        isRobotMovingBackward = !isFastestDirectionForward;
+	        moveToPointException(aim, hooks, isFastestDirectionForward, mur, turnOnly, mustDetect);
+	        isRobotMovingForward = false;
+	        isRobotMovingBackward = false;
     	}
     	
     	log.debug("Arrivés en "+aim+" vraie position : "+lowLevelPosition, this);
@@ -353,6 +361,8 @@ public class Locomotion implements Service
 		actualRetriesIfBlocked=0;// on reinitialise
 
     }
+  
+   
     
     /**
      * bloquant
@@ -373,10 +383,155 @@ public class Locomotion implements Service
         else 
         	isRobotMovingBackward=true;
 
-    }
-     
-    
+        //int maxTimeToWaitForEnemyToLeave = 600; // combien de temps attendre que l'ennemi parte avant d'abandonner
+        int unexpectedWallImpactCounter = 2; // combien de fois on réessayer si on se prend un mur (si wall est a true alors les impacts sont attendus donc on s'en fout)
+        boolean doItAgain;
+        do 
+        {
+        	//si on a pas d'erreur on ne recommence pas
+            doItAgain = false;
+            try
+            {
+                moveToPointCorrectAngleAndDetectEnnemy(aim, hooks, isMovementForward, turnOnly, mustDetect);
+            	
+            	isRobotMovingForward=false;
+            	isRobotMovingBackward=false;
+            }
+            catch (BlockedException e)
+            {
+    			log.critical( e.logStack(), this);
+                log.critical("Haut : Catch de "+e+" dans moveToPointException", this);
+                
+                if (!headingToWall) // si on s'y attendait, on ne fais rien.
+                {
+	                if(maxRetriesIfBlocked!=0)
+	                {
+		                if(maxRetriesIfBlocked > actualRetriesIfBlocked)
+		                {
+		                	actualRetriesIfBlocked++;
+		                    log.critical("Tentative "+actualRetriesIfBlocked+" de deplacement ", this);
+		                    if(isMovementForward)
+		                    	isRobotMovingForward=true;
+		                    else 
+		                    	isRobotMovingBackward=true;
+		                	moveToPointException(aim, hooks, isMovementForward, headingToWall, turnOnly, mustDetect); // on rentente s'il a y eu un probleme
+		                	isRobotMovingForward=false;
+		                	isRobotMovingBackward=false;
+		                }
+		                else 
+		                {
+	                        log.warning("On arrive pas à se degager, nombre max d'essais depassé, lancement de UnableToMoveException", this);
+	                        throw new UnableToMoveException(aim, UnableToMoveReason.PHYSICALLY_BLOCKED);
+		                }
 
+	                }
+	                else
+	                {
+		                unexpectedWallImpactCounter--;
+		                immobilise();
+	                
+	                /*
+	                 * En cas de blocage, on recule (si on allait tout droit) ou on avance.
+	                 */
+	                // Si on s'attendait à un mur, c'est juste normal de se le prendre.
+	               
+		                if(!headingToWall)
+		                {
+		                    try
+		                    {
+		                        log.warning("On n'arrive plus à avancer. On se dégage", this);
+		                        if(turnOnly)
+		                        {
+		                        	isRobotTurning=true;
+		                        	
+		                        	// TODO: les appels à déplacements sont non bloquants, il faut rajouter des sleeps
+		                        	// on alterne rotation à gauche et à droite
+		                        	if((unexpectedWallImpactCounter & 1) == 0)
+		                        		deplacements.turn(lowLevelOrientation+angleToDisengage);
+		                        	else
+		                        		deplacements.turn(lowLevelOrientation-angleToDisengage);                        	
+		                        }
+		                        else if(isMovementForward)
+		                            deplacements.moveLengthwise(distanceToDisengage);
+		                        else
+		                            deplacements.moveLengthwise(-distanceToDisengage);
+		                        while(!isMotionEnded());
+		                    		doItAgain = true; // si on est arrivé ici c'est qu'aucune exception n'a été levée
+		                    } 
+		                    catch (SerialConnexionException e1)
+		                    {
+		            			log.critical( e1.logStack(), this);
+		                        log.critical("On ne fait rien après ceci: Catch de "+e1+" dans moveToPointException", this);
+		                    } 
+		                    catch (BlockedException e1)
+		                    {
+		            			log.critical( e1.logStack(), this);
+		                        log.critical("Catch de "+e1+" dans moveToPointException", this);
+		                    	immobilise();                       
+		                        log.critical("On n'arrive pas à se dégager", this);
+		                        
+
+			                    if(!doItAgain)
+			                    {
+			                        log.critical("Lancement de UnableToMoveException dans MoveToPointException, visant "+finalAim.x+" :: "+finalAim.y+" cause physique", this);
+			                        throw new UnableToMoveException(finalAim, UnableToMoveReason.PHYSICALLY_BLOCKED);
+			                    }
+							}
+		                }
+		                else 
+		                {
+	                        log.warning("On s'attendait à ce mur.", this);
+						}
+	                }
+                }
+            }
+            
+            catch (UnexpectedObstacleOnPathException unexpectedObstacle)
+            {
+                log.critical("Ennemi detecté : Catch de "+unexpectedObstacle, this); 
+    			log.critical( unexpectedObstacle.logStack(), this);
+            	immobilise();
+            	
+                //long detectionTime = System.currentTimeMillis();
+                /*
+            	while(System.currentTimeMillis() - detectionTime < maxTimeToWaitForEnemyToLeave)
+            	{
+            		try
+            		{
+            			detectEnemy(isMovementForward);
+            			doItAgain = true; // si aucune détection
+            			break;
+            		}
+            		catch(UnexpectedObstacleOnPathException e2)
+            		{
+                        log.critical("Catch de "+e2+" dans moveToPointException", this);
+                        throw new UnableToMoveException(finalAim, UnableToMoveReason.OBSTACLE_DETECTED);
+            		}
+            	}*/
+
+                if(!doItAgain)
+                {
+                    log.critical("UnableToMoveException dans MoveToPointException, visant "+finalAim.x+" :: "+finalAim.y+" cause : detection d'obstacle", this);
+                    throw new UnableToMoveException(finalAim, UnableToMoveReason.OBSTACLE_DETECTED);
+                }
+			}
+            catch(SerialConnexionException e)
+            {
+    			log.critical( e.logStack(), this);
+
+            	// TODO : gérer cette exception
+            }
+
+        } 
+        while(doItAgain)
+        	;     
+        // on recommence tant qu'il le faut
+
+
+    // Tout s'est bien passé
+
+    }
+ 
     /**
      * Bloquant. 
      * Gère les hooks, la correction de trajectoire et la détection.
@@ -443,6 +598,7 @@ public class Locomotion implements Service
         	;
         
     }
+   
 
 
     /**
@@ -458,6 +614,7 @@ public class Locomotion implements Service
     	//la correction est toujours un turnOnly, on evite les doublons d'où le turnOnly à false.
     	moveToPointSymmetry(aim, isMovementForward, mustDetect, false, true);
     }
+   
     /**
      * Non bloquant. 
      * Gère la symétrie et la marche arrière. (si on est en marche arriere le aim doit etre modifié pour que la consigne vers le bas niveau soit bonne)
@@ -499,7 +656,6 @@ public class Locomotion implements Service
         else */
     	angle = Math.atan2(delta.y, delta.x);//Angle en absolu
 
-
         
         // si on a besoin de se retourner pour suivre la consigne de isMovementForward on le fait ici
         if(isMovementForward && distance < 0 || (!isMovementForward && distance > 0))
@@ -521,8 +677,8 @@ public class Locomotion implements Service
         else 
         	moveToPointSerialOrder(aimSymmetrized, givenPosition, angle, distance, mustDetect, turnOnly, isCorrection);
     }
- 
-   
+    
+    
     /**
      * 
      * Non bloquant. 
@@ -660,6 +816,8 @@ public class Locomotion implements Service
         }
     }
     
+    
+   
     /**
      * fonction vérifiant que l'on ne va pas taper dans le robot adverse.
      * test si le cercle devant (ou derriere en fonction du mouvement) est vide d'obstacle
@@ -878,15 +1036,10 @@ public class Locomotion implements Service
     }
 
     
-    public void asservit() throws SerialConnexionException
+    public void enableFeedbackLoop() throws SerialConnexionException
     {
         deplacements.enableRotationnalFeedbackLoop();
         deplacements.enableTranslationnalFeedbackLoop();
-    }
-    
-    public void initialiser_deplacements()
-    {
-    	System.out.println("Je ne fais rien");
     }
     
     public void disableRotationnalFeedbackLoop() throws SerialConnexionException
@@ -903,22 +1056,17 @@ public class Locomotion implements Service
 	{
 		deplacements.disableTranslationnalFeedbackLoop();
 	}
-	public void enableTranslationnalFeedbackLoop() throws SerialConnexionException
-	{
-		deplacements.enableTranslationnalFeedbackLoop();
-	}
 
 	public void close()
 	{
 		deplacements.closeLocomotion();
-
-	}
+	}	
 	
 	/**************************************************
 	 * 		JUNITS
 	 **************************************************/
 	
-	 /**
+	  /**
      * FONCTION COPIE POUR JUNIT TEST
      * @param aim le point visé sur la table (consigne donné par plus haut niveau donc non symetrise)
      * @param hooks les potentiels hooks a prendre en compte (ne pas mettre null !)
@@ -928,10 +1076,45 @@ public class Locomotion implements Service
      * @param mustDetect true si on veut detecter, false sinon.
      * @throws UnableToMoveException si le robot a un bloquage mecanique
      */
-    public void JUNIT_moveToPointForwardBackward(Vec2 aim, ArrayList<Hook> hooks, boolean mur, DirectionStrategy strategy, boolean turnOnly, boolean mustDetect) throws UnableToMoveException
+	 public void JUNIT_moveToPointForwardBackward(Vec2 aim, ArrayList<Hook> hooks, boolean mur, DirectionStrategy strategy, boolean turnOnly, boolean mustDetect) throws UnableToMoveException
     {
-    	moveToPointForwardBackward(aim, hooks, mur, strategy, turnOnly, mustDetect);
+		actualRetriesIfBlocked=0;// on reinitialise
+
+		updateCurrentPositionAndOrientation();
+
+    	// on avance en fonction de ce que nous dit la strategie
+    	if(strategy == DirectionStrategy.FORCE_BACK_MOTION)
+    	{
+            isRobotMovingForward=true;
+            moveToPointException(aim, hooks, false, mur, turnOnly, mustDetect);
+            isRobotMovingForward=false;
+    	}
+    	else if(strategy == DirectionStrategy.FORCE_FORWARD_MOTION)
+    	{ 
+            isRobotMovingBackward=true;
+            moveToPointException(aim, hooks, true, mur, turnOnly, mustDetect);
+            isRobotMovingBackward=false;
+    	}
+    	else //if(strategy == DirectionStrategy.FASTEST)
+    	{
+    		// Calcul du moyen le plus rapide (on se sert d'un calcul de produit scalaire)
+	        Vec2 delta = aim.clone();
+	        delta.minus(lowLevelPosition);
+	        // Le coeff 1000 vient du fait que Vec2 est constitué d'entiers
+	        Vec2 orientationVec = new Vec2((int)(1000*Math.cos(lowLevelOrientation)), (int)(1000*Math.sin(lowLevelOrientation)));
+	     
+	        // On regarde le produit scalaire; si c'est positif, alors on est dans le bon sens, et inversement
+	        boolean direction = delta.dot(orientationVec) >= 0;
+	        
+	        moveToPointException(aim, hooks, direction, mur, turnOnly, mustDetect);
+    	}
+    	
+    	log.debug("Arrivés en "+aim+" vraie position : "+lowLevelPosition, this);
+    	
+		actualRetriesIfBlocked=0;// on reinitialise
+
     }
+	 
 	    
     /**
      * FONCTION COPIE POUR JUNIT TEST
@@ -947,7 +1130,149 @@ public class Locomotion implements Service
      */
     public void JUNIT_moveToPointException(Vec2 aim, ArrayList<Hook> hooks, boolean isMovementForward, boolean headingToWall, boolean turnOnly, boolean mustDetect) throws UnableToMoveException
     {
-    	moveToPointException(aim, hooks, isMovementForward, headingToWall, turnOnly, mustDetect);
+        //int maxTimeToWaitForEnemyToLeave = 600; // combien de temps attendre que l'ennemi parte avant d'abandonner
+        int unexpectedWallImpactCounter = 2; // combien de fois on réessayer si on se prend un mur (si wall est a true alors les impacts sont attendus donc on s'en fout)
+        boolean doItAgain;
+        do 
+        {
+        	//si on a pas d'erreur on ne recommence pas
+            doItAgain = false;
+            try
+            {
+                moveToPointCorrectAngleAndDetectEnnemy(aim, hooks, isMovementForward, turnOnly, mustDetect);
+            }
+            catch (BlockedException e)
+            {
+    			log.critical( e.logStack(), this);
+                log.critical("Haut : Catch de "+e+" dans moveToPointException", this);
+                
+                if (!headingToWall) // si on s'y attendaiq, on ne fais rien.
+                {
+	                if(maxRetriesIfBlocked!=0)
+	                {
+		                if(maxRetriesIfBlocked > actualRetriesIfBlocked)
+		                {
+		                	actualRetriesIfBlocked++;
+		                    log.critical("Tentative "+actualRetriesIfBlocked+" de deplacement ", this);
+		                    if(isMovementForward)
+		                    	isRobotMovingForward=true;
+		                    else 
+		                    	isRobotMovingBackward=true;
+		                	moveToPointException(aim, hooks, isMovementForward, headingToWall, turnOnly, mustDetect); // on rentente s'il a y eu un probleme
+		                	isRobotMovingForward=false;
+		                	isRobotMovingBackward=false;
+		                }
+		                else 
+		                {
+	                        log.warning("On arrive pas à se degager, nombre max d'essais depassé, lancement de UnableToMOveEXception", this);
+	                        throw new UnableToMoveException(aim, UnableToMoveReason.PHYSICALLY_BLOCKED);
+		                }
+
+	                }
+	                else
+	                {
+		                unexpectedWallImpactCounter--;
+		                immobilise();
+	                
+	                /*
+	                 * En cas de blocage, on recule (si on allait tout droit) ou on avance.
+	                 */
+	                // Si on s'attendait à un mur, c'est juste normal de se le prendre.
+	               
+		                if(!headingToWall)
+		                {
+		                    try
+		                    {
+		                        log.warning("On n'arrive plus à avancer. On se dégage", this);
+		                        if(turnOnly)
+		                        {
+		                        	isRobotTurning=true;
+		                        	
+		                        	// TODO: les appels à déplacements sont non bloquants, il faut rajouter des sleeps
+		                        	// on alterne rotation à gauche et à droite
+		                        	if((unexpectedWallImpactCounter & 1) == 0)
+		                        		deplacements.turn(lowLevelOrientation+angleToDisengage);
+		                        	else
+		                        		deplacements.turn(lowLevelOrientation-angleToDisengage);                        	
+		                        }
+		                        else if(isMovementForward)
+		                            deplacements.moveLengthwise(distanceToDisengage);
+		                        else
+		                            deplacements.moveLengthwise(-distanceToDisengage);
+		                        while(!isMotionEnded());
+		                    		doItAgain = true; // si on est arrivé ici c'est qu'aucune exception n'a été levée
+		                    } 
+		                    catch (SerialConnexionException e1)
+		                    {
+		            			log.critical( e1.logStack(), this);
+		                        log.critical("On ne fait rien après ceci: Catch de "+e1+" dans moveToPointException", this);
+		                    } 
+		                    catch (BlockedException e1)
+		                    {
+		            			log.critical( e1.logStack(), this);
+		                        log.critical("Catch de "+e1+" dans moveToPointException", this);
+		                    	immobilise();                       
+		                        log.critical("On n'arrive pas à se dégager", this);
+		                        
+
+			                    if(!doItAgain)
+			                    {
+			                        log.critical("Lancement de UnableToMoveException dans MoveToPointException, visant "+finalAim.x+" :: "+finalAim.y+" cause physique", this);
+			                        throw new UnableToMoveException(finalAim, UnableToMoveReason.PHYSICALLY_BLOCKED);
+			                    }
+							}
+		                }
+		                else 
+		                {
+	                        log.warning("On s'attendait à ce mur.", this);
+						}
+	                }
+                }
+            }
+            
+            catch (UnexpectedObstacleOnPathException unexpectedObstacle)
+            {
+                log.critical("Ennemi detecté : Catch de "+unexpectedObstacle, this); 
+    			log.critical( unexpectedObstacle.logStack(), this);
+            	immobilise();
+            	
+                //long detectionTime = System.currentTimeMillis();
+                /*
+            	while(System.currentTimeMillis() - detectionTime < maxTimeToWaitForEnemyToLeave)
+            	{
+            		try
+            		{
+            			detectEnemy(isMovementForward);
+            			doItAgain = true; // si aucune détection
+            			break;
+            		}
+            		catch(UnexpectedObstacleOnPathException e2)
+            		{
+                        log.critical("Catch de "+e2+" dans moveToPointException", this);
+                        throw new UnableToMoveException(finalAim, UnableToMoveReason.OBSTACLE_DETECTED);
+            		}
+            	}*/
+
+                if(!doItAgain)
+                {
+                    log.critical("UnableToMoveException dans MoveToPointException, visant "+finalAim.x+" :: "+finalAim.y+" cause : detection d'obstacle", this);
+                    throw new UnableToMoveException(finalAim, UnableToMoveReason.OBSTACLE_DETECTED);
+                }
+			}
+            catch(SerialConnexionException e)
+            {
+    			log.critical( e.logStack(), this);
+
+            	// FIXME : gérer cette exception
+            }
+
+        } 
+        while(doItAgain)
+        	;     
+        // on recommence tant qu'il le faut
+
+
+    // Tout s'est bien passé
 
     }
     
@@ -962,14 +1287,102 @@ public class Locomotion implements Service
      * @param mustDetect true si on veut detecter, false sinon.
      * @throws BlockedException si le robot a un bloquage mecanique
      * @throws UnexpectedObstacleOnPathException si le robot rencontre un obstacle inattendu sur son chemin (par les capteurs)
-
+     * @throws SerialConnexionException 
      */
     public void JUNIT_moveToPointCorrectAngleAndDetectEnnemy(Vec2 aim, ArrayList<Hook> hooks, boolean isMovementForward, boolean turnOnly, boolean mustDetect) throws UnexpectedObstacleOnPathException, BlockedException, SerialConnexionException
     {         	
-    	moveToPointCorrectAngleAndDetectEnnemy(aim, hooks, isMovementForward, turnOnly, mustDetect) ;
+    	//double time=System.currentTimeMillis();
+        moveToPointSymmetry(aim, isMovementForward, mustDetect, turnOnly, false);
+        do 
+        { 	
+            updateCurrentPositionAndOrientation();
+            
+        	// en cas de détection d'ennemi, une exception est levée
+        	if(mustDetect)
+        	{
+        		//detectEnemyInFrontDisk(isMovementForward, turnOnly, aim);
+        		detectEnemyAtDistance(70, aim);	// 85 mm est une bonne distance pour être safe.
+        		
+        		//si un ennemi est détecté à moins de 200, on diminue au minimum la vitesse
+            	/*
+        		try
+            	{
+            		if(mustDetect)
+            			detectEnemyAtDistance(150, aim);
+            	}
+            	catch(UnexpectedObstacleOnPathException e)
+            	{
+            		//setTranslationnalSpeed(3);
+            		
+            		//debug
+            		log.debug("diminution de la vitesse suite à la détection d'un ennemi proche", this);
+            	}
+            	*/
+        	}
+//        	else 
+//        		log.debug("Pas de detection demandée", this); 
+
+        	
+
+            //on evalue les hooks (non null !)
+            if(hooks != null)
+	            for(Hook hook : hooks)
+	                hook.evaluate();
+                        
+            // le fait de faire de nombreux appels permet de corriger la trajectoire
+            correctAngle(aim, isMovementForward, mustDetect);
+            
+            //log.critical("Temps pour finir la boucle d'asservissement "+(System.currentTimeMillis()-time), this);
+            //time=System.currentTimeMillis();
+            
+            // On sleep pour eviter le spam de la serie
+            //Sleep.sleep(feedbackLoopDelay);
+
+        } 
+        while(!isMotionEnded())
+        	;
         
     }
-   
+    
+    /**
+     * COPIE POUR JUNIT
+     * @return oui si le robot est arrivé à destination, non si encore en mouvement
+     * @throws BlockedException si patinage (donc bloquage mecanique)
+     */
+    public boolean JUNIT_isMotionEnded() throws BlockedException
+    {
+        try 
+        {
+        	// récupérations des informations d'acquittement
+        	boolean[] infos=deplacements.isRobotMovingAndAbnormal();
+        	// 0-false : le robot ne bouge pas
+        	
+        	//log.debug("Test deplacement : reponse "+ infos[0] +" :: "+ infos[1], this);
+        	
+        	if(!infos[0])//si le robot ne bouge plus
+        	{
+        		if(infos[1])//si le robot patine, il est bloqué
+        		{
+                    log.critical("Robot bloqué, lancement de BlockedException dans isMotionEnded", this);
+                    throw new BlockedException();
+        		}
+        		else
+        		{
+        			return !infos[0];//On est arrivés
+        		}
+        	}
+        	else
+        	{    
+        		return !infos[0];//toujours pas arrivé
+        	}
+        } 
+        catch (SerialConnexionException e) 
+        {
+            log.critical("Catch de "+e+" dans isMotionEnded", this);
+			log.critical( e.logStack(), this);
+            return false;
+        }
+    }
     
     /**
      *FONCTION COPIE POUR JUNIT
@@ -983,7 +1396,7 @@ public class Locomotion implements Service
     {
     	//envoi de la consigne avec turnOnly a false et a isCorrection a true (c'est bien une correction)
     	//la correction est toujours un turnOnly, on evite les doublons d'où le turnOnly à false.
-    	correctAngle(aim, isMovementForward, mustDetect);
+    	moveToPointSymmetry(aim, isMovementForward, mustDetect, false, true);
     }
 	 
     /**
@@ -994,7 +1407,29 @@ public class Locomotion implements Service
     
     public void JUNIT_updateCurrentPositionAndOrientation()
     {
-        
+        try 
+        {
+            float[] infos = deplacements.getCurrentPositionAndOrientation();
+            
+            lowLevelPosition.x = (int)infos[0];            
+            lowLevelPosition.y = (int)infos[1];
+            lowLevelOrientation = infos[2]; // car getCurrentPositionAndOrientation renvoie des radians
+            
+            highLevelPosition=lowLevelPosition.clone();
+            highLevelOrientation=lowLevelOrientation;
+            
+            if(symetry)
+            {
+            	highLevelPosition.x = -highLevelPosition.x;
+            	highLevelOrientation=Math.PI-highLevelOrientation;
+            }
+            
+        }
+        catch(SerialConnexionException e)
+        {
+        	log.critical("Catch de "+e+" dans updateCurrentPositionAndOrientation", this);
+			log.critical( e.logStack(), this);
+        }
     }
     
     /**
@@ -1011,7 +1446,53 @@ public class Locomotion implements Service
      */
     public void JUNIT_moveToPointSymmetry(Vec2 aim, boolean isMovementForward, boolean mustDetect, boolean turnOnly,boolean isCorrection) throws BlockedException, UnexpectedObstacleOnPathException
     {
-    	moveToPointSymmetry(aim, isMovementForward, mustDetect, turnOnly, isCorrection);
+        updateCurrentPositionAndOrientation();
+        
+        // position donnée par le bas niveau avec un traitement dans UpdateCurrentPositionAndOrientation
+        Vec2 givenPosition = highLevelPosition.clone();
+        
+        // Le point qu'on vise, donné par le haut niveau donc comme si on etais vert
+        Vec2 aimSymmetrized = aim.clone();   
+        
+        if(symetry) // miroir des positions
+        {
+        	givenPosition.x  = -givenPosition.x;
+        	aimSymmetrized.x = -aimSymmetrized.x;
+        }
+        Vec2 delta = aimSymmetrized.clone();
+        
+        delta.minus(givenPosition);
+ 
+        
+        //calcul de la nouvelle distance et du nouvel angle
+        double distance = delta.length();
+        double angle;
+        /*
+        if(symetry)
+        	  angle = Math.atan2(-delta.y, delta.x);//Angle en absolu 
+        else */
+    	angle = Math.atan2(delta.y, delta.x);//Angle en absolu
+
+        
+        // si on a besoin de se retourner pour suivre la consigne de isMovementForward on le fait ici
+        if(isMovementForward && distance < 0 || (!isMovementForward && distance > 0))
+        {
+            distance *= -1;
+            angle += Math.PI;
+        }
+                
+        // on annule la correction si on est trop proche de la destination
+        if(isCorrection) 
+        {
+           Vec2 vectorTranslation = aimSymmetrized;
+           vectorTranslation.minus( givenPosition );
+           if( (  vectorTranslation.length() >  maxLengthCorrectionThreeshold )) 
+	        	moveToPointSerialOrder(aimSymmetrized, givenPosition, angle, distance, mustDetect, turnOnly, isCorrection);
+	        else 
+	        	return;// Si on est trop proche, on ne fais rien.
+        }
+        else 
+        	moveToPointSerialOrder(aimSymmetrized, givenPosition, angle, distance, mustDetect, turnOnly, isCorrection);
     }
     
     /**
@@ -1022,7 +1503,7 @@ public class Locomotion implements Service
      * @param givenPosition la position de depart du deplacement
      * @param angle l'angle dont il faut tourner (ordre pour la serie)
      * @param distance la distance dont il faut avancer (ordre pour la serie)
-     * @param mustDetect
+     * @param mustDetect 
      * @param turnOnly vrai si on veut uniquement tourner (et pas avancer)
      * @param isCorrection vrai si la consigne est une correction et pas un ordre de deplacement
      * @throws BlockedException si le robot rencontre un obstacle innatendu sur son chemin (par les capteurs)
@@ -1030,17 +1511,78 @@ public class Locomotion implements Service
      */
     public void JUNIT_moveToPointSerialOrder(Vec2 symmetrisedAim, Vec2 givenPosition, double angle, double distance, boolean mustDetect,boolean turnOnly, boolean isCorrection) throws BlockedException, UnexpectedObstacleOnPathException
     {
-    	moveToPointSerialOrder(symmetrisedAim,  givenPosition, angle, distance, mustDetect,turnOnly, isCorrection); 
+    	boolean trajectoire_courbe = false;
+
+    	// Ce code fait juste un modulo 2*pi, avec un résultat entre -PI et +PI
+		double delta = (angle-lowLevelOrientation) % (2*Math.PI);
+		if(delta > Math.PI)
+			delta -= 2*Math.PI;
+		else if(delta < -Math.PI)
+			delta += 2*Math.PI;
+		
+		/**
+		 * Si on fait une correction, il faut vérifier la distance à la consigne et la correction
+		 * Si la distance est grande et l'angle petit, alors on fait la correction en angle sans s'arrêter
+		 * Sinon on annule la correction 
+		 * (par exemple, si le robot dépasse un peu la consigne, la correction le ferait se retourner ce qui n'est pas le résultat demandé)
+		 */
+		if(isCorrection)
+		{
+			//Si l'angle petit, alors on fait la correction en angle
+			if((Math.abs(delta) < Math.PI/8))
+			{
+				//on active la correction (on attendra pas d'avoir fini de tourner (le robot) pour reprendre le programme)
+				trajectoire_courbe = true;
+			}
+			else
+			{
+				log.debug("correction en abandon; delta :"+delta, this);
+				return;
+			}
+		}
+
+        try
+        {
+        	if(isCorrection && Math.abs(delta) > maxRotationCorrectionThreeshold)
+        	{
+        		isRobotTurning=true;// prochain ordre : on tourne
+                
+        		deplacements.turn(angle);  // On ne tourne que si on est assez loin de l'orientation voulu
+              
+//        		log.debug("Angle corrigé", this);
+        	}
+        	else if(!isCorrection)// Si ca n'est pas  une correction
+        	{
+        		if(Math.abs(delta)>maxRotationCorrectionThreeshold)
+        		{// on ne tourne vraiment que si l'angle souhaité est vraiment different.
+	        		isRobotTurning=true;// prochain ordre : on tourne
+        		}
+                
+        		deplacements.turn(angle);
+        	}
+        	
+            // sans virage : la première rotation est bloquante
+            if(!trajectoire_courbe) 
+            	// on attend la fin du mouvement
+                while(!isMotionEnded()) 
+                {
+                	if(mustDetect)
+                		detectEnemyInDisk(true, true, highLevelPosition);
+                	//TODO : ce sleep ne pose-t-il pas de problèmes?
+                    Sleep.sleep(feedbackLoopDelay);
+                }
+            
+            isRobotTurning=false; // fin du turn
+            
+            if(!(turnOnly || isCorrection))
+            	deplacements.moveLengthwise(distance);
+        } 
+        catch (SerialConnexionException e)
+        {
+            log.critical("Catch de "+e+" dans moveToPointSerialOrder", this);
+			log.critical( e.logStack(), this);
+            isRobotTurning=false; // Meme avec un catch, on a fini de tourner
+        }
     }
-    
-    /**
-     * COPIE POUR JUNIT
-     * @return oui si le robot est arrivé à destination, non si encore en mouvement
-     * @throws BlockedException si patinage (donc bloquage mecanique)
-     */
-    public boolean JUNIT_isMotionEnded() throws BlockedException
-    {
-    	return isMotionEnded();
-    }
-    
+
 }

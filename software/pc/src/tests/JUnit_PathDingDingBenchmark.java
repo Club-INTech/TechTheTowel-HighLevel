@@ -55,7 +55,8 @@ public class JUnit_PathDingDingBenchmark extends JUnit_Test
 		    	try
 		    	{
 		    		long start = System.nanoTime();
-			    	int size = pf.computePath(startPoint.get(i), endPoint.get(i), EnumSet.allOf(ObstacleGroups.class)).size();
+			    	@SuppressWarnings("unused")
+					int size = pf.computePath(startPoint.get(i), endPoint.get(i), EnumSet.allOf(ObstacleGroups.class)).size();
 			    	long end = System.nanoTime();
 			    	temps += (end - start) / 1000;
 			    }
