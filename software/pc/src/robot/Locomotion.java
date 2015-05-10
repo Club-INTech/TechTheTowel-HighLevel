@@ -913,11 +913,12 @@ public class Locomotion implements Service
 		deplacements.closeLocomotion();
 
 	}
+	
 	/**************************************************
 	 * 		JUNITS
 	 **************************************************/
 	
-	  /**
+	 /**
      * FONCTION COPIE POUR JUNIT TEST
      * @param aim le point visé sur la table (consigne donné par plus haut niveau donc non symetrise)
      * @param hooks les potentiels hooks a prendre en compte (ne pas mettre null !)
