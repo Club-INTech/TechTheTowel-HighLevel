@@ -342,7 +342,7 @@ public class JUnit_Sensors extends JUnit_Test
    // @Test
 	public void testCapteurDeplacement() throws SerialConnexionException, InObstacleException
 	{
-    	matchSetUp(state.robot);
+    	matchSetUp(state.robot, false);
     	try 
     	{
 			state.robot.moveLengthwise(300);

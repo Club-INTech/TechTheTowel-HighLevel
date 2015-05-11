@@ -183,12 +183,12 @@ public class CloseClap extends AbstractScript
 		//on commence en (1295,230), on se tourne dans le bon sens
 		//stateToConsider.robot.moveLengthwise(80, hooksToConsider, false);
 		
-		
+		stateToConsider.robot.turn(Math.PI/4, hooksToConsider, false);
+
+		stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
+
 		stateToConsider.robot.turn(0, hooksToConsider, false);
 		
-		stateToConsider.robot.moveLengthwise(30, hooksToConsider);
-		
-		stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
 		
 		//ajout de hooks
 		Hook hook1 = hookFactory.newHookXisLesser(1250, 10);

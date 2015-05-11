@@ -51,7 +51,7 @@ public class JUnit_TennisBall extends JUnit_Test
 		
 		try 
 		{
-			matchSetUp(real_state.robot);
+			matchSetUp(real_state.robot, false);
 		} 
 		catch (SerialConnexionException e) 
 		{
@@ -83,7 +83,7 @@ public class JUnit_TennisBall extends JUnit_Test
 	 * @param robot le robot a setuper
 	 * @throws SerialConnexionException si l'ordinateur n'arrive pas a communiquer avec les cartes
 	 */
-	public void matchSetUp(Robot robot) throws SerialConnexionException
+	public void matchSetUp(Robot robot, boolean isInitialisationFast) throws SerialConnexionException
 	{
 		robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
 

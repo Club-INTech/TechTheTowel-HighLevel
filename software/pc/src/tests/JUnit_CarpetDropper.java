@@ -47,7 +47,7 @@ public class JUnit_CarpetDropper extends JUnit_Test
 		game.robot.setPosition(Table.entryPosition);
 		game.robot.setOrientation(Math.PI);
 		
-		matchSetUp(game.robot);
+		matchSetUp(game.robot, false);
 	}
 
 	@After

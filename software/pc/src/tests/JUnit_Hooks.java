@@ -54,7 +54,7 @@ public class JUnit_Hooks extends JUnit_Test
 		real_state.robot.updateConfig();
 		try 
 		{
-			matchSetUp(real_state.robot);
+			matchSetUp(real_state.robot, false);
 		} 
 		catch (SerialConnexionException e) 
 		{

@@ -43,7 +43,6 @@ public class JUnit_Strategia extends JUnit_Test
 		mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
 		real_state = (GameState<Robot>) container.getService(ServiceNames.GAME_STATE);
 		strategos = (Strategie) container.getService(ServiceNames.STRATEGIE);
-        
 		
 		emptyHook = new ArrayList<Hook> ();  
 
@@ -53,14 +52,13 @@ public class JUnit_Strategia extends JUnit_Test
 		real_state.robot.updateConfig();
 		try 
 		{
-			matchSetUp(real_state.robot);
+			matchSetUp(real_state.robot, false);
 		} 
 		catch (SerialConnexionException e) 
 		{
 			log.debug( e.logStack(), this);
 		}		
 	}
-	
 	
 	/**
 	 * Demande si la couleur est verte au jaune

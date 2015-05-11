@@ -47,7 +47,7 @@ public class JUnit_DropPile extends JUnit_Test {
 		real_state.robot.updateConfig();
 		
 		//initialisation en position des AX-12
-		matchSetUp(real_state.robot);
+		matchSetUp(real_state.robot, false);
 		
 		real_state.robot.isGlassStoredLeft=true;
 		real_state.robot.isGlassStoredRight=true;
