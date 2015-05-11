@@ -795,7 +795,7 @@ public class Strategie implements Service
 			
 			
 		}
-		//FIXME supr debug
+		// supr debug
 		log.debug("script :"+script.getClass().getName(), this);
 		log.debug("version :"+version, this);
 		log.debug("temps :"+durationScript, this);

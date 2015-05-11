@@ -292,6 +292,17 @@ public class LocomotionCardWrapper implements Service
 		locomotionCardSerial.close();
 	}
 	
+
+	/**
+	 * Eteint la STM
+	 * Attention, la STM ne répondra plus jusqu'a ce qu'elle soit manuellement ralummée
+	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
+	 */
+	public void shutdownSTM() throws SerialConnexionException
+	{
+		locomotionCardSerial.communiquer("poweroff", 0);
+	}
+	
 	/**
 	 *  Verifie si le robot est arrivé et si c'est anormal
 	 *  @return Les informations sous forme d'un tableau de booleens

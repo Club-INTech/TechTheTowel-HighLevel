@@ -151,17 +151,20 @@ public class ThreadTimer extends AbstractThread
 		// Le match est fini, immobilisation du robot
 		matchEnded = true;
 
-		try {
+		try
+		{
 			mLocomotionCardWrapper.immobilise();
 		} catch (SerialConnexionException e) {
 			log.debug( e.logStack(), this);
 		}
 
-		// fin du match : désasser
+		// fin du match : on eteint la STM
 		try 
-		{
+		{	
 			mLocomotionCardWrapper.disableRotationnalFeedbackLoop();
 			mLocomotionCardWrapper.disableTranslationnalFeedbackLoop();
+			mLocomotionCardWrapper.shutdownSTM();
+			
 		}
 		catch (SerialConnexionException e)
 		{

@@ -32,7 +32,7 @@ public class DropCarpet extends AbstractScript
 	/**
 	 * Endroit ou on d'oit s'arreter opur poser les tapis
 	 */
-	private int carperDropYCoord = 1300;
+	private int carperDropYCoord = 1320;
 
 	/**
 	 * Constructeur (normalement appelé uniquement par le scriptManager) du script déposant les tapis
