@@ -319,7 +319,7 @@ public class RobotChrono extends Robot
 	}
 
 	@Override
-	public void asservit() throws SerialConnexionException {
+	public void enableFeedbackLoop() throws SerialConnexionException {
 		// TODO Auto-generated method stub
 		
 	}

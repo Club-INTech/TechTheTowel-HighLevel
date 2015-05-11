@@ -70,8 +70,7 @@ public class Container
 			try
 			{
 				log.debug("Désasservissement du robot", this);
-				((LocomotionCardWrapper) instanciedServices[ServiceNames.LOCOMOTION_CARD_WRAPPER.ordinal()]).disableTranslationnalFeedbackLoop();
-				((LocomotionCardWrapper) instanciedServices[ServiceNames.LOCOMOTION_CARD_WRAPPER.ordinal()]).disableRotationnalFeedbackLoop();
+				((Locomotion) instanciedServices[ServiceNames.LOCOMOTION.ordinal()]).enableFeedbackLoop();
 			} 
 			catch (SerialConnexionException e)
 			{

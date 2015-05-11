@@ -1,6 +1,7 @@
 package hook.methods;
 import robot.Robot;
 import strategie.GameState;
+import utils.Log;
 import enums.ActuatorOrder;
 import exceptions.serial.SerialConnexionException;
 import hook.Executable;
@@ -13,10 +14,12 @@ import hook.Executable;
 
 public class OpenClapLeftHighExe implements Executable
 {
+	Log log;
    
-	 public OpenClapLeftHighExe()
+	 public OpenClapLeftHighExe(Log mLog)
      {
-			System.out.println("Hook de lever de bras créé");
+		log = mLog;
+		log.debug("Création du hook de fermeture du bras droit", this);
      }
 	
     @Override
@@ -24,9 +27,9 @@ public class OpenClapLeftHighExe implements Executable
     {
     	try 
     	{
-			System.out.println("en position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") au lancé du hook");
+    		log.debug("en position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") au lancé du hook", this);
 			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, false);
-			System.out.println("en position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") après le lancé du hook");
+    		log.debug("en position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") après le lancé du hook", this);
 		} 
     	catch (SerialConnexionException e) 
     	{
