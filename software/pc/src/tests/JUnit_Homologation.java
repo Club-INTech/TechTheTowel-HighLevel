@@ -69,7 +69,7 @@ public class JUnit_Homologation extends JUnit_Test
 		
 		try 
 		{
-			matchSetUp(real_state.robot);
+			matchSetUp(real_state.robot, false);
 		} 
 		catch (SerialConnexionException e) 
 		{

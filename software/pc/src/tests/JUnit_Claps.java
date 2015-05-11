@@ -43,7 +43,7 @@ public class JUnit_Claps extends JUnit_Test {
 		real_state.robot.updateConfig();
 		try 
 		{
-			matchSetUp(real_state.robot);
+			matchSetUp(real_state.robot, false);
 		} 
 		catch (SerialConnexionException e) 
 		{
@@ -51,7 +51,7 @@ public class JUnit_Claps extends JUnit_Test {
 		}		
 	}
 	
-	public void matchSetUp(Robot robot) throws SerialConnexionException
+	public void matchSetUp(Robot robot, boolean isInitialisationFast) throws SerialConnexionException
 	{
 		robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
 

@@ -61,7 +61,7 @@ public class JUnit_GetPlot extends JUnit_Test
 
 		real_state.robot.setPosition(new Vec2 (1132,1000));
 		real_state.robot.setOrientation(Math.PI);
-		matchSetUp(real_state.robot);
+		matchSetUp(real_state.robot, false);
 
 		real_state.robot.updateConfig();
 	}

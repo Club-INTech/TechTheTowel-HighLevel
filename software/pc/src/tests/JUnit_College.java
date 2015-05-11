@@ -50,7 +50,7 @@ public class JUnit_College extends JUnit_Test {
 	@Test
 	public void demonstration() throws UnableToMoveException, SerialConnexionException 
 	{
-		matchSetUp(robot);
+		matchSetUp(robot, false);
 		
 //		robot.moveLengthwise(distanceBetweenPlots+200);
 //		robot.turn(-Math.PI/2);
@@ -166,7 +166,7 @@ public class JUnit_College extends JUnit_Test {
 		}
 	}
 	
-	public void matchSetUp(Robot robot) throws SerialConnexionException
+	public void matchSetUp(Robot robot, boolean isInitialisationFast) throws SerialConnexionException
 	{
 		robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
 
