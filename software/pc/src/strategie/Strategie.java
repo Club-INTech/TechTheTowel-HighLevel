@@ -563,6 +563,7 @@ public class Strategie implements Service
 						scriptedMatchScripts.add(Math.max(0,scriptedMatchScripts.size()-3), scriptedMatchScripts.get(0));
 						scriptedMatchVersions.add(Math.max(0,scriptedMatchVersions.size()-3), scriptedMatchVersions.get(0));
 						scriptedMatchCustomExceptionHandlers.add(Math.max(0,scriptedMatchScripts.size()-3), null);
+						
 						//et on abandonne le script pour le moment
 						scriptedMatchScripts.remove(0);
 						scriptedMatchVersions.remove(0);

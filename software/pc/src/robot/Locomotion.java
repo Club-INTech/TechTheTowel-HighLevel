@@ -130,7 +130,7 @@ public class Locomotion implements Service
 	public boolean isRobotTurning=false;	
 	
 	/** nombre d'essais maximum après une BlockedException*/
-    private int maxRetriesIfBlocked=2;
+    private int maxRetriesIfBlocked=1;
     private int actualRetriesIfBlocked=0;
     
     /** Utile pour l'activation dees capteurs*/
@@ -384,7 +384,7 @@ public class Locomotion implements Service
         	isRobotMovingBackward=true;
 
         //int maxTimeToWaitForEnemyToLeave = 600; // combien de temps attendre que l'ennemi parte avant d'abandonner
-        int unexpectedWallImpactCounter = 2; // combien de fois on réessayer si on se prend un mur (si wall est a true alors les impacts sont attendus donc on s'en fout)
+        int unexpectedWallImpactCounter = 1; // combien de fois on réessayer si on se prend un mur (si wall est a true alors les impacts sont attendus donc on s'en fout)
         boolean doItAgain;
         do 
         {
@@ -409,7 +409,7 @@ public class Locomotion implements Service
 		                if(maxRetriesIfBlocked > actualRetriesIfBlocked)
 		                {
 		                	actualRetriesIfBlocked++;
-		                    log.critical("Tentative "+actualRetriesIfBlocked+" de deplacement ", this);
+		                    log.debug("Tentative "+actualRetriesIfBlocked+" de deplacement ", this);
 		                    if(isMovementForward)
 		                    	isRobotMovingForward=true;
 		                    else 
@@ -420,7 +420,7 @@ public class Locomotion implements Service
 		                }
 		                else 
 		                {
-	                        log.warning("On arrive pas à se degager, nombre max d'essais depassé, lancement de UnableToMoveException", this);
+	                        log.debug("On arrive pas à se degager, nombre max d'essais depassé, lancement de UnableToMoveException", this);
 	                        throw new UnableToMoveException(aim, UnableToMoveReason.PHYSICALLY_BLOCKED);
 		                }
 
@@ -430,10 +430,10 @@ public class Locomotion implements Service
 		                unexpectedWallImpactCounter--;
 		                immobilise();
 	                
-	                /*
-	                 * En cas de blocage, on recule (si on allait tout droit) ou on avance.
-	                 */
-	                // Si on s'attendait à un mur, c'est juste normal de se le prendre.
+		                /*
+		                 * En cas de blocage, on recule (si on allait tout droit) ou on avance.
+		                 */
+		                // Si on s'attendait à un mur, c'est juste normal de se le prendre.
 	               
 		                if(!headingToWall)
 		                {
@@ -461,14 +461,13 @@ public class Locomotion implements Service
 		                    catch (SerialConnexionException e1)
 		                    {
 		            			log.critical( e1.logStack(), this);
-		                        log.critical("On ne fait rien après ceci: Catch de "+e1+" dans moveToPointException", this);
+		                        log.debug("On ne fait rien après ceci: Catch de "+e1+" dans moveToPointException", this);
 		                    } 
 		                    catch (BlockedException e1)
 		                    {
 		            			log.critical( e1.logStack(), this);
-		                        log.critical("Catch de "+e1+" dans moveToPointException", this);
+		                        log.debug("Catch de "+e1+" dans moveToPointException", this);
 		                    	immobilise();                       
-		                        log.critical("On n'arrive pas à se dégager", this);
 		                        
 
 			                    if(!doItAgain)
@@ -488,8 +487,8 @@ public class Locomotion implements Service
             
             catch (UnexpectedObstacleOnPathException unexpectedObstacle)
             {
-                log.critical("Ennemi detecté : Catch de "+unexpectedObstacle, this); 
-    			log.critical( unexpectedObstacle.logStack(), this);
+                log.warning("Ennemi detecté : Catch de "+unexpectedObstacle, this); 
+    			log.warning( unexpectedObstacle.logStack(), this);
             	immobilise();
             	
                 //long detectionTime = System.currentTimeMillis();
@@ -511,7 +510,7 @@ public class Locomotion implements Service
 
                 if(!doItAgain)
                 {
-                    log.critical("UnableToMoveException dans MoveToPointException, visant "+finalAim.x+" :: "+finalAim.y+" cause : detection d'obstacle", this);
+                    log.warning("UnableToMoveException dans MoveToPointException, visant "+finalAim.x+" :: "+finalAim.y+" cause : detection d'obstacle", this);
                     throw new UnableToMoveException(finalAim, UnableToMoveReason.OBSTACLE_DETECTED);
                 }
 			}
@@ -836,7 +835,7 @@ public class Locomotion implements Service
         
         //centre du cercle de detection
         Vec2 detectionCenter = new Vec2((int)(signe * detectionRadius * Math.cos(highLevelOrientation)), 
-        								(int)(signe * detectionRadius * Math.sin(highLevelOrientation))); //centre par rapport au centre de position du robot
+        								(int)(signe * detectionRadius * Math.sin(highLevelOrientation)) ); //centre par rapport au centre de position du robot
         	
         detectionCenter.plus(highLevelPosition);
 
