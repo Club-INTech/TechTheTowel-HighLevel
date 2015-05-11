@@ -33,6 +33,7 @@ class ThreadSensor extends AbstractThread
 	// Valeurs par défaut s'il y a un problème de config
 	
 	/** fréquence de mise a jour des valeurs renvoyés par les capteurs. Valeurs par défaut de 5 fois par seconde s'il y a un problème de config */
+	// Overide par la config
 	private int sensorFrequency = 15;
 	
 	/**
@@ -149,6 +150,13 @@ class ThreadSensor extends AbstractThread
 	
 	public boolean homologation;
 	
+	/**
+	 * Sauvegarde de la valeur des capteurs precedente,
+	 *  à comparer si on tourne
+	 */
+	int[] saveSensorValuesFront = new int[2];
+	int[] saveSensorValuesBack = new int[2];
+
 	
 	/**
 	 * Crée un nouveau thread de capteurs
@@ -212,46 +220,59 @@ class ThreadSensor extends AbstractThread
 				  distanceFront[1]== -1 ||
 				   distanceBack[0]== -1 ||
 				   distanceBack[1]== -1 )	) // si on n'a pas spammé
-			{										
-				// on enleve les obstacles 
-				if(!homologation)
-				{
-					removeObstacleFront(distanceFront);
-					removeObstacleBack(distanceBack);
-				}
+			{					
 				
-				//mTable.getObstacleManager().removeObstacleInUs(mRobot.getPosition());
+				// si on ne tourne pas, ttout va bien :
+				// si on tourne, il faut verifier qu'on ne "translate" pas les ennemis avec nous 
+				// pour cela, on verifie que la valeur des capteurs a bien été mise à jour
+				// tourner = regarder devant 
+				log.debug("IsRobotTurning : "+mRobot.getIsRobotTurning(),this);
+				log.debug(" saveSensorValuesFront : "+saveSensorValuesFront[0]+";"+saveSensorValuesFront[1]+" distanceFront "+distanceFront[0]+";"+distanceFront[1], this);
 
-				//TODO : interface graphique, à supprimer sur la raspi
-				window.drawInt(distanceFront[0], distanceFront[1], distanceBack[0], distanceBack[1]);
-				
-				if(!homologation)
+				if(      !mRobot.getIsRobotTurning() 
+					|| (  mRobot.getIsRobotTurning() && saveSensorValuesFront[0] != distanceFront[0]
+													 && saveSensorValuesFront[1] != distanceFront[1]) )
 				{
-					//ajout d'obstacles mobiles dans l'obstacleManager
+					// on enleve les obstacles 
+					if(!homologation)
+					{
+						removeObstacleFront(distanceFront);
+						removeObstacleBack(distanceBack);
+					}
 					
-					// si on est immobile
-					if(!mRobot.getIsRobotMovingForward() && !mRobot.getIsRobotMovingBackward())
+					//mTable.getObstacleManager().removeObstacleInUs(mRobot.getPosition());
+	
+					//TODO : interface graphique, à supprimer sur la raspi
+					window.drawInt(distanceFront[0], distanceFront[1], distanceBack[0], distanceBack[1]);
+					
+					if(!homologation)
+					{
+						//ajout d'obstacles mobiles dans l'obstacleManager
+						
+						// si on est immobile
+						if(!mRobot.getIsRobotMovingForward() && !mRobot.getIsRobotMovingBackward())
+						{
+							addObstacleFront(distanceFront);
+							addObstacleBack(distanceBack);
+						}
+						
+						//si on bouge
+						
+						// Analyse des capteurs avant, avec gestion des angles
+						if(mRobot.getIsRobotMovingForward())
+							addObstacleFront(distanceFront);
+						
+						// Analyse des capteurs arrieres, avec gestion des angles
+						if(mRobot.getIsRobotMovingBackward())
+							addObstacleBack(distanceBack);
+						
+						log.debug("IsRobotMovingForward : "+mRobot.getIsRobotMovingForward()+" IsRobotMovingForward : "+mRobot.getIsRobotMovingBackward(), this);
+					}
+					else 
 					{
 						addObstacleFront(distanceFront);
 						addObstacleBack(distanceBack);
 					}
-					
-					//si on bouge
-					
-					// Analyse des capteurs avant, avec gestion des angles
-					if(mRobot.getIsRobotMovingForward())
-						addObstacleFront(distanceFront);
-					
-					// Analyse des capteurs arrieres, avec gestion des angles
-					if(mRobot.getIsRobotMovingBackward())
-						addObstacleBack(distanceBack);
-					
-					log.debug("IsRobotMovingForward : "+mRobot.getIsRobotMovingForward()+" IsRobotMovingForward : "+mRobot.getIsRobotMovingBackward(), this);
-				}
-				else 
-				{
-					addObstacleFront(distanceFront);
-					addObstacleBack(distanceBack);
 				}
 				
 			}
@@ -297,7 +318,18 @@ class ThreadSensor extends AbstractThread
 			{
 				log.critical( e.logStack(), this);
 			}
+			
+			// On sauve les valeurs de debut de turn
+			if(!mRobot.getIsRobotTurning())
+			{
+				saveSensorValuesFront[0]=distanceFront[0];
+				saveSensorValuesFront[1]=distanceFront[1];
+				
+				saveSensorValuesBack[0]=distanceBack[0];
+				saveSensorValuesBack[1]=distanceBack[1];
+			}
 
+			
 			Sleep.sleep((long)(1000./sensorFrequency));
 
 			
@@ -638,7 +670,8 @@ class ThreadSensor extends AbstractThread
 		{
 			distanceFront = (int[]) mSensorsCardWrapper.getSensorValue(SensorNames.ULTRASOUND_FRONT_SENSOR);
 			
-			if(symetry) // On inverse capteur droit et gauche : en effet, on traite les obstacles et les capteurs comme si on etait verts
+			if(symetry) // On inverse capteur droit et gauche : 
+						//en effet, on traite les obstacles et les capteurs comme si on etait verts
 			{
 				int svg=distanceFront[0];
 				distanceFront[0]=distanceFront[1];

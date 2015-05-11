@@ -79,7 +79,7 @@ public class ThreadTimer extends AbstractThread
 		log.debug("Lancement du thread timer", this);
 
 		// on eteind les capteursgetObstacleManager
-		config.set("capteurs_on", "false");
+		config.set("capteurs_on", "true");
 		mSensorsCardWrapper.updateConfig();	
 		
 		// Attente du démarrage du match
