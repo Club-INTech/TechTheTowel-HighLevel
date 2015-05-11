@@ -248,7 +248,7 @@ class ThreadSensor extends AbstractThread
 					if(mRobot.getIsRobotMovingBackward())
 						addObstacleBack(distanceBack);
 					
-					log.debug("IsRobotMovingForward : "+mRobot.getIsRobotMovingForward()+" IsRobotMovingForward : "+mRobot.getIsRobotMovingBackward(), this);
+					log.debug("IsRobotMovingForward : "+mRobot.getIsRobotMovingForward()+" IsRobotMovingBackward : "+mRobot.getIsRobotMovingBackward(), this);
 				}
 				else 
 				{
