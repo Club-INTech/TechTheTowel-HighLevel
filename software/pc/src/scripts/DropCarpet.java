@@ -194,7 +194,7 @@ public class DropCarpet extends AbstractScript
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
 				
 				//mise en place d'un hook pour attraper le gobelet 1.75 secondes après le début du script
-				Hook hookGoblet = hookFactory.newHookTimer(System.currentTimeMillis() + 2250,500);
+				Hook hookGoblet = hookFactory.newHookTimer(System.currentTimeMillis() + 2350,500);
 				hookGoblet.addCallback(new Callback(new CloseRightArmExe(log),true, stateToConsider));
 				hooksToConsider.add(hookGoblet);
 				

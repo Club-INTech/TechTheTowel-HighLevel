@@ -535,7 +535,9 @@ public class Strategie implements Service
 						
 //						if (e.reason.compareTo(UnableToMoveReason.PHYSICALLY_BLOCKED)==0)
 						{
-							// attention: ne pas bouger tryAgain dans ce catch
+							// attention: ne pas bouger tryAgain dans ce catch //TODO :why ?
+							tryAgain = false;
+							
 							try
 							{
 								realGameState.robot.moveLengthwise(-100);

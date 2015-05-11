@@ -226,13 +226,15 @@ public class DropPile extends AbstractScript
 				stateToConsider.robot.storedPlotCount = 0;
 				stateToConsider.robot.isBallStored = false;
 				
+				// on se dégage des plots
+				stateToConsider.robot.moveLengthwise(-180, hooksToConsider);
+				stateToConsider.robot.turn(Math.PI);
 				
-				stateToConsider.robot.moveLengthwise(-400, hooksToConsider);
 				//Puis on finit
 				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
-				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);
-				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
-				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
+				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, false);
+				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, false);
 			}
 			else
 			{

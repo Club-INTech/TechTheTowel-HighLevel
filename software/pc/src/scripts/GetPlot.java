@@ -159,7 +159,7 @@ public class GetPlot extends AbstractScript
 						stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);					
 						stateToConsider.robot.moveLengthwise(130, hooksToConsider);
 						stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
-						stateToConsider.robot.moveLengthwise(150, hooksToConsider);
+						stateToConsider.robot.moveLengthwise(170, hooksToConsider);
 						stateToConsider.robot.isGlassStoredLeft = true;
 					}
 					else if(!stateToConsider.robot.isGlassStoredRight)
@@ -167,7 +167,7 @@ public class GetPlot extends AbstractScript
 						stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);					
 						stateToConsider.robot.moveLengthwise(130, hooksToConsider);
 						stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
-						stateToConsider.robot.moveLengthwise(150, hooksToConsider);
+						stateToConsider.robot.moveLengthwise(170, hooksToConsider);
 						stateToConsider.robot.isGlassStoredRight = true;
 					}
 
@@ -209,6 +209,9 @@ public class GetPlot extends AbstractScript
 				}
 				stateToConsider.table.eatPlotX(3);
 			}
+//			
+//			// se dégage du bord de la table pour que la pathfinding ait un comportement correct (notamment pour enchainer avec CloseClap version 12)
+//			stateToConsider.robot.moveLengthwise(-30, hooksToConsider);
 			
 		}
 		//attention version hardcodée ne pas utilser hors du match scripté
@@ -304,7 +307,7 @@ public class GetPlot extends AbstractScript
 		else if (id==2)
 			return new Circle (630,645,200);
 		else if (id==34)
-			return new Circle (900,200,0);
+			return new Circle (900,210,0);
 		else if (id==56)
 			return new Circle (780,1620,0); // Position devant le plot 5, on longeant l'escalier
 		else if (id==567)

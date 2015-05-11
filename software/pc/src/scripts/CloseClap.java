@@ -183,13 +183,16 @@ public class CloseClap extends AbstractScript
 		//on commence en (1295,230), on se tourne dans le bon sens
 		//stateToConsider.robot.moveLengthwise(80, hooksToConsider, false);
 		
-		stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
 		
 		stateToConsider.robot.turn(0, hooksToConsider, false);
 		
+		stateToConsider.robot.moveLengthwise(30, hooksToConsider);
+		
+		stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
+		
 		//ajout de hooks
 		Hook hook1 = hookFactory.newHookXisLesser(1250, 10);
-		Hook hook2 = hookFactory.newHookXisLesser(1000, 10);
+		Hook hook2 = hookFactory.newHookXisLesser(970, 10);
 		
 		// ajoute un callback au hook de position qui ouvre / ferme le bras
 		hook1.addCallback(	new Callback(new OpenClapRightHighExe(),true, stateToConsider)	);
@@ -201,7 +204,7 @@ public class CloseClap extends AbstractScript
 		
 		try
 		{
-			stateToConsider.robot.moveLengthwise(-450, hooksToConsider);
+			stateToConsider.robot.moveLengthwise(-500, hooksToConsider);
 			stateToConsider.table.clapXClosed(1);
 		}
 		catch(UnableToMoveException e)
@@ -355,7 +358,7 @@ public class CloseClap extends AbstractScript
 		else if(version == 3)
 			return new Circle(-900,500);//point d'entrée : devant le clap 3
 		else if(version == 12)
-			return new Circle(1280,230); //point d'entrée : devant le clap 1
+			return new Circle(1280,240); //point d'entrée : devant le clap 1
 		else if(version == 123)
 			return new Circle(1290,230); //point d'entrée : devant le clap 1
 		else if(version == -1)
