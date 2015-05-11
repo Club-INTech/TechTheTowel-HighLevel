@@ -172,8 +172,10 @@ public class DropPile extends AbstractScript
 			else if (version == 2)
 			{
 				stateToConsider.robot.turn(-Math.PI/2);
-				stateToConsider.robot.moveLengthwise(180, hooksToConsider, true);				
+				stateToConsider.robot.moveLengthwise(180, hooksToConsider, true);	
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_MIDDLE, false);
 				pileDropperGround(stateToConsider, hooksToConsider, 300);
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
 			}
 			else
 			{
