@@ -80,7 +80,7 @@ public class JUnit_Hooks extends JUnit_Test
 			Hook testHookX = hookFactory.newHookX(500);
 			
 			// ajoute un callback au hook de position qui ouvre le bras  bras
-			testHookX.addCallback(	new Callback(new OpenClapLeftHighExe(),true, real_state)	);
+			testHookX.addCallback(	new Callback(new OpenClapLeftHighExe(log),true, real_state)	);
 			
 			// ajoute le hook a la liste a passer a la locomotion
 			testHookList.add(testHookX);
@@ -170,7 +170,7 @@ public class JUnit_Hooks extends JUnit_Test
 			
 			// ajoute un callback au hook de position qui ouvre le bras  bras
 			testHook1.addCallback(	new Callback(new OpenClapLeftMiddleExe(),true, real_state)	);
-			testHook2.addCallback(	new Callback(new OpenClapLeftHighExe(),true, real_state)	);
+			testHook2.addCallback(	new Callback(new OpenClapLeftHighExe(log),true, real_state)	);
 			testHook3.addCallback(	new Callback(new OpenClapLeftMiddleExe(),true, real_state)	);
 			
 			// ajoute le hook a la liste a passer a la locomotion
