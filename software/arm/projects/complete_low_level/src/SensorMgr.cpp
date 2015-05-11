@@ -71,6 +71,17 @@ SensorMgr::SensorMgr():
 	GPIO_Init(GPIOC, &GPIO_InitStruct);
 
 
+	//Bouton système d'activation/désactivation de l'asservissement
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);//Active l'horloge du port C
+
+	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_11;
+	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN;
+	GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_DOWN;
+	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;
+	GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+
+
 
 
 
@@ -360,4 +371,8 @@ bool SensorMgr::isLeftGlassInside() const{
 
 bool SensorMgr::isJumperOut() const{
 	return !GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_9);
+}
+
+bool SensorMgr::isButtonPressed() const{
+	return GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_11);
 }
