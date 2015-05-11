@@ -1070,38 +1070,43 @@ public class Locomotion implements Service
     /**
      * FONCTION JUNIT TEST
      */
-	 public void JUNIT_moveToPointForwardBackward()
+	 public void JUNIT_moveToPointForwardBackward(Vec2 aim, ArrayList<Hook> hooks, boolean mur, DirectionStrategy strategy, boolean turnOnly, boolean mustDetect) throws UnableToMoveException
     {
+		 moveToPointForwardBackward(aim, hooks, mur, strategy, turnOnly, mustDetect);
     }
 	 
 	    
     /**
      * FONCTION JUNIT TEST
      */
-    public void JUNIT_moveToPointException()
+    public void JUNIT_moveToPointException(Vec2 aim, ArrayList<Hook> hooks, boolean isMovementForward, boolean headingToWall, boolean turnOnly, boolean mustDetect) throws UnableToMoveException
     {
 
+    	moveToPointException(aim, hooks, isMovementForward, headingToWall, turnOnly, mustDetect);
     }
     
     /**
      * FONCTION POUR JUNIT. 
      */
-    public void JUNIT_moveToPointCorrectAngleAndDetectEnnemy()
+    public void JUNIT_moveToPointCorrectAngleAndDetectEnnemy(Vec2 aim, ArrayList<Hook> hooks, boolean isMovementForward, boolean turnOnly, boolean mustDetect) throws UnexpectedObstacleOnPathException, BlockedException, SerialConnexionException
     {
+    	moveToPointCorrectAngleAndDetectEnnemy(aim, hooks, isMovementForward, turnOnly, mustDetect);
     }
     
     /**
      *  POUR JUNIT
      */
-    public void JUNIT_isMotionEnded()
+    public boolean JUNIT_isMotionEnded()
     {
+    	return JUNIT_isMotionEnded();
     }
 
     /**
      *  POUR JUNIT
      */
-    public void JUNIT_correctAngle()
+    public void JUNIT_correctAngle(Vec2 aim, boolean isMovementForward, boolean mustDetect) throws BlockedException, UnexpectedObstacleOnPathException
     {
+    	correctAngle(aim, isMovementForward, mustDetect);
     }
 
     /**
@@ -1109,20 +1114,23 @@ public class Locomotion implements Service
      */
     public void JUNIT_updateCurrentPositionAndOrientation()
     {
+    	updateCurrentPositionAndOrientation();
     }
 
     /**
      *  POUR JUNIT
      */
-    public void JUNIT_moveToPointSymmetry()
+    public void JUNIT_moveToPointSymmetry(Vec2 aim, boolean isMovementForward, boolean mustDetect, boolean turnOnly,boolean isCorrection) throws BlockedException, UnexpectedObstacleOnPathException
     {
+    	moveToPointSymmetry(aim, isMovementForward, mustDetect, turnOnly, isCorrection);
     }
 
     /**
      *  POUR JUNIT
      */
-    public void JUNIT_moveToPointSerialOrder()
+    public void JUNIT_moveToPointSerialOrder(Vec2 symmetrisedAim, Vec2 givenPosition, double angle, double distance, boolean mustDetect,boolean turnOnly, boolean isCorrection) throws BlockedException, UnexpectedObstacleOnPathException
     {
+    	moveToPointSerialOrder( symmetrisedAim, givenPosition, angle, distance, mustDetect, turnOnly,  isCorrection);
     }
 
 }
