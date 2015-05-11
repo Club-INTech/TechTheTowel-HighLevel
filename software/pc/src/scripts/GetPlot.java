@@ -369,7 +369,7 @@ public class GetPlot extends AbstractScript
 	{
 		try 
 		{
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
@@ -461,14 +461,16 @@ public class GetPlot extends AbstractScript
 
 						log.debug("impossible d'attraper le plot, tentative en fermant les machoires", this);
 						stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
-					} else
+					} 
+					else
 					{
 
 						eatPlot(true, !isArmChosenLeft, stateToConsider, false, forbidArmUsage);
 						return;
 					}
 				}
-			} else
+			} 
+			else
 			{
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 			}
