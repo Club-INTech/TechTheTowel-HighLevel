@@ -19,6 +19,7 @@ import org.junit.runner.JUnitCore;
 import pathDingDing.PathDingDing;
 import enums.ScriptNames;
 import enums.ServiceNames;
+import exceptions.ExecuteException;
 import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -149,10 +150,9 @@ public class JUnit_scriptedMatch extends JUnit_Test
 			scriptmanager.getScript(ScriptNames.DROP_CARPET).execute(2, real_state, emptyHook);
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après les tapis");
 		}
-		catch (UnableToMoveException e){log.debug(e.logStack(), this);}
-		catch (SerialConnexionException e){log.debug(e.logStack(), this);}
 		catch (SerialFinallyException e){log.debug(e.logStack(), this);}
-		
+		catch (ExecuteException e){log.debug(e.logStack(), this);}
+
 		//////////////////////////////////////////////////////
 		//	script grab plot 2
 		//////////////////////////////////////////////////////
@@ -169,7 +169,8 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		catch (PathNotFoundException e){log.debug(e.logStack(), this);}
 		catch (SerialFinallyException e){log.debug(e.logStack(), this);}
 		catch (InObstacleException e){log.debug(e.logStack(), this);}
-		
+		catch (ExecuteException e){log.debug(e.logStack(), this);}
+
 		
 		System.out.println("Plot 2 pris");
 		 
@@ -189,7 +190,8 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		catch (PathNotFoundException e){log.debug(e.logStack(), this);}
 		catch (SerialFinallyException e){log.debug(e.logStack(), this);}
 		catch (InObstacleException e){log.debug(e.logStack(), this);}
-		
+		catch (ExecuteException e){log.debug(e.logStack(), this);}
+
 		System.out.println("Plot 3, 4 et gobelet pris");
 		
 		//////////////////////////////////////////////////////
@@ -208,7 +210,8 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		catch (PathNotFoundException e){log.debug(e.logStack(), this);}
 		catch (SerialFinallyException e){log.debug(e.logStack(), this);}
 		catch (InObstacleException e){log.debug(e.logStack(), this);}
-		
+		catch (ExecuteException e){log.debug(e.logStack(), this);}
+
 		System.out.println("Clap 1 et 2 Fermés");
 
 		//////////////////////////////////////////////////////
@@ -227,7 +230,8 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		catch (PathNotFoundException e){log.debug(e.logStack(), this);}
 		catch (SerialFinallyException e){log.debug(e.logStack(), this);}
 		catch (InObstacleException e){log.debug(e.logStack(), this);}
-		
+		catch (ExecuteException e){log.debug(e.logStack(), this);}
+
 		System.out.println("Plot 1 pris");
 		
 		//////////////////////////////////////////////////////
@@ -247,7 +251,8 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		catch (PathNotFoundException e){log.debug(e.logStack(), this);}
 		catch (SerialFinallyException e){log.debug(e.logStack(), this);}
 		catch (InObstacleException e){log.debug(e.logStack(), this);}
-		
+		catch (ExecuteException e){log.debug(e.logStack(), this);}
+
 		System.out.println("Pile vidée");
 		
 		try 
@@ -262,7 +267,8 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		catch (PathNotFoundException e){log.debug(e.logStack(), this);}
 		catch (SerialFinallyException e){log.debug(e.logStack(), this);}
 		catch (InObstacleException e){log.debug(e.logStack(), this);}
-		
+		catch (ExecuteException e){log.debug(e.logStack(), this);}
+
 		try 
 		{			
 			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") avant de deposé la pile sur l'estrade");
@@ -275,7 +281,8 @@ public class JUnit_scriptedMatch extends JUnit_Test
 		catch (PathNotFoundException e){log.debug(e.logStack(), this);}
 		catch (SerialFinallyException e){log.debug(e.logStack(), this);}
 		catch (InObstacleException e){log.debug(e.logStack(), this);}
-		
+		catch (ExecuteException e){log.debug(e.logStack(), this);}
+
 		System.out.println("Pile vidée");
 	
 //		try 

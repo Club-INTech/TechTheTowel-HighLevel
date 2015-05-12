@@ -5,6 +5,7 @@ import hook.types.HookFactory;
 
 import java.util.ArrayList;
 
+import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialFinallyException;
 import robot.Robot;
@@ -37,7 +38,7 @@ public class ExitBeginZone extends AbstractScript
 	}
 	
 	@Override
-	public void execute (int id_version, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider) throws SerialFinallyException, UnableToMoveException
+	public void execute (int id_version, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException
 	{
 		try
 		{
@@ -48,7 +49,7 @@ public class ExitBeginZone extends AbstractScript
 		{
 			log.critical("erreur ExitBeginZone script : impossible de sortir de la zone de depart\n", this);
 			finalize(stateToConsider);
-			throw e;
+			throw new ExecuteException(e);
 		}
 	}
 

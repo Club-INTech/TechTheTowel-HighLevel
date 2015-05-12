@@ -15,6 +15,7 @@ import org.junit.Test;
 import enums.ActuatorOrder;
 import enums.ScriptNames;
 import enums.ServiceNames;
+import exceptions.ExecuteException;
 import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -103,9 +104,8 @@ public class JUnit_Verres extends JUnit_Test
 			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
 			exitScript.execute(0, real_state, emptyHook );
 		} 
-		catch (UnableToMoveException e){log.debug(e.logStack(), this);}
-		catch (SerialConnexionException e){log.debug(e.logStack(), this);}
 		catch (SerialFinallyException e){log.debug(e.logStack(), this);}
+		catch (ExecuteException e){log.debug(e.logStack(), this);}
 
 		//debut du match
 		System.out.println("debut du match");
@@ -135,7 +135,8 @@ public class JUnit_Verres extends JUnit_Test
 		catch (PathNotFoundException e){log.debug(e.logStack(), this);}
 		catch (SerialFinallyException e){log.debug(e.logStack(), this);}
 		catch (InObstacleException e){log.debug(e.logStack(), this);}
-		
+		catch (ExecuteException e){log.debug(e.logStack(), this);}
+
 		
 		//Le match s'arrête
 		System.out.println("match fini !");

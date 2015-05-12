@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 
 //import org.junit.runner.JUnitCore;
 
+
 import strategie.GameState;
 import robot.cardsWrappers.SensorsCardWrapper;
 import scripts.ScriptManager;
@@ -24,11 +25,11 @@ import java.util.ArrayList;
 
 import table.Table;
 import threads.ThreadTimer;
-
 import pathDingDing.PathDingDing;
 import enums.ActuatorOrder;
 import enums.ScriptNames;
 import enums.Speed;
+import exceptions.ExecuteException;
 import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -205,10 +206,11 @@ public class launcher
 	    		scriptmanager.getScript(ScriptNames.DROP_CARPET).execute(2, real_state, emptyHook);
 	    		System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après les tapis");
 	    	}
-	    	catch (UnableToMoveException | SerialConnexionException | SerialFinallyException e) 
+	    	catch (ExecuteException | SerialFinallyException e) 
 	    	{
 	    		e.printStackTrace();
-	    	}
+	    	}	
+
 	    	//////////////////////////////////////////////////////
 	    	//	script grab plot 2
 	    	//////////////////////////////////////////////////////
@@ -220,10 +222,11 @@ public class launcher
 	    		scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(2, real_state, emptyHook );
 	    		System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le plot 2");
 	    	} 
-	    	catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e1) 
+	    	catch (ExecuteException | UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e1) 
 	    	{
 	    		e1.printStackTrace();
 	    	}
+
 	    	System.out.println("Plot 2 pris");
 
 	    	//////////////////////////////////////////////////////
@@ -237,10 +240,11 @@ public class launcher
 	    		scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(34, real_state, emptyHook );
 	    		System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après les plots 3 et 4 et verre 0");
 	    	} 
-	    	catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e1) 
+	    	catch (ExecuteException | UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e1) 
 	    	{
 	    		e1.printStackTrace();
 	    	}
+	    	
 	    	
 	    	System.out.println("Plot 3, 4 et gobelet pris");
 	    		
@@ -255,7 +259,7 @@ public class launcher
 	    		System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après les claps 1 et 2");
 
 	    	}
-	    	catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e) 
+	    	catch (ExecuteException | UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e) 
 	    	{
 	    		e.printStackTrace();
 	    	}
@@ -273,7 +277,7 @@ public class launcher
     			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(1, real_state, emptyHook );
     			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après le plot 1");
     		}
-    		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e) 
+    		catch (ExecuteException | UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e) 
     		{
     			e.printStackTrace();
     		}
@@ -291,7 +295,7 @@ public class launcher
     			scriptmanager.getScript(ScriptNames.FREE_STACK).goToThenExec(0, real_state, emptyHook );
     			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après deposé la pile sur l'estrade");
     		}
-    		catch (UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e) 
+    		catch (ExecuteException | UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException | InObstacleException e) 
     		{
     			e.printStackTrace();
     		}
@@ -324,7 +328,7 @@ public class launcher
     			scriptmanager.getScript(ScriptNames.DROP_GLASS).execute(0, real_state, emptyHook );//On depose 1 verre dans notre zone
     			System.out.println("en position ("+real_state.robot.getPosition().x+", "+real_state.robot.getPosition().y+") après deposer le verre");
     		}
-    		catch (UnableToMoveException | SerialConnexionException | SerialFinallyException  e) 
+    		catch (ExecuteException | UnableToMoveException  | SerialFinallyException  e) 
     		{
     			e.printStackTrace();
     		}

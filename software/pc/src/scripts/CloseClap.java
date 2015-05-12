@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import enums.ActuatorOrder;
 import enums.Speed;
+import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
@@ -70,7 +71,7 @@ public class CloseClap extends AbstractScript
 	}
 	
 	@Override
-	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, SerialFinallyException
+	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException
 	{		
 		try
 		{
@@ -94,7 +95,7 @@ public class CloseClap extends AbstractScript
 		catch (UnableToMoveException | SerialConnexionException e)
 		{
 			finalize(stateToConsider);
-			throw e;
+			throw new ExecuteException(e);
 		}
 	}
 	

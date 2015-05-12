@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import enums.ActuatorOrder;
 import enums.Speed;
+import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
@@ -50,7 +51,7 @@ public class DropCarpet extends AbstractScript
 	}
 
 	@Override
-	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, SerialFinallyException
+	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException
 	{
 		if (versionToExecute == 1)
 			try 
@@ -112,7 +113,7 @@ public class DropCarpet extends AbstractScript
 			catch (UnableToMoveException | SerialConnexionException e)
 			{
 				finalize(stateToConsider);
-				throw e;
+				throw new ExecuteException(e);
 			}
 		else if(versionToExecute == 0)
 		{
@@ -180,7 +181,7 @@ public class DropCarpet extends AbstractScript
 			catch(UnableToMoveException | SerialConnexionException e)
 			{
 				finalize(stateToConsider);
-				throw e;
+				throw new ExecuteException(e);
 			}
 		}
 		//version 2 du script : débute au point de départ du robot, attrape le gobelet en passant.
@@ -268,7 +269,7 @@ public class DropCarpet extends AbstractScript
 			catch(UnableToMoveException | SerialConnexionException e)
 			{
 				finalize(stateToConsider);
-				throw e;
+				throw new ExecuteException(e);
 			}
 		}
 	}

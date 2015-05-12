@@ -13,6 +13,7 @@ import container.Service;
 import hook.Hook;
 import hook.types.HookFactory;
 import enums.ObstacleGroups;
+import exceptions.ExecuteException;
 import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -67,8 +68,9 @@ public abstract class AbstractScript implements Service
 	 * @throws PathNotFoundException  si le pathfinding ne trouve pas de chemin
 	 * @throws SerialFinallyException si le finally n'est pas correctement execute (erreur critique)
 	 * @throws InObstacleException lorqsque le robot veut aller dans un obstacle
+	 * @throws ExecuteException 
 	 */
-	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, InObstacleException
+	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, InObstacleException, ExecuteException
 	{
 		goToThenExec(versionToExecute, actualState, hooksToConsider, EnumSet.noneOf(ObstacleGroups.class));
 	}
@@ -86,8 +88,9 @@ public abstract class AbstractScript implements Service
 	 * @throws PathNotFoundException  si le pathfinding ne trouve pas de chemin
 	 * @throws SerialFinallyException si le finally n'est pas correctement execute (erreur critique)
 	 * @throws InObstacleException lorqsque le robot veut aller dans un obstacle
+	 * @throws ExecuteException 
 	 */
-	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, ArrayList<Hook> hooksToConsider, EnumSet<ObstacleGroups> enumObstacle) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, InObstacleException
+	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, ArrayList<Hook> hooksToConsider, EnumSet<ObstacleGroups> enumObstacle) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, InObstacleException, ExecuteException
 	{
 		// va jusqu'au point d'entrée de la version demandée
 		try 
@@ -115,8 +118,9 @@ public abstract class AbstractScript implements Service
 	 * @throws UnableToMoveException losrque le robot veut se déplacer et que quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
 	 * @throws SerialConnexionException s'il y a un problème de communication avec une des cartes électroniques
 	 * @throws SerialFinallyException s'il y a un problème de communication avec une des cartes électroniques lors du finallize
+	 * @throws ExecuteException 
 	 */
-	public abstract void execute(int versionToExecute, GameState<Robot> actualState,ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, SerialFinallyException;
+	public abstract void execute(int versionToExecute, GameState<Robot> actualState,ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException;
 
 	/**
 	 * Renvoie le score que peut fournir une version d'un script.
