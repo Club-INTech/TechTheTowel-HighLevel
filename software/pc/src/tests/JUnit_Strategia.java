@@ -51,22 +51,31 @@ public class JUnit_Strategia extends JUnit_Test
 		
 		real_state.robot.updateConfig();
 		
-		boolean isSetUpSpeedQuick = askForSetUpSpeed();
+//		boolean isSetUpSpeedQuick = askForSetUpSpeed();
 		
 		try 
 		{
-			matchSetUp(real_state.robot, isSetUpSpeedQuick);
+//			matchSetUp(real_state.robot, isSetUpSpeedQuick);
+			matchSetUp(real_state.robot, false);
 		} 
 		catch (SerialConnexionException e) 
 		{
 			log.debug( e.logStack(), this);
 		}		
+		
+
+		configColor();
+
+		real_state.robot.updateConfig();
+		real_state.robot.setLocomotionSpeed(Speed.SLOW);
+		container.startAllThreads();
 	}
 	
 	/**
 	 * Demande à l'utilisateur si il veut une config rapide ou lente
 	 * @return vrai si la vitesse  est rapide false si elle est lente
 	 */
+	@SuppressWarnings("unused")
 	private boolean askForSetUpSpeed() 
 	{
 		String speed = "lol";
@@ -102,7 +111,7 @@ public class JUnit_Strategia extends JUnit_Test
 		String couleur = "";
 		while(!couleur.contains("jaune") && !couleur.contains("vert"))
 		{
-			log.debug("Rentrez \"vert\" ou \"jaune\" : ",this);
+			log.debug("Rentrez \"vert\" ou \"jaune\" (override de config.ini) : ",this);
 			BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in)); 
 			 
 			try 
@@ -141,9 +150,6 @@ public class JUnit_Strategia extends JUnit_Test
 	@Test
 	public void desisionTest()
 	{
-		configColor();
-		real_state.robot.setLocomotionSpeed(Speed.SLOW);
-		container.startAllThreads();
 		waitMatchBegin();
 		
 		long timeMatchBegin=System.currentTimeMillis();

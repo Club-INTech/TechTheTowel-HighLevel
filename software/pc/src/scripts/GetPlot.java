@@ -235,6 +235,7 @@ public class GetPlot extends AbstractScript
 				if (checkSensor(stateToConsider))
 					stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 				stateToConsider.table.eatPlotX(5);
+				stateToConsider.robot.aMiamiam();
 
 			
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);

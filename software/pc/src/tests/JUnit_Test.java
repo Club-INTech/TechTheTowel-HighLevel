@@ -149,6 +149,10 @@ public abstract class JUnit_Test
 			robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, true);
 			
 			// initialisation normale 
+
+			robot.useActuator(ActuatorOrder.ARM_LEFT_MIDDLE, true);
+			robot.useActuator(ActuatorOrder.ARM_RIGHT_MIDDLE, true);
+			
 			robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
 			
 			robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
@@ -171,6 +175,10 @@ public abstract class JUnit_Test
 			
 			robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, true);
 			robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, true);
+			
+
+			robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
+			robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
 			
 			robot.sleep(300);
 						

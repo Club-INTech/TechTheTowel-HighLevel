@@ -499,6 +499,10 @@ public class Strategie implements Service
 							// si le temps presse, on n'attends pas pour faire les scripts
 							if (realGameState.getTimeEllapsed() > timeBeforeRushMode)
 								tryAgain = false;
+
+							// Loggue qu'on passe en mode Rush
+							if (realGameState.getTimeEllapsed() > timeBeforeRushMode && realGameState.getTimeEllapsed() < timeBeforeRushMode + 300)
+								log.warning("Le temps presse: passage en mode Rush !  (TimeEllapsed = " + realGameState.getTimeEllapsed(), this);
 								
 							// exécute le prochain script sur la liste
 							log.debug("Execution du script : " + scriptedMatchScripts.get(0).getClass().getCanonicalName() + " version " + scriptedMatchVersions.get(0), this);
@@ -540,13 +544,13 @@ public class Strategie implements Service
 							
 							try
 							{
-								realGameState.robot.moveLengthwise(-100);
+								realGameState.robot.moveLengthwise(-200);
 							}
 							catch (UnableToMoveException e1)
 							{
 								try 
 								{
-									realGameState.robot.moveLengthwise(100);
+									realGameState.robot.moveLengthwise(200);
 								} 
 								catch (UnableToMoveException e2)
 								{
@@ -591,8 +595,10 @@ public class Strategie implements Service
 								scriptedMatchCustomExceptionHandlers.remove(0);
 								tryAgain = false;
 							}
-							//si on est bloqué par les plots 3, 4 ou le gobelet 0 et qu'on est pas en mode rush on execute immediatement le script pour les recuperer (ces scripts sont critiques)
-							else if ( (obstacle.compareTo(ObstacleGroups.GREEN_PLOT_3)==0 || obstacle.compareTo(ObstacleGroups.GREEN_PLOT_3)==0 || obstacle.compareTo(ObstacleGroups.GOBLET_0)==0 ) && realGameState.getTimeEllapsed() < timeBeforeRushMode)
+							// si on est bloqué par les plots 3, 4 ou le gobelet 0 (ce qui n'arrive que quand on essaye de faire clap 12 sans avoir faire getPlot34) 
+							// et qu'on est pas en mode rush on execute immediatement le script pour les recuperer (ces scripts sont critiques)
+							else if ( (obstacle.compareTo(ObstacleGroups.GREEN_PLOT_3)==0 || obstacle.compareTo(ObstacleGroups.GREEN_PLOT_3)==0
+									   || obstacle.compareTo(ObstacleGroups.GOBLET_0)==0 ) && realGameState.getTimeEllapsed() < timeBeforeRushMode)
 							{
 								//on enleve le script de get plot version 34 le plus proche (le seul)
 								for (int i = 0 ; i<scriptedMatchScripts.size(); i++)

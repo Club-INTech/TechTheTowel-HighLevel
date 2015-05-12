@@ -470,41 +470,42 @@ int main()
 	capteurInfraLeft = &capteurInfraLeftINIT;
 
 	//init ax12
-	AX<uart0> axINIT0(0,1,1023);
-	AX<uart0> axINIT1(1,1,1023);
-	AX<uart0> axINIT2(2,1,1023);
-	AX<uart0> axINIT3(3,1,1023);
-	AX<uart0> axINIT4(4,1,1023);
-	AX<uart0> axINIT5(5,1,1023);
-	AX<uart0> axINIT6(6,1,1023);
-	AX<uart0> axINIT7(7,1,1023);
-	AX<uart0> axINIT8(8,1,1023);
-	AX<uart0> axINIT9(9,1,1023);
-	AX<uart0> axINIT10(10,1,1023);
-	AX<uart0> axINIT11(11,1,1023);
-	AX<uart0> axINIT12(12,1,1023);
-	AX<uart0> axINIT13(13,1,1023);
-	AX<uart0> axINIT14(14,1,1023);
-	AX<uart0> axINIT15(15,1,1023);
+	// AX<uart0> axINIT0(0,1,1023);
+	// AX<uart0> axINIT1(1,1,1023);
+	// AX<uart0> axINIT2(2,1,1023);
+	// AX<uart0> axINIT3(3,1,1023);
+	// AX<uart0> axINIT4(4,1,1023);
+	// AX<uart0> axINIT5(5,1,1023);
+	// AX<uart0> axINIT6(6,1,1023);
+	// AX<uart0> axINIT7(7,1,1023);
+	// AX<uart0> axINIT8(8,1,1023);
+	// AX<uart0> axINIT9(9,1,1023);
+	// AX<uart0> axINIT10(10,1,1023);
+	// AX<uart0> axINIT11(11,1,1023);
+	// AX<uart0> axINIT12(12,1,1023);
+	// AX<uart0> axINIT13(13,1,1023);
+	// AX<uart0> axINIT14(14,1,1023);
+	// AX<uart0> axINIT15(15,1,1023);
 	
-	axTest0 = &axINIT0;
-	axTest1 = &axINIT1;
-	axTest2 = &axINIT2;
-	axTest3 = &axINIT3;
-	axTest4 = &axINIT4;
-	axTest5 = &axINIT5;
-	axTest6 = &axINIT6;
-	axTest7 = &axINIT7;
-	axTest8 = &axINIT8;
-	axTest9 = &axINIT9;
-	axTest10 = &axINIT10;
-	axTest11 = &axINIT11;
-	axTest12 = &axINIT12;
-	axTest13 = &axINIT13;
-	axTest14 = &axINIT14;
-	axTest15 = &axINIT15;
+	// axTest0 = &axINIT0;
+	// axTest1 = &axINIT1;
+	// axTest2 = &axINIT2;
+	// axTest3 = &axINIT3;
+	// axTest4 = &axINIT4;
+	// axTest5 = &axINIT5;
+	// axTest6 = &axINIT6;
+	// axTest7 = &axINIT7;
+	// axTest8 = &axINIT8;
+	// axTest9 = &axINIT9;
+	// axTest10 = &axINIT10;
+	// axTest11 = &axINIT11;
+	// axTest12 = &axINIT12;
+	// axTest13 = &axINIT13;
+	// axTest14 = &axINIT14;
+	// axTest15 = &axINIT15;
 
 
+	// Initialisation des pins de l'aduino
 	// IR droit sur C0 (Analog 0)
 	// IR gauche sur C1 (Analog 1)
 	D2::output();	// maxon gauche

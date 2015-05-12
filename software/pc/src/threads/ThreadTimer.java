@@ -4,7 +4,6 @@ import exceptions.serial.SerialConnexionException;
 import robot.cardsWrappers.LocomotionCardWrapper;
 import robot.cardsWrappers.SensorsCardWrapper;
 import table.Table;
-import utils.Sleep;
 import graphics.*;
 import robot.RobotReal;
 
@@ -44,8 +43,14 @@ public class ThreadTimer extends AbstractThread
 	/** Temps en ms qui s'écoule entre deux mise a jour de la liste des obstacle périmables. Lors de chaque mise a jour, les obstacles périmés sont détruits. */
 	public static int obstacleRefreshInterval = 0;
 	
-	//TODO : interface graphique à enlever eventuellement (necessaire pour les tests)
+	/** interface graphique d'affichage de la table, pour le debug */
 	public Window window;
+	
+	/**
+	 * indique si l'interface graphique est activée ou non 
+	 */
+	private boolean isGraphicalInterfaceEnabled = true; 
+	
 	
 	/**
 	 * Crée le thread timer.
@@ -65,9 +70,17 @@ public class ThreadTimer extends AbstractThread
 		
 		updateConfig();
 		Thread.currentThread().setPriority(1);
-		
-		//TODO : interface graphique à enlever (necessaire pour les tests)
-		window = new Window(table, robot);
+
+		// DEBUG: interface graphique
+		try
+		{
+			window = new Window();
+		}
+		catch (Exception e)
+		{
+			isGraphicalInterfaceEnabled = false;
+			log.debug("Affichage graphique non disponible", this);
+		}
 	}
 
 	/* (non-Javadoc)
@@ -90,7 +103,14 @@ public class ThreadTimer extends AbstractThread
 				log.debug("Arrêt du thread timer avant le début du match", this);
 				return;
 			}
-			Sleep.sleep(50);
+			try
+			{
+				Thread.sleep(50);
+			} 
+			catch (InterruptedException e)
+			{
+				e.printStackTrace();
+			}
 		}
 		
 		// Le match démarre ! On chage l'état du thread pour refléter ce changement
@@ -116,10 +136,13 @@ public class ThreadTimer extends AbstractThread
 			// On retire périodiquement les obstacles périmés
 			table.getObstacleManager().removeOutdatedObstacles();
 			
-			//on rafraichit l'interface graphique, TODO : à enlever
-			window.getPanel().repaint();
-			
-			window.getPanel().drawArrayList(robot.cheminSuivi);
+			//on rafraichit l'interface graphique de la table
+			if(isGraphicalInterfaceEnabled)
+			{
+				window.getPanel().repaint();
+				
+				window.getPanel().drawArrayList(robot.cheminSuivi);
+			}
 			
 			try
 			{
@@ -145,7 +168,7 @@ public class ThreadTimer extends AbstractThread
 	 */
 	private void onMatchEnded()
 	{
-
+ 
 		log.debug("Fin du Match car fin des 90s !", this);
 
 		// Le match est fini, immobilisation du robot

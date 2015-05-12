@@ -140,6 +140,11 @@ class ThreadSensor extends AbstractThread
 	int robotLenght;
 	
 	/**
+	 * indique si l'interface graphique est activée ou non 
+	 */
+	private boolean isGraphicalInterfaceEnabled = true; 
+	
+	/**
 	 * Positions des robots à ajouter
 	 */
 	Vec2 positionEnnemi_1=new Vec2 (0,0);
@@ -165,8 +170,16 @@ class ThreadSensor extends AbstractThread
 		mRobot = robot;		
 		homologation=false;
 		
-		//TODO : interface graphique à enlever (necessaire pour les tests)
-		window = new Window();
+		// DEBUG: interface graphique
+		try
+		{
+			window = new Window();
+		}
+		catch (Exception e)
+		{
+			isGraphicalInterfaceEnabled = false;
+			log.debug("Affichage graphique non disponible", this);
+		}
 	}
 	
 	/* (non-Javadoc)
@@ -224,8 +237,9 @@ class ThreadSensor extends AbstractThread
 				
 				//mTable.getObstacleManager().removeObstacleInUs(mRobot.getPosition());
 
-				//TODO : interface graphique, à supprimer sur la raspi
-				window.drawInt(distanceFront[0], distanceFront[1], distanceBack[0], distanceBack[1]);
+				//DEBUG : interface graphique
+				if(isGraphicalInterfaceEnabled)
+					window.drawInt(distanceFront[0], distanceFront[1], distanceBack[0], distanceBack[1]);
 				
 				if(!homologation)
 				{
