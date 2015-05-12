@@ -2,6 +2,9 @@ package tests;
 
 import hook.Hook;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import scripts.ScriptManager;
@@ -52,13 +55,14 @@ public class JUnit_Homologation extends JUnit_Test
 	public void setUp() throws Exception
 	{
 		super.setUp();
+		config.set("homologation", "true");
+		configColor();
 
 		real_state = (GameState<Robot>) container.getService(ServiceNames.GAME_STATE);
 		scriptmanager = (ScriptManager) container.getService(ServiceNames.SCRIPT_MANAGER);
 		mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
         pathDingDing = (PathDingDing)container.getService(ServiceNames.PATHDINGDING);
         sensors = (SensorsCardWrapper)container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
-        
         
 		real_state.robot.updateConfig();
         sensors.updateConfig();
@@ -75,6 +79,34 @@ public class JUnit_Homologation extends JUnit_Test
 		catch (SerialConnexionException e) 
 		{
 			log.debug(e.logStack(), this);
+		}
+	}
+	
+	/**
+	 * Demande si la couleur est verte au jaune
+	 * @throws Exception
+	 */
+	void configColor()
+	{
+
+		String couleur = "";
+		while(!couleur.contains("jaune") && !couleur.contains("vert"))
+		{
+			log.debug("Rentrez \"vert\" ou \"jaune\" (override de config.ini) : ",this);
+			BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in)); 
+			 
+			try 
+			{
+				couleur = keyboard.readLine();
+			}
+			catch (IOException e) 
+			{
+				log.debug("Erreur IO: le clavier est il bien branché ?",this);
+			} 
+			if(couleur.contains("jaune"))
+				config.set("couleur", "jaune");
+			else if(couleur.contains("vert"))
+				config.set("couleur", "vert");
 		}
 	}
 	
@@ -160,6 +192,8 @@ public class JUnit_Homologation extends JUnit_Test
 				log.debug("On retente d'attraper le verre",this);
 				
 		}
+		log.critical("Glass Taken",this);
+
 		
 		//////////////////////////////////////////////////////
 		//	Tapis
@@ -183,12 +217,14 @@ public class JUnit_Homologation extends JUnit_Test
 			if(! real_state.table.getIsLeftCarpetDropped() && ! real_state.table.getIsRightCarpetDropped())
 				log.debug("On retente de depose les tapis",this);
 		}
+		log.critical("Carpet Dropped",this);
+
 		
 		//////////////////////////////////////////////////////
 		//	Retour Maison
 		//////////////////////////////////////////////////////
 		
-		while(! real_state.table.isAreaXFilled(1))
+		do
 		{
 			try 
 			{
@@ -206,6 +242,10 @@ public class JUnit_Homologation extends JUnit_Test
 			if(! real_state.table.isAreaXFilled(1))
 				log.debug("On retente de depose le verre",this);
 		}
+		while(! real_state.table.isAreaXFilled(1));
+			
+		log.critical("Aera Filled",this);
+
 		
 		
 		//////////////////////////////////////////////////////
