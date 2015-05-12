@@ -638,7 +638,7 @@ public class Strategie implements Service
 								tryAgain = false;
 								
 								// du coup, on passe à autre chose, on quite ce for
-								return;
+								break;
 							}
 							// si on est bloqué par les plots 3, 4 ou le gobelet 0 (ce qui n'arrive que quand on essaye de faire clap 12 sans avoir faire getPlot34) 
 							// et qu'on est pas en mode rush on execute immediatement le script pour les recuperer (ces scripts sont critiques)
@@ -725,7 +725,7 @@ public class Strategie implements Service
 								tryAgain = false;
 								
 								// le souci est autre qu'un obstacle classique, on quitte donc tout ceci après avoir enlevé le script posant probleme
-								return;
+								break;
 							}
 						}
 					}

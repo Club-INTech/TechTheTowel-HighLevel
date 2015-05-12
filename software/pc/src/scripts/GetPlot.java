@@ -155,7 +155,8 @@ public class GetPlot extends AbstractScript
 				
 				if (!stateToConsider.table.isGlassXTaken(0))
 				{
-					
+					try 
+					{
 						// On ne ramasse pas l verre si on en a deja 2
 						if (!stateToConsider.robot.isGlassStoredLeft)
 						{
@@ -173,8 +174,16 @@ public class GetPlot extends AbstractScript
 							stateToConsider.robot.moveLengthwise(170, hooksToConsider);
 							stateToConsider.robot.isGlassStoredRight = true;
 						}
-	
-					stateToConsider.table.removeGlassX(0);
+		
+						stateToConsider.table.removeGlassX(0);
+					}
+					catch (SerialConnexionException | UnableToMoveException e) 
+					{
+						finalize(stateToConsider);
+						stateToConsider.table.removeGlassX(0);
+						stateToConsider.robot.moveLengthwise(-150, hooksToConsider);
+						throw new ExecuteException(e);
+					}
 				}
 				else
 				{
@@ -193,6 +202,7 @@ public class GetPlot extends AbstractScript
 					{
 						finalize(stateToConsider);
 						stateToConsider.table.eatPlotX(4);
+						stateToConsider.table.eatPlotX(3);
 						stateToConsider.robot.moveLengthwise(-150, hooksToConsider);
 						return;
 					}
@@ -207,6 +217,7 @@ public class GetPlot extends AbstractScript
 					{
 						finalize(stateToConsider);
 						stateToConsider.table.eatPlotX(3);
+						stateToConsider.table.eatPlotX(4);
 						stateToConsider.robot.moveLengthwise(-150, hooksToConsider);
 						return;
 					}
