@@ -269,7 +269,7 @@ class ThreadSensor extends AbstractThread
 					addObstacleBack(distanceBack);
 				}
 				
-	    		log.debug("Valeur des capteurs : avant brute : "+realSensorValuesFront[0]+";"+realSensorValuesFront[1] + "arriere brute : " + realSensorValuesBack[0]+";" + realSensorValuesBack[1], this);
+	    		log.debug("Valeur des capteurs : avant brute : "+realSensorValuesFront[0]+";"+realSensorValuesFront[1] + "  arriere brute : " + realSensorValuesBack[0]+";" + realSensorValuesBack[1], this);
 			}			
 			if (distanceFront[1] > 0 && distanceFront[1] < 70 || distanceFront[0] > 0 && distanceFront[0] < 70)
 				log.debug("obstacle detecte a moins de 7 cm en avant !", this);

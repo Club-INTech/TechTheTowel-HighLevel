@@ -111,7 +111,7 @@ public class DropPile extends AbstractScript
 	
 				
 				//on sort notre membre
-				stateToConsider.robot.moveLengthwise(-200, hooksToConsider, false);
+				stateToConsider.robot.moveLengthwise(-300, hooksToConsider, false);
 	
 				
 				//mais on se referme
@@ -131,8 +131,8 @@ public class DropPile extends AbstractScript
 			//version zone de depart
 			else if (version==0)
 			{
-				stateToConsider.robot.turnWithoutDetection(Math.PI/4, hooksToConsider);
-				stateToConsider.robot.moveLengthwiseWithoutDetection(350);
+				stateToConsider.robot.turnWithoutDetection(Math.PI/4.5, hooksToConsider);
+				stateToConsider.robot.moveLengthwiseWithoutDetection(360);
 				
 				pileDropperGround(stateToConsider, hooksToConsider, 180);
 				

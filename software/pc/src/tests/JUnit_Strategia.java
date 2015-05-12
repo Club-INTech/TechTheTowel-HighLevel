@@ -19,7 +19,6 @@ import strategie.Strategie;
 import threads.ThreadTimer;
 import enums.ServiceNames;
 import enums.Speed;
-import exceptions.ConfigPropertyNotFoundException;
 import exceptions.serial.SerialConnexionException;
 
 public class JUnit_Strategia extends JUnit_Test 
