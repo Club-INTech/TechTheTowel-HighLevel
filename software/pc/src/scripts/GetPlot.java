@@ -71,7 +71,7 @@ public class GetPlot extends AbstractScript
 	
 			obstacleNotConsidered.add(ObstacleGroups.GOBLET_0);
 		}
-		else if (versionToExecute == 56)
+		else if (versionToExecute == 56 || versionToExecute == 65)
 		{
 			obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_5);
 		
@@ -214,7 +214,8 @@ public class GetPlot extends AbstractScript
 //			stateToConsider.robot.moveLengthwise(-30, hooksToConsider);
 			
 		}
-		//attention version hardcodée ne pas utilser hors du match scripté
+		// attention version hardcodée ne pas utilser hors du match scripté
+		// Version qui cherche  creer des piles de 1 plot
 		else if (versionToExecute == 56)
 		{
 			// digère les plots si besoin
@@ -246,6 +247,94 @@ public class GetPlot extends AbstractScript
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
 					stateToConsider.table.eatPlotX(6);
 				}
+			}
+			stateToConsider.robot.moveLengthwise(-300, hooksToConsider, false);
+			
+			// Dans tous les cas, on ferme la machoire 
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, false);
+		}
+		// Version qui cherche à completer sa pile
+		else if (versionToExecute == 65)
+		{
+			if(stateToConsider.robot.storedPlotCount >= 3)
+			{
+				// digère les plots si besoin
+				if (stateToConsider.robot.hasRobotNonDigestedPlot())
+				{
+					stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_HIGH, true);
+					stateToConsider.robot.digestPlot();
+				}
+				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+				
+				stateToConsider.robot.turn(Math.PI/2);
+				if(stateToConsider.robot.storedPlotCount < 4)
+				{
+					stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+					stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
+					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
+	
+					if (checkSensor(stateToConsider))
+						stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+					stateToConsider.table.eatPlotX(5);
+	
+				
+					stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
+					
+					if(!stateToConsider.robot.isGlassStoredLeft)
+					{
+						stateToConsider.robot.moveLengthwise(100); // On avance vers le suivant
+						stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
+						stateToConsider.table.eatPlotX(6);
+					}
+				}
+			}
+			// si la pile a besoin de 2 plots pour etre completée
+			else if(stateToConsider.robot.storedPlotCount < 3)
+			{
+				// digère les plots si besoin
+				if (stateToConsider.robot.hasRobotNonDigestedPlot())
+				{
+					stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_HIGH, true);
+					stateToConsider.robot.digestPlot();
+				}
+				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+				
+				stateToConsider.robot.turn(Math.PI/2);
+				try 
+				{
+					eatPlot(true, true, stateToConsider, false, false);
+				} 
+				catch (UnableToEatPlot e) 
+				{
+					finalize(stateToConsider);
+					stateToConsider.table.eatPlotX(5);
+					return;
+				}
+				
+				if (checkSensor(stateToConsider))
+					stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+				
+				stateToConsider.table.eatPlotX(5);
+				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
+				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
+
+				stateToConsider.robot.moveLengthwise(100); // On avance vers le suivant
+
+				try 
+				{
+					eatPlot(true, true, stateToConsider, false, false);
+				} 
+				catch (UnableToEatPlot e) 
+				{
+					finalize(stateToConsider);
+					stateToConsider.table.eatPlotX(6);
+					return;
+				}
+				
+				if (checkSensor(stateToConsider))
+					stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+				
+				stateToConsider.table.eatPlotX(6);
 			}
 			stateToConsider.robot.moveLengthwise(-300, hooksToConsider, false);
 			
@@ -317,7 +406,7 @@ public class GetPlot extends AbstractScript
 			return new Circle (630,645,200);
 		else if (id==34)
 			return new Circle (900,210,0);
-		else if (id==56)
+		else if (id==56 || id==65)
 			return new Circle (780,1620,0); // Position devant le plot 5, on longeant l'escalier
 		else if (id==567)
 			return new Circle (780,1620,0); // Position devant le plot 5, on longeant l'escalier
@@ -341,7 +430,7 @@ public class GetPlot extends AbstractScript
 			if (state.table.isPlotXEaten(4))
 				nbPlotOfVersion -= 1;
 		}
-		else if (id_version == 56)
+		else if (id_version == 56 || id_version == 65)
 		{
 			nbPlotOfVersion = 2;
 			if (state.table.isPlotXEaten(5))

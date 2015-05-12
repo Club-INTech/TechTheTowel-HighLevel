@@ -5,6 +5,7 @@ import hook.Hook;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.EnumSet;
 
 import pathDingDing.PathDingDing;
 import container.Container;
@@ -484,10 +485,8 @@ public class Strategie implements Service
 				{
 					try 
 					{
-						
 						try
 						{
-
 							log.debug("================================== Nouvelle Tentative de script ========================================", this);
 							log.debug("================================== Liste actuelle:", this);
 							
@@ -503,7 +502,7 @@ public class Strategie implements Service
 							// Loggue qu'on passe en mode Rush
 							if (realGameState.getTimeEllapsed() > timeBeforeRushMode && realGameState.getTimeEllapsed() < timeBeforeRushMode + 300)
 								log.warning("Le temps presse: passage en mode Rush !  (TimeEllapsed = " + realGameState.getTimeEllapsed(), this);
-								
+
 							// exécute le prochain script sur la liste
 							log.debug("Execution du script : " + scriptedMatchScripts.get(0).getClass().getCanonicalName() + " version " + scriptedMatchVersions.get(0), this);
 							scriptedMatchScripts.get(0).goToThenExec(scriptedMatchVersions.get(0), gameState, hookRobot);
@@ -612,10 +611,41 @@ public class Strategie implements Service
 									}
 								}
 								
-								//et on le remet en position 0
-								scriptedMatchScripts.add(0, scriptmanager.getScript(ScriptNames.GRAB_PLOT));
-								scriptedMatchVersions.add(0, 34);
-								scriptedMatchCustomExceptionHandlers.add(null);
+								//si il existe un chemin jusqu'au script de recuperation des plots on continue
+								try 
+								{
+									pathDingDing.computePath(robotReal.getPosition(), scriptmanager.getScript(ScriptNames.GRAB_PLOT).entryPosition(34, robotReal.robotRay, robotReal.getPositionFast()).position, EnumSet.allOf(ObstacleGroups.class));
+									//et on le remet en position 0
+									scriptedMatchScripts.add(0, scriptmanager.getScript(ScriptNames.GRAB_PLOT));
+									scriptedMatchVersions.add(0, 34);
+									scriptedMatchCustomExceptionHandlers.add(null);
+								}
+								catch (PathNotFoundException | InObstacleException e1) 
+								{
+									//sinon on change totalement le match scripté
+									scriptedMatchScripts.clear();
+									scriptedMatchVersions.clear();
+									scriptedMatchCustomExceptionHandlers.clear();
+									
+									scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
+									scriptedMatchVersions.add(0, 567);
+									scriptedMatchCustomExceptionHandlers.add(null);
+									
+									scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.FREE_STACK));
+									scriptedMatchVersions.add(0, 0);
+									scriptedMatchCustomExceptionHandlers.add(null);
+									
+									scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.CLOSE_CLAP));
+									scriptedMatchVersions.add(0, 12);
+									scriptedMatchCustomExceptionHandlers.add(null);
+									
+									scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.CLOSE_CLAP));
+									scriptedMatchVersions.add(0, 2);
+									scriptedMatchCustomExceptionHandlers.add(null);
+									
+									tryAgain = false;
+								}
+								
 								
 //								try 
 //								{
@@ -815,6 +845,33 @@ public class Strategie implements Service
 		log.debug("points :"+points, this);
 		//points = (pointsScript+malus) * (tempsRestant - duree)/duree
 		return points;
+		
+	}
+	
+	private void rushMode()
+	{
+		try 
+		{
+			// On s'eloigne des ennemis potentiels, en attrapant les plots 5 et 6
+			scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
+			scriptedMatchVersions.add(65);
+	//		scriptedMatchCustomExceptionHandlers.add(Strategie.class.getDeclaredMethod(new String("scriptedMatchHandePile0Plot"),(Class[])null));	// si quelqu'un se demande ce que c'est que ce délire, c'est un "pointeur sur fonction" en mode hack de java
+			scriptedMatchCustomExceptionHandlers.add(null);
+			
+			// On vide la pile principale et le gobelet
+			scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.FREE_STACK));
+			scriptedMatchVersions.add(0);
+			scriptedMatchCustomExceptionHandlers.add(null);
+			
+			// On vide le plot dans notre bras
+			scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.FREE_STACK));
+			scriptedMatchVersions.add(2);
+			scriptedMatchCustomExceptionHandlers.add(null);
+		} 
+		catch (SecurityException e2) 
+		{
+			e2.printStackTrace();
+		}
 		
 	}
 }
