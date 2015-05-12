@@ -19,6 +19,7 @@ import strategie.Strategie;
 import threads.ThreadTimer;
 import enums.ServiceNames;
 import enums.Speed;
+import exceptions.ConfigPropertyNotFoundException;
 import exceptions.serial.SerialConnexionException;
 
 public class JUnit_Strategia extends JUnit_Test 
@@ -64,7 +65,7 @@ public class JUnit_Strategia extends JUnit_Test
 		}		
 		
 
-		configColor();
+//		configColor();
 
 		real_state.robot.updateConfig();
 		real_state.robot.setLocomotionSpeed(Speed.SLOW);
@@ -139,6 +140,18 @@ public class JUnit_Strategia extends JUnit_Test
 		boolean jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
 		while(jumperWasAbsent || !mSensorsCardWrapper.isJumperAbsent())
 		{
+			
+
+			try
+			{
+				log.warning("Attention, la couleur est définie par config.ini ! Couleur courrante :" + config.getProperty("couleur"), this);
+			} catch (ConfigPropertyNotFoundException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
 			jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
 			 real_state.robot.sleep(100);
 		}
