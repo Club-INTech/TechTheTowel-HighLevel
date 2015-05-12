@@ -42,7 +42,7 @@ public class JUnit_Strategia extends JUnit_Test
 		super.setUp();
 		
 		configColor();
-		
+		loveClap();
 		
 		mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
 		real_state = (GameState<Robot>) container.getService(ServiceNames.GAME_STATE);
@@ -100,7 +100,35 @@ public class JUnit_Strategia extends JUnit_Test
 		}
 		return true;
 	}
+	
+	/**
+	 * Demande si on ferme le clap ennemi
+	 * @throws Exception
+	 */
+	void loveClap()
+	{
 
+		String booleanLoveClap = "";
+		while(!booleanLoveClap.contains("true") && !booleanLoveClap.contains("false"))
+		{
+			log.debug("Clap de l'amitie : Rentrez \"true\" ou \"false\" (override de config.ini) : ",this);
+			BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in)); 
+			 
+			try 
+			{
+				booleanLoveClap = keyboard.readLine();
+			}
+			catch (IOException e) 
+			{
+				log.debug("Erreur IO: le clavier est il bien branché ?",this);
+			} 
+			if(booleanLoveClap.contains("true"))
+				config.set("clap_de_l_amitie", "true");
+			else if(booleanLoveClap.contains("false"))
+				config.set("clap_de_l_amitie", "false");
+		}
+	}
+	
 
 	/**
 	 * Demande si la couleur est verte au jaune

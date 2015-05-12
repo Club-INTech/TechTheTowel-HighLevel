@@ -137,7 +137,7 @@ public class ThreadTimer extends AbstractThread
 			table.getObstacleManager().removeOutdatedObstacles();
 			
 			//on rafraichit l'interface graphique de la table
-			if(isGraphicalInterfaceEnabled)
+			if(isGraphicalInterfaceEnabled && window != null)
 			{
 				window.getPanel().repaint();
 				

@@ -238,7 +238,7 @@ class ThreadSensor extends AbstractThread
 				//mTable.getObstacleManager().removeObstacleInUs(mRobot.getPosition());
 
 				//DEBUG : interface graphique
-				if(isGraphicalInterfaceEnabled)
+				if(isGraphicalInterfaceEnabled &&  window != null)
 					window.drawInt(distanceFront[0], distanceFront[1], distanceBack[0], distanceBack[1]);
 				
 				if(!homologation)
@@ -284,7 +284,7 @@ class ThreadSensor extends AbstractThread
 				// Ca evite de tenter de deposer... kedal.
 				if(mRobot.isGlassStoredLeft && ! (boolean) mRobot.getSensorValue(SensorNames.LEFT_ZONE_SENSOR))
 				{
-					log.warning("Verre gauche disparu", this);
+					log.debug("Verre gauche disparu", this);
 					mRobot.isGlassStoredLeft=false;
 				}
 				if(mRobot.isGlassStoredRight && ! (boolean) mRobot.getSensorValue(SensorNames.RIGHT_ZONE_SENSOR))
@@ -301,7 +301,7 @@ class ThreadSensor extends AbstractThread
 				}
 				if(!mRobot.isGlassStoredRight &&  (boolean) mRobot.getSensorValue(SensorNames.RIGHT_ZONE_SENSOR))
 				{
-					log.debug("Verre droit apparu", this);
+					log.warning("Verre droit apparu", this);
 					mRobot.isGlassStoredRight=true;
 				}
 				

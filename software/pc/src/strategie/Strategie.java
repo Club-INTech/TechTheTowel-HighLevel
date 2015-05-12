@@ -92,8 +92,10 @@ public class Strategie implements Service
 	/**
 	 * le chrono de la strategie
 	 */
+	@SuppressWarnings("unused")
 	private RobotChrono robotChrono;
 
+	@SuppressWarnings("unused")
 	private int matchDuration;
 	
 	/**
@@ -171,6 +173,7 @@ public class Strategie implements Service
 		} 
 		catch(ExecuteException e)
 		{
+			log.debug( e.toString()+" catché dans IA de raison "+e.getExceptionThrownByExecute().toString(), this);
 			if(e.compareInitialException(new UnableToMoveException(new Vec2(0,0), UnableToMoveReason.PHYSICALLY_BLOCKED)))
 			{
 				// Si on s'est raté mais qu'on est proches, on ajoute le script de depose tapis simplement 
@@ -202,6 +205,7 @@ public class Strategie implements Service
 		}
 		catch (SerialFinallyException e)
 		{
+			log.debug( e.toString()+" catché dans IA", this);
 			while (true)
 			{
 				try 
@@ -211,7 +215,7 @@ public class Strategie implements Service
 				} 
 				catch (UnableToMoveException | SerialFinallyException e1) 
 				{
-					;
+					log.critical("impossible de lancer dropCarpet Finalize", this);
 				}
 			}
 		}
@@ -522,6 +526,7 @@ public class Strategie implements Service
 						}
 						catch (Exception e) 
 						{
+							log.debug(e.toString()+" catché après tentative simple de script", this);
 							// en cas d'erreur d'exécution, demande la gestion de l'erreur par le gestionnaire custom s'il y en a un, sinon applique la politique par défaut.
 							if(scriptedMatchCustomExceptionHandlers.get(0) != null) 
 							{
@@ -531,7 +536,7 @@ public class Strategie implements Service
 								} 
 								catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) 
 								{
-									e1.printStackTrace();
+									log.debug(e.toString()+" catché", this); 
 								}
 							}
 							else
@@ -542,30 +547,32 @@ public class Strategie implements Service
 					catch (UnableToMoveException e) 
 					{
 						log.warning("Catch de UnableToMoveException dans Strategie", this);
-						
-						if (e.reason.compareTo(UnableToMoveReason.PHYSICALLY_BLOCKED)==0)
+//						
+//						if (e.reason.compareTo(UnableToMoveReason.PHYSICALLY_BLOCKED)==0)
+//						{
+//							// attention: ne pas bouger tryAgain dans ce catch //TODO :why ?
+////							tryAgain = false;
+//							
+//						}
+//						else {
+//							;
+//						}
+
+						try
 						{
-							// attention: ne pas bouger tryAgain dans ce catch //TODO :why ?
-							tryAgain = false;
-							
-							try
-							{
-								realGameState.robot.moveLengthwise(-200);
-							}
-							catch (UnableToMoveException e1)
-							{
-								try 
-								{
-									realGameState.robot.moveLengthwise(200);
-								} 
-								catch (UnableToMoveException e2)
-								{
-									log.critical("Le robot est complètent bloqué et n'arrive pas a se dégader", this);
-								}
-							}
+							realGameState.robot.moveLengthwise(-200);
 						}
-						else {
-							;
+						catch (UnableToMoveException e1)
+						{
+							try 
+							{
+								log.debug(e1.toString()+" catché après tentative de degagement", this);
+								realGameState.robot.moveLengthwise(200);
+							} 
+							catch (UnableToMoveException e2)
+							{
+								log.critical("Le robot est complètent bloqué et n'arrive pas a se dégader", this);
+							}
 						}
 					} 
 					catch (PathNotFoundException e)
@@ -585,6 +592,7 @@ public class Strategie implements Service
 					} 
 					catch (ExecuteException e)
 					{
+						log.debug(e.toString()+" catché après tentative simple de script, raison "+e.getExceptionThrownByExecute().toString(), this);
 						if(e.compareInitialException(new UnableToMoveException(new Vec2(0,0), UnableToMoveReason.OBSTACLE_DETECTED)))
 						{
 							UnableToMoveException e1 = (UnableToMoveException) e.getExceptionThrownByExecute();
@@ -678,7 +686,7 @@ public class Strategie implements Service
 								}
 								catch (PathNotFoundException | InObstacleException e1) 
 								{
-									log.critical("On change totalement le match", this);
+									log.warning("On change totalement le match", this);
 									//sinon on change totalement le match scripté
 									scriptedMatchScripts.clear();
 									scriptedMatchVersions.clear();
@@ -692,17 +700,25 @@ public class Strategie implements Service
 									scriptedMatchVersions.add(0, 0);
 									scriptedMatchCustomExceptionHandlers.add(null);
 									
-									scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.CLOSE_CLAP));
-									scriptedMatchVersions.add(0, 12);
-									scriptedMatchCustomExceptionHandlers.add(null);
-									
-									if(!realGameState.table.isClapXClosed(2))
+									if(!realGameState.table.isClapXClosed(1) && !realGameState.table.isClapXClosed(2))
+									{
+										scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.CLOSE_CLAP));
+										scriptedMatchVersions.add(0, 12);
+										scriptedMatchCustomExceptionHandlers.add(null);
+									}
+									else if(!realGameState.table.isClapXClosed(1))
+									{
+										scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.CLOSE_CLAP));
+										scriptedMatchVersions.add(0, 1);
+										scriptedMatchCustomExceptionHandlers.add(null);
+									}
+									else if(!realGameState.table.isClapXClosed(2))
 									{
 										scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.CLOSE_CLAP));
 										scriptedMatchVersions.add(0, 2);
 										scriptedMatchCustomExceptionHandlers.add(null);
 									}
-									
+																		
 									tryAgain = false;
 								}
 								
