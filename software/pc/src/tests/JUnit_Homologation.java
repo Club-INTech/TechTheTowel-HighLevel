@@ -17,6 +17,7 @@ import org.junit.runner.JUnitCore;
 import pathDingDing.PathDingDing;
 import enums.ScriptNames;
 import enums.ServiceNames;
+import exceptions.ExecuteException;
 import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -152,6 +153,8 @@ public class JUnit_Homologation extends JUnit_Test
 			catch (PathNotFoundException e){log.debug(e.logStack(), this);}
 			catch (SerialFinallyException e){log.debug(e.logStack(), this);}
 			catch (InObstacleException e){log.debug(e.logStack(), this);}
+			catch (ExecuteException e){log.debug(e.logStack(), this);}
+
 			
 			if(! real_state.table.isGlassXTaken(1))
 				log.debug("On retente d'attraper le verre",this);
@@ -175,7 +178,8 @@ public class JUnit_Homologation extends JUnit_Test
 			catch (PathNotFoundException e){log.debug(e.logStack(), this);}
 			catch (SerialFinallyException e){log.debug(e.logStack(), this);}
 			catch (InObstacleException e){log.debug(e.logStack(), this);}
-			
+			catch (ExecuteException e){log.debug(e.logStack(), this);}
+
 			if(! real_state.table.getIsLeftCarpetDropped() && ! real_state.table.getIsRightCarpetDropped())
 				log.debug("On retente de depose les tapis",this);
 		}
@@ -197,7 +201,8 @@ public class JUnit_Homologation extends JUnit_Test
 			catch (PathNotFoundException e){log.debug(e.logStack(), this);}
 			catch (SerialFinallyException e){log.debug(e.logStack(), this);}
 			catch (InObstacleException e){log.debug(e.logStack(), this);}
-			
+			catch (ExecuteException e){log.debug(e.logStack(), this);}
+
 			if(! real_state.table.isAreaXFilled(1))
 				log.debug("On retente de depose le verre",this);
 		}

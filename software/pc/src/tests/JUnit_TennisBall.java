@@ -15,6 +15,7 @@ import org.junit.Test;
 import enums.ActuatorOrder;
 import enums.ScriptNames;
 import enums.ServiceNames;
+import exceptions.ExecuteException;
 import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -121,17 +122,8 @@ public class JUnit_TennisBall extends JUnit_Test
 			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
 			exitScript.execute(0, real_state, emptyHook );
 		} 
-		catch (SerialConnexionException  e) 
-		{
-			System.out.println("CRITICAL : Carte mal branchée. Match termine");
-			log.critical( e.logStack(), this);
-			return;
-		}
-		catch (UnableToMoveException e) 
-		{
-			System.out.println("CRITICAL : Chemin bloque, enlevez votre main");
-			log.critical( e.logStack(), this);
-		}
+		catch (ExecuteException e){log.debug(e.logStack(), this);}
+
 		
 		//debut du match
 		System.out.println("Debut du match");
@@ -158,7 +150,8 @@ public class JUnit_TennisBall extends JUnit_Test
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-						
+		catch (ExecuteException e){log.debug(e.logStack(), this);}
+			
 		System.out.println("match fini !");
 
 		//Le match s'arrête
@@ -173,10 +166,7 @@ public class JUnit_TennisBall extends JUnit_Test
 			//real_state.robot.moveLengthwise(-450,emptyHook);
 			scriptmanager.getScript(ScriptNames.TAKE_TENNIS_BALL).execute(1, real_state, emptyHook );
 		} 
-		catch (UnableToMoveException | SerialConnexionException e) 
-		{
-			e.printStackTrace();
-		}
+		catch (ExecuteException e){log.debug(e.logStack(), this);}
 
 	}
 

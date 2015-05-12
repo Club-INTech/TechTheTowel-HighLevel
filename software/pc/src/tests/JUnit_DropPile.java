@@ -16,6 +16,7 @@ import table.Table;
 import enums.ObstacleGroups;
 import enums.ScriptNames;
 import enums.ServiceNames;
+import exceptions.ExecuteException;
 import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -65,14 +66,9 @@ public class JUnit_DropPile extends JUnit_Test {
 			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
 			exitScript.execute(0, real_state, emptyHook );
 		} 
-		catch (SerialConnexionException  | SerialFinallyException e) 
+		catch ( SerialFinallyException | ExecuteException e) 
 		{
-			e.printStackTrace();
-			return;
-		}
-		catch (UnableToMoveException e) 
-		{
-			log.critical( e.logStack(), this);
+			log.critical( ((ExecuteException) e).logStack(), this);
 			return;
 		}
 		
@@ -99,6 +95,8 @@ public class JUnit_DropPile extends JUnit_Test {
 		} 
 		catch (SerialFinallyException e) 
 		{
+			log.critical( e.logStack(), this);
+		} catch (ExecuteException e) {
 			log.critical( e.logStack(), this);
 		}
 	}

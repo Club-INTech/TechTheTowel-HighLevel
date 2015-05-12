@@ -6,6 +6,7 @@ import java.util.EnumSet;
 
 import enums.ActuatorOrder;
 import enums.ObstacleGroups;
+import exceptions.ExecuteException;
 import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -44,7 +45,7 @@ public class GetGlass extends AbstractScript
 	}
 	
 	@Override
-	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, InObstacleException
+	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, InObstacleException, ExecuteException
 	{
 		EnumSet<ObstacleGroups> obstacleNotConsidered = EnumSet.noneOf(ObstacleGroups.class);
 		
@@ -77,7 +78,7 @@ public class GetGlass extends AbstractScript
 }
 	
 	@Override
-	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, SerialFinallyException
+	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException
 	{
 		try 
 		{
@@ -126,7 +127,8 @@ public class GetGlass extends AbstractScript
 		catch (UnableToMoveException | SerialConnexionException e) 
 		{
 			finalize(stateToConsider);
-			throw e;
+			throw new ExecuteException(e);
+
 		}
 	}
 	

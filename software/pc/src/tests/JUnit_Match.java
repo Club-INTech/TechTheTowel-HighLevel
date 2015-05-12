@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import enums.ScriptNames;
 import enums.ServiceNames;
+import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
@@ -71,18 +72,14 @@ public class JUnit_Match extends JUnit_Test
 			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
 			exitScript.execute(1, real_state, emptyHook );
 		} 
-		catch (SerialConnexionException | SerialFinallyException e) 
+		catch ( SerialFinallyException e) 
 		{
 			log.critical("Carte mal branchée. Match termine",this);
 			e.printStackTrace();
 			return;
 		}
-		catch (UnableToMoveException e) 
-		{
-			log.critical("Chemin bloque, enlevez votre main",this);
-			log.critical( e.logStack(), this);
-		}
-		
+		catch (ExecuteException e){log.debug(e.logStack(), this);}
+
 		
 		try 
 		{

@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import enums.ScriptNames;
 import enums.ServiceNames;
+import exceptions.ExecuteException;
 import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -76,7 +77,7 @@ public class JUnit_GetPlot extends JUnit_Test
 			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
 			exitScript.execute(0, real_state, emptyHook );
 		} 
-		catch (SerialConnexionException | SerialFinallyException | UnableToMoveException e) 
+		catch (ExecuteException | SerialFinallyException  e) 
 		{
 			System.out.println("CRITICAL : Carte mal branchée. Match termine");
 			e.printStackTrace();
@@ -88,7 +89,7 @@ public class JUnit_GetPlot extends JUnit_Test
 		{
 			scriptmanager.getScript(ScriptNames.GRAB_PLOT).goToThenExec(65, real_state, emptyHook );
 		}
-		catch (UnableToMoveException | SerialConnexionException e) 
+		catch (ExecuteException | UnableToMoveException | SerialConnexionException e) 
 		{
 			// un robot ennemi devant ?
 			e.printStackTrace();
