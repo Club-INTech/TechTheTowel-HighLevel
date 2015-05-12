@@ -1,6 +1,7 @@
 ﻿#include <stdlib.h>
 #include <string.h>
 
+#define HOMOLOGATION		//Ligne à commenter si envie hors homologation
 #define IGNORE_TIMER0_OVF_vect	//pour préciser ce qu'on veut faire
 #define IGNORE_PCINT0_vect	//de même
 #define IGNORE_PCINT2_vect	//de même
@@ -26,7 +27,7 @@
 // B5 : LED de debug
 */
 
-
+void stopIfObstacle();
 /*
 timer1 : 16 bits
 timer0&2: 8 bits
@@ -288,25 +289,25 @@ void stopIfObstacle()
 
 	// Tant que l'on voit un obstacle sur l'un ou l'autre des capteurs, on arrete le land raider
 	// (si aucun obstacle n'est détecté, ce while n'est pas exécuté)
-
-	while(us1.value() < stopThreshold && us2.value() < stopThreshold)			//Attention, le && est là pour le débug avec capteurs. On pourrait même s'en servir à la coupe pour s'arreter moins souvent. EN tout cas, pour l'homologation, remettre le ||								//	while(capteurInfraRight->value() < stopThreshold || capteurInfraLeft->value() < stopThreshold)
+	int val1 ;
+	int val2 ;
+#ifdef HOMOLOGATION
+	while((val1 = us1.value()) < stopThreshold || (val2 = us2.value()) < stopThreshold)		
+#else
+	while((val1 = us1.value()) < stopThreshold && (val2 = us2.value()) < stopThreshold)		
+#endif
 	{
 		// arrete le land raider, pour ne pas percuter l'obstacle que l'on a détecté
 		caterpillarsStop();
 		uart0::print("Obstacle détecté, on arrete le land raider");
+		uart0::printf("%d \r\n%d\r\n",val1,val2);
 		B5::high();
 
 		
-		// Log de debug
-		//printIR();
-
 		// attends un peu avant de demander de nouveau la valeur des capteurs, pour ne pas saturer les capteurs sous nos demandes.
 		_delay_ms(100);
-
-		// met a jour la valeur des capteurs dans le code
-		//capteurInfraRight->refresh();
-		//capteurInfraLeft->refresh();
 	}
+	uart0::print("on avance");
 	B5::low();
 } 
 
@@ -411,7 +412,7 @@ void waitForMatch()
 		// rends l'état précédent du jumper égal a l'état actuel, puis met a jour l'état actuel		
 		wasJumperPresent = isJumperPresent;
 		isJumperPresent = (D7::read() == 1);
-
+			
 		// attends un peu avant de revérifier si le jumper est encore présent, pour ne pas saturer le controleur avec plein de demandes
 		_delay_ms(100);
 		B5::toggle();
@@ -538,7 +539,7 @@ int main()
 	B5::output();	// led de debug
 
 
-	// debugMode(); plus la peine de debug !
+ //	debugMode();			// plus la peine de debug !
  
 	// Code de match !
 	uart0::print("Land Raider, pret pour la coupe !");
