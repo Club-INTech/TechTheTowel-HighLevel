@@ -174,7 +174,8 @@ public class DropPile extends AbstractScript
 				stateToConsider.robot.turn(-Math.PI/2);
 				stateToConsider.robot.moveLengthwise(180, hooksToConsider, true);	
 				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_MIDDLE, false);
-				pileDropperGround(stateToConsider, hooksToConsider, 300);
+				pileDropperGround(stateToConsider, hooksToConsider, 350);
+				// on evite de taper le plot deposé
 				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
 			}
 			else
