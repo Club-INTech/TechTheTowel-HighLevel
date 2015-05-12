@@ -577,6 +577,7 @@ public class Strategie implements Service
 					{
 						log.warning("Catch de InObstacleException dans Strategie", this);
 						
+						// un obstacle gene le pathfinding : on parcourt la liste de ceux qui nous genent
 						for (ObstacleGroups obstacle : e.getObstacleGroup())
 						{
 							log.warning("attention, obstacle : "+obstacle.getClass().toString(),this);
@@ -593,6 +594,9 @@ public class Strategie implements Service
 								scriptedMatchVersions.remove(0);
 								scriptedMatchCustomExceptionHandlers.remove(0);
 								tryAgain = false;
+								
+								// du coup, on passe à autre chose, on quite ce for
+								return;
 							}
 							// si on est bloqué par les plots 3, 4 ou le gobelet 0 (ce qui n'arrive que quand on essaye de faire clap 12 sans avoir faire getPlot34) 
 							// et qu'on est pas en mode rush on execute immediatement le script pour les recuperer (ces scripts sont critiques)
@@ -614,6 +618,10 @@ public class Strategie implements Service
 								scriptedMatchScripts.add(0, scriptmanager.getScript(ScriptNames.GRAB_PLOT));
 								scriptedMatchVersions.add(0, 34);
 								scriptedMatchCustomExceptionHandlers.add(null);
+								
+								// etant donné qu'on a resolu un probleme, il est temps de quitter le for(obstacle)
+								return;
+								
 								
 //								//si il existe un chemin jusqu'au script de recuperation des plots on continue
 //								try 
@@ -667,6 +675,9 @@ public class Strategie implements Service
 								scriptedMatchVersions.remove(0);
 								scriptedMatchCustomExceptionHandlers.remove(0);
 								tryAgain = false;
+								
+								// le souci est autre qu'un obstacle classique, on quitte donc tout ceci après avoir enlevé le script posant probleme
+								return;
 							}
 						}
 					}
