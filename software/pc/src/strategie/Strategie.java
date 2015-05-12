@@ -14,6 +14,7 @@ import enums.ActuatorOrder;
 import enums.ScriptNames;
 import enums.ObstacleGroups;
 import enums.Speed;
+import enums.UnableToMoveReason;
 import exceptions.ConfigPropertyNotFoundException;
 import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
@@ -536,7 +537,7 @@ public class Strategie implements Service
 					{
 						log.warning("Catch de UnableToMoveException dans Strategie", this);
 						
-//						if (e.reason.compareTo(UnableToMoveReason.PHYSICALLY_BLOCKED)==0)
+						if (e.reason.compareTo(UnableToMoveReason.PHYSICALLY_BLOCKED)==0)
 						{
 							// attention: ne pas bouger tryAgain dans ce catch //TODO :why ?
 							tryAgain = false;
@@ -556,6 +557,9 @@ public class Strategie implements Service
 									log.critical("Le robot est complètent bloqué et n'arrive pas a se dégader", this);
 								}
 							}
+						}
+						else {
+							;
 						}
 					} 
 					catch (PathNotFoundException e)

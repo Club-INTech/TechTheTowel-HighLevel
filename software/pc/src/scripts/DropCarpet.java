@@ -204,9 +204,14 @@ public class DropCarpet extends AbstractScript
 				stateToConsider.robot.turn(3.05);
 				stateToConsider.robot.moveLengthwise(850, hooksToConsider, false, true, Speed.SLOW);
 				stateToConsider.table.removeGlassX(1);
-				
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);// on ferme dans tous les cas
+
 				//on presente ses arrieres a l'escalier
 				stateToConsider.robot.turn(-0.5*Math.PI, hooksToConsider, false);
+				// si l'orientation n'est pas parfaite, on retente
+				if(Math.abs(stateToConsider.robot.getOrientation() - Math.PI/2) > 0.1)
+					stateToConsider.robot.turn(-0.5*Math.PI, hooksToConsider, false);
+
 				// on avance vers ces demoiselles (les marches) (attention impact possible)
 				log.debug("Position avant le mur : "+stateToConsider.robot.getPosition().toString(), this);
 				stateToConsider.robot.moveLengthwiseTowardWall( -(carperDropYCoord - stateToConsider.robot.getPositionFast().y), hooksToConsider);
