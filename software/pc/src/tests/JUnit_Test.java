@@ -122,10 +122,6 @@ public abstract class JUnit_Test
 			robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
 			robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
 			
-			robot.sleep(300);
-			
-			
-			
 			robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
 			robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
 			
@@ -160,8 +156,6 @@ public abstract class JUnit_Test
 			robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, true);
 			robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, true);
 			
-			robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
-			robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
 			
 			robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
 			robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);
@@ -175,12 +169,9 @@ public abstract class JUnit_Test
 			
 			robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, true);
 			robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, true);
-			
 
 			robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
 			robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
-			
-			robot.sleep(300);
 						
 			robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, true);
 			robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, true);

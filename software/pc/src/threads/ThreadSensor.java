@@ -262,7 +262,6 @@ class ThreadSensor extends AbstractThread
 					if(mRobot.getIsRobotMovingBackward())
 						addObstacleBack(distanceBack);
 					
-					log.debug("IsRobotMovingForward : "+mRobot.getIsRobotMovingForward()+" IsRobotMovingBackward : "+mRobot.getIsRobotMovingBackward(), this);
 				}
 				else 
 				{
@@ -270,8 +269,7 @@ class ThreadSensor extends AbstractThread
 					addObstacleBack(distanceBack);
 				}
 				
-	    		log.debug("Valeur des capteurs avant brute : "+realSensorValuesFront[0]+";"+realSensorValuesFront[1], this);
-	    		log.debug("Valeur des capteurs arriere brute : "+realSensorValuesBack[0]+";"+realSensorValuesBack[1], this);
+	    		log.debug("Valeur des capteurs : avant brute : "+realSensorValuesFront[0]+";"+realSensorValuesFront[1] + "arriere brute : " + realSensorValuesBack[0]+";" + realSensorValuesBack[1], this);
 			}			
 			if (distanceFront[1] > 0 && distanceFront[1] < 70 || distanceFront[0] > 0 && distanceFront[0] < 70)
 				log.debug("obstacle detecte a moins de 7 cm en avant !", this);
@@ -286,24 +284,24 @@ class ThreadSensor extends AbstractThread
 				// Ca evite de tenter de deposer... kedal.
 				if(mRobot.isGlassStoredLeft && ! (boolean) mRobot.getSensorValue(SensorNames.LEFT_ZONE_SENSOR))
 				{
-					log.critical("Verre gauche tombé", this);
+					log.warning("Verre gauche disparu", this);
 					mRobot.isGlassStoredLeft=false;
 				}
 				if(mRobot.isGlassStoredRight && ! (boolean) mRobot.getSensorValue(SensorNames.RIGHT_ZONE_SENSOR))
 				{
-					log.critical("Verre droit tombé", this);
+					log.warning("Verre droit disparu", this);
 					mRobot.isGlassStoredRight=false;
 				}
 				
 				// On verifie aussi le clic  si on a rien et que ca clique, on a quelque chose
 				if(!mRobot.isGlassStoredLeft &&  (boolean) mRobot.getSensorValue(SensorNames.LEFT_ZONE_SENSOR))
 				{
-					log.debug("Verre gauche mis", this);
+					log.debug("Verre gauche apparu", this);
 					mRobot.isGlassStoredLeft=true;
 				}
 				if(!mRobot.isGlassStoredRight &&  (boolean) mRobot.getSensorValue(SensorNames.RIGHT_ZONE_SENSOR))
 				{
-					log.debug("Verre droit mis", this);
+					log.debug("Verre droit apparu", this);
 					mRobot.isGlassStoredRight=true;
 				}
 				

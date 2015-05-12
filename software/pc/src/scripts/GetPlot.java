@@ -218,6 +218,8 @@ public class GetPlot extends AbstractScript
 		// Version qui cherche  creer des piles de 1 plot
 		else if (versionToExecute == 56)
 		{
+			stateToConsider.robot.moveLengthwise(40); // On avance vers le suivant
+			
 			// digère les plots si besoin
 			if (stateToConsider.robot.hasRobotNonDigestedPlot())
 			{
@@ -243,7 +245,7 @@ public class GetPlot extends AbstractScript
 				
 				if(!stateToConsider.robot.isGlassStoredLeft)
 				{
-					stateToConsider.robot.moveLengthwise(100); // On avance vers le suivant
+					stateToConsider.robot.moveLengthwise(60); // On avance vers le suivant
 					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
 					stateToConsider.table.eatPlotX(6);
 				}
