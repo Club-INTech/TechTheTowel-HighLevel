@@ -41,6 +41,10 @@ public class JUnit_Strategia extends JUnit_Test
 	public void setUp() throws Exception
 	{
 		super.setUp();
+		
+		configColor();
+		
+		
 		mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
 		real_state = (GameState<Robot>) container.getService(ServiceNames.GAME_STATE);
 		strategos = (Strategie) container.getService(ServiceNames.STRATEGIE);
@@ -65,7 +69,7 @@ public class JUnit_Strategia extends JUnit_Test
 		}		
 		
 
-//		configColor();
+//		
 
 		real_state.robot.updateConfig();
 		real_state.robot.setLocomotionSpeed(Speed.SLOW);
@@ -82,7 +86,7 @@ public class JUnit_Strategia extends JUnit_Test
 		String speed = "lol";
 		while(!speed.contains("lent") && !speed.contains("rapide") && !speed.isEmpty())
 		{
-			log.debug("Rentrez \"rapide\" ou \"lent\" : ",this);
+			log.debug("Choissez lz vitesse de l'intitialisation. Rentrez \"rapide\" ou \"lent\" : ",this);
 			BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in)); 
 			 
 			try 
@@ -140,17 +144,6 @@ public class JUnit_Strategia extends JUnit_Test
 		boolean jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
 		while(jumperWasAbsent || !mSensorsCardWrapper.isJumperAbsent())
 		{
-			
-
-			try
-			{
-				log.warning("Attention, la couleur est définie par config.ini ! Couleur courrante :" + config.getProperty("couleur"), this);
-			} catch (ConfigPropertyNotFoundException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
 			
 			jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
 			 real_state.robot.sleep(100);
