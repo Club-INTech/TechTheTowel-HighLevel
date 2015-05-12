@@ -209,39 +209,40 @@ public class DropCarpet extends AbstractScript
 
 				//on presente ses arrieres a l'escalier
 				stateToConsider.robot.turn(-0.5*Math.PI, hooksToConsider, false);
-				// si l'orientation n'est pas parfaite, on retente
-				if(Math.abs(stateToConsider.robot.getOrientation() - Math.PI/2) > 0.1)
-					stateToConsider.robot.turn(-0.5*Math.PI, hooksToConsider, false);
 
 				// on avance vers ces demoiselles (les marches) (attention impact possible)
 				log.debug("Position avant le mur : "+stateToConsider.robot.getPosition().toString(), this);
 				stateToConsider.robot.moveLengthwiseTowardWall( -(carperDropYCoord - stateToConsider.robot.getPositionFast().y), hooksToConsider);
-				log.debug("Position après tapis : "+stateToConsider.robot.getPosition().toString(), this);
+				
 				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
 				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
 
 
+				// si l'orientation n'est pas parfaite, on retente
+				if(Math.abs(stateToConsider.robot.getOrientation() - Math.PI/2) > 0.1)
+					stateToConsider.robot.turn(-0.5*Math.PI, hooksToConsider, false);
 				
 				//verification de la position : on n'effectue l'action que si on est assez proche (ie pas d'obstacle)
-				if(Math.abs((stateToConsider.robot.getPosition().y-1340))<50) // position- position du centre parfait<marge d'erreur
+				//if(Math.abs((stateToConsider.robot.getPosition().y-1340))<50) // position- position du centre parfait<marge d'erreur
 				
 					//on depose le tapis gauche (si celui-ci n'est pas deja depose)
-					if (!stateToConsider.table.getIsLeftCarpetDropped())
-					{
-						stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_DROP, true);
-						stateToConsider.table.setIsLeftCarpetDropped(true);
-						stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
-					}
+				if (!stateToConsider.table.getIsLeftCarpetDropped())
+				{
+					stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_DROP, true);
+					stateToConsider.table.setIsLeftCarpetDropped(true);
+					stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
+				}
+				
+				//on depose le tapis droit (si celui-ci n'est pas deja depose)
+				if (!stateToConsider.table.getIsRightCarpetDropped())
+				{
+					stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_DROP, true);
+					stateToConsider.table.setIsRightCarpetDropped(true);
+					stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
+				}
 					
-					//on depose le tapis droit (si celui-ci n'est pas deja depose)
-					if (!stateToConsider.table.getIsRightCarpetDropped())
-					{
-						stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_DROP, true);
-						stateToConsider.table.setIsRightCarpetDropped(true);
-						stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
-					}
-					
-					
+				log.debug("Position après tapis : "+stateToConsider.robot.getPosition().toString(), this);
+
 				// on peut reprendre la vitesse que nous avions avant l'éxécution de ce script puisque les tapis sont largués (si on va trop vite avec les tapis ils masquent les capteurs)
 				stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
 					
