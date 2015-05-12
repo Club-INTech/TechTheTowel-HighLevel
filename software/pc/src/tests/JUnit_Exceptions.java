@@ -44,13 +44,16 @@ public class JUnit_Exceptions extends JUnit_Test
 		}
 		catch (UnableToMoveException e)
 		{*/
+		SerialConnexionException e1 = new SerialConnexionException();
+
 			try 
 			{
 				throw new ExecuteException(new SerialConnexionException());
 			} 
 			catch (ExecuteException e2) 
 			{
-				if(e2.getExceptionThrownByExecute().getClass().equals(SerialConnexionException.class))
+				if (e2.compareInitialException(e1))
+				//if(e2.getExceptionThrownByExecute().getClass().equals(e1.getClass()))
 					log.debug("Wééé !", this);
 				else {
 					log.debug("Pouet !", this);

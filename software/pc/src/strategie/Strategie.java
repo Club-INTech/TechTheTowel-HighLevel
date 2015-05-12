@@ -7,6 +7,8 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.EnumSet;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
 import pathDingDing.PathDingDing;
 import container.Container;
 import container.Service;
@@ -26,6 +28,7 @@ import robot.*;
 import scripts.AbstractScript;
 import scripts.GetPlot;
 import scripts.ScriptManager;
+import smartMath.Vec2;
 import table.Table;
 import utils.Log;
 import utils.Config;
@@ -168,7 +171,7 @@ public class Strategie implements Service
 		} 
 		catch(ExecuteException e)
 		{
-			if(e.getExceptionThrownByExecute().equals(UnableToMoveException.class))
+			if(e.compareInitialException(new UnableToMoveException(new Vec2(0,0), UnableToMoveReason.PHYSICALLY_BLOCKED)))
 			{
 				// Si on s'est raté mais qu'on est proches, on ajoute le script de depose tapis simplement 
 				if (robotReal.getPosition().distance(Table.entryPosition)<250)
@@ -192,7 +195,7 @@ public class Strategie implements Service
 				}
 					
 			}
-			else if(e.getExceptionThrownByExecute().equals(SerialConnexionException.class))
+			else if(e.compareInitialException(new SerialConnexionException()))
 			{		
 				initInMatch();
 			}
@@ -582,7 +585,35 @@ public class Strategie implements Service
 					} 
 					catch (ExecuteException e)
 					{
-						;//FIXME
+						if(e.compareInitialException(new UnableToMoveException(new Vec2(0,0), UnableToMoveReason.OBSTACLE_DETECTED)))
+						{
+							UnableToMoveException e1 = (UnableToMoveException) e.getExceptionThrownByExecute();
+							if(e1.reason.compareTo(UnableToMoveReason.PHYSICALLY_BLOCKED)==0)
+							{
+								disengage();
+							}
+							else if (e1.reason.compareTo(UnableToMoveReason.OBSTACLE_DETECTED)==0)
+							{
+								//on ajoute le script dans le tableau un peu plus loin
+								scriptedMatchScripts.add(Math.max(0,scriptedMatchScripts.size()-3), scriptedMatchScripts.get(0));
+								scriptedMatchVersions.add(Math.max(0,scriptedMatchVersions.size()-3), scriptedMatchVersions.get(0));
+								scriptedMatchCustomExceptionHandlers.add(Math.max(0,scriptedMatchScripts.size()-3), null);
+								
+								//et on abandonne le script pour le moment
+								scriptedMatchScripts.remove(0);
+								scriptedMatchVersions.remove(0);
+								scriptedMatchCustomExceptionHandlers.remove(0);
+								tryAgain = false;
+							}
+						}
+						else if(e.compareInitialException(new SerialConnexionException()))
+						{
+							initInMatch();
+						}
+						else
+						{
+							log.warning("type d'exception non prevue ExecuteException : "+e.getExceptionThrownByExecute().toString(), this);
+						}
 					}
 					catch (InObstacleException e) 
 					{
@@ -729,6 +760,11 @@ public class Strategie implements Service
 				}
 			}
 		}
+		
+	}
+
+private void disengage() {
+		// TODO Auto-generated method stub
 		
 	}
 
