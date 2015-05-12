@@ -161,7 +161,7 @@ public class GetPlot extends AbstractScript
 						if (!stateToConsider.robot.isGlassStoredLeft)
 						{
 							stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);					
-							stateToConsider.robot.moveLengthwise(130, hooksToConsider);
+							stateToConsider.robot.moveLengthwise(120, hooksToConsider);
 							stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
 							stateToConsider.robot.moveLengthwise(170, hooksToConsider);
 							stateToConsider.robot.isGlassStoredLeft = true;
@@ -169,7 +169,7 @@ public class GetPlot extends AbstractScript
 						else if(!stateToConsider.robot.isGlassStoredRight)
 						{
 							stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);					
-							stateToConsider.robot.moveLengthwise(130, hooksToConsider);
+							stateToConsider.robot.moveLengthwise(120, hooksToConsider);
 							stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
 							stateToConsider.robot.moveLengthwise(170, hooksToConsider);
 							stateToConsider.robot.isGlassStoredRight = true;
@@ -187,7 +187,7 @@ public class GetPlot extends AbstractScript
 				}
 				else
 				{
-					stateToConsider.robot.moveLengthwise(320, hooksToConsider);
+					stateToConsider.robot.moveLengthwise(310, hooksToConsider);
 				}
 				
 				// on ne mange que si on est assez vide

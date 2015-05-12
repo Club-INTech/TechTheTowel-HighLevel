@@ -111,7 +111,7 @@ public class JUnit_Strategia extends JUnit_Test
 		String booleanLoveClap = "";
 		while(!booleanLoveClap.contains("true") && !booleanLoveClap.contains("false"))
 		{
-			log.debug("Clap de l'amitie : Rentrez \"true\" ou \"false\" (override de config.ini) : ",this);
+			log.debug("Clap de l'amitie : Rentrez \"oui\" ou \"non\" pour fermer le clap 2 (override de config.ini) : ",this);
 			BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in)); 
 			 
 			try 
@@ -122,9 +122,9 @@ public class JUnit_Strategia extends JUnit_Test
 			{
 				log.debug("Erreur IO: le clavier est il bien branché ?",this);
 			} 
-			if(booleanLoveClap.contains("true"))
+			if(booleanLoveClap.contains("oui"))
 				config.set("clap_de_l_amitie", "true");
-			else if(booleanLoveClap.contains("false"))
+			else if(booleanLoveClap.contains("non"))
 				config.set("clap_de_l_amitie", "false");
 		}
 	}

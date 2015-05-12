@@ -152,7 +152,7 @@ public class DropPile extends AbstractScript
 						stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
 						stateToConsider.robot.isGlassStoredLeft = false;
 						stateToConsider.table.areaXFilled(0);
-						stateToConsider.robot.moveLengthwiseWithoutDetection(-100);
+						stateToConsider.robot.moveLengthwiseWithoutDetection(-150);
 					}	
 					else if (stateToConsider.robot.isGlassStoredRight)
 					{
@@ -162,12 +162,12 @@ public class DropPile extends AbstractScript
 						stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
 						stateToConsider.robot.isGlassStoredRight = false;
 						stateToConsider.table.areaXFilled(0);
-						stateToConsider.robot.moveLengthwiseWithoutDetection(-50);
+						stateToConsider.robot.moveLengthwiseWithoutDetection(-100);
 					}
 				}
 				else
 				{
-					stateToConsider.robot.moveLengthwise(-250, hooksToConsider);
+					stateToConsider.robot.moveLengthwise(-300, hooksToConsider);
 				}
 			}
 			else if (version == 2)
@@ -177,6 +177,7 @@ public class DropPile extends AbstractScript
 				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_MIDDLE, false);
 				pileDropperGround(stateToConsider, hooksToConsider, 350);
 				// on evite de taper le plot deposé
+				stateToConsider.robot.turn(-Math.PI/4);
 				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
 			}
 			else
@@ -184,7 +185,6 @@ public class DropPile extends AbstractScript
 				log.debug("version inconnue DropPile :"+version, this);
 				finalize(stateToConsider);
 			}
-			
 		}
 		catch (UnableToMoveException | SerialConnexionException e) 
 		{

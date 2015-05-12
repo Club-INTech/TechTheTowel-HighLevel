@@ -230,6 +230,7 @@ public class DropCarpet extends AbstractScript
 				{
 					stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_DROP, true);
 					stateToConsider.table.setIsLeftCarpetDropped(true);
+					stateToConsider.robot.sleep(200);
 					stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
 				}
 				
@@ -238,6 +239,7 @@ public class DropCarpet extends AbstractScript
 				{
 					stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_DROP, true);
 					stateToConsider.table.setIsRightCarpetDropped(true);
+					stateToConsider.robot.sleep(200);
 					stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
 				}
 					

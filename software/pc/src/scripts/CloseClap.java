@@ -377,7 +377,7 @@ public class CloseClap extends AbstractScript
 		else if(version == 3)
 			return new Circle(-900,500);//point d'entrée : devant le clap 3
 		else if(version == 12)
-			return new Circle(1280,240); //point d'entrée : devant le clap 1
+			return new Circle(1200,220); //point d'entrée : devant le clap 1
 		else if(version == 123)
 			return new Circle(1290,230); //point d'entrée : devant le clap 1
 		else if(version == -1)

@@ -520,9 +520,12 @@ public class Strategie implements Service
 
 							tryAgain = false;
 
-							scriptedMatchScripts.remove(0);
-							scriptedMatchVersions.remove(0);
-							scriptedMatchCustomExceptionHandlers.remove(0);
+							if(scriptedMatchScripts.size()!=1)
+							{
+								scriptedMatchScripts.remove(0);
+								scriptedMatchVersions.remove(0);
+								scriptedMatchCustomExceptionHandlers.remove(0);
+							}
 						}
 						catch (Exception e) 
 						{
@@ -735,9 +738,12 @@ public class Strategie implements Service
 							//sinon  on arrete d'essayer le script
 							else
 							{
-								scriptedMatchScripts.remove(0);
-								scriptedMatchVersions.remove(0);
-								scriptedMatchCustomExceptionHandlers.remove(0);
+								if(scriptedMatchScripts.size()!=1)
+								{
+									scriptedMatchScripts.remove(0);
+									scriptedMatchVersions.remove(0);
+									scriptedMatchCustomExceptionHandlers.remove(0);
+								}
 								tryAgain = false;
 								
 								// le souci est autre qu'un obstacle classique, on quitte donc tout ceci après avoir enlevé le script posant probleme

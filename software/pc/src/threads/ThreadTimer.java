@@ -49,7 +49,7 @@ public class ThreadTimer extends AbstractThread
 	/**
 	 * indique si l'interface graphique est activée ou non 
 	 */
-	private boolean isGraphicalInterfaceEnabled = true; 
+	private boolean isGraphicalInterfaceEnabled = false; 
 	
 	
 	/**
