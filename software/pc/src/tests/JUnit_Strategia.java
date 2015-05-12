@@ -108,23 +108,23 @@ public class JUnit_Strategia extends JUnit_Test
 	void loveClap()
 	{
 
-		String booleanLoveClap = "";
-		while(!booleanLoveClap.contains("true") && !booleanLoveClap.contains("false"))
+		String stringLoveClap = "";
+		while(!stringLoveClap.contains("oui") && !stringLoveClap.contains("non"))
 		{
 			log.debug("Clap de l'amitie : Rentrez \"oui\" ou \"non\" pour fermer le clap 2 (override de config.ini) : ",this);
 			BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in)); 
 			 
 			try 
 			{
-				booleanLoveClap = keyboard.readLine();
+				stringLoveClap = keyboard.readLine();
 			}
 			catch (IOException e) 
 			{
 				log.debug("Erreur IO: le clavier est il bien branché ?",this);
 			} 
-			if(booleanLoveClap.contains("oui"))
+			if(stringLoveClap.contains("oui"))
 				config.set("clap_de_l_amitie", "true");
-			else if(booleanLoveClap.contains("non"))
+			else if(stringLoveClap.contains("non"))
 				config.set("clap_de_l_amitie", "false");
 		}
 	}
