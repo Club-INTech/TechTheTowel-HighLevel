@@ -66,9 +66,6 @@ public class JUnit_Strategia extends JUnit_Test
 		{
 			log.debug( e.logStack(), this);
 		}		
-		
-
-//		
 
 		real_state.robot.updateConfig();
 		real_state.robot.setLocomotionSpeed(Speed.SLOW);

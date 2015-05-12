@@ -577,6 +577,7 @@ public class Strategie implements Service
 					{
 						log.warning("Catch de InObstacleException dans Strategie", this);
 						
+						// un obstacle gene le pathfinding : on parcourt la liste de ceux qui nous genent
 						for (ObstacleGroups obstacle : e.getObstacleGroup())
 						{
 							log.warning("attention, obstacle : "+obstacle.getClass().toString(),this);
@@ -593,10 +594,13 @@ public class Strategie implements Service
 								scriptedMatchVersions.remove(0);
 								scriptedMatchCustomExceptionHandlers.remove(0);
 								tryAgain = false;
+								
+								// du coup, on passe à autre chose, on quite ce for
+								return;
 							}
 							// si on est bloqué par les plots 3, 4 ou le gobelet 0 (ce qui n'arrive que quand on essaye de faire clap 12 sans avoir faire getPlot34) 
 							// et qu'on est pas en mode rush on execute immediatement le script pour les recuperer (ces scripts sont critiques)
-							else if ( (obstacle.compareTo(ObstacleGroups.GREEN_PLOT_3)==0 || obstacle.compareTo(ObstacleGroups.GREEN_PLOT_3)==0
+							else if ( (obstacle.compareTo(ObstacleGroups.GREEN_PLOT_3)==0 || obstacle.compareTo(ObstacleGroups.GREEN_PLOT_4)==0
 									   || obstacle.compareTo(ObstacleGroups.GOBLET_0)==0 ) && realGameState.getTimeEllapsed() < timeBeforeRushMode)
 							{
 								//on enleve le script de get plot version 34 le plus proche (le seul)
@@ -610,55 +614,65 @@ public class Strategie implements Service
 										break;
 									}
 								}
-								//et on le remet en position 0
-								scriptedMatchScripts.add(0, scriptmanager.getScript(ScriptNames.GRAB_PLOT));
-								scriptedMatchVersions.add(0, 34);
-								scriptedMatchCustomExceptionHandlers.add(null);
 								
-//								//si il existe un chemin jusqu'au script de recuperation des plots on continue
-//								try 
-//								{
-//									pathDingDing.computePath(robotReal.getPosition(), scriptmanager.getScript(ScriptNames.GRAB_PLOT).entryPosition(34, robotReal.robotRay, robotReal.getPositionFast()).position, EnumSet.allOf(ObstacleGroups.class));
-//									//et on le remet en position 0
-//									scriptedMatchScripts.add(0, scriptmanager.getScript(ScriptNames.GRAB_PLOT));
-//									scriptedMatchVersions.add(0, 34);
-//									scriptedMatchCustomExceptionHandlers.add(null);
-//								}
-//								catch (PathNotFoundException | InObstacleException e1) 
-//								{
-//									//sinon on change totalement le match scripté
-//									scriptedMatchScripts.clear();
-//									scriptedMatchVersions.clear();
-//									scriptedMatchCustomExceptionHandlers.clear();
-//									
-//									scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
-//									scriptedMatchVersions.add(0, 567);
-//									scriptedMatchCustomExceptionHandlers.add(null);
-//									
-//									scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.FREE_STACK));
-//									scriptedMatchVersions.add(0, 0);
-//									scriptedMatchCustomExceptionHandlers.add(null);
-//									
-//									scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.CLOSE_CLAP));
-//									scriptedMatchVersions.add(0, 12);
-//									scriptedMatchCustomExceptionHandlers.add(null);
-//									
-//									scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.CLOSE_CLAP));
-//									scriptedMatchVersions.add(0, 2);
-//									scriptedMatchCustomExceptionHandlers.add(null);
-//									
-//									tryAgain = false;
-//								}
+//								
+//								//et on le remet en position 0
+//								scriptedMatchScripts.add(0, scriptmanager.getScript(ScriptNames.GRAB_PLOT));
+//								scriptedMatchVersions.add(0, 34);
+//								scriptedMatchCustomExceptionHandlers.add(null);
+//								
+//								// etant donné qu'on a resolu un probleme, il est temps de quitter le for(obstacle)
+//								return;
 								
 								
-//								try 
-//								{
-//									scriptedMatchCustomExceptionHandlers.add(Strategie.class.getDeclaredMethod(new String("scriptedMatchHandePile0Plot"),(Class[])null));
-//								} 
-//								catch (NoSuchMethodException | SecurityException e1)
-//								{
-//									e1.printStackTrace();
-//								}
+								//si il existe un chemin jusqu'au script de recuperation des plots on continue
+								try 
+								{
+									pathDingDing.computePath(robotReal.getPosition(), scriptmanager.getScript(ScriptNames.GRAB_PLOT).entryPosition(34, robotReal.robotRay, robotReal.getPositionFast()).position, EnumSet.allOf(ObstacleGroups.class));
+									//et on le remet en position 0
+									scriptedMatchScripts.add(0, scriptmanager.getScript(ScriptNames.GRAB_PLOT));
+									scriptedMatchVersions.add(0, 34);
+									scriptedMatchCustomExceptionHandlers.add(null);
+								}
+								catch (PathNotFoundException | InObstacleException e1) 
+								{
+									log.critical("On change totalement le match", this);
+									//sinon on change totalement le match scripté
+									scriptedMatchScripts.clear();
+									scriptedMatchVersions.clear();
+									scriptedMatchCustomExceptionHandlers.clear();
+									
+									scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
+									scriptedMatchVersions.add(0, 567);
+									scriptedMatchCustomExceptionHandlers.add(null);
+									
+									scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.FREE_STACK));
+									scriptedMatchVersions.add(0, 0);
+									scriptedMatchCustomExceptionHandlers.add(null);
+									
+									scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.CLOSE_CLAP));
+									scriptedMatchVersions.add(0, 12);
+									scriptedMatchCustomExceptionHandlers.add(null);
+									
+									if(!realGameState.table.isClapXClosed(2))
+									{
+										scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.CLOSE_CLAP));
+										scriptedMatchVersions.add(0, 2);
+										scriptedMatchCustomExceptionHandlers.add(null);
+									}
+									
+									tryAgain = false;
+								}
+								
+								
+								try 
+								{
+									scriptedMatchCustomExceptionHandlers.add(Strategie.class.getDeclaredMethod(new String("scriptedMatchHandePile0Plot"),(Class[])null));
+								} 
+								catch (NoSuchMethodException | SecurityException e1)
+								{
+									e1.printStackTrace();
+								}
 							}
 							//sinon  on arrete d'essayer le script
 							else
@@ -667,6 +681,9 @@ public class Strategie implements Service
 								scriptedMatchVersions.remove(0);
 								scriptedMatchCustomExceptionHandlers.remove(0);
 								tryAgain = false;
+								
+								// le souci est autre qu'un obstacle classique, on quitte donc tout ceci après avoir enlevé le script posant probleme
+								return;
 							}
 						}
 					}
