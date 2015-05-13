@@ -15,6 +15,32 @@ public class ObstacleProximity extends ObstacleCircular
 	private long mOutDatedTime;
 	
 	private int lifetime;
+
+	/**
+	 * Nombre de fois détécté :
+	 * Positif : on l'a vu plusieurs fois
+	 * Negatif : si on ne l'a pas detecté alors qu'on aurais dû
+	 */
+	public int numberOfTimeDetected;
+
+	/*
+	 * limite entre obstacle confirmé ou infirmé; x
+	 * 
+	 * 	    unconf   conf
+	 * 	 0 |------|x|-----|y
+	 * 
+	 */
+	private int thresholdConfirmedOrUnconfirmed;
+	
+	/*
+	 *  Maximum d'incrementation de numberOfTimeDetected; y
+	 * 
+	 * 	    unconf   conf
+	 * 	 0 |------|x|-----|y
+	 * 
+	 */
+	private int maxNumberOfTimeDetected;
+
 	
 	/**
 	 * Crée un nouvel obstacle détecté a proximité du robot.
@@ -33,7 +59,12 @@ public class ObstacleProximity extends ObstacleCircular
 		
 		this.lifetime = lifetime;
 		mOutDatedTime = System.currentTimeMillis() + lifetime;// la date de peremption = temps actuel + temps de peremption de l'obstacle
-		//TODO mettre dans le fichier de config le "tempsde peremption" de chaque obstacle 
+		//TODO mettre dans le fichier de config le "temps de peremption" de chaque obstacle 
+		numberOfTimeDetected=1;
+		
+		
+		thresholdConfirmedOrUnconfirmed=1;
+		maxNumberOfTimeDetected=2;
 	}
 	
 	/* (non-Javadoc)
@@ -47,5 +78,25 @@ public class ObstacleProximity extends ObstacleCircular
 	public long getOutDatedTime()
 	{
 		return mOutDatedTime;
+	}
+	
+	public int getThresholdConfirmedOrUnconfirmed()
+	{
+		return thresholdConfirmedOrUnconfirmed;
+	}
+	
+	public int getMaxNumberOfTimeDetected()
+	{
+		return maxNumberOfTimeDetected;
+	}
+	
+	/**
+	 * nouveau du temps de vie pour l'obstacle
+	 * @param time le nouveau temps de vie
+	 */
+	public void setLifeTime(int time) 
+	{
+		lifetime = time;
+		mOutDatedTime = System.currentTimeMillis() + lifetime;
 	}
 }

@@ -13,6 +13,7 @@ import org.junit.Test;
 import enums.ActuatorOrder;
 import enums.ScriptNames;
 import enums.ServiceNames;
+import exceptions.ExecuteException;
 import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -43,7 +44,7 @@ public class JUnit_Claps extends JUnit_Test {
 		real_state.robot.updateConfig();
 		try 
 		{
-			matchSetUp(real_state.robot);
+			matchSetUp(real_state.robot, false);
 		} 
 		catch (SerialConnexionException e) 
 		{
@@ -51,7 +52,7 @@ public class JUnit_Claps extends JUnit_Test {
 		}		
 	}
 	
-	public void matchSetUp(Robot robot) throws SerialConnexionException
+	public void matchSetUp(Robot robot, boolean isInitialisationFast) throws SerialConnexionException
 	{
 		robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
 
@@ -94,6 +95,9 @@ public class JUnit_Claps extends JUnit_Test {
 		} catch (UnableToMoveException | SerialConnexionException | SerialFinallyException e) {
 			log.debug("BUG !",this);
 			e.printStackTrace();
+		} catch (ExecuteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 	}
 }

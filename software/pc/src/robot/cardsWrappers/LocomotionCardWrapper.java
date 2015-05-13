@@ -55,6 +55,18 @@ public class LocomotionCardWrapper implements Service
 		this.log = log;
 		this.locomotionCardSerial = serial;		
 		this.config = config;
+		
+		// comme l'asser n'est pas activé par défaut sur la STM, on l'active ici
+        try
+        {
+    		enableTranslationnalFeedbackLoop();
+			enableRotationnalFeedbackLoop();
+		} 
+        catch (SerialConnexionException e)
+        {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void updateConfig()
@@ -65,7 +77,7 @@ public class LocomotionCardWrapper implements Service
 		} 
 		catch (ConfigPropertyNotFoundException e)
 		{
-			log.debug("Code à revoir  : impossible de ttrouver la propriete "+e.getPropertyNotFound(), this);
+			log.debug("Code à revoir  : impossible de trouver la propriete "+e.getPropertyNotFound(), this);
 		}
 	}	
 	
@@ -119,20 +131,15 @@ public class LocomotionCardWrapper implements Service
 	 */
 	public void immobilise() throws SerialConnexionException
 	{
-		log.critical("Immobilisation du robot", this);
-		
-        disableTranslationnalFeedbackLoop();
-        disableRotationnalFeedbackLoop();
+		log.warning("Immobilisation du robot", this);
         
+        
+        locomotionCardSerial.communiquer("stop", 0);// On s'asservit sur la position actuelle
         while(isRobotMoving())
         {
         	Sleep.sleep(delayBetweenSend); // On attend d'etre arreté
         }
         
-        locomotionCardSerial.communiquer("stop", 0);// On s'asservit sur la position actuelle
-        
-        enableTranslationnalFeedbackLoop();
-        enableRotationnalFeedbackLoop();
 	}
 	
 	/**
@@ -215,7 +222,7 @@ public class LocomotionCardWrapper implements Service
 	 */
 	public void setTranslationnalSpeed(int pwmMax) throws SerialConnexionException
 	{
-		// envois a la carte d'asservissement le nouveau maximum du pwm
+		// envoie a la carte d'asservissement le nouveau maximum du pwm
 		String chaines[] = {"ctv", Integer.toString(pwmMax)};
 		locomotionCardSerial.communiquer(chaines, 0);			
 	}
@@ -227,7 +234,7 @@ public class LocomotionCardWrapper implements Service
 	 */
 	public void setRotationnalSpeed(int pwmMax) throws SerialConnexionException
 	{
-		// envois a la carte d'asservissement le nouveau maximum du pwm
+		// envoie a la carte d'asservissement le nouveau maximum du pwm
 		String chaines[] = {"crv", Integer.toString(pwmMax)};
 		locomotionCardSerial.communiquer(chaines, 0);
 	}
@@ -246,7 +253,7 @@ public class LocomotionCardWrapper implements Service
 	}
 
 	/**
-	 * envois a la carte d'asservissement de nouvelles valeurs pour les correcteurs et un nouveau maximum pour les pwm lors d'une rotation
+	 * envoie a la carte d'asservissement de nouvelles valeurs pour les correcteurs et un nouveau maximum pour les pwm lors d'une rotation
 	 * @param kp nouvelle valeur du correcteur proportionnel
 	 * @param kd nouvelle valeur du correcteur dérivé 
 	 * @param pwm_max a nouvelle valeur maximum que peut prenvent prendre les pwm des moteurs lors d'une rotation
@@ -283,6 +290,17 @@ public class LocomotionCardWrapper implements Service
 	public void closeLocomotion()
 	{
 		locomotionCardSerial.close();
+	}
+	
+
+	/**
+	 * Eteint la STM
+	 * Attention, la STM ne répondra plus jusqu'a ce qu'elle soit manuellement ralummée
+	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
+	 */
+	public void shutdownSTM() throws SerialConnexionException
+	{
+		locomotionCardSerial.communiquer("poweroff", 0);
 	}
 	
 	/**

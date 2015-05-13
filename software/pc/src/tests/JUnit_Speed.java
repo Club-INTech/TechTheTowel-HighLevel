@@ -35,7 +35,7 @@ public class JUnit_Speed extends JUnit_Test {
 		robot.setPosition(Table.entryPosition);
 		robot.setOrientation(Math.PI);
 		
-		matchSetUp(robot);
+		matchSetUp(robot, false);
 	}
 
 	@After

@@ -169,7 +169,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 				for (String m : messages)
 				{
 					// affiche dans la console ce qu'on envois sur la série -> On cache ca, pour eviter le xy0? en permanence, mais ca peux etre interessant de le garder.
-					//FIXME ne jamais push un code avec cette ligne decommentee
+					// ne jamais push un code avec cette ligne decommentee
 //					log.debug("Envoi serie : '" + m  + "'", this);
 					m += "\r";
 					

@@ -69,9 +69,8 @@ public class JUnit_Sensors extends JUnit_Test
 		mLocomotion.updateConfig();
 
 		//mLocomotion.setPosition(new Vec2 (1500-320-77,1000));
-		mLocomotion.setPosition(new Vec2 (300,1000));
-		//mLocomotion.setOrientation(Math.PI);
-		mLocomotion.setOrientation(-Math.PI*0.5);
+		mLocomotion.setPosition(new Vec2 (300,1000));// milieu de table
+		mLocomotion.setOrientation(Math.PI);
 		
 		container.startInstanciedThreads();
 
@@ -154,29 +153,28 @@ public class JUnit_Sensors extends JUnit_Test
 			;
 	}
 	
-	//@Test
+	@Test
 	public void testDetectionTournante()
 	{
 		log.debug("Test d'évitement", this);
 		
-		try {
+	/*	try 
+		{
 			state.robot.moveLengthwise(250);
-		} catch (UnableToMoveException e) {
+		} 
+		catch (UnableToMoveException e) 
+		{
 			log.critical( e.logStack(), this);
-		}
+		}*/
 		
 		while(true)
 		{
 			try 
 			{
-				state.robot.turn(Math.PI);
-				Sleep.sleep(500);
 				state.robot.turn(- Math.PI/2);
-				Sleep.sleep(500);  
-				state.robot.turn(Math.PI);
-				Sleep.sleep(500);
-				state.robot.turn(  Math.PI/2);
-				Sleep.sleep(500);
+				state.robot.sleep(500);
+				state.robot.turn( Math.PI);
+				state.robot.sleep(500);
 			} 
 			catch (UnableToMoveException e1)
 			{
@@ -283,14 +281,59 @@ public class JUnit_Sensors extends JUnit_Test
 		}
 	}
 	
-	
-	@Test
+	//@Test
 	public void testSensorEnnemyWithoutMovement()
 	{
 		log.debug("Test des capteurs fixe", this);
 		while(true)
 		{
-			;
+			;	
+		}
+	}
+	
+	//@Test
+	public void testDistaanceToClosestEnnemy()
+	{
+		while(true)
+		{
+			state.table.getObstacleManager().distanceToClosestEnemy(state.robot.getPosition(), new Vec2(500,500));
+		}
+	} 
+	
+	
+	//@Test
+	public void testSensorEnnemyWithMovement()
+	{
+		log.debug("Test des capteurs fixe", this);
+		while(true)
+		{
+			try 
+			{
+				state.robot.moveLengthwise(50);
+				state.robot.sleep(500);
+			} 
+			catch (UnableToMoveException e) 
+			{
+				try {
+					state.robot.moveLengthwise(-50);
+				} catch (UnableToMoveException e1) {
+					e1.printStackTrace();
+				}				
+			}
+			try 
+			{
+				state.robot.moveLengthwise(-50);
+				state.robot.sleep(500);
+			} 
+			catch (UnableToMoveException e) 
+			{
+				try {
+					state.robot.moveLengthwise(50);
+				} catch (UnableToMoveException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
 		}
 	}
 	
@@ -299,7 +342,7 @@ public class JUnit_Sensors extends JUnit_Test
    // @Test
 	public void testCapteurDeplacement() throws SerialConnexionException, InObstacleException
 	{
-    	matchSetUp(state.robot);
+    	matchSetUp(state.robot, false);
     	try 
     	{
 			state.robot.moveLengthwise(300);

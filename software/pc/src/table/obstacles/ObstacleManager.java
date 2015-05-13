@@ -70,6 +70,8 @@ public class ObstacleManager
         mLines = new ArrayList<Segment>();
 		mRectangles = new ArrayList<ObstacleRectangular>();
 		
+		mUntestedMobileObstacles= new ArrayList<ObstacleProximity>();
+		
 		updateConfig();
        
         //par defaut
@@ -246,23 +248,57 @@ public class ObstacleManager
     		&& !(position.y > 1420 && position.x < 533 && position.x > -533) // les marches
     		&& !(position.y > 1800 ) ) // les distributeurs de pop corn
     	{
+    		boolean isThereAnObstacleIntersecting=false;
     		for (int i = 0; i<mUntestedMobileObstacles.size(); i++)
     		{
     			ObstacleProximity obstacle = mUntestedMobileObstacles.get(i);
-    			//FIXME relire l'algo
+    			
     			//si l'obstacle est deja dans la liste des obstacles non-testés on l'ajoute dans la liste des obstacles
-	    		if(obstacle.position.distance(position)<obstacle.radius+radius)
+	    		if(obstacle.position.distance(position)<(obstacle.radius+radius)/2)
 	    		{
-	        		mMobileObstacles.add(new ObstacleProximity(position, radius, ObstacleGroups.ENNEMY_ROBOTS, lifetime));
-	    			mUntestedMobileObstacles.remove(i);
-	    			mUntestedMobileObstacles.add(new ObstacleProximity(position, radius, ObstacleGroups.ENNEMY_ROBOTS, timeToTestObstacle ));
+    				mUntestedMobileObstacles.get(i).numberOfTimeDetected++;
+    				position.copy(mUntestedMobileObstacles.get(i).position);
+    				mUntestedMobileObstacles.get(i).radius=radius;
+    				mUntestedMobileObstacles.get(i).setLifeTime(lifetime);
+    				
+    				// si on l'a deja vu plin de fois
+    				if(mUntestedMobileObstacles.get(i).numberOfTimeDetected >= mUntestedMobileObstacles.get(i).getMaxNumberOfTimeDetected())
+    					mUntestedMobileObstacles.get(i).numberOfTimeDetected = mUntestedMobileObstacles.get(i).getMaxNumberOfTimeDetected();
+
+	    			// si on valide sa vision 
+	    			if(mUntestedMobileObstacles.get(i).numberOfTimeDetected >= mUntestedMobileObstacles.get(i).getThresholdConfirmedOrUnconfirmed())
+	    			{
+	    				isThereAnObstacleIntersecting=true;
+	    				mUntestedMobileObstacles.get(i).setLifeTime(lifetime);
+	    				
+	    				mMobileObstacles.add(mUntestedMobileObstacles.get(i));
+	    				mUntestedMobileObstacles.remove(i);
+	    			}
 	    		}
-	    		else
-	    			mUntestedMobileObstacles.add(new ObstacleProximity(position, radius, ObstacleGroups.ENNEMY_ROBOTS, timeToTestObstacle));
     		}
+    		for(int i = 0; i<mMobileObstacles.size(); i++)
+    		{
+    			ObstacleProximity obstacle = mMobileObstacles.get(i);
+    			if(obstacle.position.distance(position)<obstacle.radius+radius)
+    			{
+    				isThereAnObstacleIntersecting=true;
+    				
+    				mMobileObstacles.get(i).numberOfTimeDetected++;
+    				position.copy(mMobileObstacles.get(i).position);
+    				mMobileObstacles.get(i).radius=radius;
+    				mMobileObstacles.get(i).setLifeTime(lifetime);
+    				
+    				// si on l'a deja vu plin de fois
+    				if(mMobileObstacles.get(i).numberOfTimeDetected >= mMobileObstacles.get(i).getMaxNumberOfTimeDetected())
+    					mMobileObstacles.get(i).numberOfTimeDetected = mMobileObstacles.get(i).getMaxNumberOfTimeDetected();
+    			}
+    		}
+    		if (!isThereAnObstacleIntersecting)
+    			mUntestedMobileObstacles.add(new ObstacleProximity(position, radius, ObstacleGroups.ENNEMY_ROBOTS, timeToTestObstacle));
+
     			
     		/*on ne test pas si la position est dans un obstcle deja existant 
-    		 *on ne detecte pas les plots ni les goblets (et si on les detectes on prefere ne pas prendre le risque et on les evites)
+    		 *on ne detecte pas les plots ni les gobelets (et si on les detectes on prefere ne pas prendre le risque et on les evites)
     		 * et si on detecte une deuxieme fois l'ennemi on rajoute un obstacle sur lui
     		 */
     	}
@@ -279,12 +315,15 @@ public class ObstacleManager
      */
     public synchronized void removeOutdatedObstacles()
     {
+    	
+    	// enlève les obstacles confirmées s'ils sont périmés
     	for(int i = 0; i < mMobileObstacles.size(); i++)
     		if(mMobileObstacles.get(i).getOutDatedTime() < System.currentTimeMillis())
     		{
     			mMobileObstacles.remove(i--);
     		}
     	
+    	// enlève les obstacles en attente s'ils sont périmés
     	for(int i = 0; i < mUntestedMobileObstacles.size(); i++)
     		if(mUntestedMobileObstacles.get(i).getOutDatedTime() < System.currentTimeMillis())
     		{
@@ -330,31 +369,71 @@ public class ObstacleManager
      */
     public synchronized int distanceToClosestEnemy(Vec2 position, Vec2 direction)
     {
-    	//si aucun ennemi n'est détecté, on suppose que l'ennemi le plus proche est à 1m)
-    	if(mMobileObstacles.size() == 0)
-    		return 1000;
-    	
-    	int squaredDistanceToClosestEnemy = 10000000;
-    	
-    	int indexOfClosestEnnemy = 0;
-    	for(int i=0; i<mMobileObstacles.size(); i++)
+    	try
     	{
-    		Vec2 ennemyRelativeCoords = new Vec2((mMobileObstacles.get(i).position.x - position.x), mMobileObstacles.get(i).position.y - position.y);
-    		if(direction.dot(ennemyRelativeCoords) > 0)
-    		{
-	    		int squaredDistanceToEnemy = ennemyRelativeCoords.squaredLength(); 
-	    		if(squaredDistanceToEnemy < squaredDistanceToClosestEnemy)
+	    	//si aucun ennemi n'est détecté, on suppose que l'ennemi le plus proche est à 1m)
+	    	
+	    	int squaredDistanceToClosestEnemy = 10000000;
+	    	
+	    	
+	    	int squaredDistanceToEnemyUntested=10000000;
+	    	int squaredDistanceToEnemyTested=10000000 ;
+	    	
+	    	ObstacleCircular closestEnnemy = null;
+	
+	     	if(mMobileObstacles.size() == 0 && mUntestedMobileObstacles.size()==0)
+	    		return 1000;
+	     	
+	     	
+	     	//trouve l'ennemi le plus proche parmis les obstacles confirmés
+	    	for(int i=0; i<mMobileObstacles.size(); i++)
+	    	{
+	    		Vec2 ennemyRelativeCoords = new Vec2((mMobileObstacles.get(i).position.x - position.x), 
+	    											  mMobileObstacles.get(i).position.y - position.y);
+	    		if(direction.dot(ennemyRelativeCoords) > 0)
 	    		{
-	    			squaredDistanceToClosestEnemy = squaredDistanceToEnemy;
-	    			indexOfClosestEnnemy = i;
+		    		squaredDistanceToEnemyTested = ennemyRelativeCoords.squaredLength(); 
+		    		if(squaredDistanceToEnemyTested < squaredDistanceToClosestEnemy)
+		    		{
+		    			squaredDistanceToClosestEnemy = squaredDistanceToEnemyTested;
+		    			closestEnnemy = mMobileObstacles.get(i);
+		    		}
 	    		}
-    		}
+	    	}
+	      	
+	     	//trouve l'ennemi non confirmé le plus proche parmis les obstacles 
+	    	// (et remplace la distance a l'ennemi le plus proche d'un ennemi confirmé par une distance a un ennemi non confirmé s'il est plus proche)
+	    	for(int i=0; i<mUntestedMobileObstacles.size(); i++)
+	    	{
+	    		Vec2 ennemyRelativeCoords = new Vec2((mUntestedMobileObstacles.get(i).position.x - position.x), 
+	    											  mUntestedMobileObstacles.get(i).position.y - position.y);
+	    		if(direction.dot(ennemyRelativeCoords) > 0)
+	    		{
+		    		squaredDistanceToEnemyUntested = ennemyRelativeCoords.squaredLength(); 
+		    		if(squaredDistanceToEnemyUntested < squaredDistanceToClosestEnemy)
+		    		{
+		    			squaredDistanceToClosestEnemy = squaredDistanceToEnemyUntested;
+		    			closestEnnemy = mUntestedMobileObstacles.get(i);
+		    		}
+	    		}
+	    	}
+	    	
+	    	if(squaredDistanceToClosestEnemy <= 0)
+	    		return 0;
+
+	    	if(closestEnnemy != null)
+	    	{
+	    		//log.debug("Position de l'ennemi le plus proche, non testé, d'après distanceToClosestEnnemy: "+mUntestedMobileObstacles.get(indexOfClosestEnnemy).getPosition(), this);
+		    	return (int)Math.sqrt((double)squaredDistanceToClosestEnemy) - mRobotRadius - closestEnnemy.radius;
+	    	}
+	    	else
+	    		return 10000;
     	}
-    	if(squaredDistanceToClosestEnemy <= 0)
-    		return 0;
-    	
-//		log.debug("Position de l'ennemi le plus proche proche d'après distanceToClosestEnnemy: "+mMobileObstacles.get(indexOfClosestEnnemy).getPosition(), this);
-    	return (int)Math.sqrt((double)squaredDistanceToClosestEnemy) - mRobotRadius - mMobileObstacles.get(indexOfClosestEnnemy).radius;
+    	catch(IndexOutOfBoundsException e)
+    	{
+    		log.critical("Ah bah oui, out of bound", this);
+    		throw e;
+    	}
     }
 
     /**
@@ -472,63 +551,81 @@ public class ObstacleManager
     public synchronized boolean removeNonDetectedObstacles(Vec2 position, double orientation, double detectionRadius, double detectionAngle)
     {
 		boolean obstacleDeleted=false;
-
+		//check non testés ;--;et si <=0 remove
+		// check testés ; -- ; et si <maxnon goto nonteste  remove de testés
+		
+		
     	//parcours des obstacles
+		for(int i = 0; i < mUntestedMobileObstacles.size(); i++)
+    	{
+    		Vec2 positionEnnemy = mUntestedMobileObstacles.get(i).position;
+    		int ennemyRay = mUntestedMobileObstacles.get(i).radius;
+    		// On verifie que l'ennemi est dans le cercle de detection actuel
+    		if((positionEnnemy.distance(position) < (detectionRadius+ennemyRay)*(detectionRadius+ennemyRay)))
+    		{
+    			if(isEnnemyInCone(positionEnnemy, position, detectionRadius, orientation,  detectionAngle, ennemyRay) )
+    			{
+    				mUntestedMobileObstacles.get(i).numberOfTimeDetected--;
+    			
+    				if(mUntestedMobileObstacles.get(i).numberOfTimeDetected <= 0)
+    				{
+    					mUntestedMobileObstacles.remove(i--);
+	    				obstacleDeleted=true;
+	    				log.debug("Ennemi untested en "+positionEnnemy+" enlevé !", this);
+    				}
+    			}
+    		}
+    	}
     	for(int i = 0; i < mMobileObstacles.size(); i++)
     	{
     		Vec2 positionEnnemy = mMobileObstacles.get(i).position;
     		int ennemyRay = mMobileObstacles.get(i).radius;
     		// On verifie que l'ennemi est dans le cercle de detection actuel
-    		if((positionEnnemy.x - position.x)*(positionEnnemy.x - position.x)
-    		 + (positionEnnemy.y - position.y)*(positionEnnemy.y - position.y)
-    		 < (detectionRadius+ennemyRay)*(detectionRadius+ennemyRay))
+    		if((positionEnnemy.distance(position) < (detectionRadius+ennemyRay)*(detectionRadius+ennemyRay)))
     		{
-    			double ennemyAngle = Math.atan2(positionEnnemy.x - position.x, positionEnnemy.y - position.y);
-    			
-    			// si le centre de l'obstacle est dans le cone 
-    			// ou 
-    			// si on intersecte avec le coté gauche 
-    			// ou
-    			// si on interesecte avec le coté droit
-    			Segment coteGaucheCone = new Segment(position, 
-						new Vec2( position.x + (int)(detectionRadius*Math.cos(orientation + detectionAngle/2)), 
-								  position.y + (int)(detectionRadius*Math.sin(orientation + detectionAngle/2)) ) );
-    			Segment coteDroitCone = new Segment(position, 
-						new Vec2( position.x + (int)(detectionRadius*Math.cos(orientation - detectionAngle/2)), 
-								  position.y + (int)(detectionRadius*Math.sin(orientation - detectionAngle/2)) ) );
-    			
-    			if(ennemyAngle < (orientation + detectionAngle/2)
-    		    && ennemyAngle > (orientation - detectionAngle/2)
-    		    || ( ( PathDingDing.intersects( coteGaucheCone , 
-    		    						   new Circle(positionEnnemy, ennemyRay)) )
-    		    || ( PathDingDing.intersects(	coteDroitCone, 
-    		    						   new Circle(positionEnnemy, ennemyRay))) )  )
+    			if(isEnnemyInCone(positionEnnemy, position, detectionRadius, orientation,  detectionAngle, ennemyRay) )
     			{
-    				mMobileObstacles.remove(i--);
-    				obstacleDeleted=true;
-    				log.debug("Ennemi en "+positionEnnemy+" enlevé !", this);
-    				
-
-    				// TODO enlever, Pourle debug 
-    				if(ennemyAngle < (orientation + detectionAngle/2)&& ennemyAngle > (orientation - detectionAngle/2) ) 
-        				log.debug("Cause : dans l'angle du cone", this);
-	    			if(PathDingDing.intersects(coteGaucheCone ,
-    		    						   new Circle(positionEnnemy, ennemyRay)) )
-	    			{
-        				log.debug("Cause : intersectionne avec le coté gauche du cone", this);
-	    			}
-	    			
-    		    	if( PathDingDing.intersects( coteDroitCone, 
-    		    						   new Circle(positionEnnemy, ennemyRay)))
-    		    	{
-        				log.debug("Cause : intersectionne avec le coté droit du cone", this);   
-    		    	}
+    				mMobileObstacles.get(i).numberOfTimeDetected--;
+    			
+    				if(mMobileObstacles.get(i).numberOfTimeDetected < mMobileObstacles.get(i).getThresholdConfirmedOrUnconfirmed())
+    				{
+    					mMobileObstacles.get(i).setLifeTime(5000);
+        				mUntestedMobileObstacles.add(mMobileObstacles.get(i));
+	    				mMobileObstacles.remove(i--);
+	    				
+	    				obstacleDeleted=true;
+	    				log.debug("Ennemi en "+positionEnnemy+" enlevé !", this);
+    				}
     			}
     		}
     	}
     	return obstacleDeleted;
     }
     
+    
+    public boolean isEnnemyInCone(Vec2 positionEnnemy, Vec2 position, double detectionRadius, double orientation, double detectionAngle, int ennemyRay) 
+    {
+    	double ennemyAngle = Math.atan2(positionEnnemy.x - position.x, positionEnnemy.y - position.y);
+		
+		// si le centre de l'obstacle est dans le cone 
+		// ou 
+		// si on intersecte avec le coté gauche 
+		// ou
+		// si on interesecte avec le coté droit
+		Segment coteGaucheCone = new Segment(position, 
+				new Vec2( position.x + (int)(detectionRadius*Math.cos(orientation + detectionAngle/2)), 
+						  position.y + (int)(detectionRadius*Math.sin(orientation + detectionAngle/2)) ) );
+		Segment coteDroitCone = new Segment(position, 
+				new Vec2( position.x + (int)(detectionRadius*Math.cos(orientation - detectionAngle/2)), 
+						  position.y + (int)(detectionRadius*Math.sin(orientation - detectionAngle/2)) ) );
+		
+		return (ennemyAngle < (orientation + detectionAngle/2)
+	    && ennemyAngle > (orientation - detectionAngle/2)
+	    || ( ( PathDingDing.intersects( coteGaucheCone , 
+	    						   new Circle(positionEnnemy, ennemyRay)) )
+	    || ( PathDingDing.intersects(	coteDroitCone, 
+	    						   new Circle(positionEnnemy, ennemyRay))) )  );
+	}
     
     /**
      * Debug / interface graphique
@@ -612,4 +709,10 @@ public class ObstacleManager
     		log.debug("Revoir le code : impossible de trouver la propriété "+e.getPropertyNotFound(), this);;
     	}
 	}
+    
+    public ArrayList<ObstacleProximity> getUntestedArrayList()
+    {
+    	return mUntestedMobileObstacles;
+    }
+
 }

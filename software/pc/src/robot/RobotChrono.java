@@ -14,6 +14,7 @@ import enums.ObstacleGroups;
 import enums.SensorNames;
 import enums.Speed;
 import exceptions.Locomotion.UnableToMoveException;
+import exceptions.serial.SerialConnexionException;
 
 /**
  * Robot virtuel ne faisant pas bouger le robot réel, mais détermine la durée des actions.
@@ -209,7 +210,7 @@ public class RobotChrono extends Robot
     }
 
     @Override
-    public void disableTranslationnalFeedbackLoop()
+    public void disableRotationnalFeedbackLoop()
     {
     	// prsise en considération de la latence de la liaison série
 		this.chrono += approximateSerialLatency;
@@ -315,6 +316,12 @@ public class RobotChrono extends Robot
 	public Speed getLocomotionSpeed() {
 
 		return null;
+	}
+
+	@Override
+	public void enableFeedbackLoop() throws SerialConnexionException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

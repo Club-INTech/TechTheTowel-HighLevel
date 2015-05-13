@@ -18,6 +18,7 @@ import strategie.GameState;
 import enums.ObstacleGroups;
 import enums.ScriptNames;
 import enums.ServiceNames;
+import exceptions.ExecuteException;
 import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -66,16 +67,15 @@ public class JUnit_DropGlass extends JUnit_Test {
 			AbstractScript exitScript = scriptmanager.getScript(ScriptNames.EXIT_START_ZONE);
 			exitScript.execute(0, real_state, emptyHook );
 		} 
-		catch (SerialConnexionException  | SerialFinallyException e) 
+		catch (SerialFinallyException e) 
 		{
 			log.critical("Carte mal branchée. Match termine", this);
 			e.printStackTrace();
 			return;
 		}
-		catch (UnableToMoveException e) 
-		{
-			log.critical("CRITICAL : Chemin bloque, enlevez votre main", this);
-			log.critical( e.logStack(), this);
+		catch (ExecuteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		// libère le verre
@@ -107,9 +107,12 @@ public class JUnit_DropGlass extends JUnit_Test {
 		{
 			log.critical( e.logStack(), this);
 		} 
-		catch (SerialFinallyException e) 
+		catch (ExecuteException e) 
 		{
 			log.critical( e.logStack(), this);
+		} catch (SerialFinallyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 	}
