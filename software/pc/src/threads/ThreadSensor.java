@@ -480,7 +480,7 @@ class ThreadSensor extends AbstractThread
 	}
 
 	/**
-	 * ajoute les obstacles arrieres a l'obstacleManager FIXME a changer
+	 * ajoute les obstacles arrieres a l'obstacleManager
 	 * @param distanceBack l'int[] recuperé par la serie pour les capteurs arrieres
 	 * a modifier si ajout ou supression de capteurs
 	 */

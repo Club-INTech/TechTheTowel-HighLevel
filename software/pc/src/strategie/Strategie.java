@@ -7,8 +7,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.EnumSet;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
-
 import pathDingDing.PathDingDing;
 import container.Container;
 import container.Service;
@@ -78,6 +76,7 @@ public class Strategie implements Service
 	/**
 	 * la valeure en point du prochain script
 	 */
+	@SuppressWarnings("unused")
 	private int nextScriptValue;
 	/**
 	 * le numero de version du procahin script a executer
@@ -560,23 +559,7 @@ public class Strategie implements Service
 //						else {
 //							;
 //						}
-
-						try
-						{
-							realGameState.robot.moveLengthwise(-200);
-						}
-						catch (UnableToMoveException e1)
-						{
-							try 
-							{
-								log.debug(e1.toString()+" catché après tentative de degagement", this);
-								realGameState.robot.moveLengthwise(200);
-							} 
-							catch (UnableToMoveException e2)
-							{
-								log.critical("Le robot est complètent bloqué et n'arrive pas a se dégader", this);
-							}
-						}
+						disengage();
 					} 
 					catch (PathNotFoundException e)
 					{
@@ -785,9 +768,27 @@ public class Strategie implements Service
 		
 	}
 
-private void disengage() {
-		// TODO Auto-generated method stub
-		
+	/**
+	 * Essaye de dégager le robot d'un obstacle, que ce soit un ennemi ou un bout de mur.
+	 * 
+	 */
+	private void disengage()
+	{
+		try
+		{
+			realGameState.robot.moveLengthwise(-200);
+		} catch (UnableToMoveException e1)
+		{
+			try
+			{
+				log.debug(e1.toString() + " catché après tentative de degagement par strategie", this);
+				realGameState.robot.moveLengthwise(200);
+			} catch (UnableToMoveException e2)
+			{
+				log.critical("Le robot est complètent bloqué et n'arrive pas a se dégader", this);
+			}
+		}
+
 	}
 
 //	/** Fonction principale : prend une decision en prenant tout en compte */
@@ -938,30 +939,30 @@ private void disengage() {
 //		
 //	}
 	
-	private void rushMode()
-	{
-		try 
-		{
-			// On s'eloigne des ennemis potentiels, en attrapant les plots 5 et 6
-			scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
-			scriptedMatchVersions.add(65);
-	//		scriptedMatchCustomExceptionHandlers.add(Strategie.class.getDeclaredMethod(new String("scriptedMatchHandePile0Plot"),(Class[])null));	// si quelqu'un se demande ce que c'est que ce délire, c'est un "pointeur sur fonction" en mode hack de java
-			scriptedMatchCustomExceptionHandlers.add(null);
-			
-			// On vide la pile principale et le gobelet
-			scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.FREE_STACK));
-			scriptedMatchVersions.add(0);
-			scriptedMatchCustomExceptionHandlers.add(null);
-			
-			// On vide le plot dans notre bras
-			scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.FREE_STACK));
-			scriptedMatchVersions.add(2);
-			scriptedMatchCustomExceptionHandlers.add(null);
-		} 
-		catch (SecurityException e2) 
-		{
-			e2.printStackTrace();
-		}
-		
-	}
+//	private void rushMode()
+//	{
+//		try 
+//		{
+//			// On s'eloigne des ennemis potentiels, en attrapant les plots 5 et 6
+//			scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
+//			scriptedMatchVersions.add(65);
+//	//		scriptedMatchCustomExceptionHandlers.add(Strategie.class.getDeclaredMethod(new String("scriptedMatchHandePile0Plot"),(Class[])null));	// si quelqu'un se demande ce que c'est que ce délire, c'est un "pointeur sur fonction" en mode hack de java
+//			scriptedMatchCustomExceptionHandlers.add(null);
+//			
+//			// On vide la pile principale et le gobelet
+//			scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.FREE_STACK));
+//			scriptedMatchVersions.add(0);
+//			scriptedMatchCustomExceptionHandlers.add(null);
+//			
+//			// On vide le plot dans notre bras
+//			scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.FREE_STACK));
+//			scriptedMatchVersions.add(2);
+//			scriptedMatchCustomExceptionHandlers.add(null);
+//		} 
+//		catch (SecurityException e2) 
+//		{
+//			e2.printStackTrace();
+//		}
+//		
+//	}
 }

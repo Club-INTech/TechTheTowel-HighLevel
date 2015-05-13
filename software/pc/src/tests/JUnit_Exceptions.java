@@ -6,11 +6,8 @@ import java.io.StringWriter;
 
 import org.junit.Test;
 
-import smartMath.Vec2;
-import enums.UnableToMoveReason;
 import exceptions.ConfigPropertyNotFoundException;
 import exceptions.ExecuteException;
-import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 
 /**

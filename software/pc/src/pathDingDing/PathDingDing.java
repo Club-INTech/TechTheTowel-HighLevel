@@ -80,8 +80,6 @@ public class PathDingDing implements Service
 		//si le noeud de depart n'est pas sur la table, on le lie au point le plus proche
 		if(!mGraph.isOnTable(startNode))
 		{
-			//FIXME retirer
-			System.out.println("robot hors de la table");
 			pathVec2.add(start);
 			Node closestNode = mGraph.closestNode(startNode.toVec2());
 			mGraph.setStartNode(new Node(closestNode.x, closestNode.y));

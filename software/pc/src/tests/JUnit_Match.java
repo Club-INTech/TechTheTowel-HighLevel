@@ -11,7 +11,6 @@ import enums.ScriptNames;
 import enums.ServiceNames;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
-import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import robot.Robot;
 import robot.cardsWrappers.SensorsCardWrapper;
