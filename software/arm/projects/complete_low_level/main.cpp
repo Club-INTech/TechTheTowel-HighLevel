@@ -15,7 +15,7 @@ int main(void)
 	serial_ax.init(9600);
 
 	MotionControlSystem* motionControlSystem = &MotionControlSystem::Instance();
-	motionControlSystem->init(20, 20);
+	motionControlSystem->init(10, 10);
 	ActuatorsMgr* actuatorsMgr = &ActuatorsMgr::Instance();
 	SensorMgr* sensorMgr = &SensorMgr::Instance();
 
@@ -52,6 +52,8 @@ int main(void)
 				motionControlSystem->stop();
 				motionControlSystem->enableTranslationControl(true);
 				motionControlSystem->enableRotationControl(true);
+				actuatorsMgr->asservirAscenseur(true);
+				actuatorsMgr->asservirAX12(true);
 				serial.flush();
 			}
 			else
@@ -59,6 +61,8 @@ int main(void)
 				GPIO_ResetBits(GPIOC, GPIO_Pin_10);
 				motionControlSystem->enableTranslationControl(false);
 				motionControlSystem->enableRotationControl(false);
+				actuatorsMgr->asservirAscenseur(false);
+				actuatorsMgr->asservirAX12(false);
 			}
 		}
 

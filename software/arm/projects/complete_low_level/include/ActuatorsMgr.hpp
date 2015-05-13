@@ -69,6 +69,7 @@ private:
 	volatile EtatAscenseur consigneAscenseur;
 	uint16_t vitesseOuvertureBrasLente;
 	uint16_t vitesseFermetureBrasLente;
+	bool ascenseurAsservi;
 
 public:
 	ActuatorsMgr()
@@ -90,6 +91,8 @@ public:
 		consigneAscenseur = Sol;
 		vitesseOuvertureBrasLente = 25;
 		vitesseFermetureBrasLente = 20;
+		ascenseurAsservi = true;
+
 		/* Set variables used */
 		GPIO_InitTypeDef GPIO_InitStruct;
 		GPIO_StructInit(&GPIO_InitStruct); //Remplit avec les valeurs par défaut
@@ -184,6 +187,8 @@ public:
 		moteurON = GPIO_ReadOutputDataBit(GPIOC, GPIO_Pin_8),
 		moteurMonte = GPIO_ReadOutputDataBit(GPIOD, GPIO_Pin_14);
 
+		static const uint32_t timeout = 3000;		// Temps maximal d'allumage du maxon du monte plot
+		static uint32_t instantDebutMouvement = 0;	// Instant de l'allumage du maxon
 
 
 		//Mise à jour de la position à partir des capteurs
@@ -227,6 +232,10 @@ public:
 			etatAscenseur = Sol;
 		}
 
+		if(!ascenseurAsservi || Millis() - instantDebutMouvement > timeout)
+		{
+			consigneAscenseur = etatAscenseur;
+		}
 
 
 		//Déplacement de l'ascenseur selon la consigne
@@ -234,6 +243,7 @@ public:
 		if(consigneAscenseur == etatAscenseur || (consigneAscenseur == Sol && etatAscenseur == SousSol))
 		{
 			GPIO_ResetBits(GPIOC, GPIO_Pin_8);//Arrêt du moteur
+			instantDebutMouvement = Millis();
 		}
 		else if(consigneAscenseur > etatAscenseur)
 		{
@@ -307,6 +317,20 @@ public:
 		serial.printfln("done");
 
 		serial.printfln("Fin du reglage");
+	}
+	void asservirAscenseur(bool asservir) {
+		ascenseurAsservi = asservir;
+		GPIO_ResetBits(GPIOD, GPIO_Pin_14);//Sens de l'ascenseur = Descendre   (sécurité pour cas tricky ^^)
+	}
+	void asservirAX12(bool asservir) {
+		if(asservir)
+		{
+			machoireDroite->asservB();
+		}
+		else
+		{
+			machoireDroite->unasservB();
+		}
 	}
 	void omd() {
 		machoireDroite->goTo(mdOuvert);

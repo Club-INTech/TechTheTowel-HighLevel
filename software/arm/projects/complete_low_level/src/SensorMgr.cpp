@@ -294,15 +294,22 @@ void SensorMgr::refresh(MOVING_DIRECTION direction, bool moving)
 
 	if(currentTime - lastRefreshTime >= refreshDelay)
 	{
-		if(capteur == 0 && (direction == FORWARD || !moving)) {
+		if(capteur == 0 && (direction == FORWARD || direction == NONE || !moving))
+		{
 			leftFrontUS.refresh();
-		} else if(capteur == 1 && (direction == BACKWARD || !moving)) {
+		}
+		else if(capteur == 1 && (direction == BACKWARD || !moving))
+		{
 			rightBackUS.refresh();
 		}
-		else if(capteur == 2 && (direction == FORWARD || !moving)) {
+		else if(capteur == 2 && (direction == FORWARD || direction == NONE || !moving))
+		{
 			rightFrontUS.refresh();
-		} else if(capteur == 3 && (direction == BACKWARD  || !moving))
+		}
+		else if(capteur == 3 && (direction == BACKWARD  || !moving))
+		{
 			leftBackUS.refresh();
+		}
 
 		capteur = (capteur+1)%4;
 		lastRefreshTime = currentTime;
