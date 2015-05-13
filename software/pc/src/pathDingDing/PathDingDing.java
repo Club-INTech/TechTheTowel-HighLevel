@@ -45,7 +45,6 @@ public class PathDingDing implements Service
 	 * @return un chemin optimise liant depart et arrivee (comprend les points de départ et d'arrivée)
 	 * @throws PathNotFoundException 
 	 * @throws InObstacleException 
-	 * @throws Exception pas encore implemente
 	 */
 	public ArrayList<Vec2> computePath(Vec2 start, Vec2 end, EnumSet<ObstacleGroups> obstaclesToConsider) throws PathNotFoundException, InObstacleException
 	{
