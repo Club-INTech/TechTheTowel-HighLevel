@@ -1,7 +1,7 @@
 ﻿#include <stdlib.h>
 #include <string.h>
 
-#define HOMOLOGATION		//Ligne à commenter si envie hors homologation
+//#define HOMOLOGATION		//Ligne à commenter si envie hors homologation
 #define IGNORE_TIMER0_OVF_vect	//pour préciser ce qu'on veut faire
 #define IGNORE_PCINT0_vect	//de même
 #define IGNORE_PCINT2_vect	//de même
@@ -394,7 +394,7 @@ void locomotionTurnCCW(int duration)
  * Fonction qui ne se termine que lorsque le jumper est retiré du land raider.
  * Cela permet d'attendre que le match commence
 */
-void waitForMatch()
+/* void waitForMatch()
 {
 	// état actuel du jumper, pour l'instant on fait comme si le jumper n'était pas dans le robot
 	// ce booléen est a true si le jumper est présent, et a false sinon
@@ -417,7 +417,7 @@ void waitForMatch()
 		_delay_ms(100);
 		B5::toggle();
 	}
-}
+} */
 
 
 /**
@@ -534,19 +534,22 @@ int main()
 	D2::output();	// maxon gauche
 	D6::output();	// maxon droit
 	C2::output();	// depose tapis
-	D7::input();	// jumper
-
+	//Acteullement le jumper coupe carrément et allume carrément tout D7::input();	// jumper
 	B5::output();	// led de debug
 
+	D2::low();
+	D6::low();
 
- //	debugMode();			// plus la peine de debug !
+
+
+//	debugMode();			// plus la peine de debug !
  
 	// Code de match !
 	uart0::print("Land Raider, pret pour la coupe !");
-	waitForMatch();
+// PLus de waitformatch étant donné que le jumper power l'arduino	waitForMatch();
 	uart0::print("Debut du match !");
-	doMatch();
-	
+doMatch();
+		
 }
 
 //////////////////////////////////interruption des capteurs ultrasons///////////////////////////////////////////
