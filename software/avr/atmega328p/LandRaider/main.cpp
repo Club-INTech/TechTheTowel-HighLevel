@@ -14,6 +14,7 @@
 #include <libintech/isr.hpp>	// les interruptions
 #include <libintech/interrupt_manager.hpp>	//le gestionnaire d'interruptions
 #include <libintech/capteur_srf05.hpp> // les capteurs infrarouges
+#include <libintech/moteurs.hpp>	//les moteurs contrôlés par un pont en H
 // A mort les AX12  #include <libintech/ax12.hpp>	// les sacro-saints ax-12 !
 
 #define NB_SRF_AVANT            2
@@ -46,10 +47,18 @@ INITIALISE_INTERRUPT_MANAGER();
 //capteurInfraRightType* capteurInfraRight;
 //capteurInfraLeftType* capteurInfraLeft;
 
-//def des capteurs ultrason
+//def des timers
+typedef timer0 timerMoteurs;
 typedef timer1 timer_capteur_us;
-typedef timer0 timer_refresh;
+typedef timer2 timer_refresh;
 
+//Moteur sur le Timer 0 sur la pin B. Pont en H sur le port d5
+Moteur< timerMoteurs, 'B', D2 > moteurGauche;
+    
+//Moteur sur le Timer 0 sur la pin A. Pont en H sur le port d6
+Moteur< timerMoteurs, 'A', D3 > moteurDroit;
+
+// Capteurs ultrasons
 typedef CapteurSRFMono< timer_capteur_us, D4, pcint20 > capteur_us1_type;	
 capteur_us1_type us1;
 
@@ -67,7 +76,7 @@ AX<uart0>* axTest0;
 // Moi je veux bien que tu écrives ça sur uart0, mais c'est la série de l'AX12... le 328 a qu'une série, donc tu pourras pas parler avec un pc tout en ayant des AX12
 void onOverflow()
 {
-	// effece l'écran	
+	// efface l'écran	
 	uart0::printfln("\e[1;1H\e[2J");
 
 	uart0::printfln(" etat du land raider\n\n");
@@ -131,7 +140,11 @@ void debugMode()
 		if(strcmp(buffer,"g") == 0)
 		{
 			uart0::print("maxon gauche");
-			D2::toggle();
+			if (moteurGauche.pwm()) {
+				moteurGauche.envoyerPwm(0);
+			} else {
+				moteurGauche.envoyerPwm(255);
+			}
 		}
 
 
@@ -139,7 +152,11 @@ void debugMode()
 		if(strcmp(buffer,"d") == 0)
 		{
 			uart0::print("maxon2 droit");
-			D6::toggle(); 
+			if (moteurDroite.pwm()) {
+				moteurDroite.envoyerPwm(0);
+			} else {
+				moteurDroite.envoyerPwm(255);
+			}
 		}
 
 
@@ -240,29 +257,29 @@ void debugMode()
 // met en marche avant le Land raider !
 void caterpillarsForward()
 {
-	D2::high();
-	D6::high();
+	moteurDroite.envoyerPwm(255);
+	moteurGauche.envoyerPwm(255);
 }
 
-// met en virage le Land raider ! (en sens horraire) 
+// Tourne vers la droite
 void caterpillarsTurnCW()
 {
-	D2::high();
-	D6::low();	
+	moteurDroite.envoyerPwm(255);	
+	moteurGauche.envoyerPwm(0);
 }
 
-// met en virage le Land raider ! (en sens anti-horraire) 
+// Tourne vers la gauche
 void caterpillarsTurnCCW()
 {
-	D2::low();
-	D6::high();
+	moteurDroite.envoyerPwm(0);
+	moteurGauche.envoyerPwm(255);
 }
 
 // immobilise le land raider. après cette fonction, les moteurs de propultion seront a l'arret.
 void caterpillarsStop()
 {
-	D2::low();
-	D6::low();
+	moteurDroite.envoyerPwm(0);
+	moteurGauche.envoyerPwm(0);
 }
 
 
@@ -531,11 +548,11 @@ int main()
 
 	// IR droit sur C0 (Analog 0)
 	// IR gauche sur C1 (Analog 1)
-	D2::output();	// maxon gauche
-	D6::output();	// maxon droit
+	D5::output();	//moteur G
+	D6::output();	//moteur D
 	C2::output();	// depose tapis
 	D7::input();	// jumper
-
+	D8::input();	//choix de couleur
 	B5::output();	// led de debug
 
 
