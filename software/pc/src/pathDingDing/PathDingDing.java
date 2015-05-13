@@ -45,7 +45,6 @@ public class PathDingDing implements Service
 	 * @return un chemin optimise liant depart et arrivee (comprend les points de départ et d'arrivée)
 	 * @throws PathNotFoundException 
 	 * @throws InObstacleException 
-	 * @throws Exception pas encore implemente
 	 */
 	public ArrayList<Vec2> computePath(Vec2 start, Vec2 end, EnumSet<ObstacleGroups> obstaclesToConsider) throws PathNotFoundException, InObstacleException
 	{
@@ -80,8 +79,6 @@ public class PathDingDing implements Service
 		//si le noeud de depart n'est pas sur la table, on le lie au point le plus proche
 		if(!mGraph.isOnTable(startNode))
 		{
-			//FIXME retirer
-			System.out.println("robot hors de la table");
 			pathVec2.add(start);
 			Node closestNode = mGraph.closestNode(startNode.toVec2());
 			mGraph.setStartNode(new Node(closestNode.x, closestNode.y));

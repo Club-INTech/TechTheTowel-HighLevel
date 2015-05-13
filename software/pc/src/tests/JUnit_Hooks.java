@@ -17,6 +17,7 @@ import org.junit.Test;
 
 import enums.*;
 import exceptions.ContainerException;
+import exceptions.ExecuteException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
@@ -54,7 +55,7 @@ public class JUnit_Hooks extends JUnit_Test
 		real_state.robot.updateConfig();
 		try 
 		{
-			matchSetUp(real_state.robot);
+			matchSetUp(real_state.robot, false);
 		} 
 		catch (SerialConnexionException e) 
 		{
@@ -97,6 +98,8 @@ public class JUnit_Hooks extends JUnit_Test
 		{
 			log.critical( e.logStack(), this);
 		}		
+		catch (ExecuteException e){log.debug(e.logStack(), this);}
+
 		System.out.println("match fini !");
 
 		//Le match s'arrête

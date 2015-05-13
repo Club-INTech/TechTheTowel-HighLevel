@@ -5,6 +5,8 @@ import java.util.Arrays;
 
 import enums.ActuatorOrder;
 import enums.Speed;
+import exceptions.ConfigPropertyNotFoundException;
+import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
@@ -53,6 +55,9 @@ public class CloseClap extends AbstractScript
 	//Distance à avancer après le clap 2 pour aller au clap 3
 	private int distanceBetween2and3 = 1700;
 	
+	// booleen clap de l'amitié, true si on feerme le clap eennemi, false sinon
+	private boolean loveClap = true;
+	
 	
 	/**
 	 * Constructeur (normalement appelé uniquement par le scriptManager) du script fermant les Claps
@@ -67,11 +72,20 @@ public class CloseClap extends AbstractScript
 	{
 		super(hookFactory, config, log);
 		versions = new Integer[]{1, 2, 3 ,12 ,123 , -1, -12}; // liste des versions
+		
+		try
+		{			
+			loveClap=Boolean.parseBoolean(config.getProperty("clap_de_l_amitie"));
+		}
+		catch (ConfigPropertyNotFoundException e)
+		{
+    		log.debug("Revoir le code : impossible de trouver la propriété "+e.getPropertyNotFound(), this);;
+		}
 	}
 	
 	@Override
-	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, SerialFinallyException
-	{		
+	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException
+	{			
 		try
 		{
 			if (versionToExecute == 123)
@@ -94,7 +108,7 @@ public class CloseClap extends AbstractScript
 		catch (UnableToMoveException | SerialConnexionException e)
 		{
 			finalize(stateToConsider);
-			throw e;
+			throw new ExecuteException(e);
 		}
 	}
 	
@@ -183,25 +197,31 @@ public class CloseClap extends AbstractScript
 		//on commence en (1295,230), on se tourne dans le bon sens
 		//stateToConsider.robot.moveLengthwise(80, hooksToConsider, false);
 		
+		stateToConsider.robot.turn(Math.PI/4, hooksToConsider, false);
+
 		stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
-		
+
 		stateToConsider.robot.turn(0, hooksToConsider, false);
 		
-		//ajout de hooks
-		Hook hook1 = hookFactory.newHookXisLesser(1250, 10);
-		Hook hook2 = hookFactory.newHookXisLesser(1000, 10);
+		if(!loveClap)
+		{
+			//ajout de hooks
+			Hook hook1 = hookFactory.newHookXisLesser(1250, 10);
+			Hook hook2 = hookFactory.newHookXisLesser(970, 10);
 		
-		// ajoute un callback au hook de position qui ouvre / ferme le bras
-		hook1.addCallback(	new Callback(new OpenClapRightHighExe(),true, stateToConsider)	);
-		hook2.addCallback(	new Callback(new OpenClapRightMiddleExe(),true, stateToConsider)	);
 		
-		// ajoute le hook a la liste a passer a la locomotion
-		hooksToConsider.add(hook1);
-		hooksToConsider.add(hook2);
+			// ajoute un callback au hook de position qui ouvre / ferme le bras
+			hook1.addCallback(	new Callback(new OpenClapRightHighExe(),true, stateToConsider)	);
+			hook2.addCallback(	new Callback(new OpenClapRightMiddleExe(),true, stateToConsider)	);
+			
+			// ajoute le hook a la liste a passer a la locomotion
+			hooksToConsider.add(hook1);
+			hooksToConsider.add(hook2);
+		}
 		
 		try
 		{
-			stateToConsider.robot.moveLengthwise(-450, hooksToConsider);
+			stateToConsider.robot.moveLengthwise(-500, hooksToConsider);
 			stateToConsider.table.clapXClosed(1);
 		}
 		catch(UnableToMoveException e)
@@ -245,8 +265,9 @@ public class CloseClap extends AbstractScript
 		stateToConsider.robot.moveLengthwise(250, hooksToConsider, false);
 		stateToConsider.table.clapXClosed(1);
 	
-		//On monte notre bras pour passer au dessus du clap ennemi notre bras et on avance de 250mm pour se retrouver en (660,231)
-		stateToConsider.robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, true);
+		if(!loveClap)
+			//On monte notre bras pour passer au dessus du clap ennemi notre bras et on avance de 250mm pour se retrouver en (660,231)
+			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, true);
 
 		stateToConsider.robot.moveLengthwise(250, hooksToConsider, false);
 
@@ -323,7 +344,8 @@ public class CloseClap extends AbstractScript
 			
 			stateToConsider.robot.turn (0);
 			stateToConsider.table.clapXClosed(1);
-			stateToConsider.robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, true);
+			if(!loveClap)
+				stateToConsider.robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, true);
 			
 			stateToConsider.robot.moveLengthwise(-400);
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
@@ -355,7 +377,7 @@ public class CloseClap extends AbstractScript
 		else if(version == 3)
 			return new Circle(-900,500);//point d'entrée : devant le clap 3
 		else if(version == 12)
-			return new Circle(1280,230); //point d'entrée : devant le clap 1
+			return new Circle(1200,220); //point d'entrée : devant le clap 1
 		else if(version == 123)
 			return new Circle(1290,230); //point d'entrée : devant le clap 1
 		else if(version == -1)

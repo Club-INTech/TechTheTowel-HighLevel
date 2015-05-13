@@ -7,6 +7,7 @@ import java.util.EnumSet;
 import enums.ActuatorOrder;
 import enums.ObstacleGroups;
 import enums.SensorNames;
+import exceptions.ExecuteException;
 import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.UnableToEatPlot;
@@ -44,7 +45,7 @@ public class GetPlot extends AbstractScript
 	}
 	
 	@Override
-	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, InObstacleException
+	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, InObstacleException, ExecuteException
 	{
 		EnumSet<ObstacleGroups> obstacleNotConsidered = EnumSet.noneOf(ObstacleGroups.class);
 		if (versionToExecute == 0)
@@ -71,7 +72,7 @@ public class GetPlot extends AbstractScript
 	
 			obstacleNotConsidered.add(ObstacleGroups.GOBLET_0);
 		}
-		else if (versionToExecute == 56)
+		else if (versionToExecute == 56 || versionToExecute == 65)
 		{
 			obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_5);
 		
@@ -97,200 +98,321 @@ public class GetPlot extends AbstractScript
 	}
 	
 	@Override
-	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, SerialFinallyException
+	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException
 	{
-		//version circulaire
-		if (versionToExecute == 0 || versionToExecute == 1 || versionToExecute == 2)
+		try
 		{
-			//si on a plus de place dans la pile on termine
-			if (stateToConsider.robot.storedPlotCount >= 4)
+			//version circulaire
+			if (versionToExecute == 0 || versionToExecute == 1 || versionToExecute == 2)
 			{
-				log.debug("Trop de plots !",this);//Why Can't I Hold All These Limes ?
-				return;
-			}
-									
-//		//	le robot est deja en face du plot puisqu'on a appele goToThenExec (qui met en face du centre du script) si un jour on autorise de lancer exec il faudra remettre ces lignes (et les debugger)
-//			stateToConsider.robot.turn(Math.atan2(	entryPosition(versionToExecute,stateToConsider.robot.robotRay, stateToConsider.robot.getPosition()).position.y - stateToConsider.robot.getPosition().y,	// position voulue - position actuelle
-//						 							entryPosition(versionToExecute,stateToConsider.robot.robotRay, stateToConsider.robot.getPosition()).position.x - stateToConsider.robot.getPosition().x	// de meme
-//						 						 ));
-			
-			//on mange le plot
-			try 
-			{
-				if (versionToExecute == 1)
+				//si on a plus de place dans la pile on termine
+				if (stateToConsider.robot.storedPlotCount >= 4)
 				{
-					if (stateToConsider.robot.storedPlotCount<4)
+					log.debug("Trop de plots !",this);//Why Can't I Hold All These Limes ?
+					return;
+				}
+										
+	//		//	le robot est deja en face du plot puisqu'on a appele goToThenExec (qui met en face du centre du script) si un jour on autorise de lancer exec il faudra remettre ces lignes (et les debugger)
+	//			stateToConsider.robot.turn(Math.atan2(	entryPosition(versionToExecute,stateToConsider.robot.robotRay, stateToConsider.robot.getPosition()).position.y - stateToConsider.robot.getPosition().y,	// position voulue - position actuelle
+	//						 							entryPosition(versionToExecute,stateToConsider.robot.robotRay, stateToConsider.robot.getPosition()).position.x - stateToConsider.robot.getPosition().x	// de meme
+	//						 						 ));
+				
+				//on mange le plot
+				try 
+				{
+					if (versionToExecute == 1)
 					{
-						stateToConsider.robot.turn(Math.PI);
+						if (stateToConsider.robot.storedPlotCount<4)
+						{
+							stateToConsider.robot.turn(Math.PI);
+							eatPlot(false, true, stateToConsider, true, false);
+							stateToConsider.table.eatPlotX(versionToExecute);
+						}
+					}
+					if(versionToExecute==0 || versionToExecute==2 )
+					{
+						// isSecondtry est a true car 2 essais sont inutiles (statistiquement, le 1er fonctionne)
 						eatPlot(false, true, stateToConsider, true, false);
 						stateToConsider.table.eatPlotX(versionToExecute);
 					}
-				}
-				if(versionToExecute==0 || versionToExecute==2 )
+	
+					
+				} 
+				catch (UnableToEatPlot e) 
 				{
-					// isSecondtry est a true car 2 essais sont inutiles (statistiquement, le 1er fonctionne)
-					eatPlot(false, true, stateToConsider, true, false);
+					//on a pas reussi a manger, on le dit et on termine le script
 					stateToConsider.table.eatPlotX(versionToExecute);
-				}
-
-				
-			} 
-			catch (UnableToEatPlot e) 
-			{
-				//on a pas reussi a manger, on le dit et on termine le script
-				stateToConsider.table.eatPlotX(versionToExecute);
-				log.debug("impossible de manger le plot n°"+versionToExecute+" mangeage echoue", this);
-				finalize(stateToConsider);
-				return;
-			}			
-		}
-		//version 34 on mange en plus un goblet
-		else if (versionToExecute == 34)
-		{
-			//debut du script recuperation du goblet
-			stateToConsider.robot.turn(0,hooksToConsider, false);
-			
-			if (!stateToConsider.table.isGlassXTaken(0))
-			{
-				
-					// On ne ramasse pas l verre si on en a deja 2
-					if (!stateToConsider.robot.isGlassStoredLeft)
-					{
-						stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);					
-						stateToConsider.robot.moveLengthwise(130, hooksToConsider);
-						stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
-						stateToConsider.robot.moveLengthwise(150, hooksToConsider);
-						stateToConsider.robot.isGlassStoredLeft = true;
-					}
-					else if(!stateToConsider.robot.isGlassStoredRight)
-					{
-						stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);					
-						stateToConsider.robot.moveLengthwise(130, hooksToConsider);
-						stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
-						stateToConsider.robot.moveLengthwise(150, hooksToConsider);
-						stateToConsider.robot.isGlassStoredRight = true;
-					}
-
-				stateToConsider.table.removeGlassX(0);
-			}
-			else
-			{
-				stateToConsider.robot.moveLengthwise(320, hooksToConsider);
-			}
-			
-			// on ne mange que si on est assez vide
-			if(stateToConsider.robot.storedPlotCount < 3)
-			{
-				//on mange le plot 4
-				try 
-				{
-					eatPlot(true, true, stateToConsider, false, false);
-				}
-				catch (UnableToEatPlot e) 
-				{
+					log.debug("impossible de manger le plot n°"+versionToExecute+" mangeage echoue", this);
 					finalize(stateToConsider);
+					return;
+				}			
+			}
+			//version 34 on mange en plus un goblet
+			else if (versionToExecute == 34)
+			{
+				//debut du script recuperation du goblet
+				stateToConsider.robot.turn(0,hooksToConsider, false);
+				
+				if (!stateToConsider.table.isGlassXTaken(0))
+				{
+					try 
+					{
+						// On ne ramasse pas l verre si on en a deja 2
+						if (!stateToConsider.robot.isGlassStoredLeft)
+						{
+							stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);					
+							stateToConsider.robot.moveLengthwise(120, hooksToConsider);
+							stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
+							stateToConsider.robot.moveLengthwise(170, hooksToConsider);
+							stateToConsider.robot.isGlassStoredLeft = true;
+						}
+						else if(!stateToConsider.robot.isGlassStoredRight)
+						{
+							stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, true);					
+							stateToConsider.robot.moveLengthwise(120, hooksToConsider);
+							stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE_SLOW, true);
+							stateToConsider.robot.moveLengthwise(170, hooksToConsider);
+							stateToConsider.robot.isGlassStoredRight = true;
+						}
+		
+						stateToConsider.table.removeGlassX(0);
+					}
+					catch (SerialConnexionException | UnableToMoveException e) 
+					{
+						finalize(stateToConsider);
+						stateToConsider.table.removeGlassX(0);
+						stateToConsider.robot.moveLengthwise(-150, hooksToConsider);
+						throw new ExecuteException(e);
+					}
+				}
+				else
+				{
+					stateToConsider.robot.moveLengthwise(310, hooksToConsider);
+				}
+				
+				// on ne mange que si on est assez vide
+				if(stateToConsider.robot.storedPlotCount < 3)
+				{
+					//on mange le plot 4
+					try 
+					{
+						eatPlot(true, true, stateToConsider, false, false);
+					}
+					catch (UnableToEatPlot | SerialConnexionException e) 
+					{
+						finalize(stateToConsider);
+						stateToConsider.table.eatPlotX(4);
+						stateToConsider.table.eatPlotX(3);
+						stateToConsider.robot.moveLengthwise(-150, hooksToConsider);
+						return;
+					}
 					stateToConsider.table.eatPlotX(4);
-					stateToConsider.robot.moveLengthwise(-150, hooksToConsider);
-					return;
-				}
-				stateToConsider.table.eatPlotX(4);
-			
-				//on mange le plot 3
-				try 
-				{
-					eatPlot(true, false, stateToConsider, false, false);
-				}
-				catch (UnableToEatPlot e) 
-				{
-					finalize(stateToConsider);
-					stateToConsider.table.eatPlotX(3);
-					stateToConsider.robot.moveLengthwise(-150, hooksToConsider);
-					return;
-				}
-				stateToConsider.table.eatPlotX(3);
-			}
-			
-		}
-		//attention version hardcodée ne pas utilser hors du match scripté
-		else if (versionToExecute == 56)
-		{
-			stateToConsider.robot.turn(Math.PI/2);
-			if(stateToConsider.robot.storedPlotCount < 4)
-			{
-				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
-				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
-				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
-
-				if (checkSensor(stateToConsider))
-					stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
-				stateToConsider.table.eatPlotX(5);
-
-			
-				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
 				
-				if(!stateToConsider.robot.isGlassStoredLeft)
+					//on mange le plot 3
+					try 
+					{
+						eatPlot(true, false, stateToConsider, false, false);
+					}
+					catch (UnableToEatPlot e) 
+					{
+						finalize(stateToConsider);
+						stateToConsider.table.eatPlotX(3);
+						stateToConsider.table.eatPlotX(4);
+						stateToConsider.robot.moveLengthwise(-150, hooksToConsider);
+						return;
+					}
+					stateToConsider.table.eatPlotX(3);
+				}
+	//			
+	//			// se dégage du bord de la table pour que la pathfinding ait un comportement correct (notamment pour enchainer avec CloseClap version 12)
+	//			stateToConsider.robot.moveLengthwise(-30, hooksToConsider);
+				
+			}
+			// attention version hardcodée ne pas utilser hors du match scripté
+			// Version qui cherche  creer des piles de 1 plot
+			else if (versionToExecute == 56)
+			{
+				stateToConsider.robot.moveLengthwise(40); // On avance vers le suivant
+				
+				// digère les plots si besoin
+				if (stateToConsider.robot.hasRobotNonDigestedPlot())
 				{
+					stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_HIGH, true);
+					stateToConsider.robot.digestPlot();
+				}
+				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+				
+				stateToConsider.robot.turn(Math.PI/2);
+				if(stateToConsider.robot.storedPlotCount < 4)
+				{
+					stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+					stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
+					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
+	
+					if (checkSensor(stateToConsider))
+						stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+					stateToConsider.table.eatPlotX(5);
+					stateToConsider.robot.aMiamiam();
+	
+				
+					stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
+					
+					if(!stateToConsider.robot.isGlassStoredLeft)
+					{
+						stateToConsider.robot.moveLengthwise(60); // On avance vers le suivant
+						stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
+						stateToConsider.table.eatPlotX(6);
+					}
+				}
+				stateToConsider.robot.moveLengthwise(-300, hooksToConsider, false);
+				
+				// Dans tous les cas, on ferme la machoire 
+				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, false);
+			}
+			// Version qui cherche à completer sa pile
+			else if (versionToExecute == 65)
+			{
+				if(stateToConsider.robot.storedPlotCount >= 3)
+				{
+					// digère les plots si besoin
+					if (stateToConsider.robot.hasRobotNonDigestedPlot())
+					{
+						stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_HIGH, true);
+						stateToConsider.robot.digestPlot();
+					}
+					stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+					
+					stateToConsider.robot.turn(Math.PI/2);
+					if(stateToConsider.robot.storedPlotCount < 4)
+					{
+						stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+						stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
+						stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
+		
+						if (checkSensor(stateToConsider))
+							stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+						stateToConsider.table.eatPlotX(5);
+		
+					
+						stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
+						
+						if(!stateToConsider.robot.isGlassStoredLeft)
+						{
+							stateToConsider.robot.moveLengthwise(100); // On avance vers le suivant
+							stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
+							stateToConsider.table.eatPlotX(6);
+						}
+					}
+				}
+				// si la pile a besoin de 2 plots pour etre completée
+				else if(stateToConsider.robot.storedPlotCount < 3)
+				{
+					// digère les plots si besoin
+					if (stateToConsider.robot.hasRobotNonDigestedPlot())
+					{
+						stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_HIGH, true);
+						stateToConsider.robot.digestPlot();
+					}
+					stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+					
+					stateToConsider.robot.turn(Math.PI/2);
+					try 
+					{
+						eatPlot(true, true, stateToConsider, false, false);
+					} 
+					catch (UnableToEatPlot e) 
+					{
+						finalize(stateToConsider);
+						stateToConsider.table.eatPlotX(5);
+						return;
+					}
+					
+					if (checkSensor(stateToConsider))
+						stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+					
+					stateToConsider.table.eatPlotX(5);
+					stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
+					stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
+	
 					stateToConsider.robot.moveLengthwise(100); // On avance vers le suivant
-					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
+	
+					try 
+					{
+						eatPlot(true, true, stateToConsider, false, false);
+					} 
+					catch (UnableToEatPlot e) 
+					{
+						finalize(stateToConsider);
+						stateToConsider.table.eatPlotX(6);
+						return;
+					}
+					
+					if (checkSensor(stateToConsider))
+						stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+					
 					stateToConsider.table.eatPlotX(6);
 				}
-			}
-			stateToConsider.robot.moveLengthwise(-300, hooksToConsider, false);
-			
-			// Dans tous les cas, on ferme la machoire 
-			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, false);
-		}
-		else if(versionToExecute==567)
-		{
-			stateToConsider.robot.turn(Math.PI/2);
-					//plot 5 et 6 pas mangé, on mange les deux avec notre bras gauche (celui du coté de l'estrade)
-			try 
-			{
-				eatPlot(false, true, stateToConsider, false, false);
-			} 
-			catch (UnableToEatPlot e1) 
-			{
-				stateToConsider.table.eatPlotX(5);
-				finalize(stateToConsider);
-				log.debug( e1.logStack(), this);
-			}
-			//si on est suffisamment vide on mange le plot suivant
-			if (stateToConsider.robot.storedPlotCount<4)
-			{
-				stateToConsider.robot.moveLengthwise(100); // On avance vers le suivant
+				stateToConsider.robot.moveLengthwise(-300, hooksToConsider, false);
 				
+				// Dans tous les cas, on ferme la machoire 
+				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, false);
+			}
+			else if(versionToExecute==567)
+			{
+				stateToConsider.robot.turn(Math.PI/2);
+						//plot 5 et 6 pas mangé, on mange les deux avec notre bras gauche (celui du coté de l'estrade)
 				try 
 				{
 					eatPlot(false, true, stateToConsider, false, false);
 				} 
-				catch (UnableToEatPlot e) 
+				catch (UnableToEatPlot e1) 
 				{
-					stateToConsider.table.eatPlotX(6);
+					stateToConsider.table.eatPlotX(5);
 					finalize(stateToConsider);
-					log.debug( e.logStack(), this);
+					log.debug( e1.logStack(), this);
+				}
+				//si on est suffisamment vide on mange le plot suivant
+				if (stateToConsider.robot.storedPlotCount<4)
+				{
+					stateToConsider.robot.moveLengthwise(100); // On avance vers le suivant
+					
+					try 
+					{
+						eatPlot(false, true, stateToConsider, false, false);
+					} 
+					catch (UnableToEatPlot e) 
+					{
+						stateToConsider.table.eatPlotX(6);
+						finalize(stateToConsider);
+						log.debug( e.logStack(), this);
+					}
+				}
+					
+				if (stateToConsider.robot.storedPlotCount<4)
+				{
+					stateToConsider.robot.turn(0);
+					//TODO valeur a tester
+					stateToConsider.robot.moveLengthwise(420);
+					try
+					{
+						eatPlot(true, true, stateToConsider, false, false);
+						stateToConsider.table.eatPlotX(7);
+					}
+					catch (UnableToEatPlot e)
+					{
+						stateToConsider.table.eatPlotX(7);
+						finalize(stateToConsider);
+						log.debug( e.logStack(), this);
+					}
+					stateToConsider.robot.moveLengthwise(-200);
+					stateToConsider.robot.turn(Math.PI/4);
+					stateToConsider.robot.moveLengthwise(-300);
 				}
 			}
-				
-			if (stateToConsider.robot.storedPlotCount<4)
-			{
-				stateToConsider.robot.turn(0);
-				//TODO valeur a tester
-				stateToConsider.robot.moveLengthwise(420);
-				try
-				{
-					eatPlot(true, true, stateToConsider, false, false);
-					stateToConsider.table.eatPlotX(7);
-				}
-				catch (UnableToEatPlot e)
-				{
-					stateToConsider.table.eatPlotX(7);
-					finalize(stateToConsider);
-					log.debug( e.logStack(), this);
-				}
-				stateToConsider.robot.moveLengthwise(-200);
-				stateToConsider.robot.turn(Math.PI/4);
-				stateToConsider.robot.moveLengthwise(-300);
-			}
+		}
+		catch (UnableToMoveException | SerialConnexionException e)
+		{
+			throw new ExecuteException(e);
 		}
 	}
 
@@ -304,8 +426,8 @@ public class GetPlot extends AbstractScript
 		else if (id==2)
 			return new Circle (630,645,200);
 		else if (id==34)
-			return new Circle (900,200,0);
-		else if (id==56)
+			return new Circle (900,210,0);
+		else if (id==56 || id==65)
 			return new Circle (780,1620,0); // Position devant le plot 5, on longeant l'escalier
 		else if (id==567)
 			return new Circle (780,1620,0); // Position devant le plot 5, on longeant l'escalier
@@ -329,7 +451,7 @@ public class GetPlot extends AbstractScript
 			if (state.table.isPlotXEaten(4))
 				nbPlotOfVersion -= 1;
 		}
-		else if (id_version == 56)
+		else if (id_version == 56 || id_version == 65)
 		{
 			nbPlotOfVersion = 2;
 			if (state.table.isPlotXEaten(5))
@@ -358,7 +480,7 @@ public class GetPlot extends AbstractScript
 	{
 		try 
 		{
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
@@ -400,6 +522,7 @@ public class GetPlot extends AbstractScript
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
 		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
 		if (movementAllowed)
+		{
 			try 
 			{
 				stateToConsider.robot.moveLengthwise(150);
@@ -411,64 +534,64 @@ public class GetPlot extends AbstractScript
 				log.debug("mouvement impossible, script GetPlot", this);
 				sensorAnswer = false;
 			}
+		}
 		
-			//si on a pas reussi a chopper le plot en avancant (ou si interdit) on essaye avec les bras
-			if (!sensorAnswer)
+		// si on a pas reussi a chopper le plot en avancant (ou si interdit) on essaye avec les bras
+		if (!sensorAnswer)
+		{
+			if (!forbidArmUsage)
 			{
-				if(!forbidArmUsage)
+				if (isArmChosenLeft)
 				{
-					if (isArmChosenLeft) 
-					{
-						stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
-						sensorAnswer = checkSensor(stateToConsider);
-					}
+					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
+					sensorAnswer = checkSensor(stateToConsider);
+				} else
+				{
+					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN_SLOW, true);
+					sensorAnswer = checkSensor(stateToConsider);
+				}
+				// si on a attrape qqc on termine sinon on essaie avec l'autre bras (si isSecondTry == false)
+				// si deuxieme essai ecrire dans le log qu'on a essaye de manger un plot et on jette une exeption impossible de manger
+				if (sensorAnswer)
+				{
+					stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+					if (isArmChosenLeft)
+						stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
 					else
-					{
-						stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN_SLOW, true);
-						sensorAnswer = checkSensor(stateToConsider);
-					}
-					//si on a attrape qqc on termine sinon on essaie avec l'autre bras (si isSecondTry == false)
-					//si deuxieme essai ecrire dans le log qu'on a essaye de manger un plot et on jette une exeption impossible de manger
-					if (sensorAnswer)
-					{
-							stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
-						if (isArmChosenLeft) 
-							stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
-						else 
-							stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
-					}
-					else
-					{
-						if (isArmChosenLeft) 
-							stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
-						else 
-							stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
-						
-						if (isSecondTry)
-						{
-							
-							log.debug("impossible d'attraper le plot, tentative en fermant les machoires", this);	
-							stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
-						}
-						else
-						{
-							
-							eatPlot(true,!isArmChosenLeft, stateToConsider, false, forbidArmUsage);
-							return;
-						}
-					}
+						stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
 				}
 				else
 				{
-					stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+					if (isArmChosenLeft)
+						stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
+					else
+						stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
+
+					if (isSecondTry)
+					{
+
+						log.debug("impossible d'attraper le plot, tentative en fermant les machoires", this);
+						stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+					} 
+					else
+					{
+
+						eatPlot(true, !isArmChosenLeft, stateToConsider, false, forbidArmUsage);
+						return;
+					}
 				}
-				
-			}
-			//si on a reussi a chopper le plot en avancant on ferme les machoires
+			} 
 			else
 			{
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
 			}
+
+		}
+		// si on a reussi a chopper le plot en avancant on ferme les machoires
+		else
+		{
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+		}
 		
 	
 		//si la reponse etait fausse et que c'est le deuxieme essai jusque là on reverifie une fois les machoires fermées

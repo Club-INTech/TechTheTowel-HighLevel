@@ -33,6 +33,7 @@ class ThreadSensor extends AbstractThread
 	// Valeurs par défaut s'il y a un problème de config
 	
 	/** fréquence de mise a jour des valeurs renvoyés par les capteurs. Valeurs par défaut de 5 fois par seconde s'il y a un problème de config */
+	// Overide par la config
 	private int sensorFrequency = 15;
 	
 	/**
@@ -139,6 +140,11 @@ class ThreadSensor extends AbstractThread
 	int robotLenght;
 	
 	/**
+	 * indique si l'interface graphique est activée ou non 
+	 */
+	private boolean isGraphicalInterfaceEnabled = true; 
+	
+	/**
 	 * Positions des robots à ajouter
 	 */
 	Vec2 positionEnnemi_1=new Vec2 (0,0);
@@ -148,7 +154,6 @@ class ThreadSensor extends AbstractThread
 	int[] realSensorValuesBack = new int[2];
 	
 	public boolean homologation;
-	
 	
 	/**
 	 * Crée un nouveau thread de capteurs
@@ -165,8 +170,16 @@ class ThreadSensor extends AbstractThread
 		mRobot = robot;		
 		homologation=false;
 		
-		//TODO : interface graphique à enlever (necessaire pour les tests)
-		window = new Window();
+		// DEBUG: interface graphique
+		try
+		{
+			window = new Window();
+		}
+		catch (Exception e)
+		{
+			isGraphicalInterfaceEnabled = false;
+			log.debug("Affichage graphique non disponible", this);
+		}
 	}
 	
 	/* (non-Javadoc)
@@ -212,7 +225,9 @@ class ThreadSensor extends AbstractThread
 				  distanceFront[1]== -1 ||
 				   distanceBack[0]== -1 ||
 				   distanceBack[1]== -1 )	) // si on n'a pas spammé
-			{										
+			{					
+
+		
 				// on enleve les obstacles 
 				if(!homologation)
 				{
@@ -222,8 +237,9 @@ class ThreadSensor extends AbstractThread
 				
 				//mTable.getObstacleManager().removeObstacleInUs(mRobot.getPosition());
 
-				//TODO : interface graphique, à supprimer sur la raspi
-				window.drawInt(distanceFront[0], distanceFront[1], distanceBack[0], distanceBack[1]);
+				//DEBUG : interface graphique
+				if(isGraphicalInterfaceEnabled &&  window != null)
+					window.drawInt(distanceFront[0], distanceFront[1], distanceBack[0], distanceBack[1]);
 				
 				if(!homologation)
 				{
@@ -246,7 +262,6 @@ class ThreadSensor extends AbstractThread
 					if(mRobot.getIsRobotMovingBackward())
 						addObstacleBack(distanceBack);
 					
-					log.debug("IsRobotMovingForward : "+mRobot.getIsRobotMovingForward()+" IsRobotMovingForward : "+mRobot.getIsRobotMovingBackward(), this);
 				}
 				else 
 				{
@@ -254,9 +269,8 @@ class ThreadSensor extends AbstractThread
 					addObstacleBack(distanceBack);
 				}
 				
-			}
-			
-			
+	    		log.debug("Valeur des capteurs : avant brute : "+realSensorValuesFront[0]+";"+realSensorValuesFront[1] + "  arriere brute : " + realSensorValuesBack[0]+";" + realSensorValuesBack[1], this);
+			}			
 			if (distanceFront[1] > 0 && distanceFront[1] < 70 || distanceFront[0] > 0 && distanceFront[0] < 70)
 				log.debug("obstacle detecte a moins de 7 cm en avant !", this);
 			if (distanceBack[1] > 0 && distanceBack[1] < 70 || distanceBack[0] > 0 && distanceBack[0] < 70)
@@ -270,24 +284,24 @@ class ThreadSensor extends AbstractThread
 				// Ca evite de tenter de deposer... kedal.
 				if(mRobot.isGlassStoredLeft && ! (boolean) mRobot.getSensorValue(SensorNames.LEFT_ZONE_SENSOR))
 				{
-					log.critical("Verre gauche tombé", this);
+					log.debug("Verre gauche disparu", this);
 					mRobot.isGlassStoredLeft=false;
 				}
 				if(mRobot.isGlassStoredRight && ! (boolean) mRobot.getSensorValue(SensorNames.RIGHT_ZONE_SENSOR))
 				{
-					log.critical("Verre droit tombé", this);
+					log.warning("Verre droit disparu", this);
 					mRobot.isGlassStoredRight=false;
 				}
 				
 				// On verifie aussi le clic  si on a rien et que ca clique, on a quelque chose
 				if(!mRobot.isGlassStoredLeft &&  (boolean) mRobot.getSensorValue(SensorNames.LEFT_ZONE_SENSOR))
 				{
-					log.debug("Verre gauche mis", this);
+					log.debug("Verre gauche apparu", this);
 					mRobot.isGlassStoredLeft=true;
 				}
 				if(!mRobot.isGlassStoredRight &&  (boolean) mRobot.getSensorValue(SensorNames.RIGHT_ZONE_SENSOR))
 				{
-					log.debug("Verre droit mis", this);
+					log.warning("Verre droit apparu", this);
 					mRobot.isGlassStoredRight=true;
 				}
 				
@@ -297,10 +311,15 @@ class ThreadSensor extends AbstractThread
 			{
 				log.critical( e.logStack(), this);
 			}
-
-			Sleep.sleep((long)(1000./sensorFrequency));
-
-			
+						
+			try 
+			{
+				Thread.sleep((long)(1000./sensorFrequency));
+			} 
+			catch (InterruptedException e)
+			{
+				break;
+			}			
 		}
         log.debug("Fin du thread de capteurs", this);
 		
@@ -363,7 +382,6 @@ class ThreadSensor extends AbstractThread
 				positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
 				
 				mTable.getObstacleManager().addObstacle(positionEnnemi_1);
-	    		log.debug("Valeur des capteurs avant brute : "+realSensorValuesFront[0]+";"+realSensorValuesFront[1], this);
 	    		log.debug("Ennemi avant ajouté en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
 				
 				obstacleAddedLeft=true;
@@ -380,7 +398,6 @@ class ThreadSensor extends AbstractThread
 				positionEnnemi_2=changeReference(relativePosEnnemi2, positionRobot, orientation );
 				
 				mTable.getObstacleManager().addObstacle(positionEnnemi_2);
-	    		log.debug("Valeur des capteurs avant brute : "+realSensorValuesFront[0]+";"+realSensorValuesFront[1], this);
 	    		log.debug("Ennemi avant ajouté en "+positionEnnemi_2.x+";"+positionEnnemi_2.y, this);
 
 				obstacleAddedRight=true;
@@ -407,7 +424,6 @@ class ThreadSensor extends AbstractThread
 				positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
 
 				mTable.getObstacleManager().addObstacle(positionEnnemi_1);
-	    		log.debug("Valeur des capteurs avant brute : "+realSensorValuesFront[0]+";"+realSensorValuesFront[1], this);
 	    		log.debug("Ennemi avant ajouté en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
 
 
@@ -432,7 +448,6 @@ class ThreadSensor extends AbstractThread
 			positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
 			
 			mTable.getObstacleManager().addObstacle(positionEnnemi_1);
-    		log.debug("Valeur des capteurs avant brute : "+realSensorValuesFront[0]+";"+realSensorValuesFront[1], this);
     		log.debug("Ennemi avant vu en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
 
 			
@@ -454,7 +469,6 @@ class ThreadSensor extends AbstractThread
 			positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
 			
 			mTable.getObstacleManager().addObstacle(positionEnnemi_1);
-    		log.debug("Valeur des capteurs avant brute : "+realSensorValuesFront[0]+";"+realSensorValuesFront[1], this);
     		log.debug("Ennemi avant vu en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
 
 			obstacleAddedRight=true;
@@ -466,7 +480,7 @@ class ThreadSensor extends AbstractThread
 	}
 
 	/**
-	 * ajoute les obstacles arrieres a l'obstacleManager FIXME a changer
+	 * ajoute les obstacles arrieres a l'obstacleManager
 	 * @param distanceBack l'int[] recuperé par la serie pour les capteurs arrieres
 	 * a modifier si ajout ou supression de capteurs
 	 */
@@ -565,7 +579,6 @@ class ThreadSensor extends AbstractThread
 				positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
 
 				mTable.getObstacleManager().addObstacle(positionEnnemi_1);
-	    		log.debug("Valeur des capteurs arrieres brute : "+realSensorValuesBack[0]+";"+realSensorValuesBack[1], this);
 	    		log.debug("Ennemi arriere vu en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
 
 
@@ -590,9 +603,7 @@ class ThreadSensor extends AbstractThread
 				positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
 				
 				mTable.getObstacleManager().addObstacle(positionEnnemi_1);
-	    		log.debug("Valeur des capteurs arrieres brute : "+realSensorValuesBack[0]+";"+realSensorValuesBack[1], this);
 	    		log.debug("Ennemi arriere vu en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
-	
 				
 				obstacleAddedLeft=true;
 	
@@ -612,7 +623,6 @@ class ThreadSensor extends AbstractThread
 				positionEnnemi_1=changeReference(relativePosEnnemi1, positionRobot, orientation );
 				
 				mTable.getObstacleManager().addObstacle(positionEnnemi_1);
-	    		log.debug("Valeur des capteurs arrieres brute : "+realSensorValuesBack[0]+";"+realSensorValuesBack[1], this);
 	    		log.debug("Ennemi arriere vu en "+positionEnnemi_1.x+";"+positionEnnemi_1.y, this);
 	
 				obstacleAddedRight=true;
@@ -638,7 +648,8 @@ class ThreadSensor extends AbstractThread
 		{
 			distanceFront = (int[]) mSensorsCardWrapper.getSensorValue(SensorNames.ULTRASOUND_FRONT_SENSOR);
 			
-			if(symetry) // On inverse capteur droit et gauche : en effet, on traite les obstacles et les capteurs comme si on etait verts
+			if(symetry) // On inverse capteur droit et gauche : 
+						//en effet, on traite les obstacles et les capteurs comme si on etait verts
 			{
 				int svg=distanceFront[0];
 				distanceFront[0]=distanceFront[1];

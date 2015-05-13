@@ -7,12 +7,6 @@ import javax.swing.JPanel;
 import java.awt.Color; 
 import java.util.ArrayList;
 
-import table.Table;
-import smartMath.*;
-import pathDingDing.*;
-import robot.*;
-import table.obstacles.*;
-
 /**
  * panneau sur lequel est dessine la table
  * @author Etienne

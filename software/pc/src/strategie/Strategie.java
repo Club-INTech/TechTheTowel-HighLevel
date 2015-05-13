@@ -5,6 +5,7 @@ import hook.Hook;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.EnumSet;
 
 import pathDingDing.PathDingDing;
 import container.Container;
@@ -13,7 +14,9 @@ import enums.ActuatorOrder;
 import enums.ScriptNames;
 import enums.ObstacleGroups;
 import enums.Speed;
+import enums.UnableToMoveReason;
 import exceptions.ConfigPropertyNotFoundException;
+import exceptions.ExecuteException;
 import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -23,6 +26,7 @@ import robot.*;
 import scripts.AbstractScript;
 import scripts.GetPlot;
 import scripts.ScriptManager;
+import smartMath.Vec2;
 import table.Table;
 import utils.Log;
 import utils.Config;
@@ -72,6 +76,7 @@ public class Strategie implements Service
 	/**
 	 * la valeure en point du prochain script
 	 */
+	@SuppressWarnings("unused")
 	private int nextScriptValue;
 	/**
 	 * le numero de version du procahin script a executer
@@ -86,8 +91,10 @@ public class Strategie implements Service
 	/**
 	 * le chrono de la strategie
 	 */
+	@SuppressWarnings("unused")
 	private RobotChrono robotChrono;
 
+	@SuppressWarnings("unused")
 	private int matchDuration;
 	
 	/**
@@ -163,36 +170,41 @@ public class Strategie implements Service
 			log.debug("Execution du script : DROP_CARPET version 2", this);
 			scriptmanager.getScript(ScriptNames.DROP_CARPET).execute(2, gameState, hookRobot);
 		} 
-		catch (UnableToMoveException e)
+		catch(ExecuteException e)
 		{
-			// Si on s'est raté mais qu'on est proches, on ajoute le script de depose tapis simplement 
-			if (robotReal.getPosition().distance(Table.entryPosition)<250)
+			log.debug( e.toString()+" catché dans IA de raison "+e.getExceptionThrownByExecute().toString(), this);
+			if(e.compareInitialException(new UnableToMoveException(new Vec2(0,0), UnableToMoveReason.PHYSICALLY_BLOCKED)))
 			{
-				scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.DROP_CARPET));
-				scriptedMatchVersions.add(0);
-			}
-			
-			// On tente de sortir à tout prix ! On retente tant qu'on a pas reussi
-			while (robotReal.getPosition().distance(Table.entryPosition)<250)
-			{
-				try 
+				// Si on s'est raté mais qu'on est proches, on ajoute le script de depose tapis simplement 
+				if (robotReal.getPosition().distance(Table.entryPosition)<250)
 				{
-					scriptmanager.getScript(ScriptNames.EXIT_START_ZONE).execute(0, gameState, hookRobot);
-				} 
-				catch (UnableToMoveException | SerialConnexionException | SerialFinallyException e1) 
-				{
-					log.critical("impossible de sortir de la zone de depart", this);
-					Sleep.sleep(500);
+					scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.DROP_CARPET));
+					scriptedMatchVersions.add(0);
 				}
-			}
 				
-		}
-		catch (SerialConnexionException e) 
-		{		
-			initInMatch();
+				// On tente de sortir à tout prix ! On retente tant qu'on a pas reussi
+				while (robotReal.getPosition().distance(Table.entryPosition)<250)
+				{
+					try 
+					{
+						scriptmanager.getScript(ScriptNames.EXIT_START_ZONE).execute(0, gameState, hookRobot);
+					} 
+					catch (ExecuteException | SerialFinallyException e1) 
+					{
+						log.critical("impossible de sortir de la zone de depart", this);
+						Sleep.sleep(500);
+					}
+				}
+					
+			}
+			else if(e.compareInitialException(new SerialConnexionException()))
+			{		
+				initInMatch();
+			}
 		}
 		catch (SerialFinallyException e)
 		{
+			log.debug( e.toString()+" catché dans IA", this);
 			while (true)
 			{
 				try 
@@ -202,11 +214,10 @@ public class Strategie implements Service
 				} 
 				catch (UnableToMoveException | SerialFinallyException e1) 
 				{
-					;
+					log.critical("impossible de lancer dropCarpet Finalize", this);
 				}
 			}
 		}
-		
 		
 		// match scripté de l'IA
 		scriptedMatch(gameState);
@@ -484,10 +495,8 @@ public class Strategie implements Service
 				{
 					try 
 					{
-						
 						try
 						{
-
 							log.debug("================================== Nouvelle Tentative de script ========================================", this);
 							log.debug("================================== Liste actuelle:", this);
 							
@@ -499,19 +508,27 @@ public class Strategie implements Service
 							// si le temps presse, on n'attends pas pour faire les scripts
 							if (realGameState.getTimeEllapsed() > timeBeforeRushMode)
 								tryAgain = false;
-								
+
+							// Loggue qu'on passe en mode Rush
+							if (realGameState.getTimeEllapsed() > timeBeforeRushMode && realGameState.getTimeEllapsed() < timeBeforeRushMode + 300)
+								log.warning("Le temps presse: passage en mode Rush !  (TimeEllapsed = " + realGameState.getTimeEllapsed(), this);
+
 							// exécute le prochain script sur la liste
 							log.debug("Execution du script : " + scriptedMatchScripts.get(0).getClass().getCanonicalName() + " version " + scriptedMatchVersions.get(0), this);
 							scriptedMatchScripts.get(0).goToThenExec(scriptedMatchVersions.get(0), gameState, hookRobot);
 
 							tryAgain = false;
 
-							scriptedMatchScripts.remove(0);
-							scriptedMatchVersions.remove(0);
-							scriptedMatchCustomExceptionHandlers.remove(0);
+							if(scriptedMatchScripts.size()!=1)
+							{
+								scriptedMatchScripts.remove(0);
+								scriptedMatchVersions.remove(0);
+								scriptedMatchCustomExceptionHandlers.remove(0);
+							}
 						}
 						catch (Exception e) 
 						{
+							log.debug(e.toString()+" catché après tentative simple de script", this);
 							// en cas d'erreur d'exécution, demande la gestion de l'erreur par le gestionnaire custom s'il y en a un, sinon applique la politique par défaut.
 							if(scriptedMatchCustomExceptionHandlers.get(0) != null) 
 							{
@@ -521,7 +538,7 @@ public class Strategie implements Service
 								} 
 								catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) 
 								{
-									e1.printStackTrace();
+									log.debug(e.toString()+" catché", this); 
 								}
 							}
 							else
@@ -532,26 +549,17 @@ public class Strategie implements Service
 					catch (UnableToMoveException e) 
 					{
 						log.warning("Catch de UnableToMoveException dans Strategie", this);
-						
+//						
 //						if (e.reason.compareTo(UnableToMoveReason.PHYSICALLY_BLOCKED)==0)
-						{
-							// attention: ne pas bouger tryAgain dans ce catch
-							try
-							{
-								realGameState.robot.moveLengthwise(-100);
-							}
-							catch (UnableToMoveException e1)
-							{
-								try 
-								{
-									realGameState.robot.moveLengthwise(100);
-								} 
-								catch (UnableToMoveException e2)
-								{
-									log.critical("Le robot est complètent bloqué et n'arrive pas a se dégader", this);
-								}
-							}
-						}
+//						{
+//							// attention: ne pas bouger tryAgain dans ce catch //TODO :why ?
+////							tryAgain = false;
+//							
+//						}
+//						else {
+//							;
+//						}
+						disengage();
 					} 
 					catch (PathNotFoundException e)
 					{
@@ -561,16 +569,51 @@ public class Strategie implements Service
 						scriptedMatchScripts.add(Math.max(0,scriptedMatchScripts.size()-3), scriptedMatchScripts.get(0));
 						scriptedMatchVersions.add(Math.max(0,scriptedMatchVersions.size()-3), scriptedMatchVersions.get(0));
 						scriptedMatchCustomExceptionHandlers.add(Math.max(0,scriptedMatchScripts.size()-3), null);
+						
 						//et on abandonne le script pour le moment
 						scriptedMatchScripts.remove(0);
 						scriptedMatchVersions.remove(0);
 						scriptedMatchCustomExceptionHandlers.remove(0);
 						tryAgain = false;
 					} 
+					catch (ExecuteException e)
+					{
+						log.debug(e.toString()+" catché après tentative simple de script, raison "+e.getExceptionThrownByExecute().toString(), this);
+						if(e.compareInitialException(new UnableToMoveException(new Vec2(0,0), UnableToMoveReason.OBSTACLE_DETECTED)))
+						{
+							UnableToMoveException e1 = (UnableToMoveException) e.getExceptionThrownByExecute();
+							if(e1.reason.compareTo(UnableToMoveReason.PHYSICALLY_BLOCKED)==0)
+							{
+								disengage();
+							}
+							else if (e1.reason.compareTo(UnableToMoveReason.OBSTACLE_DETECTED)==0)
+							{
+								//on ajoute le script dans le tableau un peu plus loin
+								scriptedMatchScripts.add(Math.max(0,scriptedMatchScripts.size()-3), scriptedMatchScripts.get(0));
+								scriptedMatchVersions.add(Math.max(0,scriptedMatchVersions.size()-3), scriptedMatchVersions.get(0));
+								scriptedMatchCustomExceptionHandlers.add(Math.max(0,scriptedMatchScripts.size()-3), null);
+								
+								//et on abandonne le script pour le moment
+								scriptedMatchScripts.remove(0);
+								scriptedMatchVersions.remove(0);
+								scriptedMatchCustomExceptionHandlers.remove(0);
+								tryAgain = false;
+							}
+						}
+						else if(e.compareInitialException(new SerialConnexionException()))
+						{
+							initInMatch();
+						}
+						else
+						{
+							log.warning("type d'exception non prevue ExecuteException : "+e.getExceptionThrownByExecute().toString(), this);
+						}
+					}
 					catch (InObstacleException e) 
 					{
 						log.warning("Catch de InObstacleException dans Strategie", this);
 						
+						// un obstacle gene le pathfinding : on parcourt la liste de ceux qui nous genent
 						for (ObstacleGroups obstacle : e.getObstacleGroup())
 						{
 							log.warning("attention, obstacle : "+obstacle.getClass().toString(),this);
@@ -587,9 +630,14 @@ public class Strategie implements Service
 								scriptedMatchVersions.remove(0);
 								scriptedMatchCustomExceptionHandlers.remove(0);
 								tryAgain = false;
+								
+								// du coup, on passe à autre chose, on quite ce for
+								break;
 							}
-							//si on est bloqué par les plots 3, 4 ou le gobelet 0 et qu'on est pas en mode rush on execute immediatement le script pour les recuperer (ces scripts sont critiques)
-							else if ( (obstacle.compareTo(ObstacleGroups.GREEN_PLOT_3)==0 || obstacle.compareTo(ObstacleGroups.GREEN_PLOT_3)==0 || obstacle.compareTo(ObstacleGroups.GOBLET_0)==0 ) && realGameState.getTimeEllapsed() < timeBeforeRushMode)
+							// si on est bloqué par les plots 3, 4 ou le gobelet 0 (ce qui n'arrive que quand on essaye de faire clap 12 sans avoir faire getPlot34) 
+							// et qu'on est pas en mode rush on execute immediatement le script pour les recuperer (ces scripts sont critiques)
+							else if ( (obstacle.compareTo(ObstacleGroups.GREEN_PLOT_3)==0 || obstacle.compareTo(ObstacleGroups.GREEN_PLOT_4)==0
+									   || obstacle.compareTo(ObstacleGroups.GOBLET_0)==0 ) && realGameState.getTimeEllapsed() < timeBeforeRushMode)
 							{
 								//on enleve le script de get plot version 34 le plus proche (le seul)
 								for (int i = 0 ; i<scriptedMatchScripts.size(); i++)
@@ -603,27 +651,86 @@ public class Strategie implements Service
 									}
 								}
 								
-								//et on le remet en position 0
-								scriptedMatchScripts.add(0, scriptmanager.getScript(ScriptNames.GRAB_PLOT));
-								scriptedMatchVersions.add(0, 34);
-								scriptedMatchCustomExceptionHandlers.add(null);
+//								
+//								//et on le remet en position 0
+//								scriptedMatchScripts.add(0, scriptmanager.getScript(ScriptNames.GRAB_PLOT));
+//								scriptedMatchVersions.add(0, 34);
+//								scriptedMatchCustomExceptionHandlers.add(null);
+//								
+//								// etant donné qu'on a resolu un probleme, il est temps de quitter le for(obstacle)
+//								return;
 								
-//								try 
-//								{
-//									scriptedMatchCustomExceptionHandlers.add(Strategie.class.getDeclaredMethod(new String("scriptedMatchHandePile0Plot"),(Class[])null));
-//								} 
-//								catch (NoSuchMethodException | SecurityException e1)
-//								{
-//									e1.printStackTrace();
-//								}
+								
+								//si il existe un chemin jusqu'au script de recuperation des plots on continue
+								try 
+								{
+									pathDingDing.computePath(robotReal.getPosition(), scriptmanager.getScript(ScriptNames.GRAB_PLOT).entryPosition(34, robotReal.robotRay, robotReal.getPositionFast()).position, EnumSet.allOf(ObstacleGroups.class));
+									//et on le remet en position 0
+									scriptedMatchScripts.add(0, scriptmanager.getScript(ScriptNames.GRAB_PLOT));
+									scriptedMatchVersions.add(0, 34);
+									scriptedMatchCustomExceptionHandlers.add(null);
+								}
+								catch (PathNotFoundException | InObstacleException e1) 
+								{
+									log.warning("On change totalement le match", this);
+									//sinon on change totalement le match scripté
+									scriptedMatchScripts.clear();
+									scriptedMatchVersions.clear();
+									scriptedMatchCustomExceptionHandlers.clear();
+									
+									scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
+									scriptedMatchVersions.add(0, 567);
+									scriptedMatchCustomExceptionHandlers.add(null);
+									
+									scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.FREE_STACK));
+									scriptedMatchVersions.add(0, 0);
+									scriptedMatchCustomExceptionHandlers.add(null);
+									
+									if(!realGameState.table.isClapXClosed(1) && !realGameState.table.isClapXClosed(2))
+									{
+										scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.CLOSE_CLAP));
+										scriptedMatchVersions.add(0, 12);
+										scriptedMatchCustomExceptionHandlers.add(null);
+									}
+									else if(!realGameState.table.isClapXClosed(1))
+									{
+										scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.CLOSE_CLAP));
+										scriptedMatchVersions.add(0, 1);
+										scriptedMatchCustomExceptionHandlers.add(null);
+									}
+									else if(!realGameState.table.isClapXClosed(2))
+									{
+										scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.CLOSE_CLAP));
+										scriptedMatchVersions.add(0, 2);
+										scriptedMatchCustomExceptionHandlers.add(null);
+									}
+																		
+									tryAgain = false;
+								}
+								
+								
+								try 
+								{
+									scriptedMatchCustomExceptionHandlers.add(Strategie.class.getDeclaredMethod(new String("scriptedMatchHandePile0Plot"),(Class[])null));
+								} 
+								catch (NoSuchMethodException | SecurityException e1)
+								{
+									e1.printStackTrace();
+								}
 							}
 							//sinon  on arrete d'essayer le script
 							else
 							{
-								scriptedMatchScripts.remove(0);
-								scriptedMatchVersions.remove(0);
-								scriptedMatchCustomExceptionHandlers.remove(0);
+								if(scriptedMatchScripts.size()!=1)
+								{
+									scriptedMatchScripts.remove(0);
+									scriptedMatchVersions.remove(0);
+									scriptedMatchCustomExceptionHandlers.remove(0);
+								}
 								tryAgain = false;
+								
+								// le souci est autre qu'un obstacle classique, on quitte donc tout ceci après avoir enlevé le script posant probleme
+								break;
 							}
 						}
 					}
@@ -661,33 +768,56 @@ public class Strategie implements Service
 		
 	}
 
-	/** Fonction principale : prend une decision en prenant tout en compte */
-	@SuppressWarnings("unused")
-	private void takeDecision()
+	/**
+	 * Essaye de dégager le robot d'un obstacle, que ce soit un ennemi ou un bout de mur.
+	 * 
+	 */
+	private void disengage()
 	{
-		//TODO ajouter un script qui ne fait rien si tout les scripts ont deja étés effectués (qui fait 0 points)
-		nextScriptValue=Integer.MIN_VALUE;
-		for(ScriptNames scriptName : ScriptNames.values())
+		try
 		{
-			if (scriptName != ScriptNames.EXIT_START_ZONE)
+			realGameState.robot.moveLengthwise(-200);
+		} catch (UnableToMoveException e1)
+		{
+			try
 			{
-				AbstractScript script = scriptmanager.getScript(scriptName);
-				Integer[] versions = script.getVersion(realGameState);
-				
-				for(int i=0; i<(versions.length);i++)
-				{
-					int currentScriptValue = scriptValue(script, versions[i]);
-					if (currentScriptValue>nextScriptValue)
-					{
-						nextScript=script;
-						nextScriptValue=currentScriptValue;
-						nextScriptVersion=versions[i];
-					}
-						
-				}
+				log.debug(e1.toString() + " catché après tentative de degagement par strategie", this);
+				realGameState.robot.moveLengthwise(200);
+			} catch (UnableToMoveException e2)
+			{
+				log.critical("Le robot est complètent bloqué et n'arrive pas a se dégader", this);
 			}
 		}
+
 	}
+
+//	/** Fonction principale : prend une decision en prenant tout en compte */
+//	@SuppressWarnings("unused")
+//	private void takeDecision()
+//	{
+//		//TODO ajouter un script qui ne fait rien si tout les scripts ont deja étés effectués (qui fait 0 points)
+//		nextScriptValue=Integer.MIN_VALUE;
+//		for(ScriptNames scriptName : ScriptNames.values())
+//		{
+//			if (scriptName != ScriptNames.EXIT_START_ZONE)
+//			{
+//				AbstractScript script = scriptmanager.getScript(scriptName);
+//				Integer[] versions = script.getVersion(realGameState);
+//				
+//				for(int i=0; i<(versions.length);i++)
+//				{
+//					int currentScriptValue = scriptValue(script, versions[i]);
+//					if (currentScriptValue>nextScriptValue)
+//					{
+//						nextScript=script;
+//						nextScriptValue=currentScriptValue;
+//						nextScriptVersion=versions[i];
+//					}
+//						
+//				}
+//			}
+//		}
+//	}
 	
 	@SuppressWarnings("unused")
 	private void scriptedMatchHandePile0Plot()
@@ -699,113 +829,140 @@ public class Strategie implements Service
 		return;
 	}
 
-	/**
-	 * donne la valeur d'un script au sens de l'IA
-	 * @param script le script dont on veut connaitre la valeur
-	 * @param version la version du script a tester
-	 * @return un entier qui est la valeur de ce script
-	 */
-	private int scriptValue(AbstractScript script, int version) 
-	{
-		int points = 0;
-		//on replace le robotChrono pour le calcul du temps et la table (pour ne pas modifier la table actuelle)
-		robotReal.copy(robotChrono);
-		Table tableCopy = table.clone();
-		GameState<Robot> chronoState = new GameState<Robot>(config, log, tableCopy, robotChrono);
-		
-		
-		//calcul de la duree du script
-		long durationScript;
-		robotChrono.resetChrono();
-		try 
-		{
-			script.goToThenExec(version, chronoState, hookRobot);
-			durationScript = robotChrono.getCurrentChrono();
-		} 
-		catch (UnableToMoveException | SerialConnexionException
-				| PathNotFoundException | SerialFinallyException e) 
-		{
-			durationScript = Long.MAX_VALUE;
-		} 
-		catch (InObstacleException e) 
-		{
-			//on enleve les obstacles genants en adaptant les points
-			if (!e.getObstacleGroup().isEmpty())
-			{
-				try 
-				{
-					robotChrono.resetChrono();
-					script.goToThenExec(version, chronoState, hookRobot, e.getObstacleGroup());
-					durationScript = robotChrono.getCurrentChrono();
-				}
-				catch (UnableToMoveException | SerialConnexionException
-						| PathNotFoundException | SerialFinallyException
-						| InObstacleException e1) 
-				//en cas de double erreur on suppose que le robot n'y arrivera pas
-				{
-					durationScript = Long.MAX_VALUE;
-				}
-			
-				//on retire le nombre de points correspondant a ces obstacles = malus
-				//on suppose ces obstacles toulours sur la table (a voir si on peut tester)
-				for (ObstacleGroups obstacle : e.getObstacleGroup())
-				{
-					if 
-					(	
-						obstacle == ObstacleGroups.GOBLET_0 || 
-						obstacle == ObstacleGroups.GOBLET_1 || 
-						obstacle == ObstacleGroups.GOBLET_2 || 
-						obstacle == ObstacleGroups.GOBLET_3 || 
-						obstacle == ObstacleGroups.GOBLET_4
-					)
-						points -= 4;
-					else if 
-					(	
-						obstacle == ObstacleGroups.YELLOW_PLOT_0 || 
-						obstacle == ObstacleGroups.YELLOW_PLOT_1 || 
-						obstacle == ObstacleGroups.YELLOW_PLOT_2 || 
-						obstacle == ObstacleGroups.YELLOW_PLOT_3 || 
-						obstacle == ObstacleGroups.YELLOW_PLOT_4 ||
-						obstacle == ObstacleGroups.YELLOW_PLOT_5 || 
-						obstacle == ObstacleGroups.YELLOW_PLOT_6 || 
-						obstacle == ObstacleGroups.YELLOW_PLOT_7 || 
-						obstacle == ObstacleGroups.GREEN_PLOT_0 || 
-						obstacle == ObstacleGroups.GREEN_PLOT_1 || 
-						obstacle == ObstacleGroups.GREEN_PLOT_2 || 
-						obstacle == ObstacleGroups.GREEN_PLOT_3 || 
-						obstacle == ObstacleGroups.GREEN_PLOT_4 || 
-						obstacle == ObstacleGroups.GREEN_PLOT_5 || 
-						obstacle == ObstacleGroups.GREEN_PLOT_6 || 
-						obstacle == ObstacleGroups.GREEN_PLOT_7
-					)
-						points -= 5;
-					//si il faut suprimer le zone adverse ou le robot enemi on suprime les points de ce script (puni)
-					else if
-					(
-						obstacle == ObstacleGroups.ENNEMY_ROBOTS ||
-						obstacle == ObstacleGroups.ENNEMY_ZONE
-						
-					)
-						points = Integer.MIN_VALUE;
-				}
-			}
-			//si aucun obstacle a enlever alors le point visé est hors de la table engueuler les scripts
-			else
-				durationScript = Long.MAX_VALUE;
-			
-			
-		}
-		//FIXME supr debug
-		log.debug("script :"+script.getClass().getName(), this);
-		log.debug("version :"+version, this);
-		log.debug("temps :"+durationScript, this);
-		
-		
-		points += script.remainingScoreOfVersion(version, realGameState);
-		points *= ((matchDuration-realGameState.getTimeEllapsed())-durationScript)/durationScript;
-		log.debug("points :"+points, this);
-		//points = (pointsScript+malus) * (tempsRestant - duree)/duree
-		return points;
-		
-	}
+//	/**
+//	 * donne la valeur d'un script au sens de l'IA
+//	 * @param script le script dont on veut connaitre la valeur
+//	 * @param version la version du script a tester
+//	 * @return un entier qui est la valeur de ce script
+//	 */
+//	private int scriptValue(AbstractScript script, int version) 
+//	{
+//		int points = 0;
+//		//on replace le robotChrono pour le calcul du temps et la table (pour ne pas modifier la table actuelle)
+//		robotReal.copy(robotChrono);
+//		Table tableCopy = table.clone();
+//		GameState<Robot> chronoState = new GameState<Robot>(config, log, tableCopy, robotChrono);
+//		
+//		
+//		//calcul de la duree du script
+//		long durationScript;
+//		robotChrono.resetChrono();
+//		try 
+//		{
+//			script.goToThenExec(version, chronoState, hookRobot);
+//			durationScript = robotChrono.getCurrentChrono();
+//		} 
+//		catch (UnableToMoveException | SerialConnexionException
+//				| PathNotFoundException | SerialFinallyException e) 
+//		{
+//			durationScript = Long.MAX_VALUE;
+//		} 
+//		catch (InObstacleException e) 
+//		{
+//			//on enleve les obstacles genants en adaptant les points
+//			if (!e.getObstacleGroup().isEmpty())
+//			{
+//				try 
+//				{
+//					robotChrono.resetChrono();
+//					script.goToThenExec(version, chronoState, hookRobot, e.getObstacleGroup());
+//					durationScript = robotChrono.getCurrentChrono();
+//				}
+//				catch (UnableToMoveException | SerialConnexionException
+//						| PathNotFoundException | SerialFinallyException
+//						| InObstacleException e1) 
+//				//en cas de double erreur on suppose que le robot n'y arrivera pas
+//				{
+//					durationScript = Long.MAX_VALUE;
+//				}
+//			
+//				//on retire le nombre de points correspondant a ces obstacles = malus
+//				//on suppose ces obstacles toulours sur la table (a voir si on peut tester)
+//				for (ObstacleGroups obstacle : e.getObstacleGroup())
+//				{
+//					if 
+//					(	
+//						obstacle == ObstacleGroups.GOBLET_0 || 
+//						obstacle == ObstacleGroups.GOBLET_1 || 
+//						obstacle == ObstacleGroups.GOBLET_2 || 
+//						obstacle == ObstacleGroups.GOBLET_3 || 
+//						obstacle == ObstacleGroups.GOBLET_4
+//					)
+//						points -= 4;
+//					else if 
+//					(	
+//						obstacle == ObstacleGroups.YELLOW_PLOT_0 || 
+//						obstacle == ObstacleGroups.YELLOW_PLOT_1 || 
+//						obstacle == ObstacleGroups.YELLOW_PLOT_2 || 
+//						obstacle == ObstacleGroups.YELLOW_PLOT_3 || 
+//						obstacle == ObstacleGroups.YELLOW_PLOT_4 ||
+//						obstacle == ObstacleGroups.YELLOW_PLOT_5 || 
+//						obstacle == ObstacleGroups.YELLOW_PLOT_6 || 
+//						obstacle == ObstacleGroups.YELLOW_PLOT_7 || 
+//						obstacle == ObstacleGroups.GREEN_PLOT_0 || 
+//						obstacle == ObstacleGroups.GREEN_PLOT_1 || 
+//						obstacle == ObstacleGroups.GREEN_PLOT_2 || 
+//						obstacle == ObstacleGroups.GREEN_PLOT_3 || 
+//						obstacle == ObstacleGroups.GREEN_PLOT_4 || 
+//						obstacle == ObstacleGroups.GREEN_PLOT_5 || 
+//						obstacle == ObstacleGroups.GREEN_PLOT_6 || 
+//						obstacle == ObstacleGroups.GREEN_PLOT_7
+//					)
+//						points -= 5;
+//					//si il faut suprimer le zone adverse ou le robot enemi on suprime les points de ce script (puni)
+//					else if
+//					(
+//						obstacle == ObstacleGroups.ENNEMY_ROBOTS ||
+//						obstacle == ObstacleGroups.ENNEMY_ZONE
+//						
+//					)
+//						points = Integer.MIN_VALUE;
+//				}
+//			}
+//			//si aucun obstacle a enlever alors le point visé est hors de la table engueuler les scripts
+//			else
+//				durationScript = Long.MAX_VALUE;
+//			
+//			
+//		}
+//		// supr debug
+//		log.debug("script :"+script.getClass().getName(), this);
+//		log.debug("version :"+version, this);
+//		log.debug("temps :"+durationScript, this);
+//		
+//		
+//		points += script.remainingScoreOfVersion(version, realGameState);
+//		points *= ((matchDuration-realGameState.getTimeEllapsed())-durationScript)/durationScript;
+//		log.debug("points :"+points, this);
+//		//points = (pointsScript+malus) * (tempsRestant - duree)/duree
+//		return points;
+//		
+//	}
+	
+//	private void rushMode()
+//	{
+//		try 
+//		{
+//			// On s'eloigne des ennemis potentiels, en attrapant les plots 5 et 6
+//			scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
+//			scriptedMatchVersions.add(65);
+//	//		scriptedMatchCustomExceptionHandlers.add(Strategie.class.getDeclaredMethod(new String("scriptedMatchHandePile0Plot"),(Class[])null));	// si quelqu'un se demande ce que c'est que ce délire, c'est un "pointeur sur fonction" en mode hack de java
+//			scriptedMatchCustomExceptionHandlers.add(null);
+//			
+//			// On vide la pile principale et le gobelet
+//			scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.FREE_STACK));
+//			scriptedMatchVersions.add(0);
+//			scriptedMatchCustomExceptionHandlers.add(null);
+//			
+//			// On vide le plot dans notre bras
+//			scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.FREE_STACK));
+//			scriptedMatchVersions.add(2);
+//			scriptedMatchCustomExceptionHandlers.add(null);
+//		} 
+//		catch (SecurityException e2) 
+//		{
+//			e2.printStackTrace();
+//		}
+//		
+//	}
 }
