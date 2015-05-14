@@ -3,6 +3,8 @@ package scripts;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.omg.CORBA.PUBLIC_MEMBER;
+
 import enums.ActuatorOrder;
 import enums.Speed;
 import exceptions.ConfigPropertyNotFoundException;
@@ -207,7 +209,7 @@ public class CloseClap extends AbstractScript
 		{
 			//ajout de hooks
 			Hook hook1 = hookFactory.newHookXisLesser(1250, 10);
-			Hook hook2 = hookFactory.newHookXisLesser(940, 10);
+			Hook hook2 = hookFactory.newHookXisLesser(930, 10);
 		
 		
 			// ajoute un callback au hook de position qui ouvre / ferme le bras
