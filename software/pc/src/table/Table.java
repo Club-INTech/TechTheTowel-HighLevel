@@ -68,6 +68,8 @@ public class Table implements Service
 	public static final Vec2 entryPosition = new Vec2 (1099,1000);
 	//1500 le bout de la table, 320 la taille de la cale et 77 la taille de l'arriere du robot a son centre,1000);
 	
+	// la pile de plots principale
+	public boolean isStartAreaFilledWithPile;
 	
 	/**
 	 * Instancie une nouvelle table
@@ -115,6 +117,8 @@ public class Table implements Service
 		//Les zones où sont posés les verres
 		for(int i = 0; i<3; i++)
 			isAreaXFilledWithGlass[i]=false;
+		
+		isStartAreaFilledWithPile=false;
 	}
 	
 	public ObstacleManager getObstacleManager()
@@ -381,13 +385,25 @@ public class Table implements Service
     	isLeftCarpetDropped=newValue;
     }
     public boolean getIsRightCarpetDropped() 
+	{
+		return isRightCarpetDropped;
+	}
+    public void setIsRightCarpetDropped(boolean newValue)
+    {
+    	isRightCarpetDropped=newValue;
+    }
+    
+    public boolean getIsStartAreaFilledWithPile() 
   	{
-  		return isRightCarpetDropped;
+  		return isStartAreaFilledWithPile;
   	}
-      public void setIsRightCarpetDropped(boolean newValue)
-      {
-      	isRightCarpetDropped=newValue;
-      }
+    
+    public void setIsStartAreaFilledWithPile(boolean newValue)
+    {
+    	isStartAreaFilledWithPile=newValue;
+     }
+
+      
 	/**
 	 * Compare deux tables et indique si elles sont égales.
 	 * Utilisé pour les tests.
