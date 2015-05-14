@@ -232,42 +232,45 @@ public class GetPlot extends AbstractScript
 			// Version qui cherche  creer des piles de 1 plot
 			else if (versionToExecute == 56)
 			{
-				stateToConsider.robot.moveLengthwise(40); // On avance vers le suivant
-				
-				// digère les plots si besoin
-				if (stateToConsider.robot.hasRobotNonDigestedPlot())
+				if (!stateToConsider.table.isPlotXEaten(5))
 				{
-					stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_HIGH, true);
-					stateToConsider.robot.digestPlot();
-				}
-				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
-				
-				stateToConsider.robot.turn(Math.PI/2);
-				if(stateToConsider.robot.storedPlotCount < 4)
-				{
-					stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
-					stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
-					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
-	
-					if (checkSensor(stateToConsider))
-						stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
-					stateToConsider.table.eatPlotX(5);
-					stateToConsider.robot.aMiamiam();
-	
-				
-					stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
+					stateToConsider.robot.moveLengthwise(40); // On avance vers le suivant
 					
-					if(!stateToConsider.robot.isGlassStoredLeft)
+					// digère les plots si besoin
+					if (stateToConsider.robot.hasRobotNonDigestedPlot())
 					{
-						stateToConsider.robot.moveLengthwise(60); // On avance vers le suivant
-						stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
-						stateToConsider.table.eatPlotX(6);
+						stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_HIGH, true);
+						stateToConsider.robot.digestPlot();
 					}
+					stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+					
+					stateToConsider.robot.turn(Math.PI/2);
+					if(stateToConsider.robot.storedPlotCount < 4)
+					{
+						stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+						stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
+						stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
+		
+						if (checkSensor(stateToConsider))
+							stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+						stateToConsider.table.eatPlotX(5);
+						stateToConsider.robot.aMiamiam();
+		
+					
+						stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
+						
+						if(!stateToConsider.robot.isGlassStoredLeft)
+						{
+							stateToConsider.robot.moveLengthwise(60); // On avance vers le suivant
+							stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
+							stateToConsider.table.eatPlotX(6);
+						}
+					}
+					stateToConsider.robot.moveLengthwise(-300, hooksToConsider, false);
+					
+					// Dans tous les cas, on ferme la machoire 
+					stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, false);
 				}
-				stateToConsider.robot.moveLengthwise(-300, hooksToConsider, false);
-				
-				// Dans tous les cas, on ferme la machoire 
-				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, false);
 			}
 			// Version qui cherche à completer sa pile
 			else if (versionToExecute == 65)

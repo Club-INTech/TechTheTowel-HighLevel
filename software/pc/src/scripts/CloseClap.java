@@ -99,7 +99,11 @@ public class CloseClap extends AbstractScript
 			else if (versionToExecute == 3)
 				closeThirdClap(stateToConsider, hooksToConsider);
 			else if (versionToExecute == 12)
+			{
+				if (stateToConsider.table.isClapXClosed(1) && stateToConsider.table.isClapXClosed(2))
+					return;
 				closeFirstAndSecondClapBackwardWithHooks(stateToConsider, hooksToConsider);
+			}
 			else if (versionToExecute == -1)
 				closeFirstClapBackward(stateToConsider, hooksToConsider);
 			else if (versionToExecute == -12)
@@ -192,12 +196,10 @@ public class CloseClap extends AbstractScript
 	
 	public void closeFirstAndSecondClapBackwardWithHooks (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException
 	{
-		
 		//on met le robot en vitesse lente
 		stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
 		
 		//on commence en (1295,230), on se tourne dans le bon sens
-		//stateToConsider.robot.moveLengthwise(80, hooksToConsider, false);
 		
 		stateToConsider.robot.turn(Math.PI/4, hooksToConsider, false);
 
@@ -209,7 +211,6 @@ public class CloseClap extends AbstractScript
 		{
 			//ajout de hooks
 			Hook hook1 = hookFactory.newHookXisLesser(1250, 10);
-
 			Hook hook2 = hookFactory.newHookXisLesser(900, 10);	
 		
 			// ajoute un callback au hook de position qui ouvre / ferme le bras
