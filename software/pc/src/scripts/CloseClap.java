@@ -3,8 +3,6 @@ package scripts;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.omg.CORBA.PUBLIC_MEMBER;
-
 import enums.ActuatorOrder;
 import enums.Speed;
 import exceptions.ConfigPropertyNotFoundException;
