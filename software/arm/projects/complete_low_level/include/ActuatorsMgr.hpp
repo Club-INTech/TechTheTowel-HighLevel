@@ -26,10 +26,10 @@ extern Uart<1> serial;
 #define tdRange 150
 #define tgPose 160
 #define tgRange 222
-#define cdHaut 65
+#define cdHaut 55
 #define cdMilieu 100
 #define cdBas 148
-#define cgHaut 237
+#define cgHaut 243
 #define cgMilieu 200
 #define cgBas 152
 #define ggOuvert 180
@@ -258,7 +258,7 @@ public:
 	}
 
 	void e(uint16_t angle){
-		clapGauche->goTo(angle);
+		clapDroit->goTo(angle);
 	}
 	void setAllID(){
 		int i;
