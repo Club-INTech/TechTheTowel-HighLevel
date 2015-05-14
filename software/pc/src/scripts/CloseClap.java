@@ -209,8 +209,8 @@ public class CloseClap extends AbstractScript
 		{
 			//ajout de hooks
 			Hook hook1 = hookFactory.newHookXisLesser(1250, 10);
-			Hook hook2 = hookFactory.newHookXisLesser(900, 10);
-		
+
+			Hook hook2 = hookFactory.newHookXisLesser(900, 10);	
 		
 			// ajoute un callback au hook de position qui ouvre / ferme le bras
 			hook1.addCallback(	new Callback(new OpenClapRightHighExe(),true, stateToConsider)	);
