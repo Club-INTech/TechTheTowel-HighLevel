@@ -133,9 +133,9 @@ public class DropPile extends AbstractScript
 			else if (version==0)
 			{
 				stateToConsider.robot.turnWithoutDetection(Math.PI/4.5, hooksToConsider);
-				stateToConsider.robot.moveLengthwiseWithoutDetection(360);
+				stateToConsider.robot.moveLengthwise(340, hooksToConsider, true);
 				
-				pileDropperGround(stateToConsider, hooksToConsider, 180);
+				pileDropperGround(stateToConsider, hooksToConsider, 160);
 				
 				
 				// On ne depose que si la zone est vide de gobelets ET qu'on en a au moins un verre
