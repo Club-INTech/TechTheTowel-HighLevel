@@ -1,7 +1,7 @@
 ﻿#include <stdlib.h>
 #include <string.h>
 
-//#define HOMOLOGATION		//Ligne à commenter si envie hors homologation
+#define HOMOLOGATION		//Ligne à commenter si envie hors homologation
 #define IGNORE_TIMER2_OVF_vect	//pour préciser ce qu'on veut faire
 #define IGNORE_PCINT0_vect	//de même
 #define IGNORE_PCINT2_vect	//de même
@@ -35,18 +35,8 @@ timer1 : 16 bits
 timer0&2: 8 bits
 */
 
-//typedef CapteurInfrarouge< AVR_ADC<0> > capteurInfraRightType;
-//typedef CapteurInfrarouge< AVR_ADC<1> > capteurInfraLeftType;
 
-//using namespace std;
-
-// init arduino
 INITIALISE_INTERRUPT_MANAGER();
-
-
-// def des capteurs infrarouges
-//capteurInfraRightType* capteurInfraRight;
-//capteurInfraLeftType* capteurInfraLeft;
 
 //def des timers
 typedef timer0 timerMoteurs;
@@ -66,15 +56,8 @@ capteur_us1_type us1;
 typedef CapteurSRFMono< timer_capteur_us, B0 , pcint0 > capteur_us2_type;
 capteur_us2_type us2;
 
-// declaration de l'AX-12
-/* pas d'AX12 au final
-AX<uart0>* axTest0;
-*/
-
-
 ////////////////////////// Code de debug /////////////////////////////////////////////
 
-// Moi je veux bien que tu écrives ça sur uart0, mais c'est la série de l'AX12... le 328 a qu'une série, donc tu pourras pas parler avec un pc tout en ayant des AX12
 void onOverflow()
 {
 	// efface l'écran
@@ -93,21 +76,8 @@ void onOverflow()
 	uart0::printfln("\n appuyez sur h pour le menu d'aide");
 }
 
-/* void printIR()
-{
-		uart0::printfln("IR gauche : %u", capteurInfraRight->value());
-		uart0::printfln("IR droit: %u", capteurInfraLeft->value());
-} */
-
 void debugMode()
 {
-
-	//timer
-//	timer1::mode(timer1::MODE_COUNTER);
-//	timer1::set_prescaler(timer1::prescaler::PRESCALER_256); // peut etre :       PRESCALER_DISABLE, PRESCALER_1, PRESCALER_8, PRESCALER_64, PRESCALER_256, PRESCALER_1024
-//	timer1::counter::overflow_interrupt::attach(onOverflow);
-//	timer1::counter::overflow_interrupt::enable();
-
 	while(true)
 	{
 		char buffer[17] = "";
@@ -161,49 +131,6 @@ void debugMode()
 		}
 
 
-		// test de l'ax-12
-/*	PAS d'ax12
-		if(strcmp(buffer,"a") == 0)
-		{
-			uart0::print("AX-12");
-			_delay_ms(100);
-			axTest0->goTo(20);
-			axTest1->goTo(20);
-			axTest2->goTo(20);
-			axTest3->goTo(20);
-			axTest4->goTo(20);
-			axTest5->goTo(20);
-			axTest6->goTo(20);
-			axTest7->goTo(20);
-			axTest8->goTo(20);
-			axTest9->goTo(20);
-			axTest10->goTo(20);
-			axTest11->goTo(20);
-			axTest12->goTo(20);
-			axTest13->goTo(20);
-			axTest14->goTo(20);
-			axTest15->goTo(20);
-			_delay_ms(1000);
-			axTest0->goTo(200);
-			axTest1->goTo(200);
-			axTest2->goTo(200);
-			axTest3->goTo(200);
-			axTest4->goTo(200);
-			axTest5->goTo(200);
-			axTest6->goTo(200);
-			axTest7->goTo(200);
-			axTest8->goTo(200);
-			axTest9->goTo(200);
-			axTest10->goTo(200);
-			axTest11->goTo(200);
-			axTest12->goTo(200);
-			axTest13->goTo(200);
-			axTest14->goTo(200);
-			axTest15->goTo(200);
-			_delay_ms(100);
-		}
-*/
-
 		// menu d'aide
 		if(strcmp(buffer,"h") == 0)
 		{
@@ -241,11 +168,6 @@ void debugMode()
 		}
 
 		B5::toggle();
-
-
-		// met a jour la valeur des capteurs dans le code
-		//capteurInfraRight->refresh();
-		//capteurInfraLeft->refresh();
 
 		_delay_ms(100);
 
@@ -299,16 +221,10 @@ void stopIfObstacle()
 	// distance devant le land raider (donnée par les capteurs ultrasons) jusqu'a laquelle on considère qu'il n'y a pas d'obstacle devant nous
 	int stopThreshold = 150;
 
-//Inutile, se fait automatiquement sur interruption par overflow de timer pour les ultrasons
-	// met a jour la valeur des capteurs dans le code
-//	capteurInfraRight->refresh();
-//	capteurInfraLeft->refresh();
-
-
 	// Tant que l'on voit un obstacle sur l'un ou l'autre des capteurs, on arrete le land raider
 	// (si aucun obstacle n'est détecté, ce while n'est pas exécuté)
-	int val1 ;
-	int val2 ;
+	int val1 = 5000;
+	int val2 = 5000;
 #ifdef HOMOLOGATION
 	while((val1 = us1.value()) < stopThreshold || (val2 = us2.value()) < stopThreshold)
 #else
@@ -404,40 +320,6 @@ void locomotionTurnCCW(int duration)
 	}
 }
 
-
-
-/////////////////////////////// Code de match ////////////////////////////////////////
-
-/**
- * Fonction qui ne se termine que lorsque le jumper est retiré du land raider.
- * Cela permet d'attendre que le match commence
-*/
-/* void waitForMatch()
-{
-	// état actuel du jumper, pour l'instant on fait comme si le jumper n'était pas dans le robot
-	// ce booléen est a true si le jumper est présent, et a false sinon
-	bool isJumperPresent = false;
-
-	// ancien état du jumper, pour l'instant on fait comme si le jumper n'était précédemment pas dans le robot
-	// ce booléen est a true si le jumper est présent, et a false sinon
-	bool wasJumperPresent = false;
-
-	// cette boucle attends que le jumper soit retiré du robot
-	// le jumper est retiré du robot quand il était précédemment dans le robot et qu'il n'est plus la maintenant.
-	while(!(D7::read() != 1 && wasJumperPresent))
-	{
-
-		// rends l'état précédent du jumper égal a l'état actuel, puis met a jour l'état actuel
-		wasJumperPresent = isJumperPresent;
-		isJumperPresent = (D7::read() == 1);
-
-		// attends un peu avant de revérifier si le jumper est encore présent, pour ne pas saturer le controleur avec plein de demandes
-		_delay_ms(100);
-		B5::toggle();
-	}
-} */
-
-
 /**
  * Exécute le match. Cette fonction est une sorte de chef d'orchestre qui dit quanqd faire quoi:
  * quand faut-il tourner, quand faut-il avancer, etc.
@@ -501,13 +383,6 @@ int main()
 	//init uart (série) pour causer
 	uart0::init();
 	uart0::change_baudrate(57600);
-
-	// init des capteurs infrarouges
-//	capteurInfraRightType capteurInfraRightINIT;
-//	capteurInfraLeftType capteurInfraLeftINIT;
-//	capteurInfraRight = &capteurInfraRightINIT;
-//	capteurInfraLeft = &capteurInfraLeftINIT;
-
 	// init des capteurs ultrasons
 
 	timer_capteur_us::mode(timer_capteur_us::MODE_COUNTER);
@@ -516,43 +391,6 @@ int main()
 	timer_refresh::set_prescaler(timer_refresh::prescaler::PRESCALER_1024); //normal = 1024
 	timer_refresh::counter::overflow_interrupt::enable();
 
-
-	//init ax12
-/* On a dit PAS d'AX12 !
-	AX<uart0> axINIT0(0,1,1023);
-	AX<uart0> axINIT1(1,1,1023);
-	AX<uart0> axINIT2(2,1,1023);
-	AX<uart0> axINIT3(3,1,1023);
-	AX<uart0> axINIT4(4,1,1023);
-	AX<uart0> axINIT5(5,1,1023);
-	AX<uart0> axINIT6(6,1,1023);
-	AX<uart0> axINIT7(7,1,1023);
-	AX<uart0> axINIT8(8,1,1023);
-	AX<uart0> axINIT9(9,1,1023);
-	AX<uart0> axINIT10(10,1,1023);
-	AX<uart0> axINIT11(11,1,1023);
-	AX<uart0> axINIT12(12,1,1023);
-	AX<uart0> axINIT13(13,1,1023);
-	AX<uart0> axINIT14(14,1,1023);
-	AX<uart0> axINIT15(15,1,1023);
-
-	axTest0 = &axINIT0;
-	axTest1 = &axINIT1;
-	axTest2 = &axINIT2;
-	axTest3 = &axINIT3;
-	axTest4 = &axINIT4;
-	axTest5 = &axINIT5;
-	axTest6 = &axINIT6;
-	axTest7 = &axINIT7;
-	axTest8 = &axINIT8;
-	axTest9 = &axINIT9;
-	axTest10 = &axINIT10;
-	axTest11 = &axINIT11;
-	axTest12 = &axINIT12;
-	axTest13 = &axINIT13;
-	axTest14 = &axINIT14;
-	axTest15 = &axINIT15;
-*/
 
 	// IR droit sur C0 (Analog 0)
 	// IR gauche sur C1 (Analog 1)
@@ -570,11 +408,10 @@ int main()
 
 
 
-	debugMode();			// plus la peine de debug !
+//	debugMode();			// plus la peine de debug !
 
 	// Code de match !
 	uart0::print("Land Raider, pret pour la coupe !");
-// PLus de waitformatch étant donné que le jumper power l'arduino	waitForMatch();
 	uart0::print("Debut du match !");
 	doMatch();
 
@@ -591,7 +428,7 @@ ISR(TIMER2_OVF_vect)
  	us2.refresh();
     }
     overflow++;
-	
+
     if(overflow >= 5000) {	//fin des 90 secondes approximativement
 	endMatch();
     }
