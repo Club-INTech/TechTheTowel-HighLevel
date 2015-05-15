@@ -126,6 +126,7 @@ public class ThreadTimer extends AbstractThread
 		// boucle principale, celle qui dure tout le match
 		while(System.currentTimeMillis() - matchStartTimestamp < matchDuration)
 		{
+
 			if(stopThreads)
 			{
 				// ons 'arrète si le ThreadManager le demande

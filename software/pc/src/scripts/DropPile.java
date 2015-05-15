@@ -49,12 +49,10 @@ public class DropPile extends AbstractScript
 	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, InObstacleException, ExecuteException
 	{
 
-		if(!actualState.table.getIsStartAreaFilledWithPile())
-		{
 			EnumSet<ObstacleGroups> obstacleNotConsidered = EnumSet.noneOf(ObstacleGroups.class);
 			if (versionToExecute == 1)
 				obstacleNotConsidered.add(ObstacleGroups.GOBLET_2);
-			if (versionToExecute == 0)
+			if (versionToExecute == 0 && !actualState.table.getIsStartAreaFilledWithPile())
 				obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_2);
 			
 			// va jusqu'au point d'entrée de la version demandée
@@ -62,7 +60,7 @@ public class DropPile extends AbstractScript
 			
 			// exécute la version demandée
 			execute(versionToExecute, actualState, hooksToConsider);
-		}
+
 	}
 	@Override
 	public void execute(int version, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException
@@ -312,10 +310,11 @@ public class DropPile extends AbstractScript
 	public void finalize(GameState<?> stateToConsider) throws SerialFinallyException
 	{
 		try 
-		{
-			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, false);
-			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);	
+		{	
 			stateToConsider.robot.moveLengthwise(-20);
+			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);	
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);

@@ -551,7 +551,7 @@ public class Locomotion implements Service
         { 	
             updateCurrentPositionAndOrientation();
             
-            log.debug("position actuelle = " + lowLevelPosition.toString() + "   --   oriantation actuelle : " + lowLevelOrientation,this);
+//            log.debug("position actuelle = " + lowLevelPosition.toString() + "   --   orientation actuelle : " + lowLevelOrientation,this);
             
         	// en cas de détection d'ennemi, une exception est levée
         	if(mustDetect)

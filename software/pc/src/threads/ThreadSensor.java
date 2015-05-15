@@ -200,7 +200,7 @@ class ThreadSensor extends AbstractThread
 		}
 
 		// maintenant que le jumper est retiré, le match a commencé
-		ThreadTimer.matchEnded = true;
+		ThreadTimer.matchEnded = false;
 		
 		// boucle principale, celle qui dure tout le match
 		log.debug("Activation des capteurs", this);
