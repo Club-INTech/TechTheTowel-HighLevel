@@ -221,9 +221,12 @@ public class DropPile extends AbstractScript
 			
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_GUIDE, false);
 			stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_GUIDE, true);
+			
+			stateToConsider.robot.sleep(1000);	// attente pour que la pile retrouve son équilibre
+			
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
 
-			stateToConsider.robot.sleep(700);	// attente pour que la pile retrouve son équilibre
+			stateToConsider.robot.sleep(1000);	// attente pour que la pile retrouve son équilibre
 			
 		}
 		else
@@ -273,6 +276,7 @@ public class DropPile extends AbstractScript
 	 * @throws SerialConnexionException
 	 * @throws UnableToMoveException
 	 */
+	@SuppressWarnings("unused")
 	private void pileDropperGroundOld(GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider,int distance) throws SerialConnexionException, UnableToMoveException
 	{
 		if (stateToConsider.robot.hasRobotNonDigestedPlot())
