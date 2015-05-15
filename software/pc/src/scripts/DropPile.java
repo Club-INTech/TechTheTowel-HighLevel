@@ -48,17 +48,21 @@ public class DropPile extends AbstractScript
 	@Override
 	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, InObstacleException, ExecuteException
 	{
-		EnumSet<ObstacleGroups> obstacleNotConsidered = EnumSet.noneOf(ObstacleGroups.class);
-		if (versionToExecute == 1)
-			obstacleNotConsidered.add(ObstacleGroups.GOBLET_2);
-		if (versionToExecute == 0)
-			obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_2);
-		
-		// va jusqu'au point d'entrée de la version demandée
-		actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.robotRay, actualState.robot.getPosition()), hooksToConsider, actualState.table,obstacleNotConsidered);
-		
-		// exécute la version demandée
-		execute(versionToExecute, actualState, hooksToConsider);
+
+		if(!actualState.table.getIsStartAreaFilledWithPile())
+		{
+			EnumSet<ObstacleGroups> obstacleNotConsidered = EnumSet.noneOf(ObstacleGroups.class);
+			if (versionToExecute == 1)
+				obstacleNotConsidered.add(ObstacleGroups.GOBLET_2);
+			if (versionToExecute == 0)
+				obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_2);
+			
+			// va jusqu'au point d'entrée de la version demandée
+			actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.robotRay, actualState.robot.getPosition()), hooksToConsider, actualState.table,obstacleNotConsidered);
+			
+			// exécute la version demandée
+			execute(versionToExecute, actualState, hooksToConsider);
+		}
 	}
 	@Override
 	public void execute(int version, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException

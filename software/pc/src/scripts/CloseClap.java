@@ -203,7 +203,7 @@ public class CloseClap extends AbstractScript
 		stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
 
 		// on longe les claps avec un léger anges qui nous éloigne du mur pour éviter tout risque de cogner le bord de table
-		stateToConsider.robot.turn(0.05, hooksToConsider, false);
+		stateToConsider.robot.turn(-0.02, hooksToConsider, false);
 		log.debug("Orientation de " + stateToConsider.robot.getOrientation() + " avant les claps", this);
 		
 		if(!loveClap)
