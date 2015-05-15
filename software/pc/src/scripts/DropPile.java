@@ -204,7 +204,7 @@ public class DropPile extends AbstractScript
 			throw new ExecuteException(e);
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @param stateToConsider l'état de la table pour deposer la pile
@@ -213,6 +213,67 @@ public class DropPile extends AbstractScript
 	 * @throws UnableToMoveException
 	 */
 	private void pileDropperGround(GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider,int distance) throws SerialConnexionException, UnableToMoveException
+	{
+		if (stateToConsider.robot.hasRobotNonDigestedPlot())
+		{
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+			//on ouvre le guide un peu
+			
+			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_GUIDE, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_GUIDE, true);
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
+
+			stateToConsider.robot.sleep(700);	// attente pour que la pile retrouve son équilibre
+			
+		}
+		else
+		{
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_HIGH, true);
+			//on ouvre le guide un peu
+			
+			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_GUIDE, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_GUIDE, true);
+			stateToConsider.robot.sleep(700);	// attente pour que la pile retrouve son équilibre
+			
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+
+			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
+
+		}
+		//puis beaucoup
+		stateToConsider.robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, false);
+		stateToConsider.robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, true);
+		//on se vide de nos plots et on met a jour les points
+		int ball = 0;
+		if (stateToConsider.robot.isBallStored)
+			ball = 1;
+		int valuePoints = (2*ball+3)*stateToConsider.robot.storedPlotCount;
+		stateToConsider.obtainedPoints += (2*ball+3)*stateToConsider.robot.storedPlotCount;
+		stateToConsider.table.setPileValue(0, valuePoints);
+		stateToConsider.robot.storedPlotCount = 0;
+		stateToConsider.robot.isBallStored = false;
+		stateToConsider.robot.digestPlot();
+		
+		stateToConsider.robot.moveLengthwiseWithoutDetection(-distance, hooksToConsider, false);
+		//Puis on finit
+		stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
+		stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, false);
+		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+		
+		//on remet l'ascenceur en position de deplacement
+		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
+
+	}
+
+	
+	/**
+	 * 
+	 * @param stateToConsider l'état de la table pour deposer la pile
+	 * @param distance la distance pour reculler de la pile (en valeur absolue)
+	 * @throws SerialConnexionException
+	 * @throws UnableToMoveException
+	 */
+	private void pileDropperGroundOld(GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider,int distance) throws SerialConnexionException, UnableToMoveException
 	{
 		if (stateToConsider.robot.hasRobotNonDigestedPlot())
 		{
