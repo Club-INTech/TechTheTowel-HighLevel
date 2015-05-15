@@ -2,7 +2,6 @@ package scripts;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import enums.ActuatorOrder;
 import enums.Speed;
 import exceptions.ConfigPropertyNotFoundException;
@@ -203,7 +202,9 @@ public class CloseClap extends AbstractScript
 
 		stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
 
-		stateToConsider.robot.turn(0, hooksToConsider, false);
+		// on longe les claps avec un léger anges qui nous éloigne du mur pour éviter tout risque de cogner le bord de table
+		stateToConsider.robot.turn(0.05, hooksToConsider, false);
+		log.debug("Orientation de " + stateToConsider.robot.getOrientation() + " avant les claps", this);
 		
 		if(!loveClap)
 		{
@@ -222,7 +223,15 @@ public class CloseClap extends AbstractScript
 		
 		try
 		{
-			stateToConsider.robot.moveLengthwise(-500, hooksToConsider);
+
+			stateToConsider.robot.moveLengthwise(-500, hooksToConsider);	
+			// ne pas faire : impossible de demander un mouvement en marche arrière
+//			EnumSet<ObstacleGroups> obstacleNotConsidered = EnumSet.noneOf(ObstacleGroups.class);
+//			obstacleNotConsidered.add(ObstacleGroups.GOBLET_2);
+//			stateToConsider.robot.moveToLocation(stateToConsider.robot.getPositionFast().minusNewVector(new Vec2(500,0)), hooksToConsider, stateToConsider.table, obstacleNotConsidered);
+			
+			
+			
 			stateToConsider.table.clapXClosed(1);
 		}
 		catch(UnableToMoveException e)
