@@ -131,7 +131,6 @@ public class GetPlot extends AbstractScript
 					}
 					if(versionToExecute==0 || versionToExecute==2 )
 					{
-						// isSecondtry est a true car 2 essais sont inutiles (statistiquement, le 1er fonctionne)
 						eatPlot(false, true, stateToConsider, false, false);
 						stateToConsider.table.eatPlotX(versionToExecute);
 					}
@@ -423,11 +422,11 @@ public class GetPlot extends AbstractScript
 	public Circle entryPosition(int id, int ray, Vec2 robotPosition)
 	{
 		if (id==0)
-			return new Circle (200,600,200);
+			return new Circle (200,600,170);
 		else if (id==1)
 			return new Circle (670,260,0);//ce point n'est pas le centre du plot (pour cause de PathDD)
 		else if (id==2)
-			return new Circle (630,645,200);
+			return new Circle (630,645,170);
 		else if (id==34)
 			return new Circle (900,210,0);
 		else if (id==56 || id==65)
