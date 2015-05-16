@@ -96,26 +96,25 @@ public class ThreadTimer extends AbstractThread
 		mSensorsCardWrapper.updateConfig();	
 		
 		// Attente du démarrage du match
-		
-		// attends que le jumper soit retiré du robot
-		
-		boolean jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
-		while(jumperWasAbsent || !mSensorsCardWrapper.isJumperAbsent())
+		while(!mSensorsCardWrapper.isJumperAbsent() && !matchStarted)
 		{
-			
-			jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
-			robot.sleep(100);
+			if(stopThreads)
+			{
+				log.debug("Arrêt du thread timer avant le début du match", this);
+				return;
+			}
+			try
+			{
+				Thread.sleep(50);
+			} 
+			catch (InterruptedException e)
+			{
+				e.printStackTrace();
+			}
 		}
-
-		// maintenant que le jumper est retiré, le match a commencé
-		matchStarted = true;
 		
-		log.debug(!mSensorsCardWrapper.isJumperAbsent() +" / "+ !matchStarted, this);
-
 		// Le match démarre ! On chage l'état du thread pour refléter ce changement
 		matchStartTimestamp = System.currentTimeMillis();
-		log.critical("Jumper Enlevé", this);
-
 		matchStarted = true;
 
 		config.set("capteurs_on", "true");
@@ -126,7 +125,6 @@ public class ThreadTimer extends AbstractThread
 		// boucle principale, celle qui dure tout le match
 		while(System.currentTimeMillis() - matchStartTimestamp < matchDuration)
 		{
-
 			if(stopThreads)
 			{
 				// ons 'arrète si le ThreadManager le demande
@@ -189,6 +187,7 @@ public class ThreadTimer extends AbstractThread
 			mLocomotionCardWrapper.disableRotationnalFeedbackLoop();
 			mLocomotionCardWrapper.disableTranslationnalFeedbackLoop();
 			mLocomotionCardWrapper.shutdownSTM();
+			
 		}
 		catch (SerialConnexionException e)
 		{

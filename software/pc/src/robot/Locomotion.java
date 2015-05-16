@@ -551,8 +551,6 @@ public class Locomotion implements Service
         { 	
             updateCurrentPositionAndOrientation();
             
-//            log.debug("position actuelle = " + lowLevelPosition.toString() + "   --   orientation actuelle : " + lowLevelOrientation,this);
-            
         	// en cas de détection d'ennemi, une exception est levée
         	if(mustDetect)
         	{
@@ -733,7 +731,7 @@ public class Locomotion implements Service
                 
         		deplacements.turn(angle);  // On ne tourne que si on est assez loin de l'orientation voulu
               
-        		log.debug("Angle corrigé", this);
+//        		log.debug("Angle corrigé", this);
         	}
         	else if(!isCorrection)// Si ca n'est pas  une correction
         	{

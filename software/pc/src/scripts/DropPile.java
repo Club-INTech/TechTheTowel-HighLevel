@@ -48,19 +48,17 @@ public class DropPile extends AbstractScript
 	@Override
 	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, InObstacleException, ExecuteException
 	{
-
-			EnumSet<ObstacleGroups> obstacleNotConsidered = EnumSet.noneOf(ObstacleGroups.class);
-			if (versionToExecute == 1)
-				obstacleNotConsidered.add(ObstacleGroups.GOBLET_2);
-			if (versionToExecute == 0 && !actualState.table.getIsStartAreaFilledWithPile())
-				obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_2);
-			
-			// va jusqu'au point d'entrée de la version demandée
-			actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.robotRay, actualState.robot.getPosition()), hooksToConsider, actualState.table,obstacleNotConsidered);
-			
-			// exécute la version demandée
-			execute(versionToExecute, actualState, hooksToConsider);
-
+		EnumSet<ObstacleGroups> obstacleNotConsidered = EnumSet.noneOf(ObstacleGroups.class);
+		if (versionToExecute == 1)
+			obstacleNotConsidered.add(ObstacleGroups.GOBLET_2);
+		if (versionToExecute == 0)
+			obstacleNotConsidered.add(ObstacleGroups.GREEN_PLOT_2);
+		
+		// va jusqu'au point d'entrée de la version demandée
+		actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.robotRay, actualState.robot.getPosition()), hooksToConsider, actualState.table,obstacleNotConsidered);
+		
+		// exécute la version demandée
+		execute(versionToExecute, actualState, hooksToConsider);
 	}
 	@Override
 	public void execute(int version, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException
@@ -135,19 +133,10 @@ public class DropPile extends AbstractScript
 			else if (version==0)
 			{
 				stateToConsider.robot.turnWithoutDetection(Math.PI/4.5, hooksToConsider);
-
-				if(!stateToConsider.table.getIsStartAreaFilledWithPile())
-				{
-					stateToConsider.robot.moveLengthwise(340, hooksToConsider, true);
-					
-					pileDropperGround(stateToConsider, hooksToConsider, 160);
-					stateToConsider.table.setIsStartAreaFilledWithPile(true);
-				}
-				else 
-				{
-					//340-160
-					stateToConsider.robot.moveLengthwise(180, hooksToConsider, true);
-				}
+				stateToConsider.robot.moveLengthwiseWithoutDetection(360);
+				
+				pileDropperGround(stateToConsider, hooksToConsider, 180);
+				
 				
 				// On ne depose que si la zone est vide de gobelets ET qu'on en a au moins un verre
 				if ( !stateToConsider.table.isAreaXFilled(0) 
@@ -190,6 +179,7 @@ public class DropPile extends AbstractScript
 				// on evite de taper le plot deposé
 				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);
 				stateToConsider.robot.moveLengthwise(-50, hooksToConsider, true);	
+
 			}
 			else
 			{
@@ -204,70 +194,6 @@ public class DropPile extends AbstractScript
 			throw new ExecuteException(e);
 		}
 	}
-
-	/**
-	 * 
-	 * @param stateToConsider l'état de la table pour deposer la pile
-	 * @param distance la distance pour reculler de la pile (en valeur absolue)
-	 * @throws SerialConnexionException
-	 * @throws UnableToMoveException
-	 */
-	private void pileDropperGround(GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider,int distance) throws SerialConnexionException, UnableToMoveException
-	{
-		if (stateToConsider.robot.hasRobotNonDigestedPlot())
-		{
-			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
-			//on ouvre le guide un peu
-			
-			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_GUIDE, false);
-			stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_GUIDE, true);
-			
-			stateToConsider.robot.sleep(1000);	// attente pour que la pile retrouve son équilibre
-			
-			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
-
-			stateToConsider.robot.sleep(1000);	// attente pour que la pile retrouve son équilibre
-			
-		}
-		else
-		{
-			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_HIGH, true);
-			//on ouvre le guide un peu
-			
-			stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_GUIDE, false);
-			stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_GUIDE, true);
-			stateToConsider.robot.sleep(700);	// attente pour que la pile retrouve son équilibre
-			
-			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
-
-			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
-
-		}
-		//puis beaucoup
-		stateToConsider.robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, false);
-		stateToConsider.robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, true);
-		//on se vide de nos plots et on met a jour les points
-		int ball = 0;
-		if (stateToConsider.robot.isBallStored)
-			ball = 1;
-		int valuePoints = (2*ball+3)*stateToConsider.robot.storedPlotCount;
-		stateToConsider.obtainedPoints += (2*ball+3)*stateToConsider.robot.storedPlotCount;
-		stateToConsider.table.setPileValue(0, valuePoints);
-		stateToConsider.robot.storedPlotCount = 0;
-		stateToConsider.robot.isBallStored = false;
-		stateToConsider.robot.digestPlot();
-		
-		stateToConsider.robot.moveLengthwiseWithoutDetection(-distance, hooksToConsider, false);
-		//Puis on finit
-		stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
-		stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, false);
-		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
-		
-		//on remet l'ascenceur en position de deplacement
-		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
-
-	}
-
 	
 	/**
 	 * 
@@ -276,8 +202,7 @@ public class DropPile extends AbstractScript
 	 * @throws SerialConnexionException
 	 * @throws UnableToMoveException
 	 */
-	@SuppressWarnings("unused")
-	private void pileDropperGroundOld(GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider,int distance) throws SerialConnexionException, UnableToMoveException
+	private void pileDropperGround(GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider,int distance) throws SerialConnexionException, UnableToMoveException
 	{
 		if (stateToConsider.robot.hasRobotNonDigestedPlot())
 		{
@@ -375,11 +300,10 @@ public class DropPile extends AbstractScript
 	public void finalize(GameState<?> stateToConsider) throws SerialFinallyException
 	{
 		try 
-		{	
-			stateToConsider.robot.moveLengthwise(-20);
+		{
 			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, false);
-			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);
-			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);	
+			stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);	
+			stateToConsider.robot.moveLengthwise(-20);
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);

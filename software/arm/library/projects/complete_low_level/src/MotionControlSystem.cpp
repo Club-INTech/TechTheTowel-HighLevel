@@ -4,8 +4,8 @@ MotionControlSystem::MotionControlSystem(): leftMotor(Side::LEFT), rightMotor(Si
 	translationPID(&currentDistance, &pwmTranslation, &translationSetpoint),
 	rotationPID(&currentAngle, &pwmRotation, &rotationSetpoint)
 {
-	translationControlled = false;
-	rotationControlled = false;
+	translationControlled = true;
+	rotationControlled = true;
 	originalAngle = 0.0;
 	rotationSetpoint = 0;
 	translationSetpoint = 0;
@@ -14,13 +14,10 @@ MotionControlSystem::MotionControlSystem(): leftMotor(Side::LEFT), rightMotor(Si
 	moving = false;
 	moveAbnormal = false;
 
-	delayToStop = 100;
+	delayToStop = 500;
 	toleranceInTick = 100;
-	pwmMinToMove = 3;
-	minSpeed = 0;
-
-	vitesseEvolutionConsigneTranslation = 4;
-	vitesseEvolutionConsigneRotation = 4;
+	pwmMinToMove = 0;//60
+	minSpeed = 1;
 }
 
 MotionControlSystem::MotionControlSystem(const MotionControlSystem&): leftMotor(Side::LEFT), rightMotor(Side::RIGHT),
@@ -53,21 +50,12 @@ void MotionControlSystem::init(int16_t maxPWMtranslation, int16_t maxPWMrotation
 	{//		 PWM  Kp   Ki   Kd
 			{120, 0.08, 0., 20.},//Translation
 			{120,   2., 0., 700},//Rotation
-
 			{100, 0.2, 0. , 90.},//Translation
-			{100,  3., 0. ,1200},//Rotation
-
-			{60., 0.2, 0. , 80.},//Translation
-			{60., 2.0, 0. , 500},//Rotation
-
-			{20., 0.2, 0.000001 ,  100},//Translation
-			{20., 0.8, 0. , 200},//Rotation
-
-			{10.,0.07, 0. ,  20},//Translation
-			{10., 0.1, 0. ,  25},//Rotation
-
-			{ 3., 0.1, 0. ,  10},//Translation
-			{ 3., 0.2, 0. ,  20} //Rotation
+			{150, 2.5, 0. , 600},//Rotation
+			{  0,  0 , 0. ,   0},//Translation
+			{100,  3 , 0. ,1200},//Rotation
+			{60., 0.1, 0. , 25.},//Translation
+			{60., 0.5, 0. , 130} //Rotation
 	};
 
 	for(int i=0; i<NB_SPEED; i++)
@@ -171,33 +159,6 @@ void MotionControlSystem::enableRotationControl(bool enabled) {
 void MotionControlSystem::control()
 {
 	/*
-	 * Gestion de la rampe de la consigne
-	 * (un créneau pose problème ...)
-	 */
-
-	if(translationSetpoint < translationFinalSetpoint - vitesseEvolutionConsigneTranslation)
-	{
-		translationSetpoint += vitesseEvolutionConsigneTranslation;
-	}
-	else if(translationSetpoint > translationFinalSetpoint + vitesseEvolutionConsigneTranslation)
-	{
-		translationSetpoint -= vitesseEvolutionConsigneTranslation;
-	}
-
-	if(rotationSetpoint < rotationFinalSetpoint - vitesseEvolutionConsigneRotation)
-	{
-		rotationSetpoint += vitesseEvolutionConsigneRotation;
-	}
-	else if(rotationSetpoint > rotationFinalSetpoint + vitesseEvolutionConsigneRotation)
-	{
-		rotationSetpoint -= vitesseEvolutionConsigneRotation;
-	}
-
-
-
-
-
-	/*
 	 * Comptage des ticks de la roue droite
 	 * Cette codeuse est connectée à un timer 16bit
 	 * on subit donc un overflow/underflow de la valeur des ticks tous les 7 mètres environ
@@ -229,10 +190,10 @@ void MotionControlSystem::control()
 
 	if (translationControlled)
 	{
-		if(pwmTranslation > maxPWMtranslation)
-			pwmTranslation = maxPWMtranslation;
-		if(pwmTranslation < -maxPWMtranslation)
-			pwmTranslation = -maxPWMtranslation;
+//		if(pwmTranslation > maxPWMtranslation)
+//			pwmTranslation = maxPWMtranslation;
+//		if(pwmTranslation < -maxPWMtranslation)
+//			pwmTranslation = -maxPWMtranslation;
 	}
 	else
 		pwmTranslation = 0;
@@ -242,10 +203,10 @@ void MotionControlSystem::control()
 
 	if (rotationControlled)
 	{
-		if(pwmRotation > maxPWMrotation)
-			pwmRotation = maxPWMrotation;
-		if(pwmRotation < -maxPWMrotation)
-			pwmRotation = -maxPWMrotation;
+//		if(pwmRotation > maxPWMrotation)
+//			pwmRotation = maxPWMrotation;
+//		if(pwmRotation < -maxPWMrotation)
+//			pwmRotation = -maxPWMrotation;
 	}
 	else
 		pwmRotation = 0;
@@ -320,7 +281,7 @@ int32_t MotionControlSystem::optimumAngle(int32_t fromAngle, int32_t toAngle) {
 }
 
 void MotionControlSystem::applyControl() {
-	leftMotor.run((int16_t)((pwmTranslation - pwmRotation)*balance));
+	leftMotor.run(pwmTranslation - pwmRotation);
 	rightMotor.run(pwmTranslation + pwmRotation);
 }
 
@@ -411,30 +372,16 @@ void MotionControlSystem::printTrackingAsserv()
  */
 
 void MotionControlSystem::orderTranslation(int32_t mmDistance) {
-	translationFinalSetpoint += (int32_t) mmDistance / TICK_TO_MM;
-	if(!moving)
-	{
-		translationPID.resetErrors();
-		moving = true;
-	}
-	if ( mmDistance >= 0) {
-		direction = FORWARD;
-	} else {
-		direction = BACKWARD;
-	}
+	translationSetpoint += (int32_t) mmDistance / TICK_TO_MM;
+	moving = true;
 	moveAbnormal = false;
 }
 
 void MotionControlSystem::orderRotation(float angleRadian) {
 	int32_t angleTick = (angleRadian - originalAngle) / TICK_TO_RADIAN;
-	rotationFinalSetpoint = MotionControlSystem::optimumAngle(currentAngle,
+	rotationSetpoint = MotionControlSystem::optimumAngle(currentAngle,
 			angleTick);
-	if(!moving)
-	{
-		rotationPID.resetErrors();
-		moving = true;
-	}
-	direction = NONE;
+	moving = true;
 	moveAbnormal = false;
 }
 
@@ -445,18 +392,9 @@ void MotionControlSystem::orderRawPwm(Side side, int16_t pwm) {
 		rightMotor.run(pwm);
 }
 
-void MotionControlSystem::stopMotion() {
-	translationSetpoint = currentDistance;
-	rotationSetpoint = currentAngle;
-	translationFinalSetpoint = currentDistance;
-	rotationFinalSetpoint = currentAngle;
-}
-
 void MotionControlSystem::stop() {
 	translationSetpoint = currentDistance;
 	rotationSetpoint = currentAngle;
-	translationFinalSetpoint = currentDistance;
-	rotationFinalSetpoint = currentAngle;
 
 	leftMotor.run(0);
 	rightMotor.run(0);
@@ -512,14 +450,6 @@ void MotionControlSystem::setY(float newY){
 	this->y = newY;
 }
 
-void MotionControlSystem::resetPosition()
-{
-	x = 0;
-	y = 0;
-	setOriginalAngle(0);
-	stop();
-}
-
 float MotionControlSystem::getBalance() const{
 	return balance;
 }
@@ -544,11 +474,6 @@ int16_t MotionControlSystem::getMaxPWMrotation() const{
 	return this->maxPWMrotation;
 }
 
-void MotionControlSystem::setDelayToStop(uint32_t delayToStop)
-{
-	this->delayToStop = delayToStop;
-}
-
 void MotionControlSystem::setSmartTranslationTunings()
 {
 	int i = getBestTuningsInDatabase(this->maxPWMtranslation, this->translationTunings);
@@ -564,7 +489,7 @@ void MotionControlSystem::setSmartRotationTunings()
 int MotionControlSystem::getBestTuningsInDatabase(int16_t pwm, float database[NB_SPEED][NB_CTE_ASSERV]) const
 {
 	float ecartMin = 255, indice = 0;
-	for(int i=0; i<NB_SPEED; i++)
+	for(int i=0; i<NB_CTE_ASSERV; i++)
 	{
 		float ecart = ABS(database[i][0] - float(pwm));
 		if(ecart < ecartMin)
@@ -582,10 +507,6 @@ bool MotionControlSystem::isMoving() const{
 
 bool MotionControlSystem::isMoveAbnormal() const{
 	return moveAbnormal;
-}
-
-MOVING_DIRECTION MotionControlSystem::getMovingDirection() const{
-	return direction;
 }
 
 void MotionControlSystem::testPWM(int16_t listePWM[], unsigned int nbPWM)
@@ -622,35 +543,25 @@ void MotionControlSystem::testPWM(int16_t listePWM[], unsigned int nbPWM)
 
 void MotionControlSystem::testTranslation(int distance)
 {
-	setX(0);
-	setY(0);
-	setOriginalAngle(0);
-	translationSetpoint = currentDistance;
-	rotationFinalSetpoint = currentAngle;
 	orderTranslation(distance);
-	while(moving){}
+	Delay(10*(100+distance));
 	serial.printfln("x=%f\r\ny=%f", getX(), getY());
 	serial.printfln("o=%f", getAngleRadian());
 	orderTranslation(-distance);
-	while(moving){}
+	Delay(10*(100+distance));
 	serial.printfln("x=%f\r\ny=%f", getX(), getY());
 	serial.printfln("o=%f", getAngleRadian());
 }
 
 void MotionControlSystem::testRotation(float angle)
 {
-	setX(0);
-	setY(0);
-	setOriginalAngle(0);
-	translationSetpoint = currentDistance;
-	rotationFinalSetpoint = currentAngle;
 	float angleInitial = getAngleRadian();
 	orderRotation(angle + angleInitial);
-	while(moving){}
+	Delay(angle*2000/PI+1000);
 	serial.printfln("x=%f\r\ny=%f", getX(), getY());
 	serial.printfln("o=%f", getAngleRadian());
 	orderRotation(angleInitial);
-	while(moving){}
+	Delay(angle*1000/PI+1000);
 	serial.printfln("x=%f\r\ny=%f", getX(), getY());
 	serial.printfln("o=%f", getAngleRadian());
 }
@@ -669,81 +580,5 @@ void MotionControlSystem::testPID()
 			i=0;
 			Delay(5000);
 		}
-	}
-}
-
-void MotionControlSystem::testVariableSpeed()
-{
-	//Vitesse = 10
-	setMaxPWMtranslation(10);
-	setSmartTranslationTunings();
-	setMaxPWMrotation(10);
-	setSmartRotationTunings();
-
-	resetPosition();
-
-	orderTranslation(1000);
-	while(x<200){}
-
-	setMaxPWMrotation(3);
-	setSmartRotationTunings();
-	setMaxPWMtranslation(3);
-	setSmartTranslationTunings();
-
-	while(x<400){}
-
-	setMaxPWMrotation(10);
-	setSmartRotationTunings();
-	setMaxPWMtranslation(10);
-	setSmartTranslationTunings();
-
-
-	//Retour au point de départ
-	while(moving){}
-	orderRotation(3.141592654);
-	while(moving){}
-	orderTranslation(1000);
-	while(moving){}
-	orderRotation(0);
-}
-
-void MotionControlSystem::testSpeed()
-{
-	serial.printfln("Test de vitesse du robot");
-
-	int16_t pwm[3] = {3, 10, 20};
-	int32_t longueur[6] = {100, 200, 300, 400, 600, 1200};//en mm
-
-	uint32_t resultats[6][3];
-	uint32_t instant_t;
-
-	for(int i_longueur = 0; i_longueur < 6; i_longueur++)
-	{
-		for(int i_pwm = 0; i_pwm < 3; i_pwm++)
-		{
-//			serial.printfln("\n");
-//			serial.printfln("PWMmax = %d", pwm[i_pwm]);
-//			serial.printfln("Longueur = %d mm", longueur[i_longueur]);
-//			serial.print("\n");
-
-			setMaxPWMrotation(pwm[i_pwm]);
-			setSmartRotationTunings();
-			setMaxPWMtranslation(pwm[i_pwm]);
-			setSmartTranslationTunings();
-
-			instant_t = Millis();
-			for(int i=0; i < 1200/longueur[i_longueur]; i++)
-			{
-				orderTranslation(longueur[i_longueur]);
-				while(moving){}
-			}
-			resultats[i_longueur][i_pwm] = Millis() - instant_t;
-
-			orderRotation(getAngleRadian() + 3.141592654);
-			while(moving){}
-
-			serial.printfln("%d\t", resultats[i_longueur][i_pwm]);
-		}
-		serial.print("\n");
 	}
 }

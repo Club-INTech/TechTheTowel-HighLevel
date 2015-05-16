@@ -2,6 +2,7 @@ package scripts;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
 import enums.ActuatorOrder;
 import enums.Speed;
 import exceptions.ConfigPropertyNotFoundException;
@@ -96,11 +97,7 @@ public class CloseClap extends AbstractScript
 			else if (versionToExecute == 3)
 				closeThirdClap(stateToConsider, hooksToConsider);
 			else if (versionToExecute == 12)
-			{
-				if (stateToConsider.table.isClapXClosed(1) && stateToConsider.table.isClapXClosed(2))
-					return;
 				closeFirstAndSecondClapBackwardWithHooks(stateToConsider, hooksToConsider);
-			}
 			else if (versionToExecute == -1)
 				closeFirstClapBackward(stateToConsider, hooksToConsider);
 			else if (versionToExecute == -12)
@@ -193,24 +190,25 @@ public class CloseClap extends AbstractScript
 	
 	public void closeFirstAndSecondClapBackwardWithHooks (GameState<Robot> stateToConsider,  ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException
 	{
+		
 		//on met le robot en vitesse lente
 		stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
 		
 		//on commence en (1295,230), on se tourne dans le bon sens
+		//stateToConsider.robot.moveLengthwise(80, hooksToConsider, false);
 		
 		stateToConsider.robot.turn(Math.PI/4, hooksToConsider, false);
 
 		stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, true);
 
-		// on longe les claps avec un léger anges qui nous éloigne du mur pour éviter tout risque de cogner le bord de table
-		stateToConsider.robot.turn(-0.02, hooksToConsider, false);
-		log.debug("Orientation de " + stateToConsider.robot.getOrientation() + " avant les claps", this);
+		stateToConsider.robot.turn(0, hooksToConsider, false);
 		
 		if(!loveClap)
 		{
 			//ajout de hooks
 			Hook hook1 = hookFactory.newHookXisLesser(1250, 10);
-			Hook hook2 = hookFactory.newHookXisLesser(900, 10);	
+			Hook hook2 = hookFactory.newHookXisLesser(940, 10);
+		
 		
 			// ajoute un callback au hook de position qui ouvre / ferme le bras
 			hook1.addCallback(	new Callback(new OpenClapRightHighExe(),true, stateToConsider)	);
@@ -223,15 +221,7 @@ public class CloseClap extends AbstractScript
 		
 		try
 		{
-
-			stateToConsider.robot.moveLengthwise(-500, hooksToConsider);	
-			// ne pas faire : impossible de demander un mouvement en marche arrière
-//			EnumSet<ObstacleGroups> obstacleNotConsidered = EnumSet.noneOf(ObstacleGroups.class);
-//			obstacleNotConsidered.add(ObstacleGroups.GOBLET_2);
-//			stateToConsider.robot.moveToLocation(stateToConsider.robot.getPositionFast().minusNewVector(new Vec2(500,0)), hooksToConsider, stateToConsider.table, obstacleNotConsidered);
-			
-			
-			
+			stateToConsider.robot.moveLengthwise(-500, hooksToConsider);
 			stateToConsider.table.clapXClosed(1);
 		}
 		catch(UnableToMoveException e)

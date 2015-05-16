@@ -10,7 +10,6 @@
 #include "misc.h"
 #include "capteur_srf05.hpp"
 #include "Singleton.hpp"
-#include "MotionControlSystem.h"
 #include <Uart.hpp>
 
 extern Uart<1> serial;
@@ -29,7 +28,7 @@ public:
 	bool isRightGlassInside() const;
 	bool isJumperOut() const;
 
-	void refresh(MOVING_DIRECTION direction, bool moving);
+	void refresh();
 
 	void leftFrontUSInterrupt();
 	void rightFrontUSInterrupt();

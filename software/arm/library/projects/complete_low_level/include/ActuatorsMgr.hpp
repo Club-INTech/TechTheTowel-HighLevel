@@ -12,10 +12,10 @@
 
 extern Uart<1> serial;
 
-#define bgOuvert 300
+#define bgOuvert 292
 #define bgFerme 98
 #define bgMilieu 208
-#define bdOuvert 0
+#define bdOuvert 8
 #define bdMilieu 95
 #define bdFerme 203
 #define mgOuvert 240
@@ -27,10 +27,10 @@ extern Uart<1> serial;
 #define tgPose 160
 #define tgRange 222
 #define cdHaut 65
-#define cdMilieu 100
+#define cdMilieu 90
 #define cdBas 148
 #define cgHaut 237
-#define cgMilieu 200
+#define cgMilieu 207
 #define cgBas 152
 #define ggOuvert 180
 #define ggFerme 143
@@ -248,66 +248,9 @@ public:
 	}
 
 	void e(uint16_t angle){
-		clapGauche->goTo(angle);
+		machoireDroite->goTo(angle);
 	}
-	void setAllID(){
-		int i;
-		serial.printfln("Reglage des ID des AX12");
-		serial.printfln("Brancher uniquement l'AX12 indique");
-		serial.printf("\n");
 
-		serial.printfln("Machoire droite");
-		serial.read(i);
-		machoireDroite->initIDB(0);
-		serial.printfln("done");
-
-		serial.printfln("Machoire gauche");
-		serial.read(i);
-		machoireDroite->initIDB(1);
-		serial.printfln("done");
-
-		serial.printfln("Bras droit");
-		serial.read(i);
-		machoireDroite->initIDB(2);
-		serial.printfln("done");
-
-		serial.printfln("Bras gauche");
-		serial.read(i);
-		machoireDroite->initIDB(3);
-		serial.printfln("done");
-
-		serial.printfln("Guide droit");
-		serial.read(i);
-		machoireDroite->initIDB(4);
-		serial.printfln("done");
-
-		serial.printfln("Guide gauche");
-		serial.read(i);
-		machoireDroite->initIDB(5);
-		serial.printfln("done");
-
-		serial.printfln("Tapis droit");
-		serial.read(i);
-		machoireDroite->initIDB(6);
-		serial.printfln("done");
-
-		serial.printfln("Tapis gauche");
-		serial.read(i);
-		machoireDroite->initIDB(7);
-		serial.printfln("done");
-
-		serial.printfln("Clap droit");
-		serial.read(i);
-		machoireDroite->initIDB(8);
-		serial.printfln("done");
-
-		serial.printfln("Clap gauche");
-		serial.read(i);
-		machoireDroite->initIDB(9);
-		serial.printfln("done");
-
-		serial.printfln("Fin du reglage");
-	}
 	void omd() {
 		machoireDroite->goTo(mdOuvert);
 	}
@@ -463,110 +406,6 @@ public:
 		serial.printfln("done");
 	}
 
-	void testSpeed()
-	{
-		serial.printfln("Test vitesse actionneurs");
-
-		serial.printfln("Machoire droite");
-		findTimeEllapsed(&ActuatorsMgr::fmd, &ActuatorsMgr::omd);
-
-		serial.printfln("Bras droit 1");
-		findTimeEllapsed(&ActuatorsMgr::fbd, &ActuatorsMgr::obd);
-
-		serial.printfln("Bras droit 2");
-		findTimeEllapsed(&ActuatorsMgr::fbd, &ActuatorsMgr::mbd);
-
-		serial.printfln("Bras droit 3");
-		findTimeEllapsed(&ActuatorsMgr::mbd, &ActuatorsMgr::obd);
-
-		serial.printfln("Bras droit lentement");
-		findTimeEllapsed(&ActuatorsMgr::fbdl, &ActuatorsMgr::obdl);
-
-		serial.printfln("Clap droit 1");
-		findTimeEllapsed(&ActuatorsMgr::cdb, &ActuatorsMgr::cdh);
-
-		serial.printfln("Clap droit 2");
-		findTimeEllapsed(&ActuatorsMgr::cdb, &ActuatorsMgr::cdm);
-
-		serial.printfln("Clap droit 3");
-		findTimeEllapsed(&ActuatorsMgr::cdm, &ActuatorsMgr::cdh);
-
-		serial.printfln("Clap droit 4");
-		findTimeEllapsed(&ActuatorsMgr::cdh, &ActuatorsMgr::cdb);
-
-		serial.printfln("Clap droit 5");
-		findTimeEllapsed(&ActuatorsMgr::cdm, &ActuatorsMgr::cdb);
-
-		serial.printfln("Clap droit 6");
-		findTimeEllapsed(&ActuatorsMgr::cdh, &ActuatorsMgr::cdm);
-
-		serial.printfln("Tapis droit descente");
-		findTimeEllapsed(&ActuatorsMgr::rtd, &ActuatorsMgr::ptd);
-
-		serial.printfln("Tapis droit montee");
-		findTimeEllapsed(&ActuatorsMgr::ptd, &ActuatorsMgr::rtd);
-
-		omd();
-		serial.printfln("Guide droit 1");
-		findTimeEllapsed(&ActuatorsMgr::fgg, &ActuatorsMgr::ogg);
-
-		serial.printfln("Guide droit 2");
-		findTimeEllapsed(&ActuatorsMgr::fgg, &ActuatorsMgr::ggi);
-
-		serial.printfln("Guide droit 3");
-		findTimeEllapsed(&ActuatorsMgr::ggi, &ActuatorsMgr::ogg);
-	}
-
-	void testSpeedElevator()
-	{
-		serial.printfln("Test vitesse de l'ascenseur");
-	}
-
-
-
-private:
-	void findTimeEllapsed(void (ActuatorsMgr::*gotoPositionA)(void), void (ActuatorsMgr::*gotoPositionB)(void))
-	{
-		char userSay[64];
-		int delai = 1000, delai_trop_court = 0, delai_trop_long = 2000;
-		(this->*gotoPositionA)();
-		Delay(delai);
-
-		while(delai_trop_long - delai_trop_court > 50)
-		{
-			serial.printf("Test avec %d ms", delai);
-			serial.read(userSay);
-			(this->*gotoPositionB)();
-			Delay(delai);
-			(this->*gotoPositionA)();
-			bool redemander = true;
-			while(redemander)
-			{
-				serial.printfln("Temps d'attente ? (+ augmenter ; - diminuer ; o OK)");
-				serial.read(userSay);
-				if(!strcmp("+",userSay))
-				{
-					delai_trop_court = delai;
-					delai = (delai + delai_trop_long)/2;
-					redemander = false;
-				}
-				else if (!strcmp("-",userSay))
-				{
-					delai_trop_long = delai;
-					delai = (delai_trop_court + delai)/2;
-					redemander = false;
-				}
-				else if (!strcmp("o",userSay))
-				{
-					delai_trop_court = delai;
-					delai_trop_long = delai;
-					redemander = false;
-				}
-			}
-		}
-		serial.printfln("Delai optimal : %d ms", delai);
-		serial.read(userSay);
-	}
 };
 
 #endif /* ACTUATORSMGR_HPP */

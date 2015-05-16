@@ -281,12 +281,13 @@ public:
     void init()
     {
         Serial_AX12::disable_rx();
-        writeData(AX_RETURN_LEVEL, 1, 0);
+        // Active l'asservissement de l'AX12
         writeData(AX_TORQUE_ENABLE, 1, 1);
-        writeData(AX_LIMIT_TEMPERATURE, 1, 150);
+
         writeData(AX_CW_ANGLE_LIMIT_L, 2, angleMin_);
         writeData(AX_CCW_ANGLE_LIMIT_L, 2, angleMax_);
 
+        writeData(AX_RETURN_LEVEL, 1, 0);
         changeSpeed(100);
     }
     /// Reset de l'AX12

@@ -197,9 +197,9 @@ class CapteurSRFMono
                          /*interpolation linéaire entre deux valeurs
                          mesurées: 1050/1800 à 20MHz, 1180/1800 à 16MHz*/
 
-            derniereDistance= mediane(ringBufferValeurs);
-        }
+            derniereDistance=mediane(ringBufferValeurs);
 
+        }
     }
 
 };

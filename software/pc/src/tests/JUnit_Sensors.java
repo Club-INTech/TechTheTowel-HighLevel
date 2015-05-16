@@ -153,7 +153,7 @@ public class JUnit_Sensors extends JUnit_Test
 			;
 	}
 	
-//	@Test
+	@Test
 	public void testDetectionTournante()
 	{
 		log.debug("Test d'évitement", this);
@@ -249,7 +249,7 @@ public class JUnit_Sensors extends JUnit_Test
 		}
 	}
 		
-	@Test
+	//@Test
 	public void testSensorEnnemyInDiscWithoutMovement()
 	{
 		log.debug("Test d'évitement fixe", this);
