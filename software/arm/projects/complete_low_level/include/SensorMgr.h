@@ -29,6 +29,8 @@ public:
 	bool isRightGlassInside() const;
 	bool isJumperOut() const;
 
+	bool isButtonPressed() const;
+
 	void refresh(MOVING_DIRECTION direction, bool moving);
 
 	void leftFrontUSInterrupt();

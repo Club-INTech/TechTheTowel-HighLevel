@@ -146,7 +146,6 @@ public:
 	void orderRotation(float);
 	void orderRawPwm(Side,int16_t);
 	void stop();
-	void stopMotion();
 	static int32_t optimumAngle(int32_t,int32_t);
 
 	void setTranslationTunings(float, float, float);

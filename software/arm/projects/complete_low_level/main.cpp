@@ -15,7 +15,7 @@ int main(void)
 	serial_ax.init(9600);
 
 	MotionControlSystem* motionControlSystem = &MotionControlSystem::Instance();
-	motionControlSystem->init(20, 20);
+	motionControlSystem->init(10, 10);
 	ActuatorsMgr* actuatorsMgr = &ActuatorsMgr::Instance();
 	SensorMgr* sensorMgr = &SensorMgr::Instance();
 
@@ -23,13 +23,52 @@ int main(void)
 
 	bool translation = true;//permet de basculer entre les réglages de cte d'asserv en translation et en rotation
 
+	bool robotEnable = false;
+
+	//Pin de contrôle de la lampe du bouton
+	GPIO_InitTypeDef GPIO_InitStruct;
+	GPIO_StructInit(&GPIO_InitStruct);
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);//Active l'horloge du port C
+	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_10;
+	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
+	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;
+	GPIO_Init(GPIOC, &GPIO_InitStruct);
+	GPIO_ResetBits(GPIOC, GPIO_Pin_10);
+
 	while(1)
 	{
 		sensorMgr->refresh(motionControlSystem->getMovingDirection(), motionControlSystem->isMoving());
 
+		if(sensorMgr->isButtonPressed())
+		{
+			robotEnable = !robotEnable;
+			Delay(30);
+			while(sensorMgr->isButtonPressed())
+			{}
+			Delay(30);
+			if(robotEnable)
+			{
+				GPIO_SetBits(GPIOC, GPIO_Pin_10);
+				motionControlSystem->stop();
+				motionControlSystem->enableTranslationControl(true);
+				motionControlSystem->enableRotationControl(true);
+				actuatorsMgr->asservirAscenseur(true);
+				actuatorsMgr->asservirAX12(true);
+				serial.flush();
+			}
+			else
+			{
+				GPIO_ResetBits(GPIOC, GPIO_Pin_10);
+				motionControlSystem->enableTranslationControl(false);
+				motionControlSystem->enableRotationControl(false);
+				actuatorsMgr->asservirAscenseur(false);
+				actuatorsMgr->asservirAX12(false);
+			}
+		}
+
 		uint8_t tailleBuffer = serial.available();
 
-		if (tailleBuffer && tailleBuffer < RX_BUFFER_SIZE - 1)
+		if (tailleBuffer && tailleBuffer < RX_BUFFER_SIZE - 1 && robotEnable)
 		{
 			serial.read(order);
 			serial.printfln("_");//Acquittement
@@ -79,7 +118,7 @@ int main(void)
 			}
 			else if(!strcmp("stop",order))		//Ordre d'arrêt (asservissement à la position actuelle)
 			{
-				motionControlSystem->stopMotion();
+				motionControlSystem->stop();
 			}
 			else if(!strcmp("us_av",order))		//Indiquer les distances mesurées par les capteurs avant
 			{
@@ -159,6 +198,13 @@ int main(void)
 				serial.printfln("_");
 				motionControlSystem->setMaxPWMrotation(pwmMaxRotation);
 				motionControlSystem->setSmartRotationTunings();
+			}
+			else if(!strcmp("poweroff",order))
+			{
+				robotEnable = false;
+				GPIO_ResetBits(GPIOC, GPIO_Pin_10);
+				motionControlSystem->enableTranslationControl(false);
+				motionControlSystem->enableRotationControl(false);
 			}
 
 
@@ -850,12 +896,19 @@ int main(void)
 #if DEBUG
 		else if(tailleBuffer == RX_BUFFER_SIZE - 1)
 		{
-			serial.printfln("CRITICAL OVERFLOW !");
-			motionControlSystem->enableTranslationControl(false);
-			motionControlSystem->enableRotationControl(false);
-			actuatorsMgr->cdm();
-			while(true)
-				;
+			if(robotEnable)
+			{
+				serial.printfln("CRITICAL OVERFLOW !");
+				motionControlSystem->enableTranslationControl(false);
+				motionControlSystem->enableRotationControl(false);
+				actuatorsMgr->cdm();
+				while(true)
+					;
+			}
+			else
+			{
+				serial.flush();
+			}
 		}
 #endif
 	}
