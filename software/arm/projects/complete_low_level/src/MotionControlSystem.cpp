@@ -15,7 +15,7 @@ MotionControlSystem::MotionControlSystem(): leftMotor(Side::LEFT), rightMotor(Si
 	moveAbnormal = false;
 
 	delayToStop = 100;
-	toleranceInTick = 100;
+	toleranceInTick = 50;
 	pwmMinToMove = 3;
 	minSpeed = 0;
 
@@ -27,8 +27,8 @@ MotionControlSystem::MotionControlSystem(const MotionControlSystem&): leftMotor(
 	translationPID(&currentDistance, &pwmTranslation, &translationSetpoint),
 	rotationPID(&currentAngle, &pwmRotation, &rotationSetpoint)
 {
-	translationControlled = true;
-	rotationControlled = true;
+	translationControlled = false;
+	rotationControlled = false;
 	originalAngle = 0.0;
 	rotationSetpoint = 0;
 	translationSetpoint = 0;
@@ -66,8 +66,8 @@ void MotionControlSystem::init(int16_t maxPWMtranslation, int16_t maxPWMrotation
 			{10.,0.07, 0. ,  20},//Translation
 			{10., 0.1, 0. ,  25},//Rotation
 
-			{ 3., 0.1, 0. ,  10},//Translation
-			{ 3., 0.2, 0. ,  20} //Rotation
+			{ 3., 0.1, 0. ,  15},//Translation	Quand il n'y a pas de balise ennemie posée sur nous, mettre kd à 10
+			{ 3., 0.2, 0. ,  25} //Rotation		Quand il n'y a pas de balise ennemie posée sur nous, mettre kd à 20
 	};
 
 	for(int i=0; i<NB_SPEED; i++)
@@ -443,13 +443,6 @@ void MotionControlSystem::orderRawPwm(Side side, int16_t pwm) {
 		leftMotor.run(pwm);
 	else
 		rightMotor.run(pwm);
-}
-
-void MotionControlSystem::stopMotion() {
-	translationSetpoint = currentDistance;
-	rotationSetpoint = currentAngle;
-	translationFinalSetpoint = currentDistance;
-	rotationFinalSetpoint = currentAngle;
 }
 
 void MotionControlSystem::stop() {

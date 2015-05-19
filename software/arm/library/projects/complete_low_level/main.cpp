@@ -15,7 +15,7 @@ int main(void)
 	serial_ax.init(9600);
 
 	MotionControlSystem* motionControlSystem = &MotionControlSystem::Instance();
-	motionControlSystem->init(100, 100);
+	motionControlSystem->init(20, 20);
 	ActuatorsMgr* actuatorsMgr = &ActuatorsMgr::Instance();
 	SensorMgr* sensorMgr = &SensorMgr::Instance();
 
@@ -25,7 +25,7 @@ int main(void)
 
 	while(1)
 	{
-		sensorMgr->refresh();
+		sensorMgr->refresh(motionControlSystem->getMovingDirection(), motionControlSystem->isMoving());
 
 		uint8_t tailleBuffer = serial.available();
 
@@ -79,7 +79,7 @@ int main(void)
 			}
 			else if(!strcmp("stop",order))		//Ordre d'arrêt (asservissement à la position actuelle)
 			{
-				motionControlSystem->stop();
+				motionControlSystem->stopMotion();
 			}
 			else if(!strcmp("us_av",order))		//Indiquer les distances mesurées par les capteurs avant
 			{
@@ -146,11 +146,19 @@ int main(void)
 			}
 			else if(!strcmp("ctv",order))		//Régler le PWM max en translation
 			{
-				//TODO
+				int pwmMaxTranslation = 10;
+				serial.read(pwmMaxTranslation);
+				serial.printfln("_");
+				motionControlSystem->setMaxPWMtranslation(pwmMaxTranslation);
+				motionControlSystem->setSmartTranslationTunings();
 			}
 			else if(!strcmp("crv",order))		//Régler le PWM max en rotation
 			{
-				//TODO
+				int pwmMaxRotation = 10;
+				serial.read(pwmMaxRotation);
+				serial.printfln("_");
+				motionControlSystem->setMaxPWMrotation(pwmMaxRotation);
+				motionControlSystem->setSmartRotationTunings();
 			}
 
 
@@ -231,7 +239,7 @@ int main(void)
 			}
 			else if(!strcmp("testpwm", order))
 			{
-				int16_t listePWMaTester[8] = {40, 50, 60, 70, 80, 90, 100, 110};
+				int16_t listePWMaTester[8] = {1, 2, 3, 4, 5, 10, 20, 30};
 				motionControlSystem->testPWM(listePWMaTester, 8);
 			}
 			else if(!strcmp("pwm",order))
@@ -247,15 +255,28 @@ int main(void)
 			}
 			else if(!strcmp("rp",order))//Reset position
 			{
-				motionControlSystem->setX(0);
-				motionControlSystem->setY(0);
-				motionControlSystem->setOriginalAngle(0);
-				motionControlSystem->stop();
+				motionControlSystem->resetPosition();
+				serial.printfln("Reset position");
 			}
 			else if(!strcmp("testPID",order))
 			{
+				serial.printfln("Test d'observation du PID");
 				motionControlSystem->testPID();
 			}
+			else if(!strcmp("testVV",order))
+			{
+				serial.printfln("Test de changement de vitesse");
+				motionControlSystem->testVariableSpeed();
+			}
+			else if(!strcmp("testV",order))
+			{
+				motionControlSystem->testSpeed();
+			}
+			else if(!strcmp("testVA",order))
+			{
+				actuatorsMgr->testSpeed();
+			}
+
 
 
 
@@ -271,7 +292,7 @@ int main(void)
 				{
 					motionControlSystem->getTranslationTunings(kp,ki,kd);
 					serial.read(kp);
-					serial.printfln("kp_trans = %f", kp);
+					serial.printfln("kp_trans = %g", kp);
 					motionControlSystem->setTranslationTunings(kp,ki,kd);
 					motionControlSystem->testTranslation(300);
 				}
@@ -279,7 +300,7 @@ int main(void)
 				{
 					motionControlSystem->getRotationTunings(kp,ki,kd);
 					serial.read(kp);
-					serial.printfln("kp_rot = %f", kp);
+					serial.printfln("kp_rot = %g", kp);
 					motionControlSystem->setRotationTunings(kp,ki,kd);
 					motionControlSystem->testRotation(2*PI/3);
 				}
@@ -292,7 +313,7 @@ int main(void)
 				{
 					motionControlSystem->getTranslationTunings(kp,ki,kd);
 					serial.read(kd);
-					serial.printfln("kd_trans = %f", kd);
+					serial.printfln("kd_trans = %g", kd);
 					motionControlSystem->setTranslationTunings(kp,ki,kd);
 					motionControlSystem->testTranslation(300);
 				}
@@ -300,7 +321,7 @@ int main(void)
 				{
 					motionControlSystem->getRotationTunings(kp,ki,kd);
 					serial.read(kd);
-					serial.printfln("kd_rot = %f", kd);
+					serial.printfln("kd_rot = %g", kd);
 					motionControlSystem->setRotationTunings(kp,ki,kd);
 					motionControlSystem->testRotation(2*PI/3);
 				}
@@ -313,7 +334,7 @@ int main(void)
 				{
 					motionControlSystem->getTranslationTunings(kp,ki,kd);
 					serial.read(ki);
-					serial.printfln("ki_trans = %f", ki);
+					serial.printfln("ki_trans = %g", ki);
 					motionControlSystem->setTranslationTunings(kp,ki,kd);
 					motionControlSystem->testTranslation(300);
 				}
@@ -321,7 +342,7 @@ int main(void)
 				{
 					motionControlSystem->getRotationTunings(kp,ki,kd);
 					serial.read(ki);
-					serial.printfln("ki_rot = %f", ki);
+					serial.printfln("ki_rot = %g", ki);
 					motionControlSystem->setRotationTunings(kp,ki,kd);
 					motionControlSystem->testRotation(2*PI/3);
 				}
@@ -340,8 +361,8 @@ int main(void)
 					kp_rot, ki_rot, kd_rot;
 				motionControlSystem->getTranslationTunings(kp_trans,ki_trans,kd_trans);
 				motionControlSystem->getRotationTunings(kp_rot,ki_rot,kd_rot);
-				serial.printfln("translation : kp= %f ; ki= %f ; kd= %f", kp_trans, ki_trans, kd_trans);
-				serial.printfln("rotation :    kp= %f ; ki= %f ; kd= %f", kp_rot, ki_rot, kd_rot);
+				serial.printfln("trans : pwm= %d ; kp= %g ; ki= %g ; kd= %g", motionControlSystem->getMaxPWMtranslation(), kp_trans, ki_trans, kd_trans);
+				serial.printfln("rot   : pwm= %d ; kp= %g ; ki= %g ; kd= %g", motionControlSystem->getMaxPWMrotation(), kp_rot, ki_rot, kd_rot);
 			}
 			else if(!strcmp("balance",order))
 			{
@@ -367,6 +388,14 @@ int main(void)
 				motionControlSystem->setMaxPWMrotation(pwm);
 				serial.printfln("nouveau pwm max en rotation = %d", motionControlSystem->getMaxPWMrotation());
 			}
+			else if(!strcmp("dts",order))//Delay To Stop
+			{
+				uint32_t delayToStop = 0;
+				serial.printfln("Delay to stop ? (ms)");
+				serial.read(delayToStop);
+				motionControlSystem->setDelayToStop(delayToStop);
+				serial.printfln("Delay to stop = %d", delayToStop);
+			}
 			else if(!strcmp("kpt",order))
 			{
 				float kp, ki, kd;
@@ -374,7 +403,7 @@ int main(void)
 				motionControlSystem->getTranslationTunings(kp,ki,kd);
 				serial.read(kp);
 				motionControlSystem->setTranslationTunings(kp,ki,kd);
-				serial.printfln("kp_trans = %f", kp);
+				serial.printfln("kp_trans = %g", kp);
 			}
 			else if(!strcmp("kdt",order))
 			{
@@ -383,7 +412,7 @@ int main(void)
 				motionControlSystem->getTranslationTunings(kp,ki,kd);
 				serial.read(kd);
 				motionControlSystem->setTranslationTunings(kp,ki,kd);
-				serial.printfln("kd_trans = %f", kd);
+				serial.printfln("kd_trans = %g", kd);
 			}
 			else if(!strcmp("kit",order))
 			{
@@ -392,7 +421,7 @@ int main(void)
 				motionControlSystem->getTranslationTunings(kp,ki,kd);
 				serial.read(ki);
 				motionControlSystem->setTranslationTunings(kp,ki,kd);
-				serial.printfln("ki_trans = %f", ki);
+				serial.printfln("ki_trans = %g", ki);
 			}
 			else if(!strcmp("kpr",order))
 			{
@@ -401,7 +430,7 @@ int main(void)
 				motionControlSystem->getRotationTunings(kp,ki,kd);
 				serial.read(kp);
 				motionControlSystem->setRotationTunings(kp,ki,kd);
-				serial.printfln("kp_rot = %f", kp);
+				serial.printfln("kp_rot = %g", kp);
 			}
 			else if(!strcmp("kir",order))
 			{
@@ -410,7 +439,7 @@ int main(void)
 				motionControlSystem->getRotationTunings(kp,ki,kd);
 				serial.read(ki);
 				motionControlSystem->setRotationTunings(kp,ki,kd);
-				serial.printfln("ki_rot = %f", ki);
+				serial.printfln("ki_rot = %g", ki);
 			}
 			else if(!strcmp("kdr",order))
 			{
@@ -419,7 +448,7 @@ int main(void)
 				motionControlSystem->getRotationTunings(kp,ki,kd);
 				serial.read(kd);
 				motionControlSystem->setRotationTunings(kp,ki,kd);
-				serial.printfln("kd_rot = %f", kd);
+				serial.printfln("kd_rot = %g", kd);
 			}
 
 
@@ -460,11 +489,49 @@ int main(void)
  *		   *|ACTIONNEURS|*
  *		   *|___________|*
  */
+			else if(!strcmp("reanim",order))
+			{
+				actuatorsMgr->reanimation();
+			}
+			else if(!strcmp("setallid",order))
+			{
+				actuatorsMgr->setAllID();
+			}
 			else if(!strcmp("ss",order))
 			{
 				uint16_t a17 = 0x19;
 				serial.read(a17);
 				actuatorsMgr->setArmSpeed(a17);
+			}
+			else if(!strcmp("testAX",order))
+			{
+				for(int i=0; i<50; i++)
+				{
+					serial.printfln("Ouverture");
+					actuatorsMgr->cdh();
+					actuatorsMgr->cgh();
+					actuatorsMgr->omd();
+					actuatorsMgr->omg();
+					actuatorsMgr->mbd();
+					actuatorsMgr->mbg();
+					actuatorsMgr->ptd();
+					actuatorsMgr->ptg();
+					actuatorsMgr->ogd();
+					actuatorsMgr->ogg();
+					Delay(1000);
+					serial.printfln("Fermeture");
+					actuatorsMgr->cdb();
+					actuatorsMgr->cgb();
+					actuatorsMgr->fmd();
+					actuatorsMgr->fmg();
+					actuatorsMgr->fbd();
+					actuatorsMgr->fbg();
+					actuatorsMgr->rtd();
+					actuatorsMgr->rtg();
+					actuatorsMgr->fgd();
+					actuatorsMgr->fgg();
+					Delay(1000);
+				}
 			}
 			else if(!strcmp("e",order))
 			{
