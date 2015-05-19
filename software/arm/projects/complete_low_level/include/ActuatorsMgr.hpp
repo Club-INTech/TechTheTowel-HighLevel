@@ -35,7 +35,7 @@ extern Uart<1> serial;
 #define ggOuvert 180
 #define ggFerme 143
 #define ggIntermediaire 153
-#define gdOuvert 20
+#define gdOuvert 30
 #define gdFerme 64
 #define gdIntermediaire 54
 
@@ -258,7 +258,7 @@ public:
 	}
 
 	void e(uint16_t angle){
-		guideDroit->goTo(angle);
+		clapDroit->goTo(angle);
 	}
 	void setAllID(){
 		int i;

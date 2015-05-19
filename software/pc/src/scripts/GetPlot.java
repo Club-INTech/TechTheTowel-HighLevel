@@ -131,8 +131,7 @@ public class GetPlot extends AbstractScript
 					}
 					if(versionToExecute==0 || versionToExecute==2 )
 					{
-						// isSecondtry est a true car 2 essais sont inutiles (statistiquement, le 1er fonctionne)
-						eatPlot(false, true, stateToConsider, true, false);
+						eatPlot(false, true, stateToConsider, false, false);
 						stateToConsider.table.eatPlotX(versionToExecute);
 					}
 	
@@ -232,42 +231,45 @@ public class GetPlot extends AbstractScript
 			// Version qui cherche  creer des piles de 1 plot
 			else if (versionToExecute == 56)
 			{
-				stateToConsider.robot.moveLengthwise(40); // On avance vers le suivant
-				
-				// digère les plots si besoin
-				if (stateToConsider.robot.hasRobotNonDigestedPlot())
+				if (!stateToConsider.table.isPlotXEaten(5))
 				{
-					stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_HIGH, true);
-					stateToConsider.robot.digestPlot();
-				}
-				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
-				
-				stateToConsider.robot.turn(Math.PI/2);
-				if(stateToConsider.robot.storedPlotCount < 4)
-				{
-					stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
-					stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
-					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
-	
-					if (checkSensor(stateToConsider))
-						stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
-					stateToConsider.table.eatPlotX(5);
-					stateToConsider.robot.aMiamiam();
-	
-				
-					stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
+					stateToConsider.robot.moveLengthwise(40); // On avance vers le suivant
 					
-					if(!stateToConsider.robot.isGlassStoredLeft)
+					// digère les plots si besoin
+					if (stateToConsider.robot.hasRobotNonDigestedPlot())
 					{
-						stateToConsider.robot.moveLengthwise(60); // On avance vers le suivant
-						stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
-						stateToConsider.table.eatPlotX(6);
+						stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_HIGH, true);
+						stateToConsider.robot.digestPlot();
 					}
+					stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+					
+					stateToConsider.robot.turn(Math.PI/2);
+					if(stateToConsider.robot.storedPlotCount < 4)
+					{
+						stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+						stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
+						stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
+		
+						if (checkSensor(stateToConsider))
+							stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+						stateToConsider.table.eatPlotX(5);
+						stateToConsider.robot.aMiamiam();
+		
+					
+						stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
+						
+						if(!stateToConsider.robot.isGlassStoredLeft)
+						{
+							stateToConsider.robot.moveLengthwise(60); // On avance vers le suivant
+							stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE_SLOW, true);
+							stateToConsider.table.eatPlotX(6);
+						}
+					}
+					stateToConsider.robot.moveLengthwise(-300, hooksToConsider, false);
+					
+					// Dans tous les cas, on ferme la machoire 
+					stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, false);
 				}
-				stateToConsider.robot.moveLengthwise(-300, hooksToConsider, false);
-				
-				// Dans tous les cas, on ferme la machoire 
-				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, false);
 			}
 			// Version qui cherche à completer sa pile
 			else if (versionToExecute == 65)
@@ -420,11 +422,11 @@ public class GetPlot extends AbstractScript
 	public Circle entryPosition(int id, int ray, Vec2 robotPosition)
 	{
 		if (id==0)
-			return new Circle (200,600,200);
+			return new Circle (200,600,170);
 		else if (id==1)
 			return new Circle (670,260,0);//ce point n'est pas le centre du plot (pour cause de PathDD)
 		else if (id==2)
-			return new Circle (630,645,200);
+			return new Circle (630,645,170);
 		else if (id==34)
 			return new Circle (900,210,0);
 		else if (id==56 || id==65)
@@ -526,68 +528,57 @@ public class GetPlot extends AbstractScript
 			try 
 			{
 				stateToConsider.robot.moveLengthwise(150);
-				//premiere verif (avant les bras)
-				sensorAnswer = checkSensor(stateToConsider);
 			}
 			catch (UnableToMoveException e1) 
 			{
 				log.debug("mouvement impossible, script GetPlot", this);
-				sensorAnswer = false;
 			}
 		}
 		
 		// si on a pas reussi a chopper le plot en avancant (ou si interdit) on essaye avec les bras
-		if (!sensorAnswer)
+
+		if (!forbidArmUsage)
 		{
-			if (!forbidArmUsage)
+			if (isArmChosenLeft)
 			{
-				if (isArmChosenLeft)
-				{
-					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
-					sensorAnswer = checkSensor(stateToConsider);
-				} else
-				{
-					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN_SLOW, true);
-					sensorAnswer = checkSensor(stateToConsider);
-				}
-				// si on a attrape qqc on termine sinon on essaie avec l'autre bras (si isSecondTry == false)
-				// si deuxieme essai ecrire dans le log qu'on a essaye de manger un plot et on jette une exeption impossible de manger
-				if (sensorAnswer)
-				{
-					stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
-					if (isArmChosenLeft)
-						stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
-					else
-						stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
-				}
-				else
-				{
-					if (isArmChosenLeft)
-						stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
-					else
-						stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
-
-					if (isSecondTry)
-					{
-
-						log.debug("impossible d'attraper le plot, tentative en fermant les machoires", this);
-						stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
-					} 
-					else
-					{
-
-						eatPlot(true, !isArmChosenLeft, stateToConsider, false, forbidArmUsage);
-						return;
-					}
-				}
-			} 
-			else
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN_SLOW, true);
+				sensorAnswer = checkSensor(stateToConsider);
+			} else
+			{
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN_SLOW, true);
+				sensorAnswer = checkSensor(stateToConsider);
+			}
+			// si on a attrape qqc on termine sinon on essaie avec l'autre bras (si isSecondTry == false)
+			// si deuxieme essai ecrire dans le log qu'on a essaye de manger un plot et on jette une exeption impossible de manger
+			if (sensorAnswer)
 			{
 				stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+				if (isArmChosenLeft)
+					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
+				else
+					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
 			}
+			else
+			{
+				if (isArmChosenLeft)
+					stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
+				else
+					stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
 
-		}
-		// si on a reussi a chopper le plot en avancant on ferme les machoires
+				if (isSecondTry)
+				{
+
+					log.debug("impossible d'attraper le plot, tentative en fermant les machoires", this);
+					stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+				} 
+				else
+				{
+
+					eatPlot(true, !isArmChosenLeft, stateToConsider, false, forbidArmUsage);
+					return;
+				}
+			}
+		} 
 		else
 		{
 			stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);

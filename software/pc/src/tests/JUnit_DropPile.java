@@ -13,6 +13,7 @@ import scripts.AbstractScript;
 import scripts.ScriptManager;
 import strategie.GameState;
 import table.Table;
+import enums.ActuatorOrder;
 import enums.ObstacleGroups;
 import enums.ScriptNames;
 import enums.ServiceNames;
@@ -56,8 +57,45 @@ public class JUnit_DropPile extends JUnit_Test {
 		waitMatchBegin(mSensorsCardWrapper, real_state.robot);
 	}
 
-	
 	@Test
+	public void deposepile() throws SerialConnexionException, UnableToMoveException
+	{
+		GameState<Robot> stateToConsider = real_state;
+		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+		//on ouvre le guide un peu
+		
+		stateToConsider.robot.useActuator(ActuatorOrder.MID_LEFT_GUIDE, false);
+		stateToConsider.robot.useActuator(ActuatorOrder.MID_RIGHT_GUIDE, true);
+		stateToConsider.robot.sleep(1000);	// attente pour que la pile retrouve 
+
+		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
+
+		stateToConsider.robot.sleep(1000);	// attente pour que la pile retrouve 
+		//puis beaucoup
+		stateToConsider.robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, false);
+		stateToConsider.robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, true);
+		//on se vide de nos plots et on met a jour les points
+		int ball = 0;
+		if (stateToConsider.robot.isBallStored)
+			ball = 1;
+		int valuePoints = (2*ball+3)*stateToConsider.robot.storedPlotCount;
+		stateToConsider.obtainedPoints += (2*ball+3)*stateToConsider.robot.storedPlotCount;
+		stateToConsider.table.setPileValue(0, valuePoints);
+		stateToConsider.robot.storedPlotCount = 0;
+		stateToConsider.robot.isBallStored = false;
+		stateToConsider.robot.digestPlot();
+		
+		stateToConsider.robot.moveLengthwiseWithoutDetection(-250, new ArrayList<Hook>(), false);
+		//Puis on finit
+		stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
+		stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, false);
+		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+		
+		//on remet l'ascenceur en position de deplacement
+		stateToConsider.robot.useActuator(ActuatorOrder.ELEVATOR_LOW, false);
+	}
+	
+	//@Test
 	public void test()
 	{
 		//on sort de la zone de depart
