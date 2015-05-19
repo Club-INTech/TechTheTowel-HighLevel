@@ -71,17 +71,6 @@ SensorMgr::SensorMgr():
 	GPIO_Init(GPIOC, &GPIO_InitStruct);
 
 
-	//Bouton système d'activation/désactivation de l'asservissement
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);//Active l'horloge du port C
-
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_11;
-	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN;
-	GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_DOWN;
-	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;
-	GPIO_Init(GPIOC, &GPIO_InitStruct);
-
-
-
 
 
 
@@ -294,22 +283,15 @@ void SensorMgr::refresh(MOVING_DIRECTION direction, bool moving)
 
 	if(currentTime - lastRefreshTime >= refreshDelay)
 	{
-		if(capteur == 0 && (direction == FORWARD || direction == NONE || !moving))
-		{
+		if(capteur == 0 && (direction == FORWARD || !moving)) {
 			leftFrontUS.refresh();
-		}
-		else if(capteur == 1 && (direction == BACKWARD || !moving))
-		{
+		} else if(capteur == 1 && (direction == BACKWARD || !moving)) {
 			rightBackUS.refresh();
 		}
-		else if(capteur == 2 && (direction == FORWARD || direction == NONE || !moving))
-		{
+		else if(capteur == 2 && (direction == FORWARD || !moving)) {
 			rightFrontUS.refresh();
-		}
-		else if(capteur == 3 && (direction == BACKWARD  || !moving))
-		{
+		} else if(capteur == 3 && (direction == BACKWARD  || !moving))
 			leftBackUS.refresh();
-		}
 
 		capteur = (capteur+1)%4;
 		lastRefreshTime = currentTime;
@@ -378,8 +360,4 @@ bool SensorMgr::isLeftGlassInside() const{
 
 bool SensorMgr::isJumperOut() const{
 	return !GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_9);
-}
-
-bool SensorMgr::isButtonPressed() const{
-	return GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_11);
 }

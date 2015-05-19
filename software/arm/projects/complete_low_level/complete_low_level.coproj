@@ -136,13 +136,13 @@
     <File name="cmsis_lib/include/stm32f4xx_exti.h" path="cmsis_lib/include/stm32f4xx_exti.h" type="1"/>
     <File name="cmsis_boot/system_stm32f4xx.c" path="cmsis_boot/system_stm32f4xx.c" type="1"/>
     <File name="cmsis" path="" type="2"/>
-    <File name="cmsis_lib" path="" type="2"/>
     <File name="library" path="" type="2"/>
+    <File name="cmsis_lib" path="" type="2"/>
     <File name="main.cpp" path="main.cpp" type="1"/>
     <File name="cmsis_lib/source/stm32f4xx_tim.c" path="cmsis_lib/source/stm32f4xx_tim.c" type="1"/>
     <File name="cmsis_lib/include/stm32f4xx_gpio.h" path="cmsis_lib/include/stm32f4xx_gpio.h" type="1"/>
-    <File name="syscalls" path="" type="2"/>
     <File name="cmsis_lib/include/stm32f4xx_rtc.h" path="cmsis_lib/include/stm32f4xx_rtc.h" type="1"/>
+    <File name="syscalls" path="" type="2"/>
     <File name="cmsis_lib/include/misc.h" path="cmsis_lib/include/misc.h" type="1"/>
     <File name="cmsis_lib/include" path="" type="2"/>
     <File name="library/Uart.hpp" path="../../library/Uart.hpp" type="1"/>

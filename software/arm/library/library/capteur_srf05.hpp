@@ -6,8 +6,7 @@
 #include "ring_buffer.hpp"
 #include "Uart.hpp"
 
-#define NB_VALEURS_MEDIANE_SRF  5
-// /!\ BEWARE /!\ Rechanger cette valeur à 5 pour l'homologation pour réduire le délai de détection.
+#define NB_VALEURS_MEDIANE_SRF  4
 
 typedef ring_buffer<uint32_t, NB_VALEURS_MEDIANE_SRF> ringBufferSRF;
 extern Uart<1> serial;
@@ -57,7 +56,7 @@ public:
 	uint32_t value()
 	{
 		uint32_t valeurRetour = derniereDistance;
-		//derniereDistance = 0;
+		derniereDistance = 0;
 		return valeurRetour;
 	}
 
@@ -111,8 +110,6 @@ public:
 			risingEdgeTrigger = true;
 			EXTI_sensor.EXTI_LineCmd = DISABLE;					//On a reçu la réponse qui nous intéressait, on désactive donc les lectures d'interruptions sur ce capteur
 			EXTI_Init(&EXTI_sensor);
-			GPIO_sensor.GPIO_Mode = GPIO_Mode_OUT;
-			GPIO_Init(GPIOx, &GPIO_sensor);
 		}
 	}
 

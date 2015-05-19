@@ -519,9 +519,12 @@ public class Strategie implements Service
 
 							tryAgain = false;
 
-							scriptedMatchScripts.remove(0);
-							scriptedMatchVersions.remove(0);
-							scriptedMatchCustomExceptionHandlers.remove(0);
+							if(scriptedMatchScripts.size()!=1)
+							{
+								scriptedMatchScripts.remove(0);
+								scriptedMatchVersions.remove(0);
+								scriptedMatchCustomExceptionHandlers.remove(0);
+							}
 						}
 						catch (Exception e) 
 						{

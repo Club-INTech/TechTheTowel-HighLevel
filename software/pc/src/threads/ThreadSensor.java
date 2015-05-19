@@ -7,6 +7,7 @@ import graphics.Window;
 import robot.cardsWrappers.SensorsCardWrapper;
 import table.Table;
 import robot.RobotReal;
+import utils.Sleep;
 import smartMath.Vec2;
 
 /**
@@ -191,16 +192,15 @@ class ThreadSensor extends AbstractThread
 		updateConfig();
 		
 		// boucle d'attente de début de match
-		boolean jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
-		while(jumperWasAbsent || !mSensorsCardWrapper.isJumperAbsent())
+		while(!ThreadTimer.matchStarted)
 		{
-			
-			jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
-			mRobot.sleep(100);
+			if(stopThreads)
+			{
+				log.debug("Stoppage du thread capteurs", this);
+				return;
+			}
+			Sleep.sleep(50);
 		}
-
-		// maintenant que le jumper est retiré, le match a commencé
-		ThreadTimer.matchEnded = true;
 		
 		// boucle principale, celle qui dure tout le match
 		log.debug("Activation des capteurs", this);

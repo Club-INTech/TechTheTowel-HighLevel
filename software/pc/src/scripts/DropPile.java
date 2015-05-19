@@ -133,19 +133,10 @@ public class DropPile extends AbstractScript
 			else if (version==0)
 			{
 				stateToConsider.robot.turnWithoutDetection(Math.PI/4.5, hooksToConsider);
-
-				if(!stateToConsider.table.getIsStartAreaFilledWithPile())
-				{
-					stateToConsider.robot.moveLengthwise(340, hooksToConsider, true);
-					
-					pileDropperGround(stateToConsider, hooksToConsider, 160);
-					stateToConsider.table.setIsStartAreaFilledWithPile(true);
-				}
-				else 
-				{
-					//340-160
-					stateToConsider.robot.moveLengthwise(180, hooksToConsider, true);
-				}
+				stateToConsider.robot.moveLengthwiseWithoutDetection(360);
+				
+				pileDropperGround(stateToConsider, hooksToConsider, 180);
+				
 				
 				// On ne depose que si la zone est vide de gobelets ET qu'on en a au moins un verre
 				if ( !stateToConsider.table.isAreaXFilled(0) 
@@ -188,6 +179,7 @@ public class DropPile extends AbstractScript
 				// on evite de taper le plot deposé
 				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_OPEN, true);
 				stateToConsider.robot.moveLengthwise(-50, hooksToConsider, true);	
+
 			}
 			else
 			{

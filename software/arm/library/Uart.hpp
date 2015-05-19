@@ -317,13 +317,6 @@ public:
 				% RX_BUFFER_SIZE;
 	}
 
-	/*
-	 * Erase all data in the buffer
-	 */
-	static inline void flush(void){
-		rx_buffer_.head = rx_buffer_.tail;
-	}
-
 	/**
 	 * Read one byte from the ring buffer with a timeout (~ in ms)
 	 *

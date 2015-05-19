@@ -276,21 +276,21 @@ SensorMgr::SensorMgr():
 /*
  * Fonction de mise à jour des capteurs à ultrason
  */
-void SensorMgr::refresh(MOVING_DIRECTION direction, bool moving)
+void SensorMgr::refresh()
 {
 	static uint8_t capteur = 0;
 	currentTime = Millis();
 
 	if(currentTime - lastRefreshTime >= refreshDelay)
 	{
-		if(capteur == 0 && (direction == FORWARD || !moving)) {
+		if(capteur == 0) {
 			leftFrontUS.refresh();
-		} else if(capteur == 1 && (direction == BACKWARD || !moving)) {
+		} else if(capteur == 1) {
 			rightBackUS.refresh();
 		}
-		else if(capteur == 2 && (direction == FORWARD || !moving)) {
+		else if(capteur == 2) {
 			rightFrontUS.refresh();
-		} else if(capteur == 3 && (direction == BACKWARD  || !moving))
+		} else if(capteur == 3)
 			leftBackUS.refresh();
 
 		capteur = (capteur+1)%4;

@@ -7,6 +7,7 @@
 #include "Uart.hpp"
 
 #define NB_VALEURS_MEDIANE_SRF  5
+// /!\ BEWARE /!\ Rechanger cette valeur à 5 pour l'homologation pour réduire le délai de détection.
 
 typedef ring_buffer<uint32_t, NB_VALEURS_MEDIANE_SRF> ringBufferSRF;
 extern Uart<1> serial;
@@ -56,7 +57,7 @@ public:
 	uint32_t value()
 	{
 		uint32_t valeurRetour = derniereDistance;
-		derniereDistance = 0;
+		//derniereDistance = 0;
 		return valeurRetour;
 	}
 
