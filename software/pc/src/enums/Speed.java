@@ -10,12 +10,12 @@ public enum Speed
 {
 	
 	/** vitesse très lente */
-	SLOW(3, 3);
-	// Buggé jusqu'a nouvel ordre
-//
-//	/** vitesse en temps normal (pour des distances de 200mm à 1000 mm) */
-//	BETWEEN_SCRIPTS_SLOW(10, 10),
-//	
+	SLOW(3, 3),
+
+	/** vitesse en temps normal (pour des distances de 200mm à 1000 mm) */
+	BETWEEN_SCRIPTS_SLOW(10, 10);
+	
+	//buggé jusqu'a nouveau test
 //	/** vitesse en temps normal (distances de 1000+ mm) */
 //	BETWEEN_SCRIPTS(20, 20),
 //    

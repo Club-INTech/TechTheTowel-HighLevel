@@ -24,6 +24,7 @@ import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import robot.*;
 import scripts.AbstractScript;
+import scripts.FinalRush;
 import scripts.GetPlot;
 import scripts.ScriptManager;
 import smartMath.Vec2;
@@ -393,12 +394,20 @@ public class Strategie implements Service
 			scriptedMatchVersions.add(0);
 			scriptedMatchCustomExceptionHandlers.add(null);
 			
-			scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
-			scriptedMatchVersions.add(56);
+			
+			//match de finale
+			scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.GOGOGO));
+			scriptedMatchVersions.add(0);
 			scriptedMatchCustomExceptionHandlers.add(null);
 			
-			scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.FREE_STACK));
-			scriptedMatchVersions.add(2);
+			
+			
+//			scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.GRAB_PLOT));
+//			scriptedMatchVersions.add(56);
+//			scriptedMatchCustomExceptionHandlers.add(null);
+//			
+//			scriptedMatchScripts.add(scriptmanager.getScript(ScriptNames.FREE_STACK));
+//			scriptedMatchVersions.add(2);
 //		} catch (NoSuchMethodException e2) {
 //			// TODO Auto-generated catch block
 //			e2.printStackTrace();
@@ -449,6 +458,11 @@ public class Strategie implements Service
 						}
 						catch (Exception e) 
 						{
+							//on arrete le match apres le rush final
+							if (scriptedMatchScripts.get(0) instanceof FinalRush)
+								return;
+							
+							
 							log.debug(e.toString()+" catché après tentative simple de script", this);
 							// en cas d'erreur d'exécution, demande la gestion de l'erreur par le gestionnaire custom s'il y en a un, sinon applique la politique par défaut.
 							if(scriptedMatchCustomExceptionHandlers.get(0) != null) 
