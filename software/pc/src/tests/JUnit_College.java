@@ -1,6 +1,6 @@
 package tests;
 
-import hook.Hook;
+import graphics.Window;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -28,7 +28,6 @@ public class JUnit_College extends JUnit_Test {
 	{
 		super.setUp();
 		real_state = (GameState<Robot>) container.getService(ServiceNames.GAME_STATE);
-		new ArrayList<Hook> ();  
 		robot = real_state.robot;
 		
 		config.set("couleur", "vert");

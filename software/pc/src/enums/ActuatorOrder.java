@@ -12,6 +12,12 @@ public enum ActuatorOrder
 	// Syntaxe: NOM_METHODE("protocole_serie") Cette syntaxe suppose que l'action prends une seconde pour s'exécuter
 	// Syntaxe alternative: NOM_METHODE("protocole_serie", durée actions)
 	
+	// Consignes avancer / reculer
+	MOVE_FORWARD("av"),
+	MOVE_BACKWARD("rc"),
+	TURN_RIGHT("td"),
+	TURN_LEFT("tg"),
+	STOP("stop"),
 	
 	// Consignes dépose-tapis
 	LEFT_CARPET_DROP("ptg",312),

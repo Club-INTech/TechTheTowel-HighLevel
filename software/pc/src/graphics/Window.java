@@ -20,6 +20,7 @@ public class Window extends JFrame
 	private TablePanel mPanel;
 	private SensorPanel mSensorPanel;
 	private Mouse mMouse;
+	private Keyboard mKeyboard;
 	
 	public Window(Table table, RobotReal robot)
 	{
@@ -33,6 +34,9 @@ public class Window extends JFrame
 	    
 	    mMouse = new Mouse(mPanel);
 	    addMouseListener(mMouse);
+	    
+	    mKeyboard = new Keyboard(robot);
+	    addKeyListener(mKeyboard);
 	}
 	
 	public Window(Table table)
@@ -44,6 +48,9 @@ public class Window extends JFrame
 	    
 	    mPanel = new TablePanel(table);
 	    this.setContentPane(mPanel);
+	    
+	    mMouse = new Mouse(mPanel);
+	    addMouseListener(mMouse);
 	    
 	    mMouse = new Mouse(mPanel);
 	    addMouseListener(mMouse);
