@@ -3,6 +3,7 @@ package scripts;
 import java.util.ArrayList;
 
 import enums.ActuatorOrder;
+import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
@@ -32,7 +33,7 @@ public class TakeTennisBall extends AbstractScript
 	}
 	
 	@Override
-	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, SerialFinallyException
+	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException
 	{
 		try
 		{
@@ -76,7 +77,7 @@ public class TakeTennisBall extends AbstractScript
 		catch(UnableToMoveException | SerialConnexionException e)
 		{
 			finalize(stateToConsider);
-			throw e;
+			throw new ExecuteException(e);
 		}
 	}
 	

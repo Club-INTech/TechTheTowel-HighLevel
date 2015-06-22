@@ -40,10 +40,13 @@ public class JUnit_Strategia extends JUnit_Test
 	public void setUp() throws Exception
 	{
 		super.setUp();
+		
+		configColor();
+		loveClap();
+		
 		mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
 		real_state = (GameState<Robot>) container.getService(ServiceNames.GAME_STATE);
 		strategos = (Strategie) container.getService(ServiceNames.STRATEGIE);
-        
 		
 		emptyHook = new ArrayList<Hook> ();  
 
@@ -51,17 +54,82 @@ public class JUnit_Strategia extends JUnit_Test
 		real_state.robot.setOrientation(Math.PI);
 		
 		real_state.robot.updateConfig();
+		
+//		boolean isSetUpSpeedQuick = askForSetUpSpeed();
+		
 		try 
 		{
-			matchSetUp(real_state.robot);
+//			matchSetUp(real_state.robot, isSetUpSpeedQuick);
+			matchSetUp(real_state.robot, false);
 		} 
 		catch (SerialConnexionException e) 
 		{
 			log.debug( e.logStack(), this);
 		}		
+
+		real_state.robot.updateConfig();
+		real_state.robot.setLocomotionSpeed(Speed.SLOW);
+		container.startAllThreads();
 	}
 	
+	/**
+	 * Demande à l'utilisateur si il veut une config rapide ou lente
+	 * @return vrai si la vitesse  est rapide false si elle est lente
+	 */
+	@SuppressWarnings("unused")
+	private boolean askForSetUpSpeed() 
+	{
+		String speed = "lol";
+		while(!speed.contains("lent") && !speed.contains("rapide") && !speed.isEmpty())
+		{
+			log.debug("Choissez lz vitesse de l'intitialisation. Rentrez \"rapide\" ou \"lent\" : ",this);
+			BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in)); 
+			 
+			try 
+			{
+				speed = keyboard.readLine();
+			}
+			catch (IOException e) 
+			{
+				log.debug("Erreur IO: le clavier est il bien branché ?",this);
+			} 
+			if(speed.contains("rapide") || speed.isEmpty())
+				return true;
+			else if(speed.contains("lent"))
+				return false;
+		}
+		return true;
+	}
 	
+	/**
+	 * Demande si on ferme le clap ennemi
+	 * @throws Exception
+	 */
+	void loveClap()
+	{
+
+		String stringLoveClap = "";
+		while(!stringLoveClap.contains("oui") && !stringLoveClap.contains("non"))
+		{
+			log.debug("Clap de l'amitie : Rentrez \"oui\" ou \"non\" pour fermer le clap 2 (override de config.ini) : ",this);
+			BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in)); 
+			 
+			try 
+			{
+				stringLoveClap = keyboard.readLine();
+			}
+			catch (IOException e) 
+			{
+				log.debug("Erreur IO: le clavier est il bien branché ?",this);
+			} 
+			if(stringLoveClap.contains("oui"))
+				config.set("clap_de_l_amitie", "true");
+			else if(stringLoveClap.contains("non"))
+				config.set("clap_de_l_amitie", "false");
+		}
+	}
+	
+
 	/**
 	 * Demande si la couleur est verte au jaune
 	 * @throws Exception
@@ -72,7 +140,7 @@ public class JUnit_Strategia extends JUnit_Test
 		String couleur = "";
 		while(!couleur.contains("jaune") && !couleur.contains("vert"))
 		{
-			log.debug("Rentrez \"vert\" ou \"jaune\" : ",this);
+			log.debug("Rentrez \"vert\" ou \"jaune\" (override de config.ini) : ",this);
 			BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in)); 
 			 
 			try 
@@ -100,6 +168,7 @@ public class JUnit_Strategia extends JUnit_Test
 		boolean jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
 		while(jumperWasAbsent || !mSensorsCardWrapper.isJumperAbsent())
 		{
+			
 			jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
 			 real_state.robot.sleep(100);
 		}
@@ -111,9 +180,6 @@ public class JUnit_Strategia extends JUnit_Test
 	@Test
 	public void desisionTest()
 	{
-		//configColor();
-		real_state.robot.setLocomotionSpeed(Speed.SLOW);
-		container.startAllThreads();
 		waitMatchBegin();
 		
 		long timeMatchBegin=System.currentTimeMillis();

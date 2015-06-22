@@ -13,6 +13,7 @@ import org.junit.Test;
 import enums.ActuatorOrder;
 import enums.ScriptNames;
 import enums.ServiceNames;
+import exceptions.ExecuteException;
 import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -47,7 +48,7 @@ public class JUnit_CarpetDropper extends JUnit_Test
 		game.robot.setPosition(Table.entryPosition);
 		game.robot.setOrientation(Math.PI);
 		
-		matchSetUp(game.robot);
+		matchSetUp(game.robot, false);
 	}
 
 	@After
@@ -64,13 +65,21 @@ public class JUnit_CarpetDropper extends JUnit_Test
 		log.debug("debut du depose tapis", this);
 		try 
 		{
-			scriptManager.getScript(ScriptNames.EXIT_START_ZONE).execute(0, game, emptyHook);
+			try {
+				scriptManager.getScript(ScriptNames.EXIT_START_ZONE).execute(0, game, emptyHook);
+			} catch (ExecuteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			scriptManager.getScript(ScriptNames.DROP_CARPET).goToThenExec(0, game, emptyHook);
 		} 
 			catch (UnableToMoveException | SerialConnexionException | SerialFinallyException | PathNotFoundException | InObstacleException e) 
 		{
 			e.printStackTrace();
-		}
+		} catch (ExecuteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		log.debug("fin du depose tapis", this);
 		try 
 		{

@@ -4,7 +4,6 @@ import exceptions.serial.SerialConnexionException;
 import robot.cardsWrappers.LocomotionCardWrapper;
 import robot.cardsWrappers.SensorsCardWrapper;
 import table.Table;
-import utils.Sleep;
 import graphics.*;
 import robot.RobotReal;
 
@@ -44,8 +43,14 @@ public class ThreadTimer extends AbstractThread
 	/** Temps en ms qui s'écoule entre deux mise a jour de la liste des obstacle périmables. Lors de chaque mise a jour, les obstacles périmés sont détruits. */
 	public static int obstacleRefreshInterval = 0;
 	
-	//TODO : interface graphique à enlever eventuellement (necessaire pour les tests)
+	/** interface graphique d'affichage de la table, pour le debug */
 	public Window window;
+	
+	/**
+	 * indique si l'interface graphique est activée ou non 
+	 */
+	private boolean isGraphicalInterfaceEnabled = false; 
+	
 	
 	/**
 	 * Crée le thread timer.
@@ -65,9 +70,17 @@ public class ThreadTimer extends AbstractThread
 		
 		updateConfig();
 		Thread.currentThread().setPriority(1);
-		
-		//TODO : interface graphique à enlever (necessaire pour les tests)
-		window = new Window(table, robot);
+
+		// DEBUG: interface graphique
+		try
+		{
+			window = new Window();
+		}
+		catch (Exception e)
+		{
+			isGraphicalInterfaceEnabled = false;
+			log.debug("Affichage graphique non disponible", this);
+		}
 	}
 
 	/* (non-Javadoc)
@@ -83,18 +96,26 @@ public class ThreadTimer extends AbstractThread
 		mSensorsCardWrapper.updateConfig();	
 		
 		// Attente du démarrage du match
-		while(!mSensorsCardWrapper.isJumperAbsent() && !matchStarted)
-		{
-			if(stopThreads)
-			{
-				log.debug("Arrêt du thread timer avant le début du match", this);
-				return;
-			}
-			Sleep.sleep(50);
-		}
 		
+		// attends que le jumper soit retiré du robot
+		
+		boolean jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
+		while(jumperWasAbsent || !mSensorsCardWrapper.isJumperAbsent())
+		{
+			
+			jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
+			robot.sleep(100);
+		}
+
+		// maintenant que le jumper est retiré, le match a commencé
+		matchStarted = true;
+		
+		log.debug(!mSensorsCardWrapper.isJumperAbsent() +" / "+ !matchStarted, this);
+
 		// Le match démarre ! On chage l'état du thread pour refléter ce changement
 		matchStartTimestamp = System.currentTimeMillis();
+		log.critical("Jumper Enlevé", this);
+
 		matchStarted = true;
 
 		config.set("capteurs_on", "true");
@@ -105,6 +126,7 @@ public class ThreadTimer extends AbstractThread
 		// boucle principale, celle qui dure tout le match
 		while(System.currentTimeMillis() - matchStartTimestamp < matchDuration)
 		{
+
 			if(stopThreads)
 			{
 				// ons 'arrète si le ThreadManager le demande
@@ -116,10 +138,13 @@ public class ThreadTimer extends AbstractThread
 			// On retire périodiquement les obstacles périmés
 			table.getObstacleManager().removeOutdatedObstacles();
 			
-			//on rafraichit l'interface graphique, TODO : à enlever
-			window.getPanel().repaint();
-			
-			window.getPanel().drawArrayList(robot.cheminSuivi);
+			//on rafraichit l'interface graphique de la table
+			if(isGraphicalInterfaceEnabled && window != null)
+			{
+				window.getPanel().repaint();
+				
+				window.getPanel().drawArrayList(robot.cheminSuivi);
+			}
 			
 			try
 			{
@@ -130,7 +155,7 @@ public class ThreadTimer extends AbstractThread
 				log.warning(e.toString(), this);
 			}
 		}
-		log.debug("Fin des "+matchDuration+" ms de match, temps : "+matchStartTimestamp, this);
+		log.debug("Fin des "+matchDuration+" ms de match, temps : "+(System.currentTimeMillis() - matchStartTimestamp) , this);
 
 
 		// actions de fin de match
@@ -145,7 +170,7 @@ public class ThreadTimer extends AbstractThread
 	 */
 	private void onMatchEnded()
 	{
-
+ 
 		log.debug("Fin du Match car fin des 90s !", this);
 
 		// Le match est fini, immobilisation du robot
@@ -164,7 +189,6 @@ public class ThreadTimer extends AbstractThread
 			mLocomotionCardWrapper.disableRotationnalFeedbackLoop();
 			mLocomotionCardWrapper.disableTranslationnalFeedbackLoop();
 			mLocomotionCardWrapper.shutdownSTM();
-			
 		}
 		catch (SerialConnexionException e)
 		{

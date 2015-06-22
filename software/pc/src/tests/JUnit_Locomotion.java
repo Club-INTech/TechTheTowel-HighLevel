@@ -25,6 +25,20 @@ import smartMath.Vec2;
  * Tests unitaires pour Deplacements.
  *
  * @author pf, spraakforskaren
+ * 
+ * 
+ * Classe test pour les déplacements vus d'en haut(-niveau)
+ * Si vous voulez effectuer une série de tests, il vous faudra beaucoup de place
+ * Le mieux est donc de les faire bien séparément
+ * Ce que je préconise pour tester les déplacement est la liste des action suivante
+ * 1-testMoveLengthwise() | non fait par spraakforskaren
+ * 2-testFollowPath() | non fait par spraakforskaren
+ * 3-testTurn()
+ * 4-testGetPosition()
+ * 5-testGetOrientation()
+ * 6-testImmobilise()
+ * 7-testMoveToPointException()
+ * 8-testDetectEnemyAtDistance() 
  */
 public class JUnit_Locomotion extends JUnit_Test
 {
@@ -106,7 +120,7 @@ public class JUnit_Locomotion extends JUnit_Test
 	/**
 	 * Test_tourner.
 	 * ATTENTION NE FONCTIONNE QUE DU COTE VERT !
-	 * Test ui fait faire des allers-retours
+	 * Test qui fait faire des allers-retours
 	 * @throws Exception the exception
 	 */
 	//@Test
@@ -143,6 +157,11 @@ public class JUnit_Locomotion extends JUnit_Test
 			}
 		}
 	}
+	/**
+	 * 
+	 * 
+	 * 
+	 */
 	@Test
 	public void testTurn()
 	{
@@ -166,9 +185,13 @@ public class JUnit_Locomotion extends JUnit_Test
 		log.debug("en position : x="+position.x+"; y="+position.y, this);
 		Vec2 aim = new Vec2(0,500);
 		log.debug("position de l'objectif : x="+position.x+"; y="+position.y, this);
-//		mLocomotion.JUNIT_moveToPointForwardBackward(aim, null, false, DirectionStrategy.FASTEST, false, true); 
+		mLocomotion.JUNIT_moveToPointForwardBackward(aim, null, false, DirectionStrategy.FASTEST, false, true); 
 		Assert.assertEquals(aim, mLocomotion.getPosition());
 	}
+	/**
+	 * 
+	 * @throws UnableToMoveException
+	 */
 	@Test
 	public void testMoveToPointException() throws UnableToMoveException
 	{
@@ -176,38 +199,53 @@ public class JUnit_Locomotion extends JUnit_Test
 		log.debug("en position : x="+position.x+"; y="+position.y, this);
 		Vec2 aim = new Vec2(0,500);
 		log.debug("position de l'objectif : x="+position.x+"; y="+position.y, this);
-//		mLocomotion.JUNIT_moveToPointException(aim, null, true, false, false,true); 
+		mLocomotion.JUNIT_moveToPointException(aim, null, true, false, false,true); 
 		Assert.assertEquals(aim, mLocomotion.getPosition());
 	}
+	/**
+	 * 
+	 * @throws UnexpectedObstacleOnPathException
+	 * @throws BlockedException
+	 * @throws SerialConnexionException
+	 */
 	@Test
 	public void testMoveToPointCorrectAngleAndDetectEnnemy() throws UnexpectedObstacleOnPathException, BlockedException, SerialConnexionException
 	{
 		
 		Vec2 position = mLocomotion.getPosition();
 		log.debug("en position : x="+position.x+"; y="+position.y, this);
-//		Vec2 aim =  new Vec2(0,500);
+		Vec2 aim =  new Vec2(0,500);
 		log.debug("position de l'objectif : x="+position.x+"; y="+position.y, this);
-//		mLocomotion.JUNIT_moveToPointCorrectAngleAndDetectEnnemy(aim, null, true, false, true);
+		mLocomotion.JUNIT_moveToPointCorrectAngleAndDetectEnnemy(aim, null, true, false, true);
 	}
+	/**
+	 * 
+	 * @throws BlockedException
+	 * @throws UnexpectedObstacleOnPathException
+	 */
 	@Test
 	public void testCorrectAngle() throws BlockedException, UnexpectedObstacleOnPathException
 	{
 		Vec2 position = mLocomotion.getPosition();
 		log.debug("en position : x="+position.x+"; y="+position.y, this);
-//		Vec2 aim = new Vec2(0,500);
+		Vec2 aim = new Vec2(0,500);
 		log.debug("position de l'objectif : x="+position.x+"; y="+position.y, this);
-//		mLocomotion.JUNIT_correctAngle(aim, true, true);
+		mLocomotion.JUNIT_correctAngle(aim, true, true);
 	}
-
+/**
+ * 
+ * @throws BlockedException
+ * @throws UnexpectedObstacleOnPathException
+ */
 	@Test
 	public void testMoveToPointSymmetry() throws BlockedException, UnexpectedObstacleOnPathException
 	{
 		Vec2 position = mLocomotion.getPosition();
 		log.debug("en position : x="+position.x+"; y="+position.y, this);
-//		Vec2 aim = new  Vec2(0,500);
+		Vec2 aim = new  Vec2(0,500);
 		log.debug("position de l'objectif : x="+position.x+"; y="+position.y, this);
 		
-//		mLocomotion.JUNIT_moveToPointSymmetry(aim, true, true, false, false);
+		mLocomotion.JUNIT_moveToPointSymmetry(aim, true, true, false, false);
 		
 	}
 	/**
@@ -226,25 +264,26 @@ public class JUnit_Locomotion extends JUnit_Test
 	{
 		Vec2 position = mLocomotion.getPosition();
 		log.debug("en position : x="+position.x+"; y="+position.y, this);
-//		Vec2 aim = new Vec2(0,500);
+		Vec2 aim = new Vec2(0,500);
 		log.debug("position de l'objectif : x="+position.x+"; y="+position.y, this);
-//		mLocomotion.JUNIT_moveToPointSerialOrder(aim, position, 0, 300, true, false, false);
+		mLocomotion.JUNIT_moveToPointSerialOrder(aim, position, 0, 300, true, false, false);
 	}
 	/**
 	 * 
 	 * @throws BlockedException
 	 * @throws UnexpectedObstacleOnPathException
 	 */
-	
+	/*
 	@Test
 	public void testMoveToPointSerialOrder() throws BlockedException, UnexpectedObstacleOnPathException
 	{
 		Vec2 position = mLocomotion.getPosition();
 		log.debug("en position : x="+position.x+"; y="+position.y, this);
-//		Vec2 aim = new Vec2(0,500);
+		Vec2 aim = new Vec2(0,500);
 		log.debug("position de l'objectif : x="+position.x+"; y="+position.y, this);
-//		mLocomotion.JUNIT_moveToPointSerialOrder(aim, position, 0, 300, true, false, false);
+		mLocomotion.JUNIT_moveToPointSerialOrder(aim, position, 0, 300, true, false, false);
 	}
+	*/
 	/**
 	 * 
 	 * @throws BlockedException
@@ -253,12 +292,12 @@ public class JUnit_Locomotion extends JUnit_Test
 	@Test
 	public void	testIsMotionEnded() throws BlockedException, UnableToMoveException 
 	{
-//		mLocomotion.moveLengthwise(0, null, false);
-//		boolean res1 = mLocomotion.JUNIT_isMotionEnded();
-//		Assert.assertEquals(res1, false);
-//		mLocomotion.moveLengthwise(1000, null, false);
-//		boolean res2 = mLocomotion.JUNIT_isMotionEnded();
-//		Assert.assertEquals(res2, true);
+		mLocomotion.moveLengthwise(0, null, false);
+		boolean res1 = mLocomotion.JUNIT_isMotionEnded();
+		Assert.assertEquals(res1, false);
+		mLocomotion.moveLengthwise(1000, null, false);
+		boolean res2 = mLocomotion.JUNIT_isMotionEnded();
+		Assert.assertEquals(res2, true);
 	}
 	@Test 
 	public void testDetectEnemyInDisk(boolean front, boolean isTurnOnly, Vec2 aim) throws UnexpectedObstacleOnPathException 
@@ -279,8 +318,7 @@ public class JUnit_Locomotion extends JUnit_Test
 		System.out.println("Placez un ennemi à une distance inférieure à "+distance);
 		mLocomotion.moveLengthwise(distance+200, null, false);
 		mLocomotion.detectEnemyAtDistance( distance, new Vec2 (0,100));
-		System.out.println("Le robot a dû s'arrêter");
-		
+		System.out.println("Le robot a dû s'arrêter");		
 	}
 	/**
 	 * 
@@ -303,7 +341,6 @@ public class JUnit_Locomotion extends JUnit_Test
 	public void testImmobilise() throws UnableToMoveException
 	{
 		mLocomotion.moveLengthwise(200, null, false);
-		
 		mLocomotion.immobilise();
 		log.debug("Le robot a dû s'arrêter", this);
 	

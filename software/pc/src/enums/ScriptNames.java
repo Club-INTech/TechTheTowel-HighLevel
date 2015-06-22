@@ -16,5 +16,6 @@ public enum ScriptNames
 	TAKE_TENNIS_BALL,
 	GRAB_GLASS,
 	GRAB_PLOT,
+	GOGOGO,
 	WAIT;
 }

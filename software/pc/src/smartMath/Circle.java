@@ -47,13 +47,12 @@ public class Circle {
 	 * cree un nouveau cerlce
 	 * @param centerX la position en abscisse du centre
 	 * @param centerY la position en ordonnee du centre
-	 * @param radius 
 	 * @param ray le rayon
 	 */
-	public Circle(int centerX, int centerY, int radius) 
+	public Circle(int centerX, int centerY, int ray) 
 	{
 		this.position=new Vec2(centerX,centerY);
-		this.radius=radius;
+		this.radius=ray;
 	}
 
 	/**

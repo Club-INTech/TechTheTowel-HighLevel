@@ -79,44 +79,110 @@ public abstract class JUnit_Test
 		}
 
 		// maintenant que le jumper est retiré, le match a commencé
+		log.critical("Jumper Retiré ! ", this);
 		ThreadTimer.matchStarted = true;
 	}
 
-	public void matchSetUp(Robot robot) throws SerialConnexionException
+	public void matchSetUp(Robot robot, boolean isInitialisationQuick) throws SerialConnexionException
 	{
-		robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
 		
-		robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
+		if(isInitialisationQuick)
+		{
+			// Fermeture de tous  les actionneurs
+			
+			robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
+			robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, false);
+			
+			robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
+			robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
+			
+			robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
+			robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
+			
+			// initialisation normale 
+			robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+			
+			robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
+	
+			robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, false);
+			robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, true);
+			
+			robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
+			robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
+			
+			robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
+			robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);
+	
+	
+			robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, false);
+			robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, false);
+			
+			robot.useActuator(ActuatorOrder.LEFT_CARPET_DROP, false);
+			robot.useActuator(ActuatorOrder.RIGHT_CARPET_DROP, true);
+			
+			robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
+			robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
+			
+			robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
+			robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
+			
+			robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+			
+			robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+			
+			robot.setLocomotionSpeed(Speed.SLOW);
+		}
+		else
+		{
+			// Fermeture de tous  les actionneurs
+			
+			robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
+			robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);
+			
+			robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
+			robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
+			
+			robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, true);
+			robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, true);
+			
+			// initialisation normale 
 
-		robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, false);
-		robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, true);
-		
-		robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
-		robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
-		
-		robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
-		robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);
+			robot.useActuator(ActuatorOrder.ARM_LEFT_MIDDLE, true);
+			robot.useActuator(ActuatorOrder.ARM_RIGHT_MIDDLE, true);
+			
+			robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
+			
+			robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
+	
+			robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, true);
+			robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, true);
+			
+			
+			robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
+			robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);
+	
+	
+			robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, true);
+			robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, true);
+			
+			robot.useActuator(ActuatorOrder.LEFT_CARPET_DROP, true);
+			robot.useActuator(ActuatorOrder.RIGHT_CARPET_DROP, true);
+			
+			robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, true);
+			robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, true);
 
-
-		robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, false);
-		robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, false);
-		
-		robot.useActuator(ActuatorOrder.LEFT_CARPET_DROP, false);
-		robot.useActuator(ActuatorOrder.RIGHT_CARPET_DROP, true);
-		
-		robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
-		robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
-		
-		robot.sleep(300);
-		
-		robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
-		robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
-		
-		robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
-		
-		robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
-		
-		robot.setLocomotionSpeed(Speed.SLOW);
+			robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
+			robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
+						
+			robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, true);
+			robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, true);
+			
+			robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
+			
+			robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+			
+			robot.setLocomotionSpeed(Speed.SLOW);
+		}
 	}
 	
 	public void putTennisBall(Robot robot) throws SerialConnexionException
