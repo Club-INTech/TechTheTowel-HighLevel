@@ -245,7 +245,7 @@ public class Strategie implements Service
 			return;
 		}
 		
-		try 
+		try
 		{
 			robotReal.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
 		} 

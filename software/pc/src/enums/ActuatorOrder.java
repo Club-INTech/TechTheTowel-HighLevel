@@ -18,6 +18,7 @@ public enum ActuatorOrder
 	TURN_RIGHT("td"),
 	TURN_LEFT("tg"),
 	STOP("stop"),
+	POWEROFF("poweroff"),
 	
 	// Consignes dépose-tapis
 	LEFT_CARPET_DROP("ptg",312),

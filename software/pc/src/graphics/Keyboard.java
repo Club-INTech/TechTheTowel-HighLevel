@@ -6,15 +6,22 @@ import java.awt.event.KeyListener;
 import enums.ActuatorOrder;
 import robot.RobotReal;
 
+
 public class Keyboard implements KeyListener
 {
 	private RobotReal mRobot;
 	private boolean mIsRightArmOpen = false;
 	private boolean mIsLeftArmOpen = false;
-	private boolean mIsRightClapOpen = false;
-	private boolean mIsLeftClapOpen = false;
+	private boolean mIsRightClapMiddle = false;
+	private boolean mIsRightClapGoingDown = false;
+	private boolean mIsLeftClapMiddle = false;
+	private boolean mIsLeftClapGoingDown = false;
 	private boolean mIsRightCarpetOpen = false;
 	private boolean mIsLeftCarpetOpen = false;
+	private boolean mIsMovingForward = false;
+	private boolean mIsMovingBackward = false;
+	private boolean mIsTurningRight = false;
+	private boolean mIsTurningLeft = false;
 	
 	
 	public Keyboard(RobotReal robot)
@@ -69,11 +76,17 @@ public class Keyboard implements KeyListener
 		{
 			try
 			{
-				if(!mIsRightClapOpen)
-					mRobot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, false);
+				if(mIsRightClapMiddle)
+				{
+					if(mIsRightClapGoingDown)
+						mRobot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
+					else
+						mRobot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, false);
+					mIsRightClapGoingDown = !mIsRightClapGoingDown;
+				}
 				else
-					mRobot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
-				mIsRightClapOpen = !mIsRightClapOpen;
+					mRobot.useActuator(ActuatorOrder.MID_RIGHT_CLAP, false);
+				mIsRightClapMiddle = !mIsRightClapMiddle;
 			}
 			catch(Exception exception)
 			{
@@ -84,11 +97,17 @@ public class Keyboard implements KeyListener
 		{
 			try
 			{
-				if(!mIsLeftClapOpen)
-					mRobot.useActuator(ActuatorOrder.MID_LEFT_CLAP, false);
+				if(mIsLeftClapMiddle)
+				{
+					if(mIsLeftClapGoingDown)
+						mRobot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
+					else
+						mRobot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, false);
+					mIsLeftClapGoingDown = !mIsLeftClapGoingDown;
+				}
 				else
-					mRobot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
-				mIsLeftClapOpen = !mIsLeftClapOpen;
+					mRobot.useActuator(ActuatorOrder.MID_LEFT_CLAP, false);
+				mIsLeftClapMiddle = !mIsLeftClapMiddle;
 			}
 			catch(Exception exception)
 			{
@@ -163,6 +182,17 @@ public class Keyboard implements KeyListener
 			try
 			{
 				mRobot.useActuator(ActuatorOrder.TURN_LEFT, false);
+			}
+			catch(Exception exception)
+			{
+				System.out.println("ça marche pas bien trololo");
+			}
+		}
+		if(e.getKeyCode() == KeyEvent.VK_P)
+		{
+			try
+			{
+				mRobot.useActuator(ActuatorOrder.POWEROFF, false);
 			}
 			catch(Exception exception)
 			{
