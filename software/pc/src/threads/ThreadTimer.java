@@ -49,7 +49,7 @@ public class ThreadTimer extends AbstractThread
 	/**
 	 * indique si l'interface graphique est activée ou non 
 	 */
-	private boolean isGraphicalInterfaceEnabled = false; 
+	private boolean isGraphicalInterfaceEnabled = true; 
 	
 	
 	/**
@@ -74,7 +74,7 @@ public class ThreadTimer extends AbstractThread
 		// DEBUG: interface graphique
 		try
 		{
-			window = new Window();
+			window = new Window(table, robot);
 		}
 		catch (Exception e)
 		{
@@ -139,12 +139,15 @@ public class ThreadTimer extends AbstractThread
 			table.getObstacleManager().removeOutdatedObstacles();
 			
 			//on rafraichit l'interface graphique de la table
-			if(isGraphicalInterfaceEnabled && window != null)
+			if(isGraphicalInterfaceEnabled/* && window != null*/)
 			{
 				window.getPanel().repaint();
 				
 				window.getPanel().drawArrayList(robot.cheminSuivi);
 			}
+			else
+				System.out.println("damn");
+				
 			
 			try
 			{

@@ -36,6 +36,7 @@ public enum ServiceNames
 	 THREAD_SENSOR,
 	 THREAD_LASER,
 	 THREAD_TIMER,
+	 THREAD_GRAPHICS,
 	 
 	 STRATEGIE,
 	 

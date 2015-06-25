@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import robot.Robot;
 import robot.RobotReal;
+import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
 import enums.ServiceNames;
@@ -30,14 +31,20 @@ public class JUnit_BorneArcade extends JUnit_Test
 		real_state = (GameState<Robot>) container.getService(ServiceNames.GAME_STATE);
         
 		win = new Window((Table)container.getService(ServiceNames.TABLE), (RobotReal)real_state.robot);
+		
+		container.getService(ServiceNames.THREAD_GRAPHICS);
+		container.startInstanciedThreads();
         
-		//real_state.robot.updateConfig();
+		//FIXME : bug pour la position en y :(
+		real_state.robot.setPosition(new Vec2(0, 500));
+		real_state.robot.setOrientation(Math.PI/2);
+		
+		real_state.robot.updateConfig();
 	}
 
 	@Test
 	public void start()
 	{
 		while(true);
-		
 	}
 }

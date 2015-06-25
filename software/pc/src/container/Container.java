@@ -209,6 +209,11 @@ public class Container
 																	(RobotReal)getService(ServiceNames.ROBOT_REAL),
 																	(SensorsCardWrapper)getService(ServiceNames.SENSORS_CARD_WRAPPER)
 																);
+		else if(serviceRequested == ServiceNames.THREAD_GRAPHICS)
+			instanciedServices[serviceRequested.ordinal()] = 	(Service)threadmanager.getThreadGraphics(
+																	(Table)getService(ServiceNames.TABLE),
+																	(RobotReal)getService(ServiceNames.ROBOT_REAL)
+																);
 		else if(serviceRequested == ServiceNames.THREAD_LASER)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)threadmanager.getThreadLaser(
 																	(LaserCardWrapper)getService(ServiceNames.LASER),

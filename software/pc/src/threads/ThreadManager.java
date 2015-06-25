@@ -83,6 +83,22 @@ public class ThreadManager
 			instanciedThreads.put("threadCapteurs", new ThreadSensor( table, robot, sensorsCardWrapper));
 		return instanciedThreads.get("threadCapteurs");
 	}
+	
+	/**
+	 * Renvoie le thread graphique.
+	 * L'instancie si c'est la première fois qu'on le demande.
+	 * 
+	 * @param table La table a l'intérieure de laquelle le thread doit croire évoluer
+	 * @param robot 
+	 * @return le thread capteurs
+	 */
+	public AbstractThread getThreadGraphics( Table table, RobotReal robot)
+	{
+		AbstractThread thread = instanciedThreads.get("threadGraphics");
+		if(thread == null)
+			instanciedThreads.put("threadGraphics", new ThreadGraphics( table, robot));
+		return instanciedThreads.get("threadGraphics");
+	}
 
 	/**
 	 * Renvois le thread laser.
