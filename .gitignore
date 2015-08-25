@@ -3,8 +3,6 @@
 *.so
 *.user
 *.project
-*.s#*
-*.b#*
 software/build/
 software/bin/
 /software/pc/logs/
@@ -15,6 +13,7 @@ software/bin/
 project.properties
 hardware/*/*.b\#*
 hardware/*/*.s\#*
+hardware/*/*.epf
 *.class
 /bin/
 /Debug/
