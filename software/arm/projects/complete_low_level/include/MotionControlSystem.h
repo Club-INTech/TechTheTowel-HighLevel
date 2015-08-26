@@ -11,125 +11,164 @@
 #include "misc.h"
 #include "Counter.h"
 #include <Uart.hpp>
+#include "average.hpp"
 
 #define PI 3.14159265
-//#define PI_TIC 24809 // pi/TICK_TO_RADIAN
-#define PI_TIC 2171
 
 /**
- * 123,825 mm : diametre des roues
- * 12000 ticks par tour de roue
+ * 65.5 mm : diamètre des roues
+ * ~1000 ticks par tour de roue
+ * Ecartement des roues : ~17 cm
  */
-#define PERIMETER_MM 123.825*PI
-//#define TICK_TO_MM 0.0324173 // PERIMETER_MM/12000
+
 #define TICK_TO_MM 0.2077
-//#define TICK_TO_RADIAN 0.00012663 // TICK_TO_MM/256 : entre roues de 25.6cm
 #define TICK_TO_RADIAN 0.0014468
 
-#define NB_SPEED 6 //Nombre de vitesses différentes gérées par l'asservissement
-#define NB_CTE_ASSERV 4 //Nombre de variables constituant un asservissement : pwmMAX, kp, ki, kd
-
 #if DEBUG
-#define TRACKER_SIZE 1024
+#define TRACKER_SIZE 		1000
+#define AVERAGE_SPEED_SIZE	100
 #else
-#define TRACKER_SIZE 1
+#define TRACKER_SIZE 		1
+#define AVERAGE_SPEED_SIZE	1
 #endif
 
 enum MOVING_DIRECTION {FORWARD, BACKWARD, NONE};
 
 extern Uart<1> serial;
 
-class MotionControlSystem : public Singleton<MotionControlSystem> {
+class MotionControlSystem : public Singleton<MotionControlSystem>
+{
 private:
 	Motor leftMotor;
 	Motor rightMotor;
-	volatile bool translationControlled;
-	volatile bool rotationControlled;
+
+/*
+ * 		Définition des variables d'état du système (position, vitesse, consigne, ...)
+ * 		Les unités sont :
+ * 			Pour les distances		: ticks
+ * 			Pour les vitesses		: ticks/1000000*[fréquence d'asservissement]
+ * 			Pour les accélérations	: ticks/1000000*[fréquence d'asservissement]^2
+ * 			La fréquence d'asservissement est exprimmée en Hz et vaut à priori 2kHz
+ * 			On compte les vitesses en 'microTicks' car en pratique elles valent 0,1 ou 2 ticks*[fréquence d'asservissement]
+ * 			c'est pas hyper précis du coup sur des int ^^
+ * 			De même pour les accélérations, pour les mêmes raisons.
+ */
+
+
+	//	Asservissement en vitesse du moteur droit
+	PID rightSpeedPID;
+	volatile int32_t rightSpeedSetpoint;
+	volatile int32_t currentRightSpeed;
+	volatile int32_t rightPWM;
+
+	//	Asservissement en vitesse du moteur gauche
+	PID leftSpeedPID;
+	volatile int32_t leftSpeedSetpoint;
+	volatile int32_t currentLeftSpeed;
+	volatile int32_t leftPWM;
+
+	//	Asservissement en position : translation
 	PID translationPID;
-	PID rotationPID;
-
-	volatile float originalAngle;
-
-	//Consignes à atteindre en tick
-	volatile int32_t rotationSetpoint;
 	volatile int32_t translationSetpoint;
-	volatile int32_t translationFinalSetpoint;
-	volatile int32_t rotationFinalSetpoint;
+	volatile int32_t currentDistance;
+	volatile int32_t translationSpeed;
 
-	//Coefficients directeurs de la rampe de la consigne (unité : tick/fréquence d'asserv)
-	float vitesseEvolutionConsigneTranslation;
-	float vitesseEvolutionConsigneRotation;
+	//	Asservissement en position : rotation
+	PID rotationPID;
+	volatile int32_t rotationSetpoint;
+	volatile int32_t currentAngle;
+	volatile int32_t rotationSpeed;
 
-	volatile int16_t pwmRotation;
-	volatile int16_t pwmTranslation;
-	volatile int16_t maxPWMtranslation;
-	volatile int16_t maxPWMrotation;
-	float balance; //Pour tout PWM on a : balance = PWM_moteur_droit/PWM_moteur_gauche
-	volatile float x;
-	volatile float y;
+	//	Limitation de vitesse
+	volatile int32_t maxSpeed;
+
+	//	Limitation d'accélération
+	volatile int32_t maxAcceleration;
+
+	//	Pour faire de jolies courbes de réponse du système, la vitesse moyenne c'est mieux !
+	Average<int32_t, AVERAGE_SPEED_SIZE> averageLeftSpeed;
+	Average<int32_t, AVERAGE_SPEED_SIZE> averageRightSpeed;
+
+
+/*
+ * 	Variables de positionnement haut niveau (exprimmées en unités pratiques ^^)
+ *
+ * 	Toutes ces variables sont initialisées à 0. Elles doivent donc être règlées ensuite
+ * 	par le haut niveau pour correspondre à son système de coordonnées.
+ * 	Le bas niveau met à jour la valeur de ces variables mais ne les utilise jamais pour
+ * 	lui même, il se contente de les transmettre au haut niveau.
+ */
+	volatile float x;				// Positionnement 'x' (mm)
+	volatile float y;				// Positionnement 'y' (mm)
+	volatile float originalAngle;	// Angle d'origine	  (radians)
+	// 'originalAngle' représente un offset ajouté à l'angle courant pour que nos angles en radians coïncident avec la représentation haut niveau des angles.
+
+
+	// Variables d'état du mouvement
 	volatile bool moving;
 	volatile MOVING_DIRECTION direction;
 	volatile bool moveAbnormal;
-	float translationTunings[NB_SPEED][NB_CTE_ASSERV];
-	float rotationTunings[NB_SPEED][NB_CTE_ASSERV];
+
+	// Variables d'activation des différents PID
+	volatile bool translationControlled;
+	volatile bool rotationControlled;
+	volatile bool leftSpeedControlled;
+	volatile bool rightSpeedControlled;
+
+	// Variables de réglage de la détection de blocage physique
+	unsigned int delayToStop;//En ms
+	//Nombre de ticks de tolérance pour considérer qu'on est arrivé à destination
+	int toleranceTranslation;
+	int toleranceRotation;
 
 
 	/*
 	 * Dispositif d'enregistrement de l'état du système pour permettre le débug
 	 * La valeur de TRACKER_SIZE dépend de la valeur de DEBUG.
 	 */
-
 	struct trackerType
 	{
 		float x;
 		float y;
 		float angle;
+
+		int consigneVitesseGauche;
+		int vitesseGaucheCourante;
+		int vitesseMoyenneGauche;
+		int pwmGauche;
+
+		int consigneVitesseDroite;
+		int vitesseDroiteCourante;
+		int vitesseMoyenneDroite;
+		int pwmDroit;
+
 		int consigneTranslation;
-		int consigneRotation;
 		int translationCourante;
+		int consigneVitesseTranslation;
+
+		int consigneRotation;
 		int rotationCourante;
-		bool asservTranslation;
-		bool asservRotation;
-		int16_t pwmTranslation;
-		int16_t pwmRotation;
-		uint8_t tailleBufferReception;
+		int consigneVitesseRotation;
 	};
 
 	trackerType trackArray[TRACKER_SIZE];
+	unsigned int trackerCursor;
 
-	void applyControl();
-	bool isPhysicallyStopped(int);//Indique si le robot est immobile, avec une certaine tolérance passée en argument, exprimmée en ticks*[fréquence d'asservissement]
-
-
-	/*
-	 * Constantes de réglage de la détection de blocage physique
-	 */
-	unsigned int delayToStop;//En ms
-	int toleranceInTick;//Nombre de ticks de tolérance pour considérer qu'on est arrivé à destination
-	int pwmMinToMove;//PWM minimal en dessous duquel le robot ne bougera pas
-	int minSpeed;//Vitesse en dessous de laquelle on considère la vitesse comme nulle (en tick*[freq d'asserv])
+	bool isPhysicallyStopped();//Indique si le robot est immobile.
 
 
 public:
-
 	MotionControlSystem();
-    MotionControlSystem (const MotionControlSystem&);
 
-	volatile int32_t currentDistance;
-	volatile int32_t currentAngle;
-	void init(int16_t maxPWMtranslation, int16_t maxPWMrotation);
+	void init();
 
 	void control();
 	void updatePosition();
 	void manageStop();
 
-	void track();///Stock les valeurs de débug
-	void printTrackingOXY();///Affiche les x,y,angle du tableau de tracking
-	void printTrackingAll();///Affiche l'intégralité du tableau de tracking
-	void printTrackingLocomotion();
-	void printTrackingSerie();
-	void printTrackingPWM();
-	void printTrackingAsserv();
+	void track();//Stock les valeurs de débug
+	void printTrackingAll();//Affiche l'intégralité du tableau de tracking
+	void resetTracking();// Reset le tableau de tracking
 
 	int getPWMTranslation() const;
 	int getPWMRotation() const;
@@ -150,8 +189,12 @@ public:
 
 	void setTranslationTunings(float, float, float);
 	void setRotationTunings(float, float, float);
+	void setLeftSpeedTunings(float, float, float);
+	void setRightSpeedTunings(float, float, float);
 	void getTranslationTunings(float &,float &,float &) const;
 	void getRotationTunings(float &,float &,float &) const;
+	void getLeftSpeedTunings(float &, float &, float &) const;
+	void getRightSpeedTunings(float &, float &, float &) const;
 
 	float getAngleRadian() const;
 	void setOriginalAngle(float);
@@ -168,27 +211,10 @@ public:
 	void setMaxPWMrotation(int16_t);
 	void setDelayToStop(uint32_t);
 
-	/*
-	 * Règlage des constantes d'asservissement et du pwm
-	 * à partir du pwm donné en argument et de la base de
-	 * donnée de constantes compatibles qui associent
-	 * chaque pwm à des constanes d'asservissement.
-	 */
-	void setSmartTranslationTunings();
-	void setSmartRotationTunings();
-	int getBestTuningsInDatabase(int16_t pwm, float[NB_SPEED][NB_CTE_ASSERV]) const;
-
 	bool isMoving() const;
 	bool isMoveAbnormal() const;
 	MOVING_DIRECTION getMovingDirection() const;
 
-	/* Fonction permettant de Test de différents PWM, afin de connaître le PWM minimal mettant en mouvement le robot */
-	void testPWM(int16_t listePWM[], unsigned int nbPWM);
-
-	void testTranslation(int);
-	void testRotation(float);
-	void testPID(void);
-	void testVariableSpeed(void);
 	void testSpeed();
 };
 

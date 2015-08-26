@@ -39,6 +39,7 @@ public:
 
 /** TODO
  * A changer en un tri plus optimisé
+ * FAUX ! le tri à bulles est optimisé dans le cas où une seule valeur du tableau n'est pas triée !
  */
 template<typename T, uint16_t BUFFER_SIZE>
 void bubble_sort(ring_buffer<T, BUFFER_SIZE> & buff) {

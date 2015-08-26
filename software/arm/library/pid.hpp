@@ -10,30 +10,24 @@
 #define PID_HPP
 
 #include <stdint.h>
-#include "safe_enum.hpp"
 #include "utils.h"
 
-struct pid_direction_def {
-	enum type {
-		DIRECT, REVERSE
-	};
-};
-
-typedef safe_enum<pid_direction_def> PidDirection;
-
-class PID {
+class PID
+{
 public:
 
-	PID(volatile int32_t* input, volatile int16_t* output, volatile int32_t* setPoint) :
-			controllerDirection(PidDirection::DIRECT), epsilon(0), pre_error(
-					0), integral(0) {
-
+	PID(volatile int32_t* input, volatile int32_t* output, volatile int32_t* setPoint)
+	{
 		this->output = output;
 		this->input = input;
 		this->setPoint = setPoint;
 
-		setOutputLimits(-32678, 32767);
+		setOutputLimits(-2147483647, 2147483647);
 		setTunings(0, 0, 0);
+		epsilon = 0;
+		pre_error = 0;
+		derivative = 0;
+		integral = 0;
 		resetErrors();
 	}
 
@@ -65,18 +59,12 @@ public:
 		if (kp < 0 || ki < 0 || kd < 0)
 			return;
 
-		if (controllerDirection == PidDirection::DIRECT) {
-			this->kp = kp;
-			this->ki = ki;
-			this->kd = kd;
-		} else {
-			this->kp = (0 - kp);
-			this->ki = (0 - ki);
-			this->kd = (0 - kd);
-		}
+		this->kp = kp;
+		this->ki = ki;
+		this->kd = kd;
 	}
 
-	void setOutputLimits(int16_t min, int16_t max) {
+	void setOutputLimits(int32_t min, int32_t max) {
 		if (min >= max)
 			return;
 
@@ -89,18 +77,18 @@ public:
 			(*output) = outMin;
 	}
 
-	int16_t getOutputLimit()
-	{
+	int32_t getOutputLimit() const {
 		return outMax;
 	}
 
-	void setControllerDirection(PidDirection dir) {
-		if (dir == PidDirection::REVERSE) {
-			kp = (0 - kp);
-			ki = (0 - ki);
-			kd = (0 - kd);
-		}
-		controllerDirection = dir;
+	void setEpsilon(int32_t seuil) {
+		if(seuil < 0)
+			return;
+		epsilon = seuil;
+	}
+
+	int32_t getEpsilon() const {
+		return epsilon;
 	}
 
 	void resetErrors() {
@@ -115,9 +103,6 @@ public:
 	}
 	float getKd() const {
 		return kd;
-	}
-	PidDirection getDirection() const {
-		return controllerDirection;
 	}
 
 	int32_t getError() const {
@@ -138,14 +123,12 @@ private:
 	float ki;
 	float kd;
 
-	PidDirection controllerDirection;
-
 	volatile int32_t* input; //Valeur du codeur
-	volatile int16_t* output; //Output : pwm
+	volatile int32_t* output; //Output : pwm
 	volatile int32_t* setPoint; //Valeur à atteindre
 
-	uint8_t epsilon;
-	int16_t outMin, outMax;
+	int32_t epsilon;
+	int32_t outMin, outMax;
 
 	int32_t pre_error;
 	int32_t derivative;
