@@ -20,29 +20,15 @@ class SensorMgr : public Singleton<SensorMgr>
 public:
 	SensorMgr();
 
-	int getLeftFrontValue();
-	int getRightFrontValue();
-	int getLeftBackValue();
-	int getRightBackValue();
-	bool isPlotInside() const;
-	bool isLeftGlassInside() const;
-	bool isRightGlassInside() const;
+	int getSensorDistance();
 	bool isJumperOut() const;
 
-	bool isButtonPressed() const;
+	void refresh();
 
-	void refresh(MOVING_DIRECTION direction, bool moving);
-
-	void leftFrontUSInterrupt();
-	void rightFrontUSInterrupt();
-	void leftBackUSInterrupt();
-	void rightBackUSInterrupt();
+	void sensorInterrupt();
 
 private:
-	CapteurSRF leftFrontUS;
-	CapteurSRF rightFrontUS;
-	CapteurSRF leftBackUS;
-	CapteurSRF rightBackUS;
+	CapteurSRF ultrason;
 
 	unsigned int refreshDelay;
 	unsigned int currentTime;

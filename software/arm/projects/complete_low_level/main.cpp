@@ -23,52 +23,13 @@ int main(void)
 
 	bool translation = true;//permet de basculer entre les réglages de cte d'asserv en translation et en rotation
 
-	bool robotEnable = true;
-
-	//Pin de contrôle de la lampe du bouton
-	GPIO_InitTypeDef GPIO_InitStruct;
-	GPIO_StructInit(&GPIO_InitStruct);
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);//Active l'horloge du port C
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_10;
-	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
-	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;
-	GPIO_Init(GPIOC, &GPIO_InitStruct);
-	GPIO_ResetBits(GPIOC, GPIO_Pin_10);
-
 	while(1)
 	{
-		sensorMgr->refresh(motionControlSystem->getMovingDirection(), motionControlSystem->isMoving());
-
-		if(sensorMgr->isButtonPressed())
-		{
-			robotEnable = !robotEnable;
-			Delay(30);
-			while(sensorMgr->isButtonPressed())
-			{}
-			Delay(30);
-			if(robotEnable)
-			{
-				GPIO_SetBits(GPIOC, GPIO_Pin_10);
-				motionControlSystem->stop();
-				motionControlSystem->enableTranslationControl(true);
-				motionControlSystem->enableRotationControl(true);
-				actuatorsMgr->asservirAscenseur(true);
-				actuatorsMgr->asservirAX12(true);
-				serial.flush();
-			}
-			else
-			{
-				GPIO_ResetBits(GPIOC, GPIO_Pin_10);
-				motionControlSystem->enableTranslationControl(false);
-				motionControlSystem->enableRotationControl(false);
-				actuatorsMgr->asservirAscenseur(false);
-				actuatorsMgr->asservirAX12(false);
-			}
-		}
+		sensorMgr->refresh();
 
 		uint8_t tailleBuffer = serial.available();
 
-		if (tailleBuffer && tailleBuffer < RX_BUFFER_SIZE - 1 && robotEnable)
+		if (tailleBuffer && tailleBuffer < RX_BUFFER_SIZE - 1)
 		{
 			serial.read(order);
 			serial.printfln("_");//Acquittement
@@ -120,31 +81,13 @@ int main(void)
 			{
 				motionControlSystem->stop();
 			}
-			else if(!strcmp("us_av",order))		//Indiquer les distances mesurées par les capteurs avant
+			else if(!strcmp("us",order))		//Indiquer la distance mesurée par le capteur à ultrason
 			{
-				serial.printfln("%d", sensorMgr->getLeftFrontValue());//Distance mesurée par l'ultrason avant gauche, en mm
-				serial.printfln("%d", sensorMgr->getRightFrontValue());//Distance mesurée par l'ultrason avant droit, en mm
-			}
-			else if(!strcmp("us_ar",order))		//Indiquer les distances mesurées par les capteurs arrière
-			{
-				serial.printfln("%d", sensorMgr->getLeftBackValue());//Distance mesurée par l'ultrason arrière gauche, en mm
-				serial.printfln("%d", sensorMgr->getRightBackValue());//Distance mesurée par l'ultrason arrière droit, en mm
+				serial.printfln("%d", sensorMgr->getSensorDistance());//en mm
 			}
 			else if(!strcmp("j",order))			//Indiquer l'état du jumper (0='en place'; 1='dehors')
 			{
 				serial.printfln("%d", sensorMgr->isJumperOut());
-			}
-			else if(!strcmp("ccg",order))		//Indiquer l'état du contacteur du porte-gobelet gauche
-			{
-				serial.printfln("%d", sensorMgr->isLeftGlassInside());
-			}
-			else if(!strcmp("ccd",order))		//Indiquer l'état du contacteur du porte-gobelet droit
-			{
-				serial.printfln("%d", sensorMgr->isRightGlassInside());
-			}
-			else if(!strcmp("ccm",order))		//Indiquer l'état du contacteur intérieur du monte-plot
-			{
-				serial.printfln("%d", sensorMgr->isPlotInside());
 			}
 			else if(!strcmp("ct0",order))		//Désactiver l'asservissement en translation
 			{
@@ -199,13 +142,6 @@ int main(void)
 				//motionControlSystem->setSmartRotationTunings();
 				//TODO
 			}
-			else if(!strcmp("poweroff",order))
-			{
-				robotEnable = false;
-				GPIO_ResetBits(GPIOC, GPIO_Pin_10);
-				motionControlSystem->enableTranslationControl(false);
-				motionControlSystem->enableRotationControl(false);
-			}
 
 
 
@@ -224,15 +160,6 @@ int main(void)
 			{
 				serial.printfln("x=%f\r\ny=%f", motionControlSystem->getX(), motionControlSystem->getY());
 				serial.printfln("o=%f", motionControlSystem->getAngleRadian());
-			}
-			else if (!strcmp("broad",order))
-			{
-				serial.printfln("brodcasting...");
-				actuatorsMgr->broad();
-			}
-			else if (!strcmp("reanim",order))
-			{
-				actuatorsMgr->reanimation();
 			}
 			else if (!strcmp("at", order))	// Commute l'asservissement en translation
 			{
@@ -285,9 +212,9 @@ int main(void)
 
 
 
-	/**
-	 * 		Réglage des constantes d'asservissement et des PWM max
-	 */
+/**
+ * 	Réglage des constantes d'asservissement
+ */
 			else if(!strcmp("toggle",order))//Bascule entre le réglage d'asserv en translation et en rotation
 			{
 				translation = !translation;
@@ -455,359 +382,20 @@ int main(void)
  *		   *|ACTIONNEURS|*
  *		   *|___________|*
  */
-			else if(!strcmp("reanim",order))
-			{
-				actuatorsMgr->reanimation();
-			}
+
 			else if(!strcmp("setallid",order))
 			{
 				actuatorsMgr->setAllID();
 			}
-			else if(!strcmp("ss",order))
-			{
-				uint16_t a17 = 0x19;
-				serial.read(a17);
-				actuatorsMgr->setArmSpeed(a17);
-			}
 			else if(!strcmp("testAX",order))
 			{
-				for(int i=0; i<50; i++)
-				{
-					serial.printfln("Ouverture");
-					actuatorsMgr->cdh();
-					actuatorsMgr->cgh();
-					actuatorsMgr->omd();
-					actuatorsMgr->omg();
-					actuatorsMgr->mbd();
-					actuatorsMgr->mbg();
-					actuatorsMgr->ptd();
-					actuatorsMgr->ptg();
-					actuatorsMgr->ogd();
-					actuatorsMgr->ogg();
-					Delay(1000);
-					serial.printfln("Fermeture");
-					actuatorsMgr->cdb();
-					actuatorsMgr->cgb();
-					actuatorsMgr->fmd();
-					actuatorsMgr->fmg();
-					actuatorsMgr->fbd();
-					actuatorsMgr->fbg();
-					actuatorsMgr->rtd();
-					actuatorsMgr->rtg();
-					actuatorsMgr->fgd();
-					actuatorsMgr->fgg();
-					Delay(1000);
-				}
+				actuatorsMgr->testMouvement();
 			}
-			else if(!strcmp("e",order))
-			{
-				uint16_t angle = 0;
-				serial.printfln("set angle");
-				if(angle <= 300)
-				{
-					serial.read(angle);
-					actuatorsMgr->e(angle);
-				}
-			}
-			else if(!strcmp("obd",order))
-			{
-				actuatorsMgr->obd();//		Ouvrir bras droit
-			}
-			else if(!strcmp("fbd",order))
-			{
-				actuatorsMgr->fbd();//		Fermer bras droit
-			}
-			else if(!strcmp("mbd",order))
-			{
-				actuatorsMgr->mbd();//		Bras droit en position médiane
-			}
-			else if(!strcmp("obg",order))
-			{
-				actuatorsMgr->obg();//		Ouvrir bras gauche
-			}
-			else if(!strcmp("fbg",order))
-			{
-				actuatorsMgr->fbg();//		Fermer bras gauche
-			}
-			else if(!strcmp("mbg",order))
-			{
-				actuatorsMgr->mbg();//		Bras gauche en position médiane
-			}
-			else if(!strcmp("obdl",order))
-			{
-				actuatorsMgr->obdl();//		Ouvrir bras droit lentement
-			}
-			else if(!strcmp("fbdl",order))
-			{
-				actuatorsMgr->fbdl();//		Fermer bras droit lentement
-			}
-			else if(!strcmp("obgl",order))
-			{
-				actuatorsMgr->obgl();//		Ouvrir bras gauche lentement
-			}
-			else if(!strcmp("fbgl",order))
-			{
-				actuatorsMgr->fbgl();//		Fermer bras gauche lentement
-			}
-			else if(!strcmp("omd",order))
-			{
-				actuatorsMgr->omd();//		Ouvrir machoire droite
-			}
-			else if(!strcmp("fmd",order))
-			{
-				actuatorsMgr->fmd();//		Fermer machoire droite
-			}
-			else if(!strcmp("omg",order))
-			{
-				actuatorsMgr->omg();//		Ouvrir machoire gauche
-			}
-			else if(!strcmp("fmg",order))
-			{
-				actuatorsMgr->fmg();//		Fermer machoire gauche
-			}
-			else if(!strcmp("om_",order))
-			{//								Ouvrir les deux machoires [TEST]
-				actuatorsMgr->omg();
-				actuatorsMgr->omd();
-			}
-			else if(!strcmp("om",order))
-			{//								Ouvrir les deux machoires
-				actuatorsMgr->omg();
-				actuatorsMgr->omd();
-			}
-			else if(!strcmp("fm",order))
-			{//								Fermer les deux machoires
-				actuatorsMgr->fmg();
-				actuatorsMgr->fmd();
-			}
-			else if(!strcmp("ah",order))
-			{
-				actuatorsMgr->ah();//		Ascenseur en position haute
-			}
-			else if(!strcmp("ab",order))
-			{
-				actuatorsMgr->ab();//		Ascenseur en position basse
-			}
-			else if(!strcmp("as",order))
-			{
-				actuatorsMgr->as();//		Ascenseur au niveau du sol
-			}
-			else if(!strcmp("ae",order))
-			{
-				actuatorsMgr->ae();//		Ascenseur au niveau de l'estrade
-			}
-			else if(!strcmp("ase",order))
-			{
-				actuatorsMgr->ase();//		Ascenseur au niveau de l'estrade
-			}
-			else if(!strcmp("ogd",order))
-			{
-				actuatorsMgr->ogd();//		Ouvrir guide droit
-			}
-			else if(!strcmp("fgd",order))
-			{
-				actuatorsMgr->fgd();//		Fermer guide droit
-			}
-			else if(!strcmp("gdi",order))
-			{
-				actuatorsMgr->gdi();//		Guide droit en position intermédiaire
-			}
-			else if(!strcmp("ogg",order))
-			{
-				actuatorsMgr->ogg();//		Ouvrir guide gauche
-			}
-			else if(!strcmp("fgg",order))
-			{
-				actuatorsMgr->fgg();//		Fermer guide gauche
-			}
-			else if(!strcmp("ggi",order))
-			{
-				actuatorsMgr->ggi();//		Guide gauche en position intermédiaire
-			}
-			else if(!strcmp("go",order))
-			{//								Ouvrir le guide
-				actuatorsMgr->ogg();
-				//Delay(10);
-				actuatorsMgr->ogd();
-			}
-			else if(!strcmp("gf",order))
-			{//								Fermer le guide
-				actuatorsMgr->fgg();
-				//Delay(10);
-				actuatorsMgr->fgd();
-			}
-			else if(!strcmp("gi",order))
-			{//								Guide en position intermédiaire
-				actuatorsMgr->ggi();
-				//Delay(10);
-				actuatorsMgr->gdi();
-			}
-			else if(!strcmp("ptd",order))
-			{
-				actuatorsMgr->ptd();//		Poser tapis droit
-			}
-			else if(!strcmp("rtd",order))
-			{
-				actuatorsMgr->rtd();//		Ranger tapis droit
-			}
-			else if(!strcmp("ptg",order))
-			{
-				actuatorsMgr->ptg();//		Poser tapis gauche
-			}
-			else if(!strcmp("rtg",order))
-			{
-				actuatorsMgr->rtg();//		Ranger tapis gauche
-			}
-			else if(!strcmp("cdh",order))
-			{
-				actuatorsMgr->cdh();//		Clap droit en haut
-			}
-			else if(!strcmp("cdm",order))
-			{
-				actuatorsMgr->cdm();//		Clap droit au milieu
-			}
-			else if(!strcmp("cdb",order))
-			{
-				actuatorsMgr->cdb();//		Clap droit en bas
-			}
-			else if(!strcmp("cgh",order))
-			{
-				actuatorsMgr->cgh();//		Clap gauche en haut
-			}
-			else if(!strcmp("cgm",order))
-			{
-				actuatorsMgr->cgm();//		Clap gauche au milieu
-			}
-			else if(!strcmp("cgb",order))
-			{
-				actuatorsMgr->cgb();//		Clap gauche en bas
-			}
-			else if(!strcmp("bordel",order))
-			{
-				float dummy;
-				// Test des actionneurs //
-				Delay(5000);
-				actuatorsMgr->obd();//		Ouvrir bras droit
-				serial.printfln("obd");
-				serial.read(dummy);
-				actuatorsMgr->fbd();//		Fermer bras droit
-				serial.printfln("fbd");
-				serial.read(dummy);
-				actuatorsMgr->obg();//		Ouvrir bras gauche
-				serial.printfln("obg");
-				serial.read(dummy);
-				actuatorsMgr->fbg();//		Fermer bras gauche
-				serial.printfln("fbg");
-				serial.read(dummy);
-				actuatorsMgr->obdl();//		Ouvrir bras droit lentement
-				serial.printfln("obdl");
-				serial.read(dummy);
-				actuatorsMgr->fbdl();//		Fermer bras droit lentement
-				serial.printfln("obd");
-				serial.printfln("fbdl");
-				serial.read(dummy);
-				actuatorsMgr->obgl();//		Ouvrir bras gauche lentement
-				serial.printfln("obgl");
-				serial.read(dummy);
-				actuatorsMgr->fbgl();//		Fermer bras gauche lentement
-				serial.printfln("fbgl");
-				serial.read(dummy);
-				actuatorsMgr->omd();//		Ouvrir machoire droite
-				serial.printfln("omd");
-				serial.read(dummy);
-				actuatorsMgr->fmd();//		Fermer machoire droite
-				serial.printfln("fmd");
-				serial.read(dummy);
-				actuatorsMgr->omg();//		Ouvrir machoire gauche
-				serial.printfln("omg");
-				serial.read(dummy);
-				actuatorsMgr->fmg();//		Fermer machoire gauche
-				serial.printfln("fmg");
-				serial.read(dummy);
-				actuatorsMgr->omg();
-				actuatorsMgr->omd();
-				serial.printfln("omg plus omd");
-				serial.read(dummy);
-				actuatorsMgr->fmg();
-				actuatorsMgr->fmd();
-				serial.printfln("fmg plus fmd");
-				serial.read(dummy);
-				actuatorsMgr->ah();//		Ascenseur en position haute
-				serial.printfln("ah");
-				serial.read(dummy);
-				actuatorsMgr->ab();//		Ascenseur en position basse
-				serial.printfln("ab");
-				serial.read(dummy);
-				actuatorsMgr->as();//		Ascenseur au niveau du sol
-				serial.printfln("as");
-				serial.read(dummy);
-				actuatorsMgr->ae();//		Ascenseur au niveau de l'estrade
-				serial.printfln("ae");
-				serial.read(dummy);
-				actuatorsMgr->omg();
-				actuatorsMgr->omd();
-				serial.read(dummy);
-				actuatorsMgr->ogd();//		Ouvrir guide droit
-				serial.printfln("ogd");
-				serial.read(dummy);
-				actuatorsMgr->fgd();//		Fermer guide droit
-				serial.printfln("fgd");
-				serial.read(dummy);
-				actuatorsMgr->gdi();//		Guide droit en position intermédiaire
-				serial.printfln("gdi");
-				serial.read(dummy);
-				actuatorsMgr->ogg();//		Ouvrir guide gauche
-				serial.printfln("ogg");
-				serial.read(dummy);
-				actuatorsMgr->fgg();//		Fermer guide gauche
-				serial.printfln("fgg");
-				serial.read(dummy);
-				actuatorsMgr->ggi();//		Guide gauche en position intermédiaire
-				serial.printfln("ggi");
-				serial.read(dummy);
-				actuatorsMgr->ogg();
-				actuatorsMgr->ogd();
-				serial.printfln("ogg plus ogd");
-				serial.read(dummy);
-				actuatorsMgr->fgg();
-				actuatorsMgr->fgd();
-				serial.printfln("fgg plus fgd");
-				serial.read(dummy);
-				actuatorsMgr->ggi();
-				actuatorsMgr->gdi();
-				serial.printfln("ggi plus gdi");
-				serial.read(dummy);
-				actuatorsMgr->ptd();//		Poser tapis droit
-				serial.printfln("ptd");
-				serial.read(dummy);
-				actuatorsMgr->rtd();//		Ranger tapis droit
-				serial.printfln("rtd");
-				serial.read(dummy);
-				actuatorsMgr->ptg();//		Poser tapis gauche
-				serial.printfln("ptg");
-				serial.read(dummy);
-				actuatorsMgr->rtg();//		Ranger tapis gauche
-				serial.printfln("rtg");
-				serial.read(dummy);
-				actuatorsMgr->cdh();//		Clap droit en haut
-				serial.printfln("cdh");
-				serial.read(dummy);
-				actuatorsMgr->cdm();//		Clap droit au milieu
-				serial.printfln("cdm");
-				serial.read(dummy);
-				actuatorsMgr->cdb();//		Clap droit en bas
-				serial.printfln("cdb");
-				serial.read(dummy);
-				actuatorsMgr->cgh();//		Clap gauche en haut
-				serial.printfln("cgh");
-				serial.read(dummy);
-				actuatorsMgr->cgm();//		Clap gauche au milieu
-				serial.printfln("cgm");
-				serial.read(dummy);
-				actuatorsMgr->cgb();//		Clap gauche en bas
-				serial.printfln("cgb");
-				Delay(5000);
-			}
+
+
+
+
+
 			else
 			{
 				serial.printfln("Ordre inconnu");
@@ -816,19 +404,11 @@ int main(void)
 #if DEBUG
 		else if(tailleBuffer == RX_BUFFER_SIZE - 1)
 		{
-			if(robotEnable)
-			{
-				serial.printfln("CRITICAL OVERFLOW !");
-				motionControlSystem->enableTranslationControl(false);
-				motionControlSystem->enableRotationControl(false);
-				actuatorsMgr->cdm();
-				while(true)
-					;
-			}
-			else
-			{
-				serial.flush();
-			}
+			serial.printfln("CRITICAL OVERFLOW !");
+			motionControlSystem->enableTranslationControl(false);
+			motionControlSystem->enableRotationControl(false);
+			while(true)
+				;
 		}
 #endif
 	}
@@ -839,7 +419,6 @@ extern "C" {
 void TIM4_IRQHandler(void) { //2kHz = 0.0005s = 0.5ms
 	volatile static uint32_t i = 0, j = 0;
 	static MotionControlSystem* motionControlSystem = &MotionControlSystem::Instance();
-	static ActuatorsMgr* actuatorsMgr = &ActuatorsMgr::Instance();
 
 	if (TIM_GetITStatus(TIM4, TIM_IT_Update) != RESET) {
 		//Remise à 0 manuelle du flag d'interruption nécessaire
@@ -850,9 +429,8 @@ void TIM4_IRQHandler(void) { //2kHz = 0.0005s = 0.5ms
 		motionControlSystem->updatePosition();
 
 		if (i >= 10) { //5ms
-			//Gestion de l'arrêt et de l'ascenseur
+			//Gestion de l'arrêt
 			motionControlSystem->manageStop();
-			actuatorsMgr->refreshElevatorState();
 			i = 0;
 		}
 
@@ -866,56 +444,17 @@ void TIM4_IRQHandler(void) { //2kHz = 0.0005s = 0.5ms
 	}
 }
 
-
-void EXTI4_IRQHandler(void)
-{
-	static SensorMgr* sensorMgr = &SensorMgr::Instance();
-
-	//Interruption de l'ultrason Avant Gauche
-	if (EXTI_GetITStatus(EXTI_Line4) != RESET)
-	{
-		sensorMgr->leftFrontUSInterrupt();
-
-		/* Clear interrupt flag */
-		EXTI_ClearITPendingBit(EXTI_Line4);
-	}
-}
-
-
-void EXTI1_IRQHandler(void)
-{
-	static SensorMgr* sensorMgr = &SensorMgr::Instance();
-
-	//Interruption de l'ultrason Arrière Gauche
-	if (EXTI_GetITStatus(EXTI_Line1) != RESET)
-	{
-		sensorMgr->leftBackUSInterrupt();
-
-		/* Clear interrupt flag */
-		EXTI_ClearITPendingBit(EXTI_Line1);
-	}
-}
-
-
 void EXTI9_5_IRQHandler(void)
 {
 	static SensorMgr* sensorMgr = &SensorMgr::Instance();
 
-	//Interruptions de l'ultrason Avant Droit
+	//Interruptions de l'ultrason de test
     if (EXTI_GetITStatus(EXTI_Line6) != RESET) {
-        sensorMgr->rightFrontUSInterrupt();
+        sensorMgr->sensorInterrupt();
 
         /* Clear interrupt flag */
         EXTI_ClearITPendingBit(EXTI_Line6);
     }
-
-    //Interruptions de l'ultrason Arrière Droit
-	if (EXTI_GetITStatus(EXTI_Line7) != RESET) {
-		sensorMgr->rightBackUSInterrupt();
-
-		/* Clear interrupt flag */
-		EXTI_ClearITPendingBit(EXTI_Line7);
-	}
 }
 
 }

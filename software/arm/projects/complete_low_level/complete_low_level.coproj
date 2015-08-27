@@ -100,12 +100,12 @@
     <File name="cmsis_lib/include/stm32f4xx_usart.h" path="cmsis_lib/include/stm32f4xx_usart.h" type="1"/>
     <File name="src" path="" type="2"/>
     <File name="include/Motor.h" path="include/Motor.h" type="1"/>
-    <File name="cmsis_boot/stm32f4xx.h" path="cmsis_boot/stm32f4xx.h" type="1"/>
-    <File name="library/ax12.hpp" path="../../library/ax12.hpp" type="1"/>
     <File name="cmsis/core_cm4_simd.h" path="cmsis/core_cm4_simd.h" type="1"/>
+    <File name="library/ax12.hpp" path="../../library/ax12.hpp" type="1"/>
+    <File name="cmsis_boot/stm32f4xx.h" path="cmsis_boot/stm32f4xx.h" type="1"/>
     <File name="cmsis_boot/startup" path="" type="2"/>
-    <File name="library/utils.h" path="../../library/utils.h" type="1"/>
     <File name="cmsis/core_cmFunc.h" path="cmsis/core_cmFunc.h" type="1"/>
+    <File name="library/utils.h" path="../../library/utils.h" type="1"/>
     <File name="cmsis/core_cm4.h" path="cmsis/core_cm4.h" type="1"/>
     <File name="library/safe_enum.hpp" path="../../library/safe_enum.hpp" type="1"/>
     <File name="library/delay.h" path="../../library/delay.h" type="1"/>
@@ -116,8 +116,8 @@
     <File name="library/pid.hpp" path="../../library/pid.hpp" type="1"/>
     <File name="cmsis_boot/stm32f4xx_conf.h" path="cmsis_boot/stm32f4xx_conf.h" type="1"/>
     <File name="cmsis_boot/system_stm32f4xx.h" path="cmsis_boot/system_stm32f4xx.h" type="1"/>
-    <File name="library/delay.c" path="../../library/delay.c" type="1"/>
     <File name="include/SensorMgr.h" path="include/SensorMgr.h" type="1"/>
+    <File name="library/delay.c" path="../../library/delay.c" type="1"/>
     <File name="cmsis_lib/source/stm32f4xx_rtc.c" path="cmsis_lib/source/stm32f4xx_rtc.c" type="1"/>
     <File name="library/ring_buffer.hpp" path="../../library/ring_buffer.hpp" type="1"/>
     <File name="cmsis_lib/include/stm32f4xx_rcc.h" path="cmsis_lib/include/stm32f4xx_rcc.h" type="1"/>
@@ -141,12 +141,13 @@
     <File name="main.cpp" path="main.cpp" type="1"/>
     <File name="cmsis_lib/source/stm32f4xx_tim.c" path="cmsis_lib/source/stm32f4xx_tim.c" type="1"/>
     <File name="cmsis_lib/include/stm32f4xx_gpio.h" path="cmsis_lib/include/stm32f4xx_gpio.h" type="1"/>
-    <File name="syscalls" path="" type="2"/>
     <File name="cmsis_lib/include/stm32f4xx_rtc.h" path="cmsis_lib/include/stm32f4xx_rtc.h" type="1"/>
+    <File name="syscalls" path="" type="2"/>
     <File name="cmsis_lib/include/misc.h" path="cmsis_lib/include/misc.h" type="1"/>
     <File name="cmsis_lib/include" path="" type="2"/>
     <File name="library/Uart.hpp" path="../../library/Uart.hpp" type="1"/>
     <File name="src/MotionControlSystem.cpp" path="src/MotionControlSystem.cpp" type="1"/>
     <File name="library/capteur_srf05.hpp" path="../../library/capteur_srf05.hpp" type="1"/>
+    <File name="library/average.hpp" path="../../library/average.hpp" type="1"/>
   </Files>
 </Project>
