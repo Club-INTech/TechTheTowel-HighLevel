@@ -6,17 +6,17 @@ import exceptions.serial.SerialConnexionException;
 import hook.Executable;
 
 /**
- * @author Etienne
- * Classe à utiliser par un hook permettant de fermer un bras
+ * @author theo
+ * Classe d'exmple d'executable que les callBacks peuvent appeler
  *
  */
 
-public class CloseLeftArmExe implements Executable
+public class ExempleExe implements Executable
 {
    
-	 public CloseLeftArmExe()
+	 public ExempleExe()
      {
-			System.out.println("Hook de fermeture du bras gauche");
+			System.out.println("Hook d'ouverture de machoire crée");
      }
 	
     @Override
@@ -25,7 +25,7 @@ public class CloseLeftArmExe implements Executable
     	try 
     	{
 			System.out.println("en position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") au lancé du hook");
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.STOP, false);
 			System.out.println("en position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") après le lancé du hook");
 		} 
     	catch (SerialConnexionException e) 

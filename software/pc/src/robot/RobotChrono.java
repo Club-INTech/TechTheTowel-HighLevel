@@ -98,7 +98,7 @@ public class RobotChrono extends Robot
 		
 		
 		// incrémente le chronomètre du temps de trajet
-		chrono += turnAmount*speed.invertedRotationnalSpeed;
+		chrono += turnAmount*speed.rotationSpeed;
 		
 
     	// prsise en considération de la latence de la liaison série
@@ -114,7 +114,7 @@ public class RobotChrono extends Robot
 				this.chrono += approximateSerialLatency;
 				
 				// rajoute au compteur le temps de trajet
-				chrono += Math.abs(distance)*newSpeed.invertedTranslationnalSpeed;
+				chrono += Math.abs(distance)*newSpeed.translationSpeed;
 
 				// déplace le robot virtuel
 				position.plus( new Vec2( 	(int)(distance*Math.cos(orientation)),

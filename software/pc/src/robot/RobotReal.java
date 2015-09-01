@@ -36,6 +36,7 @@ public class RobotReal extends Robot
 	/** Système de locomotion a utiliser pour déplacer le robot */
 	private Locomotion mLocomotion;
 	
+	
 	// Constructeur
 	public RobotReal( Locomotion deplacements, ActuatorCardWrapper mActuatorCardWrapper, Config config, Log log, PathDingDing pathDingDing, SensorsCardWrapper mSensorsCardWrapper)
  	{
@@ -52,9 +53,6 @@ public class RobotReal extends Robot
     	// TODO: vérifier que la copie est faite sur tout ce qu'il y a besoin
         getPosition().copy(rc.position);
         rc.speed=speed;
-        rc.isBallStored=isBallStored;
-        rc.isGlassStoredLeft=isGlassStoredLeft;
-        rc.isGlassStoredRight=isGlassStoredRight;
         rc.orientation = getOrientation();
     }
     
@@ -83,21 +81,10 @@ public class RobotReal extends Robot
 		{
 			// on regarde les capteurs symetrisés (ex : contacteur du bras droit / gauche)
 			sensor = mSensorCorrespondenceMap.getSymmetrizedSensorName(sensor);
-
-			// capteurs ultrasons
-			// on échange les valeurs des ultrasons (l'ultrason droit devien l'ultrason gauche et réciproquement)
-			if(sensor == SensorNames.ULTRASOUND_FRONT_SENSOR || sensor == SensorNames.ULTRASOUND_FRONT_SENSOR)
-			{
-				 // On intervertit droite et gauche pour les capteurs	
-				int[] invertedOut = (int[])mSensorsCardWrapper.getSensorValue(sensor);
-				int[] out = new int[2];
-				out[0] = invertedOut[1];
-				return out;					
-			}
-			else // contacteurs
-			{
-				return mSensorsCardWrapper.getSensorValue(sensor);
-			}
+			
+			/* attention si les capteurs sont en int[] il faut symétriser ce int[] */
+			
+			return mSensorsCardWrapper.getSensorValue(sensor);
 		}
 	}
 
@@ -196,17 +183,6 @@ public class RobotReal extends Robot
 		speed = oldSpeed;
 	}	
 
-	/* TODO nexiste pas ?
-	@Override
-    public void moveTowardEnnemy(int distance, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, BlockedException, UnexpectedObstacleOnPathException
-	{	
-		
-		mLocomotion.moveTowardEnnemy(distance, hooksToConsider);
-	}
-	*/
-	
-
-
 	/**
 	 * ATTENTION, la valeur "mur" est ignorée
 	 */
@@ -268,9 +244,7 @@ public class RobotReal extends Robot
 	@Override
     public void followPath(ArrayList<Vec2> chemin, ArrayList<Hook> hooksToConsider) throws UnableToMoveException
     {
-		log.debug("appel de RobotReal.followPath(" + chemin + "," + hooksToConsider + ")", this);
-    	cheminSuivi=(ArrayList<Vec2>) chemin.clone();
-
+    	cheminSuivi = (ArrayList<Vec2>) chemin.clone();
         mLocomotion.followPath(chemin, hooksToConsider, DirectionStrategy.getDefaultStrategy());
     }
     
@@ -279,8 +253,7 @@ public class RobotReal extends Robot
 	@Override
     protected void followPath(ArrayList<Vec2> chemin, ArrayList<Hook> hooksToConsider, DirectionStrategy direction) throws UnableToMoveException
     {
-		log.debug("appel de RobotReal.followPath(" + chemin + "," + hooksToConsider + "," + direction + ")", this);
-    	cheminSuivi=(ArrayList<Vec2>) chemin.clone();
+    	cheminSuivi = (ArrayList<Vec2>) chemin.clone();
         mLocomotion.followPath(chemin, hooksToConsider, direction);
     }
 
@@ -359,8 +332,8 @@ public class RobotReal extends Robot
 	{
         try
         {
-			mLocomotion.setTranslationnalSpeed(vitesse.PWMTranslation);
-	        mLocomotion.setRotationnalSpeed(vitesse.PWMRotation);
+			mLocomotion.setTranslationnalSpeed(vitesse.translationSpeed);
+	        mLocomotion.setRotationnalSpeed(vitesse.rotationSpeed);
 	        
 	        speed = vitesse;
 		} 

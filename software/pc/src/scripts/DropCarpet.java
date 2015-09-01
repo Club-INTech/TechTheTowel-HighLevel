@@ -73,17 +73,17 @@ public class DropCarpet extends AbstractScript
 					//on depose le tapis gauche (si celui-ci n'est pas deja depose)
 					if (!stateToConsider.table.getIsLeftCarpetDropped())
 					{
-						stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_DROP, true);
+						stateToConsider.robot.useActuator(ActuatorOrder.STOP, true);
 						stateToConsider.table.setIsLeftCarpetDropped(true);
-						stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
+						stateToConsider.robot.useActuator(ActuatorOrder.STOP, false);
 					}
 					
 					//on depose le tapis droit (si celui-ci n'est pas deja depose)
 					if (!stateToConsider.table.getIsRightCarpetDropped())
 					{
-						stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_DROP, true);
+						stateToConsider.robot.useActuator(ActuatorOrder.STOP, true);
 						stateToConsider.table.setIsRightCarpetDropped(true);
-						stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
+						stateToConsider.robot.useActuator(ActuatorOrder.STOP, false);
 					}
 				}
 				
@@ -124,7 +124,7 @@ public class DropCarpet extends AbstractScript
 				hookGoblet.addCallback(new Callback(new CloseRightArmExe(log),true, stateToConsider));
 				hooksToConsider.add(hookGoblet);
 				
-				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, false);
+				stateToConsider.robot.useActuator(ActuatorOrder.STOP, false);
 
 				//le 2.98 a ete testé de façon experimentale (ainsi que le 606), a modifier si quelqu'un veut le calculer
 				stateToConsider.robot.turn(2.98);
@@ -144,17 +144,17 @@ public class DropCarpet extends AbstractScript
 					//on depose le tapis gauche (si celui-ci n'est pas deja depose)
 					if (!stateToConsider.table.getIsLeftCarpetDropped())
 					{
-						stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_DROP, true);
+						stateToConsider.robot.useActuator(ActuatorOrder.STOP, true);
 						stateToConsider.table.setIsLeftCarpetDropped(true);
-						stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
+						stateToConsider.robot.useActuator(ActuatorOrder.STOP, false);
 					}
 					
 					//on depose le tapis droit (si celui-ci n'est pas deja depose)
 					if (!stateToConsider.table.getIsRightCarpetDropped())
 					{
-						stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_DROP, true);
+						stateToConsider.robot.useActuator(ActuatorOrder.STOP, true);
 						stateToConsider.table.setIsRightCarpetDropped(true);
-						stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
+						stateToConsider.robot.useActuator(ActuatorOrder.STOP, false);
 					}
 					
 				//on s'eloigne de l'escalier
@@ -199,13 +199,13 @@ public class DropCarpet extends AbstractScript
 				hookGoblet.addCallback(new Callback(new CloseRightArmExe(log),true, stateToConsider));
 				hooksToConsider.add(hookGoblet);
 				
-				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_OPEN, false);
+				stateToConsider.robot.useActuator(ActuatorOrder.STOP, false);
 
 				//le 3.05 a ete testé de façon experimentale (ainsi que le 850), a modifier si quelqu'un veut le calculer
 				stateToConsider.robot.turn(3.05);
 				stateToConsider.robot.moveLengthwise(850, hooksToConsider, false, true, Speed.SLOW);
 				stateToConsider.table.removeGlassX(1);
-				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);// on ferme dans tous les cas
+				stateToConsider.robot.useActuator(ActuatorOrder.STOP, false);// on ferme dans tous les cas
 
 				//on presente ses arrieres a l'escalier
 				stateToConsider.robot.turn(-0.5*Math.PI, hooksToConsider, false);
@@ -214,8 +214,8 @@ public class DropCarpet extends AbstractScript
 				log.debug("Position avant le mur : "+stateToConsider.robot.getPosition().toString(), this);
 				stateToConsider.robot.moveLengthwiseTowardWall( -(carperDropYCoord - stateToConsider.robot.getPositionFast().y), hooksToConsider);
 				
-				stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
-				stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
+				stateToConsider.robot.useActuator(ActuatorOrder.STOP, false);
+				stateToConsider.robot.useActuator(ActuatorOrder.STOP, false);
 
 
 				// si l'orientation n'est pas parfaite, on retente
@@ -228,19 +228,19 @@ public class DropCarpet extends AbstractScript
 					//on depose le tapis gauche (si celui-ci n'est pas deja depose)
 				if (!stateToConsider.table.getIsLeftCarpetDropped())
 				{
-					stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_DROP, true);
+					stateToConsider.robot.useActuator(ActuatorOrder.STOP, true);
 					stateToConsider.table.setIsLeftCarpetDropped(true);
 					stateToConsider.robot.sleep(200);
-					stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
+					stateToConsider.robot.useActuator(ActuatorOrder.STOP, false);
 				}
 				
 				//on depose le tapis droit (si celui-ci n'est pas deja depose)
 				if (!stateToConsider.table.getIsRightCarpetDropped())
 				{
-					stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_DROP, true);
+					stateToConsider.robot.useActuator(ActuatorOrder.STOP, true);
 					stateToConsider.table.setIsRightCarpetDropped(true);
 					stateToConsider.robot.sleep(200);
-					stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
+					stateToConsider.robot.useActuator(ActuatorOrder.STOP, false);
 				}
 					
 				log.debug("Position après tapis : "+stateToConsider.robot.getPosition().toString(), this);
@@ -311,10 +311,10 @@ public class DropCarpet extends AbstractScript
 	{
 		try 
 		{
-			stateToConsider.robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
-			stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.STOP, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.STOP, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.STOP, false);
+			stateToConsider.robot.useActuator(ActuatorOrder.STOP, false);
 		} 
 		catch (SerialConnexionException e) 
 		{

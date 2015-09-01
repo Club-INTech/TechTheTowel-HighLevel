@@ -10,7 +10,6 @@ import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
 import enums.ServiceNames;
-import exceptions.serial.SerialConnexionException;
 import graphics.Window;
 
 public class JUnit_BorneArcade extends JUnit_Test 
@@ -23,6 +22,7 @@ public class JUnit_BorneArcade extends JUnit_Test
 	   JUnitCore.main("tests.JUnit_BorneArcade");
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Before
 	public void setUp() throws Exception
 	{
@@ -35,7 +35,6 @@ public class JUnit_BorneArcade extends JUnit_Test
 		container.getService(ServiceNames.THREAD_GRAPHICS);
 		container.startInstanciedThreads();
         
-		//FIXME : bug pour la position en y :(
 		real_state.robot.setPosition(new Vec2(0, 500));
 		real_state.robot.setOrientation(Math.PI/2);
 		

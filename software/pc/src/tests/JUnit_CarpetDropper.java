@@ -55,8 +55,8 @@ public class JUnit_CarpetDropper extends JUnit_Test
 	public void tearDown() throws Exception 
 	{
 		//on remonte les deux bras a tapis en meme temps
-		game.robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP,false);
-		game.robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP,true);
+		game.robot.useActuator(ActuatorOrder.STOP,false);
+		game.robot.useActuator(ActuatorOrder.STOP,true);
 	}
 
 	@Test
@@ -65,19 +65,12 @@ public class JUnit_CarpetDropper extends JUnit_Test
 		log.debug("debut du depose tapis", this);
 		try 
 		{
-			try {
-				scriptManager.getScript(ScriptNames.EXIT_START_ZONE).execute(0, game, emptyHook);
-			} catch (ExecuteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			scriptManager.getScript(ScriptNames.DROP_CARPET).goToThenExec(0, game, emptyHook);
 		} 
 			catch (UnableToMoveException | SerialConnexionException | SerialFinallyException | PathNotFoundException | InObstacleException e) 
 		{
 			e.printStackTrace();
 		} catch (ExecuteException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		log.debug("fin du depose tapis", this);
@@ -88,7 +81,6 @@ public class JUnit_CarpetDropper extends JUnit_Test
 		catch (PathNotFoundException | UnableToMoveException
 				| InObstacleException e) 
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

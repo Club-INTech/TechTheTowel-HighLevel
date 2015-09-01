@@ -217,25 +217,25 @@ public class LocomotionCardWrapper implements Service
 
 	/**
 	 * Modifie la vitesse en translation du robot sur la table
-	 * @param pwmMax la nouvelle valeur maximum que peut prenvent prendre les pwm des moteurs lors d'une translation
+	 * @param speed la nouvelle valeur maximum que peut prenvent prendre les pwm des moteurs lors d'une translation
 	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
 	 */
-	public void setTranslationnalSpeed(int pwmMax) throws SerialConnexionException
+	public void setTranslationnalSpeed(float speed) throws SerialConnexionException
 	{
 		// envoie a la carte d'asservissement le nouveau maximum du pwm
-		String chaines[] = {"ctv", Integer.toString(pwmMax)};
+		String chaines[] = {"ctv", Float.toString(speed)};
 		locomotionCardSerial.communiquer(chaines, 0);			
 	}
 
 	/**
 	 * Modifie la vitesse en rotation du robot sur la table
-	 * @param pwmMax la nouvelle valeur maximum que peut prenvent prendre les pwm des moteurs lors d'une rotation
+	 * @param rotationSpeed la nouvelle valeur maximum que peut prenvent prendre les pwm des moteurs lors d'une rotation
 	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
 	 */
-	public void setRotationnalSpeed(int pwmMax) throws SerialConnexionException
+	public void setRotationnalSpeed(float rotationSpeed) throws SerialConnexionException
 	{
 		// envoie a la carte d'asservissement le nouveau maximum du pwm
-		String chaines[] = {"crv", Integer.toString(pwmMax)};
+		String chaines[] = {"crv", Float.toString(rotationSpeed)};
 		locomotionCardSerial.communiquer(chaines, 0);
 	}
 	

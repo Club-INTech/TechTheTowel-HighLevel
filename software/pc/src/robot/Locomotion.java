@@ -1025,14 +1025,14 @@ public class Locomotion implements Service
         }
     }
 
-    public void setRotationnalSpeed(int pwm) throws SerialConnexionException
+    public void setRotationnalSpeed(float rotationSpeed) throws SerialConnexionException
     {
-        deplacements.setRotationnalSpeed(pwm);
+        deplacements.setRotationnalSpeed(rotationSpeed);
     }
 
-    public void setTranslationnalSpeed(int pwm) throws SerialConnexionException
+    public void setTranslationnalSpeed(float speed) throws SerialConnexionException
     {
-        deplacements.setTranslationnalSpeed(pwm);
+        deplacements.setTranslationnalSpeed(speed);
     }
 
     

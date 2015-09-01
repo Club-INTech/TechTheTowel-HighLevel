@@ -8,6 +8,7 @@ package enums;
 
 public enum Speed
 {
+	//FIXME a regler, demander au bas niveau.
 	
 	/** vitesse très lente */
 	SLOW(3, 3),
@@ -26,34 +27,22 @@ public enum Speed
 //	VERY_FAST(100, 100);
 
     
-    /** PWM des moteurs lors d'une translation, ce sont ces valeurs qui seront envoyées à la carte d'asserv */
-    public int PWMTranslation;
+    /** vitesse des moteurs lors d'une translation, ce sont ces valeurs qui seront envoyées à la STM*/
+    public float translationSpeed;
 
-    /** PWM des moteurs lors d'une rotation, ce sont ces valeurs qui seront envoyées à la carte d'asserv */
-    public int PWMRotation;
-    
-    /** temps nécéssaire en millisecondes au robot pour partourir un milliètre. Utilisé par RobotChrono*/
-    public int invertedTranslationnalSpeed;
+    /** vitesse des moteurs lors d'une rotation, ce sont ces valeurs qui seront envoyées à la STM*/
+    public float rotationSpeed;
 
-    /** temps nécéssaire en millisecondes au robot pour tourner d'un radian. Utilisé par RobotChrono */
-    public int invertedRotationnalSpeed;
         
     /**
      * Constructeur d'une vitesse.
      * @param PWM_translation la vitesse (entre 0 et 255) translationnel
      * @param PWM_rotation la vitesse (entre 0 et 255) en rotation
      */
-    private Speed(int PWM_translation, int PWM_rotation)
+    private Speed(int translationSpeed, int rotationSpeed)
     {
-        this.PWMTranslation = PWM_translation;
-        this.PWMRotation = PWM_rotation;
-        
-        /**
-         * Formule héritée de Deboc (intech 2012).
-         * Ca peut être intéressant de refaire des mesures et une interpolation.
-         */
-        invertedTranslationnalSpeed = (int) (1./(((float)2500)/((float)613.52 * (float)(Math.pow((double)PWM_translation,(double)(-1.034))))/1000));
-        invertedRotationnalSpeed = (int) (1./(((float)Math.PI)/((float)277.85 * (float)Math.pow(PWM_rotation,(-1.222)))/1000));
+        this.translationSpeed = translationSpeed;
+        this.rotationSpeed = rotationSpeed;
     }
 
     

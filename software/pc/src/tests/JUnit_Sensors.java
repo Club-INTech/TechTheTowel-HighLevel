@@ -10,7 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.Assert;
 
-import enums.ActuatorOrder;
 import enums.ObstacleGroups;
 import enums.SensorNames;
 import enums.ServiceNames;
@@ -88,23 +87,23 @@ public class JUnit_Sensors extends JUnit_Test
 		log.debug("JUnit_CapteursTest.desactivation_capteur()", this);
 
 		// Avec capteurs
-		log.debug(((int[])capteurs.getSensorValue(SensorNames.ULTRASOUND_FRONT_SENSOR))[1], this);
+		log.debug((capteurs.getSensorValue(SensorNames.ULTRASOUND)), this);
 	//	Assert.assertTrue(capteurs.mesurer_infrarouge() != 3000);
-		Assert.assertTrue(((int[])capteurs.getSensorValue(SensorNames.ULTRASOUND_FRONT_SENSOR))[1] != 3000);
+		Assert.assertTrue(((int)capteurs.getSensorValue(SensorNames.ULTRASOUND)) != 3000);
 
 		// Sans capteurs
 		config.set("capteurs_on", "false");
 		capteurs.updateConfig();
-		log.debug(((int[])capteurs.getSensorValue(SensorNames.ULTRASOUND_FRONT_SENSOR))[1], this);
+		log.debug(((int)capteurs.getSensorValue(SensorNames.ULTRASOUND)), this);
 	//	Assert.assertTrue(capteurs.mesurer_infrarouge() == 3000);
-		Assert.assertTrue(((int[])capteurs.getSensorValue(SensorNames.ULTRASOUND_FRONT_SENSOR))[1] == 3000);
+		Assert.assertTrue(((int)capteurs.getSensorValue(SensorNames.ULTRASOUND)) == 3000);
 
 		// Et re avec
 		config.set("capteurs_on", "true");
 		capteurs.updateConfig();
-		Assert.assertTrue(((int[])capteurs.getSensorValue(SensorNames.ULTRASOUND_FRONT_SENSOR))[1] != 3000);
+		Assert.assertTrue(((int)capteurs.getSensorValue(SensorNames.ULTRASOUND)) != 3000);
 	//	Assert.assertTrue(capteurs.mesurer_infrarouge() != 3000);
-		Assert.assertTrue(((int[])capteurs.getSensorValue(SensorNames.ULTRASOUND_FRONT_SENSOR))[1] != 3000);
+		Assert.assertTrue(((int)capteurs.getSensorValue(SensorNames.ULTRASOUND)) != 3000);
 
 	}
 	
@@ -228,27 +227,6 @@ public class JUnit_Sensors extends JUnit_Test
 		}
 	}
 	
-
-	//@Test 
-	public void testContactGlasses()
-	{
-		try 
-		{
-			state.robot.useActuator(ActuatorOrder.ARM_LEFT_MIDDLE, false);
-			state.robot.useActuator(ActuatorOrder.ARM_RIGHT_MIDDLE, false);
-		} 
-		catch (Exception e) 
-		{
-			;		
-		}
-
-		while(true)
-		{
-			log.debug("Gauche : "+state.robot.isGlassStoredLeft+" | Droit : "+state.robot.isGlassStoredRight, this);
-			state.robot.sleep(50);
-		}
-	}
-		
 	@Test
 	public void testSensorEnnemyInDiscWithoutMovement()
 	{
@@ -330,7 +308,6 @@ public class JUnit_Sensors extends JUnit_Test
 				try {
 					state.robot.moveLengthwise(50);
 				} catch (UnableToMoveException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}

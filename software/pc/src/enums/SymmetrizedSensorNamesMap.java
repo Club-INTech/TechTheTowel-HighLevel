@@ -18,11 +18,8 @@ public class SymmetrizedSensorNamesMap
      */
     public SymmetrizedSensorNamesMap()
     {
-    	mCorrespondenceMap.put(SensorNames.JAW_SENSOR, SensorNames.JAW_SENSOR);
-    	mCorrespondenceMap.put(SensorNames.LEFT_ZONE_SENSOR, SensorNames.RIGHT_ZONE_SENSOR);
-    	mCorrespondenceMap.put(SensorNames.RIGHT_ZONE_SENSOR, SensorNames.LEFT_ZONE_SENSOR);
-    	mCorrespondenceMap.put(SensorNames.ULTRASOUND_FRONT_SENSOR, SensorNames.ULTRASOUND_FRONT_SENSOR);
-    	mCorrespondenceMap.put(SensorNames.ULTRASOUND_BACK_SENSOR, SensorNames.ULTRASOUND_BACK_SENSOR);
+    	//TODO associer un capteur a son symetrique sur le robot (gauche droit)
+    	//exemple : mCorrespondenceMap.put(SensorNames.LEFT_ZONE_SENSOR, SensorNames.RIGHT_ZONE_SENSOR);
     }
     
     /**

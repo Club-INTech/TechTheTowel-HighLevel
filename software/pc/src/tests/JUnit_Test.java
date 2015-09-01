@@ -16,12 +16,9 @@ import table.Table;
 import threads.ThreadTimer;
 import utils.Log;
 import utils.Config;
-import utils.Sleep;
 import container.Container;
-import enums.ActuatorOrder;
 import enums.ObstacleGroups;
 import enums.ServiceNames;
-import enums.Speed;
 import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -85,116 +82,7 @@ public abstract class JUnit_Test
 
 	public void matchSetUp(Robot robot, boolean isInitialisationQuick) throws SerialConnexionException
 	{
-		
-		if(isInitialisationQuick)
-		{
-			// Fermeture de tous  les actionneurs
-			
-			robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
-			robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, false);
-			
-			robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
-			robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
-			
-			robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
-			robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
-			
-			// initialisation normale 
-			robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
-			
-			robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
-	
-			robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, false);
-			robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, true);
-			
-			robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, false);
-			robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, false);
-			
-			robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
-			robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);
-	
-	
-			robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, false);
-			robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, false);
-			
-			robot.useActuator(ActuatorOrder.LEFT_CARPET_DROP, false);
-			robot.useActuator(ActuatorOrder.RIGHT_CARPET_DROP, true);
-			
-			robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, false);
-			robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, false);
-			
-			robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, false);
-			robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, false);
-			
-			robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
-			
-			robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
-			
-			robot.setLocomotionSpeed(Speed.SLOW);
-		}
-		else
-		{
-			// Fermeture de tous  les actionneurs
-			
-			robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
-			robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);
-			
-			robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
-			robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
-			
-			robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, true);
-			robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, true);
-			
-			// initialisation normale 
-
-			robot.useActuator(ActuatorOrder.ARM_LEFT_MIDDLE, true);
-			robot.useActuator(ActuatorOrder.ARM_RIGHT_MIDDLE, true);
-			
-			robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
-			
-			robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, true);
-	
-			robot.useActuator(ActuatorOrder.OPEN_LEFT_GUIDE, true);
-			robot.useActuator(ActuatorOrder.OPEN_RIGHT_GUIDE, true);
-			
-			
-			robot.useActuator(ActuatorOrder.CLOSE_RIGHT_GUIDE, true);
-			robot.useActuator(ActuatorOrder.CLOSE_LEFT_GUIDE, true);
-	
-	
-			robot.useActuator(ActuatorOrder.HIGH_LEFT_CLAP, true);
-			robot.useActuator(ActuatorOrder.HIGH_RIGHT_CLAP, true);
-			
-			robot.useActuator(ActuatorOrder.LEFT_CARPET_DROP, true);
-			robot.useActuator(ActuatorOrder.RIGHT_CARPET_DROP, true);
-			
-			robot.useActuator(ActuatorOrder.LEFT_CARPET_FOLDUP, true);
-			robot.useActuator(ActuatorOrder.RIGHT_CARPET_FOLDUP, true);
-
-			robot.useActuator(ActuatorOrder.ARM_LEFT_CLOSE, true);
-			robot.useActuator(ActuatorOrder.ARM_RIGHT_CLOSE, true);
-						
-			robot.useActuator(ActuatorOrder.LOW_LEFT_CLAP, true);
-			robot.useActuator(ActuatorOrder.LOW_RIGHT_CLAP, true);
-			
-			robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
-			
-			robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
-			
-			robot.setLocomotionSpeed(Speed.SLOW);
-		}
-	}
-	
-	public void putTennisBall(Robot robot) throws SerialConnexionException
-	{
-		robot.useActuator(ActuatorOrder.ELEVATOR_GROUND, true);
-		robot.useActuator(ActuatorOrder.ELEVATOR_OPEN_JAW, false);
-		
-		log.debug("Veuillez mettre la Balle de Tennis", this);
-		Sleep.sleep(1500);
-		
-		robot.useActuator(ActuatorOrder.ELEVATOR_CLOSE_JAW, true);
-		robot.useActuator(ActuatorOrder.ELEVATOR_LOW, true);
+		//TODO init du robot
 	}
 
 	public void setBeginPosition(Robot robot)

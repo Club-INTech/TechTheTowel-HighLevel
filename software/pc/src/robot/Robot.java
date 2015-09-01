@@ -13,7 +13,6 @@ import enums.ActuatorOrder;
 import enums.ObstacleGroups;
 import enums.SensorNames;
 import enums.Speed;
-import enums.UnableToMoveReason;
 import exceptions.ConfigPropertyNotFoundException;
 import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
@@ -55,32 +54,12 @@ public abstract class Robot implements Service
 	 * l'orientation du robot
 	 */
 	protected double orientation;
-
-	/** nombre de plots stockes dans le robot (mis a jour et utlisé par les scripts) */
-	public int storedPlotCount;
-	
-	/** si le robot stocke une balle de tennis (mis a jour et utilise par les scripts) */
-	public boolean isBallStored;
-
-	/** si le robot a un verre dans la zone gauche (mis a jour et utilise par les scripts) */
-	public boolean isGlassStoredLeft;
-	
-	/** si le robot a un verre dans la zone droit (mis a jour et utilise par les scripts) */
-	public boolean isGlassStoredRight;
 	
 	/** Rayon du robot provenant du fichier de config */
 	public int robotRay;
-	
-	/** chemin que le robot suit, pour l'interface : TODO supprimer */
-	public ArrayList<Vec2> cheminSuivi= new ArrayList<Vec2>();
-	
-	/** Nombre d'essais maximal de tentative de calcul de PathDingDing */
-	private int maxNumberTriesRecalculation = 2;
-	private int actualNumberOfTries=0;
 
-	/** Booleen explicitant si on a un plot dans les machoires mais pas encore dans le tube */
-	private boolean hasNonDigestedPlot=false;
-
+	public ArrayList<Vec2> cheminSuivi = new ArrayList<Vec2>();
+	
 	private float aimThresold = 15;
 	
 	
@@ -447,37 +426,8 @@ public abstract class Robot implements Service
     public void moveToCircle(Circle aim, ArrayList<Hook> hooksToConsider, Table table, EnumSet<ObstacleGroups> obstaclesNotConsidered) throws PathNotFoundException, UnableToMoveException, InObstacleException
     {
 
-		log.debug("appel de Robot.moveToCircle(" + aim + "," + hooksToConsider + "," + table + "," + obstaclesNotConsidered + ")", this);
-    	
-    	ArrayList<Vec2> path;
-    	//si on est jaune on retire les plots verts de la liste des obstacles
-    
-		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_0);
-		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_1);
-		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_2);
-		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_3);
-		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_4);
-		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_5);
-		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_6);
-		obstaclesNotConsidered.add(ObstacleGroups.YELLOW_PLOT_7);
-    	
-    	
-    	EnumSet<ObstacleGroups> obstacleConsidered = EnumSet.complementOf(obstaclesNotConsidered);
-    	if (obstacleConsidered == null)
-    	{
-    		obstacleConsidered = EnumSet.noneOf(ObstacleGroups.class);
-    	}
-    	
-    	try 
-    	{
-    		path = pathDingDing.computePath(getPosition(),aim.toVec2(),obstacleConsidered);
-    	}
-    	catch (InObstacleException e)
-    	{
-			log.critical( e.logStack(), this);
-    		log.debug("Probleme en allant en "+aim.toVec2()+" InObstacleException", this);
-    		throw e;
-    	}
+		//FIXME calcule de path par le pathDingDing
+    	ArrayList<Vec2> path = new ArrayList<Vec2>();
 		
     	//retire une distance egale au rayon du cercle au dernier point du chemin (le centre du cercle)
     	
@@ -512,79 +462,8 @@ public abstract class Robot implements Service
     	//si on est trop proche du point d'arrivee on le retire
 	    	if (path.get(1).distance(getPosition())<aimThresold)
 	    		path.remove(1);
-    	
-    	try 
-    	{
-			log.debug("Chemin suivi :"+path , this);
-			followPath(path , hooksToConsider);
-		} 
-    	catch (UnableToMoveException unableToMoveException) 
-    	{
-			log.critical("Catch de "+unableToMoveException+" dans moveToCircle" , this);
-			log.critical( unableToMoveException.logStack(), this);
-			actualNumberOfTries=0;
-			retryNewPath(path.get(path.size()-1), hooksToConsider, unableToMoveException.reason); // on recalcule le path
-			throw unableToMoveException;
-		}
-    }
-    
-    /**
-     * 	Fonction recalculant le path à suivre et le fait suivre, à utiliser pour l'evitement
-     * 	Elle s'appelle elle-meme tant qu'on a pas reussi.
-     *  Avant d'apeller cette méthode remettre actualNumberOfTries à 0
-     * @param aim 
-     * @param hooksToConsider 
-     * @param reason rason pour laquelle un auttre essai de déplacement est nécéssaire
-     * @throws UnableToMoveException 
-     * 	@throws PathNotFoundException 
-     *  @throws InObstacleException lorqsque le robot veut aller dans un obstacle
-     */
-    
-    public void retryNewPath(Vec2 aim, ArrayList<Hook> hooksToConsider, UnableToMoveReason reason) throws UnableToMoveException, PathNotFoundException, InObstacleException
-    {
 
-		log.debug("appel de Robot.retryNewPath(" + aim + "," + hooksToConsider + "," + reason + ")", this);
-    	
-    	if(actualNumberOfTries < maxNumberTriesRecalculation)
-		{
-    		actualNumberOfTries++;
-			try
-			{
-				ArrayList<Vec2> newPath;
-				// On le recaclule, et on essaye de le suivre 
-				
-				try 
-				{
-					 newPath = pathDingDing.computePath(getPosition(),aim, EnumSet.of(ObstacleGroups.ENNEMY_ROBOTS));
-						log.debug("Nouveau Path recalculé: "+newPath, this);
-				}
-				catch (InObstacleException e)
-		    	{
-		    		log.debug("Probleme en allant en "+aim+" InObstacleException", this);
-					log.critical( e.logStack(), this);
-		    		throw e;
-		    	}
-				
-				
-				
-				followPath(newPath , hooksToConsider);
-				
-				//on reinitialise actualNumberOfTries puisque le mouvement a reussi
-				actualNumberOfTries=0;
-			} 
-			catch (UnableToMoveException unableToMoveException) 
-			{
-				//si cela echoue, on recalcule encore en tenant compte du nouvel obstacle
-				if (unableToMoveException.reason.compareTo(UnableToMoveReason.OBSTACLE_DETECTED)==0)
-					retryNewPath(unableToMoveException.aim, hooksToConsider, unableToMoveException.reason);
-			}
-    	}
-    	else // On a depassé le nombre maximal d'essais :
-    	{
-    		log.debug("Recalculate a depasse son nombre max d'essais, "+maxNumberTriesRecalculation+" lancement de UnableToMoveExeception", this);
-    		log.debug("Raison : "+reason+ " / aim : "+aim, this);
-			throw new UnableToMoveException(aim, reason);       
-		}
+		followPath(path , hooksToConsider);
     }
     
     /**
@@ -603,10 +482,6 @@ public abstract class Robot implements Service
 	 */
     public abstract void disableRotationnalFeedbackLoop();
 
-	public void setMaxNumberTriesRecalculation(int numberOfTries)
-	{
-		maxNumberTriesRecalculation=numberOfTries;
-	}
 	/**
 	 * le robot demande l'etat de ses capteurs
 	 * @param captor le nom du capteur dont on veut l'etat
@@ -616,25 +491,5 @@ public abstract class Robot implements Service
 	public abstract Object getSensorValue(SensorNames captor) throws SerialConnexionException;
 
 	public abstract void turnWithoutDetection(double angle, ArrayList<Hook> hooks) throws UnableToMoveException;
-	
-	/** met hasNonDigestedPlot à false  */
-	public void digestPlot()
-	{
-		hasNonDigestedPlot=false;
-	}
-	
-	/** met hasNonDigestedPlot à true  */
-	public void aMiamiam()
-	{
-		hasNonDigestedPlot=true;
-	}	
-	/**
-	 * getter de hasNonDigestedPlot
-	 * @return vra si on a un plot dans les machoires, faux sinon
-	 */
-	public boolean hasRobotNonDigestedPlot()
-	{
-		return hasNonDigestedPlot;
-	}
 
 }

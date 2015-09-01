@@ -1,16 +1,13 @@
 package enums;
 
 public enum SensorNames {
-	/** le capteur des machoires */
-	JAW_SENSOR("ccm",10,true,1), //true on a attrape qqch //TODO: valeurs a modifier
-	/** le capteur de la zone gauche */
-	LEFT_ZONE_SENSOR("ccg",10,true,1), //true = on a qqch dans la poche de gauche
-	/** le capteur de la zone droite */
-	RIGHT_ZONE_SENSOR("ccd",10,true,1), //true = on a qqch dans la poche de droite
-	/** les capteur ultrason avant, comme il y en a deux la reponse est un int[2] */
-	ULTRASOUND_FRONT_SENSOR("us_av",10,new int[]{0,0},2),
-	/** les capteurs ultrason arriere, comme il y en a deux la reponse est un int[2]  */
-	ULTRASOUND_BACK_SENSOR("us_ar",10,new int[]{0,0},2)
+	// Syntaxe: NOM_METHODE("protocole_serie", duree_action, valeur_par_default, nombre_de_ligne_reponse)
+	// exemple : JAW_SENSOR("ccm",10,true,1)
+	// exemple 2 : ULTRASOUND_BACK_SENSOR("us_ar",10,new int[]{0,0},2)
+
+	/** les capteur ultrason exemple a modifier*/
+	ULTRASOUND("us",10,0,1),
+
 	;
 
 	/**la duree moyenne que fait perdre une autre valeur que la valeur par default*/

@@ -39,17 +39,8 @@ public class ScriptManager implements Service
 		
 		// exemple:
 		//instanciedScripts[ScriptNames.CLOSE_CLAP.ordinal()] = new CloseClap(factory, config, log);
-		
-		instanciedScripts[ScriptNames.CLOSE_CLAP.ordinal()] = new CloseClap(factory, config, log);
 		instanciedScripts[ScriptNames.DROP_CARPET.ordinal()] = new DropCarpet(factory, config, log);
-		instanciedScripts[ScriptNames.EXIT_START_ZONE.ordinal()] = new ExitBeginZone(factory, config, log);
-		instanciedScripts[ScriptNames.FREE_STACK.ordinal()] = new DropPile(factory, config, log);
-		instanciedScripts[ScriptNames.GRAB_GLASS.ordinal()] = new GetGlass(factory, config, log);
-		instanciedScripts[ScriptNames.GRAB_PLOT.ordinal()] = new GetPlot(factory, config, log);
-		instanciedScripts[ScriptNames.TAKE_TENNIS_BALL.ordinal()] = new TakeTennisBall(factory, config, log);
-		instanciedScripts[ScriptNames.DROP_GLASS.ordinal()] = new DropGlass(factory, config, log);
-		instanciedScripts[ScriptNames.GOGOGO.ordinal()] = new FinalRush(factory, config, log);
-		instanciedScripts[ScriptNames.WAIT.ordinal()] = new Wait(factory, config, log);
+		//TODO instancier les scripts
 	}
 	
 	/**

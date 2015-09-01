@@ -234,12 +234,8 @@ public class Container
 																);
 		else if(serviceRequested == ServiceNames.STRATEGIE)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new Strategie(
-																(Config)getService(ServiceNames.CONFIG),
-																(Log)getService(ServiceNames.LOG),
-																(GameState<RobotReal>)getService(ServiceNames.GAME_STATE), 
-																(ScriptManager)getService(ServiceNames.SCRIPT_MANAGER), 
-																(PathDingDing)getService(ServiceNames.PATHDINGDING)
 																);
+		
 		else if(serviceRequested == ServiceNames.CHECK_UP)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new CheckUp(
 																	(Log)getService(ServiceNames.LOG),
