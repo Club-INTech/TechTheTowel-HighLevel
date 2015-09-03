@@ -17,7 +17,6 @@ import exceptions.ConfigPropertyNotFoundException;
  */
 public class Config implements Service
 {
-	// TODO: trouver a quoi sert ce fichier
 	/** Nom du fichier local. */
 	private String localFileName = "local.ini";
 	

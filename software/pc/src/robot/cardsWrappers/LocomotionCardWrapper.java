@@ -64,7 +64,6 @@ public class LocomotionCardWrapper implements Service
 		} 
         catch (SerialConnexionException e)
         {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

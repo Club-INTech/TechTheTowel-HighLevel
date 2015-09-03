@@ -34,7 +34,7 @@ public enum ServiceNames
 	 STM_CARD(0),
 	 
 	 THREAD_SENSOR,
-	 THREAD_LASER,
+	 THREAD_BALISE,
 	 THREAD_TIMER,
 	 THREAD_GRAPHICS,
 	 

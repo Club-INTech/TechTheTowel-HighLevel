@@ -145,7 +145,6 @@ public class HookFactory implements Service
 	 */
     public Hook newHookXisGreater(float xValue, float tolerancy)
     {
-    	// TODO: vérifier si ce if et le color=="yellow" ne font pas double emploi (et su coup s'annulent)
         if(color=="yellow")
             return new HookXisLesser(config, log, realState, xValue, tolerancy, color=="yellow");
         return new HookXisGreater(config, log, realState, xValue, tolerancy, color=="yellow");
@@ -161,7 +160,6 @@ public class HookFactory implements Service
 	 */
     public Hook newHookXisLesser(float xValue, float tolerancy)
     {
-    	// TODO: vérifier si ce if et le color=="yellow" ne font pas double emploi (et su coup s'annulent)
         if(color=="yellow")
             return new HookXisGreater(config, log, realState, xValue, tolerancy, color=="yellow");
         return new HookXisLesser(config, log, realState, xValue, tolerancy, color=="yellow");

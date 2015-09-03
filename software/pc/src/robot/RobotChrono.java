@@ -159,19 +159,10 @@ public class RobotChrono extends Robot
     	
     }
 
-	@SuppressWarnings("unused")
 	@Override
     public void followPath(ArrayList<Vec2> path, ArrayList<Hook> hooksToConsider) throws UnableToMoveException
 	{
-		// va sucessivement a tout les points
-		for(Vec2 point: path)
-		{
-			
-			//TODO on utilise pas moveToLocation
-			//moveToLocation vas au point en utilisant le pathfinding, followPath suit le chemin donne par moveToLocation
-			//il faut calculer le temps pour parcourir le chemin donne : TempsPourTourner + distance/vitesse
-			//moveToLocation(point, hooksToConsider);
-		}
+		followPath(path, hooksToConsider, DirectionStrategy.FASTEST);
 	}
 	
 	@Override
@@ -299,11 +290,9 @@ public class RobotChrono extends Robot
 	}
 
 	@Override
-	public void moveLengthwiseWithoutDetection(int distance,
-			ArrayList<Hook> hooksToConsider, boolean expectsWallImpact)
-			throws UnableToMoveException {
-		// TODO Auto-generated method stub
-		
+	public void moveLengthwiseWithoutDetection(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException 
+	{
+		moveLengthwise(distance, hooksToConsider, expectsWallImpact, false);
 	}
 
 	@Override
@@ -315,13 +304,13 @@ public class RobotChrono extends Robot
 	@Override
 	public Speed getLocomotionSpeed() {
 
-		return null;
+		return speed;
 	}
 
 	@Override
-	public void enableFeedbackLoop() throws SerialConnexionException {
+	public void enableFeedbackLoop() throws SerialConnexionException 
+	{
 		// TODO Auto-generated method stub
-		
 	}
 
 }
