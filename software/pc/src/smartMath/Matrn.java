@@ -285,7 +285,8 @@ public class Matrn
 	}
 
 	/**
-	 * Inverser.
+	 * inverse la matrice si elle est inversible
+	 * si la matrice n'est pas inversible Unknown Behaviour
 	 *
 	 * @return the matrn
 	 */

@@ -1,4 +1,4 @@
-package robot.cards.laser;
+package robot.cards.balise;
 
 import exceptions.MatrixException;
 import smartMath.Matrn;

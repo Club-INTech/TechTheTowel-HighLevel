@@ -152,11 +152,7 @@ public class Log implements Service
 	 */
 	public void critical(Object message, Object objet)
 	{
-		//FIXME : Hack car crée une erreur dans les jar
-		/*
-		if( !mutedClasses.contains(objet.getClass().getName()) )
 			critical(message.toString(), objet);
-		*/
 	}
 	
 	/**

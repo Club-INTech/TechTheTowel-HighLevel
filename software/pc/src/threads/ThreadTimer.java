@@ -54,7 +54,6 @@ public class ThreadTimer extends AbstractThread
 	
 	/**
 	 * Crée le thread timer.
-	 * TODO : enlever le robot eventuellement (si on arrete d'afficher l'interface)
 	 *
 	 * @param table La table sur laquelle le thread doit croire évoluer
 	 * @param sensorsCardWrapper La carte capteurs avec laquelle on doit communiquer

@@ -2,27 +2,29 @@ package threads;
 
 import java.util.ArrayList;
 
-import robot.cards.laser.Beacon;
-import robot.cards.laser.LaserFiltration;
-import robot.cards.laser.LaserCardWrapper;
+import robot.cards.balise.BaliseCardWrapper;
+import robot.cards.balise.BaliseFiltration;
+import robot.cards.balise.Beacon;
 import smartMath.Vec2;
 import table.Table;
 import utils.Sleep;
+
 
 /**
  * Thread de gestion de la balise laser.
  *
  * @author pf
+ * TODO suprimer et transformer la balise en sensor ?
  */
 
-class ThreadLaser extends AbstractThread
+class ThreadBalise extends AbstractThread
 {
 
 	/** Le système de filtrage de valeurs a utiliser */
-	private LaserFiltration filtragelaser;
+	private BaliseFiltration filtragelaser;
 	
 	/** La carte électronique Laser a utiliser */
-	private LaserCardWrapper laser;
+	private BaliseCardWrapper laser;
 	
 	/** La table sur laquelle le thread doit croire évoluer */
 	private Table table;
@@ -43,7 +45,7 @@ class ThreadLaser extends AbstractThread
 	 * @param table La table sur laquelle le thread doit croire évoluer
 	 * @param filtragelaser Le système de filtrage de valeurs a utiliser
 	 */
-	public ThreadLaser(LaserCardWrapper laser, Table table, LaserFiltration filtragelaser)
+	public ThreadBalise(BaliseCardWrapper laser, Table table, BaliseFiltration filtragelaser)
 	{
 		this.filtragelaser = filtragelaser;
 		this.laser = laser;
@@ -139,15 +141,13 @@ class ThreadLaser extends AbstractThread
 				}
 				catch(Exception e)
 				{
-					// TODO (désactiver pour le moment car, vu que FiltrageLaser n'est pas fini, y'a des erreurs tout le temps)
-					//					e.printStackTrace();
 					continue;
 				}
 			}
 
 		}
 
-		laser.eteindre();
+		laser.turnOff();
 		log.debug("Fin du thread des lasers", this);
 
 	}

@@ -426,7 +426,7 @@ public abstract class Robot implements Service
     public void moveToCircle(Circle aim, ArrayList<Hook> hooksToConsider, Table table, EnumSet<ObstacleGroups> obstaclesNotConsidered) throws PathNotFoundException, UnableToMoveException, InObstacleException
     {
 
-		//FIXME calcule de path par le pathDingDing
+		//FIXME calculer path par le pathDingDing
     	ArrayList<Vec2> path = new ArrayList<Vec2>();
 		
     	//retire une distance egale au rayon du cercle au dernier point du chemin (le centre du cercle)

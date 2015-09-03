@@ -2,7 +2,6 @@ package threads;
 
 import graphics.Window;
 import robot.RobotReal;
-import robot.cardsWrappers.SensorsCardWrapper;
 import table.Table;
 
 public class ThreadGraphics extends AbstractThread
@@ -14,7 +13,7 @@ public class ThreadGraphics extends AbstractThread
 	/** Le robot */
 	private RobotReal mRobot;
 	
-	//TODO : interface graphique à enlever eventuellement (necessaire pour les tests)
+	/** interface graphique */
 	public Window window;
 	
 	public ThreadGraphics(Table table, RobotReal robot)

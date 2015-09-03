@@ -17,8 +17,8 @@ import table.Table;
 import threads.ThreadManager;
 import robot.Locomotion;
 import robot.RobotReal;
-import robot.cards.laser.LaserFiltration;
-import robot.cards.laser.LaserCardWrapper;
+import robot.cards.balise.BaliseFiltration;
+import robot.cards.balise.BaliseCardWrapper;
 import robot.cardsWrappers.ActuatorCardWrapper;
 import robot.cardsWrappers.LocomotionCardWrapper;
 import robot.cardsWrappers.SensorsCardWrapper;
@@ -216,19 +216,19 @@ public class Container
 																);
 		else if(serviceRequested == ServiceNames.THREAD_LASER)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)threadmanager.getThreadLaser(
-																	(LaserCardWrapper)getService(ServiceNames.LASER),
+																	(BaliseCardWrapper)getService(ServiceNames.LASER),
 																	(Table)getService(ServiceNames.TABLE),
-																	(LaserFiltration)getService(ServiceNames.LASER_FILTRATION)
+																	(BaliseFiltration)getService(ServiceNames.LASER_FILTRATION)
 																);
 		else if(serviceRequested == ServiceNames.LASER)
-			instanciedServices[serviceRequested.ordinal()] = 	(Service)new LaserCardWrapper(
+			instanciedServices[serviceRequested.ordinal()] = 	(Service)new BaliseCardWrapper(
 																	(Config)getService(ServiceNames.CONFIG),
 																	(Log)getService(ServiceNames.LOG),
 																	(SerialConnexion)getService(ServiceNames.STM_CARD),
 																	(RobotReal)getService(ServiceNames.ROBOT_REAL)
 																);
 		else if(serviceRequested == ServiceNames.LASER_FILTRATION)
-			instanciedServices[serviceRequested.ordinal()] = 	(Service)new LaserFiltration(
+			instanciedServices[serviceRequested.ordinal()] = 	(Service)new BaliseFiltration(
 																	(Config)getService(ServiceNames.CONFIG),
 																	(Log)getService(ServiceNames.LOG)
 																);

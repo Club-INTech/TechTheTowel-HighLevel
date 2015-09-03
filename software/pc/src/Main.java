@@ -37,7 +37,9 @@ public class Main
 // dans la config de debut de match, toujours demander une entrée clavier assez longue (ex "oui" au lieu de "o", pour éviter les fautes de frappes. Une erreur a ce stade coûte cher.
 	
 	public static void main(String[] args)
-	{}
+	{
+		//TODO main
+	}
 
 	
 

@@ -1,8 +1,9 @@
-package robot.cards.laser;
+package robot.cards.balise;
 
 import java.util.ArrayList;
 
 import robot.RobotReal;
+import robot.cards.balise.Beacon;
 import robot.serial.SerialConnexion;
 import smartMath.Vec2;
 import utils.Log;
@@ -14,10 +15,11 @@ import exceptions.serial.SerialConnexionException;
  * Classe qui gère la balise laser
  * @author pf
  * @author clément
+ * FIXME refaire une fois la balise disponible
  *
  */
 
-public class LaserCardWrapper implements Service {
+public class BaliseCardWrapper implements Service {
 
 	// Dépendances
 	private Log log;
@@ -26,7 +28,7 @@ public class LaserCardWrapper implements Service {
 
 	private Beacon[] beacons;
 
-	public LaserCardWrapper(Config config, Log log, SerialConnexion serie, RobotReal robotvrai)
+	public BaliseCardWrapper(Config config, Log log, SerialConnexion serie, RobotReal robotvrai)
 	{
 		this.log = log;
 		this.serie = serie;
@@ -80,7 +82,7 @@ public class LaserCardWrapper implements Service {
 	/**
 	 * Eteindre le moteur et les lasers
 	 */
-	public void eteindre()
+	public void turnOff()
 	{
 		try {
 			serie.communiquer("motor_off", 0);

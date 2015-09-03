@@ -1,4 +1,4 @@
-package robot.cards.laser;
+package robot.cards.balise;
 
 import java.util.Stack;
 
@@ -7,14 +7,14 @@ import java.util.Stack;
  * @auteur clément
  */
 
+
+import robot.cards.balise.Kalman;
 import smartMath.Vec2;
-
-
 import utils.Log;
 import utils.Config;
 import container.Service;
 import smartMath.Matrn;
-public class LaserFiltration implements Service
+public class BaliseFiltration implements Service
 {
 
 
@@ -24,7 +24,7 @@ public class LaserFiltration implements Service
 	private int rejectedValues;//valeurs_rejetees;
 	private Stack<Vec2> history;//historique;
 
-	public LaserFiltration(Config config, Log log)
+	public BaliseFiltration(Config config, Log log)
 	{
 		this.dt = (double)0.2; //intervalle de temps
 		double[][] tab_x = {{1400.}, {100.},{0.},{0.}}; 

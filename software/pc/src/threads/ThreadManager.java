@@ -2,9 +2,8 @@ package threads;
 
 import java.util.Hashtable;
 
-
-import robot.cards.laser.LaserFiltration;
-import robot.cards.laser.LaserCardWrapper;
+import robot.cards.balise.BaliseFiltration;
+import robot.cards.balise.BaliseCardWrapper;
 import robot.cardsWrappers.ActuatorCardWrapper;
 import robot.cardsWrappers.LocomotionCardWrapper;
 import robot.cardsWrappers.SensorsCardWrapper;
@@ -109,11 +108,11 @@ public class ThreadManager
 	 * @param laserFiltration la méthode de filtrage de valeurs que le thread laser va utiliser
 	 * @return le thread laser
 	 */
-	public AbstractThread getThreadLaser(LaserCardWrapper laserCardWrapper, Table table, LaserFiltration laserFiltration)
+	public AbstractThread getThreadLaser(BaliseCardWrapper laserCardWrapper, Table table, BaliseFiltration laserFiltration)
 	{
 		AbstractThread thread = instanciedThreads.get("threadLaser");
 		if(thread == null)
-			instanciedThreads.put("threadLaser", new ThreadLaser(laserCardWrapper, table, laserFiltration));
+			instanciedThreads.put("threadLaser", new ThreadBalise(laserCardWrapper, table, laserFiltration));
 		return instanciedThreads.get("threadLaser");
 	}
 

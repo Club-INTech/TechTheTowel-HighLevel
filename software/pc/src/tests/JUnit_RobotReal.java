@@ -14,7 +14,7 @@ public class JUnit_RobotReal extends JUnit_Test
 {
     
     /** The robotvrai. */
-    RobotReal robotvrai;
+    RobotReal robotReal;
     
     /* (non-Javadoc)
      * @see tests.JUnit_Test#setUp()
@@ -22,7 +22,7 @@ public class JUnit_RobotReal extends JUnit_Test
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        robotvrai = (RobotReal) container.getService(ServiceNames.ROBOT_REAL);
+        robotReal = (RobotReal) container.getService(ServiceNames.ROBOT_REAL);
     }
 
     /**
@@ -33,7 +33,7 @@ public class JUnit_RobotReal extends JUnit_Test
     @Test
     public void test_recaler() throws Exception
     {
-        robotvrai.recaler();
+        robotReal.recaler();
     }
     
     // TODO : tester chaque action de cette facon

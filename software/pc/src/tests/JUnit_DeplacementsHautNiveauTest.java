@@ -22,7 +22,7 @@ import utils.Sleep;
  * @author pf
  */
 
-// TODO : comprendre ce système
+// TODO : faire ce système
 
 public class JUnit_DeplacementsHautNiveauTest extends JUnit_Test
 {
