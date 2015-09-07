@@ -150,7 +150,7 @@ public class RobotChrono extends Robot
 		// va sucessivement a tout les points
 		for(int i = 0; i < path.size(); i++)
         {
-			//TODO mettre les bonnes valeures !!!
+			//TODO mettre les bonnes valeurs
             @SuppressWarnings("unused")
 			Vec2 aim = path.get(i);
             turn (0);

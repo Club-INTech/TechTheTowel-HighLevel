@@ -59,12 +59,8 @@ public class DropCarpet extends AbstractScript
 				//on presente ses arrieres a l'escalier
 				stateToConsider.robot.turn(-0.5*Math.PI, hooksToConsider, false);
 				// on avance vers ces demoiselles (les marches) (attention impact possible)
-				// TODO utiliser moveLengthwiseTorwardWalls
 				stateToConsider.robot.moveLengthwiseWithoutDetection(-(carperDropYCoord - stateToConsider.robot.getPositionFast().y), hooksToConsider, true);
-				
-				//TODO supr
-				System.out.println("en position ("+stateToConsider.robot.getPosition().x+", "+stateToConsider.robot.getPosition().y+") avant depose-tapis");
-		
+	
 				
 				//verification de la position : on n'effectue l'action que si on est assez proche (ie pas d'obstacle)
 			//	if(Math.abs((stateToConsider.robot.getPosition().y-1340))<50) // position- position du centre parfait<marge d'erreur
