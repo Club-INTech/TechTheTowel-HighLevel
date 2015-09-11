@@ -27,11 +27,7 @@ class ThreadSensor extends AbstractThread
 	/** La carte capteurs avec laquelle on doit communiquer */
 	private SensorsCardWrapper mSensorsCardWrapper;
 	
-<<<<<<< HEAD
-	// interface graphique à enlever eventuellement (necessaire pour les tests)
-=======
 	/** interface graphique */
->>>>>>> 3a873d6e08b7e39dca6cef1778c44704f30d90be
 	public Window window;
 	
 	// Valeurs par défaut s'il y a un problème de config
