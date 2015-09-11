@@ -17,8 +17,8 @@ import table.Table;
 import threads.ThreadManager;
 import robot.Locomotion;
 import robot.RobotReal;
-import robot.cards.laser.LaserFiltration;
-import robot.cards.laser.LaserCardWrapper;
+import robot.cards.balise.BaliseFiltration;
+import robot.cards.balise.BaliseCardWrapper;
 import robot.cardsWrappers.ActuatorCardWrapper;
 import robot.cardsWrappers.LocomotionCardWrapper;
 import robot.cardsWrappers.SensorsCardWrapper;
@@ -40,10 +40,10 @@ public class Container
 	/** liste des services déjà instanciés. Contient au moins Config et Log. Les autres services appelables seront présents s'ils ont déjà étés appellés au moins une fois */
 	private Service[] instanciedServices = new Service[ServiceNames.values().length];
 	
-	/** TODO: Pourquoi ce manager est-il memebre de container ? */
+	/** le serial manager */
 	private SerialManager serialmanager = null;
 
-	/** TODO: Pourquoi ce manager est-il memebre de container ? */
+	/** le thread manager */
 	private ThreadManager threadmanager;
 	
 
@@ -93,7 +93,7 @@ public class Container
 	 * Services instanciés:
 	 * 		Config
 	 * 		Log
-	 * Instancie aussi le ThreadManager. // TODO: voir si l'on peut proprer cela ( ce n'est pa a priori le role de container puisque ThreadManager n'est pas un service) 
+	 * Instancie aussi le ThreadManager.
 	 * @throws IOException si le fichier de config du robot ne peut être lu.
 	 */
 	public Container() throws IOException
@@ -111,7 +111,7 @@ public class Container
 		log = (Log)instanciedServices[ServiceNames.LOG.ordinal()];
 		
 		// instancie le gestionnnaire de thread
-		threadmanager = new ThreadManager(config, log); //TODO: pourquoi ce manager est instancié ici alors que le manager des serial ne l'est qu'au premier appel ?
+		threadmanager = new ThreadManager(config, log);
 	}
 
 	/**
@@ -214,21 +214,21 @@ public class Container
 																	(Table)getService(ServiceNames.TABLE),
 																	(RobotReal)getService(ServiceNames.ROBOT_REAL)
 																);
-		else if(serviceRequested == ServiceNames.THREAD_LASER)
+		else if(serviceRequested == ServiceNames.THREAD_BALISE)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)threadmanager.getThreadLaser(
-																	(LaserCardWrapper)getService(ServiceNames.LASER),
+																	(BaliseCardWrapper)getService(ServiceNames.LASER),
 																	(Table)getService(ServiceNames.TABLE),
-																	(LaserFiltration)getService(ServiceNames.LASER_FILTRATION)
+																	(BaliseFiltration)getService(ServiceNames.LASER_FILTRATION)
 																);
 		else if(serviceRequested == ServiceNames.LASER)
-			instanciedServices[serviceRequested.ordinal()] = 	(Service)new LaserCardWrapper(
+			instanciedServices[serviceRequested.ordinal()] = 	(Service)new BaliseCardWrapper(
 																	(Config)getService(ServiceNames.CONFIG),
 																	(Log)getService(ServiceNames.LOG),
 																	(SerialConnexion)getService(ServiceNames.STM_CARD),
 																	(RobotReal)getService(ServiceNames.ROBOT_REAL)
 																);
 		else if(serviceRequested == ServiceNames.LASER_FILTRATION)
-			instanciedServices[serviceRequested.ordinal()] = 	(Service)new LaserFiltration(
+			instanciedServices[serviceRequested.ordinal()] = 	(Service)new BaliseFiltration(
 																	(Config)getService(ServiceNames.CONFIG),
 																	(Log)getService(ServiceNames.LOG)
 																);
@@ -270,7 +270,6 @@ public class Container
 	/**
 	 * Demande au thread manager de démarrer tous les threads
 	 */
-	//TODO: gestion propre des exeptions
 	public void startAllThreads()
 	{
 		// TODO: faire une gestion propre des exceptions

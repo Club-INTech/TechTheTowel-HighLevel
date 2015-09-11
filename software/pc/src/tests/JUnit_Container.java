@@ -225,7 +225,7 @@ public class JUnit_Container extends JUnit_Test {
 	public void test_threadLaser() throws Exception
 	{
 		log.debug("JUnit_ContainerTest.test_threadLaser()", this);
-		container.getService(ServiceNames.THREAD_LASER);
+		container.getService(ServiceNames.THREAD_BALISE);
 	}
 
 	/**

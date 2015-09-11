@@ -38,16 +38,9 @@ public class Strategie implements Service
 	public void IA()
 	{
 		//TODO IA
+		scriptedMatch();
 	}
-	
-	/**
-	 * initialize le robot real pendant un match (suite a une SerialConnexionException)
-	 * se relance tant qu'il y a des SerialConnexionException (pour preserver la meca)
-	 */
-	private void initInMatch() 
-	{
-		//TODO initialiser le robot
-	}
+
 
 	/**
 	 * 	Lance le match scripté de l'IA, suite de scripts

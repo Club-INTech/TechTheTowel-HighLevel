@@ -355,7 +355,7 @@ public class Table implements Service
 	 * La table en argument deviendra la copie de this (this reste inchangé)
 	 * @param ct
 	 */
-	public void copy(Table ct) // TODO
+	public void copy(Table ct) 
 	{
         if(!equals(ct))
 		{
@@ -422,7 +422,7 @@ public class Table implements Service
 	@Override
 	public void updateConfig()
 	{
-		// TODO Auto-generated
+		// TODO update config
 	}
 	
 	public Config getConfig()
