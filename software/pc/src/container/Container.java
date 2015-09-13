@@ -41,10 +41,10 @@ public class Container
 	private Service[] instanciedServices = new Service[ServiceNames.values().length];
 	
 	/** le serial manager */
-	private SerialManager serialmanager = null;
+	private SerialManager serialManager = null;
 
 	/** le thread manager */
-	private ThreadManager threadmanager;
+	private ThreadManager threadManager;
 	
 
 	/** gestion des log */
@@ -77,10 +77,10 @@ public class Container
 			}
 		
 		// coupe les connexions séries
-		if(serialmanager != null)
+		if(serialManager != null)
 		{
-			if(serialmanager.serieAsservissement != null)
-				serialmanager.serieAsservissement.close();
+			if(serialManager.serieAsservissement != null)
+				serialManager.serieAsservissement.close();
 		}
 		
 		// ferme le log
@@ -111,7 +111,7 @@ public class Container
 		log = (Log)instanciedServices[ServiceNames.LOG.ordinal()];
 		
 		// instancie le gestionnnaire de thread
-		threadmanager = new ThreadManager(config, log);
+		threadManager = new ThreadManager(config, log);
 	}
 
 	/**
@@ -139,9 +139,9 @@ public class Container
 																);
 		else if(serviceRequested.getType() == ServiceType.SERIAL) // les séries
 		{
-			if(serialmanager == null)
-				serialmanager = new SerialManager(log);
-			instanciedServices[serviceRequested.ordinal()] = 	(Service)serialmanager.getSerial(serviceRequested);
+			if(serialManager == null)
+				serialManager = new SerialManager(log);
+			instanciedServices[serviceRequested.ordinal()] = 	(Service)serialManager.getSerial(serviceRequested);
 		}
 		else if(serviceRequested == ServiceNames.LOCOMOTION_CARD_WRAPPER)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new LocomotionCardWrapper(
@@ -196,7 +196,7 @@ public class Container
 																	(Log)getService(ServiceNames.LOG)
 																);
 		else if(serviceRequested == ServiceNames.THREAD_TIMER)
-			instanciedServices[serviceRequested.ordinal()] = 	(Service)threadmanager.getThreadTimer(
+			instanciedServices[serviceRequested.ordinal()] = 	(Service)threadManager.getThreadTimer(
 																	(Table)getService(ServiceNames.TABLE),
 																	(RobotReal)getService(ServiceNames.ROBOT_REAL),
 																	(SensorsCardWrapper)getService(ServiceNames.SENSORS_CARD_WRAPPER),
@@ -204,18 +204,18 @@ public class Container
 	                                                                (ActuatorCardWrapper)getService(ServiceNames.ACTUATOR_CARD_WRAPPER)
                                                                 );
 		else if(serviceRequested == ServiceNames.THREAD_SENSOR)
-			instanciedServices[serviceRequested.ordinal()] = 	(Service)threadmanager.getThreadSensors(
+			instanciedServices[serviceRequested.ordinal()] = 	(Service)threadManager.getThreadSensors(
 																	(Table)getService(ServiceNames.TABLE),
 																	(RobotReal)getService(ServiceNames.ROBOT_REAL),
 																	(SensorsCardWrapper)getService(ServiceNames.SENSORS_CARD_WRAPPER)
 																);
 		else if(serviceRequested == ServiceNames.THREAD_GRAPHICS)
-			instanciedServices[serviceRequested.ordinal()] = 	(Service)threadmanager.getThreadGraphics(
+			instanciedServices[serviceRequested.ordinal()] = 	(Service)threadManager.getThreadGraphics(
 																	(Table)getService(ServiceNames.TABLE),
 																	(RobotReal)getService(ServiceNames.ROBOT_REAL)
 																);
 		else if(serviceRequested == ServiceNames.THREAD_BALISE)
-			instanciedServices[serviceRequested.ordinal()] = 	(Service)threadmanager.getThreadLaser(
+			instanciedServices[serviceRequested.ordinal()] = 	(Service)threadManager.getThreadLaser(
 																	(BaliseCardWrapper)getService(ServiceNames.LASER),
 																	(Table)getService(ServiceNames.TABLE),
 																	(BaliseFiltration)getService(ServiceNames.LASER_FILTRATION)
@@ -264,7 +264,7 @@ public class Container
 	 */
 	public void startInstanciedThreads()
 	{
-		threadmanager.startInstanciedThreads();
+		threadManager.startInstanciedThreads();
 	}
 
 	/**
@@ -288,7 +288,7 @@ public class Container
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		threadmanager.startInstanciedThreads();
+		threadManager.startInstanciedThreads();
 	}
 
 	/**
@@ -297,7 +297,7 @@ public class Container
 	 */
 	public void stopAllThreads()
 	{
-		threadmanager.stopAllThreads();
+		threadManager.stopAllThreads();
 	}
 	
 }

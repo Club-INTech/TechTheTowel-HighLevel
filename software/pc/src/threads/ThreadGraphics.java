@@ -1,3 +1,5 @@
+//TODO : refactor
+
 package threads;
 
 import graphics.Window;

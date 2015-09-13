@@ -1,3 +1,5 @@
+//TODO : refactor
+
 package graphics;
 
 import javax.swing.JFrame;

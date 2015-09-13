@@ -1,8 +1,7 @@
 package enums;
 
-public enum UnableToMoveReason {
-	
+public enum UnableToMoveReason
+{
 	OBSTACLE_DETECTED,
 	PHYSICALLY_BLOCKED,
-	
 }

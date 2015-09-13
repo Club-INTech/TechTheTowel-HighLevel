@@ -1,3 +1,5 @@
+//TODO : refactor
+
 package graphics;
 
 import java.awt.Graphics;

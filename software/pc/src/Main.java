@@ -27,7 +27,7 @@ public class Main
 	static Container container;
 	static Config config;
 	static Strategie strategos;
-	static GameState<Robot> real_state;
+	static GameState<Robot> realState;
 	static ArrayList<Hook> emptyHook;
 	static ScriptManager scriptmanager;
 	static SensorsCardWrapper mSensorsCardWrapper;
@@ -45,7 +45,7 @@ public class Main
 
 	/**
 	 * Attends que le match soit lancé
-	 * cette fonciton prends fin quand le match a démarré
+	 * cette fonction prend fin quand le match a démarré
 	 */
 	static void waitMatchBegin()
 	{
@@ -68,7 +68,6 @@ public class Main
 	 */
 	static void configColor()
 	{
-
 		String couleur = "";
 		while(!couleur.contains("jaune") && !couleur.contains("vert"))
 		{
@@ -81,15 +80,12 @@ public class Main
 			}
 			catch (IOException e) 
 			{
-				System.out.println("Eurreur IO: le clavier est il bien branché ?");
+				System.out.println("Erreur IO: le clavier est il bien branché ?");
 			} 
 			if(couleur.contains("jaune"))
 				config.set("couleur","jaune");
 			else if(couleur.contains("vert"))
-				config.set("couleur", "vert");
-			
+				config.set("couleur", "vert");	
 		}
-		
-	}
-	
+	}	
 }

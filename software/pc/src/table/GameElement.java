@@ -14,7 +14,7 @@ abstract class GameElement
 	/**
 	 * Crée un nouvel élément a l'endroit de la table spécifié
 	 *
-	 * @param position position a laquelle instancier l'élément de jeu
+	 * @param position position à laquelle instancier l'élément de jeu
 	 */
 	public GameElement(Vec2 position)
 	{
@@ -22,9 +22,9 @@ abstract class GameElement
 	}
 	
 	/**
-	 * Renvois la position courrante de l'élément de jeu
+	 * Renvoie la position courante de l'élément de jeu
 	 *
-	 * @return la position courrante de l'élément de jeu
+	 * @return la position courante de l'élément de jeu
 	 */
 	public Vec2 getPosition()
 	{
