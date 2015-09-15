@@ -37,9 +37,6 @@ public class Log implements Service
 	
 	/** Vrai s'il faut sauvegarder les logs dans un fichier. */
 	private boolean saveLogs = false;
-	
-	/** Liste des logs rendus muets*/
-	private ArrayList<String> mutedClasses;
 
 	
 	/**
@@ -66,24 +63,10 @@ public class Log implements Service
 			}
 			catch(Exception e)
 			{
-				critical(e, this);
+				critical(e);
 			}
-		
-		initMutedClassList();
-		debug("Service de log démarré", this);
+		debug("Service de log démarré");
 	
-	}
-	
-
-	/**
-	 * Initialise la liste des classes rendues muettes sur le log
-	 */
-	private void initMutedClassList()
-	{
-		mutedClasses = new ArrayList<String>();
-//		mutedClasses.add("threads.ThreadSensor");
-//		mutedClasses.add("table.obstacles.ObstacleManager");
-//		mutedClasses.add("strategie.Strategie");
 	}
 		
 	/**
@@ -101,71 +84,60 @@ public class Log implements Service
 	 * Affichage de debug, en vert. User-friendly
 	 *
 	 * @param message message a logguer
-	 * @param objet l'objet demandant le log
 	 */
-	public void debug(Object message, Object objet)
+	public void debug(Object message)
 	{
-		if( !mutedClasses.contains(objet.getClass().getName()) )
-			debug(message.toString(), objet);
+			debug(message.toString());
 	}
 	
 	/**
 	 * Affichage de debug, en vert.
 	 *
 	 * @param message message a logguer
-	 * @param objet l'objet demandant le log
 	 */
-	public void debug(String message, Object objet)
+	public void debug(String message)
 	{
-		if( printLogs && !mutedClasses.contains(objet.getClass().getName()) )
-			writeToLog(objet.getClass().getName()+": "+message, debugPrefix, System.out);
+			writeToLog(message, debugPrefix, System.out);
 	}
 
 	/**
 	 * Affichage de warnings, en orange. User-friendly
 	 * 
 	 * @param message message a logguer
-	 * @param objet l'objet demandant le log
 	 */
-	public void warning(Object message, Object objet)
+	public void warning(Object message)
 	{
-		if( !mutedClasses.contains(objet.getClass().getName()) )
-			warning(message.toString(), objet);
+			warning(message.toString());
 	}
 
 	/**
 	 * Affichage de warnings, en orange.
 	 * 
 	 * @param message message a logguer
-	 * @param objet l'objet demandant le log
 	 */
-	public void warning(String message, Object objet)
+	public void warning(String message)
 	{
-		writeToLog(objet.getClass().getName()+": "+message, warningPrefix, System.out);
+		writeToLog(message, warningPrefix, System.out);
 	}
 
 	/**
 	 * Affichage d'erreurs critiques, en rouge. User-friendly
 	 *
 	 * @param message message a logguer
-	 * @param objet l'objet demandant le log
 	 */
-	public void critical(Object message, Object objet)
+	public void critical(Object message)
 	{
-			critical(message.toString(), objet);
+			critical(message.toString());
 	}
 	
 	/**
 	 * Affichage d'erreurs critiques, en rouge.
 	 *
 	 * @param message message a logguer
-	 * @param objet l'objet demandant le log
 	 */
-	public void critical(String message, Object objet)
+	public void critical(String message)
 	{
-		if( !mutedClasses.contains(objet.getClass().getName()) )
-		
-			writeToLog(objet.getClass().getName()+": "+message, criticalPrefix, System.err);
+			writeToLog(message, criticalPrefix, System.err);
 	}
 
 	/**
@@ -184,7 +156,10 @@ public class Log implements Service
 		
 		
 		if(prefix != debugPrefix || printLogs)
-			logPrinter.println(prefix+heure+" "+message+"\u001B[0m"); // suffixe en \u001B[0m pour que la prochiane ligne soit blanche si on ne spécifie rien
+		{
+			StackTraceElement elem = Thread.currentThread().getStackTrace()[3];
+			logPrinter.println(System.currentTimeMillis()+elem.getClassName()+"."+elem.getMethodName()+":"+elem.getLineNumber()+" > "+message+"\u001B[0m");
+		}
 		if(saveLogs)
 			writeToFile(prefix+heure+" "+message+"\u001B[0m"); // suffixe en \u001B[0m pour que la prochiane ligne soit blanche si on ne spécifie rien
 	}
@@ -215,11 +190,11 @@ public class Log implements Service
 	 */
 	public void close()
 	{
-		warning("Fin du log",this);
+		warning("Fin du log");
 		
 		if(saveLogs)
 			try {
-				debug("Sauvegarde du fichier de logs", this);
+				debug("Sauvegarde du fichier de logs");
 				if(writer != null)
 					writer.close();
 			}
@@ -242,7 +217,7 @@ public class Log implements Service
 		}
 		catch(Exception e)
 		{
-			critical(e, this);
+			critical(e);
 		}
 		try
 		{
@@ -252,7 +227,7 @@ public class Log implements Service
 		}
 		catch(Exception e)
 		{
-			critical(e, this);
+			critical(e);
 		}
 	}
 

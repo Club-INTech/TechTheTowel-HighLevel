@@ -55,7 +55,7 @@ public class JUnit_Hooks extends JUnit_Test
 		} 
 		catch (SerialConnexionException e) 
 		{
-			log.debug( e.logStack(), this);
+			log.debug( e.logStack());
 		}		
 	}
 
@@ -90,7 +90,7 @@ public class JUnit_Hooks extends JUnit_Test
 		}
 		catch (UnableToMoveException e) 
 		{
-			log.critical( e.logStack(), this);
+			log.critical( e.logStack());
 		}
 
 		System.out.println("match fini !");

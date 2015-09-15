@@ -1,12 +1,11 @@
 package enums;
 
-public enum SensorNames {
+public enum USsensors {
 	// Syntaxe: NOM_METHODE("protocole_serie", duree_action, valeur_par_default, nombre_de_ligne_reponse)
-	// exemple : JAW_SENSOR("ccm",10,true,1)
-	// exemple 2 : ULTRASOUND_BACK_SENSOR("us_ar",10,new int[]{0,0},2)
+	// exemple : ULTRASOUND_BACK_SENSOR("us_ar",10,new int[]{0,0})
 
 	/** les capteur ultrason exemple a modifier*/
-	ULTRASOUND("us",10,0,1),
+	ULTRASOUND("us",10,0),
 
 	;
 
@@ -14,25 +13,21 @@ public enum SensorNames {
 	private int averageDuration;
 	
 	/**le string a envoyer a la serie*/
-	private String serialCaptor;
+	private String serialSensor;
 	
 	/**la valeur par default envoyee par le capteur (celle qui fait terminer le script le plus vite)*/
-	private Object defaultValue;
-	
-	/**le nombre de ligne de la reponse du bas niveau (sans compter les aquitements)*/
-	private int awnserLineAmount;
+	private int defaultValue;
 
 	public int getAverageDuration() 
 	{
 		return averageDuration;
 	}
 	
-	private SensorNames(String serialString, int duration, Object defaultValue, int awnserLineAmount)
+	private USsensors(String serialString, int duration, int defaultValue)
 	{
 		this.defaultValue = defaultValue;
-		this.serialCaptor = serialString;
+		this.serialSensor = serialString;
 		this.averageDuration = duration;
-		this.awnserLineAmount = awnserLineAmount;
 	}
 	
 	/**
@@ -41,20 +36,15 @@ public enum SensorNames {
 	 */
 	public String getSerialCommunication()
 	{
-		return serialCaptor;
+		return serialSensor;
 	}
 	
 	/**
 	 *  
 	 * @return la valeur par default du capteur
 	 */
-	public Object getDefaultValue()
+	public int getDefaultValue()
 	{
 		return defaultValue;
-	}
-
-	public int getAwnserLineAmount()
-	{
-		return awnserLineAmount;
 	}
 }

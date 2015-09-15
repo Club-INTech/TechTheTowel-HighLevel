@@ -78,7 +78,7 @@ public class ThreadTimer extends AbstractThread
 		catch (Exception e)
 		{
 			isGraphicalInterfaceEnabled = false;
-			log.debug("Affichage graphique non disponible", this);
+			log.debug("Affichage graphique non disponible");
 		}
 	}
 
@@ -88,7 +88,7 @@ public class ThreadTimer extends AbstractThread
 	@Override
 	public void run()
 	{
-		log.debug("Lancement du thread timer", this);
+		log.debug("Lancement du thread timer");
 
 		// on eteind les capteursgetObstacleManager
 		config.set("capteurs_on", "true");
@@ -109,18 +109,18 @@ public class ThreadTimer extends AbstractThread
 		// maintenant que le jumper est retiré, le match a commencé
 		matchStarted = true;
 		
-		log.debug(!mSensorsCardWrapper.isJumperAbsent() +" / "+ !matchStarted, this);
+		log.debug(!mSensorsCardWrapper.isJumperAbsent() +" / "+ !matchStarted);
 
 		// Le match démarre ! On chage l'état du thread pour refléter ce changement
 		matchStartTimestamp = System.currentTimeMillis();
-		log.critical("Jumper Enlevé", this);
+		log.critical("Jumper Enlevé");
 
 		matchStarted = true;
 
 		config.set("capteurs_on", "true");
 		mSensorsCardWrapper.updateConfig();
 
-		log.debug("LE MATCH COMMENCE !", this);
+		log.debug("LE MATCH COMMENCE !");
 
 		// boucle principale, celle qui dure tout le match
 		while(System.currentTimeMillis() - matchStartTimestamp < matchDuration)
@@ -129,7 +129,7 @@ public class ThreadTimer extends AbstractThread
 			if(stopThreads)
 			{
 				// ons 'arrète si le ThreadManager le demande
-				log.debug("Arrêt du thread timer demandé durant le match", this);
+				log.debug("Arrêt du thread timer demandé durant le match");
 				return;
 			}
 			
@@ -154,16 +154,16 @@ public class ThreadTimer extends AbstractThread
 			}
 			catch(Exception e)
 			{
-				log.warning(e.toString(), this);
+				log.warning(e.toString());
 			}
 		}
-		log.debug("Fin des "+matchDuration+" ms de match, temps : "+(System.currentTimeMillis() - matchStartTimestamp) , this);
+		log.debug("Fin des "+matchDuration+" ms de match, temps : "+(System.currentTimeMillis() - matchStartTimestamp));
 
 
 		// actions de fin de match
 		onMatchEnded();
 		
-		log.debug("Fin du thread timer", this);
+		log.debug("Fin du thread timer");
 		
 	}
 	
@@ -173,7 +173,7 @@ public class ThreadTimer extends AbstractThread
 	private void onMatchEnded()
 	{
  
-		log.debug("Fin du Match car fin des 90s !", this);
+		log.debug("Fin du Match car fin des 90s !");
 
 		// Le match est fini, immobilisation du robot
 		matchEnded = true;
@@ -182,7 +182,7 @@ public class ThreadTimer extends AbstractThread
 		{
 			mLocomotionCardWrapper.immobilise();
 		} catch (SerialConnexionException e) {
-			log.debug( e.logStack(), this);
+			log.debug( e.logStack());
 		}
 
 		// fin du match : on eteint la STM
@@ -194,7 +194,7 @@ public class ThreadTimer extends AbstractThread
 		}
 		catch (SerialConnexionException e)
 		{
-			log.critical( e.logStack(), this);
+			log.critical( e.logStack());
 		}
 		
 		// et on coupe la connexion avec la carte d'asser comme ca on est sur qu'aucune partie du code ne peut faire quoi que ce soit pour faire bouger le robot
@@ -235,7 +235,7 @@ public class ThreadTimer extends AbstractThread
 		}
 		catch(Exception e)
 		{
-			log.warning(e, this);
+			log.warning(e);
 		}
 	}
 	

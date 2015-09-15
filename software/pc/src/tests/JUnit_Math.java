@@ -3,6 +3,7 @@ package tests;
 import java.util.Random;
 
 import org.junit.Assert;
+import org.junit.Test;
 
 import smartMath.Matrn;
 import smartMath.Vec2;
@@ -93,7 +94,7 @@ public class JUnit_Math extends JUnit_Test {
 //	@Test
 	public void test_Vec2() throws Exception
 	{
-		log.debug("JUnit_MathTest.test_Vec2()", this);
+		log.debug("JUnit_MathTest.test_Vec2()");
 		Vec2 a = new Vec2(10, 500);
 		Vec2 b = new Vec2(20, -20);
 		Vec2 c = new Vec2();
@@ -123,7 +124,7 @@ public class JUnit_Math extends JUnit_Test {
 //	@Test
 	public void test_matrn_constructor() throws Exception
 	{
-		log.debug("JUnit_MathTest.test_matrn_constructor()", this);
+		log.debug("JUnit_MathTest.test_matrn_constructor()");
 		y = new Matrn(2);
 		Assert.assertTrue(y.getNbRows() == 2);
 		Assert.assertTrue(y.getNbLines() == 2);
@@ -146,7 +147,7 @@ public class JUnit_Math extends JUnit_Test {
 //	@Test
 	public void test_add() throws Exception
 	{
-		log.debug("JUnit_MathTest.test_add()", this);
+		log.debug("JUnit_MathTest.test_add()");
 		y = new Matrn(2);
 		y.setCoeff(1, 0, 0);
 		y.setCoeff(2, 0, 1);
@@ -174,7 +175,7 @@ public class JUnit_Math extends JUnit_Test {
 //	@Test
 	public void test_add_2() throws Exception
 	{
-		log.debug("JUnit_MathTest.test_add_2()", this);
+		log.debug("JUnit_MathTest.test_add_2()");
 		y = new Matrn(2);
 		y.setCoeff(1, 0, 0);
 		y.setCoeff(2, 0, 1);
@@ -202,7 +203,7 @@ public class JUnit_Math extends JUnit_Test {
 //	@Test
 	public void test_mul() throws Exception
 	{
-		log.debug("JUnit_MathTest.test_mul()", this);
+		log.debug("JUnit_MathTest.test_mul()");
 		y = new Matrn(2);
 		y.setCoeff(1, 0, 0);
 		y.setCoeff(2, 0, 1);
@@ -230,7 +231,7 @@ public class JUnit_Math extends JUnit_Test {
 //	@Test
 	public void test_mul_2() throws Exception
 	{
-		log.debug("JUnit_MathTest.test_mul_2()", this);
+		log.debug("JUnit_MathTest.test_mul_2()");
 		y = new Matrn(2);
 		y.setCoeff(1, 0, 0);
 		y.setCoeff(2, 0, 1);
@@ -255,10 +256,10 @@ public class JUnit_Math extends JUnit_Test {
 	 *
 	 * @throws Exception the exception
 	 */
-//	@Test
+	@Test
 	public void test_transpose() throws Exception
 	{
-		log.debug("JUnit_MathTest.test_transpose()", this);
+		log.debug("JUnit_MathTest.test_transpose()");
 		y = new Matrn(3);
 		y.setCoeff(1, 0, 0);
 		y.setCoeff(2, 0, 1);
@@ -290,7 +291,7 @@ public class JUnit_Math extends JUnit_Test {
 //	@Test
 	public void test_transpose_2() throws Exception
 	{
-		log.debug("JUnit_MathTest.test_transpose_2()", this);
+		log.debug("JUnit_MathTest.test_transpose_2()");
 		y = new Matrn(3);
 		y.setCoeff(1, 0, 0);
 		y.setCoeff(2, 0, 1);
@@ -322,7 +323,7 @@ public class JUnit_Math extends JUnit_Test {
 //	@Test(expected=MatrixException.class)
 	public void test_exception_add() throws Exception
 	{
-		log.debug("JUnit_MathTest.test_exception_add()", this);
+		log.debug("JUnit_MathTest.test_exception_add()");
 		y = new Matrn(2);
 		y.setCoeff(1, 0, 0);
 		y.setCoeff(2, 0, 1);
@@ -343,7 +344,7 @@ public class JUnit_Math extends JUnit_Test {
 //	@Test(expected=MatrixException.class)
 	public void test_exception_mul() throws Exception
 	{
-		log.debug("JUnit_MathTest.test_exception_mul()", this);
+		log.debug("JUnit_MathTest.test_exception_mul()");
 		y = new Matrn(1,2);
 		y.setCoeff(1, 0, 0);
 		y.setCoeff(2, 0, 1);
@@ -362,7 +363,7 @@ public class JUnit_Math extends JUnit_Test {
 //	@Test(expected=MatrixException.class)
 	public void test_exception_transpose() throws Exception
 	{
-		log.debug("JUnit_MathTest.test_exception_transpose()", this);
+		log.debug("JUnit_MathTest.test_exception_transpose()");
 		y = new Matrn(1,2);
 		y.setCoeff(1, 0, 0);
 		y.setCoeff(2, 0, 1);

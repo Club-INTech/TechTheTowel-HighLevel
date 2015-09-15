@@ -17,8 +17,6 @@ import table.Table;
 import threads.ThreadManager;
 import robot.Locomotion;
 import robot.RobotReal;
-import robot.cards.balise.BaliseFiltration;
-import robot.cards.balise.BaliseCardWrapper;
 import robot.cardsWrappers.ActuatorCardWrapper;
 import robot.cardsWrappers.LocomotionCardWrapper;
 import robot.cardsWrappers.SensorsCardWrapper;
@@ -59,7 +57,7 @@ public class Container
 	 */
 	public void destructor()
 	{
-		log.debug("Destruction de container", this);
+		log.debug("Destruction de container");
 		
 		// stoppe les différents threads
 		stopAllThreads();
@@ -69,7 +67,7 @@ public class Container
 		if(instanciedServices[ServiceNames.LOCOMOTION_CARD_WRAPPER.ordinal()] != null)
 			try
 			{
-				log.debug("Désasservissement du robot", this);
+				log.debug("Désasservissement du robot");
 				((Locomotion) instanciedServices[ServiceNames.LOCOMOTION.ordinal()]).enableFeedbackLoop();
 			} 
 			catch (SerialConnexionException e)
@@ -214,24 +212,6 @@ public class Container
 																	(Table)getService(ServiceNames.TABLE),
 																	(RobotReal)getService(ServiceNames.ROBOT_REAL)
 																);
-		else if(serviceRequested == ServiceNames.THREAD_BALISE)
-			instanciedServices[serviceRequested.ordinal()] = 	(Service)threadManager.getThreadLaser(
-																	(BaliseCardWrapper)getService(ServiceNames.LASER),
-																	(Table)getService(ServiceNames.TABLE),
-																	(BaliseFiltration)getService(ServiceNames.LASER_FILTRATION)
-																);
-		else if(serviceRequested == ServiceNames.LASER)
-			instanciedServices[serviceRequested.ordinal()] = 	(Service)new BaliseCardWrapper(
-																	(Config)getService(ServiceNames.CONFIG),
-																	(Log)getService(ServiceNames.LOG),
-																	(SerialConnexion)getService(ServiceNames.STM_CARD),
-																	(RobotReal)getService(ServiceNames.ROBOT_REAL)
-																);
-		else if(serviceRequested == ServiceNames.LASER_FILTRATION)
-			instanciedServices[serviceRequested.ordinal()] = 	(Service)new BaliseFiltration(
-																	(Config)getService(ServiceNames.CONFIG),
-																	(Log)getService(ServiceNames.LOG)
-																);
 		else if(serviceRequested == ServiceNames.STRATEGIE)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new Strategie(
 																);
@@ -250,7 +230,7 @@ public class Container
 		// si le service demandé n'est pas connu, alors on log une erreur.
 		else
 		{
-			log.critical("Erreur de getService pour le service (service inconnu): "+serviceRequested, this);
+			log.critical("Erreur de getService pour le service (service inconnu): "+serviceRequested);
 			throw new ContainerException();
 		}
 		

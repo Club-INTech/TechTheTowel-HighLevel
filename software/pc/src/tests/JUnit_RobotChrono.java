@@ -35,7 +35,7 @@ public class JUnit_RobotChrono extends JUnit_Test {
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
-		log.debug("JUnit_RobotChronoTest.setUp()", this);
+		log.debug("JUnit_RobotChronoTest.setUp()");
 		table = (Table)container.getService(ServiceNames.TABLE);
 		robotchrono = new RobotChrono(config, log, (PathDingDing)container.getService(ServiceNames.PATHDINGDING));
 		robotchrono.setPosition(new Vec2(0, 1500));
@@ -50,7 +50,7 @@ public class JUnit_RobotChrono extends JUnit_Test {
 	@Test
 	public void test_avancer() throws Exception
 	{
-		log.debug("JUnit_RobotChronoTest.test_avancer()", this);
+		log.debug("JUnit_RobotChronoTest.test_avancer()");
 		robotchrono.moveLengthwise(10);
 		System.out.println("Avant: "+robotchrono.getPosition());
 		Assert.assertTrue(robotchrono.getPosition().equals(new Vec2(10,1500)));
@@ -65,7 +65,7 @@ public class JUnit_RobotChrono extends JUnit_Test {
 	@Test
 	public void test_va_au_point_symetrie() throws Exception
 	{
-		log.debug("JUnit_RobotChronoTest.test_va_au_point_symetrie()", this);
+		log.debug("JUnit_RobotChronoTest.test_va_au_point_symetrie()");
 		config.set("couleur", "jaune");
 		robotchrono.updateConfig();
 		robotchrono = new RobotChrono(config, log, (PathDingDing)container.getService(ServiceNames.PATHDINGDING));
@@ -90,7 +90,7 @@ public class JUnit_RobotChrono extends JUnit_Test {
 	@Test
 	public void test_va_au_point() throws Exception
 	{
-		log.debug("JUnit_RobotChronoTest.test_va_au_point()", this);
+		log.debug("JUnit_RobotChronoTest.test_va_au_point()");
 		robotchrono.moveToLocation(new Vec2(10, 1400), new ArrayList<Hook>(), table,EnumSet.noneOf(ObstacleGroups.class));
 		Assert.assertTrue(robotchrono.getPosition().distance(new Vec2(10,1400)) < 2);
 	}
@@ -103,7 +103,7 @@ public class JUnit_RobotChrono extends JUnit_Test {
 	@Test
 	public void test_tourner() throws Exception
 	{
-		log.debug("JUnit_RobotChronoTest.test_tourner()", this);
+		log.debug("JUnit_RobotChronoTest.test_tourner()");
 		robotchrono.turn((float)1.2);
 		Assert.assertTrue(robotchrono.getOrientation()==(float)1.2);
 	}
@@ -116,7 +116,7 @@ public class JUnit_RobotChrono extends JUnit_Test {
 	@Test
 	public void test_suit_chemin() throws Exception
 	{
-		log.debug("JUnit_RobotChronoTest.test_suit_chemin()", this);
+		log.debug("JUnit_RobotChronoTest.test_suit_chemin()");
 		ArrayList<Vec2> chemin = new ArrayList<Vec2>();
 		chemin.add(new Vec2(20, 1400));
 		chemin.add(new Vec2(40, 1500));

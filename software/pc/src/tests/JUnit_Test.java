@@ -76,7 +76,7 @@ public abstract class JUnit_Test
 		}
 
 		// maintenant que le jumper est retiré, le match a commencé
-		log.critical("Jumper Retiré ! ", this);
+		log.critical("Jumper Retiré ! ");
 		ThreadTimer.matchStarted = true;
 	}
 

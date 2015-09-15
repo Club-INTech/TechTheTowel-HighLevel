@@ -37,7 +37,7 @@ public class JUnit_LocomotionCardWrapper extends JUnit_Test
 	public void setUp() throws Exception
 	{
 		super.setUp();
-		log.debug("JUnit_DeplacementsTest.setUp()", this);
+		log.debug("JUnit_DeplacementsTest.setUp()");
 		mLocomotionCardWrapper = (LocomotionCardWrapper)container.getService(ServiceNames.LOCOMOTION_CARD_WRAPPER);
 		mLocomotionCardWrapper.setX(0);
 		mLocomotionCardWrapper.setY(1500);
@@ -54,7 +54,7 @@ public class JUnit_LocomotionCardWrapper extends JUnit_Test
 	@Test
 	public void test_infos_xyo() throws Exception
 	{
-		log.debug("JUnit_DeplacementsTest.test_infos_xyo()", this);
+		log.debug("JUnit_DeplacementsTest.test_infos_xyo()");
 		float[] infos_float = mLocomotionCardWrapper.getCurrentPositionAndOrientation();
 		Assert.assertTrue(infos_float[0] == 0);
 		Assert.assertTrue(infos_float[1] == 1500);
@@ -69,7 +69,7 @@ public class JUnit_LocomotionCardWrapper extends JUnit_Test
 	@Test
 	public void test_avancer() throws Exception
 	{
-		log.debug("JUnit_DeplacementsTest.test_avancer()", this);
+		log.debug("JUnit_DeplacementsTest.test_avancer()");
 		mLocomotionCardWrapper.moveLengthwise(100);
 		Thread.sleep(1000);
 		float[] infos_float = mLocomotionCardWrapper.getCurrentPositionAndOrientation();
@@ -89,7 +89,7 @@ public class JUnit_LocomotionCardWrapper extends JUnit_Test
 	{
 	    mLocomotionCardWrapper.enableRotationnalFeedbackLoop();
         mLocomotionCardWrapper.enableTranslationnalFeedbackLoop();
-		log.debug("JUnit_DeplacementsTest.test_tourner()", this);
+		log.debug("JUnit_DeplacementsTest.test_tourner()");
 		System.out.println("Avant tourner");
 		mLocomotionCardWrapper.turn((float)1.2);
         System.out.println("Après tourner");
@@ -108,7 +108,7 @@ public class JUnit_LocomotionCardWrapper extends JUnit_Test
 	@Test
 	public void test_set_x() throws Exception
 	{
-		log.debug("JUnit_DeplacementsTest.test_set_x()", this);
+		log.debug("JUnit_DeplacementsTest.test_set_x()");
 		mLocomotionCardWrapper.setX(30);
 		float[] infos_float = mLocomotionCardWrapper.getCurrentPositionAndOrientation();
 		Assert.assertTrue(infos_float[0] == 30);
@@ -124,7 +124,7 @@ public class JUnit_LocomotionCardWrapper extends JUnit_Test
 	@Test
 	public void test_set_y() throws Exception
 	{
-		log.debug("JUnit_DeplacementsTest.test_set_y()", this);
+		log.debug("JUnit_DeplacementsTest.test_set_y()");
 		mLocomotionCardWrapper.setY(330);
 		float[] infos_float = mLocomotionCardWrapper.getCurrentPositionAndOrientation();
 		Assert.assertTrue(infos_float[0] == 0);
@@ -140,7 +140,7 @@ public class JUnit_LocomotionCardWrapper extends JUnit_Test
 	@Test
 	public void test_set_orientation() throws Exception
 	{
-		log.debug("JUnit_DeplacementsTest.test_set_orientation()", this);
+		log.debug("JUnit_DeplacementsTest.test_set_orientation()");
 		mLocomotionCardWrapper.setOrientation(1.234f);
 		float[] infos_float = mLocomotionCardWrapper.getCurrentPositionAndOrientation();
 		Assert.assertTrue(infos_float[0] == 0);

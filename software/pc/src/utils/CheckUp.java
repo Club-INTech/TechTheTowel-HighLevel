@@ -37,14 +37,14 @@ public class CheckUp implements Service
 	public void doCheckUp()
 	{
 		// Par exemple
-		log.debug("Lancement d'un check-up", this);
+		log.debug("Lancement d'un check-up");
 		try
 		{
 		robotReal.moveLengthwise(100);
 		}
 		catch(Exception e)
 		{
-			log.warning(e, this);
+			log.warning(e);
 		}
 	}
 	

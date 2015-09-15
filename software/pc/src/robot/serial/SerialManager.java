@@ -75,7 +75,7 @@ public class SerialManager
 		} 
 		catch (ServiceTypeException e1)
 		{
-			log.critical( e1.logStack(), this);
+			log.critical( e1.logStack());
 		}
 
 		checkSerial();
@@ -112,7 +112,7 @@ public class SerialManager
 		String pings[] = new String[20];
 		for (int baudrate : this.baudrate)
 		{
-			log.debug("liste des pings pour le baudrate " + baudrate, this);
+			log.debug("liste des pings pour le baudrate " + baudrate);
 
 			for(int k = 0; k < this.connectedSerial.size(); k++)
 			{
@@ -150,7 +150,7 @@ public class SerialManager
 
 					deja_attribues.add(k);
 
-					log.debug(id + " sur: " + connectedSerial.get(k),this);
+					log.debug(id + " sur: " + connectedSerial.get(k));
 
 				}
 			}
@@ -168,7 +168,7 @@ public class SerialManager
 
 			if (pings[serial.id] == null)
 			{
-				log.critical("La carte " + serial.name + " n'est pas détectée", this);
+				log.critical("La carte " + serial.name + " n'est pas détectée");
 				throw new SerialManagerException();
 			}
 		}
@@ -226,15 +226,15 @@ public class SerialManager
 			}
 			else
 			{
-				log.critical("Aucune série du nom : " + name.toString() + " n'existe", this);
-				log.critical("Vérifiez les branchements ou l'interface+simulateur (redémarrez si besoin).", this);
-				log.critical("Vérifiez aussi que tous les processus Java exécutant ce code sont éteints.", this);
+				log.critical("Aucune série du nom : " + name.toString() + " n'existe");
+				log.critical("Vérifiez les branchements ou l'interface+simulateur (redémarrez si besoin).");
+				log.critical("Vérifiez aussi que tous les processus Java exécutant ce code sont éteints.");
 				throw new SerialManagerException("serie non trouvée");
 			}
 		}
 		catch (ServiceTypeException e)
 		{
-			log.debug( e.logStack(), this);
+			log.debug( e.logStack());
 		}
 		return serieAsservissement;
 	}

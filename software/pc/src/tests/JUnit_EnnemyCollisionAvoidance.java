@@ -29,7 +29,7 @@ public class JUnit_EnnemyCollisionAvoidance extends JUnit_Test
 	public void setUp() throws Exception
 	{
 		super.setUp();
-		log.debug("JUnit_DetectionEnnemiTest.setUp()", this);
+		log.debug("JUnit_DetectionEnnemiTest.setUp()");
 		config.set("couleur", "jaune");
 		robotvrai = (RobotReal) container.getService(ServiceNames.ROBOT_REAL);
 		table = (Table) container.getService(ServiceNames.TABLE);
@@ -44,15 +44,15 @@ public class JUnit_EnnemyCollisionAvoidance extends JUnit_Test
 	@Test
 	public void test_ajoutObstacle() throws Exception
 	{
-		log.debug("JUnit_DetectionEnnemiTest.test_ajoutObstacle()", this);
+		log.debug("JUnit_DetectionEnnemiTest.test_ajoutObstacle()");
 		robotvrai.setPosition(new Vec2(-600, 1410));
 		robotvrai.setOrientation((float)-Math.PI/2);
 		Thread.sleep(1000);
 		container.startInstanciedThreads();
 		Thread.sleep(1000);
 		Assert.assertEquals(table.getObstacleManager().getMobileObstaclesCount(), 0);
-		log.warning("!!!!!!!!!!!!!!!!!!!!!!!!!!!!", this);
-		log.warning("Vous avez 5 secondes pour placer un obstacle devant le robot", this);
+		log.warning("!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		log.warning("Vous avez 5 secondes pour placer un obstacle devant le robot");
 		Thread.sleep(6000);
 		Assert.assertTrue(table.getObstacleManager().getMobileObstaclesCount() >= 1);
 	}

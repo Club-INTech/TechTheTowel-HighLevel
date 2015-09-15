@@ -64,7 +64,7 @@ public class JUnit_Strategia extends JUnit_Test
 		} 
 		catch (SerialConnexionException e) 
 		{
-			log.debug( e.logStack(), this);
+			log.debug( e.logStack());
 		}		
 
 		real_state.robot.updateConfig();
@@ -82,7 +82,7 @@ public class JUnit_Strategia extends JUnit_Test
 		String speed = "lol";
 		while(!speed.contains("lent") && !speed.contains("rapide") && !speed.isEmpty())
 		{
-			log.debug("Choissez lz vitesse de l'intitialisation. Rentrez \"rapide\" ou \"lent\" : ",this);
+			log.debug("Choissez lz vitesse de l'intitialisation. Rentrez \"rapide\" ou \"lent\" : ");
 			BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in)); 
 			 
 			try 
@@ -91,7 +91,7 @@ public class JUnit_Strategia extends JUnit_Test
 			}
 			catch (IOException e) 
 			{
-				log.debug("Erreur IO: le clavier est il bien branché ?",this);
+				log.debug("Erreur IO: le clavier est il bien branché ?");
 			} 
 			if(speed.contains("rapide") || speed.isEmpty())
 				return true;
@@ -111,7 +111,7 @@ public class JUnit_Strategia extends JUnit_Test
 		String stringLoveClap = "";
 		while(!stringLoveClap.contains("oui") && !stringLoveClap.contains("non"))
 		{
-			log.debug("Clap de l'amitie : Rentrez \"oui\" ou \"non\" pour fermer le clap 2 (override de config.ini) : ",this);
+			log.debug("Clap de l'amitie : Rentrez \"oui\" ou \"non\" pour fermer le clap 2 (override de config.ini) : ");
 			BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in)); 
 			 
 			try 
@@ -120,7 +120,7 @@ public class JUnit_Strategia extends JUnit_Test
 			}
 			catch (IOException e) 
 			{
-				log.debug("Erreur IO: le clavier est il bien branché ?",this);
+				log.debug("Erreur IO: le clavier est il bien branché ?");
 			} 
 			if(stringLoveClap.contains("oui"))
 				config.set("clap_de_l_amitie", "true");
@@ -140,7 +140,7 @@ public class JUnit_Strategia extends JUnit_Test
 		String couleur = "";
 		while(!couleur.contains("jaune") && !couleur.contains("vert"))
 		{
-			log.debug("Rentrez \"vert\" ou \"jaune\" (override de config.ini) : ",this);
+			log.debug("Rentrez \"vert\" ou \"jaune\" (override de config.ini) : ");
 			BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in)); 
 			 
 			try 
@@ -149,7 +149,7 @@ public class JUnit_Strategia extends JUnit_Test
 			}
 			catch (IOException e) 
 			{
-				log.debug("Erreur IO: le clavier est il bien branché ?",this);
+				log.debug("Erreur IO: le clavier est il bien branché ?");
 			} 
 			if(couleur.contains("jaune"))
 				config.set("couleur", "jaune");
@@ -161,7 +161,7 @@ public class JUnit_Strategia extends JUnit_Test
 	public void waitMatchBegin()
 	{
 
-		log.debug("Robot pret pour le match, attente du retrait du jumper",this);
+		log.debug("Robot pret pour le match, attente du retrait du jumper");
 		
 		// attends que le jumper soit retiré du robot
 		
@@ -192,11 +192,11 @@ public class JUnit_Strategia extends JUnit_Test
 		//	Fin du match
 		//////////////////////////////////////////////////////
 		
-		log.debug("match fini !",this);
+		log.debug("match fini !");
 
 		//Le match s'arrête
 		container.destructor();
 		
-		log.debug(System.currentTimeMillis()-timeMatchBegin+" ms depuis le debut : < 90.000 ?",this);
+		log.debug(System.currentTimeMillis()-timeMatchBegin+" ms depuis le debut : < 90.000 ?");
 	}
 }

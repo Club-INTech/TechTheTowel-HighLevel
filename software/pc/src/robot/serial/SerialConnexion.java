@@ -94,7 +94,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 		}
 		catch (NoSuchPortException e2)
 		{
-			log.critical("Catch de "+e2+" dans initialize",this);
+			log.critical("Catch de "+e2+" dans initialize");
 		}
 
 		// Ouverture du port s�rie
@@ -104,7 +104,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 		} 
 		catch (PortInUseException e1)
 		{
-			log.critical("Catch de "+e1+" dans initialize",this);
+			log.critical("Catch de "+e1+" dans initialize");
 		}
 		try
 		{
@@ -121,7 +121,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 		}
 		catch (Exception e)
 		{
-			log.critical("Catch de "+e+" dans initialize",this);
+			log.critical("Catch de "+e+" dans initialize");
 		}
 		
 		// permet d'avoir un readLine non bloquant
@@ -131,7 +131,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 		} 
 		catch (UnsupportedCommOperationException e)
 		{
-			log.critical("Catch de "+e+" dans initialize",this);
+			log.critical("Catch de "+e+" dans initialize");
 		}
 	}
 
@@ -193,7 +193,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 						}
 						if (nb_tests > 10)
 						{
-							log.critical("La série " + this.name + " ne répond pas après " + nb_tests + " tentatives (envoyé : '" + m + "', reponse : '" + resposeFromCard + "')", this);
+							log.critical("La série " + this.name + " ne répond pas après " + nb_tests + " tentatives (envoyé : '" + m + "', reponse : '" + resposeFromCard + "')");
 							break;
 						}
 					}
@@ -201,7 +201,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 			}
 			catch (Exception e)
 			{
-				log.critical("Ne peut pas parler à la carte " + this.name + " lancement de "+e, this);
+				log.critical("Ne peut pas parler à la carte " + this.name + " lancement de "+e);
 				throw new SerialConnexionException();
 			}
 	
@@ -215,20 +215,20 @@ public class SerialConnexion implements SerialPortEventListener, Service
 //					log.debug("Ligne "+i+": '"+inputLines[i]+"'",this); 
 					if(inputLines[i].equals(null) || inputLines[i].replaceAll(" ", "").equals("")|| inputLines[i].replaceAll(" ", "").equals("-"))
 					{
-						log.critical("='( , envoi de "+inputLines[i]+" envoi du message a nouveau",this);
+						log.critical("='( , envoi de "+inputLines[i]+" envoi du message a nouveau");
 						communiquer(messages, nb_lignes_reponse);
 					}
 					
 					if(!isAsciiExtended(inputLines[i]))
 					{
-						log.critical("='( , envoi de "+inputLines[i]+" envoi du message a nouveau",this);
+						log.critical("='( , envoi de "+inputLines[i]+" envoi du message a nouveau");
 						communiquer(messages, nb_lignes_reponse); // On retente
 					}
 				}
 			}
 			catch (Exception e)
 			{
-				log.critical("Ne peut pas parler à la carte " + this.name + " lancement de "+e, this);
+				log.critical("Ne peut pas parler à la carte " + this.name + " lancement de "+e);
 				throw new SerialConnexionException();
 			}
 			return inputLines;
@@ -242,7 +242,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	{
 		if (serialPort != null)
 		{
-			log.debug("Fermeture de "+name, this);
+			log.debug("Fermeture de "+name);
 			serialPort.close();
 		}
 	}
@@ -290,7 +290,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 			}
 			catch (Exception e)
 			{
-				log.critical("Catch de "+e+" dans ping",this);
+				log.critical("Catch de "+e+" dans ping");
 			}
 			return ping;
 		}
@@ -318,7 +318,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	        if (characterSet > 259) 
 	        {
 				isAsciiExtended=false;
-                log.critical(inputLines+"n'est pas ASCII", this);
+                log.critical(inputLines+"n'est pas ASCII");
 				return isAsciiExtended;
 	        }
 	    }

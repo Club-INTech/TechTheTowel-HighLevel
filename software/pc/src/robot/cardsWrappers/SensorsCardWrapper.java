@@ -4,7 +4,8 @@ import robot.serial.SerialConnexion;
 import utils.Log;
 import utils.Config;
 import container.Service;
-import enums.SensorNames;
+import enums.ContactSensors;
+import enums.USsensors;
 import exceptions.ConfigPropertyNotFoundException;
 import exceptions.serial.SerialConnexionException;
 
@@ -51,7 +52,7 @@ public class SensorsCardWrapper implements Service
 		}
 		catch (ConfigPropertyNotFoundException e)
 		{
-    		log.debug("Revoir le code : impossible de trouver la propriété "+e.getPropertyNotFound(), this);
+    		log.debug("Revoir le code : impossible de trouver la propriété "+e.getPropertyNotFound());
 		}
 	}
 
@@ -75,8 +76,8 @@ public class SensorsCardWrapper implements Service
 		}
 		catch(SerialConnexionException e)
 		{
-			log.critical("La carte capteurs ne répond pas !", this);
-			log.critical( e.logStack(), this);
+			log.critical("La carte capteurs ne répond pas !");
+			log.critical( e.logStack());
 			return 3000; // valeur considérée comme infinie
 		}
 
@@ -98,86 +99,39 @@ public class SensorsCardWrapper implements Service
 		} 
 		catch (NumberFormatException e)
 		{
-			log.critical("réponse corrompue du jumper !", this);
+			log.critical("réponse corrompue du jumper !");
 			e.printStackTrace();
 			return false;
 		}
 		catch (SerialConnexionException e)
 		{
-			log.critical(" Problème de communication avec la carte capteurs en essayent de parler au jumper.", this);
-			log.debug( e.logStack(), this);
+			log.critical(" Problème de communication avec la carte capteurs en essayent de parler au jumper.");
+			log.debug( e.logStack());
 			return false;
 		}
     }
     
     /**
-     * recupere la valeur d'un capteur et la parse dans le bon type
-     * si la reponse est sur une unique ligne on a juste l'objet et si la reponse est sur n lignes on a un array de taille n
+     * recupere la valeur d'un capteur de contact
      * @param sensor le capteur dont on veut recuperer la valeur
-     * @return la valeur du capteur, un objet ou un tableau d'objet
+     * @return la valeur du capteur
      * @throws SerialConnexionException si erreur de connexion avec le capteur
      */
-    public Object getSensorValue(SensorNames sensor) throws SerialConnexionException
+    public boolean getContactSensorValue(ContactSensors sensor) throws SerialConnexionException
     {
-    	//log.debug("demande aux capteurs : \""+sensor.getSerialCommunication()+"\"", this);
-		String[] sensorAnswer = sensorsCardSerial.communiquer(sensor.getSerialCommunication(),sensor.getAwnserLineAmount());
-		
-		if (sensor.getDefaultValue().getClass() == Boolean.class)
-		{
-			return (!sensorAnswer[0].toString().equals("0"));
-		}
-		else if (sensor.getDefaultValue().getClass() == boolean[].class)
-		{
-			boolean[] parsedAnswer = new boolean[sensor.getAwnserLineAmount()];
-			if (sensor.getAwnserLineAmount()==1)
-			{
-				return (!sensorAnswer[0].equals("0"));
-			}
-				for (int i = 0; i<sensor.getAwnserLineAmount(); i++)
-				{
-					parsedAnswer[i] = (!sensorAnswer[i].equals("0"));
-				}
-				return parsedAnswer;
-		}
-		else if (sensor.getDefaultValue().getClass() == Integer.class)
-		{
-			return Integer.parseInt(sensorAnswer[0]);
-		}
-		else if (sensor.getDefaultValue().getClass() == int[].class)
-		{
-			int[] parsedAnswer = new int[sensor.getAwnserLineAmount()];
-			if (sensor.getAwnserLineAmount()==1)
-			{
-				return Integer.parseInt(sensorAnswer[0]);
-			}
-			for (int i = 0; i<sensor.getAwnserLineAmount(); i++)
-			{
-				parsedAnswer[i] = Integer.parseInt(sensorAnswer[i]);
-			}
-			return parsedAnswer;
-		}
-		else if (sensor.getDefaultValue().getClass() == Float.class)
-		{
-			return Float.parseFloat(sensorAnswer[0]);
-		}
-		else if (sensor.getDefaultValue().getClass() == float[].class)
-		{
-			float[] parsedAnswer = new float[sensor.getAwnserLineAmount()];
-			if (sensor.getAwnserLineAmount()==1)
-			{
-				return Float.parseFloat(sensorAnswer[0]);
-			}
-				for (int i = 0; i<sensor.getAwnserLineAmount(); i++)
-				{
-					parsedAnswer[i] = Float.parseFloat(sensorAnswer[i]);
-				}
-				return parsedAnswer;
-		}
-		else
-		{
-			//ne pas ajouter le type Double, sinon on aura un overflow de la serie
-			log.critical("Le type de retour du capteur n'est pas pris en compte : modifiez SensorsCardWrapper.getSensorValue", this);
-			return false;
-		}
+    	String[] sensorAnswer = sensorsCardSerial.communiquer(sensor.getSerialCommunication(),1);
+		return (!sensorAnswer[0].toString().equals("0"));
+    }
+    
+    /**
+     * recupere la valeur d'un capteur ultrason
+     * @param sensor le capteur dont on veut recuperer la valeur
+     * @return la valeur du capteur
+     * @throws SerialConnexionException si erreur de connexion avec le capteur
+     */
+    public int getUSSensorValue(USsensors sensor) throws SerialConnexionException
+    {
+    	String[] sensorAnswer = sensorsCardSerial.communiquer(sensor.getSerialCommunication(),1);
+    	return Integer.parseInt(sensorAnswer[0]);
     }
 }

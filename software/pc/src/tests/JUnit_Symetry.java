@@ -57,7 +57,7 @@ public class JUnit_Symetry extends JUnit_Test
 		}
 		catch (Exception e)
 		{
-			log.critical(e, this);
+			log.critical(e);
 		}
 		
 		
@@ -77,7 +77,7 @@ public class JUnit_Symetry extends JUnit_Test
 		}
 		catch (Exception e)
 		{
-			log.critical(e, this);
+			log.critical(e);
 		}
 	}
 }

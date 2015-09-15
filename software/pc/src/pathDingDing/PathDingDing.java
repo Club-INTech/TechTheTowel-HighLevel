@@ -5,11 +5,7 @@ import table.Table;
 import utils.Log;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
-
 import container.Service;
-import exceptions.*;
-import enums.ObstacleGroups;
 
 /**
  * Classe de calcul de chemins

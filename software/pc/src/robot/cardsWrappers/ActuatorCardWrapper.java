@@ -45,7 +45,7 @@ public class ActuatorCardWrapper implements Service
 	 */
 	public void useActuator(ActuatorOrder order) throws SerialConnexionException
 	{
-		log.debug("Envoi consigne a la carte actionneur : " + order.toString(), this);
+		log.debug("Envoi consigne a la carte actionneur : " + order.toString());
 		actuatorCardSerial.communiquer(order.getSerialOrder(), 0);
 	}
 

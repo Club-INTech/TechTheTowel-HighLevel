@@ -185,7 +185,7 @@ public class Locomotion implements Service
      */
     public void turn(double angle, ArrayList<Hook> hooks, boolean mustDetect) throws UnableToMoveException
     {
-        log.debug("Tourner de "+Double.toString(angle), this);
+        log.debug("Tourner de "+Double.toString(angle));
 
     	actualRetriesIfBlocked=0;
 		updateCurrentPositionAndOrientation();
@@ -236,7 +236,7 @@ public class Locomotion implements Service
     	
 		updateCurrentPositionAndOrientation();
 
-        log.debug("Avancer de "+Integer.toString(distance), this);
+        log.debug("Avancer de "+Integer.toString(distance));
         
         /**
          * aim est la visée du haut niveau, qui commence toujours à droite
@@ -356,7 +356,7 @@ public class Locomotion implements Service
 	        isRobotMovingBackward = false;
     	}
     	
-    	log.debug("Arrivés en "+aim+" vraie position : "+lowLevelPosition, this);
+    	log.debug("Arrivés en "+aim+" vraie position : "+lowLevelPosition);
     	
 		actualRetriesIfBlocked=0;// on reinitialise
 
@@ -399,8 +399,8 @@ public class Locomotion implements Service
             }
             catch (BlockedException e)
             {
-    			log.critical( e.logStack(), this);
-                log.critical("Haut : Catch de "+e+" dans moveToPointException", this);
+    			log.critical( e.logStack());
+                log.critical("Haut : Catch de "+e+" dans moveToPointException");
                 
                 if (!headingToWall) // si on s'y attendait, on ne fais rien.
                 {
@@ -409,7 +409,7 @@ public class Locomotion implements Service
 		                if(maxRetriesIfBlocked > actualRetriesIfBlocked)
 		                {
 		                	actualRetriesIfBlocked++;
-		                    log.debug("Tentative "+actualRetriesIfBlocked+" de deplacement ", this);
+		                    log.debug("Tentative "+actualRetriesIfBlocked+" de deplacement ");
 		                    if(isMovementForward)
 		                    	isRobotMovingForward=true;
 		                    else 
@@ -420,7 +420,7 @@ public class Locomotion implements Service
 		                }
 		                else 
 		                {
-	                        log.debug("On arrive pas à se degager, nombre max d'essais depassé, lancement de UnableToMoveException", this);
+	                        log.debug("On arrive pas à se degager, nombre max d'essais depassé, lancement de UnableToMoveException");
 	                        throw new UnableToMoveException(aim, UnableToMoveReason.PHYSICALLY_BLOCKED);
 		                }
 
@@ -439,7 +439,7 @@ public class Locomotion implements Service
 		                {
 		                    try
 		                    {
-		                        log.warning("On n'arrive plus à avancer. On se dégage", this);
+		                        log.warning("On n'arrive plus à avancer. On se dégage");
 		                        if(turnOnly)
 		                        {
 		                        	isRobotTurning=true;
@@ -460,26 +460,26 @@ public class Locomotion implements Service
 		                    } 
 		                    catch (SerialConnexionException e1)
 		                    {
-		            			log.critical( e1.logStack(), this);
-		                        log.debug("On ne fait rien après ceci: Catch de "+e1+" dans moveToPointException", this);
+		            			log.critical( e1.logStack());
+		                        log.debug("On ne fait rien après ceci: Catch de "+e1+" dans moveToPointException");
 		                    } 
 		                    catch (BlockedException e1)
 		                    {
-		            			log.critical( e1.logStack(), this);
-		                        log.debug("Catch de "+e1+" dans moveToPointException", this);
+		            			log.critical( e1.logStack());
+		                        log.debug("Catch de "+e1+" dans moveToPointException");
 		                    	immobilise();                       
 		                        
 
 			                    if(!doItAgain)
 			                    {
-			                        log.critical("Lancement de UnableToMoveException dans MoveToPointException, visant "+finalAim.x+" :: "+finalAim.y+" cause physique", this);
+			                        log.critical("Lancement de UnableToMoveException dans MoveToPointException, visant "+finalAim.x+" :: "+finalAim.y+" cause physique");
 			                        throw new UnableToMoveException(finalAim, UnableToMoveReason.PHYSICALLY_BLOCKED);
 			                    }
 							}
 		                }
 		                else 
 		                {
-	                        log.warning("On s'attendait à ce mur.", this);
+	                        log.warning("On s'attendait à ce mur.");
 						}
 	                }
                 }
@@ -487,8 +487,8 @@ public class Locomotion implements Service
             
             catch (UnexpectedObstacleOnPathException unexpectedObstacle)
             {
-                log.warning("Ennemi detecté : Catch de "+unexpectedObstacle, this); 
-    			log.warning( unexpectedObstacle.logStack(), this);
+                log.warning("Ennemi detecté : Catch de "+unexpectedObstacle); 
+    			log.warning( unexpectedObstacle.logStack());
             	immobilise();
             	
                 //long detectionTime = System.currentTimeMillis();
@@ -510,13 +510,13 @@ public class Locomotion implements Service
 
                 if(!doItAgain)
                 {
-                    log.warning("UnableToMoveException dans MoveToPointException, visant "+finalAim.x+" :: "+finalAim.y+" cause : detection d'obstacle", this);
+                    log.warning("UnableToMoveException dans MoveToPointException, visant "+finalAim.x+" :: "+finalAim.y+" cause : detection d'obstacle");
                     throw new UnableToMoveException(finalAim, UnableToMoveReason.OBSTACLE_DETECTED);
                 }
 			}
             catch(SerialConnexionException e)
             {
-    			log.critical( e.logStack(), this);
+    			log.critical( e.logStack());
 
             	// TODO : gérer cette exception
             }
@@ -720,7 +720,7 @@ public class Locomotion implements Service
 			}
 			else
 			{
-				log.debug("correction en abandon; delta :"+delta, this);
+				log.debug("correction en abandon; delta :"+delta);
 				return;
 			}
 		}
@@ -733,7 +733,7 @@ public class Locomotion implements Service
                 
         		deplacements.turn(angle);  // On ne tourne que si on est assez loin de l'orientation voulu
               
-        		log.debug("Angle corrigé", this);
+        		log.debug("Angle corrigé");
         	}
         	else if(!isCorrection)// Si ca n'est pas  une correction
         	{
@@ -762,8 +762,8 @@ public class Locomotion implements Service
         } 
         catch (SerialConnexionException e)
         {
-            log.critical("Catch de "+e+" dans moveToPointSerialOrder", this);
-			log.critical( e.logStack(), this);
+            log.critical("Catch de "+e+" dans moveToPointSerialOrder");
+			log.critical( e.logStack());
             isRobotTurning=false; // Meme avec un catch, on a fini de tourner
         }
     }
@@ -795,7 +795,7 @@ public class Locomotion implements Service
         	{
         		if(infos[1])//si le robot patine, il est bloqué
         		{
-                    log.critical("Robot bloqué, lancement de BlockedException dans isMotionEnded", this);
+                    log.critical("Robot bloqué, lancement de BlockedException dans isMotionEnded");
                     throw new BlockedException();
         		}
         		else
@@ -810,8 +810,8 @@ public class Locomotion implements Service
         } 
         catch (SerialConnexionException e) 
         {
-            log.critical("Catch de "+e+" dans isMotionEnded", this);
-			log.critical( e.logStack(), this);
+            log.critical("Catch de "+e+" dans isMotionEnded");
+			log.critical( e.logStack());
             return false;
         }
     }
@@ -847,7 +847,7 @@ public class Locomotion implements Service
         
         if(table.getObstacleManager().isDiscObstructed(detectionCenter, detectionDistance))
         {
-            log.warning("Lancement de UnexpectedObstacleOnPathException dans detectEnemyInDisk", this);
+            log.warning("Lancement de UnexpectedObstacleOnPathException dans detectEnemyInDisk");
             throw new UnexpectedObstacleOnPathException();
         }
     }
@@ -866,7 +866,7 @@ public class Locomotion implements Service
         if(table.getObstacleManager().distanceToClosestEnemy(highLevelPosition, movementDirection) <= distance)
         {
         	log.debug("DetectEnemyAtDistance voit un ennemi trop proche pour continuer le déplacement (distance de " 
-        			 + table.getObstacleManager().distanceToClosestEnemy(highLevelPosition, movementDirection) +" mm)", this);
+        			 + table.getObstacleManager().distanceToClosestEnemy(highLevelPosition, movementDirection) +" mm)");
         	immobilise();
         	throw new UnexpectedObstacleOnPathException();
         }
@@ -901,8 +901,8 @@ public class Locomotion implements Service
         }
         catch(SerialConnexionException e)
         {
-        	log.critical("Catch de "+e+" dans updateCurrentPositionAndOrientation", this);
-			log.critical( e.logStack(), this);
+        	log.critical("Catch de "+e+" dans updateCurrentPositionAndOrientation");
+			log.critical( e.logStack());
         }
     }
     
@@ -923,8 +923,8 @@ public class Locomotion implements Service
     	}
     	catch (ConfigPropertyNotFoundException e)
     	{
-    		log.debug("Revoir le code : impossible de trouver la propriété "+e.getPropertyNotFound(), this);
-			log.critical( e.logStack(), this);
+    		log.debug("Revoir le code : impossible de trouver la propriété "+e.getPropertyNotFound());
+			log.critical( e.logStack());
     	}
     }
 
@@ -934,15 +934,15 @@ public class Locomotion implements Service
      */
     public void immobilise()
     {
-        log.warning("Arrêt du robot en "+lowLevelPosition, this);
+        log.warning("Arrêt du robot en "+lowLevelPosition);
         try 
         {
             deplacements.immobilise();
         } 
         catch (SerialConnexionException e) 
         {
-            log.critical("Catch de "+e+" dans immobilise", this);
-			log.critical( e.logStack(), this);
+            log.critical("Catch de "+e+" dans immobilise");
+			log.critical( e.logStack());
         }           
     }
 
@@ -964,8 +964,8 @@ public class Locomotion implements Service
 		} 
 		catch (SerialConnexionException e)
 		{
-            log.critical("Catch de "+e+" dans setPosition", this);
-			log.critical( e.logStack(), this);
+            log.critical("Catch de "+e+" dans setPosition");
+			log.critical( e.logStack());
 		}
 		Sleep.sleep(300);
     }
@@ -986,8 +986,8 @@ public class Locomotion implements Service
         }
         catch (SerialConnexionException e) 
         {
-            log.critical("Catch de "+e+" dans setOrientation", this);
-			log.critical( e.logStack(), this);
+            log.critical("Catch de "+e+" dans setOrientation");
+			log.critical( e.logStack());
         }
     }
 
@@ -1019,8 +1019,8 @@ public class Locomotion implements Service
             deplacements.disableTranslationnalFeedbackLoop();
         } catch (SerialConnexionException e)
         {
-            log.critical("Catch de "+e+" dans desasservit", this);
-			log.critical( e.logStack(), this);
+            log.critical("Catch de "+e+" dans desasservit");
+			log.critical( e.logStack());
 
         }
     }

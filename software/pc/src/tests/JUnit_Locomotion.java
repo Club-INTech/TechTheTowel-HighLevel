@@ -66,7 +66,7 @@ public class JUnit_Locomotion extends JUnit_Test
 	public void setUp() throws Exception
 	{
 		super.setUp();
-		log.debug("JUnit_DeplacementsTest.setUp()", this);
+		log.debug("JUnit_DeplacementsTest.setUp()");
 		mLocomotion = (Locomotion)container.getService(ServiceNames.LOCOMOTION);
 		cardWrapper=(LocomotionCardWrapper)container.getService(ServiceNames.LOCOMOTION_CARD_WRAPPER);
 		config.set("couleur", "vert");
@@ -111,7 +111,7 @@ public class JUnit_Locomotion extends JUnit_Test
 		}
 		catch (Exception e)
 		{
-			log.debug(e, this);
+			log.debug(e);
 			return;
 		}
 		
@@ -129,31 +129,31 @@ public class JUnit_Locomotion extends JUnit_Test
 		ArrayList<Vec2> path = new ArrayList<Vec2>();
 		path.add(new Vec2 (-500,1000));
 		path.add(new Vec2 (500,1000));
-		log.debug("JUnit_DeplacementsTest", this);
+		log.debug("JUnit_DeplacementsTest");
 		Vec2 position = mLocomotion.getPosition();
-		log.debug("en position : x="+position.x+"; y="+position.y, this);
+		log.debug("en position : x="+position.x+"; y="+position.y);
 		try 
 		{
 			mLocomotion.moveLengthwise(2000,new ArrayList<Hook>(), false, false);
 		} 
 		catch (UnableToMoveException e) 
 		{
-			log.critical( e.logStack(), this);
+			log.critical( e.logStack());
 		}
 		position = mLocomotion.getPosition();
-		log.debug("en position : x="+position.x+"; y="+position.y, this);
-		log.debug("orientation : "+mLocomotion.getOrientation(), this);
+		log.debug("en position : x="+position.x+"; y="+position.y);
+		log.debug("orientation : "+mLocomotion.getOrientation());
 		while (true)
 		{
 			try 
 			{
 				mLocomotion.followPath(path, null, DirectionStrategy.FORCE_FORWARD_MOTION);
 				position = mLocomotion.getPosition();
-				log.debug("en position : x="+position.x+"; y="+position.y+" après le followpath", this);
+				log.debug("en position : x="+position.x+"; y="+position.y+" après le followpath");
 			} 
 			catch (UnableToMoveException e) 
 			{
-				log.critical( e.logStack(), this);
+				log.critical( e.logStack());
 			}
 		}
 	}
@@ -171,7 +171,7 @@ public class JUnit_Locomotion extends JUnit_Test
 		} 
 		catch (UnableToMoveException e) 
 		{
-			log.debug("ça n'a pas bien tourné", this);
+			log.debug("ça n'a pas bien tourné");
 		}
 	}
 	/**On vérifie si on peut aller à un point voulu sans problème vers l'avant en détectant les ennemis
@@ -182,9 +182,9 @@ public class JUnit_Locomotion extends JUnit_Test
 	public void testMoveToPointForwardBackward() throws UnableToMoveException
 	{
 		Vec2 position = mLocomotion.getPosition();
-		log.debug("en position : x="+position.x+"; y="+position.y, this);
+		log.debug("en position : x="+position.x+"; y="+position.y);
 		Vec2 aim = new Vec2(0,500);
-		log.debug("position de l'objectif : x="+position.x+"; y="+position.y, this);
+		log.debug("position de l'objectif : x="+position.x+"; y="+position.y);
 		mLocomotion.JUNIT_moveToPointForwardBackward(aim, null, false, DirectionStrategy.FASTEST, false, true); 
 		Assert.assertEquals(aim, mLocomotion.getPosition());
 	}
@@ -196,9 +196,9 @@ public class JUnit_Locomotion extends JUnit_Test
 	public void testMoveToPointException() throws UnableToMoveException
 	{
 		Vec2 position = mLocomotion.getPosition();
-		log.debug("en position : x="+position.x+"; y="+position.y, this);
+		log.debug("en position : x="+position.x+"; y="+position.y);
 		Vec2 aim = new Vec2(0,500);
-		log.debug("position de l'objectif : x="+position.x+"; y="+position.y, this);
+		log.debug("position de l'objectif : x="+position.x+"; y="+position.y);
 		mLocomotion.JUNIT_moveToPointException(aim, null, true, false, false,true); 
 		Assert.assertEquals(aim, mLocomotion.getPosition());
 	}
@@ -213,9 +213,9 @@ public class JUnit_Locomotion extends JUnit_Test
 	{
 		
 		Vec2 position = mLocomotion.getPosition();
-		log.debug("en position : x="+position.x+"; y="+position.y, this);
+		log.debug("en position : x="+position.x+"; y="+position.y);
 		Vec2 aim =  new Vec2(0,500);
-		log.debug("position de l'objectif : x="+position.x+"; y="+position.y, this);
+		log.debug("position de l'objectif : x="+position.x+"; y="+position.y);
 		mLocomotion.JUNIT_moveToPointCorrectAngleAndDetectEnnemy(aim, null, true, false, true);
 	}
 	/**
@@ -227,9 +227,9 @@ public class JUnit_Locomotion extends JUnit_Test
 	public void testCorrectAngle() throws BlockedException, UnexpectedObstacleOnPathException
 	{
 		Vec2 position = mLocomotion.getPosition();
-		log.debug("en position : x="+position.x+"; y="+position.y, this);
+		log.debug("en position : x="+position.x+"; y="+position.y);
 		Vec2 aim = new Vec2(0,500);
-		log.debug("position de l'objectif : x="+position.x+"; y="+position.y, this);
+		log.debug("position de l'objectif : x="+position.x+"; y="+position.y);
 		mLocomotion.JUNIT_correctAngle(aim, true, true);
 	}
 /**
@@ -241,9 +241,9 @@ public class JUnit_Locomotion extends JUnit_Test
 	public void testMoveToPointSymmetry() throws BlockedException, UnexpectedObstacleOnPathException
 	{
 		Vec2 position = mLocomotion.getPosition();
-		log.debug("en position : x="+position.x+"; y="+position.y, this);
+		log.debug("en position : x="+position.x+"; y="+position.y);
 		Vec2 aim = new  Vec2(0,500);
-		log.debug("position de l'objectif : x="+position.x+"; y="+position.y, this);
+		log.debug("position de l'objectif : x="+position.x+"; y="+position.y);
 		
 		mLocomotion.JUNIT_moveToPointSymmetry(aim, true, true, false, false);
 		
@@ -263,9 +263,9 @@ public class JUnit_Locomotion extends JUnit_Test
 	public void testmoveToPointSerialOrder() throws BlockedException, UnexpectedObstacleOnPathException
 	{
 		Vec2 position = mLocomotion.getPosition();
-		log.debug("en position : x="+position.x+"; y="+position.y, this);
+		log.debug("en position : x="+position.x+"; y="+position.y);
 		Vec2 aim = new Vec2(0,500);
-		log.debug("position de l'objectif : x="+position.x+"; y="+position.y, this);
+		log.debug("position de l'objectif : x="+position.x+"; y="+position.y);
 		mLocomotion.JUNIT_moveToPointSerialOrder(aim, position, 0, 300, true, false, false);
 	}
 	/**
@@ -342,7 +342,7 @@ public class JUnit_Locomotion extends JUnit_Test
 	{
 		mLocomotion.moveLengthwise(200, null, false);
 		mLocomotion.immobilise();
-		log.debug("Le robot a dû s'arrêter", this);
+		log.debug("Le robot a dû s'arrêter");
 	
 	}
 	@Test
@@ -367,13 +367,13 @@ public class JUnit_Locomotion extends JUnit_Test
 	@Test
 	public void testGetPosition()
 	{
-		log.debug("Vérifiez que la position du robot est bien : "+mLocomotion.getPosition(), this);
+		log.debug("Vérifiez que la position du robot est bien : "+mLocomotion.getPosition());
 	}
 	@Test
 	
 	public void testGetOrientation()
 	{
-		log.debug("Vérifiez que l'orientation du robot est bien : "+mLocomotion.getOrientation(), this);
+		log.debug("Vérifiez que l'orientation du robot est bien : "+mLocomotion.getOrientation());
 	}
 	/**
 	 * A voir avec la série
@@ -481,7 +481,7 @@ public class JUnit_Locomotion extends JUnit_Test
 	public void testClose()
 	{
 		
-		log.debug("La série est fermée", this);
+		log.debug("La série est fermée");
 		Vec2 beginning = mLocomotion.getPosition();
 		mLocomotion.close();
 		Vec2 end = mLocomotion.getPosition();

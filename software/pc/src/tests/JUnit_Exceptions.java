@@ -30,7 +30,7 @@ public class JUnit_Exceptions extends JUnit_Test
 			String exceptionAsString = sw.toString();	
 			
 			exceptionAsString = exceptionAsString.replaceAll("(\r\n|\n\r|\r|\n)", " -> ");
-			log.debug(exceptionAsString, this);
+			log.debug(exceptionAsString);
 		}
 	}
 	
@@ -51,9 +51,9 @@ public class JUnit_Exceptions extends JUnit_Test
 			{
 				if (e2.compareInitialException(e1))
 				//if(e2.getExceptionThrownByExecute().getClass().equals(e1.getClass()))
-					log.debug("Wééé !", this);
+					log.debug("Wééé !");
 				else {
-					log.debug("Pouet !", this);
+					log.debug("Pouet !");
 
 				}
 			}

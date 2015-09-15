@@ -52,7 +52,7 @@ public class JUnit_Speed extends JUnit_Test {
 		for (Speed speed : Speed.values())
 		{
 			robot.setLocomotionSpeed(speed);
-			log.debug("PWM rotation : "+speed.rotationSpeed+"\nPWM translation : "+speed.translationSpeed,this);
+			log.debug("PWM rotation : "+speed.rotationSpeed+"\nPWM translation : "+speed.translationSpeed);
 			
 			robot.moveToLocation(new Vec2(-1000,1000), new ArrayList<Hook>(), table, EnumSet.allOf(ObstacleGroups.class));
 			robot.moveToLocation(new Vec2(1000, 1000), new ArrayList<Hook>(), table, EnumSet.allOf(ObstacleGroups.class));

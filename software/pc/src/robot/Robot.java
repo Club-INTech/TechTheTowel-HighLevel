@@ -10,9 +10,10 @@ import smartMath.Vec2;
 import table.Table;
 import container.Service;
 import enums.ActuatorOrder;
+import enums.ContactSensors;
 import enums.ObstacleGroups;
-import enums.SensorNames;
 import enums.Speed;
+import enums.USsensors;
 import exceptions.ConfigPropertyNotFoundException;
 import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
@@ -94,8 +95,8 @@ public abstract class Robot implements Service
 		}
 	    catch (ConfigPropertyNotFoundException e)
     	{
-			log.critical( e.logStack(), this);
-    		log.debug("Revoir le code : impossible de trouver la propriété "+e.getPropertyNotFound(), this);;
+			log.critical( e.logStack());
+    		log.debug("Revoir le code : impossible de trouver la propriété "+e.getPropertyNotFound());;
     	}
 	}
 
@@ -257,7 +258,7 @@ public abstract class Robot implements Service
 	 */
 	public void turnRelative(double angle) throws UnableToMoveException
 	{
-		log.debug("appel de Robot.turnRelative(" + angle + ")", this);
+		log.debug("appel de Robot.turnRelative(" + angle + ")");
 		turn(angle, null, false, true);
 	}
 	
@@ -270,7 +271,7 @@ public abstract class Robot implements Service
 	 */
     public void turn(double angle) throws UnableToMoveException
     {
-		log.debug("appel de Robot.turn(" + angle + ")", this);
+		log.debug("appel de Robot.turn(" + angle + ")");
         turn(angle, null, false, false);
     }
 
@@ -288,7 +289,7 @@ public abstract class Robot implements Service
     public void turnNoSymmetry(double angle) throws UnableToMoveException
     {
 
-		log.debug("appel de Robot.turnNoSymmetry(" + angle + ")", this);
+		log.debug("appel de Robot.turnNoSymmetry(" + angle + ")");
     	// Fais la symétrie deux fois (symétrie de symétrie, c'est l'identité)
         if(symmetry)
             turn(Math.PI-angle, null, false, false);
@@ -305,7 +306,7 @@ public abstract class Robot implements Service
 	 */
     public void moveLengthwise(int distance) throws UnableToMoveException
     {
-		log.debug("appel de Robot.distance(" + distance + ")", this);
+		log.debug("appel de Robot.distance(" + distance + ")");
         moveLengthwise(distance, new ArrayList<Hook>(), false);
     }
     
@@ -314,7 +315,7 @@ public abstract class Robot implements Service
     
     public void moveLengthwiseWithoutDetection(int distance) throws UnableToMoveException
     {
-		log.debug("appel de Robot.moveLengthwiseWithoutDetection(" + distance + ")", this);
+		log.debug("appel de Robot.moveLengthwiseWithoutDetection(" + distance + ")");
     	moveLengthwiseWithoutDetection(distance, null, false);
     }
 
@@ -354,7 +355,7 @@ public abstract class Robot implements Service
 	 public void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, Speed speed) throws UnableToMoveException
 	 {
 
-		log.debug("appel de Robot.moveLengthwise(" + distance + "," + hooksToConsider + "," + speed + ")", this);
+		log.debug("appel de Robot.moveLengthwise(" + distance + "," + hooksToConsider + "," + speed + ")");
 		moveLengthwise(distance, hooksToConsider, false, true, speed);
 	 }
 	 
@@ -369,7 +370,7 @@ public abstract class Robot implements Service
 	 */
     public void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider) throws UnableToMoveException
     {
-		log.debug("appel de Robot.moveLengthwise(" + distance + "," + hooksToConsider + ")", this);
+		log.debug("appel de Robot.moveLengthwise(" + distance + "," + hooksToConsider + ")");
         moveLengthwise(distance, hooksToConsider, false);
     }
 
@@ -384,7 +385,7 @@ public abstract class Robot implements Service
     public void moveLengthwiseTowardWall(int distance, ArrayList<Hook> hooksToConsider) throws UnableToMoveException
     {
 
-		log.debug("appel de Robot.moveLengthwiseTowardWall(" + distance + "," + hooksToConsider + ")", this);
+		log.debug("appel de Robot.moveLengthwiseTowardWall(" + distance + "," + hooksToConsider + ")");
         Speed oldSpeed = speed; 
         setLocomotionSpeed(Speed.SLOW);
         moveLengthwise(distance, hooksToConsider, true, false);
@@ -406,7 +407,7 @@ public abstract class Robot implements Service
     public void moveToLocation(Vec2 aim, ArrayList<Hook> hooksToConsider, Table table, EnumSet<ObstacleGroups> obstaclesNotConsidered) throws  PathNotFoundException, UnableToMoveException, InObstacleException
     {
 
-		log.debug("appel de Robot.moveToLocation(" + aim + "," + hooksToConsider + "," + table + "," + obstaclesNotConsidered + ")", this);
+		log.debug("appel de Robot.moveToLocation(" + aim + "," + hooksToConsider + "," + table + "," + obstaclesNotConsidered + ")");
     	moveToCircle(new Circle(aim), hooksToConsider, table, obstaclesNotConsidered);
     }
     
@@ -483,13 +484,21 @@ public abstract class Robot implements Service
     public abstract void disableRotationnalFeedbackLoop();
 
 	/**
-	 * le robot demande l'etat de ses capteurs
+	 * le robot demande l'etat de ses capteurs ultrasons
 	 * @param captor le nom du capteur dont on veut l'etat
 	 * @return la valeur du capteur
 	 * @throws SerialConnexionException si la connexion avec le capteur est interrompue
 	 */
-	public abstract Object getSensorValue(SensorNames captor) throws SerialConnexionException;
+	public abstract int getUSSensorValue(USsensors captor) throws SerialConnexionException;
 
+	/**
+	 * le robot demande l'etat de ses capteurs de contact
+	 * @param captor le nom du capteur dont on veut l'etat
+	 * @return la valeur du capteur
+	 * @throws SerialConnexionException si la connexion avec le capteur est interrompue
+	 */
+	public abstract boolean getContactSensorValue(ContactSensors captor) throws SerialConnexionException;
+	
 	public abstract void turnWithoutDetection(double angle, ArrayList<Hook> hooks) throws UnableToMoveException;
 
 }

@@ -99,7 +99,7 @@ public abstract class AbstractScript implements Service
 		}
 		catch (UnableToMoveException | InObstacleException | PathNotFoundException e)
 		{
-			log.debug("Catch de "+e+" Impossible de goToThenExec : abandon d'exec, throw de "+e, this);
+			log.debug("Catch de "+e+" Impossible de goToThenExec : abandon d'exec, throw de "+e);
 			throw e;
 		}
 		

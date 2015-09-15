@@ -304,7 +304,7 @@ public class ObstacleManager
     	}
     	else
     	{
-    		log.debug("Ennemi hors de la table", this);
+    		log.debug("Ennemi hors de la table");
 		}
     }
 
@@ -350,8 +350,8 @@ public class ObstacleManager
     			 > (discCenter.x-mMobileObstacles.get(i).getPosition().x)*(discCenter.x-mMobileObstacles.get(i).getPosition().x)
     			 + (discCenter.y-mMobileObstacles.get(i).getPosition().y)*(discCenter.y-mMobileObstacles.get(i).getPosition().y))
     		{
-    			log.debug("Disque obstructed avec l'obstacle "+mMobileObstacles.get(i).getPosition()+"de rayon"+mMobileObstacles.get(i).radius, this);
-    			log.debug("Disque en "+discCenter+" de rayon "+radius, this);
+    			log.debug("Disque obstructed avec l'obstacle "+mMobileObstacles.get(i).getPosition()+"de rayon"+mMobileObstacles.get(i).radius);
+    			log.debug("Disque en "+discCenter+" de rayon "+radius);
     			isDiscObstructed=true;
     			
     		}
@@ -431,7 +431,7 @@ public class ObstacleManager
     	}
     	catch(IndexOutOfBoundsException e)
     	{
-    		log.critical("Ah bah oui, out of bound", this);
+    		log.critical("Ah bah oui, out of bound");
     		throw e;
     	}
     }
@@ -571,7 +571,7 @@ public class ObstacleManager
     				{
     					mUntestedMobileObstacles.remove(i--);
 	    				obstacleDeleted=true;
-	    				log.debug("Ennemi untested en "+positionEnnemy+" enlevé !", this);
+	    				log.debug("Ennemi untested en "+positionEnnemy+" enlevé !");
     				}
     			}
     		}
@@ -594,7 +594,7 @@ public class ObstacleManager
 	    				mMobileObstacles.remove(i--);
 	    				
 	    				obstacleDeleted=true;
-	    				log.debug("Ennemi en "+positionEnnemy+" enlevé !", this);
+	    				log.debug("Ennemi en "+positionEnnemy+" enlevé !");
     				}
     			}
     		}
@@ -655,7 +655,7 @@ public class ObstacleManager
 				if(mFixedObstacles.remove(mFixedObstacles.get(i)))
 					return;
 				else 
-					log.debug("Impossible d'enlever l'obstacle "+obstacleGroupToDelete, this);
+					log.debug("Impossible d'enlever l'obstacle "+obstacleGroupToDelete);
     		}
     	}
     }
@@ -706,7 +706,7 @@ public class ObstacleManager
 		}
 	    catch (ConfigPropertyNotFoundException e)
     	{
-    		log.debug("Revoir le code : impossible de trouver la propriété "+e.getPropertyNotFound(), this);;
+    		log.debug("Revoir le code : impossible de trouver la propriété "+e.getPropertyNotFound());;
     	}
 	}
     

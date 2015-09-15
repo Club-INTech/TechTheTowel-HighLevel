@@ -1,6 +1,6 @@
 package threads;
 
-import enums.SensorNames;
+import enums.USsensors;
 import exceptions.ConfigPropertyNotFoundException;
 import exceptions.serial.SerialConnexionException;
 import graphics.Window;
@@ -18,9 +18,6 @@ import smartMath.Vec2;
 
 class ThreadSensor extends AbstractThread
 {
-	/** La table */
-	private Table mTable;
-	
 	/** Le robot */
 	private RobotReal mRobot;
 
@@ -66,11 +63,6 @@ class ThreadSensor extends AbstractThread
 	double detectionAngle=40*Math.PI/180;
 	
 	/**
-	 * taille du rayon d'un obstacle
-	 */
-	private int radius;
-	
-	/**
 	 * Largeur du robot recuperée sur la config
 	 */
 	int robotWidth;
@@ -103,7 +95,6 @@ class ThreadSensor extends AbstractThread
 		super(config, log);
 		this.mSensorsCardWrapper = sensorsCardWrapper;
 		Thread.currentThread().setPriority(2);
-		mTable = table;
 		mRobot = robot;		
 		
 		// DEBUG: interface graphique
@@ -114,14 +105,14 @@ class ThreadSensor extends AbstractThread
 		catch (Exception e)
 		{
 			isGraphicalInterfaceEnabled = false;
-			log.debug("Affichage graphique non disponible", this);
+			log.debug("Affichage graphique non disponible");
 		}
 	}
 	
 	@Override
 	public void run()
 	{
-		log.debug("Lancement du thread de capteurs", this);
+		log.debug("Lancement du thread de capteurs");
 		updateConfig();
 		
 		// boucle d'attente de début de match
@@ -137,13 +128,13 @@ class ThreadSensor extends AbstractThread
 		ThreadTimer.matchEnded = false;
 		
 		// boucle principale, celle qui dure tout le match
-		log.debug("Activation des capteurs", this);
+		log.debug("Activation des capteurs");
 		while(!ThreadTimer.matchEnded)
 		{
 			// on s'arrete si le ThreadManager le demande
 			if(stopThreads)
 			{
-				log.debug("Stoppage du thread capteurs", this);
+				log.debug("Stoppage du thread capteurs");
 				return;
 			}
 			
@@ -164,7 +155,7 @@ class ThreadSensor extends AbstractThread
 				addObstacle(distance);
 			}			
 			if (distance > 0 && distance < 70)
-				log.debug("obstacle detecte a moins de 7 cm  !", this);
+				log.debug("obstacle detecte a moins de 7 cm  !");
 				
 				
 			try 
@@ -178,7 +169,7 @@ class ThreadSensor extends AbstractThread
 				break;
 			}			
 		}
-        log.debug("Fin du thread de capteurs", this);
+        log.debug("Fin du thread de capteurs");
 		
 	}
 	
@@ -204,7 +195,7 @@ class ThreadSensor extends AbstractThread
 		int distance;
 		try 
 		{
-			distance = (int) mSensorsCardWrapper.getSensorValue(SensorNames.ULTRASOUND);
+			distance = mSensorsCardWrapper.getUSSensorValue(USsensors.ULTRASOUND);
 			
 
 			//on met tout les capteurs qui detectent un objet DANS le robot ou à plus de maxSensorRange a 0
@@ -221,9 +212,9 @@ class ThreadSensor extends AbstractThread
 		}
 		catch(SerialConnexionException e)
 		{
-			log.critical("La carte capteurs ne répond pas !", this);
-			log.critical( e.logStack(), this);
-			distance = (int) SensorNames.ULTRASOUND.getDefaultValue();
+			log.critical("La carte capteurs ne répond pas !");
+			log.critical( e.logStack());
+			distance = USsensors.ULTRASOUND.getDefaultValue();
 		}
 		return distance;
 	}
@@ -233,7 +224,7 @@ class ThreadSensor extends AbstractThread
 		try
 		{
 			sensorFrequency = Integer.parseInt(config.getProperty("capteurs_frequence"));
-			radius = Integer.parseInt(config.getProperty("rayon_robot_adverse"));
+			Integer.parseInt(config.getProperty("rayon_robot_adverse"));
 			
 			//plus que cette distance (environ 50cm) on est beaucoup moins precis sur la position adverse (donc on ne l'ecrit pas !)
 			maxSensorRange = Integer.parseInt(config.getProperty("largeur_robot"))
@@ -246,7 +237,7 @@ class ThreadSensor extends AbstractThread
 		}
 		catch (ConfigPropertyNotFoundException e)
 		{
-    		log.debug("Revoir le code : impossible de trouver la propriété "+e.getPropertyNotFound(), this);;
+    		log.debug("Revoir le code : impossible de trouver la propriété "+e.getPropertyNotFound());;
 		}
 	}
 

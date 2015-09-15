@@ -76,7 +76,7 @@ public class LocomotionCardWrapper implements Service
 		} 
 		catch (ConfigPropertyNotFoundException e)
 		{
-			log.debug("Code à revoir  : impossible de trouver la propriete "+e.getPropertyNotFound(), this);
+			log.debug("Code à revoir  : impossible de trouver la propriete "+e.getPropertyNotFound());
 		}
 	}	
 	
@@ -130,7 +130,7 @@ public class LocomotionCardWrapper implements Service
 	 */
 	public void immobilise() throws SerialConnexionException
 	{
-		log.warning("Immobilisation du robot", this);
+		log.warning("Immobilisation du robot");
         
         
         locomotionCardSerial.communiquer("stop", 0);// On s'asservit sur la position actuelle
@@ -321,7 +321,7 @@ public class LocomotionCardWrapper implements Service
 			else if ( infosBuffer[i].equals("1") )
 				 parsedInfos[i]=true;
 			else
-				log.debug("Probleme de lecture de f", this);
+				log.debug("Probleme de lecture de f");
 		}
 		return parsedInfos;
 	}

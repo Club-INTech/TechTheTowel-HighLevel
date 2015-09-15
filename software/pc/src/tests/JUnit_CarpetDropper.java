@@ -62,7 +62,7 @@ public class JUnit_CarpetDropper extends JUnit_Test
 	@Test
 	public void test() 
 	{
-		log.debug("debut du depose tapis", this);
+		log.debug("debut du depose tapis");
 		try 
 		{
 			scriptManager.getScript(ScriptNames.DROP_CARPET).goToThenExec(0, game, emptyHook);
@@ -73,7 +73,7 @@ public class JUnit_CarpetDropper extends JUnit_Test
 		} catch (ExecuteException e) {
 				e.printStackTrace();
 			}
-		log.debug("fin du depose tapis", this);
+		log.debug("fin du depose tapis");
 		try 
 		{
 			returnToEntryPosition(game);

@@ -11,8 +11,8 @@ import org.junit.Test;
 import org.junit.Assert;
 
 import enums.ObstacleGroups;
-import enums.SensorNames;
 import enums.ServiceNames;
+import enums.USsensors;
 import exceptions.ContainerException;
 import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
@@ -54,7 +54,7 @@ public class JUnit_Sensors extends JUnit_Test
 		super.setUp();
 		state = (GameState<Robot>)container.getService(ServiceNames.GAME_STATE);
 		
-		log.debug("JUnit_ActionneursTest.setUp()", this);
+		log.debug("JUnit_ActionneursTest.setUp()");
 		capteurs = (SensorsCardWrapper)container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
 		
 		config.set("capteurs_on", "true");
@@ -84,33 +84,33 @@ public class JUnit_Sensors extends JUnit_Test
 //	@Test
 	public void desactivation_capteur() throws Exception
 	{
-		log.debug("JUnit_CapteursTest.desactivation_capteur()", this);
+		log.debug("JUnit_CapteursTest.desactivation_capteur()");
 
 		// Avec capteurs
-		log.debug((capteurs.getSensorValue(SensorNames.ULTRASOUND)), this);
+		log.debug((capteurs.getUSSensorValue(USsensors.ULTRASOUND)));
 	//	Assert.assertTrue(capteurs.mesurer_infrarouge() != 3000);
-		Assert.assertTrue(((int)capteurs.getSensorValue(SensorNames.ULTRASOUND)) != 3000);
+		Assert.assertTrue(((int)capteurs.getUSSensorValue(USsensors.ULTRASOUND)) != 3000);
 
 		// Sans capteurs
 		config.set("capteurs_on", "false");
 		capteurs.updateConfig();
-		log.debug(((int)capteurs.getSensorValue(SensorNames.ULTRASOUND)), this);
+		log.debug(((int)capteurs.getUSSensorValue(USsensors.ULTRASOUND)));
 	//	Assert.assertTrue(capteurs.mesurer_infrarouge() == 3000);
-		Assert.assertTrue(((int)capteurs.getSensorValue(SensorNames.ULTRASOUND)) == 3000);
+		Assert.assertTrue(((int)capteurs.getUSSensorValue(USsensors.ULTRASOUND)) == 3000);
 
 		// Et re avec
 		config.set("capteurs_on", "true");
 		capteurs.updateConfig();
-		Assert.assertTrue(((int)capteurs.getSensorValue(SensorNames.ULTRASOUND)) != 3000);
+		Assert.assertTrue(((int)capteurs.getUSSensorValue(USsensors.ULTRASOUND)) != 3000);
 	//	Assert.assertTrue(capteurs.mesurer_infrarouge() != 3000);
-		Assert.assertTrue(((int)capteurs.getSensorValue(SensorNames.ULTRASOUND)) != 3000);
+		Assert.assertTrue(((int)capteurs.getUSSensorValue(USsensors.ULTRASOUND)) != 3000);
 
 	}
 	
 //	@Test
 	public void testEvitement() throws InObstacleException
 	{
-		log.debug("Test d'évitement", this);
+		log.debug("Test d'évitement");
 		try 
 		{	
 			state.robot.moveLengthwiseWithoutDetection(250);
@@ -120,7 +120,7 @@ public class JUnit_Sensors extends JUnit_Test
 			;
 		}
 
-		log.critical("Fin de moveLengthWise" , this);
+		log.critical("Fin de moveLengthWise");
 		while(true)
 		{
 			try
@@ -129,7 +129,7 @@ public class JUnit_Sensors extends JUnit_Test
 			}
 			catch (UnableToMoveException | PathNotFoundException | ContainerException | SerialManagerException e) 
 			{
-				log.critical("!!!!!! Catch de"+e+" dans testEvitement !!!!!!" , this);
+				log.critical("!!!!!! Catch de"+e+" dans testEvitement !!!!!!");
 			}	
 		}
 	}
@@ -137,7 +137,7 @@ public class JUnit_Sensors extends JUnit_Test
 	//@Test
 	public void testDetecting()
 	{
-		log.debug("Test d'évitement", this);
+		log.debug("Test d'évitement");
 		try 
 		{	
 			state.robot.moveLengthwise(500);
@@ -145,7 +145,7 @@ public class JUnit_Sensors extends JUnit_Test
 		} 
 		catch (UnableToMoveException e) 
 		{
-			log.critical( e.logStack(), this);
+			log.critical( e.logStack());
 		}
 		
 		while(true)
@@ -155,7 +155,7 @@ public class JUnit_Sensors extends JUnit_Test
 //	@Test
 	public void testDetectionTournante()
 	{
-		log.debug("Test d'évitement", this);
+		log.debug("Test d'évitement");
 		
 	/*	try 
 		{
@@ -177,7 +177,7 @@ public class JUnit_Sensors extends JUnit_Test
 			} 
 			catch (UnableToMoveException e1)
 			{
-				log.critical( e1.logStack(), this);
+				log.critical( e1.logStack());
 			}
 		}
 	}
@@ -193,7 +193,7 @@ public class JUnit_Sensors extends JUnit_Test
 		} 
 		catch (UnableToMoveException e1)
 		{
-			log.critical( e1.logStack(), this);
+			log.critical( e1.logStack());
 		}
 		while (true)
 		{
@@ -211,7 +211,7 @@ public class JUnit_Sensors extends JUnit_Test
 		} 
 		catch (UnableToMoveException e1)
 		{
-			log.critical( e1.logStack(), this);
+			log.critical( e1.logStack());
 		}
 		while (true)
 		{
@@ -222,7 +222,7 @@ public class JUnit_Sensors extends JUnit_Test
 			} 
 			catch (UnableToMoveException e1)
 			{
-				log.critical( e1.logStack(), this);
+				log.critical( e1.logStack());
 			}
 		}
 	}
@@ -230,7 +230,7 @@ public class JUnit_Sensors extends JUnit_Test
 	@Test
 	public void testSensorEnnemyInDiscWithoutMovement()
 	{
-		log.debug("Test d'évitement fixe", this);
+		log.debug("Test d'évitement fixe");
 		while(true)
 		{
 			try
@@ -239,10 +239,10 @@ public class JUnit_Sensors extends JUnit_Test
 			}
 			catch (UnexpectedObstacleOnPathException unexpectedObstacle)
 	        {
-                log.critical("Haut: Catch de "+unexpectedObstacle+" dans moveToPointException", this); 
+                log.critical("Haut: Catch de "+unexpectedObstacle+" dans moveToPointException"); 
 
             	long detectionTime = System.currentTimeMillis();
-                log.critical("Détection d'un ennemi! Abandon du mouvement.", this);
+                log.critical("Détection d'un ennemi! Abandon du mouvement.");
             	while(System.currentTimeMillis() - detectionTime < 600)
             	{
             		try
@@ -252,7 +252,7 @@ public class JUnit_Sensors extends JUnit_Test
             		}
             		catch(UnexpectedObstacleOnPathException e2)
             		{
-            			log.critical( e2.logStack(), this);
+            			log.critical( e2.logStack());
             		}
             	}
 			}
@@ -262,7 +262,7 @@ public class JUnit_Sensors extends JUnit_Test
 	//@Test
 	public void testSensorEnnemyWithoutMovement()
 	{
-		log.debug("Test des capteurs fixe", this);
+		log.debug("Test des capteurs fixe");
 		while(true)
 		{
 			;	
@@ -282,7 +282,7 @@ public class JUnit_Sensors extends JUnit_Test
 	//@Test
 	public void testSensorEnnemyWithMovement()
 	{
-		log.debug("Test des capteurs fixe", this);
+		log.debug("Test des capteurs fixe");
 		while(true)
 		{
 			try 
@@ -326,9 +326,9 @@ public class JUnit_Sensors extends JUnit_Test
 		} 
     	catch (UnableToMoveException e2) 
     	{
-    		log.critical( e2.logStack(), this);
+    		log.critical( e2.logStack());
 		}
-		log.debug("Test d'évitement", this);
+		log.debug("Test d'évitement");
 		Random rand = new Random();
     	while(true)
     	{
@@ -341,16 +341,16 @@ public class JUnit_Sensors extends JUnit_Test
 			} 
 			catch (UnableToMoveException e1)
 			{
-				log.critical("!!!!! Catch de"+e1+" dans testEvitement !!!!!" , this);
+				log.critical("!!!!! Catch de"+e1+" dans testEvitement !!!!!");
 				break;
 			} 
 			catch (PathNotFoundException e) 
 			{
-				log.debug("pas de chemin trouvé : ("+x+";"+y+")", this);
+				log.debug("pas de chemin trouvé : ("+x+";"+y+")");
 			}
 			catch (InObstacleException e) 
 			{
-				log.debug("dans un obstacle!", this);
+				log.debug("dans un obstacle!");
 			}
 			
     	}

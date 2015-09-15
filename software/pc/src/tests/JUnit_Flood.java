@@ -23,7 +23,7 @@ public class JUnit_Flood extends JUnit_Test
 	public void setUp() throws Exception
 	{
 		super.setUp();
-		log.debug("JUnit_DeplacementsTest.setUp()", this);
+		log.debug("JUnit_DeplacementsTest.setUp()");
 		mLocomotion = (Locomotion)container.getService(ServiceNames.LOCOMOTION);
 		mLocomotion.updateConfig();
 		mLocomotion.setPosition(new Vec2(-123, 456));
@@ -36,7 +36,7 @@ public class JUnit_Flood extends JUnit_Test
 		int compt=0;
 		while(true)
 		{
-			log.debug(compt++, this);
+			log.debug(compt++);
 			mLocomotion.getPosition();
 		}
 	}	

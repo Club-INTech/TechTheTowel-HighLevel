@@ -5,13 +5,8 @@ import org.junit.runner.JUnitCore;
 
 import pathDingDing.*;
 import table.Table;
-import smartMath.*;
 import enums.*;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-
-import exceptions.*;
 import graphics.Window;
 
 public class JUnit_Pathfinding extends JUnit_Test
@@ -41,11 +36,4 @@ public class JUnit_Pathfinding extends JUnit_Test
     {
     	 // TODO : ON clique et le pathfinding trouve le chemin de A à B
     } 
-    
-    //@Test
-    public void testEnums()
-    {
-    	table.eatPlotX(5);
-    	
-    }
 }

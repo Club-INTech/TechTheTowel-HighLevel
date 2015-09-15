@@ -67,18 +67,18 @@ public class DropCarpet extends AbstractScript
 				
 				{
 					//on depose le tapis gauche (si celui-ci n'est pas deja depose)
-					if (!stateToConsider.table.getIsLeftCarpetDropped())
+//					if (!stateToConsider.table.getIsLeftCarpetDropped())
 					{
 						stateToConsider.robot.useActuator(ActuatorOrder.STOP, true);
-						stateToConsider.table.setIsLeftCarpetDropped(true);
+//						stateToConsider.table.setIsLeftCarpetDropped(true);
 						stateToConsider.robot.useActuator(ActuatorOrder.STOP, false);
 					}
 					
 					//on depose le tapis droit (si celui-ci n'est pas deja depose)
-					if (!stateToConsider.table.getIsRightCarpetDropped())
+//					if (!stateToConsider.table.getIsRightCarpetDropped())
 					{
 						stateToConsider.robot.useActuator(ActuatorOrder.STOP, true);
-						stateToConsider.table.setIsRightCarpetDropped(true);
+//						stateToConsider.table.setIsRightCarpetDropped(true);
 						stateToConsider.robot.useActuator(ActuatorOrder.STOP, false);
 					}
 				}
@@ -100,7 +100,7 @@ public class DropCarpet extends AbstractScript
 						}
 						catch (UnableToMoveException e1)
 						{
-							log.debug("catch dans le script DropCarpet : impossible de s'eloigner de l'escalier",this);
+							log.debug("catch dans le script DropCarpet : impossible de s'eloigner de l'escalier");
 						}
 					}
 				}
@@ -126,7 +126,7 @@ public class DropCarpet extends AbstractScript
 				stateToConsider.robot.turn(2.98);
 
 				stateToConsider.robot.moveLengthwise(606, hooksToConsider, false, true, Speed.SLOW);
-				stateToConsider.table.removeGlassX(1);
+//				stateToConsider.table.removeGlassX(1);
 				
 				//on presente ses arrieres a l'escalier
 				stateToConsider.robot.turn(-0.5*Math.PI, hooksToConsider, false);
@@ -138,18 +138,18 @@ public class DropCarpet extends AbstractScript
 				if(Math.abs((stateToConsider.robot.getPosition().y-1340))<50) // position- position du centre parfait<marge d'erreur
 				
 					//on depose le tapis gauche (si celui-ci n'est pas deja depose)
-					if (!stateToConsider.table.getIsLeftCarpetDropped())
+//					if (!stateToConsider.table.getIsLeftCarpetDropped())
 					{
 						stateToConsider.robot.useActuator(ActuatorOrder.STOP, true);
-						stateToConsider.table.setIsLeftCarpetDropped(true);
+//						stateToConsider.table.setIsLeftCarpetDropped(true);
 						stateToConsider.robot.useActuator(ActuatorOrder.STOP, false);
 					}
 					
 					//on depose le tapis droit (si celui-ci n'est pas deja depose)
-					if (!stateToConsider.table.getIsRightCarpetDropped())
+//					if (!stateToConsider.table.getIsRightCarpetDropped())
 					{
 						stateToConsider.robot.useActuator(ActuatorOrder.STOP, true);
-						stateToConsider.table.setIsRightCarpetDropped(true);
+//						stateToConsider.table.setIsRightCarpetDropped(true);
 						stateToConsider.robot.useActuator(ActuatorOrder.STOP, false);
 					}
 					
@@ -169,7 +169,7 @@ public class DropCarpet extends AbstractScript
 						}
 						catch (UnableToMoveException e1)
 						{
-							log.debug("catch dans le script DropCarpet : impossible de s'eloigner de l'escalier",this);
+							log.debug("catch dans le script DropCarpet : impossible de s'eloigner de l'escalier");
 						}
 					}
 				}
@@ -200,14 +200,14 @@ public class DropCarpet extends AbstractScript
 				//le 3.05 a ete testé de façon experimentale (ainsi que le 850), a modifier si quelqu'un veut le calculer
 				stateToConsider.robot.turn(3.05);
 				stateToConsider.robot.moveLengthwise(850, hooksToConsider, false, true, Speed.SLOW);
-				stateToConsider.table.removeGlassX(1);
+//				stateToConsider.table.removeGlassX(1);
 				stateToConsider.robot.useActuator(ActuatorOrder.STOP, false);// on ferme dans tous les cas
 
 				//on presente ses arrieres a l'escalier
 				stateToConsider.robot.turn(-0.5*Math.PI, hooksToConsider, false);
 
 				// on avance vers ces demoiselles (les marches) (attention impact possible)
-				log.debug("Position avant le mur : "+stateToConsider.robot.getPosition().toString(), this);
+				log.debug("Position avant le mur : "+stateToConsider.robot.getPosition().toString());
 				stateToConsider.robot.moveLengthwiseTowardWall( -(carperDropYCoord - stateToConsider.robot.getPositionFast().y), hooksToConsider);
 				
 				stateToConsider.robot.useActuator(ActuatorOrder.STOP, false);
@@ -222,24 +222,24 @@ public class DropCarpet extends AbstractScript
 				//if(Math.abs((stateToConsider.robot.getPosition().y-1340))<50) // position- position du centre parfait<marge d'erreur
 				
 					//on depose le tapis gauche (si celui-ci n'est pas deja depose)
-				if (!stateToConsider.table.getIsLeftCarpetDropped())
+//				if (!stateToConsider.table.getIsLeftCarpetDropped())
 				{
 					stateToConsider.robot.useActuator(ActuatorOrder.STOP, true);
-					stateToConsider.table.setIsLeftCarpetDropped(true);
+//					stateToConsider.table.setIsLeftCarpetDropped(true);
 					stateToConsider.robot.sleep(200);
 					stateToConsider.robot.useActuator(ActuatorOrder.STOP, false);
 				}
 				
 				//on depose le tapis droit (si celui-ci n'est pas deja depose)
-				if (!stateToConsider.table.getIsRightCarpetDropped())
+//				if (!stateToConsider.table.getIsRightCarpetDropped())
 				{
 					stateToConsider.robot.useActuator(ActuatorOrder.STOP, true);
-					stateToConsider.table.setIsRightCarpetDropped(true);
+//					stateToConsider.table.setIsRightCarpetDropped(true);
 					stateToConsider.robot.sleep(200);
 					stateToConsider.robot.useActuator(ActuatorOrder.STOP, false);
 				}
 					
-				log.debug("Position après tapis : "+stateToConsider.robot.getPosition().toString(), this);
+				log.debug("Position après tapis : "+stateToConsider.robot.getPosition().toString());
 
 				// on peut reprendre la vitesse que nous avions avant l'éxécution de ce script puisque les tapis sont largués (si on va trop vite avec les tapis ils masquent les capteurs)
 				stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
@@ -260,7 +260,7 @@ public class DropCarpet extends AbstractScript
 						}
 						catch (UnableToMoveException e1)
 						{
-							log.debug("catch dans le script DropCarpet : impossible de s'eloigner de l'escalier",this);
+							log.debug("catch dans le script DropCarpet : impossible de s'eloigner de l'escalier");
 						}
 					}
 				}
@@ -284,7 +284,7 @@ public class DropCarpet extends AbstractScript
 		else if (id == 2)
 			return new Circle(Table.entryPosition);
 		else
-			log.debug("erreur id script :"+id+" attendu 0 ou 1", this);
+			log.debug("erreur id script :"+id+" attendu 0 ou 1");
 			return new Circle(0,1000);
 	}
 
@@ -292,11 +292,11 @@ public class DropCarpet extends AbstractScript
 	public int remainingScoreOfVersion(int version, GameState<?> stateToConsider) 
 	{
 		int score = 24;
-		if (version == 0 && !stateToConsider.table.isGlassXTaken(1))
+//		if (version == 0 && !stateToConsider.table.isGlassXTaken(1))
 			score += 4;
-		if(stateToConsider.table.getIsLeftCarpetDropped())
+//		if(stateToConsider.table.getIsLeftCarpetDropped())
 			score -= 12;
-		if(stateToConsider.table.getIsRightCarpetDropped())
+//		if(stateToConsider.table.getIsRightCarpetDropped())
 			score -= 12;
 		
 		return score;
@@ -314,7 +314,7 @@ public class DropCarpet extends AbstractScript
 		} 
 		catch (SerialConnexionException e) 
 		{
-			log.debug("erreur termine DropCarpet script : impossible de ranger", this);
+			log.debug("erreur termine DropCarpet script : impossible de ranger");
 			throw new SerialFinallyException ();
 		}
 	}
@@ -322,16 +322,16 @@ public class DropCarpet extends AbstractScript
 	public Integer[] getVersion(GameState<?> stateToConsider)
 	{
 		//si un des deux tapis n'est pas deposé
-		if (!stateToConsider.table.getIsLeftCarpetDropped() || !stateToConsider.table.getIsRightCarpetDropped())
+//		if (!stateToConsider.table.getIsLeftCarpetDropped() || !stateToConsider.table.getIsRightCarpetDropped())
 			//et si le verre 1 n'est pas pris on renvoie toutes les versions
-			if (!stateToConsider.table.isGlassXTaken(1))
+//			if (!stateToConsider.table.isGlassXTaken(1))
 				return versions;
 			//si le verre 1 est pris on donne seulement a version 1
-			else
-				return new Integer[]{1};
+//			else
+//				return new Integer[]{1};
 
 		//si les deux tapis ont été deposés on ne donne aucune version (tant pis pour le gobelet 1, il y a mieux pour le catch)
-		return new Integer[]{};
+//		return new Integer[]{};
 	}
 
 }

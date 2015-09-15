@@ -32,7 +32,7 @@ public class ThreadGraphics extends AbstractThread
 		}
 		catch (Exception e)
 		{
-			log.debug("Affichage graphique non disponible", this);
+			log.debug("Affichage graphique non disponible");
 		}
 	}
 	
@@ -42,7 +42,7 @@ public class ThreadGraphics extends AbstractThread
 	@Override
 	public void run()
 	{
-		log.debug("Lancement du thread de capteurs", this);
+		log.debug("Lancement du thread de capteurs");
 		updateConfig();
 		
 		while(true)

@@ -19,7 +19,7 @@ public class JUnit_Container extends JUnit_Test {
 	@Test
 	public void test_log() throws Exception
 	{
-		log.debug("JUnit_ContainerTest.test_log()", this);
+		log.debug("JUnit_ContainerTest.test_log()");
 		container.getService(ServiceNames.LOG);
 	}
 
@@ -31,7 +31,7 @@ public class JUnit_Container extends JUnit_Test {
 	@Test
 	public void test_config() throws Exception
 	{
-		log.debug("JUnit_ContainerTest.test_config()", this);
+		log.debug("JUnit_ContainerTest.test_config()");
 		container.getService(ServiceNames.CONFIG);
 	}
 
@@ -43,7 +43,7 @@ public class JUnit_Container extends JUnit_Test {
 	@Test
 	public void test_table() throws Exception
 	{
-		log.debug("JUnit_ContainerTest.test_table()", this);
+		log.debug("JUnit_ContainerTest.test_table()");
 		container.getService(ServiceNames.TABLE);
 	}
 
@@ -55,7 +55,7 @@ public class JUnit_Container extends JUnit_Test {
     @Test
     public void test_deplacementshautniveau() throws Exception
     {
-        log.debug("JUnit_ContainerTest.test_deplacementshautniveau()", this);
+        log.debug("JUnit_ContainerTest.test_deplacementshautniveau()");
         container.getService(ServiceNames.LOCOMOTION);
     }
 
@@ -67,7 +67,7 @@ public class JUnit_Container extends JUnit_Test {
 	@Test
 	public void test_deplacements() throws Exception
 	{
-		log.debug("JUnit_ContainerTest.test_deplacements()", this);
+		log.debug("JUnit_ContainerTest.test_deplacements()");
 		container.getService(ServiceNames.LOCOMOTION_CARD_WRAPPER);
 	}
 
@@ -79,7 +79,7 @@ public class JUnit_Container extends JUnit_Test {
 	@Test
 	public void test_capteurs() throws Exception
 	{
-		log.debug("JUnit_ContainerTest.test_capteurs()", this);
+		log.debug("JUnit_ContainerTest.test_capteurs()");
 		container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
 	}
 
@@ -91,7 +91,7 @@ public class JUnit_Container extends JUnit_Test {
 	@Test
 	public void test_actionneurs() throws Exception
 	{
-		log.debug("JUnit_ContainerTest.test_actionneurs()", this);
+		log.debug("JUnit_ContainerTest.test_actionneurs()");
 		container.getService(ServiceNames.ACTUATOR_CARD_WRAPPER);
 	}
 
@@ -103,7 +103,7 @@ public class JUnit_Container extends JUnit_Test {
 	@Test
 	public void test_HookGenerator() throws Exception
 	{
-		log.debug("JUnit_ContainerTest.test_HookGenerator()", this);
+		log.debug("JUnit_ContainerTest.test_HookGenerator()");
 		container.getService(ServiceNames.HOOK_FACTORY);
 	}
 
@@ -115,7 +115,7 @@ public class JUnit_Container extends JUnit_Test {
 	@Test
 	public void test_RobotVrai() throws Exception
 	{
-		log.debug("JUnit_ContainerTest.test_RobotVrai()", this);
+		log.debug("JUnit_ContainerTest.test_RobotVrai()");
 		container.getService(ServiceNames.ROBOT_REAL);
 	}
 
@@ -127,7 +127,7 @@ public class JUnit_Container extends JUnit_Test {
 	@Test
 	public void test_ScriptManager() throws Exception
 	{
-		log.debug("JUnit_ContainerTest.test_ScriptManager()", this);
+		log.debug("JUnit_ContainerTest.test_ScriptManager()");
 		container.getService(ServiceNames.SCRIPT_MANAGER);
 	}
 
@@ -139,7 +139,7 @@ public class JUnit_Container extends JUnit_Test {
 	@Test
 	public void test_pathfinding() throws Exception
 	{
-		log.debug("JUnit_ContainerTest.test_pathfinding()", this);
+		log.debug("JUnit_ContainerTest.test_pathfinding()");
 		container.getService(ServiceNames.PATHDINGDING);
 	}
 
@@ -151,7 +151,7 @@ public class JUnit_Container extends JUnit_Test {
 	@Test
 	public void test_Laser() throws Exception
 	{
-		log.debug("JUnit_ContainerTest.test_Laser()", this);
+		log.debug("JUnit_ContainerTest.test_Laser()");
 		container.getService(ServiceNames.LASER);
 	}
 
@@ -163,7 +163,7 @@ public class JUnit_Container extends JUnit_Test {
 	@Test
 	public void test_FiltrageLaser() throws Exception
 	{
-		log.debug("JUnit_ContainerTest.test_FiltrageLaser()", this);
+		log.debug("JUnit_ContainerTest.test_FiltrageLaser()");
 		container.getService(ServiceNames.LASER_FILTRATION);
 	}
 
@@ -175,7 +175,7 @@ public class JUnit_Container extends JUnit_Test {
 	@Test
 	public void test_doublon() throws Exception
 	{
-		log.debug("JUnit_ContainerTest.test_doublon()", this);
+		log.debug("JUnit_ContainerTest.test_doublon()");
 		container.getService(ServiceNames.LASER_FILTRATION);
 		container.getService(ServiceNames.LASER_FILTRATION);
 	}
@@ -188,7 +188,7 @@ public class JUnit_Container extends JUnit_Test {
 	@Test
 	public void test_CheckUp() throws Exception
 	{
-		log.debug("JUnit_ContainerTest.test_CheckUp()", this);
+		log.debug("JUnit_ContainerTest.test_CheckUp()");
 		container.getService(ServiceNames.CHECK_UP);
 	}
 
@@ -200,7 +200,7 @@ public class JUnit_Container extends JUnit_Test {
 	@Test
 	public void test_serieAsservissement() throws Exception
 	{
-		log.debug("JUnit_ContainerTest.test_serieAsservissement()", this);
+		log.debug("JUnit_ContainerTest.test_serieAsservissement()");
 		container.getService(ServiceNames.STM_CARD);
 	}
 
@@ -212,7 +212,7 @@ public class JUnit_Container extends JUnit_Test {
 	@Test
 	public void test_threadTimer() throws Exception
 	{
-		log.debug("JUnit_ContainerTest.test_threadTimer()", this);
+		log.debug("JUnit_ContainerTest.test_threadTimer()");
 		container.getService(ServiceNames.THREAD_TIMER);
 	}
 
@@ -224,7 +224,7 @@ public class JUnit_Container extends JUnit_Test {
 	@Test
 	public void test_threadLaser() throws Exception
 	{
-		log.debug("JUnit_ContainerTest.test_threadLaser()", this);
+		log.debug("JUnit_ContainerTest.test_threadLaser()");
 		container.getService(ServiceNames.THREAD_BALISE);
 	}
 
@@ -236,7 +236,7 @@ public class JUnit_Container extends JUnit_Test {
 	@Test
 	public void test_threadCapteurs() throws Exception
 	{
-		log.debug("JUnit_ContainerTest.test_threadCapteurs()", this);
+		log.debug("JUnit_ContainerTest.test_threadCapteurs()");
 		container.getService(ServiceNames.THREAD_SENSOR);
 	}
 

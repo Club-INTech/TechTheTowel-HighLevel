@@ -10,9 +10,10 @@ import utils.Log;
 import utils.Config;
 import pathDingDing.PathDingDing;
 import enums.ActuatorOrder;
+import enums.ContactSensors;
 import enums.ObstacleGroups;
-import enums.SensorNames;
 import enums.Speed;
+import enums.USsensors;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 
@@ -282,7 +283,15 @@ public class RobotChrono extends Robot
     }
 
 	@Override
-	public Object getSensorValue(SensorNames sensor) 
+	public int getUSSensorValue(USsensors sensor) 
+	{
+		this.chrono += approximateSerialLatency;
+		this.chrono += sensor.getAverageDuration();
+		return sensor.getDefaultValue();
+	}
+	
+	@Override
+	public boolean getContactSensorValue(ContactSensors sensor) 
 	{
 		this.chrono += approximateSerialLatency;
 		this.chrono += sensor.getAverageDuration();

@@ -2,8 +2,6 @@ package threads;
 
 import java.util.Hashtable;
 
-import robot.cards.balise.BaliseFiltration;
-import robot.cards.balise.BaliseCardWrapper;
 import robot.cardsWrappers.ActuatorCardWrapper;
 import robot.cardsWrappers.LocomotionCardWrapper;
 import robot.cardsWrappers.SensorsCardWrapper;
@@ -99,22 +97,6 @@ public class ThreadManager
 		return instanciedThreads.get("threadGraphics");
 	}
 
-	/**
-	 * Renvois le thread laser.
-	 * L'instancie si c'est la première fois qu'on le demande.
-	 * 
-	 * @param laserCardWrapper la carte laser avec laquelle le thread va parler
-	 * @param table La table a l'intérieure de laquelle le thread doit croire évoluer
-	 * @param laserFiltration la méthode de filtrage de valeurs que le thread laser va utiliser
-	 * @return le thread laser
-	 */
-	public AbstractThread getThreadLaser(BaliseCardWrapper laserCardWrapper, Table table, BaliseFiltration laserFiltration)
-	{
-		AbstractThread thread = instanciedThreads.get("threadLaser");
-		if(thread == null)
-			instanciedThreads.put("threadLaser", new ThreadBalise(laserCardWrapper, table, laserFiltration));
-		return instanciedThreads.get("threadLaser");
-	}
 
 	/**
 	 * Démarre tout les threads instanciés auparavant.
@@ -123,7 +105,7 @@ public class ThreadManager
 	public void startInstanciedThreads()
 	{
 		// démarre tout les threads déja instanciées
-		log.debug("Démarrage des threads enregistrés", this);
+		log.debug("Démarrage des threads enregistrés");
 		for(String nom: instanciedThreads.keySet())
 			instanciedThreads.get(nom).start();
 		
