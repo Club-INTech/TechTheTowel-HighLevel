@@ -1,9 +1,7 @@
 package table.obstacles;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 
-import enums.ObstacleGroups;
 import exceptions.ConfigPropertyNotFoundException;
 import pathDingDing.PathDingDing;
 import smartMath.*;
@@ -116,37 +114,6 @@ public class ObstacleManager
       	mRectangles.add(new ObstacleRectangular(new Vec2(900, 1930),70,70));
       	mRectangles.add(new ObstacleRectangular(new Vec2(1200, 1930),70,70));
       	mRectangles.add(new ObstacleRectangular(new Vec2(1300, 778),400,444));
-      	
-      	
-	    // obstacles plots verts
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(200, 600), 10, ObstacleGroups.GREEN_PLOT_0));
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(400, 250), 10, ObstacleGroups.GREEN_PLOT_1));
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(630, 645), 10, ObstacleGroups.GREEN_PLOT_2));
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(1410, 150), 10, ObstacleGroups.GREEN_PLOT_3));
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(1410, 250), 10, ObstacleGroups.GREEN_PLOT_4));
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(650, 1800), 10, ObstacleGroups.GREEN_PLOT_5));
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(650, 1900), 10, ObstacleGroups.GREEN_PLOT_6));
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(1410, 1800), 10, ObstacleGroups.GREEN_PLOT_7));
-	    
-	    //obstacles plots jaunes
-	    //mFixedObstacles.add(new ObstacleCircular(new Vec2(-200, 600), 30, ObstacleGroups.YELLOW_PLOT_0));
-	    //mFixedObstacles.add(new ObstacleCircular(new Vec2(-400, 250), 30, ObstacleGroups.YELLOW_PLOT_1));
-	    //mFixedObstacles.add(new ObstacleCircular(new Vec2(-630, 645), 30, ObstacleGroups.YELLOW_PLOT_2));
-	    //mFixedObstacles.add(new ObstacleCircular(new Vec2(-1410, 150), 30, ObstacleGroups.YELLOW_PLOT_3));
-	    //mFixedObstacles.add(new ObstacleCircular(new Vec2(-1410, 250), 30, ObstacleGroups.YELLOW_PLOT_4));
-	    //mFixedObstacles.add(new ObstacleCircular(new Vec2(-650, 1800), 30, ObstacleGroups.YELLOW_PLOT_5));
-	    //mFixedObstacles.add(new ObstacleCircular(new Vec2(-650, 1900), 30, ObstacleGroups.YELLOW_PLOT_6));
-	    //mFixedObstacles.add(new ObstacleCircular(new Vec2(-1410, 1800), 30, ObstacleGroups.YELLOW_PLOT_7));
-
-	    // gobelets
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(1250, 250), 48, ObstacleGroups.GOBLET_0));
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(590, 1170), 48, ObstacleGroups.GOBLET_1));
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(0, 350), 48, ObstacleGroups.GOBLET_2));
-	    //mFixedObstacles.add(new ObstacleCircular(new Vec2(-590, 1170), 48, ObstacleGroups.GOBLET_3));
-	    //mFixedObstacles.add(new ObstacleCircular(new Vec2(-1250, 250), 48, ObstacleGroups.GOBLET_4));
-	    
-      	//la zone ennemie
-	    mFixedObstacles.add(new ObstacleCircular(new Vec2(-1100, 1000), 200, ObstacleGroups.ENNEMY_ZONE));
     }    
 
     /**
@@ -294,7 +261,7 @@ public class ObstacleManager
     			}
     		}
     		if (!isThereAnObstacleIntersecting)
-    			mUntestedMobileObstacles.add(new ObstacleProximity(position, radius, ObstacleGroups.ENNEMY_ROBOTS, timeToTestObstacle));
+    			mUntestedMobileObstacles.add(new ObstacleProximity(position, radius, timeToTestObstacle));
 
     			
     		/*on ne test pas si la position est dans un obstcle deja existant 
@@ -521,26 +488,6 @@ public class ObstacleManager
     }
     
     /**
-     * 
-     * @param position
-     * @return les groupes d'obstacles dans lesquels est le point
-     */
-    public EnumSet<ObstacleGroups> obstacleGroupsInThePosition(Vec2 position)
-    {
-    	EnumSet<ObstacleGroups> obstacleGroups = EnumSet.noneOf(ObstacleGroups.class);
-    	for(int i = 0; i < mMobileObstacles.size(); i++)
-			if(isPositionInObstacle(position, mMobileObstacles.get(i)))
-			{
-				obstacleGroups.add(mMobileObstacles.get(i).getObstacleGroup());
-				break;
-			}
-		for(int i = 0; i < mFixedObstacles.size(); i++)
-			if(isPositionInObstacle(position, mFixedObstacles.get(i)))
-				obstacleGroups.add(mFixedObstacles.get(i).getObstacleGroup());
-    	return obstacleGroups;
-    }
-    
-    /**
      *  On enleve les obstacles presents sur la table virtuelle mais non detectés
      * @param position 
      * @param orientation 
@@ -639,25 +586,6 @@ public class ObstacleManager
     public Vec2 getDiscPosition()
     {
     	return positionDetectionDisc;
-    }
-    
-    /**
-     * supprime tous les obstacles dont le groupe est celui spécifié
-     * 
-     * @param obstacleGroupToDelete
-     */
-    public void removeFixedObstacle(ObstacleGroups obstacleGroupToDelete)
-    {
-    	for(int i=0; i<mFixedObstacles.size(); i++)
-    	{
-    		if( mFixedObstacles.get(i).getObstacleGroup() == obstacleGroupToDelete )
-    		{
-				if(mFixedObstacles.remove(mFixedObstacles.get(i)))
-					return;
-				else 
-					log.debug("Impossible d'enlever l'obstacle "+obstacleGroupToDelete);
-    		}
-    	}
     }
     
     /**

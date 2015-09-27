@@ -14,7 +14,6 @@ import enums.ActuatorOrder;
 import enums.ScriptNames;
 import enums.ServiceNames;
 import exceptions.ExecuteException;
-import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
@@ -66,23 +65,16 @@ public class JUnit_CarpetDropper extends JUnit_Test
 		try 
 		{
 			scriptManager.getScript(ScriptNames.DROP_CARPET).goToThenExec(0, game, emptyHook);
-		} 
-			catch (UnableToMoveException | SerialConnexionException | SerialFinallyException | PathNotFoundException | InObstacleException e) 
-		{
-			e.printStackTrace();
-		} catch (ExecuteException e) {
+		} catch (ExecuteException | UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException e) {
 				e.printStackTrace();
 			}
 		log.debug("fin du depose tapis");
-		try 
-		{
-			returnToEntryPosition(game);
-		}
-		catch (PathNotFoundException | UnableToMoveException
-				| InObstacleException e) 
-		{
-			e.printStackTrace();
-		}
+			try {
+				returnToEntryPosition(game);
+			} catch (PathNotFoundException | UnableToMoveException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	}
 
 }

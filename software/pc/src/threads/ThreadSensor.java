@@ -73,11 +73,6 @@ class ThreadSensor extends AbstractThread
 	int robotLenght;
 	
 	/**
-	 * indique si l'interface graphique est activée ou non 
-	 */
-	private boolean isGraphicalInterfaceEnabled = true; 
-	
-	/**
 	 * Positions des robots à ajouter
 	 */
 	Vec2 positionEnnemi_1=new Vec2 (0,0);
@@ -95,18 +90,7 @@ class ThreadSensor extends AbstractThread
 		super(config, log);
 		this.mSensorsCardWrapper = sensorsCardWrapper;
 		Thread.currentThread().setPriority(2);
-		mRobot = robot;		
-		
-		// DEBUG: interface graphique
-		try
-		{
-			window = new Window();
-		}
-		catch (Exception e)
-		{
-			isGraphicalInterfaceEnabled = false;
-			log.debug("Affichage graphique non disponible");
-		}
+		mRobot = robot;
 	}
 	
 	@Override

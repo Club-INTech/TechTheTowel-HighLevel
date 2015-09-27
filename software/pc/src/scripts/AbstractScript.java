@@ -1,7 +1,6 @@
 package scripts;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 
 import smartMath.Circle;
 import smartMath.Vec2;
@@ -12,9 +11,7 @@ import utils.Config;
 import container.Service;
 import hook.Hook;
 import hook.types.HookFactory;
-import enums.ObstacleGroups;
 import exceptions.ExecuteException;
-import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
@@ -53,27 +50,6 @@ public abstract class AbstractScript implements Service
 		AbstractScript.config = config;
 		AbstractScript.log = log;
 	}	
-	
-	/**
-	 * Va au point d'entrée du script (en utilisant le Pathfinding), puis l'exécute
-	 * En fournissant un GameState<RobotChrono>, il est possible de chronométrer le temps que l'on metterait a exécuter ce script sans réellement l'exécuter
-	 * IMPORTANT : Tout les scripts voulant retirer des obstacles particuliers lors du calcul de chemin doivent reecrire cette methode et retirer ces obstacles dans leur propre calcul du pathfinding
-	 * (on suppose qu'on prends en compte tout les obstacles hors plots adverses)
-	 *
-	 * @param versionToExecute la version du
-	 * @param actualState l'état courrant du match.
-	 * @param hooksToConsider les hooks a considérer lors des déplacements vers ces scripts
-	 * @throws UnableToMoveException losrque le robot veut se déplacer et que quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
-	 * @throws SerialConnexionException s'il y a un problème de communication avec une des cartes électroniques
-	 * @throws PathNotFoundException  si le pathfinding ne trouve pas de chemin
-	 * @throws SerialFinallyException si le finally n'est pas correctement execute (erreur critique)
-	 * @throws InObstacleException lorqsque le robot veut aller dans un obstacle
-	 * @throws ExecuteException 
-	 */
-	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, InObstacleException, ExecuteException
-	{
-		goToThenExec(versionToExecute, actualState, hooksToConsider, EnumSet.noneOf(ObstacleGroups.class));
-	}
 		
 	/**
 	 * Va au point d'entrée du script (en utilisant le Pathfinding), puis l'exécute
@@ -90,14 +66,14 @@ public abstract class AbstractScript implements Service
 	 * @throws InObstacleException lorqsque le robot veut aller dans un obstacle
 	 * @throws ExecuteException 
 	 */
-	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, ArrayList<Hook> hooksToConsider, EnumSet<ObstacleGroups> enumObstacle) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, InObstacleException, ExecuteException
+	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, ExecuteException
 	{
 		// va jusqu'au point d'entrée de la version demandée
 		try 
 		{
-			actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.robotRay, actualState.robot.getPosition()), hooksToConsider, actualState.table, enumObstacle);
+			actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.robotRay, actualState.robot.getPosition()), hooksToConsider, actualState.table);
 		}
-		catch (UnableToMoveException | InObstacleException | PathNotFoundException e)
+		catch (UnableToMoveException | PathNotFoundException e)
 		{
 			log.debug("Catch de "+e+" Impossible de goToThenExec : abandon d'exec, throw de "+e);
 			throw e;

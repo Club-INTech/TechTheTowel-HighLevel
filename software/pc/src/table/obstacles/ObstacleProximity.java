@@ -1,7 +1,6 @@
 package table.obstacles;
 
 import smartMath.Vec2;
-import enums.ObstacleGroups;
 
 /**
  * Obstacles détectés par capteurs de proximité (ultrasons et infrarouges).
@@ -53,9 +52,9 @@ public class ObstacleProximity extends ObstacleCircular
 	 * @param obstacleGroup 
 	 * @param lifetime la durée de vie (en ms) de l'objet a créer
 	 */
-	public ObstacleProximity (Vec2 position, int radius, ObstacleGroups obstacleGroup, int lifetime)
+	public ObstacleProximity (Vec2 position, int radius, int lifetime)
 	{
-		super(position,radius, obstacleGroup);
+		super(position,radius);
 		
 		this.lifetime = lifetime;
 		mOutDatedTime = System.currentTimeMillis() + lifetime;// la date de peremption = temps actuel + temps de peremption de l'obstacle
@@ -72,7 +71,7 @@ public class ObstacleProximity extends ObstacleCircular
 	 */
 	public ObstacleProximity clone()
 	{
-		return new ObstacleProximity(position.clone(), getRadius(), obstacleGroup, lifetime);
+		return new ObstacleProximity(position.clone(), getRadius(), lifetime);
 	}
 	
 	public long getOutDatedTime()

@@ -1,6 +1,5 @@
 package table.obstacles;
 
-import enums.ObstacleGroups;
 import smartMath.*;
 
 /**
@@ -10,8 +9,6 @@ import smartMath.*;
  */
 public class ObstacleCircular extends Obstacle
 {
-	/** groupe d'obstacle auquel appartient l'obstacle*/
-	protected ObstacleGroups obstacleGroup;
 	
 	/** rayon en mm de cet obstacle */
 	protected int radius=0;
@@ -23,11 +20,10 @@ public class ObstacleCircular extends Obstacle
 	 * @param radius rayon de l'obstacle a créer 
 	 * @param obstacleGroup 
 	 */
-	public ObstacleCircular(Vec2 position, int radius, ObstacleGroups obstacleGroup)
+	public ObstacleCircular(Vec2 position, int radius)
 	{
 		super(position);
 		this.radius = radius;
-		this.obstacleGroup = obstacleGroup;
 	}
 	
 	/* (non-Javadoc)
@@ -35,7 +31,7 @@ public class ObstacleCircular extends Obstacle
 	 */
 	public ObstacleCircular clone()
 	{
-		return new ObstacleCircular(position.clone(), radius, obstacleGroup);
+		return new ObstacleCircular(position.clone(), radius);
 	}
 	
 	/**
@@ -48,7 +44,6 @@ public class ObstacleCircular extends Obstacle
 		return (
 				this.radius == otherObstacle.radius
 			&&  this.position.equals(otherObstacle.position)	
-			&&	this.obstacleGroup.compareTo(otherObstacle.obstacleGroup)==0	
 				);
 	}
 
@@ -73,11 +68,6 @@ public class ObstacleCircular extends Obstacle
 		return radius;
 	}
 	
-	public ObstacleGroups getObstacleGroup()
-	{
-		return obstacleGroup;
-	}
-	
 	/**
 	 * Convertit l'obstacle en cercle.
 	 * 
@@ -99,11 +89,11 @@ public class ObstacleCircular extends Obstacle
 	
 	public void printObstacleDeleted()
 	{
-		System.out.println("Obstacle enlevé:"+obstacleGroup);
+		System.out.println("Obstacle enlevé");
 	}
 	
 	public void printObstacleMemory()
 	{
-		System.out.println("Obstacle en memoire : "+obstacleGroup);
+		System.out.println("Obstacle en memoire");
 	}
 }

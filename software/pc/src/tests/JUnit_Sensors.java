@@ -3,18 +3,15 @@ package tests;
 import hook.Hook;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.Assert;
 
-import enums.ObstacleGroups;
 import enums.ServiceNames;
 import enums.USsensors;
 import exceptions.ContainerException;
-import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.Locomotion.UnexpectedObstacleOnPathException;
@@ -108,7 +105,7 @@ public class JUnit_Sensors extends JUnit_Test
 	}
 	
 //	@Test
-	public void testEvitement() throws InObstacleException
+	public void testEvitement()
 	{
 		log.debug("Test d'évitement");
 		try 
@@ -125,7 +122,7 @@ public class JUnit_Sensors extends JUnit_Test
 		{
 			try
 			{
-				state.robot.moveToCircle(new Circle(new Vec2(-700, 900),0),  new ArrayList<Hook>(), (Table)container.getService(ServiceNames.TABLE),EnumSet.noneOf(ObstacleGroups.class));
+				state.robot.moveToCircle(new Circle(new Vec2(-700, 900),0),  new ArrayList<Hook>(), (Table)container.getService(ServiceNames.TABLE));
 			}
 			catch (UnableToMoveException | PathNotFoundException | ContainerException | SerialManagerException e) 
 			{
@@ -317,7 +314,7 @@ public class JUnit_Sensors extends JUnit_Test
 	
 	
    // @Test
-	public void testCapteurDeplacement() throws SerialConnexionException, InObstacleException
+	public void testCapteurDeplacement() throws SerialConnexionException
 	{
     	matchSetUp(state.robot, false);
     	try 
@@ -337,7 +334,7 @@ public class JUnit_Sensors extends JUnit_Test
 			{
 				x = rand.nextInt(3000)-1500;
 				y = rand.nextInt(2000);
-				state.robot.moveToLocation(new Vec2 (x,y),new ArrayList<Hook>(), state.table, EnumSet.noneOf(ObstacleGroups.class));
+				state.robot.moveToLocation(new Vec2 (x,y),new ArrayList<Hook>(), state.table);
 			} 
 			catch (UnableToMoveException e1)
 			{
@@ -348,11 +345,6 @@ public class JUnit_Sensors extends JUnit_Test
 			{
 				log.debug("pas de chemin trouvé : ("+x+";"+y+")");
 			}
-			catch (InObstacleException e) 
-			{
-				log.debug("dans un obstacle!");
-			}
-			
     	}
 	}
 

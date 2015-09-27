@@ -11,7 +11,6 @@ import java.util.ArrayList;
 
 import table.Table;
 import smartMath.*;
-import pathDingDing.*;
 import robot.*;
 import table.obstacles.*;
 
@@ -28,8 +27,6 @@ public class TablePanel extends JPanel
 	private ArrayList<Vec2> mPath;
 	private Table mTable;
 	private Robot mRobot;
-	private boolean showGraph;
-	private Graph mGraph;
 	private boolean isRobotPresent = true;
 	
 	public TablePanel(Table table, RobotReal robot)
@@ -37,14 +34,12 @@ public class TablePanel extends JPanel
 		mPath = new ArrayList<Vec2>();
 		mTable = table;
 		mRobot = robot;
-		showGraph = false;
 	}
 	
 	public TablePanel(Table table)
 	{
 		mPath = new ArrayList<Vec2>();
 		mTable = table;
-		showGraph = false;
 		isRobotPresent = false;
 	}
 	
@@ -76,27 +71,7 @@ public class TablePanel extends JPanel
 	    			  -(rects.get(i).getPosition().y + rects.get(i).getSizeY()) * this.getHeight() / 2000 + this.getHeight(), 
 	    			  rects.get(i).getSizeX() * this.getWidth() / 3000, 
 	    			  rects.get(i).getSizeY() * this.getHeight() / 2000);
-	    }
-	    
-	    
-	    //  Le graphe du pathdingding
-	    if(showGraph)
-	    {
-	    	//parcours des noeuds
-	    	for(int i = 0; i < mGraph.getNodes().size(); i++)
-	    	{
-	    		g.setColor(new Color(200, 120, 15));
-		    	g.fillOval( (mGraph.getNodes().get(i).x + 1500) * this.getWidth() / 3000 - 5,
-	    			    -mGraph.getNodes().get(i).y * this.getHeight() / 2000 + this.getHeight() - 5,
-	    			     10,
-	    			     10);
-		    	g.setColor(new Color(100, 60, 5));
-	    		//parcours des liens de chaque noeud
-	    		for(int j = 0; j < mGraph.getNodes().get(i).getLinkNumber(); j++)
-	    			g.drawLine((mGraph.getNodes().get(i).x + 1500) * this.getWidth() / 3000, -mGraph.getNodes().get(i).y * this.getHeight() / 2000 + this.getHeight(), (mGraph.getNodes().get(i).getLink(j).getDestination().x + 1500) * this.getWidth() / 3000, -mGraph.getNodes().get(i).getLink(j).getDestination().y * this.getHeight() / 2000 + this.getHeight());
-	    	}
-	    }
-	    
+	    }	    
 	    
 	    // Les obstacles fixes : plots, gobelets
 	    g.setColor(Color.white);
@@ -140,17 +115,6 @@ public class TablePanel extends JPanel
 		    			(int)(-(position.y + 200*Math.sin(orientation)) * this.getHeight() / 2000 + this.getHeight()));
 	    }
 	    
-	    g.setColor(Color.green);
-	    //debug : zones
-	    if(showGraph)
-	    	for(int i=0; i<mGraph.mAreas.size(); i++)
-	    	{
-	    		g.drawRect((mGraph.mAreas.get(i).x + 1500) * this.getWidth() / 3000,
-	    				  -(mGraph.mAreas.get(i).y + mGraph.mAreas.get(i).height) * this.getHeight() / 2000 + this.getHeight(),
-	    				   mGraph.mAreas.get(i).width * this.getWidth() / 3000,
-	    				   mGraph.mAreas.get(i).height * this.getHeight() / 2000);
-	    	}
-	    
 	    // un chemin
 	    g.setColor(Color.blue);
 	    for(int i = 0; i+1 < mPath.size(); i++)
@@ -192,13 +156,6 @@ public class TablePanel extends JPanel
 	{
 		mPath = path;
 		repaint();
-	}
-	
-	//permet d'afficher le graphe du pathdingding
-	public void drawGraph(Graph graph)
-	{
-		mGraph = graph;
-		showGraph = true;
 	}
 	
 	public Table getTable()

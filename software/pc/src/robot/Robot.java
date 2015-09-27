@@ -1,7 +1,6 @@
 package robot;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 
 import pathDingDing.PathDingDing;
 import hook.Hook;
@@ -11,11 +10,9 @@ import table.Table;
 import container.Service;
 import enums.ActuatorOrder;
 import enums.ContactSensors;
-import enums.ObstacleGroups;
 import enums.Speed;
 import enums.USsensors;
 import exceptions.ConfigPropertyNotFoundException;
-import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
@@ -404,11 +401,11 @@ public abstract class Robot implements Service
      * @throws PathNotFoundException lorsque le pathdingding ne trouve pas de chemin 
      * @throws InObstacleException lorqsque le robot veut aller dans un obstacle
      */
-    public void moveToLocation(Vec2 aim, ArrayList<Hook> hooksToConsider, Table table, EnumSet<ObstacleGroups> obstaclesNotConsidered) throws  PathNotFoundException, UnableToMoveException, InObstacleException
+    public void moveToLocation(Vec2 aim, ArrayList<Hook> hooksToConsider, Table table) throws  PathNotFoundException, UnableToMoveException
     {
 
-		log.debug("appel de Robot.moveToLocation(" + aim + "," + hooksToConsider + "," + table + "," + obstaclesNotConsidered + ")");
-    	moveToCircle(new Circle(aim), hooksToConsider, table, obstaclesNotConsidered);
+		log.debug("appel de Robot.moveToLocation(" + aim + "," + hooksToConsider + "," + table + ")");
+    	moveToCircle(new Circle(aim), hooksToConsider, table);
     }
     
     /**
@@ -424,7 +421,7 @@ public abstract class Robot implements Service
      * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
      * @throws InObstacleException lorqsque le robot veut aller dans un obstacle
      */
-    public void moveToCircle(Circle aim, ArrayList<Hook> hooksToConsider, Table table, EnumSet<ObstacleGroups> obstaclesNotConsidered) throws PathNotFoundException, UnableToMoveException, InObstacleException
+    public void moveToCircle(Circle aim, ArrayList<Hook> hooksToConsider, Table table) throws PathNotFoundException, UnableToMoveException
     {
 
 		//FIXME calculer path par le pathDingDing

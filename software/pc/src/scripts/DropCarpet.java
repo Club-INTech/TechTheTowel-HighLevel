@@ -8,9 +8,7 @@ import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
-import hook.Callback;
 import hook.Hook;
-import hook.methods.CloseRightArmExe;
 import hook.types.HookFactory;
 import robot.Robot;
 import smartMath.*;
@@ -116,9 +114,9 @@ public class DropCarpet extends AbstractScript
 			try
 			{
 				//mise en place d'un hook pour attraper le gobelet 1.5 secondes après le début du script
-				Hook hookGoblet = hookFactory.newHookTimer(System.currentTimeMillis() + 2000, 500);
-				hookGoblet.addCallback(new Callback(new CloseRightArmExe(log),true, stateToConsider));
-				hooksToConsider.add(hookGoblet);
+//				Hook hookGoblet = hookFactory.newHookTimer(System.currentTimeMillis() + 2000, 500);
+//				hookGoblet.addCallback(new Callback(new CloseRightArmExe(log),true, stateToConsider));
+//				hooksToConsider.add(hookGoblet);
 				
 				stateToConsider.robot.useActuator(ActuatorOrder.STOP, false);
 
@@ -191,9 +189,9 @@ public class DropCarpet extends AbstractScript
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
 				
 				//mise en place d'un hook pour attraper le gobelet 1.75 secondes après le début du script
-				Hook hookGoblet = hookFactory.newHookTimer(System.currentTimeMillis() + 2350,500);
-				hookGoblet.addCallback(new Callback(new CloseRightArmExe(log),true, stateToConsider));
-				hooksToConsider.add(hookGoblet);
+//				Hook hookGoblet = hookFactory.newHookTimer(System.currentTimeMillis() + 2350,500);
+//				hookGoblet.addCallback(new Callback(new CloseRightArmExe(log),true, stateToConsider));
+//				hooksToConsider.add(hookGoblet);
 				
 				stateToConsider.robot.useActuator(ActuatorOrder.STOP, false);
 

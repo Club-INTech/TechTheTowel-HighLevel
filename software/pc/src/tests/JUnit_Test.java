@@ -3,7 +3,6 @@ package tests;
 import hook.Hook;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 
 import org.junit.Before;
 import org.junit.After;
@@ -17,9 +16,7 @@ import threads.ThreadTimer;
 import utils.Log;
 import utils.Config;
 import container.Container;
-import enums.ObstacleGroups;
 import enums.ServiceNames;
-import exceptions.InObstacleException;
 import exceptions.PathNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
@@ -90,9 +87,9 @@ public abstract class JUnit_Test
 		robot.setPosition(Table.entryPosition);
 	}
 	
-	public void returnToEntryPosition(GameState<Robot> state) throws PathNotFoundException, UnableToMoveException, InObstacleException
+	public void returnToEntryPosition(GameState<Robot> state) throws PathNotFoundException, UnableToMoveException
 	{
-		state.robot.moveToLocation(new Vec2(Table.entryPosition.x-250, Table.entryPosition.y),new ArrayList<Hook>(), state.table, EnumSet.noneOf(ObstacleGroups.class));
+		state.robot.moveToLocation(new Vec2(Table.entryPosition.x-250, Table.entryPosition.y),new ArrayList<Hook>(), state.table);
 		state.robot.turn(Math.PI);
 		state.robot.moveLengthwise(-250);
 	}
