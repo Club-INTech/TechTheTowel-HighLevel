@@ -14,6 +14,7 @@ void loop() {
      delay(5000);  // Oui, c'est dégeulasse. A changer par 91000 pour le réel
      digitalWrite(7, HIGH);
      delay(2000); // TODO : A mesurer !!! Ceci est le temps nécessaire à ouvrir le parasol.
+     digitalWrite(7, LOW);
      done=1; // Empeche le système de se relancer
  }
    delay(10);
