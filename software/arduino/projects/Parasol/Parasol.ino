@@ -1,22 +1,35 @@
 // Ouverture du parasol (robot secondaire)
-// Transistor Moteur PIN 7 ; jumper relié au PIN 8
+// Transistor Moteur PIN 7 ; jumper relié au PIN 8 ; led de "match en cours" pin 4
+// Moteur alimenté avec pile 9V et transistor polarisé amplificateur
 
-bool done = 0;
+bool done = false;
+long int t_depart = 0;
+
 
 void setup() {
   pinMode(7, OUTPUT);
   pinMode(8, INPUT);
+  pinMode(4, OUTPUT);
   digitalWrite(7, LOW);
+  digitalWrite(4, LOW);
 }
 
 void loop() {
-   if(digitalWrite(8) && !done){ // On attend que le jumper soit mis en place (utile pour déterminer un front descendant, duh...)
-     while(digitalWrite(8)){} // On attends le front descendant (enlevage du jumper)
-     delay(5000);  // Oui, c'est dégeulasse. A changer par 91000 pour le réel
-     digitalWrite(7, HIGH);
-     delay(2000); // TODO : A mesurer !!! Ceci est le temps nécessaire à ouvrir le parasol.
-     digitalWrite(7, LOW);
-     done=1; // Empeche le système de se relancer
+   if(digitalRead(8) && !done) { // On attend que le jumper soit mis en place (utile pour déterminer un front descendant, duh...)
+     while(digitalRead(8)){} // On attends le front descendant (enlevage du jumper)
+
+     digitalWrite(4, HIGH); // On indique qu'il a compris que le match commence
+     t_depart = millis();
+     delay(91000);  // Oui, c'est dégeulasse.
+     
+     if((millis() - t_depart) <= 95000 && (millis() - t_depart) >= 90000) { // Empêche le lancement du moteur si le temps est écoulé ou s'il est trop tôt (overkill mais on ne l'est jamais trop quand il s'agit de ne pas se prendre une pénalité de 20 points)
+      digitalWrite(7, HIGH);
+      delay(2000); // TODO : A mesurer !!! Ceci est le temps nécessaire à ouvrir le parasol.
+      digitalWrite(7, LOW);
+     }
+
+     digitalWrite(4, LOW);
+     done=true; // Empeche le système de se relancer
    }
   
 }
