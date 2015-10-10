@@ -20,12 +20,18 @@ import utils.Log;
 /**
  * @author julian
  * Script pour la fermeture des portes des cabines
- * Version 0 : Deplacement de la serviette aux portes puis fermeture ; aucune action prevue hors du deplacement ; aucun pathdingding ; si pb -> arret complet
+ * Version 0 : Deplacement de la serviette aux portes puis fermeture en même tamps ; aucune action prevue hors du deplacement ; aucun pathdingding/evitement ; si pb -> arret complet
  */
 public class CloseDoors extends AbstractScript
 {
-
-	private Boolean doorsClosed = false;
+	/**
+	 * Definit si la porte exterieure est fermee
+	 */
+	private Boolean extDoorClosed = false;
+	/**
+	 * Definit si la porte interieure est fermee
+	 */
+	private Boolean intDoorClosed = false;
 
 	public CloseDoors(HookFactory hookFactory, Config config, Log log) {
 		super(hookFactory, config, log);
@@ -73,7 +79,8 @@ public class CloseDoors extends AbstractScript
 				//PORTES FERMEES !
 				stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
 				
-				doorsClosed = true;
+				extDoorClosed = true;
+				intDoorClosed = true;
 			}
 			catch(UnableToMoveException e)
 			{
@@ -107,9 +114,12 @@ public class CloseDoors extends AbstractScript
 	public void finalize(GameState<?> state) throws SerialFinallyException
 	{
 		
-		if(this.doorsClosed)
-			state.obtainedPoints += 40;
-		state.table.doorsClosed = this.doorsClosed;
+		if(this.extDoorClosed)
+			state.obtainedPoints += 20;
+		if(this.intDoorClosed)
+			state.obtainedPoints += 20;
+		state.table.extDoorClosed = this.extDoorClosed;
+		state.table.intDoorClosed = this.intDoorClosed;
 	}
 
 	@Override
