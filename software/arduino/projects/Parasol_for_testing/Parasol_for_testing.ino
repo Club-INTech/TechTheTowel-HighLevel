@@ -27,13 +27,11 @@ void loop() {
 
      digitalWrite(4, HIGH); // On indique qu'il a compris que le match commence
      t_depart = millis();
-     delay(91000);  // Oui, c'est dégeulasse.
+     delay(5000);  // Oui, c'est dégeulasse.
      
-     if((millis() - t_depart) <= 95000 && (millis() - t_depart) >= 90000) { // Empêche le lancement du moteur si le temps est écoulé ou s'il est trop tôt (overkill mais on ne l'est jamais trop quand il s'agit de ne pas se prendre une pénalité de 20 points)
       digitalWrite(7, HIGH);
       delay(2000); // TODO : A mesurer !!! Ceci est le temps nécessaire à ouvrir le parasol.
       digitalWrite(7, LOW);
-     }
 
      digitalWrite(4, LOW);
      done=true; // Empeche le système de se relancer
