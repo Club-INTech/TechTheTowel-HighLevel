@@ -34,6 +34,9 @@ public class Table implements Service
 	/** endroit ou lire la configuration du robot */
 	private Config config;
 	
+	/** portes fermées ou non */
+	public Boolean doorsClosed = false;
+	
 	
 	/** point de depart du match a modifier a chaque base roulante */
 	public static final Vec2 entryPosition = new Vec2 (1099,1000); //TODO position entree
