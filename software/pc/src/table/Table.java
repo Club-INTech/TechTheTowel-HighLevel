@@ -35,12 +35,8 @@ public class Table implements Service
 	private Config config;
 	
 	
-	// point de depart du match a modifier a chaque base roulante
+	/** point de depart du match a modifier a chaque base roulante */
 	public static final Vec2 entryPosition = new Vec2 (1099,1000); //TODO position entree
-	//1500 le bout de la table, 320 la taille de la cale et 77 la taille de l'arriere du robot a son centre,1000);
-	
-	// la pile de plots principale
-	public boolean isStartAreaFilledWithPile;
 	
 	/**
 	 * Instancie une nouvelle table
