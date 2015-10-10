@@ -1,5 +1,5 @@
 // Ouverture du parasol (robot secondaire)
-// Transistor Moteur PIN 7 ; jumper relié au PIN 8 ; led de "match en cours" pin 4
+// Transistor Moteur PIN 7 ; jumper relié au PIN 8 ; led de "match en cours" pin 4 ; capteur de contact pin 6
 // Moteur alimenté avec pile 9V et transistor polarisé amplificateur
 
 bool done = false;
@@ -10,6 +10,7 @@ void setup() {
   pinMode(7, OUTPUT);
   pinMode(8, INPUT);
   pinMode(4, OUTPUT);
+  pinMode(6, INPUT);
   digitalWrite(7, LOW);
   digitalWrite(4, LOW);
 }
@@ -26,8 +27,14 @@ void loop() {
      
      if((millis() - t_depart) <= 95000 && (millis() - t_depart) >= 90000) { // Empêche le lancement du moteur si le temps est écoulé ou s'il est trop tôt (overkill mais on ne l'est jamais trop quand il s'agit de ne pas se prendre une pénalité de 20 points)
       digitalWrite(7, HIGH);
-      delay(2000); // TODO A mesurer !!! Ceci est le temps nécessaire à ouvrir le parasol.
-      digitalWrite(7, LOW);
+      while(42)
+      {
+        if(digitalRead(6))
+        {
+          digitalWrite(7, LOW);
+          break;
+        }
+      }
      }
 
      digitalWrite(4, LOW);
