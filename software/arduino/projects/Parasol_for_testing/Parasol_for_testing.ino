@@ -11,6 +11,7 @@ void setup() {
   pinMode(7, OUTPUT);
   pinMode(8, INPUT);
   pinMode(4, OUTPUT);
+  pinMode(6, INPUT);
   digitalWrite(7, LOW);
   digitalWrite(4, LOW);
   Serial.begin(9600);
@@ -30,8 +31,14 @@ void loop() {
      delay(5000);  // Oui, c'est dégeulasse.
      
       digitalWrite(7, HIGH);
-      delay(2000); // TODO : A mesurer !!! Ceci est le temps nécessaire à ouvrir le parasol.
-      digitalWrite(7, LOW);
+      while(42)
+      {
+        if(digitalRead(6))
+        {
+          digitalWrite(7, LOW);
+          break;
+        }
+      }
 
      digitalWrite(4, LOW);
      done=true; // Empeche le système de se relancer
