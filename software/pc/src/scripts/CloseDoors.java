@@ -51,19 +51,21 @@ public class CloseDoors extends AbstractScript
 			{
 				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
 				stateToConsider.robot.setLocomotionSpeed(Speed.BETWEEN_SCRIPTS_SLOW);
-				// TODO Deplacement en biais (vive la trigo)
-				stateToConsider.robot.moveLengthwise(300, hooksToConsider, false);
-				
 			
-				//On tourne le robot vers les portes
+				//On tourne le robot vers la position
+				stateToConsider.robot.turn((Math.PI*0.5 - 0.986), hooksToConsider, false);
+			
+				//On deplace le robot vers les portes
+				stateToConsider.robot.moveLengthwise(807, hooksToConsider, false);
+				
+				//On ralentit pour eviter de demonter les elements de jeu "Discord-style"
+				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
+				
+				//On s'oriente vers les portes
 				stateToConsider.robot.turn((Math.PI / 2), hooksToConsider, false);
 				
-			
-				//On deplace le robot vers les portes, sans rentrer dans le tas
-				stateToConsider.robot.moveLengthwise(750, hooksToConsider, false);
-	
 				//On ferme les portes, (20) A CHANGER !!!!!
-				stateToConsider.robot.moveLengthwiseTowardWall(20, hooksToConsider);
+				stateToConsider.robot.moveLengthwise(20, hooksToConsider, true);
 			
 				//On recule
 				stateToConsider.robot.moveLengthwiseWithoutDetection(-30, hooksToConsider, false);
@@ -86,7 +88,6 @@ public class CloseDoors extends AbstractScript
 	@Override
 	public int remainingScoreOfVersion(int version, GameState<?> state) 
 	{
-		// TODO Comptage du score
 		return 0;
 	}
 
