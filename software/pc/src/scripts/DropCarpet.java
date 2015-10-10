@@ -18,7 +18,7 @@ import utils.Config;
 import utils.Log;
 /**
  * @author paul
- * Script pour deposer les tapis sur l'escalier
+ * Script pour deposer les tapis sur l'escalier (Exemple de script d'INTech 2015)
  */
 public class DropCarpet extends AbstractScript 
 {
@@ -29,7 +29,7 @@ public class DropCarpet extends AbstractScript
 	private int distanceBetweenEntryAndStairs=220;
 	
 	/**
-	 * Endroit ou on d'oit s'arreter opur poser les tapis
+	 * Endroit ou l'on doit s'arreter pour poser les tapis
 	 */
 	private int carperDropYCoord = 1320;
 
