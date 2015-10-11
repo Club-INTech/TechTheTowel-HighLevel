@@ -40,6 +40,7 @@ public class ScriptManager implements Service
 		// exemple:
 		//instanciedScripts[ScriptNames.CLOSE_CLAP.ordinal()] = new CloseClap(factory, config, log);
 		instanciedScripts[ScriptNames.DROP_CARPET.ordinal()] = new DropCarpet(factory, config, log);
+		instanciedScripts[ScriptNames.CLOSE_DOORS.ordinal()] = new CloseDoors(factory, config, log);
 		//TODO instancier les scripts
 	}
 	

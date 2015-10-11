@@ -8,5 +8,6 @@ package enums;
 
 public enum ScriptNames
 {
-	DROP_CARPET;
+	DROP_CARPET,
+	CLOSE_DOORS;
 }

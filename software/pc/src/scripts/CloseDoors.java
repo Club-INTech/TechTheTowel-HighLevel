@@ -52,7 +52,7 @@ public class CloseDoors extends AbstractScript
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
 			
 				//On tourne le robot vers la position
-				//Tourne vers les portes ; Angle de coordonnées x=(1350,2000) y=(1350,1150) z=(900,2000)
+				//Tourne vers les portes ; Angle de coordonnees x=(1350,2000) y=(1350,1150) z=(900,2000)
 				stateToConsider.robot.turn((Math.PI*0.5 + 0.986), hooksToConsider, false);
 			
 				//On deplace le robot vers les portes
