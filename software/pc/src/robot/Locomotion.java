@@ -154,10 +154,63 @@ public class Locomotion implements Service
      */
     public void readjust()
     {
-    	// TODO méthode a faire
-    	//se delacer vers le mur suppose le plus proche en abscisse
-    	//des qu'on rentre dedans on met a jour netre position
+    	// TODO modifier pour les spécificités de la table (tasseaux, etc...) pour accelerer le recalage et eviter les collisions prematurees
+    	
+    	//On se delace vers le mur suppose le plus proche en abscisse
+    	//des qu'on rentre dedans on met a jour notre position
     	//on fait la meme chose avec l'autre coordonnee
+    	
+    	/**
+    	 * Angle de direction pour la coordonnee X
+    	 * 0 vers notre mur, pi vers le leur
+    	 */
+    	double angleX = 0; 
+    	if(highLevelPosition.x < 0)
+    		angleX = Math.PI;
+    	
+    	/**
+    	 * Angle de direction pour la coordonnee Y
+    	 * pi/2 ou -pi/2
+    	 */
+    	double angleY = Math.PI /2;
+    	if(highLevelPosition.y < 1000)
+    		angleY *= -1;
+    	
+    	try
+    	{
+    		//On se tourne vers le mur et on rentre dedans
+    		turn(angleX, null, false);
+    		moveLengthwise(1500, null, true);
+    		
+    		//On ajuste la position X
+    		highLevelPosition.x = 1500;
+    		if(angleX != 0)
+    			highLevelPosition.x *= -1;
+    		
+    		//on recule du mur pour pas se le manger
+    		moveLengthwise(-300, null, false);
+    		
+    		//On se tourne vers le mur et on rentre dedans
+    		turn(angleY, null, false);
+    		moveLengthwise(1000, null, true);
+    		
+    		//On ajuste la position Y
+    		highLevelPosition.y = 2000;
+    		if(angleY < 0)
+    			highLevelPosition.y = 0;
+    		
+    		//On recule du mur
+    		moveLengthwise(-300, null, false);
+    		
+    		
+    	}
+    	catch(UnableToMoveException e)
+    	{
+    		//TODO Corriger le catch
+    		log.critical("Erreur de déplacement lors du readjust()");
+    	}
+    	
+    	
     	
     }
 
