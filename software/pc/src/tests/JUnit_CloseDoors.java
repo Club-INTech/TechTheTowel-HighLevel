@@ -30,26 +30,26 @@ public class JUnit_CloseDoors extends JUnit_Test
 	@Test
 	public void closeThatDoors() throws Exception
 	{
-		mLocomotion.setRotationnalSpeed(10);
-		mLocomotion.setTranslationnalSpeed(10);
+		mLocomotion.setRotationnalSpeed(3);
+		mLocomotion.setTranslationnalSpeed(3);
 	
 		//On tourne le robot vers la position
-		mLocomotion.turn((Math.PI*0.5 - 0.986), null, false);
+		mLocomotion.turn((Math.PI*0.5 + 0.8), null, false);
 	
 		//On deplace le robot vers les portes
-		mLocomotion.moveLengthwise(807, null, false);
+		mLocomotion.moveLengthwise(380, null, false);
 		
 		//On ralentit pour eviter de demonter les elements de jeu "Discord-style"
 		mLocomotion.setTranslationnalSpeed(3);
 		
 		//On s'oriente vers les portes
-		mLocomotion.turn((Math.PI / 2), null, false);
+		mLocomotion.turn(-(Math.PI / 2), null, false);
 		
 		//On ferme les portes, (20) A CHANGER !!!!!
-		mLocomotion.moveLengthwise(20, null, true);
+		mLocomotion.moveLengthwise(-600, null, true);
 	
 		//On recule
-		mLocomotion.moveLengthwise(-30, null, false);
+		mLocomotion.moveLengthwise(200, null, false);
 		
 		//PORTES FERMEES !
 	}

@@ -51,30 +51,29 @@ public class CloseDoors extends AbstractScript
 	@Override
 	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException
 	{
+		//Les parametres de cette version ont ete determines experimentalement, fonctionnel sur robot 2015
 		if(versionToExecute == 0)
 		{
 			try
 			{
+				//On ralentit pour eviter de demonter les elements de jeu "Discord-style"
 				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
-				stateToConsider.robot.setLocomotionSpeed(Speed.BETWEEN_SCRIPTS_SLOW);
+				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
 			
 				//On tourne le robot vers la position
-				stateToConsider.robot.turn((Math.PI*0.5 - 0.986), hooksToConsider, false);
+				stateToConsider.robot.turn((Math.PI*0.5 + 0.986), hooksToConsider, false);
 			
 				//On deplace le robot vers les portes
-				stateToConsider.robot.moveLengthwise(807, hooksToConsider, false);
-				
-				//On ralentit pour eviter de demonter les elements de jeu "Discord-style"
-				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
+				stateToConsider.robot.moveLengthwise(380, hooksToConsider, false);
 				
 				//On s'oriente vers les portes
-				stateToConsider.robot.turn((Math.PI / 2), hooksToConsider, false);
+				stateToConsider.robot.turn(-(Math.PI / 2), hooksToConsider, false);
 				
-				//On ferme les portes, (20) A CHANGER !!!!!
-				stateToConsider.robot.moveLengthwise(20, hooksToConsider, true);
+				//On ferme les portes
+				stateToConsider.robot.moveLengthwise(-600, hooksToConsider, true);
 			
 				//On recule
-				stateToConsider.robot.moveLengthwiseWithoutDetection(-30, hooksToConsider, false);
+				stateToConsider.robot.moveLengthwise(200, hooksToConsider, false);
 				
 				//PORTES FERMEES !
 				stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
