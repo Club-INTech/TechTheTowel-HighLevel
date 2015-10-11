@@ -10,7 +10,7 @@ public enum Speed
 {
 	//FIXME a regler, demander au bas niveau.
 	
-	/** vitesse très lente */
+	/** vitesse tres lente */
 	SLOW(3, 3),
 
 	/** vitesse en temps normal (pour des distances de 200mm à 1000 mm) */

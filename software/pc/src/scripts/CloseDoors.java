@@ -24,15 +24,6 @@ import utils.Log;
  */
 public class CloseDoors extends AbstractScript
 {
-	/**
-	 * Definit si la porte exterieure est fermee
-	 */
-	private Boolean extDoorClosed = false;
-	/**
-	 * Definit si la porte interieure est fermee
-	 */
-	private Boolean intDoorClosed = false;
-
 	public CloseDoors(HookFactory hookFactory, Config config, Log log) {
 		super(hookFactory, config, log);
 		/**
@@ -61,6 +52,7 @@ public class CloseDoors extends AbstractScript
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
 			
 				//On tourne le robot vers la position
+				//Tourne vers les portes ; Angle de coordonnées x=(1350,2000) y=(1350,1150) z=(900,2000)
 				stateToConsider.robot.turn((Math.PI*0.5 + 0.986), hooksToConsider, false);
 			
 				//On deplace le robot vers les portes
@@ -71,15 +63,19 @@ public class CloseDoors extends AbstractScript
 				
 				//On ferme les portes
 				stateToConsider.robot.moveLengthwise(-600, hooksToConsider, true);
+
+				//PORTES FERMEES !
+				stateToConsider.obtainedPoints += 20;
+				stateToConsider.table.extDoorClosed = true;
+				stateToConsider.table.intDoorClosed = true;
 			
-				//On recule
+				//On avance
 				stateToConsider.robot.moveLengthwise(200, hooksToConsider, false);
 				
-				//PORTES FERMEES !
+				
 				stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
 				
-				extDoorClosed = true;
-				intDoorClosed = true;
+				
 			}
 			catch(UnableToMoveException e)
 			{
@@ -94,31 +90,29 @@ public class CloseDoors extends AbstractScript
 	@Override
 	public int remainingScoreOfVersion(int version, GameState<?> state) 
 	{
+		//TODO
 		return 0;
 	}
 
 	@Override
 	public Circle entryPosition(int version, int ray, Vec2 robotPosition)
 	{
+		//TODO eviter la position d'entree du robot, a modifier quand le pathdingding sera fait
 		if (version == 0)
 			return new Circle(Table.entryPosition);
 		else
 		{
+			//TODO jetter une exception
 			log.debug("erreur : mauvaise version de script");
-			return new Circle(Table.entryPosition);
+			return new Circle(new Vec2(0,0));
 		}
 	}
 
 	@Override
 	public void finalize(GameState<?> state) throws SerialFinallyException
 	{
+		//TODO
 		
-		if(this.extDoorClosed)
-			state.obtainedPoints += 20;
-		if(this.intDoorClosed)
-			state.obtainedPoints += 20;
-		state.table.extDoorClosed = this.extDoorClosed;
-		state.table.intDoorClosed = this.intDoorClosed;
 	}
 
 	@Override

@@ -1,11 +1,17 @@
 package tests;
 
+import java.util.ArrayList;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import robot.Locomotion;
+import robot.RobotReal;
 import smartMath.Vec2;
 import enums.ServiceNames;
+import enums.Speed;
+import exceptions.Locomotion.UnableToMoveException;
+import hook.Hook;
 
 /**
  * teste la fermeture des portes par la version 0 du script
@@ -14,41 +20,37 @@ import enums.ServiceNames;
  */
 public class JUnit_CloseDoors extends JUnit_Test
 {
-	private Locomotion mLocomotion;
+	private RobotReal mRobot;
 
 	@Before
 	public void setUp() throws Exception
 	{
 		super.setUp();
 		log.debug("JUnit_DeplacementsTest.setUp()");
-		mLocomotion = (Locomotion)container.getService(ServiceNames.LOCOMOTION);
-		mLocomotion.updateConfig();
-		mLocomotion.setPosition(new Vec2(1300, 1200));
-		mLocomotion.setOrientation( Math.PI);
+		mRobot = (RobotReal)container.getService(ServiceNames.ROBOT_REAL);
+		mRobot.updateConfig();
 	}
 	
 	@Test
-	public void closeThatDoors() throws Exception
+	public void closeThatDoors() throws UnableToMoveException
 	{
+		ArrayList<Hook> emptyList = new ArrayList<Hook>();
 		//On ralentit pour eviter de demonter les elements de jeu "Discord-style"
-		mLocomotion.setRotationnalSpeed(3);
-		mLocomotion.setTranslationnalSpeed(3);
+		mRobot.setLocomotionSpeed(Speed.SLOW);
 	
 		//On tourne le robot vers la position
-		mLocomotion.turn((Math.PI*0.5 + 0.8), null, false);
+		mRobot.turn((Math.PI*0.5 + 0.8), emptyList, false);
 	
 		//On deplace le robot vers les portes
-		mLocomotion.moveLengthwise(380, null, false);
+		mRobot.moveLengthwise(380, emptyList, false);
 		
 		//On s'oriente vers les portes
-		mLocomotion.turn(-(Math.PI / 2), null, false);
+		mRobot.turn(-(Math.PI / 2), emptyList, false);
 		
 		//On ferme les portes, (20) A CHANGER !!!!!
-		mLocomotion.moveLengthwise(-600, null, true);
+		mRobot.moveLengthwise(-600, emptyList, true);
 	
 		//On recule
-		mLocomotion.moveLengthwise(200, null, false);
-		
-		//PORTES FERMEES !
+		mRobot.moveLengthwise(200, emptyList, false);
 	}
 }
