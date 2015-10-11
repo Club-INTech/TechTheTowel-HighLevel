@@ -8,6 +8,7 @@ import org.junit.Test;
 import robot.Robot;
 import scripts.ScriptManager;
 import strategie.GameState;
+import table.Table;
 import enums.ScriptNames;
 import enums.ServiceNames;
 import exceptions.ExecuteException;
@@ -33,9 +34,11 @@ public class JUnit_CloseDoors extends JUnit_Test
 	{
 		super.setUp();
 		log.debug("JUnit_DeplacementsTest.setUp()");
-		mRobot = (GameState<Robot>)container.getService(ServiceNames.ROBOT_REAL);
+		mRobot = (GameState<Robot>)container.getService(ServiceNames.GAME_STATE);
 		//La position de depart est mise dans le updateConfig()
 		mRobot.updateConfig();
+		mRobot.robot.setPosition(Table.entryPosition);
+		mRobot.robot.setOrientation(Math.PI);
 		scriptManager = (ScriptManager)container.getService(ServiceNames.SCRIPT_MANAGER);
 	}
 	
@@ -46,9 +49,10 @@ public class JUnit_CloseDoors extends JUnit_Test
 		try
 		{
 			//On execute le script
-			scriptManager.getScript(ScriptNames.CLOSE_DOORS).goToThenExec(0, mRobot, emptyList);
+			log.debug("Script lance");
+			scriptManager.getScript(ScriptNames.CLOSE_DOORS).execute(0, mRobot, emptyList);
 		}
-		catch(ExecuteException | UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException e)
+		catch(ExecuteException | SerialFinallyException e)
 		{
 			e.printStackTrace();
 		}
