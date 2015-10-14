@@ -12,6 +12,8 @@ public class Sand extends GameElement
 	/** Type d'element de sable, enumeres dans enums/Elements.java */
 	private Elements type;
 	
+	public int sandSize = 58;
+	
 	/** Niveau de l'element (z si vous preferez)
 	 *  0 = sur la table
 	 *  1 = sur un element
@@ -32,4 +34,25 @@ public class Sand extends GameElement
 		this.level = level;
 		this.type = type;
 	}
+	
+	public float getX()
+	{
+		return position.x;
+	}
+	
+	public float getY()
+	{
+		return position.y;
+	}
+	
+	public float getZ()
+	{
+		return (((level*2)+1)*this.sandSize)/2;
+	}
+	
+	public Elements getType()
+	{
+		return this.type; 
+	}
+	
 }

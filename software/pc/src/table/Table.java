@@ -45,7 +45,7 @@ public class Table implements Service
 	//==================================
 	
 	/** taille des cubes/cylindres */
-	private int sandSize = 58;
+	public int sandSize = 58;
 	
 	/** Cubes de sable centraux */
 	public ArrayList<Sand> centerCubes = new ArrayList<Sand>(16);
@@ -172,9 +172,9 @@ public class Table implements Service
 		centerCylinders.add(new Sand(Elements.SAND_CYLINDER, new Vec2(0, 2000-((3*sandSize)/2)), 2));
 		
 		//Cylindres niveau 3
-		for(int i=0; i<5 ; i++)
+		for(int i=0; i<3 ; i++)
 		{
-			centerCylinders.add(new Sand(Elements.SAND_CYLINDER, new Vec2(-sandSize+(i*sandSize), 2000-(sandSize/2)), 3));
+			centerCylinders.add(new Sand(Elements.SAND_CYLINDER, new Vec2(-(sandSize)+(i*sandSize), 2000-(sandSize/2)), 3));
 		}
 		
 		//Cones niveau 3
