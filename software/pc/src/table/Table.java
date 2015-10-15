@@ -196,6 +196,37 @@ public class Table implements Service
 		
 		//TODO elements annexes
 		
+		//Cubes devant notre serviette
+		ourTowelCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(850-(sandSize/2), 1100+(sandSize/2)), 0));
+		ourTowelCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(850+(sandSize/2), 1100+(sandSize/2)), 0));
+		ourTowelCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(850-(sandSize/2), 1100-(sandSize/2)), 0));
+		ourTowelCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(850+(sandSize/2), 1100-(sandSize/2)), 0));
+
+		//Cubes devant leur serviette
+		theirTowelCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(-850-(sandSize/2), 1100+(sandSize/2)), 0));
+		theirTowelCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(-850+(sandSize/2), 1100+(sandSize/2)), 0));
+		theirTowelCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(-850-(sandSize/2), 1100-(sandSize/2)), 0));
+		theirTowelCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(-850+(sandSize/2), 1100-(sandSize/2)), 0));
+		
+		//Nos cubes devant la dune
+		for(int i=0 ; i<2 ;i++)
+		{
+			ourDuneCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(678-((3*sandSize)/2), 2000-(sandSize/2)), i));
+			ourDuneCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(678-(sandSize/2), 2000-(sandSize/2)), i));
+			ourDuneCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(678-((3*sandSize)/2), 2000-((3*sandSize)/2)), i));
+			ourDuneCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(678-(sandSize/2), 2000-((3*sandSize/2))), i));
+		}
+		
+		//Leur cubes devant la dune
+		for(int i=0 ; i<2 ;i++)
+		{
+			theirDuneCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(-678+((3*sandSize)/2), 2000-(sandSize/2)), i));
+			theirDuneCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(-678+(sandSize/2), 2000-(sandSize/2)), i));
+			theirDuneCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(-678+((3*sandSize)/2), 2000-((3*sandSize)/2)), i));
+			theirDuneCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(-678+(sandSize/2), 2000-((3*sandSize/2))), i));
+		}
+		
+		
 	}
 	
 	public ObstacleManager getObstacleManager()
