@@ -8,17 +8,27 @@ import java.util.ArrayList;
 import container.Service;
 
 /**
- * Classe de calcul de chemins
- * @author Etienne
+ * Classe de calcul de chemins utilisant l'algorithme A*
+ * @author Etienne, julian
  *
  */
 public class PathDingDing implements Service
 {
+	//La table
+	private Table table;
+	
+	//Noeuds ouverts
+	
+	//Le log
+	private Log log;
 	
 	public PathDingDing(Table table, Log log)
 	{
 		//TODO constructeur pathfinding
+		this.table = table;
+		this.log = log;
 	}
+	
 	
 	public ArrayList<Vec2> computePath()
 	{
@@ -39,8 +49,8 @@ public class PathDingDing implements Service
 		// les points formant les segments 1 et 2 sont A1, B1, A2, B2
 		// pour qu'il y ait intersection, il faut :
 		// - les segments ne soient pas paralleles : (A1B1)^(A2B2) != 0
-		// - les point d'intersection est entre A2 et B2 : (A1B1)^(A1B2) * (A1B1)^(A1A2) < 0
-		// - les point d'intersection est entre A1 et B1 : (A2B2)^(A2B1) * (A2B2)^(A2A1) < 0
+		// - le point d'intersection est entre A2 et B2 : (A1B1)^(A1B2) * (A1B1)^(A1A2) < 0
+		// - le point d'intersection est entre A1 et B1 : (A2B2)^(A2B1) * (A2B2)^(A2A1) < 0
 		// ^ = produit vectoriel
 		return ((double)segment1.getB().x - (double)segment1.getA().x) * ((double)segment2.getB().y - (double)segment2.getA().y) - ((double)segment1.getB().y - (double)segment1.getA().y) * ((double)segment2.getB().x - (double)segment2.getA().x) != 0
 				&& (((double)segment1.getB().x - (double)segment1.getA().x) * ((double)segment2.getB().y - (double)segment1.getA().y) - ((double)segment1.getB().y - (double)segment1.getA().y) * ((double)segment2.getB().x - (double)segment1.getA().x)) * (((double)segment1.getB().x - (double)segment1.getA().x) * ((double)segment2.getA().y - (double)segment1.getA().y) - ((double)segment1.getB().y - (double)segment1.getA().y) * ((double)segment2.getA().x - (double)segment1.getA().x)) < 0
@@ -56,7 +66,7 @@ public class PathDingDing implements Service
 	 */
 	public static boolean intersects(Segment segment, Circle circle)
 	{
-		// TODO : expliquer l'algo
+		// TODO : expliquer l'algo (TOO MANY CASTS EXCEPTION)
 		double area = ((double)circle.position.x - (double)segment.getA().x)*((double)segment.getB().y - (double)segment.getA().y) - ((double)circle.position.y - (double)segment.getA().y)*((double)segment.getB().x - (double)segment.getA().x);
 		double distA = ((double)segment.getA().x - (double)circle.position.x)*((double)segment.getA().x - (double)circle.position.x) + ((double)segment.getA().y - (double)circle.position.y)*((double)segment.getA().y - (double)circle.position.y);
 		double distB = ((double)segment.getB().x - (double)circle.position.x)*((double)segment.getB().x - (double)circle.position.x) + ((double)segment.getB().y - (double)circle.position.y)*((double)segment.getB().y - (double)circle.position.y);
