@@ -34,4 +34,23 @@ public class PDDGraph
 	{
 		return this.links.get(i);
 	}
+	
+	/**
+	 * Renvoie les nodes adjacents à tel node
+	 * @param node le node
+	 * @return
+	 */
+	private ArrayList<PDDNode> getRelatedNodes(PDDNode node)
+	{
+		ArrayList<PDDNode> related = new ArrayList<PDDNode>();
+		
+		for(int i = 0 ; i < links.size() ; i++)
+		{
+			if(links.get(i).isRelated(node))
+				related.add(links.get(i).getTheOtherNode(node));
+		}
+		
+		return related;
+		
+	}
 }

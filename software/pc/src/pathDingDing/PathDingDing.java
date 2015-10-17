@@ -17,7 +17,13 @@ public class PathDingDing implements Service
 	//La table
 	private Table table;
 	
+	//Le graphe
+	
 	//Noeuds ouverts
+	private ArrayList<PDDNode> openNodes;
+	
+	//Noeuds fermés
+	private ArrayList<PDDNode> closedNodes;
 	
 	//Le log
 	private Log log;
@@ -27,6 +33,9 @@ public class PathDingDing implements Service
 		//TODO constructeur pathfinding
 		this.table = table;
 		this.log = log;
+		
+		this.openNodes = new ArrayList<PDDNode>();
+		this.closedNodes = new ArrayList<PDDNode>();
 	}
 	
 	
