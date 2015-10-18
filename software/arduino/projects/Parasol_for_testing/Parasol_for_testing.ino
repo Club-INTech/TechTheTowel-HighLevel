@@ -8,11 +8,11 @@ long int t_depart = 0;
 
 
 void setup() {
-  pinMode(7, OUTPUT);
+  pinMode(5, OUTPUT);
   pinMode(8, INPUT);
   pinMode(4, OUTPUT);
   pinMode(6, INPUT);
-  digitalWrite(7, LOW);
+  analogWrite(5, 0);
   digitalWrite(4, LOW);
   Serial.begin(9600);
 }
@@ -30,12 +30,12 @@ void loop() {
      t_depart = millis();
      delay(5000);  // Oui, c'est dégeulasse.
      
-      digitalWrite(7, HIGH);
+      analogWrite(5, 255);
       while(42)
       {
         if(digitalRead(6))
         {
-          digitalWrite(7, LOW);
+          analogWrite(5, 0);
           break;
         }
       }
