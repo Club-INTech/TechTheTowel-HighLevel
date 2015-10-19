@@ -16,7 +16,7 @@ public class PDDNode
 	private Vec2 position;
 	
 	/**
-	 * Valeur heuristique (distance eulerienne jusqu'au point d'arrivee)
+	 * Valeur heuristique (distance eulerienne jusqu'au point d'arrivee), necessaire pour le A*
 	 */
 	private double heuristic;
 	
