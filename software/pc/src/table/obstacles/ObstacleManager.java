@@ -568,9 +568,9 @@ public class ObstacleManager
 		
 		return (ennemyAngle < (orientation + detectionAngle/2)
 	    && ennemyAngle > (orientation - detectionAngle/2)
-	    || ( ( PathDingDing.intersects( coteGaucheCone , 
+	    || ( ( Geometry.intersects( coteGaucheCone , 
 	    						   new Circle(positionEnnemy, ennemyRay)) )
-	    || ( PathDingDing.intersects(	coteDroitCone, 
+	    || ( Geometry.intersects(	coteDroitCone, 
 	    						   new Circle(positionEnnemy, ennemyRay))) )  );
 	}
     
