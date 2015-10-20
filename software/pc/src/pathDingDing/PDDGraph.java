@@ -36,6 +36,7 @@ public class PDDGraph
 	private void createGraph()
 	{
 		//TODO Creer le graphe (LONG)
+		// On ajoute tous les nodes et on les relie ensemble en verifiant si on "intersect()" pas un obstacle
 	}
 	
 	/**
