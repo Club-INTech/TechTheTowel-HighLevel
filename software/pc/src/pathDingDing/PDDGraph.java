@@ -2,6 +2,8 @@ package pathDingDing;
 
 import java.util.ArrayList;
 
+import table.Table;
+
 /**
  * Graphe de la table, utilise par le pathDingDing pour creer un chemin sur la table et le parcourir
  * @author julian
@@ -37,6 +39,9 @@ public class PDDGraph
 	{
 		//TODO Creer le graphe (LONG)
 		// On ajoute tous les nodes et on les relie ensemble en verifiant si on "intersect()" pas un obstacle
+		
+		//Node du point de depart du robot
+		this.nodes.add(new PDDNode(Table.entryPosition));
 	}
 	
 	/**
