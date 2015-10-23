@@ -48,7 +48,7 @@ public class Graph
 	 * Renvoie le noeud numero i
 	 * @param i le numero du noeud
 	 */
-	private Node getNode(int i)
+	public Node getNode(int i)
 	{
 		return this.nodes.get(i);
 	}
@@ -57,7 +57,7 @@ public class Graph
 	 * Renvoie le lien numero i
 	 * @param i numero du lien
 	 */
-	private Link getLink(int i)
+	public Link getLink(int i)
 	{
 		return this.links.get(i);
 	}
@@ -66,7 +66,7 @@ public class Graph
 	 * Renvoie les nodes adjacents à tel node
 	 * @param node le node a tester
 	 */
-	private ArrayList<Node> getRelatedNodes(Node node)
+	public ArrayList<Node> getRelatedNodes(Node node)
 	{
 		ArrayList<Node> related = new ArrayList<Node>();
 		
@@ -78,5 +78,13 @@ public class Graph
 		
 		return related;
 		
+	}
+	
+	/**
+	 * Renvoie si le graphe est vide ou non (des noeuds mais pas de lien ou l'inverse est considere vide)
+	 */
+	public boolean isEmpty()
+	{
+		return (nodes.isEmpty() || links.isEmpty());
 	}
 }

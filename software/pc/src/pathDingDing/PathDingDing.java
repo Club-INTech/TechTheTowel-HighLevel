@@ -69,6 +69,11 @@ public class PathDingDing implements Service
 	{
 		//TODO pathfinding
 		this.initialise();
+		// Verifie si le graphe n'a pas ete initialise vide (ALERTE AU GOGOLE!!)
+		if(graph.isEmpty())
+		{
+			log.critical("GRAPHE DE PathDingDing VIDE !!");
+		}
 		return null;
 	}
 	
