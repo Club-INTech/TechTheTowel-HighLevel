@@ -1,6 +1,6 @@
 package pathDingDing;
 
-import smartMath.*;
+import smartMath.Vec2;
 import table.Table;
 import utils.Log;
 
@@ -41,13 +41,13 @@ public class PathDingDing implements Service
 	private Table table;
 	
 	//Le graphe a parcourir
-	private PDDGraph graph;
+	private Graph graph;
 	
 	//Noeuds ouverts (a vider a chaque calcul de chemin) 
-	private ArrayList<PDDNode> openNodes;
+	private ArrayList<Node> openNodes;
 	
 	//Noeuds fermés (a vider a chaque calcul de chemin)
-	private ArrayList<PDDNode> closedNodes;
+	private ArrayList<Node> closedNodes;
 	
 	//Le log
 	private Log log;
@@ -58,14 +58,14 @@ public class PathDingDing implements Service
 		this.table = table;
 		this.log = log;
 		
-		this.graph = new PDDGraph();
+		this.graph = new Graph();
 		
-		this.openNodes = new ArrayList<PDDNode>();
-		this.closedNodes = new ArrayList<PDDNode>();
+		this.openNodes = new ArrayList<Node>();
+		this.closedNodes = new ArrayList<Node>();
 	}
 	
 	
-	public ArrayList<Vec2> computePath(PDDNode startNode, PDDNode endNode)
+	public ArrayList<Vec2> computePath(Node startNode, Node endNode)
 	{
 		//TODO pathfinding
 		this.initialise();
@@ -79,8 +79,8 @@ public class PathDingDing implements Service
 	{
 		if(!openNodes.isEmpty() || !closedNodes.isEmpty())
 		{
-			this.openNodes = new ArrayList<PDDNode>();
-			this.closedNodes = new ArrayList<PDDNode>();
+			this.openNodes = new ArrayList<Node>();
+			this.closedNodes = new ArrayList<Node>();
 		}
 	}
 
