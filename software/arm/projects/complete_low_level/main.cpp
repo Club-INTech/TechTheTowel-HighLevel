@@ -126,7 +126,7 @@ int main(void)
 				serial.printfln("_");//Acquittement
 				motionControlSystem->setOriginalAngle(o);
 			}
-			else if(!strcmp("ctv",order))
+			else if(!strcmp("ctv",order))   //Régler la vitesse de translation
 			{
 				int pwmMaxTranslation = 10;
 				serial.read(pwmMaxTranslation);
@@ -134,7 +134,7 @@ int main(void)
 				//motionControlSystem->setSmartTranslationTunings();
 				//TODO
 			}
-			else if(!strcmp("crv",order))
+			else if(!strcmp("crv",order))  //Régler la vitesse de rotation
 			{
 				int pwmMaxRotation = 10;
 				serial.read(pwmMaxRotation);

@@ -74,6 +74,19 @@ public class PathDingDing implements Service
 		{
 			log.critical("GRAPHE DE PathDingDing VIDE !!");
 		}
+		
+		//=============================
+		// DEBUT DE L'ALGORITHME A*
+		//=============================
+		
+		// D'abord, on ajoute les noeuds adjacents au depart dans la liste ouverte
+		ArrayList<Node> related = this.graph.getRelatedNodes(startNode);
+		for(int i=0 ; i < related.size() ; i++)
+			openNodes.add(related.get(i));
+		
+		
+		
+		
 		return null;
 	}
 	
