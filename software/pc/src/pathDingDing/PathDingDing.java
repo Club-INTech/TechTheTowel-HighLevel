@@ -5,6 +5,9 @@ import table.Table;
 import utils.Log;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
 import container.Service;
 
 /**
@@ -64,8 +67,13 @@ public class PathDingDing implements Service
 		this.closedNodes = new ArrayList<Node>();
 	}
 	
-	
-	public ArrayList<Vec2> computePath(Node startNode, Node endNode)
+	/**
+	 * Calcule le chemin à parcourir à l'aide de l'algorithme A*
+	 * @param startNode noeud de départ
+	 * @param endNode noeud d'arrivée
+	 * @return Liste de noeuds à parcourir ; null si échec
+	 */
+	public ArrayList<Node> computePath(Node startNode, Node endNode)
 	{
 		//TODO pathfinding
 		this.initialise();
@@ -75,14 +83,36 @@ public class PathDingDing implements Service
 			log.critical("GRAPHE DE PathDingDing VIDE !!");
 		}
 		
-		//=============================
-		// DEBUT DE L'ALGORITHME A*
-		//=============================
+		//===========================================
+		// DEBUT DE L'ALGORITHME A* - INITIALISATION
+		//===========================================
 		
 		// D'abord, on ajoute les noeuds adjacents au depart dans la liste ouverte
 		ArrayList<Node> related = this.graph.getRelatedNodes(startNode);
 		for(int i=0 ; i < related.size() ; i++)
 			openNodes.add(related.get(i));
+		
+		//On vérifie que l'on est pas dans un cas de bloquage
+		if(openNodes.isEmpty())
+			return null;
+		
+		//On classe ces noeuds par coût croissant grâce au service Collections et la méthode compareTo() dont hérite Node
+		Collections.sort(openNodes);
+		
+		//On ajoute le meilleur noeud (en premier dans openNodes) dans la liste fermée
+		closedNodes.add(openNodes.get(0));
+		
+		//====================================================================
+		// Boucle principale - Recherche de l'arrivée en parcourant le graphe
+		//====================================================================
+		while(!this.closedNodes.contains(endNode)) //Tant que le noeud de fin n'est pas dans la liste fermée, on continue
+		{
+			// On prend les noeuds proches du dernier noeud fermé
+			related = this.graph.getRelatedNodes(closedNodes.get(closedNodes.size()-1));
+			
+		}
+		
+		
 		
 		
 		

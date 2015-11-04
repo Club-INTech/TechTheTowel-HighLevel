@@ -68,6 +68,7 @@ public class Graph
 	 */
 	public ArrayList<Node> getRelatedNodes(Node node)
 	{
+		//TODO Optimiser cette méthode pour réduire le temps de calcul
 		ArrayList<Node> related = new ArrayList<Node>();
 		
 		for(int i = 0 ; i < links.size() ; i++)

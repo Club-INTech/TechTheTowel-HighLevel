@@ -7,7 +7,7 @@ import smartMath.Vec2;
  * @author julian
  *
  */
-public class Node
+public class Node implements Comparable<Node>
 {
 	
 	/**
@@ -115,5 +115,39 @@ public class Node
 	public double getMovementCost()
 	{
 		return this.movementCost;
+	}
+	
+	/**
+	 * Revoie le coût total du noeud (heuristique + mouvement)
+	 */
+	public double getCost()
+	{
+		return (this.movementCost + this.heuristic);
+	}
+
+	/**
+	 * Permet de comparer deux nodes (donc de les classer), ceci est fait par leur coût
+	 * @param otherNode l'autre node à comparer avec celui-ci
+	 * @return 0 si = ; 1 si > ; -1 si <
+	 */
+	@Override
+	public int compareTo(Node otherNode) 
+	{
+		double thisCost = this.getCost();
+		double otherCost = otherNode.getCost();
+		
+		if(thisCost == otherCost)
+		{
+			return 0;
+		}
+		else if(thisCost > otherCost)
+		{
+			return 1;
+		}
+		else
+		{
+			return -1;
+		}
+		
 	}
 }
