@@ -4,14 +4,21 @@ import enums.Elements;
 import smartMath.Vec2;
 
 /**
- * Classe definissant les cubes/cylindre/cones de sable.
+ * Classe definissant les cubes/cylindres/cones de sable.
+ * Cette classe herite de GameElement
  * @author julian
  */
 public class Sand extends GameElement
 {
-	/** Type d'element de sable, enumeres dans enums/Elements.java */
+	/** Type d'element de sable, enumeres dans enums/Elements.java 
+	 *  Cone, cylindre, cube 									
+	 */
 	private Elements type;
 	
+	/**
+	 * Taille en mm des elements de jeu :
+	 * Hauteur d'un cube, cylindre, cone
+	 */
 	public int sandSize = 58;
 	
 	/** Niveau de l'element (z si vous preferez)
@@ -35,21 +42,37 @@ public class Sand extends GameElement
 		this.type = type;
 	}
 	
+	/**
+	 * Getter de la position de l'element de jeu
+	 * @return la position en X de l'element de jeu
+	 */
 	public float getX()
 	{
 		return position.x;
 	}
 	
+	/**
+	 * Getter de la position de l'element de jeu
+	 * @return la position en Y de l'element de jeu
+	 */
 	public float getY()
 	{
 		return position.y;
 	}
 	
+	/**
+	 * Getter de la position de l'element de jeu
+	 * @return la position en Z de l'element de jeu
+	 */
 	public float getZ()
 	{
 		return (((level*2)+1)*this.sandSize)/2;
 	}
 	
+	/**
+	 * Getter du type de l'element de jeu
+	 * @return le type de l'element de jeu
+	 */
 	public Elements getType()
 	{
 		return this.type; 
