@@ -81,15 +81,20 @@ public class PathDingDing implements Service
 		if(graph.isEmpty())
 		{
 			log.critical("GRAPHE DE PathDingDing VIDE !!");
+			return new ArrayList<Node>();
+		}
+		
+		if(endNode == startNode)
+		{
+			log.critical("Appel pathDingDing avec arrivée=départ !");
+			return new ArrayList<Node>();
 		}
 		
 		//===========================================
 		// DEBUT DE L'ALGORITHME A* - INITIALISATION
 		//===========================================
 		
-		//On met le parent du noeud de départ comme son propre parent (utile plus tard)
-		//et on l'ajoute à la liste des noeuds fermés
-		startNode.setParent(startNode);
+		//On ajoute le noeud de départ à la liste fermée
 		this.closedNodes.add(startNode);
 		
 		// D'abord, on ajoute les noeuds adjacents au depart dans la liste ouverte
@@ -128,11 +133,13 @@ public class PathDingDing implements Service
 			
 			
 			//On vérifie si un de ces noeuds n'existe pas déjà dans la liste des noeuds ouverts (pas de doublons)
+			// ou s'il est dans la liste des noeuds fermés
 			for(int i=0 ; i < related.size() ; i++)
 			{
 				if(openNodes.contains(related.get(i)))
 				{
 					Node replicate = openNodes.get(openNodes.indexOf(related.get(i)));
+					related.remove(replicate);
 					Node newParent = lastClosedNode;
 					//Si il existe, on recalcule le coût de déplacement (l'heuristique ne changeant pas
 					//s'il est inférieur on change le noeud avec le nouveau coût, sinon on l'ignore
@@ -154,6 +161,8 @@ public class PathDingDing implements Service
 						openNodes.add(compteur, replicate);
 					}
 				}
+				else if(closedNodes.contains(related.get(i)))
+					related.remove(i);
 			}
 			
 			
@@ -174,8 +183,15 @@ public class PathDingDing implements Service
 			closedNodes.add(openNodes.get(0));
 			openNodes.remove(0);
 			
+			//On vérifie que la liste des noeuds ouverts n'est pas vide
+			//Si c'est le cas, il n'y a pas de chemin existant, ce noeud est inaccessible
+			if(openNodes.isEmpty())
+			{
+				log.critical("pathDingDing : Le noeud demandé ("+endNode.getPosition().toString()+") est inacessible.");
+			}
+			
 			//ET ON RECOMMENCE !!!
-		} //
+		} 
 		
 		//==============================================
 		// Recomposition du chemin - Arrivée --> Départ
@@ -183,16 +199,25 @@ public class PathDingDing implements Service
 		
 		//result est le chemin final à renvoyer ; on y met l'arrivée
 		ArrayList<Node> result = new ArrayList<Node>();
-		result.add(endNode);
 		
-		//On remonte la liste en ajoutant 
+		//On remonte le chemin en ajoutant le parent du dernier noeud ajouté à result
+		//Il s'arrête quand il rencontre le noeud de départ
+		Node currentNode = endNode;
+		while(currentNode != startNode)
+		{
+			result.add(0, currentNode);
+			currentNode = currentNode.getParent();
+		}
+		
+		//Petite vérification
+		if(result.isEmpty())
+		{
+			log.critical("erreur : pathDingDing sans résultat");
+		}
 		
 		
-		
-		
-		
-		
-		return null;
+		// ET C'EST FUCKING TERMINE !!!!
+		return result;
 	}
 	
 	/**
