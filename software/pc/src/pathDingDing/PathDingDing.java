@@ -35,7 +35,7 @@ import container.Service;
  *  Le code est commente a chaque etape, mais il est preferable de lire cet article pour une meilleure comprehension :
  *  http://www.gamedev.net/page/resources/_/technical/artificial-intelligence/a-pathfinding-for-beginners-r2003
  *  
- * @author Etienne, julian
+ * @author julian
  *
  */
 public class PathDingDing implements Service
@@ -87,10 +87,22 @@ public class PathDingDing implements Service
 		// DEBUT DE L'ALGORITHME A* - INITIALISATION
 		//===========================================
 		
+		//On met le parent du noeud de départ comme son propre parent (utile plus tard)
+		//et on l'ajoute à la liste des noeuds fermés
+		startNode.setParent(startNode);
+		this.closedNodes.add(startNode);
+		
 		// D'abord, on ajoute les noeuds adjacents au depart dans la liste ouverte
 		ArrayList<Node> related = this.graph.getRelatedNodes(startNode);
 		for(int i=0 ; i < related.size() ; i++)
+		{
 			openNodes.add(related.get(i));
+			
+			//Cette ligne calcule le coût de déplacement et le set ; l'offset est à 0 car on débute le chemin
+			openNodes.get(i).setMovementCost(openNodes.get(i).computeMovementCost(startNode, (double)0));
+			
+			openNodes.get(i).setParent(startNode);
+		}
 		
 		//On vérifie que l'on est pas dans un cas de bloquage
 		if(openNodes.isEmpty())
@@ -105,12 +117,75 @@ public class PathDingDing implements Service
 		//====================================================================
 		// Boucle principale - Recherche de l'arrivée en parcourant le graphe
 		//====================================================================
+		
 		while(!this.closedNodes.contains(endNode)) //Tant que le noeud de fin n'est pas dans la liste fermée, on continue
 		{
-			// On prend les noeuds proches du dernier noeud fermé
-			related = this.graph.getRelatedNodes(closedNodes.get(closedNodes.size()-1));
+			//On enregistre le dernier noeud fermé dans une variable (ça rends le code plus lisible)
+			Node lastClosedNode = closedNodes.get(closedNodes.size()-1);
 			
-		}
+			//On prend les noeuds proches du dernier noeud fermé
+			related = this.graph.getRelatedNodes(lastClosedNode);
+			
+			
+			//On vérifie si un de ces noeuds n'existe pas déjà dans la liste des noeuds ouverts (pas de doublons)
+			for(int i=0 ; i < related.size() ; i++)
+			{
+				if(openNodes.contains(related.get(i)))
+				{
+					Node replicate = openNodes.get(openNodes.indexOf(related.get(i)));
+					Node newParent = lastClosedNode;
+					//Si il existe, on recalcule le coût de déplacement (l'heuristique ne changeant pas
+					//s'il est inférieur on change le noeud avec le nouveau coût, sinon on l'ignore
+					double newCost = replicate.computeMovementCost(newParent, newParent.getMovementCost());
+					if(newCost < replicate.getMovementCost())
+					{
+						replicate.setMovementCost(newCost);
+						
+						//Un fois modifié, on le reclasse dans la liste afin de la garder ordonnée
+						//Ceci est fait en le supprimant et en l'ajoutant avant le premier noeud
+						//ayant un coût plus grand que lui-même (la liste est triée)
+						openNodes.remove(replicate);
+						int compteur = 0;
+						while(replicate.getCost() >  openNodes.get(compteur).getCost())
+						{
+							compteur++;
+						}
+						replicate.setParent(newParent);
+						openNodes.add(compteur, replicate);
+					}
+				}
+			}
+			
+			
+			//On place les noeuds restants dans la liste des noeuds ouverts, de manière à la garder triée
+			for(int i=0 ; i < related.size() ; i++)
+			{
+				int compteur = 0;
+				while(related.get(i).getCost() >  openNodes.get(compteur).getCost())
+				{
+					compteur++;
+				}
+				openNodes.add(compteur, related.get(i));
+				openNodes.get(compteur).setParent(lastClosedNode);
+				openNodes.get(i).setMovementCost(openNodes.get(i).computeMovementCost(lastClosedNode, lastClosedNode.getMovementCost()));
+			}
+			
+			//On ajoute le meilleur noeud dans la liste fermée en le supprimant de openNodes
+			closedNodes.add(openNodes.get(0));
+			openNodes.remove(0);
+			
+			//ET ON RECOMMENCE !!!
+		} //
+		
+		//==============================================
+		// Recomposition du chemin - Arrivée --> Départ
+		//==============================================
+		
+		//result est le chemin final à renvoyer ; on y met l'arrivée
+		ArrayList<Node> result = new ArrayList<Node>();
+		result.add(endNode);
+		
+		//On remonte la liste en ajoutant 
 		
 		
 		

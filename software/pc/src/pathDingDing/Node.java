@@ -82,7 +82,7 @@ public class Node implements Comparable<Node>
 	}
 	
 	/**
-	 * Donne le noeud parent a celui ci ; utile dans l'algorithme
+	 * Donne le noeud parent a celui ci ; utile dans l'algorithme A*
 	 * @param p le noeud parent
 	 */
 	public void setParent(Node p)
@@ -100,13 +100,26 @@ public class Node implements Comparable<Node>
 	}
 	
 	/**
-	 * Calcule le cout en deplacement du noeud precedent specifie a celui-ci
+	 * Calcule le cout en deplacement du noeud precedent specifie a celui-ci + un offset (déplacements précédents)
 	 * LE CHEMIN DOIT ETRE SANS OBSTACLE ! VERIFIEZ AVANT DE L'APPELER
+	 * Cette méthode n'enregistre pas le résultat dans l'objet, pour cela il faut appeler setMovementCost()
 	 * @param start noeud precedent
+	 * @return le coût de déplacement
 	 */
-	public void setMovementCost(Node start)
+	public double computeMovementCost(Node start, double offset)
 	{
 		//TODO calcul de cout
+		return 0;
+	}
+	
+	/**
+	 * Enregistre la valeur donnée comme coût de déplacement
+	 * Utilisez setMovementCost(computeMovementCost()) pour le calculer et définir
+	 * @param cost le coût
+	 */
+	public void setMovementCost(double cost)
+	{
+		this.movementCost = cost;
 	}
 	
 	/**
@@ -125,6 +138,8 @@ public class Node implements Comparable<Node>
 		return (this.movementCost + this.heuristic);
 	}
 
+	
+	
 	/**
 	 * Permet de comparer deux nodes (donc de les classer), ceci est fait par leur coût
 	 * @param otherNode l'autre node à comparer avec celui-ci
