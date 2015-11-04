@@ -103,7 +103,8 @@ public class PathDingDing implements Service
 		{
 			openNodes.add(related.get(i));
 			
-			//Cette ligne calcule le coût de déplacement et le set ; l'offset est à 0 car on débute le chemin
+			//Cette ligne calcule le coût de déplacement et le met dans l'objet ; l'offset est à 0 car on débute le chemin
+			//Ce que j'appelle l'offset c'est le coût du déplacement déjà effectué qui s'y ajoute
 			openNodes.get(i).setMovementCost(openNodes.get(i).computeMovementCost(startNode, (double)0));
 			
 			openNodes.get(i).setParent(startNode);
