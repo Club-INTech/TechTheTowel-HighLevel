@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import container.Service;
+import robot.RobotReal;
 
 /**
  * Classe de calcul de chemins utilisant l'algorithme A*
@@ -42,6 +43,9 @@ public class PathDingDing implements Service
 {
 	//La table de jeu
 	private Table table;
+	
+	//Le robot
+	private RobotReal robot;
 	
 	//Le graphe a parcourir
 	private Graph graph;
@@ -105,7 +109,7 @@ public class PathDingDing implements Service
 			
 			//Cette ligne calcule le coût de déplacement et le met dans l'objet ; l'offset est à 0 car on débute le chemin
 			//Ce que j'appelle l'offset c'est le coût du déplacement déjà effectué qui s'y ajoute
-			openNodes.get(i).setMovementCost(openNodes.get(i).computeMovementCost(startNode, (double)0));
+			openNodes.get(i).setMovementCost(openNodes.get(i).computeMovementCost(startNode, (double)0, robot.getLocomotionSpeed()));
 			
 			openNodes.get(i).setParent(startNode);
 		}
@@ -144,7 +148,7 @@ public class PathDingDing implements Service
 					Node newParent = lastClosedNode;
 					//Si il existe, on recalcule le coût de déplacement (l'heuristique ne changeant pas
 					//s'il est inférieur on change le noeud avec le nouveau coût, sinon on l'ignore
-					double newCost = replicate.computeMovementCost(newParent, newParent.getMovementCost());
+					double newCost = replicate.computeMovementCost(newParent, newParent.getMovementCost(), robot.getLocomotionSpeed());
 					if(newCost < replicate.getMovementCost())
 					{
 						replicate.setMovementCost(newCost);
@@ -177,7 +181,7 @@ public class PathDingDing implements Service
 				}
 				openNodes.add(compteur, related.get(i));
 				openNodes.get(compteur).setParent(lastClosedNode);
-				openNodes.get(i).setMovementCost(openNodes.get(i).computeMovementCost(lastClosedNode, lastClosedNode.getMovementCost()));
+				openNodes.get(i).setMovementCost(openNodes.get(i).computeMovementCost(lastClosedNode, lastClosedNode.getMovementCost(), robot.getLocomotionSpeed()));
 			}
 			
 			//On ajoute le meilleur noeud dans la liste fermée en le supprimant de openNodes
