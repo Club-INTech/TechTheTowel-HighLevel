@@ -16,10 +16,12 @@ import robot.RobotReal;
  * 
  * Le but de l'algorithme A* est de trouver le chemin le plus court en demarrant d'un
  * node et en parcourant les nodes alentours reliés. Le node suivant est choisi selon 2 critères :
+ * 
  *  1- Le coût direct, c'est-a-dire le temps que va prendre le robot pour s'y rendre
  *  2- L'heuristique, cela peut prendre plusieures formes, ici c'est la distance à vol d'oiseau entre
  *     le noeud et l'arrivée, donc un noeud qui fait s'eloigner le robot de la destination finale aura
  *     une heuristique plus elevee qu'un noeud plus proche
+ *     
  *  On choisit simplement le node avec la somme des deux la moins elevee. Ce node sera considere comme FERME
  *  
  *  Avant de choisir le node suivant, on parcourt les nodes adjacents et :
@@ -59,9 +61,13 @@ public class PathDingDing implements Service
 	//Le log
 	private Log log;
 	
+	/**
+	 * Constructeur du PathDIngDIng
+	 * @param table La table de jeu
+	 * @param log Le systeme de log qui affiche les erreurs et reussites
+	 */
 	public PathDingDing(Table table, Log log)
 	{
-		//TODO constructeur pathfinding
 		this.table = table;
 		this.log = log;
 		
@@ -80,7 +86,10 @@ public class PathDingDing implements Service
 	public ArrayList<Node> computePath(Node startNode, Node endNode)
 	{
 		//TODO pathfinding
+		
+		//On vide les listes de nodes pour un nouveau calcul
 		this.initialise();
+		
 		// Verifie si le graphe n'a pas ete initialise vide (ALERTE AU GOGOLE!!)
 		if(graph.isEmpty())
 		{
@@ -88,6 +97,7 @@ public class PathDingDing implements Service
 			return new ArrayList<Node>();
 		}
 		
+		// Si on demande un calcul trivial (ALERTE AU GOGOLE!!)
 		if(endNode == startNode)
 		{
 			log.critical("Appel pathDingDing avec arrivée=départ !");
@@ -98,7 +108,7 @@ public class PathDingDing implements Service
 		// DEBUT DE L'ALGORITHME A* - INITIALISATION
 		//===========================================
 		
-		//On ajoute le noeud de départ à la liste fermée
+		//On ajoute le noeud de départ à la liste des nodes fermés
 		this.closedNodes.add(startNode);
 		
 		// D'abord, on ajoute les noeuds adjacents au depart dans la liste ouverte
@@ -107,21 +117,22 @@ public class PathDingDing implements Service
 		{
 			openNodes.add(related.get(i));
 			
-			//Cette ligne calcule le coût de déplacement et le met dans l'objet ; l'offset est à 0 car on débute le chemin
-			//Ce que j'appelle l'offset c'est le coût du déplacement déjà effectué qui s'y ajoute
+			// Cette ligne calcule le coût de déplacement et le met dans l'objet ; l'offset est à 0 car on débute le chemin
+			// Ce que j'appelle l'offset c'est le coût du déplacement déjà effectué qui s'y ajoute
 			openNodes.get(i).setMovementCost(openNodes.get(i).computeMovementCost(startNode, (double)0, robot.getLocomotionSpeed()));
 			
 			openNodes.get(i).setParent(startNode);
 		}
 		
-		//On vérifie que l'on est pas dans un cas de bloquage
+		// On vérifie que l'on est pas dans un cas de bloquage :
+		// On etudie un seul point, et il n'y a rien autour.
 		if(openNodes.isEmpty())
 			return null;
 		
-		//On classe ces noeuds par coût croissant grâce au service Collections et la méthode compareTo() dont hérite Node
+		// On classe ces noeuds par coût croissant grâce au service Collections et la méthode compareTo() dont hérite Node
 		Collections.sort(openNodes);
 		
-		//On ajoute le meilleur noeud (en premier dans openNodes) dans la liste fermée
+		// On ajoute le meilleur noeud (en premier dans openNodes) dans la liste fermée
 		closedNodes.add(openNodes.get(0));
 		
 		//====================================================================
@@ -136,7 +147,6 @@ public class PathDingDing implements Service
 			//On prend les noeuds proches du dernier noeud fermé
 			related = this.graph.getRelatedNodes(lastClosedNode);
 			
-			
 			//On vérifie si un de ces noeuds n'existe pas déjà dans la liste des noeuds ouverts (pas de doublons)
 			// ou s'il est dans la liste des noeuds fermés
 			for(int i=0 ; i < related.size() ; i++)
@@ -146,7 +156,8 @@ public class PathDingDing implements Service
 					Node replicate = openNodes.get(openNodes.indexOf(related.get(i)));
 					related.remove(replicate);
 					Node newParent = lastClosedNode;
-					//Si il existe, on recalcule le coût de déplacement (l'heuristique ne changeant pas
+					
+					//Si il existe, on recalcule le coût de déplacement (l'heuristique ne changeant pas)
 					//s'il est inférieur on change le noeud avec le nouveau coût, sinon on l'ignore
 					double newCost = replicate.computeMovementCost(newParent, newParent.getMovementCost(), robot.getLocomotionSpeed());
 					if(newCost < replicate.getMovementCost())
@@ -226,7 +237,7 @@ public class PathDingDing implements Service
 	}
 	
 	/**
-	 * Vide les listes ouverte et fermee pour lancer un nouveau calcul
+	 * Vide les listes ouvertes et fermees pour lancer un nouveau calcul
 	 */
 	public void initialise()
 	{
