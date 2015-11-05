@@ -77,8 +77,11 @@ public class Node implements Comparable<Node>
 		}
 		else
 		{
-			// Calcul de la distance a vol d'oiseau (methode basique mais suffisante dans notre cas) 
-			this.heuristic = Math.sqrt(Math.pow(Math.abs(this.position.x - goal.getPosition().x), 2) + Math.pow(Math.abs(this.position.y - goal.getPosition().y), 2));
+			// Calcul de la distance a vol d'oiseau (methode basique mais suffisante dans notre cas)
+			// Une heuristique plus avancée peut-être envisageable, elle est actuellement à l'étude
+			double X = Math.abs(this.position.x - goal.getPosition().x);
+			double Y = Math.abs(this.position.y - goal.getPosition().y);
+			this.heuristic = Math.sqrt(X*X + Y*Y);
 		}
 	}
 	

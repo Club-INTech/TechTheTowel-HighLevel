@@ -42,6 +42,40 @@ public class Graph
 		
 		//Node du point de depart du robot
 		this.nodes.add(new Node(Table.entryPosition));
+		
+		
+		
+		setAllLinks();
+	}
+	
+	/**
+	 * Relie tous les noeuds ensemble en vérifiant s'il n'y a pas d'intersection avec un obstacle
+	 */
+	private void setAllLinks()
+	{
+		for(int i=0 ; i < nodes.size() ; i++)
+		{
+			for(int j=0 ; j < nodes.size() ; j++)
+			{
+				if(i!=j)
+				{
+					//TODO intersect puis ajout
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Ajoute un noeud et crée tous les liens qui le relient
+	 * @param node le noeud
+	 */
+	private void addNode(Node node)
+	{
+		for(int i=0 ; i<nodes.size() ; i++)
+		{
+			//TODO intersect puis ajout
+		}
+		nodes.add(node);
 	}
 	
 	/**

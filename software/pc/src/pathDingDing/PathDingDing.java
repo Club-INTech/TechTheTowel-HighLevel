@@ -247,6 +247,23 @@ public class PathDingDing implements Service
 			this.closedNodes = new ArrayList<Node>();
 		}
 	}
+	
+	/**
+	 * Ajoute le départ et l'arrivée au graphe, crée les liens et les renvoie
+	 * @param position la position de ce noeud
+	 */
+	public ArrayList<Node> addStartAndEnd(Vec2 start, Vec2 end)
+	{
+		Node endNode = new Node(end);
+		Node startNode = new Node(start, endNode);
+		
+		
+		
+		ArrayList<Node> array = new ArrayList<Node>();
+		array.add(startNode);
+		array.add(endNode);
+		return array;
+	}
 
 
 	@Override

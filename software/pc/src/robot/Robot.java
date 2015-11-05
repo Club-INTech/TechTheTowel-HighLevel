@@ -2,6 +2,7 @@ package robot;
 
 import java.util.ArrayList;
 
+import pathDingDing.Node;
 import pathDingDing.PathDingDing;
 import hook.Hook;
 import smartMath.Circle;
@@ -424,8 +425,19 @@ public abstract class Robot implements Service
     public void moveToCircle(Circle aim, ArrayList<Hook> hooksToConsider, Table table) throws PathNotFoundException, UnableToMoveException
     {
 
-		//FIXME calculer path par le pathDingDing
+    	PathDingDing pdd = new PathDingDing(table, log);
+		//On ajoute le départ et l'arrivée au graphe
+    	ArrayList<Node> startAndEnd = pdd.addStartAndEnd(position, aim.position);
+    	//On calcule le chemin en liste de Node
+    	ArrayList<Node> nodePath = pdd.computePath(startAndEnd.get(0), startAndEnd.get(1));
+    	
+    	//On transforme les noeuds en Vec2
     	ArrayList<Vec2> path = new ArrayList<Vec2>();
+    	for(int i=0 ; i<nodePath.size() ; i++)
+    	{
+    		path.add(nodePath.get(i).getPosition());
+    	}
+    	
 		
     	//retire une distance egale au rayon du cercle au dernier point du chemin (le centre du cercle)
     	

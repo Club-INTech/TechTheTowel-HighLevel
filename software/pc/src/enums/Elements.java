@@ -15,8 +15,6 @@ public enum Elements
 	// Poissons
 	FISH,
 	
-	// Couleurs possibles des coquillages
-	SHELL_NEUTRAL,
-	SHELL_ENEMY,
-	SHELL_ALLY;
+	// Coquillages
+	SHELL;
 }
