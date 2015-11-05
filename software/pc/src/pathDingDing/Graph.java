@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import smartMath.Geometry;
 import smartMath.Segment;
+import smartMath.Vec2;
 import table.Table;
 import table.obstacles.ObstacleCircular;
 import table.obstacles.ObstacleManager;
@@ -65,10 +66,28 @@ public class Graph
 		//TODO Creer le graphe (LONG)
 		// On ajoute tous les nodes et on les relie ensemble en verifiant si on "intersect()" pas un obstacle
 		
-		//Node du point de depart du robot
-		this.nodes.add(new Node(Table.entryPosition));
+		//========================================
+		// CE GRAPHE N'EST PAS LE FINAL !!!
+		// IL NE SERT QUE DE TEST DU PATHDINGDING
+		//========================================
 		
+		nodes.add(new Node(new Vec2(-1350, 1150)));
+		nodes.add(new Node(new Vec2(-1050, 1800)));
+		nodes.add(new Node(new Vec2(-1050, 1500)));
+		nodes.add(new Node(new Vec2(-1050, 1150)));
+		nodes.add(new Node(new Vec2(-1050, 400)));
+		nodes.add(new Node(new Vec2(-800, 1500)));
+		nodes.add(new Node(new Vec2(-800, 1150)));
+		nodes.add(new Node(new Vec2(-800, 400)));
+		nodes.add(new Node(new Vec2(-300, 1150)));
 		
+		for(int i=0 ; i<nodes.size() ; i++)
+		{
+			nodes.add(new Node(new Vec2((-1*nodes.get(i).getPosition().x),nodes.get(i).getPosition().y)));
+		}
+		
+		nodes.add(new Node(new Vec2(0, 1500)));
+		nodes.add(new Node(new Vec2(0, 200)));
 		
 		setAllLinks();
 	}
