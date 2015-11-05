@@ -7,11 +7,14 @@ import smartMath.Vec2;
  * @author julian
  */
 
-public class Fish extends GameElement
+public class Fish
 {
 	
-	public Fish(Vec2 position)
+	/**
+	 *  Constructeur du poisson ; pas de paramètres
+	 */
+	public Fish()
 	{
-		super(position);
+		
 	}
 }

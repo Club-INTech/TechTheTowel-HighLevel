@@ -96,6 +96,9 @@ public class Table implements Service
 	// Objectifs
 	//==========
 	
+	/** poissons */
+	public ArrayList<Fish> ourFish = new ArrayList<Fish>();
+	
 	/** portes fermées ou non */
 	public boolean extDoorClosed = false;
 	public boolean intDoorClosed = false;
@@ -225,6 +228,7 @@ public class Table implements Service
 			theirDuneCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(-678+((3*sandSize)/2), 2000-((3*sandSize)/2)), i));
 			theirDuneCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(-678+(sandSize/2), 2000-((3*sandSize/2))), i));
 		}
+		
 		
 		
 	}
