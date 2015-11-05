@@ -1,5 +1,8 @@
 package table.obstacles;
 
+import java.util.ArrayList;
+
+import smartMath.Segment;
 import smartMath.Vec2;
 
 /**
@@ -66,6 +69,21 @@ public class ObstacleRectangular extends Obstacle
 	public int getSizeX()
 	{
 		return this.sizeX;
+	}
+	
+	/**
+	 * Renvoie les Segments des côtés du rectangle
+	 * @return [ Segment nord , Segment est ; Segment sud ; Segment ouest ]
+	 */
+	public ArrayList<Segment> getSegments()
+	{
+		ArrayList<Segment> segments = new ArrayList<Segment>();
+		segments.add(new Segment(new Vec2(position.x - sizeX/2 , position.y + sizeY/2), new Vec2(position.x + sizeX/2 , position.y + sizeY/2)));
+		segments.add(new Segment(new Vec2(position.x + sizeX/2 , position.y + sizeY/2), new Vec2(position.x + sizeX/2 , position.y - sizeY/2)));
+		segments.add(new Segment(new Vec2(position.x + sizeX/2 , position.y - sizeY/2), new Vec2(position.x - sizeX/2 , position.y - sizeY/2)));
+		segments.add(new Segment(new Vec2(position.x - sizeX/2 , position.y - sizeY/2), new Vec2(position.x - sizeX/2 , position.y + sizeY/2)));
+
+		return segments;
 	}
 	
 	/**

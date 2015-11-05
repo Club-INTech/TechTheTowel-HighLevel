@@ -2,7 +2,13 @@ package pathDingDing;
 
 import java.util.ArrayList;
 
+import smartMath.Geometry;
+import smartMath.Segment;
 import table.Table;
+import table.obstacles.ObstacleCircular;
+import table.obstacles.ObstacleManager;
+import table.obstacles.ObstacleRectangular;
+import utils.Log;
 
 /**
  * Graphe de la table, utilise par le pathDingDing pour creer un chemin sur la table et le parcourir
@@ -22,12 +28,31 @@ public class Graph
 	private ArrayList<Link> links;
 	
 	/**
-	 * Instancie le graphe
+	 * La Table
 	 */
-	public Graph()
+	private Table table;
+	
+	/**
+	 * Le log
+	 */
+	private Log log;
+	
+	/**
+	 * Le Gestionnaire d'Obstacles
+	 */
+	private ObstacleManager obstacleManager;
+	
+	/**
+	 * Instancie le graphe
+	 * @param table 
+	 */
+	public Graph(Table table, Log log)
 	{
 		this.nodes = new ArrayList<Node>();
 		this.links = new ArrayList<Link>();
+		this.table = table;
+		this.log = log;
+		this.obstacleManager = table.getObstacleManager();
 		
 		createGraph();
 	}
@@ -51,15 +76,60 @@ public class Graph
 	/**
 	 * Relie tous les noeuds ensemble en vérifiant s'il n'y a pas d'intersection avec un obstacle
 	 */
-	private void setAllLinks()
+	public void setAllLinks()
 	{
+		//On récupère les différents obstacles
+		ArrayList<ObstacleRectangular> rectangularObstacles = obstacleManager.getRectangles();
+		ArrayList<ObstacleCircular> circleObstacles = obstacleManager.getFixedObstacles();
+		ArrayList<Segment> lineObstacles = obstacleManager.getLines();
+				
+		//Booléen indiquant si la liaison est possible
+		boolean ok;
+		
 		for(int i=0 ; i < nodes.size() ; i++)
 		{
 			for(int j=0 ; j < nodes.size() ; j++)
 			{
-				if(i!=j)
+				if(j>i)
 				{
-					//TODO intersect puis ajout
+					
+					ok = true;
+					
+					//On vérifie l'intersection avec les cercles
+					for(int k=0 ; k<circleObstacles.size() ; k++)
+					{
+						if(!Geometry.intersects(new Segment(nodes.get(j).getPosition(), nodes.get(i).getPosition()), circleObstacles.get(k).toCircle()))
+						{
+							ok = false;
+						}
+					}
+					
+					//On vérifie l'intersection avec les lignes
+					for(int k=0 ; k<lineObstacles.size() ; k++)
+					{
+						if(!Geometry.intersects(new Segment(nodes.get(j).getPosition(), nodes.get(i).getPosition()), lineObstacles.get(k)))
+						{
+							ok = false;
+						}
+					}
+					
+					//On vérifie l'intersection
+					for(int k=0 ; k<rectangularObstacles.size() ; k++)
+					{
+						ArrayList<Segment> segments = rectangularObstacles.get(k).getSegments();
+						for(int l=0 ; l<segments.size() ; l++)
+						{
+							if(!Geometry.intersects(new Segment(nodes.get(j).getPosition(), nodes.get(i).getPosition()), segments.get(l)))
+							{
+								ok = false;
+							}
+						}
+					}
+					
+					if(ok)
+					{
+						links.add(new Link(nodes.get(j), nodes.get(i)));
+					}
 				}
 			}
 		}
@@ -69,11 +139,56 @@ public class Graph
 	 * Ajoute un noeud et crée tous les liens qui le relient
 	 * @param node le noeud
 	 */
-	private void addNode(Node node)
+	public void addNode(Node node)
 	{
+		//On récupère les différents obstacles
+		ArrayList<ObstacleRectangular> rectangularObstacles = obstacleManager.getRectangles();
+		ArrayList<ObstacleCircular> circleObstacles = obstacleManager.getFixedObstacles();
+		ArrayList<Segment> lineObstacles = obstacleManager.getLines();
+						
+		//Booléen indiquant si la liaison est possible
+		boolean ok;
+				
 		for(int i=0 ; i<nodes.size() ; i++)
 		{
-			//TODO intersect puis ajout
+			
+			ok = true;
+			
+			//On vérifie l'intersection avec les cercles
+			for(int k=0 ; k<circleObstacles.size() ; k++)
+			{
+				if(!Geometry.intersects(new Segment(node.getPosition(), nodes.get(i).getPosition()), circleObstacles.get(k).toCircle()))
+				{
+					ok = false;
+				}
+			}
+			
+			//On vérifie l'intersection avec les lignes
+			for(int k=0 ; k<lineObstacles.size() ; k++)
+			{
+				if(!Geometry.intersects(new Segment(node.getPosition(), nodes.get(i).getPosition()), lineObstacles.get(k)))
+				{
+					ok = false;
+				}
+			}
+			
+			//On vérifie l'intersection
+			for(int k=0 ; k<rectangularObstacles.size() ; k++)
+			{
+				ArrayList<Segment> segments = rectangularObstacles.get(k).getSegments();
+				for(int l=0 ; l<segments.size() ; l++)
+				{
+					if(!Geometry.intersects(new Segment(node.getPosition(), nodes.get(i).getPosition()), segments.get(l)))
+					{
+						ok = false;
+					}
+				}
+			}
+			
+			if(ok)
+			{
+				links.add(new Link(node, nodes.get(i)));
+			}
 		}
 		nodes.add(node);
 	}
@@ -113,6 +228,22 @@ public class Graph
 		
 		return related;
 		
+	}
+	
+	/**
+	 * Supprime tous les liens dans l'optique de les reconstruire
+	 */
+	public void clearLinks()
+	{
+		links.clear();
+	}
+	
+	/**
+	 * Supprime un noeud du graphe
+	 */
+	public void removeNode(Node node)
+	{
+		nodes.remove(node);
 	}
 	
 	/**

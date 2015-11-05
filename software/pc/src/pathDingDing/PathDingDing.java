@@ -71,7 +71,7 @@ public class PathDingDing implements Service
 		this.table = table;
 		this.log = log;
 		
-		this.graph = new Graph();
+		this.graph = new Graph(table, log);
 		
 		this.openNodes = new ArrayList<Node>();
 		this.closedNodes = new ArrayList<Node>();
@@ -127,7 +127,7 @@ public class PathDingDing implements Service
 		// On vérifie que l'on est pas dans un cas de bloquage :
 		// On etudie un seul point, et il n'y a rien autour.
 		if(openNodes.isEmpty())
-			return null;
+			return new ArrayList<Node>();
 		
 		// On classe ces noeuds par coût croissant grâce au service Collections et la méthode compareTo() dont hérite Node
 		Collections.sort(openNodes);

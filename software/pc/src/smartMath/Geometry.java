@@ -105,6 +105,8 @@ public class Geometry
 			&& ((double)segment.getA().x - (double)segment.getB().x)*((double)circle.position.x - (double)segment.getB().x) + ((double)segment.getA().y - (double)segment.getB().y)*((double)circle.position.y - (double)segment.getB().y) >= 0;
 	}
 	
+	
+	
 	/**
 	 * 
 	 * @param segment1
