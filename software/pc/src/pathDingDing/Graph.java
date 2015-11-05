@@ -89,6 +89,9 @@ public class Graph
 		nodes.add(new Node(new Vec2(0, 1500)));
 		nodes.add(new Node(new Vec2(0, 200)));
 		
+		//========================
+		// Fin du graphe à la con
+		//========================
 		setAllLinks();
 	}
 	
@@ -160,6 +163,10 @@ public class Graph
 	 */
 	public void addNode(Node node)
 	{
+		//S'il existe déjà, on sort de la fonction
+		if(nodes.contains(node))
+			return;
+		
 		//On récupère les différents obstacles
 		ArrayList<ObstacleRectangular> rectangularObstacles = obstacleManager.getRectangles();
 		ArrayList<ObstacleCircular> circleObstacles = obstacleManager.getFixedObstacles();

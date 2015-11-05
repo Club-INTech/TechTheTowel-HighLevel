@@ -83,9 +83,8 @@ public class PathDingDing implements Service
 	 * @param endNode noeud d'arrivée
 	 * @return Liste de noeuds à parcourir ; null si échec
 	 */
-	public ArrayList<Node> computePath(Node startNode, Node endNode)
+	public ArrayList<Node> computePath(Vec2 start, Vec2 end)
 	{
-		//TODO pathfinding
 		
 		//On vide les listes de nodes pour un nouveau calcul
 		this.initialise();
@@ -98,11 +97,17 @@ public class PathDingDing implements Service
 		}
 		
 		// Si on demande un calcul trivial (ALERTE AU GOGOLE!!)
-		if(endNode == startNode)
+		if(end == start)
 		{
 			log.critical("Appel pathDingDing avec arrivée=départ !");
 			return new ArrayList<Node>();
 		}
+		
+		// On ajoute les noeuds de départ et d'arrivée au graphe (ignorés s'ils existent déjà)
+		ArrayList<Node> temp = addStartAndEnd(start, end);
+		Node startNode = temp.get(0);
+		Node endNode = temp.get(1);
+		temp.clear();
 		
 		//===========================================
 		// DEBUT DE L'ALGORITHME A* - INITIALISATION
@@ -257,7 +262,8 @@ public class PathDingDing implements Service
 		Node endNode = new Node(end);
 		Node startNode = new Node(start, endNode);
 		
-		
+		graph.addNode(startNode);
+		graph.addNode(endNode);
 		
 		ArrayList<Node> array = new ArrayList<Node>();
 		array.add(startNode);

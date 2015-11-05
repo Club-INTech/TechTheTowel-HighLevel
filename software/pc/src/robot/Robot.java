@@ -426,12 +426,10 @@ public abstract class Robot implements Service
     {
 
     	PathDingDing pdd = new PathDingDing(table, log);
-		//On ajoute le départ et l'arrivée au graphe
-    	ArrayList<Node> startAndEnd = pdd.addStartAndEnd(position, aim.position);
-    	//On calcule le chemin en liste de Node
-    	ArrayList<Node> nodePath = pdd.computePath(startAndEnd.get(0), startAndEnd.get(1));
+    	// On lance le calcul
+    	ArrayList<Node> nodePath = pdd.computePath(position, aim.position);
     	
-    	//On transforme les noeuds en Vec2
+    	// On transforme les noeuds en Vec2
     	ArrayList<Vec2> path = new ArrayList<Vec2>();
     	for(int i=0 ; i<nodePath.size() ; i++)
     	{
