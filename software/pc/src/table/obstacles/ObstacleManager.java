@@ -76,44 +76,34 @@ public class ObstacleManager
         //mEnnemyRobot1 = new ObstacleCircular(new Vec2(0, 0), 200 + robotRadius);
       	//mEnnemyRobot2 = new ObstacleCircular(new Vec2(0, 0), 200 + robotRadius);
 		
-        // les numeros sont ceux de la doc sur /pc/config/obstacles
-		
-		//obstacles 1, 2, 3
-      	mLines.add(new Segment(new Vec2(-1500, 778 - mRobotRadius), new Vec2(-1100 + mRobotRadius, 778 - mRobotRadius)));
-      	mLines.add(new Segment(new Vec2(-1100 + mRobotRadius, 778 - mRobotRadius), new Vec2(-1100 + mRobotRadius, 1222 + mRobotRadius)));
-   		mLines.add(new Segment(new Vec2(-1100 + mRobotRadius, 1222 + mRobotRadius), new Vec2(-1500, 1222 + mRobotRadius)));
-     		
-      	//obstacles 10, 11, 12
-     	mLines.add(new Segment(new Vec2(1500, 1222 + mRobotRadius), new Vec2(1100 - mRobotRadius, 1222 + mRobotRadius)));
-   		mLines.add(new Segment(new Vec2(1100 - mRobotRadius, 1222 + mRobotRadius), new Vec2(1100 - mRobotRadius, 778 - mRobotRadius)));
-      	mLines.add(new Segment(new Vec2(1100 - mRobotRadius, 778 - mRobotRadius), new Vec2(1500, 778 - mRobotRadius)));
-      		
-      	//obstacle 6
-      	mLines.add(new Segment(new Vec2(533 + mRobotRadius, 2000), new Vec2(533 + mRobotRadius, 1420 - mRobotRadius)));
-      	mLines.add(new Segment(new Vec2(533 + mRobotRadius, 1420 - mRobotRadius), new Vec2(-533 - mRobotRadius, 1420 - mRobotRadius)));
-      	mLines.add(new Segment(new Vec2(-533 - mRobotRadius, 1420 - mRobotRadius), new Vec2(-533 - mRobotRadius, 2000)));
-      		
-      		
-      	//obstacle 7
-      	mLines.add(new Segment(new Vec2(300 + mRobotRadius, 0), new Vec2(300 + mRobotRadius, 100 + mRobotRadius)));
-      	mLines.add(new Segment(new Vec2(300 + mRobotRadius, 100 + mRobotRadius), new Vec2(-300 - mRobotRadius, 100 + mRobotRadius)));
-      	mLines.add(new Segment(new Vec2(-300 - mRobotRadius, 100 + mRobotRadius), new Vec2(-300 - mRobotRadius, 0)));
+	
       		
       	//bords de la table
       	mLines.add(new Segment(new Vec2(-1500 + mRobotRadius, 0 + mRobotRadius), new Vec2(1500 - mRobotRadius, 0 + mRobotRadius)));
-      	mLines.add(new Segment(new Vec2(1500 - mRobotRadius, 0 + mRobotRadius), new Vec2(1500 - mRobotRadius, 1930 - mRobotRadius)));
-      	mLines.add(new Segment(new Vec2(1500 - mRobotRadius, 1930 - mRobotRadius), new Vec2(-1500 + mRobotRadius, 1930 - mRobotRadius)));
-      	mLines.add(new Segment(new Vec2(-1500 + mRobotRadius, 1930 - mRobotRadius), new Vec2(-1500 + mRobotRadius, 0 + mRobotRadius)));
+      	mLines.add(new Segment(new Vec2(1500 - mRobotRadius, 0 + mRobotRadius), new Vec2(1500 - mRobotRadius, 2000 - mRobotRadius)));
+      	mLines.add(new Segment(new Vec2(1500 - mRobotRadius, 2000 - mRobotRadius), new Vec2(-1500 + mRobotRadius, 2000 - mRobotRadius)));
+      	mLines.add(new Segment(new Vec2(-1500 + mRobotRadius, 2000 - mRobotRadius), new Vec2(-1500 + mRobotRadius, 0 + mRobotRadius)));
       	
-      	//obstacles rectangulaires
-      	mRectangles.add(new ObstacleRectangular(new Vec2(-1300, 778),400,444));
-      	mRectangles.add(new ObstacleRectangular(new Vec2(-1200, 1930),70,70));
-      	mRectangles.add(new ObstacleRectangular(new Vec2(-900, 1930),70,70));
-      	mRectangles.add(new ObstacleRectangular(new Vec2(0, 1420),1066,580));
-      	mRectangles.add(new ObstacleRectangular(new Vec2(0,0), 600,100));
-      	mRectangles.add(new ObstacleRectangular(new Vec2(900, 1930),70,70));
-      	mRectangles.add(new ObstacleRectangular(new Vec2(1200, 1930),70,70));
-      	mRectangles.add(new ObstacleRectangular(new Vec2(1300, 778),400,444));
+      	//Les différents obstacles fixés sur la table
+      	//planches au sud
+      	mRectangles.add(new ObstacleRectangular(new Vec2(711, 1900), 22 + mRobotRadius, 200 + mRobotRadius));
+      	mRectangles.add(new ObstacleRectangular(new Vec2(-711, 1900), 200 + mRobotRadius, 200 + mRobotRadius));
+      	
+      	//Vitre centrale
+      	mRectangles.add(new ObstacleRectangular(new Vec2(0, 950), 48 + mRobotRadius, 300 + mRobotRadius));
+      	
+      	//planches à côté de la vitre
+      	mRectangles.add(new ObstacleRectangular(new Vec2(288, 1239), 756 + mRobotRadius, 22 + mRobotRadius));
+      	mRectangles.add(new ObstacleRectangular(new Vec2(-288, 1239), 576 + mRobotRadius, 22 + mRobotRadius));
+      	
+      	//Rochers
+      	mFixedObstacles.add(new ObstacleCircular(new Vec2(1500, 0), 250 + mRobotRadius));
+      	mFixedObstacles.add(new ObstacleCircular(new Vec2(-1500, 0), 250 + mRobotRadius));
+
+
+
+
+
     }    
 
     /**
