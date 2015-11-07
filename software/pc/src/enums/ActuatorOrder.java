@@ -13,11 +13,15 @@ public enum ActuatorOrder
 	// Syntaxe alternative: NOM_METHODE("protocole_serie", durée actions)
 	// exemple : MOVE_FORWARD("av")
 	
-	// Consignes avancer / reculer
+	// Consignes avancer / reculer et mouvement des bras
 	MOVE_FORWARD("av"),
 	MOVE_BACKWARD("rc"),
 	TURN_RIGHT("td"),
 	TURN_LEFT("tg"),
+	ARM_DOWN("ad"),
+	ARM_MID("am"),
+	ARM_UP("au"),
+	DROP_FISH("df"),
 	STOP("stop");
 
 	/**
