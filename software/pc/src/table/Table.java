@@ -158,10 +158,16 @@ public class Table implements Service
 		centerCylinders.add(new Sand(Elements.SAND_CYLINDER, new Vec2(0, 2000-((5*sandSize)/2)), 0));
 		
 		//Cylindres au niveau 1 (C'est le bordel, la flemme de mettre un commentaire pour chacun)
+		
+		//Cylindres formant les flancs de la montagne du côté l'ennemi
 		centerCylinders.add(new Sand(Elements.SAND_CYLINDER, new Vec2(-(sandSize*3), 2000-(sandSize/2)), 1));
 		centerCylinders.add(new Sand(Elements.SAND_CYLINDER, new Vec2(-(sandSize*2), 2000-(sandSize/2)), 1));
+		
+		//Cylindres formant les flancs de la montagne de notre côté
 		centerCylinders.add(new Sand(Elements.SAND_CYLINDER, new Vec2((sandSize*2), 2000-(sandSize/2)), 1));
 		centerCylinders.add(new Sand(Elements.SAND_CYLINDER, new Vec2((sandSize*3), 2000-(sandSize/2)), 1));
+		
+		// Cylindres en avant de la montagne 
 		centerCylinders.add(new Sand(Elements.SAND_CYLINDER, new Vec2(-sandSize, 2000-((3*sandSize)/2)), 1));
 		centerCylinders.add(new Sand(Elements.SAND_CYLINDER, new Vec2(sandSize, 2000-((3*sandSize)/2)), 1));
 		
