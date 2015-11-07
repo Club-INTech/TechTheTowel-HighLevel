@@ -46,9 +46,6 @@ public class PathDingDing implements Service
 	//La table de jeu
 	private Table table;
 	
-	//Le robot
-	private RobotReal robot;
-	
 	//Le graphe a parcourir
 	private Graph graph;
 	
@@ -118,13 +115,20 @@ public class PathDingDing implements Service
 		
 		// D'abord, on ajoute les noeuds adjacents au depart dans la liste ouverte
 		ArrayList<Node> related = this.graph.getRelatedNodes(startNode);
+		
+		if(related.isEmpty())
+		{
+			log.critical("PDD : noeud de départ isolé");
+		}
+		
 		for(int i=0 ; i < related.size() ; i++)
 		{
 			openNodes.add(related.get(i));
 			
 			// Cette ligne calcule le coût de déplacement et le met dans l'objet ; l'offset est à 0 car on débute le chemin
 			// Ce que j'appelle l'offset c'est le coût du déplacement déjà effectué qui s'y ajoute
-			openNodes.get(i).setMovementCost(openNodes.get(i).computeMovementCost(startNode, (double)0, robot.getLocomotionSpeed()));
+			double zero =0;
+			openNodes.get(i).setMovementCost(openNodes.get(i).computeMovementCost(startNode, zero));
 			
 			openNodes.get(i).setParent(startNode);
 		}
@@ -139,6 +143,7 @@ public class PathDingDing implements Service
 		
 		// On ajoute le meilleur noeud (en premier dans openNodes) dans la liste fermée
 		closedNodes.add(openNodes.get(0));
+		openNodes.remove(0);
 		
 		//====================================================================
 		// Boucle principale - Recherche de l'arrivée en parcourant le graphe
@@ -158,13 +163,14 @@ public class PathDingDing implements Service
 			{
 				if(openNodes.contains(related.get(i)))
 				{
-					Node replicate = openNodes.get(openNodes.indexOf(related.get(i)));
-					related.remove(replicate);
+					Node replicate = related.get(i);
+					while(related.contains(related))
+						related.remove(replicate);
 					Node newParent = lastClosedNode;
 					
 					//Si il existe, on recalcule le coût de déplacement (l'heuristique ne changeant pas)
 					//s'il est inférieur on change le noeud avec le nouveau coût, sinon on l'ignore
-					double newCost = replicate.computeMovementCost(newParent, newParent.getMovementCost(), robot.getLocomotionSpeed());
+					double newCost = replicate.computeMovementCost(newParent, newParent.getMovementCost());
 					if(newCost < replicate.getMovementCost())
 					{
 						replicate.setMovementCost(newCost);
@@ -183,7 +189,11 @@ public class PathDingDing implements Service
 					}
 				}
 				else if(closedNodes.contains(related.get(i)))
-					related.remove(i);
+				{
+					Node replicate = related.get(i);
+					while(related.contains(related))
+						related.remove(replicate);
+				}
 			}
 			
 			
@@ -191,13 +201,13 @@ public class PathDingDing implements Service
 			for(int i=0 ; i < related.size() ; i++)
 			{
 				int compteur = 0;
-				while(related.get(i).getCost() >  openNodes.get(compteur).getCost())
+				while(compteur < openNodes.size() && (related.get(i).getCost() >  openNodes.get(compteur).getCost()))
 				{
 					compteur++;
 				}
+				related.get(i).setParent(lastClosedNode);
+				related.get(i).setMovementCost(related.get(i).computeMovementCost(lastClosedNode, lastClosedNode.getMovementCost()));
 				openNodes.add(compteur, related.get(i));
-				openNodes.get(compteur).setParent(lastClosedNode);
-				openNodes.get(i).setMovementCost(openNodes.get(i).computeMovementCost(lastClosedNode, lastClosedNode.getMovementCost(), robot.getLocomotionSpeed()));
 			}
 			
 			//On ajoute le meilleur noeud dans la liste fermée en le supprimant de openNodes

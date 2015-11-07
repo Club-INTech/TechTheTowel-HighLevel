@@ -113,11 +113,12 @@ public class Node implements Comparable<Node>
 	 * @param speed vitesse du robot
 	 * @return le coût de déplacement
 	 */
-	public double computeMovementCost(Node start, double offset, Speed speed)
+	public double computeMovementCost(Node start, double offset)
 	{
 		//C'est la distance divisé par la vitesse de translation
 		double distance = Math.sqrt(Math.pow(Math.abs(this.position.x - start.getPosition().x), 2) + Math.pow(Math.abs(this.position.y - start.getPosition().y), 2));
 		
+<<<<<<< HEAD
 		
 		Vec2 vecteur1 = new Vec2(parent.getPosition().x - start.getPosition().x,parent.getPosition().y - start.getPosition().y);
 		Vec2 vecteur2 = new Vec2(this.getPosition().x - start.getPosition().x,this.getPosition().y - start.getPosition().y);
@@ -133,6 +134,22 @@ public class Node implements Comparable<Node>
 		// On retranche a pi l'angle calculé pour déterminer l'angle avec lequel se ré-oriente le robot 
 		
 		return ((distance/speed.translationSpeed)+(angle/speed.rotationSpeed)+offset);
+=======
+		if(parent != null)
+		{
+			Vec2 vecteur1 = new Vec2(parent.getPosition().x - start.getPosition().x,parent.getPosition().y - start.getPosition().y);
+			Vec2 vecteur2 = new Vec2(this.getPosition().x - start.getPosition().x,this.getPosition().y - start.getPosition().y);
+			// Calcul des vecteurs entre le node start et le node parent, ainsi que le node start vers le node this
+			double produitscalaire = vecteur1.x*vecteur2.x + vecteur1.y*vecteur2.y;
+			// Calcul du produit scalaire de ces deux vecteurs
+			produitscalaire /= vecteur1.length()*vecteur2.length();
+			// Par division des normes, on obtient le cosinus de l'angle entre les deux vecteurs, donc l'angle via arcos
+			double angle = Math.PI - Math.abs(Math.acos(produitscalaire));
+			// On retranche a pi l'angle calculé pour déterminer l'angle avec lequel se ré-oriente le robot
+			return ((distance)+(angle)+offset);
+		}
+		return ((distance)+offset);
+>>>>>>> a69b0943138bdb6ae06d8bed79e87bee1339c6cf
 	}
 	
 	/**
