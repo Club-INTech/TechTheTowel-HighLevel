@@ -71,15 +71,15 @@ public class Graph
 		// IL NE SERT QUE DE TEST DU PATHDINGDING
 		//========================================
 		
-		nodes.add(new Node(new Vec2(-1350, 1150)));
+		nodes.add(new Node(new Vec2(-1350, 1000)));
 		nodes.add(new Node(new Vec2(-1050, 1800)));
 		nodes.add(new Node(new Vec2(-1050, 1500)));
-		nodes.add(new Node(new Vec2(-1050, 1150)));
+		nodes.add(new Node(new Vec2(-1050, 1000)));
 		nodes.add(new Node(new Vec2(-1050, 400)));
 		nodes.add(new Node(new Vec2(-800, 1500)));
-		nodes.add(new Node(new Vec2(-800, 1150)));
+		nodes.add(new Node(new Vec2(-800, 1000)));
 		nodes.add(new Node(new Vec2(-800, 400)));
-		nodes.add(new Node(new Vec2(-300, 1150)));
+		nodes.add(new Node(new Vec2(-300, 1000)));
 		
 		int k = nodes.size();
 		
