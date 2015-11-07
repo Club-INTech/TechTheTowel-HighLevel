@@ -45,7 +45,7 @@ public class Table implements Service
 	//==================================
 	
 	/** taille des cubes/cylindres */
-	public int sandSize = 58;
+	public static int sandSize = 58;
 	
 	/** Cubes de sable centraux */
 	public ArrayList<Sand> centerCubes = new ArrayList<Sand>(16);

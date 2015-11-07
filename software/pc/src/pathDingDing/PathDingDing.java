@@ -110,15 +110,26 @@ public class PathDingDing implements Service
 		// DEBUT DE L'ALGORITHME A* - INITIALISATION
 		//===========================================
 		
-		//On ajoute le noeud de départ à la liste des nodes fermés
+		// On ajoute le noeud de départ à la liste des nodes fermés
 		this.closedNodes.add(startNode);
 		
-		// D'abord, on ajoute les noeuds adjacents au depart dans la liste ouverte
-		ArrayList<Node> related = this.graph.getRelatedNodes(startNode);
+		// Test d'isolation du point d'arrivée
+		ArrayList<Node> related = this.graph.getRelatedNodes(endNode);
+		if(related.isEmpty())
+		{
+			log.critical("PDD : noeud d'arrivée isolé (obstacle ?)");
+			return new ArrayList<Node>();
+		}
 		
+		// D'abord, on ajoute les noeuds adjacents au depart dans la liste ouverte
+		related = this.graph.getRelatedNodes(startNode);
+		
+		// Idem test d'isolation du départ
+		// TODO Ajuster pour sortir de l'obstacle 
 		if(related.isEmpty())
 		{
 			log.critical("PDD : noeud de départ isolé");
+			return new ArrayList<Node>();
 		}
 		
 		for(int i=0 ; i < related.size() ; i++)
