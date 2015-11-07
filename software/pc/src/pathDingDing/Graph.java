@@ -81,7 +81,9 @@ public class Graph
 		nodes.add(new Node(new Vec2(-800, 400)));
 		nodes.add(new Node(new Vec2(-300, 1150)));
 		
-		for(int i=0 ; i<nodes.size() ; i++)
+		int k = nodes.size();
+		
+		for(int i=0 ; i<k ; i++)
 		{
 			nodes.add(new Node(new Vec2((-1*nodes.get(i).getPosition().x),nodes.get(i).getPosition().y)));
 		}
@@ -106,7 +108,7 @@ public class Graph
 		ArrayList<Segment> lineObstacles = obstacleManager.getLines();
 				
 		//Booléen indiquant si la liaison est possible
-		boolean ok;
+		boolean ok = true;
 		
 		for(int i=0 ; i < nodes.size() ; i++)
 		{
@@ -120,7 +122,7 @@ public class Graph
 					//On vérifie l'intersection avec les cercles
 					for(int k=0 ; k<circleObstacles.size() ; k++)
 					{
-						if(!Geometry.intersects(new Segment(nodes.get(j).getPosition(), nodes.get(i).getPosition()), circleObstacles.get(k).toCircle()))
+						if(Geometry.intersects(new Segment(nodes.get(j).getPosition(), nodes.get(i).getPosition()), circleObstacles.get(k).toCircle()))
 						{
 							ok = false;
 						}
@@ -129,7 +131,7 @@ public class Graph
 					//On vérifie l'intersection avec les lignes
 					for(int k=0 ; k<lineObstacles.size() ; k++)
 					{
-						if(!Geometry.intersects(new Segment(nodes.get(j).getPosition(), nodes.get(i).getPosition()), lineObstacles.get(k)))
+						if(Geometry.intersects(new Segment(nodes.get(j).getPosition(), nodes.get(i).getPosition()), lineObstacles.get(k)))
 						{
 							ok = false;
 						}
@@ -141,7 +143,7 @@ public class Graph
 						ArrayList<Segment> segments = rectangularObstacles.get(k).getSegments();
 						for(int l=0 ; l<segments.size() ; l++)
 						{
-							if(!Geometry.intersects(new Segment(nodes.get(j).getPosition(), nodes.get(i).getPosition()), segments.get(l)))
+							if(Geometry.intersects(new Segment(nodes.get(j).getPosition(), nodes.get(i).getPosition()), segments.get(l)))
 							{
 								ok = false;
 							}
@@ -183,7 +185,7 @@ public class Graph
 			//On vérifie l'intersection avec les cercles
 			for(int k=0 ; k<circleObstacles.size() ; k++)
 			{
-				if(!Geometry.intersects(new Segment(node.getPosition(), nodes.get(i).getPosition()), circleObstacles.get(k).toCircle()))
+				if(Geometry.intersects(new Segment(node.getPosition(), nodes.get(i).getPosition()), circleObstacles.get(k).toCircle()))
 				{
 					ok = false;
 				}
@@ -192,7 +194,7 @@ public class Graph
 			//On vérifie l'intersection avec les lignes
 			for(int k=0 ; k<lineObstacles.size() ; k++)
 			{
-				if(!Geometry.intersects(new Segment(node.getPosition(), nodes.get(i).getPosition()), lineObstacles.get(k)))
+				if(Geometry.intersects(new Segment(node.getPosition(), nodes.get(i).getPosition()), lineObstacles.get(k)))
 				{
 					ok = false;
 				}
@@ -204,7 +206,7 @@ public class Graph
 				ArrayList<Segment> segments = rectangularObstacles.get(k).getSegments();
 				for(int l=0 ; l<segments.size() ; l++)
 				{
-					if(!Geometry.intersects(new Segment(node.getPosition(), nodes.get(i).getPosition()), segments.get(l)))
+					if(Geometry.intersects(new Segment(node.getPosition(), nodes.get(i).getPosition()), segments.get(l)))
 					{
 						ok = false;
 					}

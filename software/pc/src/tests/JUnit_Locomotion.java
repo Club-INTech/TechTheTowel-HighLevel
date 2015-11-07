@@ -69,6 +69,7 @@ public class JUnit_Locomotion extends JUnit_Test
 		log.debug("JUnit_DeplacementsTest.setUp()");
 		mLocomotion = (Locomotion)container.getService(ServiceNames.LOCOMOTION);
 		cardWrapper=(LocomotionCardWrapper)container.getService(ServiceNames.LOCOMOTION_CARD_WRAPPER);
+		container.getService(ServiceNames.ROBOT_REAL);
 		config.set("couleur", "vert");
 		mLocomotion.updateConfig();
 		mLocomotion.setPosition(new Vec2 (1381,1000));
