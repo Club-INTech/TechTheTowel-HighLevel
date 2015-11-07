@@ -122,12 +122,16 @@ public class Node implements Comparable<Node>
 		Vec2 vecteur1 = new Vec2(parent.getPosition().x - start.getPosition().x,parent.getPosition().y - start.getPosition().y);
 		Vec2 vecteur2 = new Vec2(this.getPosition().x - start.getPosition().x,this.getPosition().y - start.getPosition().y);
 		// Calcul des vecteurs entre le node start et le node parent, ainsi que le node start vers le node this
+		
 		double produitscalaire = vecteur1.x*vecteur2.x + vecteur1.y*vecteur2.y;
 		// Calcul du produit scalaire de ces deux vecteurs
+		
 		produitscalaire /= vecteur1.length()*vecteur2.length();
 		// Par division des normes, on obtient le cosinus de l'angle entre les deux vecteurs, donc l'angle via arcos
+		
 		double angle = Math.PI - Math.abs(Math.acos(produitscalaire));
 		// On retranche a pi l'angle calculé pour déterminer l'angle avec lequel se ré-oriente le robot 
+		
 		return ((distance/speed.translationSpeed)+(angle/speed.rotationSpeed)+offset);
 	}
 	

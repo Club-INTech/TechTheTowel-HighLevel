@@ -13,6 +13,7 @@ import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import hook.types.HookFactory;
+import pathDingDing.Node;
 import utils.Config;
 import utils.Log;
 
@@ -51,19 +52,18 @@ public class CloseDoors extends AbstractScript
 				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
 			
-				//On tourne le robot vers la position
-				//Tourne vers les portes ; Angle de coordonnees x=(1350,2000) y=(1350,1150) z=(900,2000)
-				stateToConsider.robot.turn((Math.PI*0.5 + 0.986), hooksToConsider, false);
-			
-				//On deplace le robot vers les portes
-				stateToConsider.robot.moveLengthwise(380, hooksToConsider, false);
+				//Position d'entrée entre les deux portes (Pourait-on juste les fermer en tournant avec notre vitre ?)
+				// La position en y est assez éloignée pour éviter un contact entre portes et vitre lors de la rotaion du robot
+				// A modifier une fois l'envergure du robot précisée
+				
+				Vec2 doors = new Vec2(1100,2000-500);
 				
 				//On s'oriente vers les portes
 				stateToConsider.robot.turn(-(Math.PI / 2), hooksToConsider, false);
 				
 				//On ferme les portes
 				stateToConsider.robot.moveLengthwise(-600, hooksToConsider, true);
-
+						
 				//PORTES FERMEES !
 				stateToConsider.obtainedPoints += 20;
 				stateToConsider.table.extDoorClosed = true;
