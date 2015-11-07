@@ -15,6 +15,7 @@ import enums.ScriptNames;
 import enums.ServiceNames;
 import exceptions.ExecuteException;
 import exceptions.PathNotFoundException;
+import exceptions.PointInObstacleException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
@@ -59,7 +60,7 @@ public class JUnit_CarpetDropper extends JUnit_Test
 	}
 
 	@Test
-	public void test() 
+	public void test() throws PointInObstacleException 
 	{
 		log.debug("debut du depose tapis");
 		try 

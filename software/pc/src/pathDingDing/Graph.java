@@ -240,6 +240,14 @@ public class Graph
 	}
 	
 	/**
+	 * Revoie le gestionnaire d'obstacles, utile pour PointInObstacleException
+	 */
+	public ObstacleManager getObstacleManager()
+	{
+		return obstacleManager;
+	}
+	
+	/**
 	 * Renvoie les nodes adjacents à tel node
 	 * @param node le node a tester
 	 */

@@ -13,6 +13,7 @@ import hook.Hook;
 import hook.types.HookFactory;
 import exceptions.ExecuteException;
 import exceptions.PathNotFoundException;
+import exceptions.PointInObstacleException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
@@ -65,8 +66,9 @@ public abstract class AbstractScript implements Service
 	 * @throws SerialFinallyException si le finally n'est pas correctement execute (erreur critique)
 	 * @throws InObstacleException lorqsque le robot veut aller dans un obstacle
 	 * @throws ExecuteException 
+	 * @throws PointInObstacleException 
 	 */
-	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, ExecuteException
+	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, ExecuteException, PointInObstacleException
 	{
 		// va jusqu'au point d'entrée de la version demandée
 		try 

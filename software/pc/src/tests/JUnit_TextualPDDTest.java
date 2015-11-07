@@ -12,6 +12,7 @@ import table.Table;
 import utils.Log;
 import enums.*;
 import exceptions.PathNotFoundException;
+import exceptions.PointInObstacleException;
 import exceptions.Locomotion.UnableToMoveException;
 import graphics.Window;
 import hook.Hook;
@@ -45,14 +46,20 @@ public class JUnit_TextualPDDTest extends JUnit_Test
     public void test()
     {
     	time = System.currentTimeMillis();
-    	ArrayList<Node> path = pf.computePath(new Vec2(0, 1750), new Vec2(-300, 1000));
-    	ArrayList<Vec2> pathVec = new ArrayList<Vec2>();
-    	for(int i=0 ; i<path.size() ; i++)
-    	{
-    		pathVec.add(path.get(i).getPosition());
-    		log.debug(path.get(i).getPosition());
+    	ArrayList<Node> path;
+		try {
+			path = pf.computePath(new Vec2(0, 1750), new Vec2(-300, 1000));
+			
+    		ArrayList<Vec2> pathVec = new ArrayList<Vec2>();
+    		for(int i=0 ; i<path.size() ; i++)
+    		{
+    			pathVec.add(path.get(i).getPosition());
+    			log.debug(path.get(i).getPosition());
+    		}
+    		log.debug(System.currentTimeMillis()-time);
+    	} catch (PointInObstacleException e) {
+    		e.printStackTrace();
     	}
-    	log.debug(System.currentTimeMillis()-time);
     	/*
     	try {
 			robot.moveToLocation(new Vec2(-300, 1000), new ArrayList<Hook>(), table);
