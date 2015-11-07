@@ -31,24 +31,19 @@ public class JUnit_TextualPDDTest extends JUnit_Test
     {
         super.setUp();
         log = (Log)container.getService(ServiceNames.LOG);
-        log.critical("setup lance");
         table = (Table)container.getService(ServiceNames.TABLE);
         pf = (PathDingDing)container.getService(ServiceNames.PATHDINGDING);
-        log.critical("setup quitte");
     }
     
     @Test
     public void test()
     {
-    	//TODO test
-    	log.critical("recherche lancee");
     	ArrayList<Node> path = pf.computePath(Table.entryPosition, new Vec2(-1300, 1200));
-    	log.critical("recherche terminee");
     	ArrayList<Vec2> pathVec = new ArrayList<Vec2>();
     	for(int i=0 ; i<path.size() ; i++)
     	{
     		pathVec.add(path.get(i).getPosition());
-    		log.critical(path.get(i).getPosition());
+    		log.debug(path.get(i).getPosition());
     	}
     	
     }
