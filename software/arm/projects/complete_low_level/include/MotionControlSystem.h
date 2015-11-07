@@ -15,7 +15,12 @@
 
 #define PI 3.14159265
 
-'
+// 65,5mm diametre des roues
+// ~1000 ticks par tour de roue
+// 17cm écartement des roues
+
+#define TICK_TO_MM 0.2077
+#define TICK_TO_RADIAN 0.0014468
 
 #if DEBUG
 #define TRACKER_SIZE 		1000
