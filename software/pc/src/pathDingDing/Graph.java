@@ -72,7 +72,7 @@ public class Graph
 		//========================================
 		
 		nodes.add(new Node(new Vec2(-1350, 1000)));
-		nodes.add(new Node(new Vec2(-1050, 1800)));
+		nodes.add(new Node(new Vec2(-1050, 1750)));
 		nodes.add(new Node(new Vec2(-1050, 1500)));
 		nodes.add(new Node(new Vec2(-1050, 1000)));
 		nodes.add(new Node(new Vec2(-1050, 400)));

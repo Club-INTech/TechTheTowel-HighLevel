@@ -175,8 +175,8 @@ public class PathDingDing implements Service
 				if(openNodes.contains(related.get(i)))
 				{
 					Node replicate = related.get(i);
-					while(related.contains(related))
-						related.remove(replicate);
+					while(related.remove(replicate))
+						i--;
 					Node newParent = lastClosedNode;
 					
 					//Si il existe, on recalcule le coût de déplacement (l'heuristique ne changeant pas)
@@ -202,8 +202,8 @@ public class PathDingDing implements Service
 				else if(closedNodes.contains(related.get(i)))
 				{
 					Node replicate = related.get(i);
-					while(related.contains(related))
-						related.remove(replicate);
+					while(related.remove(replicate))
+						i--;
 				}
 			}
 			
