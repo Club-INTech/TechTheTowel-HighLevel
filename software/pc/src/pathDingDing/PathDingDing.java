@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import container.Service;
+import exceptions.PointInObstacleException;
 import robot.RobotReal;
 
 /**
@@ -80,7 +81,7 @@ public class PathDingDing implements Service
 	 * @param endNode noeud d'arrivée
 	 * @return Liste de noeuds à parcourir ; null si échec
 	 */
-	public ArrayList<Node> computePath(Vec2 start, Vec2 end)
+	public ArrayList<Node> computePath(Vec2 start, Vec2 end) throws PointInObstacleException
 	{
 		
 		//On vide les listes de nodes pour un nouveau calcul
@@ -118,7 +119,7 @@ public class PathDingDing implements Service
 		if(related.isEmpty())
 		{
 			log.critical("PDD : noeud d'arrivée isolé (obstacle ?)");
-			return new ArrayList<Node>();
+			throw new PointInObstacleException(endNode, graph.getObstacleManager());
 		}
 		
 		// D'abord, on ajoute les noeuds adjacents au depart dans la liste ouverte
@@ -129,7 +130,8 @@ public class PathDingDing implements Service
 		if(related.isEmpty())
 		{
 			log.critical("PDD : noeud de départ isolé");
-			return new ArrayList<Node>();
+			
+			throw new PointInObstacleException(startNode, graph.getObstacleManager());
 		}
 		
 		for(int i=0 ; i < related.size() ; i++)

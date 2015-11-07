@@ -11,6 +11,7 @@ import org.junit.Test;
 import enums.ServiceNames;
 import enums.Speed;
 import exceptions.PathNotFoundException;
+import exceptions.PointInObstacleException;
 import exceptions.Locomotion.UnableToMoveException;
 import robot.Robot;
 import smartMath.Vec2;
@@ -42,7 +43,7 @@ public class JUnit_Speed extends JUnit_Test {
 	}
 
 	@Test
-	public void test() throws UnableToMoveException, PathNotFoundException
+	public void test() throws UnableToMoveException, PathNotFoundException, PointInObstacleException
 	{
 		robot.moveLengthwise(250);
 		

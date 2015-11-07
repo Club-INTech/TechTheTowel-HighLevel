@@ -15,6 +15,7 @@ import enums.Speed;
 import enums.USsensors;
 import exceptions.ConfigPropertyNotFoundException;
 import exceptions.PathNotFoundException;
+import exceptions.PointInObstacleException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import utils.Log;
@@ -400,9 +401,10 @@ public abstract class Robot implements Service
      * @param obstaclesNotConsidered 
      * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
      * @throws PathNotFoundException lorsque le pathdingding ne trouve pas de chemin 
+     * @throws PointInObstacleException 
      * @throws InObstacleException lorqsque le robot veut aller dans un obstacle
      */
-    public void moveToLocation(Vec2 aim, ArrayList<Hook> hooksToConsider, Table table) throws  PathNotFoundException, UnableToMoveException
+    public void moveToLocation(Vec2 aim, ArrayList<Hook> hooksToConsider, Table table) throws  PathNotFoundException, UnableToMoveException, PointInObstacleException
     {
 
 		log.debug("appel de Robot.moveToLocation(" + aim + "," + hooksToConsider + "," + table + ")");
@@ -420,9 +422,10 @@ public abstract class Robot implements Service
      * 
      * @throws PathNotFoundException lorsque le pathdingding ne trouve pas de chemin 
      * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
+     * @throws PointInObstacleException 
      * @throws InObstacleException lorqsque le robot veut aller dans un obstacle
      */
-    public void moveToCircle(Circle aim, ArrayList<Hook> hooksToConsider, Table table) throws PathNotFoundException, UnableToMoveException
+    public void moveToCircle(Circle aim, ArrayList<Hook> hooksToConsider, Table table) throws PathNotFoundException, UnableToMoveException, PointInObstacleException
     {
 
     	PathDingDing pdd = new PathDingDing(table, log);
