@@ -19,11 +19,10 @@ public enum ActuatorOrder
 	TURN_RIGHT("td"),
 	TURN_LEFT("tg"),
 	
-	// Consignes pour les bras chargés de prendre les poissons, position haute(initiale), intermédiaire et basse
-	ARM_MAGNET_DOWN("amd"),
-	ARM_MAGNET_MID("amm"),
-	ARM_MAGNET_UP("amu"),
-	DROP_FISH("df"),
+	// Consignes pour les bras chargés de prendre les poissons
+	FISHING_POSITION("fp"),
+	MIDLE_POSITION("mp"),
+	FREE_FISHES("ff"),
 	
 	STOP("stop");
 
