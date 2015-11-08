@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import container.Service;
+import exceptions.PointInObstacleException;
 import robot.RobotReal;
 
 /**
@@ -80,7 +81,7 @@ public class PathDingDing implements Service
 	 * @param endNode noeud d'arrivée
 	 * @return Liste de noeuds à parcourir ; null si échec
 	 */
-	public ArrayList<Node> computePath(Vec2 start, Vec2 end)
+	public ArrayList<Node> computePath(Vec2 start, Vec2 end) throws PointInObstacleException
 	{
 		
 		//On vide les listes de nodes pour un nouveau calcul
@@ -110,15 +111,27 @@ public class PathDingDing implements Service
 		// DEBUT DE L'ALGORITHME A* - INITIALISATION
 		//===========================================
 		
-		//On ajoute le noeud de départ à la liste des nodes fermés
+		// On ajoute le noeud de départ à la liste des nodes fermés
 		this.closedNodes.add(startNode);
 		
-		// D'abord, on ajoute les noeuds adjacents au depart dans la liste ouverte
-		ArrayList<Node> related = this.graph.getRelatedNodes(startNode);
+		// Test d'isolation du point d'arrivée
+		ArrayList<Node> related = this.graph.getRelatedNodes(endNode);
+		if(related.isEmpty())
+		{
+			log.critical("PDD : noeud d'arrivée isolé (obstacle ?)");
+			throw new PointInObstacleException(endNode, graph.getObstacleManager());
+		}
 		
+		// D'abord, on ajoute les noeuds adjacents au depart dans la liste ouverte
+		related = this.graph.getRelatedNodes(startNode);
+		
+		// Idem test d'isolation du départ
+		// TODO Ajuster pour sortir de l'obstacle 
 		if(related.isEmpty())
 		{
 			log.critical("PDD : noeud de départ isolé");
+			
+			throw new PointInObstacleException(startNode, graph.getObstacleManager());
 		}
 		
 		for(int i=0 ; i < related.size() ; i++)
@@ -164,8 +177,8 @@ public class PathDingDing implements Service
 				if(openNodes.contains(related.get(i)))
 				{
 					Node replicate = related.get(i);
-					while(related.contains(related))
-						related.remove(replicate);
+					while(related.remove(replicate))
+						i--;
 					Node newParent = lastClosedNode;
 					
 					//Si il existe, on recalcule le coût de déplacement (l'heuristique ne changeant pas)
@@ -191,8 +204,8 @@ public class PathDingDing implements Service
 				else if(closedNodes.contains(related.get(i)))
 				{
 					Node replicate = related.get(i);
-					while(related.contains(related))
-						related.remove(replicate);
+					while(related.remove(replicate))
+						i--;
 				}
 			}
 			

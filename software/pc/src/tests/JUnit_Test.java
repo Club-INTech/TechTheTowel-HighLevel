@@ -18,6 +18,7 @@ import utils.Config;
 import container.Container;
 import enums.ServiceNames;
 import exceptions.PathNotFoundException;
+import exceptions.PointInObstacleException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 
@@ -87,7 +88,7 @@ public abstract class JUnit_Test
 		robot.setPosition(Table.entryPosition);
 	}
 	
-	public void returnToEntryPosition(GameState<Robot> state) throws PathNotFoundException, UnableToMoveException
+	public void returnToEntryPosition(GameState<Robot> state) throws PathNotFoundException, UnableToMoveException, PointInObstacleException
 	{
 		state.robot.moveToLocation(new Vec2(Table.entryPosition.x-250, Table.entryPosition.y),new ArrayList<Hook>(), state.table);
 		state.robot.turn(Math.PI);
