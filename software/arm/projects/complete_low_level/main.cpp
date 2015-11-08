@@ -394,6 +394,32 @@ int main(void)
 
 
 
+			else if(!strcmp("fp",order)) // Descente du bras aimanté (poissons)
+			{
+				actuatorsMgr->fishing();
+			}
+
+			else if(!strcmp("mp",order))
+			{
+				actuatorsMgr->midPosition();
+			}
+
+			else if(!strcmp("ff",order))
+			{
+				actuatorsMgr->freefishes();
+			}
+
+			else if(!strcmp("e", order)) // permet de tester manuellement les positions des AX12
+			{
+				int position = 150;
+				serial.printfln("Entrez angle");
+				serial.read(position);
+				serial.printfln("angle = %d", position);
+				if(position >= 0 && position <= 300)
+					actuatorsMgr->setAXpos(position);
+				serial.printfln("done.");
+
+			}
 
 
 			else
