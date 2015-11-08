@@ -22,10 +22,10 @@ public class Shell extends GameElement
 	private int level;
 	
 	/** Hauteur en mm d'un coquillage*/
-	public int shellHeight = 25;
+	public double shellHeight = 25;
 	
 	/** Diamètre en mm d'un coquillage */
-	public float shellDiam = (float) 76.2;
+	public double shellDiam = 76.2;
 	/**
 	 * Constructeur du coquillage
 	 * @param color, SHELL_NEUTRAL, SHELL_ENEMY, ou SHELL_ALLY de l'enum Elements
@@ -73,15 +73,15 @@ public class Shell extends GameElement
 	{
 		if (this.level == 0)
 		{
-			return ((float) 0);
+			return (0);
 		}
 		else if (this.level == 1)
 		{
-			return ((float) 44+(shellHeight/2));
+			return (float)( 44+(shellHeight/2));
 		}
 		else 
 		{
-			return ((float) 44+22+(shellHeight/2));
+			return (float)(44+22+(shellHeight/2));
 		}
 	}
 	
