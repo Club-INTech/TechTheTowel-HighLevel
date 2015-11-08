@@ -7,6 +7,7 @@ import table.obstacles.*;
 import java.util.ArrayList;
 
 import container.Service;
+import enums.Color;
 import enums.Elements;
 import utils.*;
 
@@ -40,6 +41,8 @@ public class Table implements Service
 	/** endroit ou lire la configuration du robot */
 	private Config config;
 	
+	/** configuration pour les différentes arrangements des coquillages, vaut au choix entre 1 et 5*/
+	private int configShell = 1;
 	//==================================
 	// Definition des elements de sable
 	//==================================
@@ -91,6 +94,25 @@ public class Table implements Service
 	
 	/** Cone annexe devant la dune, cote adversaire */
 	public Sand theirDuneCones = new Sand(Elements.SAND_CONE, new Vec2(sandSize-678, 2000-sandSize), 3);
+	
+	//==================================
+	// Definition des coquillages
+	//==================================
+	
+	/** Hauteur en mm d'un coquillage*/
+	public static int shellHeight = 25;
+	
+	/** Diamètre en mm d'un coquillage */
+	public static float shellDiam = (float) 76.2;
+	
+	/** Nos coquillages */
+	public ArrayList<Shell> ourShells = new ArrayList<Shell>(5);
+			
+	/** Coquillages ennemis */
+	public ArrayList<Shell> theirShells = new ArrayList<Shell>(5);
+			
+	/**Coquillages neutres*/
+	public ArrayList<Shell> neutralShells = new ArrayList<Shell>(6);
 	
 	//==========
 	// Objectifs
@@ -235,7 +257,123 @@ public class Table implements Service
 			theirDuneCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(-678+(sandSize/2), 2000-((3*sandSize/2))), i));
 		}
 		
+		//=======================================================================
+		// Instanciation des coquillages selon la valeur de configShell 
+		// L'ordre est : les niveaux du sol au ciel,
+		//               de l'ennemi à nous,
+		//               du fond à l'avant,
+		//               d'abord les notres, puis les leurs et enfin les neutres
+		//=======================================================================
 		
+		if (configShell == 1)
+		{
+			ourShells.add(new Shell(new Vec2(-300,350),Color.ALLY,0));
+			ourShells.add(new Shell(new Vec2(600,550),Color.ALLY,0));
+			ourShells.add(new Shell(new Vec2(1300,75),Color.ALLY,1));
+			ourShells.add(new Shell(new Vec2(1425,200),Color.ALLY,1));
+			ourShells.add(new Shell(new Vec2(1425,75),Color.ALLY,2));
+			
+			theirShells.add(new Shell(new Vec2(-600,550),Color.ENNEMY,0));
+			theirShells.add(new Shell(new Vec2(300,350),Color.ENNEMY,0));
+			theirShells.add(new Shell(new Vec2(-1425,200),Color.ENNEMY,1));
+			theirShells.add(new Shell(new Vec2(-1300,75),Color.ENNEMY,1));
+			theirShells.add(new Shell(new Vec2(-1425,75),Color.ENNEMY,2));
+			
+			neutralShells.add(new Shell(new Vec2(-1300,750),Color.NEUTRAL,0));
+			neutralShells.add(new Shell(new Vec2(-1300,450),Color.NEUTRAL,0));
+			neutralShells.add(new Shell(new Vec2(0,450),Color.NEUTRAL,0));
+			neutralShells.add(new Shell(new Vec2(0,150),Color.NEUTRAL,0));
+			neutralShells.add(new Shell(new Vec2(1300,750),Color.NEUTRAL,0));
+			neutralShells.add(new Shell(new Vec2(1300,450),Color.NEUTRAL,0));
+		}
+		
+		else if (configShell == 2)
+		{
+			ourShells.add(new Shell(new Vec2(300,350),Color.ALLY,0));
+			ourShells.add(new Shell(new Vec2(600,550),Color.ALLY,0));
+			ourShells.add(new Shell(new Vec2(1300,750),Color.ALLY,0));
+			ourShells.add(new Shell(new Vec2(1300,75),Color.ALLY,1));
+			ourShells.add(new Shell(new Vec2(1425,200),Color.ALLY,1));
+			
+			theirShells.add(new Shell(new Vec2(-1300,750),Color.ENNEMY,0));
+			theirShells.add(new Shell(new Vec2(-600,550),Color.ENNEMY,0));
+			theirShells.add(new Shell(new Vec2(-300,350),Color.ENNEMY,0));
+			theirShells.add(new Shell(new Vec2(-1425,200),Color.ENNEMY,1));
+			theirShells.add(new Shell(new Vec2(-1300,75),Color.ENNEMY,1));
+			
+			neutralShells.add(new Shell(new Vec2(-1300,450),Color.NEUTRAL,0));
+			neutralShells.add(new Shell(new Vec2(0,450),Color.NEUTRAL,0));
+			neutralShells.add(new Shell(new Vec2(0,150),Color.NEUTRAL,0));
+			neutralShells.add(new Shell(new Vec2(1300,450),Color.NEUTRAL,0));
+			neutralShells.add(new Shell(new Vec2(-1425,75),Color.NEUTRAL,1));
+			neutralShells.add(new Shell(new Vec2(1425,75),Color.NEUTRAL,1));
+		}
+		
+		else if (configShell == 3)
+		{
+			ourShells.add(new Shell(new Vec2(300,350),Color.ALLY,0));
+			ourShells.add(new Shell(new Vec2(900,750),Color.ALLY,0));
+			ourShells.add(new Shell(new Vec2(1300,750),Color.ALLY,0));
+			ourShells.add(new Shell(new Vec2(1300,75),Color.ALLY,1));
+			ourShells.add(new Shell(new Vec2(1425,200),Color.ALLY,1));
+			
+			theirShells.add(new Shell(new Vec2(-1300,750),Color.ENNEMY,0));
+			theirShells.add(new Shell(new Vec2(-900,750),Color.ENNEMY,0));
+			theirShells.add(new Shell(new Vec2(-300,350),Color.ENNEMY,0));
+			theirShells.add(new Shell(new Vec2(-1425,200),Color.ENNEMY,1));
+			theirShells.add(new Shell(new Vec2(-1300,75),Color.ENNEMY,1));
+			
+			neutralShells.add(new Shell(new Vec2(-1300,450),Color.NEUTRAL,0));
+			neutralShells.add(new Shell(new Vec2(-900,450),Color.NEUTRAL,0));
+			neutralShells.add(new Shell(new Vec2(900,450),Color.NEUTRAL,0));
+			neutralShells.add(new Shell(new Vec2(1300,450),Color.NEUTRAL,0));
+			neutralShells.add(new Shell(new Vec2(-1425,75),Color.NEUTRAL,2));
+			neutralShells.add(new Shell(new Vec2(1425,75),Color.NEUTRAL,2));
+		}
+		
+		else if (configShell == 4)
+		{
+			ourShells.add(new Shell(new Vec2(900,750),Color.ALLY,0));
+			ourShells.add(new Shell(new Vec2(1300,750),Color.ALLY,0));
+			ourShells.add(new Shell(new Vec2(1300,450),Color.ALLY,0));
+			ourShells.add(new Shell(new Vec2(-1425,200),Color.ALLY,1));
+			ourShells.add(new Shell(new Vec2(-1300,75),Color.ALLY,1));
+			
+			theirShells.add(new Shell(new Vec2(-1300,750),Color.ENNEMY,0));
+			theirShells.add(new Shell(new Vec2(-1300,450),Color.ENNEMY,0));
+			theirShells.add(new Shell(new Vec2(-900,750),Color.ENNEMY,0));
+			theirShells.add(new Shell(new Vec2(1300,75),Color.ENNEMY,1));
+			theirShells.add(new Shell(new Vec2(1425,200),Color.ENNEMY,1));
+			
+			neutralShells.add(new Shell(new Vec2(-900,450),Color.NEUTRAL,0));
+			neutralShells.add(new Shell(new Vec2(-300,350),Color.NEUTRAL,0));
+			neutralShells.add(new Shell(new Vec2(300,350),Color.NEUTRAL,0));
+			neutralShells.add(new Shell(new Vec2(900,450),Color.NEUTRAL,0));
+			neutralShells.add(new Shell(new Vec2(-1425,75),Color.NEUTRAL,2));
+			neutralShells.add(new Shell(new Vec2(1425,75),Color.NEUTRAL,2));
+		}
+		
+		else if (configShell == 5)
+		{
+			ourShells.add(new Shell(new Vec2(-900,450),Color.ALLY,0));
+			ourShells.add(new Shell(new Vec2(900,750),Color.ALLY,0));
+			ourShells.add(new Shell(new Vec2(1300,750),Color.ALLY,0));
+			ourShells.add(new Shell(new Vec2(1300,450),Color.ALLY,0));
+			ourShells.add(new Shell(new Vec2(1425,200),Color.ALLY,1));
+			
+			theirShells.add(new Shell(new Vec2(-1300,750),Color.ENNEMY,0));
+			theirShells.add(new Shell(new Vec2(-1300,450),Color.ENNEMY,0));
+			theirShells.add(new Shell(new Vec2(-900,750),Color.ENNEMY,0));
+			theirShells.add(new Shell(new Vec2(900,450),Color.ENNEMY,0));
+			theirShells.add(new Shell(new Vec2(-1425,200),Color.ENNEMY,1));
+			
+			neutralShells.add(new Shell(new Vec2(-900,150),Color.NEUTRAL,0));
+			neutralShells.add(new Shell(new Vec2(900,150),Color.NEUTRAL,0));
+			neutralShells.add(new Shell(new Vec2(-1300,75),Color.NEUTRAL,1));
+			neutralShells.add(new Shell(new Vec2(1300,75),Color.NEUTRAL,1));
+			neutralShells.add(new Shell(new Vec2(-1425,75),Color.NEUTRAL,2));
+			neutralShells.add(new Shell(new Vec2(1425,75),Color.NEUTRAL,2));
+		}
 		
 	}
 	
