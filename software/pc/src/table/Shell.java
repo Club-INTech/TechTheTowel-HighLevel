@@ -13,10 +13,6 @@ public class Shell extends GameElement
 {
 	/** Couleur du coquillage, enumeres dans enums/Elements.java */
 	private Color color;
-	
-	/** Type d'élément du coquillage*/
-	// A priori pas utile, mais julian s'est embêté à le creer
-	private Elements type;
 
 	/** Niveau de l'element
 	 *  0 = sur la table
@@ -89,12 +85,4 @@ public class Shell extends GameElement
 		}
 	}
 	
-	/**
-	 * Getter du type de l'element de jeu
-	 * @return le type de l'element de jeu
-	 */
-	public Elements getType()
-	{
-		return this.type; 
-	}
 }
