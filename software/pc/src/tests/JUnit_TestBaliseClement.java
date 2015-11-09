@@ -24,11 +24,12 @@ public class JUnit_TestBaliseClement extends JUnit_Test
 
 	GameState<Robot> clement;
 	Table table;
+	long time;
 	@SuppressWarnings("unchecked")
 	public void setUp() throws Exception
 	{
 		//creation des objets pour le test
-		super.setUp();                                                                                                                                 
+		super.setUp();                                                                                                                                
 		clement = (GameState<Robot>)container.getService(ServiceNames.GAME_STATE);
 		
 		//position initiale du robot
@@ -36,15 +37,16 @@ public class JUnit_TestBaliseClement extends JUnit_Test
 		clement.robot.setOrientation(Math.PI);
 		
 		table = (Table)container.getService(ServiceNames.TABLE);
+		this.time = System.currentTimeMillis();
 	}	
 		
 	@Test
 	private void test() {
-		fail("Not yet implemented");
+		run();
 	}
 	
 	/**
-	 * La méthode NextPoint renvoie un point généré aléatoirement
+	 * La mï¿½thode NextPoint renvoie un point gï¿½nï¿½rï¿½ alï¿½atoirement
 	 * @return un point sur la table ([-1500,1500],[0,2000])
 	 */
 	private Vec2 NextPoint() 
@@ -55,7 +57,6 @@ public class JUnit_TestBaliseClement extends JUnit_Test
 		
 	public void run()
 	{
-		long time = System.currentTimeMillis();
 		while((System.currentTimeMillis()-time)<90000)
 		{
 			try {
@@ -70,6 +71,8 @@ public class JUnit_TestBaliseClement extends JUnit_Test
 				e.printStackTrace();
 			}
 			catch (PointInObstacleException e) {
+				//Si le point est mal placÃ©, on relance
+				run();
 			}
 		}
 	}
