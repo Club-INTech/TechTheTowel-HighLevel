@@ -41,7 +41,7 @@ public class Table implements Service
 	/** endroit ou lire la configuration du robot */
 	private Config config;
 	
-	/** configuration pour les différentes arrangements des coquillages, vaut au choix entre 1 et 5*/
+	/** configuration pour les différents arrangements des coquillages, vaut au choix entre 1 et 5*/
 	private int configShell = 1;
 	//==================================
 	// Definition des elements de sable
