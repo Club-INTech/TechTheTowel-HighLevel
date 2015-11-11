@@ -87,6 +87,19 @@ public class ObstacleRectangular extends Obstacle
 	}
 	
 	/**
+	 * Vérifie si le point donné est dans l'obstacle
+	 * @param point le point à tester
+	 */
+	public boolean isInObstacle(Vec2 point)
+	{
+		if(point.x <= position.x+(sizeX/2) && point.x >= position.x-(sizeX/2) && point.y <= position.y+(sizeY/2) && point.y >= position.y+(sizeY/2))
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	/**
 	 * Fourni la plus petite distance entre le point fourni et l'obstacle.
 	 *
 	 * @param point point a considérer
