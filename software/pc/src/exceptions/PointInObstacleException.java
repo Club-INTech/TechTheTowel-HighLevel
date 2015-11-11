@@ -2,9 +2,12 @@ package exceptions;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
 
 import enums.Obstacles;
 import pathDingDing.Node;
+import smartMath.Geometry;
+import smartMath.Segment;
 import table.obstacles.ObstacleCircular;
 import table.obstacles.ObstacleManager;
 import table.obstacles.ObstacleRectangular;
@@ -101,6 +104,33 @@ public class PointInObstacleException extends Exception
 	 */
 	private void getObstacle()
 	{
-		//TODO recherche de l'obstacle en question
+		//==================================================================
+		// Test des obstacles circulaires
+		// Vrai si le segment node-centre_cercle n'intersecte pas le cercle
+		//==================================================================
+		
+		ArrayList<ObstacleCircular> cirObs = obstacleManager.getFixedObstacles();
+		
+		for(int i=0; i<cirObs.size(); i++)
+		{
+			if(!Geometry.intersects(new Segment(cirObs.get(i).getPosition(), node.getPosition()), cirObs.get(i).toCircle()))
+			{
+				obsCir = cirObs.get(i);
+			}
+		}
+		
+		//===================================
+		// Test des obstacles rectangulaires
+		//===================================
+		
+		ArrayList<ObstacleRectangular> recObs = obstacleManager.getRectangles();
+		
+		for(int i=0; i<recObs.size() ; i++)
+		{
+			if(recObs.get(i).isInObstacle(node.getPosition()))
+			{
+				obsRec = recObs.get(i);
+			}
+		}
 	}
 }
