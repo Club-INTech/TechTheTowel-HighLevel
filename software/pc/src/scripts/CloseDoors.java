@@ -21,7 +21,7 @@ import utils.Log;
 /**
  * @author julian
  * Script pour la fermeture des portes des cabines
- * Version 0 : Deplacement de la serviette aux portes puis fermeture en même tamps ; aucune action prevue hors du deplacement ; aucun pathdingding/evitement ; si pb -> arret complet
+ * Version 0 : Deplacement de la serviette aux portes puis fermeture en même temps ; aucune action prevue hors du deplacement ; aucun pathdingding/evitement ; si pb -> arret complet
  */
 public class CloseDoors extends AbstractScript
 {
