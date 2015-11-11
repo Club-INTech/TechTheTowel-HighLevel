@@ -51,12 +51,6 @@ public class CloseDoors extends AbstractScript
 				//On ralentit pour eviter de demonter les elements de jeu "Discord-style"
 				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
-			
-				//Position d'entrée entre les deux portes (Pourait-on juste les fermer en tournant avec notre vitre ?)
-				// La position en y est assez éloignée pour éviter un contact entre portes et vitre lors de la rotaion du robot
-				// A modifier une fois l'envergure du robot précisée
-				
-				Vec2 doors = new Vec2(1100,2000-500);
 				
 				//On s'oriente vers les portes
 				stateToConsider.robot.turn(-(Math.PI / 2), hooksToConsider, false);
