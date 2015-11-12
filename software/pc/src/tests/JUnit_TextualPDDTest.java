@@ -36,10 +36,13 @@ public class JUnit_TextualPDDTest extends JUnit_Test
     public void setUp() throws Exception
     {
         super.setUp();
+        
         log = (Log)container.getService(ServiceNames.LOG);
         table = (Table)container.getService(ServiceNames.TABLE);
-        robot = (RobotReal)container.getService(ServiceNames.ROBOT_REAL);
+       // robot = (RobotReal)container.getService(ServiceNames.ROBOT_REAL);
+        time = System.currentTimeMillis();
         pf = (PathDingDing)container.getService(ServiceNames.PATHDINGDING);
+        log.debug(System.currentTimeMillis() - time);
     }
     
     @Test

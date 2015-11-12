@@ -263,6 +263,8 @@ public class PathDingDing implements Service
 	
 	/**
 	 * Vide les listes ouvertes et fermees pour lancer un nouveau calcul
+	 * et reconstruit le graphe au cas de nouveau obstacles sont apparus
+	 * TODO Booléen vérifiant la modification du paysage (ensemble, évitons les calculs inutiles)
 	 */
 	public void initialise()
 	{
@@ -271,6 +273,7 @@ public class PathDingDing implements Service
 			this.openNodes = new ArrayList<Node>();
 			this.closedNodes = new ArrayList<Node>();
 		}
+		graph.setAllLinks();
 	}
 	
 	/**
