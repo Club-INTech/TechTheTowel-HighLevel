@@ -24,6 +24,10 @@ public enum ActuatorOrder
 	MIDLE_POSITION("mp"),
 	FREE_FISHES("ff"),
 	
+	//Consigne d'ouverture du parasol
+	//TODO : mesurer la durée de déploiement du parasol, implémenter la commande "ps" au bas niveau
+	OPEN_PARASOL("ps",4),
+	
 	STOP("stop");
 
 	/**
