@@ -73,6 +73,8 @@ public class Fishing extends AbstractScript
 				
 				// Points gagnés max
 				stateToConsider.obtainedPoints += 40;
+				
+				stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
 			}
 			catch(UnableToMoveException | SerialConnexionException e)
 			{
