@@ -46,7 +46,7 @@ abstract class GameElement
 	/** Renvoie si l'élément est dans le robot */
 	public boolean getInRobot()
 	{
-		return in Robot
+		return inRobot;
 	}
 	
 }
