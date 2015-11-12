@@ -102,6 +102,9 @@ public class Graph
 	 */
 	public void setAllLinks()
 	{
+		//On vide la liste des noeuds pour la reconstruire
+		links.clear();
+		
 		//On récupère les différents obstacles
 		ArrayList<ObstacleRectangular> rectangularObstacles = obstacleManager.getRectangles();
 		ArrayList<ObstacleCircular> circleObstacles = obstacleManager.getFixedObstacles();
