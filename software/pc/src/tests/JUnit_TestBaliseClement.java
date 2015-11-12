@@ -25,6 +25,7 @@ public class JUnit_TestBaliseClement extends JUnit_Test
 	GameState<Robot> clement;
 	Table table;
 	long time;
+	
 	@SuppressWarnings("unchecked")
 	public void setUp() throws Exception
 	{
@@ -41,7 +42,7 @@ public class JUnit_TestBaliseClement extends JUnit_Test
 	}	
 		
 	@Test
-	private void test() {
+	public void test() {
 		run();
 	}
 	
