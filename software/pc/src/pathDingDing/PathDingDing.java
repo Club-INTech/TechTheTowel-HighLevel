@@ -44,8 +44,6 @@ import robot.RobotReal;
  */
 public class PathDingDing implements Service
 {
-	//La table de jeu
-	private Table table;
 	
 	//Le graphe a parcourir
 	private Graph graph;
@@ -66,7 +64,6 @@ public class PathDingDing implements Service
 	 */
 	public PathDingDing(Table table, Log log)
 	{
-		this.table = table;
 		this.log = log;
 		
 		this.graph = new Graph(table, log);
