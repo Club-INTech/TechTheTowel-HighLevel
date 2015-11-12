@@ -45,6 +45,10 @@ public class Fishing extends AbstractScript
 	@Override
 	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException
 	{
+		/*
+		 * On ex�cute la version 0 si le robot est dans le terrain vert
+		 * et 1 s'il est dans la zone violette
+		 */
 		if (versionToExecute == 0)
 		{
 			try
@@ -81,6 +85,44 @@ public class Fishing extends AbstractScript
 				finalize(stateToConsider);
 				throw new ExecuteException(e);
 			}
+		}
+		else if (versionToExecute == 1)
+		{
+			try
+				{
+					// On prend une vitesse lente pour que les aimants puissent récupérer les poissons
+					Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
+					stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
+					
+					// On s'oriente vers le côté ennemi
+					stateToConsider.robot.turn((Math.PI), hooksToConsider, false);
+					
+					// On baisse le bras aimanté
+					stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION, true);
+					
+					// On longe le bac
+					stateToConsider.robot.moveLengthwise(-420, hooksToConsider, false);
+					
+					// On remonte le bras pour passer au dessus du filet
+					stateToConsider.robot.useActuator(ActuatorOrder.MIDLE_POSITION, true);
+					
+					// On avance jusqu'au niveau du filet, distance à vérifier avec le robot final
+					stateToConsider.robot.moveLengthwise(-200, hooksToConsider, false);
+					
+					// On lâche les poissons
+					stateToConsider.robot.useActuator(ActuatorOrder.FREE_FISHES, true);	
+					
+					// Points gagnés max
+					stateToConsider.obtainedPoints += 40;
+					
+					stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
+				}
+				catch(UnableToMoveException | SerialConnexionException e)
+				{
+					finalize(stateToConsider);
+					throw new ExecuteException(e);
+				}
+			
 		}
 	}
 
