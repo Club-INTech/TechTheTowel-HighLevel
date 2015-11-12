@@ -119,7 +119,7 @@ public class Table implements Service
 	//==========
 	
 	/** poissons */
-	public ArrayList<Fish> ourFish = new ArrayList<Fish>();
+	public ArrayList<Fish> ourFish = new ArrayList<Fish>(4);
 	
 	/** portes fermées ou non */
 	public boolean extDoorClosed = false;
@@ -375,7 +375,20 @@ public class Table implements Service
 			neutralShells.add(new Shell(new Vec2(1425,75),Color.NEUTRAL,2));
 		}
 		
+		
+		//=======================================================================
+		// Instanciation des Poissons
+		//=======================================================================
+		
+		// Ajout des quatre poissons qu'on récupère
+		for(int i=0; i<4 ; i++)
+		{
+			ourFish.add(new Fish());
+		}
+		
 	}
+
+	
 	
 	public ObstacleManager getObstacleManager()
 	{
