@@ -18,12 +18,14 @@ import scripts.ScriptManager;
 import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
+import utils.Log;
 
 public class JUnit_TestBaliseClement extends JUnit_Test
 {
 
 	GameState<Robot> clement;
 	Table table;
+	Log log;
 	long time;
 	
 	@SuppressWarnings("unchecked")
@@ -38,6 +40,7 @@ public class JUnit_TestBaliseClement extends JUnit_Test
 		clement.robot.setOrientation(Math.PI);
 		
 		table = (Table)container.getService(ServiceNames.TABLE);
+		log = (Log)container.getService(ServiceNames.LOG);
 		this.time = System.currentTimeMillis();
 	}	
 		
@@ -53,7 +56,9 @@ public class JUnit_TestBaliseClement extends JUnit_Test
 	private Vec2 NextPoint() 
 	{
 		Random random = new Random();
-		return(new Vec2(random.nextInt(3001)-1500,random.nextInt(2001)));
+		Vec2 point = new Vec2(random.nextInt(3001)-1500,random.nextInt(2001));
+		log.debug(point);
+		return(point);
 	}
 		
 	public void run()
