@@ -11,6 +11,9 @@ abstract class GameElement
 	/** La position de l'élément sur la table */
 	protected Vec2 position;
 	
+	/** Booléen qui précise si l'élement est dans le robot ou non */
+	public boolean inRobot;
+	
 	/**
 	 * Crée un nouvel élément a l'endroit de la table spécifié
 	 *
@@ -30,4 +33,20 @@ abstract class GameElement
 	{
 		return position;
 	}
+	
+	/** Permet d'annoncer si l'élément est dans le robot
+	 * 
+	 * @param inRobot le booléen associé
+	 */
+	public void setInRobot(boolean inRobot)
+	{
+		this.inRobot = inRobot;
+	}
+	
+	/** Renvoie si l'élément est dans le robot */
+	public boolean getInRobot()
+	{
+		return inRobot;
+	}
+	
 }
