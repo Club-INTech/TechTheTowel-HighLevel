@@ -383,7 +383,7 @@ public class Table implements Service
 		// Ajout des quatre poissons qu'on récupère
 		for(int i=0; i<4 ; i++)
 		{
-			ourFish.add(new Fish(Elements.FISH));
+			ourFish.add(new Fish());
 		}
 		
 	}
