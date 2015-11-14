@@ -11,10 +11,13 @@
 
 #include <stdint.h>
 #include "utils.h"
+#include <Uart.hpp>
+
 
 class PID
 {
 public:
+
 
 	PID(volatile int32_t* input, volatile int32_t* output, volatile int32_t* setPoint)
 	{
@@ -35,7 +38,11 @@ public:
 
 		int32_t error = (*setPoint) - (*input);
 		derivative = error - pre_error;
-		integral += error;
+		integral += error/1000;
+		if(integral < 0)
+		{
+			while(42);
+		}
 		pre_error = error;
 
 		int32_t result = (int32_t)(

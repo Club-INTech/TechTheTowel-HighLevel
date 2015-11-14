@@ -29,7 +29,7 @@ int main(void)
 
 		uint8_t tailleBuffer = serial.available();
 
-		if (tailleBuffer && tailleBuffer < RX_BUFFER_SIZE - 1)
+		if (true || tailleBuffer && tailleBuffer < RX_BUFFER_SIZE - 1)
 		{
 			serial.read(order);
 			serial.printfln("_");//Acquittement
@@ -212,6 +212,10 @@ int main(void)
 				motionControlSystem->testSpeedReverse();
 			}
 
+			else if(!strcmp("continualTest",order))//Test long
+			{
+				motionControlSystem->longTestSpeed();
+			}
 
 
 

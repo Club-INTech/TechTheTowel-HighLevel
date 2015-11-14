@@ -26,7 +26,7 @@ MotionControlSystem::MotionControlSystem(): leftMotor(Side::LEFT), rightMotor(Si
 	leftSpeedPID.setOutputLimits(-255,255);
 	rightSpeedPID.setOutputLimits(-255,255);
 
-	maxSpeed = 2000000;
+	maxSpeed = 1000000; //Vitesse maximum Ta guele Rémi, des moteurs (avec une marge au cas où on s'amuse à faire forcer un peu la bestiole).
 	maxAcceleration = 200000;
 
 	delayToStop = 100;
@@ -385,9 +385,9 @@ void MotionControlSystem::testSpeed()
 	rightSpeedControlled = true;
 
 	resetTracking();
-	translationSpeed = 1000000;
+	translationSpeed = 200000;
 	rotationSpeed = 0;
-	Delay(1500);
+	Delay(500);
 	translationSpeed = 0;
 	printTracking();
 	serial.printf("endtest");
@@ -401,14 +401,30 @@ void MotionControlSystem::testSpeedReverse()
 	rightSpeedControlled = true;
 
 	resetTracking();
-	translationSpeed = -1000000;
+	translationSpeed = -200000;
 	rotationSpeed = 0;
-	Delay(1500);
+	Delay(500);
 	translationSpeed = 0;
 	printTracking();
 	serial.printf("endtest");
 }
 
+void MotionControlSystem::longTestSpeed()
+{
+	translationControlled = false;
+	rotationControlled = false;
+	leftSpeedControlled = true;
+	rightSpeedControlled = true;
+
+	resetTracking();
+	translationSpeed = 200000;
+	rotationSpeed = 0;
+	Delay(500);
+	translationSpeed = 0;
+	printTracking();
+	serial.printf("endtest");
+
+}
 
 /**
  * Getters/Setters des constantes d'asservissement en translation/rotation/vitesse
