@@ -166,6 +166,7 @@ public:
 
 	void track();//Stock les valeurs de débug
 	void printTrackingAll();//Affiche l'intégralité du tableau de tracking
+	void printTracking(); // Envoie des données pour l'asserv auto
 	void resetTracking();// Reset le tableau de tracking
 
 	int getPWMTranslation() const;
@@ -214,6 +215,7 @@ public:
 	MOVING_DIRECTION getMovingDirection() const;
 
 	void testSpeed();
+	void testSpeedReverse();
 };
 
 #endif /* MOTION_CONTROL_H_ */
