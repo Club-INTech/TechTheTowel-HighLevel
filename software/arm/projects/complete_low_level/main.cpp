@@ -29,7 +29,7 @@ int main(void)
 
 		uint8_t tailleBuffer = serial.available();
 
-		if (true || tailleBuffer && tailleBuffer < RX_BUFFER_SIZE - 1)
+		if (tailleBuffer && tailleBuffer < RX_BUFFER_SIZE - 1)
 		{
 			serial.read(order);
 			serial.printfln("_");//Acquittement
