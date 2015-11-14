@@ -26,7 +26,7 @@ public:
 		this->setPoint = setPoint;
 
 		setOutputLimits(-2147483647, 2147483647);
-		setTunings(10, 0, 0);
+		setTunings(0.125, 0.001, 0);
 		epsilon = 0;
 		pre_error = 0;
 		derivative = 0;
@@ -39,10 +39,6 @@ public:
 		int32_t error = (*setPoint) - (*input);
 		derivative = error - pre_error;
 		integral += error/1000;
-		if(integral < 0)
-		{
-			while(42);
-		}
 		pre_error = error;
 
 		int32_t result = (int32_t)(
