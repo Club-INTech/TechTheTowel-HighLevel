@@ -216,6 +216,7 @@ public:
 
 	void testSpeed();
 	void testSpeedReverse();
+	void longTestSpeed();
 };
 
 #endif /* MOTION_CONTROL_H_ */
