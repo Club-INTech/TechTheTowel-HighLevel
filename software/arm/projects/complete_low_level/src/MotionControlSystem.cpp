@@ -338,12 +338,12 @@ void MotionControlSystem::printTrackingAll()
 	}
 }
 
-void MotionControlSystem::printTracking() // Envoie les données nécessaires à l'asserv auto
+void MotionControlSystem::printTracking() // Envoie les données nécessaires à l'analyse d'asserv / l'asserv auto (Python)
 {
 	for(int i=0; i<TRACKER_SIZE; i++)
 						{
 							serial.printf("%d\t%d\t%d\t%d\t", trackArray[i].vitesseGaucheCourante, trackArray[i].vitesseDroiteCourante, trackArray[i].vitesseMoyenneGauche, trackArray[i].vitesseMoyenneDroite);
-							serial.printf("%d\t%d\t", trackArray[i].consigneVitesseGauche, trackArray[i].consigneVitesseDroite);
+							serial.printf("%d\t%d\t%d\t%d\t", trackArray[i].consigneVitesseGauche, trackArray[i].consigneVitesseDroite, trackArray[i].pwmGauche, trackArray[i].pwmDroit);
 							serial.printf("\r\n");
 
 						}
@@ -385,7 +385,7 @@ void MotionControlSystem::testSpeed()
 	rightSpeedControlled = true;
 
 	resetTracking();
-	translationSpeed = 20000;
+	translationSpeed = 2000;
 	rotationSpeed = 0;
 	Delay(2000);
 	translationSpeed = 0;
@@ -401,7 +401,7 @@ void MotionControlSystem::testSpeedReverse()
 	rightSpeedControlled = true;
 
 	resetTracking();
-	translationSpeed = -20000;
+	translationSpeed = -2000;
 	rotationSpeed = 0;
 	Delay(2000);
 	translationSpeed = 0;

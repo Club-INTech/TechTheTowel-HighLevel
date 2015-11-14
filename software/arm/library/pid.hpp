@@ -26,7 +26,7 @@ public:
 		this->setPoint = setPoint;
 
 		setOutputLimits(-2147483647, 2147483647);
-		setTunings(0.125, 0.001, 0);
+		setTunings(0.125, 0, 0);
 		epsilon = 0;
 		pre_error = 0;
 		derivative = 0;
