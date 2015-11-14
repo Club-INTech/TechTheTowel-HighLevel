@@ -27,7 +27,7 @@ MotionControlSystem::MotionControlSystem(): leftMotor(Side::LEFT), rightMotor(Si
 	rightSpeedPID.setOutputLimits(-255,255);
 
 	maxSpeed = 2000000;
-	maxAcceleration = 5000;
+	maxAcceleration = 200000;
 
 	delayToStop = 100;
 	toleranceTranslation = 50;
@@ -142,7 +142,7 @@ void MotionControlSystem::control()
 	leftSpeedSetpoint = translationSpeed - rotationSpeed;
 	rightSpeedSetpoint = translationSpeed + rotationSpeed;
 
-
+/*
 	// Limitation de l'accélération du moteur gauche
 	if(leftSpeedSetpoint - previousLeftSpeedSetpoint > maxAcceleration)
 	{
@@ -162,7 +162,7 @@ void MotionControlSystem::control()
 	{
 		rightSpeedSetpoint = previousRightSpeedSetpoint - maxAcceleration;
 	}
-
+*/
 	// Limitation de la vitesse
 	if(leftSpeedSetpoint > maxSpeed)
 		leftSpeedSetpoint = maxSpeed;
@@ -338,6 +338,17 @@ void MotionControlSystem::printTrackingAll()
 	}
 }
 
+void MotionControlSystem::printTracking() // Envoie les données nécessaires à l'asserv auto
+{
+	for(int i=0; i<TRACKER_SIZE; i++)
+						{
+							serial.printf("%d\t%d\t%d\t%d\t", trackArray[i].vitesseGaucheCourante, trackArray[i].vitesseDroiteCourante, trackArray[i].vitesseMoyenneGauche, trackArray[i].vitesseMoyenneDroite);
+							serial.printf("%d\t%d\t", trackArray[i].consigneVitesseGauche, trackArray[i].consigneVitesseDroite);
+							serial.printf("\r\n");
+
+						}
+}
+
 void MotionControlSystem::resetTracking()
 {
 	trackerType zero;
@@ -378,9 +389,25 @@ void MotionControlSystem::testSpeed()
 	rotationSpeed = 0;
 	Delay(1500);
 	translationSpeed = 0;
-	printTrackingAll();
+	printTracking();
+	serial.printf("endtest");
 }
 
+void MotionControlSystem::testSpeedReverse()
+{
+	translationControlled = false;
+	rotationControlled = false;
+	leftSpeedControlled = true;
+	rightSpeedControlled = true;
+
+	resetTracking();
+	translationSpeed = -1000000;
+	rotationSpeed = 0;
+	Delay(1500);
+	translationSpeed = 0;
+	printTracking();
+	serial.printf("endtest");
+}
 
 
 /**

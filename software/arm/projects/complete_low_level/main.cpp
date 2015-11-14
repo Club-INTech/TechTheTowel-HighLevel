@@ -203,9 +203,13 @@ int main(void)
 				motionControlSystem->resetPosition();
 				serial.printfln("Reset position");
 			}
-			else if(!strcmp("test",order))//Reset position
+			else if(!strcmp("testSpeed",order))//Reset position
 			{
 				motionControlSystem->testSpeed();
+			}
+			else if(!strcmp("testSpeedReverse",order))//Reset position
+			{
+				motionControlSystem->testSpeedReverse();
 			}
 
 
@@ -239,6 +243,20 @@ int main(void)
 				serial.printfln("gauche: kp= %g ; ki= %g ; kd= %g", kp_g, ki_g, kd_g);
 				serial.printfln("droite: kp= %g ; ki= %g ; kd= %g", kp_d, ki_d, kd_d);
 			}
+
+			else if(!strcmp("autoasserv" ,order))// Commande pour le programme d'autoasserv (python)
+			{
+				float
+					kp_g, kp_d, ki_g, ki_d, kd_g, kd_d;
+
+				motionControlSystem->getLeftSpeedTunings(kp_g, ki_g, kd_g);
+				motionControlSystem->getRightSpeedTunings(kp_d, ki_d, kd_d);
+
+				motionControlSystem->printTracking();
+				serial.printf("endtest");
+			}
+
+
 			else if(!strcmp("dts",order))//Delay To Stop
 			{
 				uint32_t delayToStop = 0;
@@ -460,7 +478,7 @@ void TIM4_IRQHandler(void) { //2kHz = 0.0005s = 0.5ms
 			i = 0;
 		}
 
-		if(j >= 10){ //5ms
+		if(j >= 5){ //5ms
 			motionControlSystem->track();
 			j=0;
 		}
