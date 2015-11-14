@@ -27,7 +27,7 @@ MotionControlSystem::MotionControlSystem(): leftMotor(Side::LEFT), rightMotor(Si
 	rightSpeedPID.setOutputLimits(-255,255);
 
 	maxSpeed = 1000000; //Vitesse maximum Ta guele Rémi, des moteurs (avec une marge au cas où on s'amuse à faire forcer un peu la bestiole).
-	maxAcceleration = 200000;
+	maxAcceleration = 5000;
 
 	delayToStop = 100;
 	toleranceTranslation = 50;
@@ -123,8 +123,8 @@ void MotionControlSystem::control()
 	int32_t leftTicks = Counter::getLeftValue();
 
 
-	currentLeftSpeed = (leftTicks - previousLeftTicks)*1000000;
-	currentRightSpeed = (rightTicks - previousRightTicks)*1000000;
+	currentLeftSpeed = (leftTicks - previousLeftTicks)*500000;
+	currentRightSpeed = (rightTicks - previousRightTicks)*500000;
 	previousLeftTicks = leftTicks;
 	previousRightTicks = rightTicks;
 
@@ -142,7 +142,7 @@ void MotionControlSystem::control()
 	leftSpeedSetpoint = translationSpeed - rotationSpeed;
 	rightSpeedSetpoint = translationSpeed + rotationSpeed;
 
-/*
+
 	// Limitation de l'accélération du moteur gauche
 	if(leftSpeedSetpoint - previousLeftSpeedSetpoint > maxAcceleration)
 	{
@@ -162,7 +162,7 @@ void MotionControlSystem::control()
 	{
 		rightSpeedSetpoint = previousRightSpeedSetpoint - maxAcceleration;
 	}
-*/
+
 	// Limitation de la vitesse
 	if(leftSpeedSetpoint > maxSpeed)
 		leftSpeedSetpoint = maxSpeed;
@@ -385,9 +385,9 @@ void MotionControlSystem::testSpeed()
 	rightSpeedControlled = true;
 
 	resetTracking();
-	translationSpeed = 200000;
+	translationSpeed = 20000;
 	rotationSpeed = 0;
-	Delay(500);
+	Delay(2000);
 	translationSpeed = 0;
 	printTracking();
 	serial.printf("endtest");
@@ -401,9 +401,9 @@ void MotionControlSystem::testSpeedReverse()
 	rightSpeedControlled = true;
 
 	resetTracking();
-	translationSpeed = -200000;
+	translationSpeed = -20000;
 	rotationSpeed = 0;
-	Delay(500);
+	Delay(2000);
 	translationSpeed = 0;
 	printTracking();
 	serial.printf("endtest");
@@ -419,7 +419,7 @@ void MotionControlSystem::longTestSpeed()
 	resetTracking();
 	translationSpeed = 200000;
 	rotationSpeed = 0;
-	Delay(500);
+	Delay(1000);
 	translationSpeed = 0;
 	printTracking();
 	serial.printf("endtest");
