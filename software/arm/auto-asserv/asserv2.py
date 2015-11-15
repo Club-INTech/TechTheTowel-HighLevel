@@ -11,8 +11,8 @@ class ShittyClass:
         self.VcD=[]
         self.VD=0.0
         self.VG=0.0
-        self.KpG=10
-        self.KpD=10
+        self.KpG=0.125
+        self.KpD=0.125
         self.AG=0
         self.AD=0
         self.done = False
@@ -20,7 +20,7 @@ class ShittyClass:
 
     def doYourShit(self, serial):
         data = serial.rsplit("\t")
-        if len(data) == 7:
+        if len(data) == 9:
             self.speedG.append(np.abs(float(data[2])))
             self.speedD.append(np.abs(float(data[3])))
             self.VcG.append(np.abs(float(data[4])))
@@ -45,8 +45,8 @@ class ShittyClass:
             if np.abs(i)>self.VD:
                 self.VD=np.abs(i)
 
-        self.D_percG = self.maxG/self.VG +0.23
-        self.D_percD = self.maxD/self.VD +0.21
+        self.D_percG = self.maxG/(self.VG-300) 
+        self.D_percD = self.maxD/(self.VD-300)
         print "DperG = "+str(self.D_percG)
         print "DperD = "+str(self.D_percD)
 
@@ -74,6 +74,9 @@ class ShittyClass:
         self.VcD=[]
         self.VD=0.0
         self.VG=0.0
+
+    
+       
         
             
     """def gimmeThoseKp(serial):
