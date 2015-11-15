@@ -26,8 +26,8 @@ MotionControlSystem::MotionControlSystem(): leftMotor(Side::LEFT), rightMotor(Si
 	leftSpeedPID.setOutputLimits(-255,255);
 	rightSpeedPID.setOutputLimits(-255,255);
 
-	maxSpeed = 1000000; //Vitesse maximum, des moteurs (avec une marge au cas où on s'amuse à faire forcer un peu la bestiole).
-	maxAcceleration = 500;
+	maxSpeed =3000; //Vitesse maximum, des moteurs (avec une marge au cas où on s'amuse à faire forcer un peu la bestiole).
+	maxAcceleration = 3000;
 
 	delayToStop = 100;
 	toleranceTranslation = 50;
@@ -123,14 +123,17 @@ void MotionControlSystem::control()
 	int32_t leftTicks = Counter::getLeftValue();
 
 
-	currentLeftSpeed = (leftTicks - previousLeftTicks)*250000;
-	currentRightSpeed = (rightTicks - previousRightTicks)*250000;
+	currentLeftSpeed = (leftTicks - previousLeftTicks)*400; // (nb-de-tick-passés)*(freq_asserv) (ticks/sec)
+	currentRightSpeed = (rightTicks - previousRightTicks)*400;
 
 	previousLeftTicks = leftTicks;
 	previousRightTicks = rightTicks;
 
 	averageLeftSpeed.add(currentLeftSpeed);
 	averageRightSpeed.add(currentRightSpeed);
+
+	currentLeftSpeed = averageLeftSpeed.value();
+	currentRightSpeed = averageRightSpeed.value();
 
 	currentDistance = (leftTicks + rightTicks) / 2;
 	currentAngle = (rightTicks - leftTicks) / 2;
@@ -176,6 +179,8 @@ void MotionControlSystem::control()
 
 	previousLeftSpeedSetpoint = leftSpeedSetpoint;
 	previousRightSpeedSetpoint = rightSpeedSetpoint;
+
+	//serial.printfln("%d",(leftSpeedSetpoint - currentLeftSpeed));
 
 	if(leftSpeedControlled)
 		leftSpeedPID.compute();		// Actualise la valeur de 'leftPWM'
@@ -386,9 +391,9 @@ void MotionControlSystem::testSpeed()
 	rightSpeedControlled = true;
 
 	resetTracking();
-	translationSpeed = 150000;
+	translationSpeed = 2500;
 	rotationSpeed = 0;
-	Delay(2000);
+	Delay(1000);
 	translationSpeed = 0;
 	printTracking();
 	serial.printf("endtest");
@@ -402,9 +407,9 @@ void MotionControlSystem::testSpeedReverse()
 	rightSpeedControlled = true;
 
 	resetTracking();
-	translationSpeed = -150000;
+	translationSpeed = -2500;
 	rotationSpeed = 0;
-	Delay(2000);
+	Delay(1000);
 	translationSpeed = 0;
 	printTracking();
 	serial.printf("endtest");
@@ -462,6 +467,11 @@ void MotionControlSystem::setLeftSpeedTunings(float kp, float ki, float kd) {
 }
 void MotionControlSystem::setRightSpeedTunings(float kp, float ki, float kd) {
 	rightSpeedPID.setTunings(kp, ki, kd);
+}
+
+void MotionControlSystem::setPWM() {
+	leftMotor.run(leftPWM);
+	rightMotor.run(rightPWM);
 }
 
 

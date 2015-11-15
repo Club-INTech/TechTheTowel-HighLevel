@@ -25,6 +25,7 @@ public class JUnit_TestBaliseClement extends JUnit_Test
 
 	GameState<Robot> clement;
 	Table table;
+	//TODO deja un log dans la classe mere
 	Log log;
 	long time;
 	
@@ -46,6 +47,8 @@ public class JUnit_TestBaliseClement extends JUnit_Test
 		
 	@Test
 	public void test() {
+		//TODO vraiment utile comme appel ? 
+		//la fonction run n'est utilisée qu'une fois et elle n'a pas vocation a etre reutilisee
 		run();
 	}
 	
@@ -65,20 +68,25 @@ public class JUnit_TestBaliseClement extends JUnit_Test
 	{
 		while((System.currentTimeMillis()-time)<90000)
 		{
-			try {
-				clement.robot.moveToLocation(NextPoint(),new ArrayList<Hook>(), table);
+			Vec2 point = NextPoint();
+			try
+			{	
+				clement.robot.moveToLocation(point,new ArrayList<Hook>(), table);
 			} 
-			catch (PathNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			catch (PathNotFoundException e) 
+			{
+				log.debug("pas de chemin entre : "+clement.robot.getPosition()+" et : "+point);
 			} 
-			catch (UnableToMoveException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			catch (UnableToMoveException e) 
+			{
+				log.debug("robot bloque");
+				return;//on arrete le test pour preserver la mecanique du robot
 			}
-			catch (PointInObstacleException e) {
+			catch (PointInObstacleException e) 
+			{
+				log.debug("le point : "+point+" est dans un obtacle");
 				//Si le point est mal placÃ©, on relance
-				run();
+				run();//TODO mauvaise idee. tu est dans un while donc ne rien faire continuera aussi ta boucle
 			}
 		}
 	}
