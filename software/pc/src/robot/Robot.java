@@ -58,6 +58,7 @@ public abstract class Robot implements Service
 	/** Rayon du robot provenant du fichier de config */
 	public int robotRay;
 
+	/** chemin en court par le robot, utilise par l'interface graphique */
 	public ArrayList<Vec2> cheminSuivi = new ArrayList<Vec2>();
 	
 	private float aimThresold = 15;
