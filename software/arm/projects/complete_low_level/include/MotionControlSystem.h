@@ -24,7 +24,7 @@
 
 #if DEBUG
 #define TRACKER_SIZE 		1000
-#define AVERAGE_SPEED_SIZE	100
+#define AVERAGE_SPEED_SIZE	5
 #else
 #define TRACKER_SIZE 		1
 #define AVERAGE_SPEED_SIZE	1
@@ -209,6 +209,7 @@ public:
 	void setMaxPWMtranslation(int16_t);
 	void setMaxPWMrotation(int16_t);
 	void setDelayToStop(uint32_t);
+	void setPWM();
 
 	bool isMoving() const;
 	bool isMoveAbnormal() const;
