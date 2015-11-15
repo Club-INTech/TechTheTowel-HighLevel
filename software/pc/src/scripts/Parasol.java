@@ -24,6 +24,7 @@ import utils.Log;
 public class Parasol extends AbstractScript
 {
 	// Etat du parasol ; overkill
+	//TODO passer en documentation + plutot dans robot
 	private static boolean opened = false;
 	
 	public Parasol(HookFactory hookFactory, Config config, Log log)
@@ -56,12 +57,14 @@ public class Parasol extends AbstractScript
 		}
 	}
 	
+	//TODO le score varie en foction de la position du parassol et du temps restant dans le match
 	@Override
 	public int remainingScoreOfVersion(int version, GameState<?> state)
 	{
 		return 0;
 	}
 
+	//TODO retourer la position du robot (comme ca pas de deplacement)
 	@Override
 	public Circle entryPosition(int version, int ray, Vec2 robotPosition) 
 	{
@@ -75,6 +78,7 @@ public class Parasol extends AbstractScript
 		
 	}
 
+	//TODO
 	@Override
 	public Integer[] getVersion(GameState<?> stateToConsider) 
 	{
