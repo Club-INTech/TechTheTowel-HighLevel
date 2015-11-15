@@ -26,7 +26,7 @@ public:
 		this->setPoint = setPoint;
 
 		setOutputLimits(-2147483647, 2147483647);
-		setTunings(0.125, 0, 0);
+		setTunings(1, 0, 0);
 		epsilon = 0;
 		pre_error = 0;
 		derivative = 0;
@@ -45,11 +45,15 @@ public:
 				kp * error + ki * integral + kd * derivative);
 
 		//Saturation
+		/*
 		if (result > outMax) {
 			result = outMax;
 		} else if (result < outMin) {
 			result = outMin;
 		}
+		*/
+		result = (result * 255) / 1000000;
+
 
 		//Seuillage de la commande
 		if (ABS(result) < epsilon)
