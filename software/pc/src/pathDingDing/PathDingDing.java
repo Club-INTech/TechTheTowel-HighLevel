@@ -74,8 +74,8 @@ public class PathDingDing implements Service
 	
 	/**
 	 * Calcule le chemin à parcourir à l'aide de l'algorithme A*
-	 * @param startNode noeud de départ
-	 * @param endNode noeud d'arrivée
+	 * @param start noeud de départ
+	 * @param end noeud d'arrivée
 	 * @return Liste de noeuds à parcourir ; null si échec
 	 */
 	public ArrayList<Node> computePath(Vec2 start, Vec2 end) throws PointInObstacleException
@@ -278,7 +278,8 @@ public class PathDingDing implements Service
 	
 	/**
 	 * Ajoute le départ et l'arrivée au graphe, crée les liens et les renvoie
-	 * @param position la position de ce noeud
+	 * @param start la position du noeud de départ
+	 * @param end la postion du noeud d'arrivée
 	 */
 	public ArrayList<Node> addStartAndEnd(Vec2 start, Vec2 end)
 	{
