@@ -29,6 +29,9 @@ public class GameState<R extends Robot> implements Service
     
     /** Le robot que l'on fait agir sur cette table. Cela peut être un RobotReal ou un RobotChrono */
     public final R robot;
+    
+	// état du parasol
+	public static boolean stateParasol = false;
 
     /** Temps écoulé depuis le début du match en ms */
     private long timeEllapsed;
@@ -76,6 +79,17 @@ public class GameState<R extends Robot> implements Service
 		timeEllapsed = ThreadTimer.ellapsedTimeSinceMatchStarted();
 		return timeEllapsed;
 	}
+	
+	// le parasol est-il déployé ?
+	public boolean getIsParasolUnfolded()
+	{
+		return stateParasol;
+	}
 
+	// "le parasol est maintenant déployé !"
+	public void parasolUnfolded()
+	{
+		stateParasol = true;
+	}
     
 }
