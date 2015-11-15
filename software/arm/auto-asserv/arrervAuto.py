@@ -52,7 +52,7 @@ while(not test.done):
     print test.KpG
     print test.KpD
 
-   
+    """
     T= np.linspace(0, 1.5, len(test.speedG))
     SG, SD, VC = test.speedG, test.speedD, test.VcG
     print SG
@@ -62,8 +62,9 @@ while(not test.done):
     plt.autoscale()
     plt.show()
     plt.cla()
-
     raw_input("Waiting your shitty order")
+    """
+    
 
 
 
@@ -85,7 +86,7 @@ while(not test.done):
     print test.KpG
     print test.KpD
 
-
+    """
     T= np.linspace(0, 1.5, len(test.speedG))
     SG, SD, VC = test.speedG, test.speedD, test.VcG
     print SG
@@ -97,7 +98,7 @@ while(not test.done):
     plt.cla()
     raw_input("Waiting your shitty order")
 
-    
+    """
     ShittyClass.resetYourShit(test)
 
     
