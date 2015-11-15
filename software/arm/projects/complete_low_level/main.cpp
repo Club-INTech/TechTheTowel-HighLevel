@@ -473,7 +473,6 @@ void TIM4_IRQHandler(void) { //2kHz = 0.0005s = 0.5ms
 		TIM_ClearITPendingBit(TIM4, TIM_IT_Update);
 
 		//Asservissement et mise à jour de la position
-		motionControlSystem->control();
 		motionControlSystem->updatePosition();
 
 		if (i >= 10) { //5ms
@@ -483,6 +482,7 @@ void TIM4_IRQHandler(void) { //2kHz = 0.0005s = 0.5ms
 		}
 
 		if(j >= 5){ //5ms
+			motionControlSystem->control();
 			motionControlSystem->track();
 			j=0;
 		}

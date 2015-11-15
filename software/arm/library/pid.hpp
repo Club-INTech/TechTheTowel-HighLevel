@@ -26,7 +26,7 @@ public:
 		this->setPoint = setPoint;
 
 		setOutputLimits(-2147483647, 2147483647);
-		setTunings(1, 0, 0);
+		setTunings(0.125, 0.00007, 0);
 		epsilon = 0;
 		pre_error = 0;
 		derivative = 0;
@@ -38,21 +38,21 @@ public:
 
 		int32_t error = (*setPoint) - (*input);
 		derivative = error - pre_error;
-		integral += error/1000;
+		integral += error;
 		pre_error = error;
 
 		int32_t result = (int32_t)(
 				kp * error + ki * integral + kd * derivative);
 
 		//Saturation
-		/*
+/*
 		if (result > outMax) {
 			result = outMax;
 		} else if (result < outMin) {
 			result = outMin;
-		}
-		*/
-		result = (result * 255) / 1000000;
+		}*/
+
+		result = (result * 255) / 3000;
 
 
 		//Seuillage de la commande
