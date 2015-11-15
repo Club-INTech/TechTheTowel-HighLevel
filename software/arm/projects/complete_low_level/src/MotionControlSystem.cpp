@@ -26,8 +26,8 @@ MotionControlSystem::MotionControlSystem(): leftMotor(Side::LEFT), rightMotor(Si
 	leftSpeedPID.setOutputLimits(-255,255);
 	rightSpeedPID.setOutputLimits(-255,255);
 
-	maxSpeed = 1000000; //Vitesse maximum Ta guele Rémi, des moteurs (avec une marge au cas où on s'amuse à faire forcer un peu la bestiole).
-	maxAcceleration = 5000;
+	maxSpeed = 1000000; //Vitesse maximum, des moteurs (avec une marge au cas où on s'amuse à faire forcer un peu la bestiole).
+	maxAcceleration = 500;
 
 	delayToStop = 100;
 	toleranceTranslation = 50;
@@ -123,8 +123,9 @@ void MotionControlSystem::control()
 	int32_t leftTicks = Counter::getLeftValue();
 
 
-	currentLeftSpeed = (leftTicks - previousLeftTicks)*500000;
-	currentRightSpeed = (rightTicks - previousRightTicks)*500000;
+	currentLeftSpeed = (leftTicks - previousLeftTicks)*250000;
+	currentRightSpeed = (rightTicks - previousRightTicks)*250000;
+
 	previousLeftTicks = leftTicks;
 	previousRightTicks = rightTicks;
 
@@ -385,7 +386,7 @@ void MotionControlSystem::testSpeed()
 	rightSpeedControlled = true;
 
 	resetTracking();
-	translationSpeed = 2000;
+	translationSpeed = 150000;
 	rotationSpeed = 0;
 	Delay(2000);
 	translationSpeed = 0;
@@ -401,7 +402,7 @@ void MotionControlSystem::testSpeedReverse()
 	rightSpeedControlled = true;
 
 	resetTracking();
-	translationSpeed = -2000;
+	translationSpeed = -150000;
 	rotationSpeed = 0;
 	Delay(2000);
 	translationSpeed = 0;
@@ -419,7 +420,7 @@ void MotionControlSystem::longTestSpeed()
 	resetTracking();
 	translationSpeed = 200000;
 	rotationSpeed = 0;
-	Delay(1000);
+	Delay(200);
 	translationSpeed = 0;
 	printTracking();
 	serial.printf("endtest");

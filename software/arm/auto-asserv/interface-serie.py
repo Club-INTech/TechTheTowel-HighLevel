@@ -62,8 +62,8 @@ while(m!='exit'):
                 speedD.append(np.abs(float(data[3])))
                 VcG.append(np.abs(float(data[4])))
                 VcD.append(np.abs(float(data[5])))
-                pwmG.append(np.abs(float(data[6])))
-                pwmD.append(np.abs(float(data[7])))
+                pwmG.append(float(data[6]))
+                pwmD.append(float(data[7]))
                 
         T= np.linspace(0, 1.5, len(speedG))
         plt.plot(T, speedG, 'r')
