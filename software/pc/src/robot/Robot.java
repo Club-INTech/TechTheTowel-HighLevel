@@ -409,6 +409,7 @@ public abstract class Robot implements Service
     {
 
 		log.debug("appel de Robot.moveToLocation(" + aim + "," + hooksToConsider + "," + table + ")");
+		//On crée bêtement un cercle de rayon nul pour lancer moveToCircle, sachant que la position de ce cercle est extraite pour le pathDiniDing (et après on dit qu'à INTech on code comme des porcs...)
     	moveToCircle(new Circle(aim), hooksToConsider, table);
     }
     
@@ -419,11 +420,10 @@ public abstract class Robot implements Service
      * @param aim le cercle ou l'on veut se rendre
 	 * @param hooksToConsider the hooks to consider
      * @param table la table sur laquell on est sensé se déplacer
-     * @param obstaclesNotConsidered les obstacles a ne pas considerer dans le pathDingDing comporte de base les plots ennemis
      * 
      * @throws PathNotFoundException lorsque le pathdingding ne trouve pas de chemin 
      * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
-     * @throws PointInObstacleException 
+     * @throws PointInObstacleException lorsque le point demandé est dans un obstacle ; utile pour un déplacement random / à éviter de jouer avec...
      * @throws InObstacleException lorqsque le robot veut aller dans un obstacle
      */
     public void moveToCircle(Circle aim, ArrayList<Hook> hooksToConsider, Table table) throws PathNotFoundException, UnableToMoveException, PointInObstacleException
