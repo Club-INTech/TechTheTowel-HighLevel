@@ -151,13 +151,13 @@ public class Log implements Service
 	{
 		// trouve l'heure pour la rajouter dans le message de log
 		java.util.GregorianCalendar calendar = new GregorianCalendar();
-		String heure = calendar.get(Calendar.HOUR)+":"+calendar.get(Calendar.MINUTE)+":"+calendar.get(Calendar.SECOND)+","+calendar.get(Calendar.MILLISECOND);
+		String heure = calendar.get(Calendar.HOUR_OF_DAY)+"h"+calendar.get(Calendar.MINUTE)+":"+calendar.get(Calendar.SECOND)+","+calendar.get(Calendar.MILLISECOND);
 		
 		
 		if(prefix != debugPrefix || printLogs)
 		{
 			StackTraceElement elem = Thread.currentThread().getStackTrace()[3];
-			logPrinter.println(System.currentTimeMillis()+elem.getClassName()+"."+elem.getMethodName()+":"+elem.getLineNumber()+" > "+message+"\u001B[0m");
+			logPrinter.println(heure+" "+elem.getClassName()+"."+elem.getMethodName()+":"+elem.getLineNumber()+" > "+message+"\u001B[0m");
 		}
 		if(saveLogs)
 			writeToFile(prefix+heure+" "+message+"\u001B[0m"); // suffixe en \u001B[0m pour que la prochiane ligne soit blanche si on ne spécifie rien
