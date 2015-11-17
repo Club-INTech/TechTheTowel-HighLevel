@@ -1,6 +1,7 @@
 package tests;
 
 import enums.ServiceNames;
+import exceptions.PathNotFoundException;
 import exceptions.PointInObstacleException;
 import graphics.Window;
 import org.junit.Before;
@@ -58,7 +59,7 @@ public class JUnit_TextualPDDTest extends JUnit_Test
     			log.debug(path.get(i).getPosition());
     		}
     		log.debug(System.currentTimeMillis()-time);
-    	} catch (PointInObstacleException e) {
+    	} catch (PointInObstacleException | PathNotFoundException e) {
     		e.printStackTrace();
     	}
     	/*
