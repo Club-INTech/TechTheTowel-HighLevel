@@ -5,6 +5,8 @@ import exceptions.PathNotFoundException;
 import exceptions.PointInObstacleException;
 import smartMath.Vec2;
 import table.Table;
+import table.obstacles.ObstacleCircular;
+import table.obstacles.ObstacleRectangular;
 import utils.Log;
 
 import java.util.ArrayList;
@@ -54,6 +56,9 @@ public class PathDingDing implements Service
 	
 	//Le log
 	private Log log;
+
+    //La table
+    private Table table;
 	
 	/**
 	 * Constructeur du PathDIngDIng
@@ -63,7 +68,7 @@ public class PathDingDing implements Service
 	public PathDingDing(Table table, Log log)
 	{
 		this.log = log;
-		
+		this.table = table;
 		this.graph = new Graph(table, log);
 		
 		this.openNodes = new ArrayList<Node>();
@@ -313,7 +318,69 @@ public class PathDingDing implements Service
 	}
 
 
-	@Override
+    /**
+     * Déplace un obstacle à la postion donnée, effectue tous les changements necessaires, autant sur le graphe
+     * de PathDingDing que sur la table.
+     * @param obs l'obstacle en question
+     * @param newPos la nouvelle position
+     */
+    public void moveObstacle(ObstacleCircular obs, Vec2 newPos)
+    {
+        // Pour informer qu'on a changé la table
+        table.getObstacleManager().hasBeenModified = true;
+
+        // On supprime les noeuds du graphe désormais inutiles
+        graph.removeNode(new Vec2((obs.getPosition().x - obs.getRadius()),(obs.getPosition().y)));
+        graph.removeNode(new Vec2((obs.getPosition().x + obs.getRadius()),(obs.getPosition().y)));
+        graph.removeNode(new Vec2((obs.getPosition().x),(obs.getPosition().y + obs.getRadius())));
+        graph.removeNode(new Vec2((obs.getPosition().x),(obs.getPosition().y - obs.getRadius())));
+
+        //on ajoute les nouveaux noeuds
+        graph.addNode(new Node(new Vec2((newPos.x + obs.getRadius()),(newPos.y))));
+        graph.addNode(new Node(new Vec2((newPos.x - obs.getRadius()),(newPos.y))));
+        graph.addNode(new Node(new Vec2((newPos.x),(newPos.y + obs.getRadius()))));
+        graph.addNode(new Node(new Vec2((newPos.x),(newPos.y - obs.getRadius()))));
+
+        // On change les données du Vec2 au lieu de l'écraser par celui en argument
+        // cela permet de changer la position en même temps dans la table
+        obs.getPosition().x = newPos.x;
+        obs.getPosition().y = newPos.y;
+
+    }
+
+    /**
+     * Déplace un obstacle à la postion donnée, effectue tous les changements necessaires, autant sur le graphe
+     * de PathDingDing que sur la table.
+     * @param obs l'obstacle en question
+     * @param newPos la nouvelle position
+     */
+    public void moveObstacle(ObstacleRectangular obs, Vec2 newPos)
+    {
+        // Pour informer qu'on a changé la table
+        table.getObstacleManager().hasBeenModified = true;
+
+        // On supprime les noeuds du graphe désormais inutiles
+        graph.removeNode(new Vec2((obs.getPosition().x - obs.getSizeX()),(obs.getPosition().y + obs.getSizeY())));
+        graph.removeNode(new Vec2((obs.getPosition().x - obs.getSizeX()),(obs.getPosition().y - obs.getSizeY())));
+        graph.removeNode(new Vec2((obs.getPosition().x + obs.getSizeX()),(obs.getPosition().y + obs.getSizeY())));
+        graph.removeNode(new Vec2((obs.getPosition().x + obs.getSizeX()),(obs.getPosition().y - obs.getSizeY())));
+
+        // On change les données du Vec2 au lieu de l'écraser par celui en argument
+        // cela permet de changer la position en même temps dans la table
+        obs.getPosition().x = newPos.x;
+        obs.getPosition().y = newPos.y;
+
+        //on ajoute les nouveaux noeuds
+        graph.addNode(new Node(new Vec2((obs.getPosition().x - obs.getSizeX()),(obs.getPosition().y + obs.getSizeY()))));
+        graph.addNode(new Node(new Vec2((obs.getPosition().x - obs.getSizeX()),(obs.getPosition().y - obs.getSizeY()))));
+        graph.addNode(new Node(new Vec2((obs.getPosition().x + obs.getSizeX()),(obs.getPosition().y + obs.getSizeY()))));
+        graph.addNode(new Node(new Vec2((obs.getPosition().x + obs.getSizeX()),(obs.getPosition().y - obs.getSizeY()))));
+
+    }
+
+
+
+    @Override
 	public void updateConfig() 
 	{
 		// TODO update the config
