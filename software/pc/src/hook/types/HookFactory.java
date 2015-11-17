@@ -77,7 +77,7 @@ public class HookFactory implements Service
 	 * ======================================================================
 	 */
 	
-	//TODO !
+	//TODO Hooks EN STATIC !!!!!!! JE VEUX PAS VOIR DE FACTORY SANS STATIC !!!!!
 	
 
 	
