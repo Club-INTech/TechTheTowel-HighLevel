@@ -285,7 +285,10 @@ public class PathDingDing implements Service
 			this.openNodes = new ArrayList<Node>();
 			this.closedNodes = new ArrayList<Node>();
 		}
-		graph.setAllLinks();
+        if(graph.getObstacleManager().hasBeenModified)
+        {
+            graph.setAllLinksOptimised();
+        }
 	}
 	
 	/**

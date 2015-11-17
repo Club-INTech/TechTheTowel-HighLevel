@@ -42,6 +42,11 @@ public class Segment
 		mPointB = pointB;
 	}
 
+	/**
+	 * Renvoie la distance au carré entre deux points Vec2
+	 * @param pointA point 1
+	 * @param pointB point 2
+     */
 	public static double squaredLength(Vec2 pointA, Vec2 pointB)
 	{
 		return (pointB.x - pointA.x)*(pointB.x - pointA.x) + (pointB.y - pointA.y)*(pointB.y - pointA.y);

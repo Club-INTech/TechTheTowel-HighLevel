@@ -25,7 +25,7 @@ public class Graph
      * Une valeur trop petite peut rendre un noeud isolé s'il est trop éloigné des autres
      * Assimilable au clipping dans les moteurs 3D
 	 */
-	public static double IGNORE_DISTANCE = 5000;
+	public static double IGNORE_DISTANCE = 250000;
 
 	/**
 	 * Nodes statiques du graphe, c'est a dire permaments sur la tables (pas utilises pour l'evitement)
@@ -188,7 +188,7 @@ public class Graph
 			// On le prend en compte que les noeuds proches
 			if(Segment.squaredLength(nodes.get(i).getPosition(), node.getPosition()) <= IGNORE_DISTANCE)
             {
-				if (isObstructed(node, nodes.get(i)))
+				if (!isObstructed(node, nodes.get(i)))
                 {
 					links.add(new Link(node, nodes.get(i)));
 				}
