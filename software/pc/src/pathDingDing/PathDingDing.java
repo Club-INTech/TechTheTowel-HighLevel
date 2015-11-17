@@ -254,9 +254,22 @@ public class PathDingDing implements Service
 		{
 			log.critical("erreur : pathDingDing sans résultat");
 		}
-		
-		
-		// ET C'EST FUCKING TERMINE !!!!
+
+        //==================================
+        // On cherche à optimiser le chemin
+        //==================================
+        for(int i=0 ; i<(result.size()-2) ; i++)
+        {
+            // Si le noeud i et i+2 sont reliables, on les relie et on supprime le i+1
+            if(!graph.isObstructed(result.get(i), result.get(i+2)))
+            {
+                result.remove(i+1);
+                i--;
+            }
+        }
+
+
+        // ET C'EST FUCKING TERMINE !!!!
 		return result;
 	}
 	

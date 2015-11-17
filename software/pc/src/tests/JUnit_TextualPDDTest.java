@@ -17,8 +17,7 @@ import utils.Log;
 import java.util.ArrayList;
 
 public class JUnit_TextualPDDTest extends JUnit_Test
-{	
-	Window win;
+{
 	Table table;
 	PathDingDing pf;
 	RobotReal robot;

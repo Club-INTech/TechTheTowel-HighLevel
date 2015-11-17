@@ -41,4 +41,10 @@ public class Segment
 	{
 		mPointB = pointB;
 	}
+
+	public static double squaredLength(Vec2 pointA, Vec2 pointB)
+	{
+		return (pointB.x - pointA.x)*(pointB.x - pointA.x) + (pointB.y - pointA.y)*(pointB.y - pointA.y);
+
+	}
 }
