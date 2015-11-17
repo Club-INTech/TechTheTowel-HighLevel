@@ -5,6 +5,7 @@ import exceptions.Locomotion.UnableToMoveException;
 import exceptions.PathNotFoundException;
 import exceptions.PointInObstacleException;
 import hook.Hook;
+import org.junit.Before;
 import org.junit.Test;
 import robot.Robot;
 import smartMath.Vec2;
@@ -20,11 +21,12 @@ public class JUnit_TestBaliseClement extends JUnit_Test
 
 	GameState<Robot> clement;
 	Table table;
-	//TODO deja un log dans la classe mere
+	// On utulise le log du robot au lieu de celui de JUnit pour le PDD et pour l'entraînement
 	Log log;
 	long time;
 	
 	@SuppressWarnings("unchecked")
+    @Before
 	public void setUp() throws Exception
 	{
 		//creation des objets pour le test
@@ -42,9 +44,27 @@ public class JUnit_TestBaliseClement extends JUnit_Test
 		
 	@Test
 	public void test() {
-		//TODO vraiment utile comme appel ? 
-		//la fonction run n'est utilis�e qu'une fois et elle n'a pas vocation a etre reutilisee
-		run();
+		while((System.currentTimeMillis()-time)<90000)
+		{
+			Vec2 point = NextPoint();
+			try
+			{
+				clement.robot.moveToLocation(point, new ArrayList<Hook>(), table);
+			}
+			catch (PathNotFoundException e)
+			{
+				log.debug("pas de chemin entre : "+clement.robot.getPosition()+" et : "+point);
+			}
+			catch (UnableToMoveException e)
+			{
+				log.debug("robot bloque");
+				return;//on arrete le test pour preserver la mecanique du robot
+			}
+			catch (PointInObstacleException e)
+			{
+				log.debug("le point : "+point+" est dans un obtacle");
+			}
+		}
 	}
 	
 	/**
@@ -57,32 +77,5 @@ public class JUnit_TestBaliseClement extends JUnit_Test
 		Vec2 point = new Vec2(random.nextInt(3001)-1500,random.nextInt(2001));
 		log.debug(point);
 		return(point);
-	}
-		
-	public void run()
-	{
-		while((System.currentTimeMillis()-time)<90000)
-		{
-			Vec2 point = NextPoint();
-			try
-			{	
-				clement.robot.moveToLocation(point,new ArrayList<Hook>(), table);
-			} 
-			catch (PathNotFoundException e) 
-			{
-				log.debug("pas de chemin entre : "+clement.robot.getPosition()+" et : "+point);
-			} 
-			catch (UnableToMoveException e) 
-			{
-				log.debug("robot bloque");
-				return;//on arrete le test pour preserver la mecanique du robot
-			}
-			catch (PointInObstacleException e) 
-			{
-				log.debug("le point : "+point+" est dans un obtacle");
-				//Si le point est mal placé, on relance
-				run();//TODO mauvaise idee. tu est dans un while donc ne rien faire continuera aussi ta boucle
-			}
-		}
 	}
 }

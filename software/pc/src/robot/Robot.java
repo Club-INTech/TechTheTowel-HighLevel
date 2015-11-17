@@ -422,7 +422,6 @@ public abstract class Robot implements Service
      * @throws PathNotFoundException lorsque le pathdingding ne trouve pas de chemin 
      * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
      * @throws PointInObstacleException lorsque le point demandé est dans un obstacle ; utile pour un déplacement random / à éviter de jouer avec...
-     * @throws InObstacleException lorqsque le robot veut aller dans un obstacle
      */
     public void moveToCircle(Circle aim, ArrayList<Hook> hooksToConsider, Table table) throws PathNotFoundException, UnableToMoveException, PointInObstacleException
     {
