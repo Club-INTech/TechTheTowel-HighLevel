@@ -23,13 +23,18 @@ public class Log implements Service
 	FileWriter writer = null;
 
 	/** Préfixe donnant la couleur en console des messages de debug */
-	private String 	debugPrefix 	= "Dbg - \u001B[32m";
+	private String debugPrefix 	= "Dbg - \u001B[32m";
 
 	/** Préfixe donnant la couleur en console des messages de warning */
-	private String 	warningPrefix 	= "Warn - \u001B[33m";
+	private String 	warningPrefix 	= "Warn - \u001B[30m";
 
 	/** Préfixe donnant la couleur en console des messages critiques */
 	private String 	criticalPrefix = "Critical - \u001B[31m";
+	
+	/** Affixe resettant la couleur actuelle */
+	// Actuellement, on ne met rien, mais on est censé reset la couleur avec \u001B[0m a la fin du messsage.
+	// voir http://stackoverflow.com/questions/5762491/how-to-print-color-in-console-using-system-out-println
+	private String resetColor = "";//"\u001B[0m";
 
 	/** Vrai s'il faut afficher les messages sur la sortie standard (prend du temps CPU), faux sinon. */
 	private boolean printLogs = true;
@@ -126,7 +131,7 @@ public class Log implements Service
 	 */
 	public void critical(Object message)
 	{
-			critical(message.toString());
+		critical(message.toString());
 	}
 	
 	/**
@@ -136,7 +141,7 @@ public class Log implements Service
 	 */
 	public void critical(String message)
 	{
-			writeToLog(message, criticalPrefix, System.err);
+		writeToLog(message, criticalPrefix, System.err);
 	}
 
 	/**
@@ -157,10 +162,10 @@ public class Log implements Service
 		if(prefix != debugPrefix || printLogs)
 		{
 			StackTraceElement elem = Thread.currentThread().getStackTrace()[3];
-			logPrinter.println(heure+" "+elem.getClassName()+"."+elem.getMethodName()+":"+elem.getLineNumber()+" > "+message+"\u001B[0m");
+			logPrinter.println(heure+" "+elem.getClassName()+"."+elem.getMethodName()+":"+elem.getLineNumber()+" > "+message+resetColor);
 		}
 		if(saveLogs)
-			writeToFile(prefix+heure+" "+message+"\u001B[0m"); // suffixe en \u001B[0m pour que la prochiane ligne soit blanche si on ne spécifie rien
+			writeToFile(prefix+heure+" "+message+resetColor); // suffixe en \u001B[0m pour que la prochiane ligne soit blanche si on ne spécifie rien
 	}
 	
 	/**
