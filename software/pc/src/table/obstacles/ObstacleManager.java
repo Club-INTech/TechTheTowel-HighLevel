@@ -20,7 +20,6 @@ import java.util.ArrayList;
 
 public class ObstacleManager
 {
-    //TODO déplacement d'obstacle (le Vec2 de position s'auto-ajuste mais il faut refaire les noeuds du graphe autour de l'obstacle et supprimer les anciens)
 
 	/** système de log sur lequel écrire. */
     private Log log;
@@ -113,7 +112,8 @@ public class ObstacleManager
 
 
 
-    }    
+    }
+
 
     /**
      * Rends le gestionnaire d'obstacle fourni en argument explicite égal a ce gestionnaire.

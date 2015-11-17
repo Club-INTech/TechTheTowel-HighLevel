@@ -5,6 +5,7 @@ import container.Service;
 import enums.Color;
 import enums.Elements;
 import smartMath.Vec2;
+import table.obstacles.ObstacleCircular;
 import table.obstacles.ObstacleManager;
 import table.obstacles.ObstacleRectangular;
 import utils.Config;
@@ -395,7 +396,6 @@ public class Table implements Service
 		
 	}
 
-	
 	
 	public ObstacleManager getObstacleManager()
 	{

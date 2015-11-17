@@ -104,6 +104,7 @@ public class Graph
 		//========================
 		// Fin du graphe à la con
 		//========================
+        addObstacleNodes();
 		setAllLinksOptimised();
 	}
 
@@ -158,23 +159,7 @@ public class Graph
 		nodes.add(node);
 	}
 
-	/** Moodle
-Accéder directement à Moodle
-Tutoriel de présentation de Moodle
-(français  - - -   english)
-Mes cours Moodle (année 2015-2016)
-
-Algorithmique et langage de programmation
-Analyse de données
-Analyse Numérique
-Carnet d'Activité Professionnel 1A
-Echanges avec la direction des formations
-Econométrie et Analyse de Données
-Espace des Stages et Relations Entreprises TSP
-Files d'Attente
-GATE : Gestion et Apprentissage du Travail en Equipe
-Gestion financière et marketing
-Hyperfréquences
+	/**
 	 * Relie tous les noeuds ensemble en vérifiant s'il n'y a pas d'intersection avec un obstacle ; méthode optimisée
 	 */
 	public void setAllLinksOptimised()
@@ -362,9 +347,16 @@ Hyperfréquences
 	/**
 	 * Supprime un noeud du graphe
 	 */
-	public void removeNode(Node node)
+	public void removeNode(Vec2 pos)
 	{
-		nodes.remove(node);
+		for(int i =0 ; i<nodes.size() ; i++)
+		{
+			if(nodes.get(i).getPosition().x == pos.x && nodes.get(i).getPosition().y == pos.y)
+            {
+                nodes.remove(i);
+                break;
+            }
+		}
 	}
 	
 	/**
