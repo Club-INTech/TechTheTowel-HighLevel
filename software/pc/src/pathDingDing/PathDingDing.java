@@ -105,6 +105,9 @@ public class PathDingDing implements Service
 		//===========================================
 		// DEBUT DE L'ALGORITHME A* - INITIALISATION
 		//===========================================
+
+		//On calcule l'heuristique de chacun des noeuds
+		graph.computeAllHeuristic(endNode);
 		
 		// On ajoute le noeud de départ à la liste des nodes fermés
 		this.closedNodes.add(startNode);

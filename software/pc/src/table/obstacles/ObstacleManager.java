@@ -268,9 +268,27 @@ public class ObstacleManager
     	}
     	else
     	{
-    		log.debug("Ennemi hors de la table");
+    		log.debug("Obstacle hors de la table");
 		}
     }
+
+	/**
+	 * Ajoute un obstacle rectangulaire
+	 * @param obs le ObstacleRectangular en question
+     */
+	public void addRectangle(ObstacleRectangular obs)
+	{
+		mRectangles.add(obs);
+	}
+
+	/**
+	 * Ajoute un obstacle circulaire
+	 * @param obs le ObstacleCircular en question
+     */
+	public void addCircular(ObstacleCircular obs)
+	{
+		mFixedObstacles.add(obs);
+	}
 
     /**
 	 * Supprime du gestionnaire tout les obstacles dont la date de péremption est antérieure a la date fournie

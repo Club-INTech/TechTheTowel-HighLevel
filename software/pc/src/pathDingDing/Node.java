@@ -67,7 +67,7 @@ public class Node implements Comparable<Node>
 	 * Calcule la valeur heuristique du noeud ; l'arrivee ayant une heuristique nulle
 	 * @param goal point d'arrivee du chemin recherché
 	 */
-	private void computeHeuristic(Node goal)
+	public void computeHeuristic(Node goal)
 	{
 		//Si ce noeud est l'arrivee, on met son heuristique à 0 (car il parait que la distance d'un point a lui même est nulle...)
 		if(this == goal)
