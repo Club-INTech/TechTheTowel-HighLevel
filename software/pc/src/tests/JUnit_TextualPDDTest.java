@@ -43,7 +43,7 @@ public class JUnit_TextualPDDTest extends JUnit_Test
         log.debug(System.currentTimeMillis() - time);
     }
     
-    @Test
+   //@Test
     public void test()
     {
     	time = System.currentTimeMillis();
@@ -57,7 +57,7 @@ public class JUnit_TextualPDDTest extends JUnit_Test
     			pathVec.add(path.get(i).getPosition());
     			log.debug(path.get(i).getPosition());
     		}
-    		log.debug(System.currentTimeMillis()-time);
+    		log.debug(System.currentTimeMillis()-time+" milliSecondes");
     	} catch (PointInObstacleException | PathNotFoundException e) {
     		e.printStackTrace();
     	}
@@ -68,6 +68,36 @@ public class JUnit_TextualPDDTest extends JUnit_Test
 			e.printStackTrace();
 		} */
     	
+    }
+    
+    /**
+     * Meme test, mais en plus muet : ne donne que les milliSecondes passées, sur plusieurs tests
+     */
+    @Test
+    public void testMuted()
+    {
+    	String timeUsed = "";
+    	for(int j=0; j<10; j++)
+    	{
+	    	time = System.currentTimeMillis();
+	    	ArrayList<Node> path;
+			try 
+			{
+				path = pf.computePath(new Vec2(1000, 1800), new Vec2(0, 0));
+				
+	    		ArrayList<Vec2> pathVec = new ArrayList<Vec2>();
+	    		for(int i=0 ; i<path.size() ; i++)
+	    		{
+	    			pathVec.add(path.get(i).getPosition());
+	    		}
+	    	} 
+			catch (PointInObstacleException | PathNotFoundException e) 
+			{
+	    		e.printStackTrace();
+			}
+			timeUsed+=System.currentTimeMillis()-time+"//";
+    	}
+    	log.debug(timeUsed);
     }
     
 }
