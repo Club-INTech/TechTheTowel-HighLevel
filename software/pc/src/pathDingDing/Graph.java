@@ -4,6 +4,7 @@ import smartMath.Geometry;
 import smartMath.Segment;
 import smartMath.Vec2;
 import table.Table;
+import table.obstacles.Obstacle;
 import table.obstacles.ObstacleCircular;
 import table.obstacles.ObstacleManager;
 import table.obstacles.ObstacleRectangular;
@@ -25,7 +26,7 @@ public class Graph
      * Une valeur trop petite peut rendre un noeud isolé s'il est trop éloigné des autres
      * Assimilable au clipping dans les moteurs 3D
 	 */
-	public static double IGNORE_DISTANCE = 250000;
+	public static final double IGNORE_DISTANCE = 250000;
 
 	/**
 	 * Nodes statiques du graphe, c'est a dire permaments sur la tables (pas utilises pour l'evitement)
@@ -105,7 +106,15 @@ public class Graph
 		//========================
 		setAllLinksOptimised();
 	}
-	
+
+	public void computeAllHeuristic(Node goal)
+	{
+		for(int i = 0 ; i< nodes.size() ; i++)
+		{
+			nodes.get(i).computeHeuristic(goal);
+		}
+	}
+
 	/**
 	 * Relie tous les noeuds ensemble en vérifiant s'il n'y a pas d'intersection avec un obstacle
 	 */
@@ -281,6 +290,31 @@ public class Graph
 
         return ok;
     }
+
+	/**
+	 * Ajoute les noeuds aux coins des obstacles ; permet d'optimiser le PathDingDing
+	 */
+	public void addObstacleNodes()
+	{
+		ArrayList<ObstacleRectangular> rect = obstacleManager.getRectangles();
+		ArrayList<ObstacleCircular> cir = obstacleManager.getFixedObstacles();
+		for(int i = 0 ; i < rect.size() ; i++)
+        {
+            ObstacleRectangular r = rect.get(i);
+            nodes.add(new Node(new Vec2(r.getPosition().x + (r.getSizeX()/2), (r.getPosition().y - r.getSizeY()/2))));
+            nodes.add(new Node(new Vec2(r.getPosition().x + (r.getSizeX()/2), (r.getPosition().y + r.getSizeY()/2))));
+            nodes.add(new Node(new Vec2(r.getPosition().x - (r.getSizeX()/2), (r.getPosition().y - r.getSizeY()/2))));
+            nodes.add(new Node(new Vec2(r.getPosition().x - (r.getSizeX()/2), (r.getPosition().y + r.getSizeY()/2))));
+		}
+        for(int i = 0 ; i < cir.size() ; i++)
+        {
+            ObstacleCircular c = cir.get(i);
+            nodes.add(new Node(new Vec2(c.getPosition().x, (c.getPosition().y - c.getRadius()))));
+            nodes.add(new Node(new Vec2(c.getPosition().x, (c.getPosition().y + c.getRadius()))));
+            nodes.add(new Node(new Vec2(c.getPosition().x - (c.getRadius()), c.getPosition().y )));
+            nodes.add(new Node(new Vec2(c.getPosition().x + (c.getRadius()), c.getPosition().y )));
+        }
+	}
 
 	/**
 	 * Renvoie les nodes adjacents à tel node

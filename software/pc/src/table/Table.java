@@ -6,6 +6,7 @@ import enums.Color;
 import enums.Elements;
 import smartMath.Vec2;
 import table.obstacles.ObstacleManager;
+import table.obstacles.ObstacleRectangular;
 import utils.Config;
 import utils.Log;
 
@@ -146,7 +147,7 @@ public class Table implements Service
 	
 	public void initialise() // initialise la table du debut du jeu
 	{
-		//TODO initialiser la table (instancier les elems de jeu, etc...)
+		//TODO initialiser les obstacles de ObstacleManager (exemple fait pour les 3 premières boucles)
 		
 		//==================================================================================
 		// Instanciation des elements de sable centraux (VOIR LES REGLES POUR LES POSITIONS)
@@ -158,19 +159,25 @@ public class Table implements Service
 		//Ligne de cubes au sol, au fond, de l'ennemi à nous
 		for(int i = 0 ; i < 9 ; i++)
 		{
-			centerCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(-(4*sandSize)+(i*sandSize), 2000-(sandSize/2)), 0));
+			Vec2 pos = new Vec2(-(4*sandSize)+(i*sandSize),  2000-(sandSize/2));
+			mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+			centerCubes.add(new Sand(Elements.SAND_CUBE, pos, 0));
 		}
 		
 		//Ligne de cubes au sol, avant, de l'ennemi à nous
 		for(int i = 0 ; i < 3 ; i++)
 		{
-			centerCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(-sandSize+(i*sandSize), 2000-((3*sandSize)/2)), 0));
+			Vec2 pos = new Vec2(-sandSize+(i*sandSize), 2000-((3*sandSize)/2));
+			mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+			centerCubes.add(new Sand(Elements.SAND_CUBE, pos , 0));
 		}
 		
 		//Ligne de cubes niveau 1, au fond, de l'ennemi à nous
 		for(int i = 0 ; i < 3 ; i++)
 		{
-			centerCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(-sandSize+(i*sandSize), 2000-(sandSize/2)), 1));
+			Vec2 pos = new Vec2(-sandSize+(i*sandSize), 2000-(sandSize/2));
+			mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+			centerCubes.add(new Sand(Elements.SAND_CUBE, pos, 1));
 		}
 		
 		//Cube au niveau 1, avant centré
@@ -225,7 +232,7 @@ public class Table implements Service
 		//               et enfin les cubes de l'ennemi à nous à chaque ligne
 		//==================================================================================
 		
-		//TODO elements annexes
+
 		
 		//Cubes devant notre serviette
 		ourTowelCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(850-(sandSize/2), 1100+(sandSize/2)), 0));
