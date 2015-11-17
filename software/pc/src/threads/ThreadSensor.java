@@ -4,10 +4,10 @@ import enums.USsensors;
 import exceptions.ConfigPropertyNotFoundException;
 import exceptions.serial.SerialConnexionException;
 import graphics.Window;
-import robot.cardsWrappers.SensorsCardWrapper;
-import table.Table;
 import robot.RobotReal;
+import robot.cardsWrappers.SensorsCardWrapper;
 import smartMath.Vec2;
+import table.Table;
 
 /**
  * Thread qui ajoute en continu les obstacles détectés par les capteurs,

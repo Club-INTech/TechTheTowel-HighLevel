@@ -1,10 +1,10 @@
 package graphics;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
 import enums.ActuatorOrder;
 import robot.RobotReal;
+
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 
 public class Keyboard implements KeyListener

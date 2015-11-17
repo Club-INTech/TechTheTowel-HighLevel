@@ -1,11 +1,11 @@
 package tests;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
-import org.junit.Test;
-import org.junit.Assert;
 
 /**
  * Tests unitaires pour la configuration... juste épique.

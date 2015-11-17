@@ -1,10 +1,9 @@
 package tests;
 
-import java.util.Random;
-
 import org.junit.Assert;
-
 import smartMath.Vec2;
+
+import java.util.Random;
 /**
  * Tests unitaires pour le package smartMath.
  *

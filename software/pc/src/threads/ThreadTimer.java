@@ -1,11 +1,11 @@
 package threads;
 
 import exceptions.serial.SerialConnexionException;
+import graphics.Window;
+import robot.RobotReal;
 import robot.cardsWrappers.LocomotionCardWrapper;
 import robot.cardsWrappers.SensorsCardWrapper;
 import table.Table;
-import graphics.*;
-import robot.RobotReal;
 
 /**
  * Thread qui s'occupe de la gestion du temps: début du match et immobilisation du robot en fin de match

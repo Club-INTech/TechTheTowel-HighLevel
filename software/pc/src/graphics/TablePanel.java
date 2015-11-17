@@ -2,17 +2,18 @@
 
 package graphics;
 
-import java.awt.Graphics;
-
-import javax.swing.JPanel;
-
-import java.awt.Color; 
-import java.util.ArrayList;
-
+import robot.Robot;
+import robot.RobotReal;
+import smartMath.Segment;
+import smartMath.Vec2;
 import table.Table;
-import smartMath.*;
-import robot.*;
-import table.obstacles.*;
+import table.obstacles.ObstacleCircular;
+import table.obstacles.ObstacleProximity;
+import table.obstacles.ObstacleRectangular;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * panneau sur lequel est dessine la table

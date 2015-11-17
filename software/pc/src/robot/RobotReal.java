@@ -1,23 +1,18 @@
 package robot;
 
+import enums.*;
+import exceptions.Locomotion.UnableToMoveException;
+import exceptions.serial.SerialConnexionException;
+import hook.Hook;
+import pathDingDing.PathDingDing;
 import robot.cardsWrappers.ActuatorCardWrapper;
 import robot.cardsWrappers.SensorsCardWrapper;
 import smartMath.Vec2;
-import utils.Log;
 import utils.Config;
-import pathDingDing.PathDingDing;
+import utils.Log;
 import utils.Sleep;
-import hook.Hook;
 
 import java.util.ArrayList;
-
-import enums.ActuatorOrder;
-import enums.ContactSensors;
-import enums.Speed;
-import enums.SymmetrizedActuatorOrderMap;
-import enums.USsensors;
-import exceptions.Locomotion.UnableToMoveException;
-import exceptions.serial.SerialConnexionException;
 
 /**
  * Effectue le lien entre le code et la réalité (permet de parler aux actionneurs, d'interroger les capteurs, etc.)

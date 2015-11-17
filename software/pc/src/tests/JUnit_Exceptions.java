@@ -1,14 +1,13 @@
 
 package tests;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-
-import org.junit.Test;
-
 import exceptions.ConfigPropertyNotFoundException;
 import exceptions.ExecuteException;
 import exceptions.serial.SerialConnexionException;
+import org.junit.Test;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 /**
  * classe des tests d'exceptions

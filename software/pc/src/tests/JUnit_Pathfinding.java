@@ -1,13 +1,12 @@
 package tests;
 
-import org.junit.*;
-import org.junit.runner.JUnitCore;
-
-import pathDingDing.*;
-import table.Table;
-import enums.*;
-
+import enums.ServiceNames;
 import graphics.Window;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.JUnitCore;
+import pathDingDing.PathDingDing;
+import table.Table;
 
 public class JUnit_Pathfinding extends JUnit_Test
 {	

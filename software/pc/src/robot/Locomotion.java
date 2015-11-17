@@ -1,15 +1,5 @@
 package robot;
 
-import hook.Hook;
-
-import java.util.ArrayList;
-
-import robot.cardsWrappers.LocomotionCardWrapper;
-import smartMath.Vec2;
-import table.Table;
-import utils.Config;
-import utils.Log;
-import utils.Sleep;
 import container.Service;
 import enums.UnableToMoveReason;
 import exceptions.ConfigPropertyNotFoundException;
@@ -17,6 +7,15 @@ import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.Locomotion.UnexpectedObstacleOnPathException;
 import exceptions.serial.SerialConnexionException;
+import hook.Hook;
+import robot.cardsWrappers.LocomotionCardWrapper;
+import smartMath.Vec2;
+import table.Table;
+import utils.Config;
+import utils.Log;
+import utils.Sleep;
+
+import java.util.ArrayList;
 
 /**
  * Entre Deplacement (appels à la série) et RobotVrai (déplacements haut niveau), Locomotion

@@ -1,11 +1,13 @@
 package robot.cardsWrappers;
 
 
-import robot.serial.SerialConnexion;
-import utils.*;
 import container.Service;
 import exceptions.ConfigPropertyNotFoundException;
 import exceptions.serial.SerialConnexionException;
+import robot.serial.SerialConnexion;
+import utils.Config;
+import utils.Log;
+import utils.Sleep;
 
 /**
  *  Dialogue avec la carte d'asservissement en position du robot.

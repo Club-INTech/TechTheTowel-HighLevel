@@ -1,10 +1,10 @@
 package exceptions.Locomotion;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-
 import enums.UnableToMoveReason;
 import smartMath.Vec2;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 /**
  * Problème générique de déplacement du robot, que ce soit a cause d'un robot ennemi

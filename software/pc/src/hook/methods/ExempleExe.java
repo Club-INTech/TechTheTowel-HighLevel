@@ -1,9 +1,10 @@
 package hook.methods;
-import robot.Robot;
-import strategie.GameState;
+
 import enums.ActuatorOrder;
 import exceptions.serial.SerialConnexionException;
 import hook.Executable;
+import robot.Robot;
+import strategie.GameState;
 
 /**
  * @author theo

@@ -1,26 +1,24 @@
 package tests;
 
+import container.Container;
+import enums.ServiceNames;
+import exceptions.Locomotion.UnableToMoveException;
+import exceptions.PathNotFoundException;
+import exceptions.PointInObstacleException;
+import exceptions.serial.SerialConnexionException;
 import hook.Hook;
-
-import java.util.ArrayList;
-
-import org.junit.Before;
 import org.junit.After;
-
+import org.junit.Before;
 import robot.Robot;
 import robot.cardsWrappers.SensorsCardWrapper;
 import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
 import threads.ThreadTimer;
-import utils.Log;
 import utils.Config;
-import container.Container;
-import enums.ServiceNames;
-import exceptions.PathNotFoundException;
-import exceptions.PointInObstacleException;
-import exceptions.Locomotion.UnableToMoveException;
-import exceptions.serial.SerialConnexionException;
+import utils.Log;
+
+import java.util.ArrayList;
 
 /**
  * The Class JUnit_Test.

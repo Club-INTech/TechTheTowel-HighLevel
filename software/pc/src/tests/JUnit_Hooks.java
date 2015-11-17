@@ -1,19 +1,17 @@
 package tests;
 
+import enums.ServiceNames;
+import exceptions.serial.SerialConnexionException;
 import hook.Hook;
 import hook.types.HookFactory;
-
-import java.util.ArrayList;
-
+import org.junit.Before;
+import robot.Robot;
+import robot.cardsWrappers.SensorsCardWrapper;
 import scripts.ScriptManager;
 import strategie.GameState;
 import table.Table;
 
-import org.junit.Before;
-import enums.*;
-import exceptions.serial.SerialConnexionException;
-import robot.Robot;
-import robot.cardsWrappers.SensorsCardWrapper;
+import java.util.ArrayList;
 
 /**
  *  Classe de test pour les Hooks

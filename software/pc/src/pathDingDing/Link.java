@@ -1,7 +1,5 @@
 package pathDingDing;
 
-import enums.Direction;
-
 /**
  * Liens reliant les nodes du pathDingDing
  * @author julian

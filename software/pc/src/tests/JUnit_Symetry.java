@@ -1,19 +1,17 @@
 package tests;
 
+import enums.ServiceNames;
 import hook.Hook;
-
-import java.util.ArrayList;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import pathDingDing.PathDingDing;
 import robot.Robot;
 import robot.cardsWrappers.SensorsCardWrapper;
 import scripts.ScriptManager;
 import smartMath.Vec2;
 import strategie.GameState;
-import enums.ServiceNames;
+
+import java.util.ArrayList;
 
 public class JUnit_Symetry extends JUnit_Test
 {

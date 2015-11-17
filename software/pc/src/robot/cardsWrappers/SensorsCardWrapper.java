@@ -1,13 +1,13 @@
 package robot.cardsWrappers;
 
-import robot.serial.SerialConnexion;
-import utils.Log;
-import utils.Config;
 import container.Service;
 import enums.ContactSensors;
 import enums.USsensors;
 import exceptions.ConfigPropertyNotFoundException;
 import exceptions.serial.SerialConnexionException;
+import robot.serial.SerialConnexion;
+import utils.Config;
+import utils.Log;
 
 /**
  * Classe simplifiant le dialogue avec les capteurs

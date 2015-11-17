@@ -1,7 +1,7 @@
 package utils;
 
-import robot.RobotReal;
 import container.Service;
+import robot.RobotReal;
 
 /**
  * Service qui permet de tester tout les actionneurs.

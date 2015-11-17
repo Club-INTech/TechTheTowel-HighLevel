@@ -1,6 +1,7 @@
 package table.obstacles;
 
-import smartMath.*;
+import smartMath.Circle;
+import smartMath.Vec2;
 
 /**
  * Obstacle de forme circulaire.

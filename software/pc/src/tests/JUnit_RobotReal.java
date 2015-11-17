@@ -1,9 +1,8 @@
 package tests;
 
+import enums.ServiceNames;
 import org.junit.Before;
 import org.junit.Test;
-
-import enums.ServiceNames;
 import robot.RobotReal;
 
 

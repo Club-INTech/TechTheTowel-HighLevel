@@ -1,8 +1,8 @@
 package tests;
 
-import org.junit.*;
-
-import graphics.*;
+import graphics.Window;
+import org.junit.Before;
+import org.junit.Test;
 import smartMath.Vec2;
 import utils.Sleep;
 

@@ -1,14 +1,14 @@
 package robot.serial;
-import utils.Log;
+
 import enums.ServiceNames;
+import exceptions.ServiceTypeException;
+import exceptions.serial.SerialManagerException;
 import gnu.io.CommPortIdentifier;
+import utils.Log;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
-
-import exceptions.ServiceTypeException;
-import exceptions.serial.SerialManagerException;
 
 /**
  * Instancie toutes les s�ries, il faut bien faire attention � d�finir les cartes

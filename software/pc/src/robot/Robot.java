@@ -1,25 +1,25 @@
 package robot;
 
-import java.util.ArrayList;
-
-import pathDingDing.Node;
-import pathDingDing.PathDingDing;
-import hook.Hook;
-import smartMath.Circle;
-import smartMath.Vec2;
-import table.Table;
 import container.Service;
 import enums.ActuatorOrder;
 import enums.ContactSensors;
 import enums.Speed;
 import enums.USsensors;
 import exceptions.ConfigPropertyNotFoundException;
+import exceptions.Locomotion.UnableToMoveException;
 import exceptions.PathNotFoundException;
 import exceptions.PointInObstacleException;
-import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
-import utils.Log;
+import hook.Hook;
+import pathDingDing.Node;
+import pathDingDing.PathDingDing;
+import smartMath.Circle;
+import smartMath.Vec2;
+import table.Table;
 import utils.Config;
+import utils.Log;
+
+import java.util.ArrayList;
 
 // TODO ajouter les capteurs au robot.
 /**

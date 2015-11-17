@@ -1,11 +1,11 @@
 package hook;
 
-import java.util.ArrayList;
-
 import robot.RobotReal;
 import strategie.GameState;
-import utils.Log;
 import utils.Config;
+import utils.Log;
+
+import java.util.ArrayList;
 
 /**
  * Classe-mère abstraite des hooks, utilisés pour la programmation évènementielle

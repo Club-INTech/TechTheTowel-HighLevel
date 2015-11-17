@@ -1,13 +1,12 @@
 package utils;
 
 import container.Service;
+import exceptions.ConfigPropertyNotFoundException;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
-
-import exceptions.ConfigPropertyNotFoundException;
 
 /**
  * Service de configuration du robot.

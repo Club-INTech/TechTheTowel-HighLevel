@@ -1,7 +1,5 @@
 package table;
 
-import smartMath.Vec2;
-
 /**
  * Classe definissant les poissons.
  * @author julian

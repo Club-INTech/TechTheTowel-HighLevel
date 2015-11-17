@@ -1,12 +1,11 @@
 package tests;
 
+import enums.ServiceNames;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import enums.ServiceNames;
-import robot.cardsWrappers.*;
+import robot.cardsWrappers.LocomotionCardWrapper;
 import utils.Sleep;
 
 /**

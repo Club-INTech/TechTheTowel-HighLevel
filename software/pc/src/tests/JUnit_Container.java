@@ -1,8 +1,7 @@
 package tests;
 
-import org.junit.Test;
-
 import enums.ServiceNames;
+import org.junit.Test;
 
 /**
  * Tests unitaires pour le container

@@ -1,18 +1,16 @@
 package tests;
 
+import enums.ServiceNames;
 import hook.Hook;
-
-import java.util.ArrayList;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import enums.ServiceNames;
-import robot.*;
+import pathDingDing.PathDingDing;
+import robot.RobotChrono;
 import smartMath.Vec2;
 import table.Table;
-import pathDingDing.PathDingDing;
+
+import java.util.ArrayList;
 
 /**
  * Tests unitaires pour RobotChrono.

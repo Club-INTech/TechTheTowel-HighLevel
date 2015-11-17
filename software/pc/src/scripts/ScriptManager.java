@@ -1,10 +1,10 @@
 package scripts;
 
-import hook.types.HookFactory;
-import utils.Log;
-import utils.Config;
 import container.Service;
 import enums.ScriptNames;
+import hook.types.HookFactory;
+import utils.Config;
+import utils.Log;
 
 /**
   * Classe enregistrée comme service qui instancie puis fournira les scripts.

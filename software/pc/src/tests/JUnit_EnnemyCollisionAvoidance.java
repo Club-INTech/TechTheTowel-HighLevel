@@ -1,11 +1,10 @@
 package tests;
 
+import enums.ServiceNames;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import enums.ServiceNames;
-import robot.*;
+import robot.RobotReal;
 import smartMath.Vec2;
 import table.Table;
 /**

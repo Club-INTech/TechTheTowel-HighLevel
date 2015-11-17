@@ -1,7 +1,5 @@
 package pathDingDing;
 
-import java.util.ArrayList;
-
 import smartMath.Geometry;
 import smartMath.Segment;
 import smartMath.Vec2;
@@ -10,6 +8,8 @@ import table.obstacles.ObstacleCircular;
 import table.obstacles.ObstacleManager;
 import table.obstacles.ObstacleRectangular;
 import utils.Log;
+
+import java.util.ArrayList;
 
 /**
  * Graphe de la table, utilise par le pathDingDing pour creer un chemin sur la table et le parcourir

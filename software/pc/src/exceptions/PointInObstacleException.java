@@ -1,9 +1,5 @@
 package exceptions;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.ArrayList;
-
 import enums.Obstacles;
 import pathDingDing.Node;
 import smartMath.Geometry;
@@ -11,6 +7,10 @@ import smartMath.Segment;
 import table.obstacles.ObstacleCircular;
 import table.obstacles.ObstacleManager;
 import table.obstacles.ObstacleRectangular;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.ArrayList;
 
 /**
  * Exception lancée si le point donné au pathDingDing est dans un obstacle

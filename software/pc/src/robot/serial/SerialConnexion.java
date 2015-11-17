@@ -1,21 +1,14 @@
 package robot.serial;
 
+import container.Service;
 import enums.ServiceNames;
 import exceptions.serial.SerialConnexionException;
-import gnu.io.CommPortIdentifier;
-import gnu.io.NoSuchPortException;
-import gnu.io.PortInUseException;
-import gnu.io.SerialPort;
-import gnu.io.SerialPortEvent;
-import gnu.io.SerialPortEventListener;
-import gnu.io.UnsupportedCommOperationException;
+import gnu.io.*;
+import utils.Log;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-
-import utils.Log;
-import container.Service;
 
 /**
  * Classe implémentant le concept d'une connexion série.

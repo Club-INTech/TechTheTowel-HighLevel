@@ -1,21 +1,19 @@
 package tests;
 
-import java.util.ArrayList;
-
-import org.junit.*;
+import enums.ServiceNames;
+import exceptions.PointInObstacleException;
+import graphics.Window;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.JUnitCore;
-
-import pathDingDing.*;
+import pathDingDing.Node;
+import pathDingDing.PathDingDing;
 import robot.RobotReal;
 import smartMath.Vec2;
 import table.Table;
 import utils.Log;
-import enums.*;
-import exceptions.PathNotFoundException;
-import exceptions.PointInObstacleException;
-import exceptions.Locomotion.UnableToMoveException;
-import graphics.Window;
-import hook.Hook;
+
+import java.util.ArrayList;
 
 public class JUnit_TextualPDDTest extends JUnit_Test
 {	
