@@ -35,6 +35,10 @@ public class ObstacleManager
      */
 	private ArrayList<ObstacleProximity> mUntestedMobileObstacles;
 
+	/**
+	 * Booléen indiquant s'il y a eu modification dans les obstacles
+	 */
+	public boolean hasBeenModified;
     
     //les bords de la table auxquels on ajoute le rayon du robot. Utilisé par le pathfinding.
     private ArrayList<Segment> mLines;
@@ -71,6 +75,7 @@ public class ObstacleManager
 		mRectangles = new ArrayList<ObstacleRectangular>();
 		
 		mUntestedMobileObstacles= new ArrayList<ObstacleProximity>();
+		this.hasBeenModified = false;
 		
 		updateConfig();
        
