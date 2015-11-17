@@ -1,27 +1,30 @@
 package container;
 
-import java.io.IOException;
-
-import hook.types.HookFactory;
 import enums.ServiceNames;
 import enums.ServiceNames.ServiceType;
 import exceptions.ContainerException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialManagerException;
-import utils.*;
+import hook.types.HookFactory;
 import pathDingDing.PathDingDing;
-import scripts.ScriptManager;
-import strategie.GameState;
-import strategie.Strategie;
-import table.Table;
-import threads.ThreadManager;
 import robot.Locomotion;
 import robot.RobotReal;
 import robot.cardsWrappers.ActuatorCardWrapper;
 import robot.cardsWrappers.LocomotionCardWrapper;
 import robot.cardsWrappers.SensorsCardWrapper;
-import robot.serial.SerialManager;
 import robot.serial.SerialConnexion;
+import robot.serial.SerialManager;
+import scripts.ScriptManager;
+import strategie.GameState;
+import strategie.Strategie;
+import table.Table;
+import threads.ThreadManager;
+import utils.CheckUp;
+import utils.Config;
+import utils.Log;
+import utils.Sleep;
+
+import java.io.IOException;
 
 /**
  * 

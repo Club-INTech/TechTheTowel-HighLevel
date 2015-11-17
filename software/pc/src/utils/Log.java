@@ -1,12 +1,12 @@
 package utils;
 
+import container.Service;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintStream;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-
-import container.Service;
 
 /**
  * Service de log, affiche à l'écran et enregistre dans des fichiers de logs des informations avec différents niveaux de couleurs.

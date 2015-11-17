@@ -2,11 +2,10 @@
 
 package graphics;
 
-import javax.swing.JFrame;
-
-import table.Table;
-import graphics.Mouse;
 import robot.RobotReal;
+import table.Table;
+
+import javax.swing.*;
 
 /**
  * interface graphique de debugage

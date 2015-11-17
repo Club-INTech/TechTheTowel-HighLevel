@@ -1,23 +1,18 @@
 package tests;
 
-import hook.Hook;
-
-import java.util.ArrayList;
-import java.util.Random;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.Assert;
-
 import enums.ServiceNames;
 import enums.USsensors;
 import exceptions.ContainerException;
-import exceptions.PathNotFoundException;
-import exceptions.PointInObstacleException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.Locomotion.UnexpectedObstacleOnPathException;
+import exceptions.PathNotFoundException;
+import exceptions.PointInObstacleException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialManagerException;
+import hook.Hook;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import robot.Locomotion;
 import robot.Robot;
 import robot.cardsWrappers.SensorsCardWrapper;
@@ -26,6 +21,9 @@ import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
 import utils.Sleep;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Test des capteurs : les obstacles doivent être détectés

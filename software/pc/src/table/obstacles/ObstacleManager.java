@@ -1,12 +1,14 @@
 package table.obstacles;
 
-import java.util.ArrayList;
-
 import exceptions.ConfigPropertyNotFoundException;
-import pathDingDing.PathDingDing;
-import smartMath.*;
-import utils.Log;
+import smartMath.Circle;
+import smartMath.Geometry;
+import smartMath.Segment;
+import smartMath.Vec2;
 import utils.Config;
+import utils.Log;
+
+import java.util.ArrayList;
 
 /**
  * Traite tout ce qui concerne la gestion des obstacles sur la table.

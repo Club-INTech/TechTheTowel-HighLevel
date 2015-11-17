@@ -1,16 +1,14 @@
 package pathDingDing;
 
+import container.Service;
+import exceptions.PathNotFoundException;
+import exceptions.PointInObstacleException;
 import smartMath.Vec2;
 import table.Table;
 import utils.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
-
-import container.Service;
-import exceptions.PointInObstacleException;
-import robot.RobotReal;
 
 /**
  * Classe de calcul de chemins utilisant l'algorithme A*
@@ -76,9 +74,9 @@ public class PathDingDing implements Service
 	 * Calcule le chemin à parcourir à l'aide de l'algorithme A*
 	 * @param start noeud de départ
 	 * @param end noeud d'arrivée
-	 * @return Liste de noeuds à parcourir ; null si échec
+	 * @return Liste de noeuds à parcourir ; exception si échec
 	 */
-	public ArrayList<Node> computePath(Vec2 start, Vec2 end) throws PointInObstacleException
+	public ArrayList<Node> computePath(Vec2 start, Vec2 end) throws PointInObstacleException, PathNotFoundException
 	{
 		
 		//On vide les listes de nodes pour un nouveau calcul
@@ -229,6 +227,7 @@ public class PathDingDing implements Service
 			if(openNodes.isEmpty())
 			{
 				log.critical("pathDingDing : Le noeud demandé ("+endNode.getPosition().toString()+") est inacessible.");
+				throw new PathNotFoundException();
 			}
 			
 			//ET ON RECOMMENCE !!!

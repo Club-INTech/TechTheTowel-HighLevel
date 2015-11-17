@@ -4,8 +4,8 @@ import container.Service;
 import robot.Robot;
 import table.Table;
 import threads.ThreadTimer;
-import utils.Log;
 import utils.Config;
+import utils.Log;
 
 /**
  * Classe indiquant l'ensemble des informations sur le match suceptibles d'évoluer durant le match.

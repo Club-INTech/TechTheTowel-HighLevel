@@ -1,25 +1,23 @@
 package tests;
 
+import enums.ServiceNames;
+import enums.Speed;
+import exceptions.serial.SerialConnexionException;
 import hook.Hook;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
-
 import robot.Robot;
 import robot.cardsWrappers.SensorsCardWrapper;
 import smartMath.Vec2;
 import strategie.GameState;
 import strategie.Strategie;
 import threads.ThreadTimer;
-import enums.ServiceNames;
-import enums.Speed;
-import exceptions.serial.SerialConnexionException;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 public class JUnit_Strategia extends JUnit_Test 
 {

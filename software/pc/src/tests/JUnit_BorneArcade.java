@@ -1,16 +1,15 @@
 package tests;
 
-import org.junit.runner.JUnitCore;
+import enums.ServiceNames;
+import graphics.Window;
 import org.junit.Before;
 import org.junit.Test;
-
+import org.junit.runner.JUnitCore;
 import robot.Robot;
 import robot.RobotReal;
 import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
-import enums.ServiceNames;
-import graphics.Window;
 
 public class JUnit_BorneArcade extends JUnit_Test 
 {

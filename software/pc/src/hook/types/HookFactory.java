@@ -1,13 +1,13 @@
 package hook.types;
 
-import hook.Hook;
 import container.Service;
 import exceptions.ConfigPropertyNotFoundException;
+import hook.Hook;
 import robot.RobotReal;
 import smartMath.Vec2;
 import strategie.GameState;
-import utils.Log;
 import utils.Config;
+import utils.Log;
 
 /**
  * Service fabriquant des hooks à la demande.

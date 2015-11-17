@@ -1,19 +1,19 @@
 package robot;
 
-import java.util.ArrayList;
-
-import hook.Hook;
-import smartMath.Vec2;
-import table.Table;
-import utils.Log;
-import utils.Config;
-import pathDingDing.PathDingDing;
 import enums.ActuatorOrder;
 import enums.ContactSensors;
 import enums.Speed;
 import enums.USsensors;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
+import hook.Hook;
+import pathDingDing.PathDingDing;
+import smartMath.Vec2;
+import table.Table;
+import utils.Config;
+import utils.Log;
+
+import java.util.ArrayList;
 
 /**
  * Robot virtuel ne faisant pas bouger le robot réel, mais détermine la durée des actions.

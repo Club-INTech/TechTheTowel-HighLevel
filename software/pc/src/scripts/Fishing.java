@@ -1,7 +1,5 @@
 package scripts;
 
-import java.util.ArrayList;
-
 import enums.ActuatorOrder;
 import enums.Speed;
 import exceptions.ExecuteException;
@@ -11,12 +9,13 @@ import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import hook.types.HookFactory;
 import robot.Robot;
-import smartMath.*;
+import smartMath.Circle;
+import smartMath.Vec2;
 import strategie.GameState;
-import table.Table;
 import utils.Config;
-
 import utils.Log;
+
+import java.util.ArrayList;
 /**
  * Script pour récuperer les poissons
  * Version 0: déplacement le long du bac pour récupérer les poissons, puis déplacement près du filet pour les lâcher. On suppose un seul aller suffisant.
@@ -46,7 +45,7 @@ public class Fishing extends AbstractScript
 	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException
 	{
 		/*
-		 * On ex�cute la version 0 si le robot est dans le terrain vert
+		 * On ex�cute la version 0 si le robot est dans le terrain vert
 		 * et 1 s'il est dans la zone violette
 		 */
 		if (versionToExecute == 0)

@@ -1,28 +1,26 @@
 package tests;
 
 
-import java.util.ArrayList;
-
-import hook.Hook;
-import hook.types.HookFactory;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
 import enums.ActuatorOrder;
 import enums.ScriptNames;
 import enums.ServiceNames;
 import exceptions.ExecuteException;
+import exceptions.Locomotion.UnableToMoveException;
 import exceptions.PathNotFoundException;
 import exceptions.PointInObstacleException;
-import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
+import hook.Hook;
+import hook.types.HookFactory;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import robot.Robot;
 import scripts.ScriptManager;
 import strategie.GameState;
 import table.Table;
+
+import java.util.ArrayList;
 /**
  * test pour le script du depose tapis 
  * @author paul

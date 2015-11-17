@@ -1,11 +1,11 @@
 package robot.cardsWrappers;
 
-import robot.serial.SerialConnexion;
-import utils.Log;
-import utils.Config;
 import container.Service;
 import enums.ActuatorOrder;
 import exceptions.serial.SerialConnexionException;
+import robot.serial.SerialConnexion;
+import utils.Config;
+import utils.Log;
 
 
 /**

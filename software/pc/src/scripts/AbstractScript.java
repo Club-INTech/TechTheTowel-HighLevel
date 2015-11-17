@@ -1,22 +1,22 @@
 package scripts;
 
-import java.util.ArrayList;
-
+import container.Service;
+import exceptions.ExecuteException;
+import exceptions.Locomotion.UnableToMoveException;
+import exceptions.PathNotFoundException;
+import exceptions.PointInObstacleException;
+import exceptions.serial.SerialConnexionException;
+import exceptions.serial.SerialFinallyException;
+import hook.Hook;
+import hook.types.HookFactory;
+import robot.Robot;
 import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
-import robot.Robot;
-import utils.Log;
 import utils.Config;
-import container.Service;
-import hook.Hook;
-import hook.types.HookFactory;
-import exceptions.ExecuteException;
-import exceptions.PathNotFoundException;
-import exceptions.PointInObstacleException;
-import exceptions.Locomotion.UnableToMoveException;
-import exceptions.serial.SerialConnexionException;
-import exceptions.serial.SerialFinallyException;
+import utils.Log;
+
+import java.util.ArrayList;
 
 /**
  * Classe abstraite dont héritent les différents scripts.

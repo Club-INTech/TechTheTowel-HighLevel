@@ -1,15 +1,15 @@
 package table;
 
 
-import smartMath.Vec2;
-import table.obstacles.*;
-
-import java.util.ArrayList;
-
 import container.Service;
 import enums.Color;
 import enums.Elements;
-import utils.*;
+import smartMath.Vec2;
+import table.obstacles.ObstacleManager;
+import utils.Config;
+import utils.Log;
+
+import java.util.ArrayList;
 
 /* Positions :
  * 			_______________________________________________________

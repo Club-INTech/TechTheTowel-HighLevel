@@ -1,7 +1,5 @@
 package scripts;
 
-import java.util.ArrayList;
-
 import enums.ActuatorOrder;
 import exceptions.ExecuteException;
 import exceptions.serial.SerialConnexionException;
@@ -9,11 +7,13 @@ import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import hook.types.HookFactory;
 import robot.Robot;
-import smartMath.*;
+import smartMath.Circle;
+import smartMath.Vec2;
 import strategie.GameState;
 import utils.Config;
-
 import utils.Log;
+
+import java.util.ArrayList;
 
 /*
  * Script pour l'ouverture du parasol

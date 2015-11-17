@@ -1,7 +1,5 @@
 package scripts;
 
-import java.util.ArrayList;
-
 import enums.ActuatorOrder;
 import enums.Speed;
 import exceptions.ExecuteException;
@@ -11,11 +9,14 @@ import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import hook.types.HookFactory;
 import robot.Robot;
-import smartMath.*;
+import smartMath.Circle;
+import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
 import utils.Config;
 import utils.Log;
+
+import java.util.ArrayList;
 /**
  * @author paul
  * Script pour deposer les tapis sur l'escalier (Exemple de script d'INTech 2015)

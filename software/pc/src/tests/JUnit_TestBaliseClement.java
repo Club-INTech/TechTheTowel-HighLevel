@@ -1,24 +1,19 @@
 package tests;
 
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.Random;
-
-import org.junit.Test;
-import java.lang.System;
 import enums.ServiceNames;
+import exceptions.Locomotion.UnableToMoveException;
 import exceptions.PathNotFoundException;
 import exceptions.PointInObstacleException;
-import exceptions.Locomotion.UnableToMoveException;
 import hook.Hook;
+import org.junit.Test;
 import robot.Robot;
-import robot.RobotChrono;
-import scripts.ScriptManager;
 import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
 import utils.Log;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 public class JUnit_TestBaliseClement extends JUnit_Test
 {
@@ -48,7 +43,7 @@ public class JUnit_TestBaliseClement extends JUnit_Test
 	@Test
 	public void test() {
 		//TODO vraiment utile comme appel ? 
-		//la fonction run n'est utilisée qu'une fois et elle n'a pas vocation a etre reutilisee
+		//la fonction run n'est utilisï¿½e qu'une fois et elle n'a pas vocation a etre reutilisee
 		run();
 	}
 	

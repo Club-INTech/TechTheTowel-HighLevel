@@ -1,25 +1,24 @@
 package tests;
 
 
-import hook.Hook;
-
-import java.util.ArrayList;
-
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.Assert;
-
 import enums.ServiceNames;
-//import enums.Direction;
 import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.Locomotion.UnexpectedObstacleOnPathException;
 import exceptions.serial.SerialConnexionException;
+import hook.Hook;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import robot.DirectionStrategy;
 import robot.Locomotion;
 import robot.cardsWrappers.LocomotionCardWrapper;
 import smartMath.Vec2;
+
+import java.util.ArrayList;
+
+//import enums.Direction;
 
 /**
  * Tests unitaires pour Deplacements.

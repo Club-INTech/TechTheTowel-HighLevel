@@ -1,9 +1,9 @@
 package graphics;
 
-import java.awt.event.MouseListener;
-import java.awt.event.MouseEvent;
-
 import smartMath.Vec2;
+
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 /**
  * gestion de la souris

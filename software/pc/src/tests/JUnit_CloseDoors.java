@@ -1,22 +1,19 @@
 package tests;
 
-import java.util.ArrayList;
-
+import enums.ScriptNames;
+import enums.ServiceNames;
+import exceptions.ExecuteException;
+import exceptions.Locomotion.UnableToMoveException;
+import exceptions.serial.SerialFinallyException;
+import hook.Hook;
 import org.junit.Before;
 import org.junit.Test;
-
 import robot.Robot;
 import scripts.ScriptManager;
 import strategie.GameState;
 import table.Table;
-import enums.ScriptNames;
-import enums.ServiceNames;
-import exceptions.ExecuteException;
-import exceptions.PathNotFoundException;
-import exceptions.Locomotion.UnableToMoveException;
-import exceptions.serial.SerialConnexionException;
-import exceptions.serial.SerialFinallyException;
-import hook.Hook;
+
+import java.util.ArrayList;
 
 /**
  * teste la fermeture des portes par la version 0 du script

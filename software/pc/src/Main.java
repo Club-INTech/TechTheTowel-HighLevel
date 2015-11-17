@@ -1,10 +1,5 @@
+import container.Container;
 import hook.Hook;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-
 import robot.Locomotion;
 import robot.Robot;
 import robot.cardsWrappers.SensorsCardWrapper;
@@ -14,7 +9,11 @@ import strategie.Strategie;
 import threads.ThreadTimer;
 import utils.Config;
 import utils.Sleep;
-import container.Container;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 
 /**

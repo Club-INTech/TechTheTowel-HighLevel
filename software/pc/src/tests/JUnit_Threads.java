@@ -1,9 +1,8 @@
 package tests;
 
+import enums.ServiceNames;
 import org.junit.Assert;
 import org.junit.Test;
-
-import enums.ServiceNames;
 import robot.RobotReal;
 import robot.cardsWrappers.LocomotionCardWrapper;
 import smartMath.Vec2;

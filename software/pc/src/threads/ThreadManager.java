@@ -1,14 +1,14 @@
 package threads;
 
-import java.util.Hashtable;
-
+import robot.RobotReal;
 import robot.cardsWrappers.ActuatorCardWrapper;
 import robot.cardsWrappers.LocomotionCardWrapper;
 import robot.cardsWrappers.SensorsCardWrapper;
 import table.Table;
-import robot.RobotReal;
-import utils.Log;
 import utils.Config;
+import utils.Log;
+
+import java.util.Hashtable;
 
 /**
  * Service qui instancie les threads et le démarre a la demande.

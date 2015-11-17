@@ -1,21 +1,19 @@
 package tests;
 
+import enums.ServiceNames;
+import enums.Speed;
+import exceptions.Locomotion.UnableToMoveException;
+import exceptions.PathNotFoundException;
+import exceptions.PointInObstacleException;
 import hook.Hook;
-
-import java.util.ArrayList;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import enums.ServiceNames;
-import enums.Speed;
-import exceptions.PathNotFoundException;
-import exceptions.PointInObstacleException;
-import exceptions.Locomotion.UnableToMoveException;
 import robot.Robot;
 import smartMath.Vec2;
 import table.Table;
+
+import java.util.ArrayList;
 
 public class JUnit_Speed extends JUnit_Test {
 

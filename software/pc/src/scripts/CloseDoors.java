@@ -1,21 +1,20 @@
 package scripts;
 
-import java.util.ArrayList;
-
-import robot.Robot;
-import smartMath.Circle;
-import smartMath.Vec2;
-import strategie.GameState;
-import table.Table;
 import enums.Speed;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import hook.types.HookFactory;
-import pathDingDing.Node;
+import robot.Robot;
+import smartMath.Circle;
+import smartMath.Vec2;
+import strategie.GameState;
+import table.Table;
 import utils.Config;
 import utils.Log;
+
+import java.util.ArrayList;
 
 
 /**

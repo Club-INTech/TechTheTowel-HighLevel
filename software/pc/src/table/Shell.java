@@ -1,7 +1,6 @@
 package table;
 
 import enums.Color;
-import enums.Elements;
 import smartMath.Vec2;
 
 /**
