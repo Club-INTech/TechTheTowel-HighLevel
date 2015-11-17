@@ -19,6 +19,15 @@ import java.util.ArrayList;
 public class Graph
 {
 	/**
+	 * Définit la distance maximale entre deux noeuds pour tenter le calcul d'un lien
+	 * Permet d'éviter un calcul en O(n²)
+     * Plus cette valeur est élevée, plus le calcul sera lent, mais plus le chemin sera optimisé
+     * Une valeur trop petite peut rendre un noeud isolé s'il est trop éloigné des autres
+     * Assimilable au clipping dans les moteurs 3D
+	 */
+	public static double IGNORE_DISTANCE = 5000;
+
+	/**
 	 * Nodes statiques du graphe, c'est a dire permaments sur la tables (pas utilises pour l'evitement)
 	 */
 	private ArrayList<Node> nodes;
@@ -94,7 +103,7 @@ public class Graph
 		//========================
 		// Fin du graphe à la con
 		//========================
-		setAllLinks();
+		setAllLinksOptimised();
 	}
 	
 	/**
@@ -105,55 +114,13 @@ public class Graph
 		//On vide la liste des noeuds pour la reconstruire
 		links.clear();
 		
-		//On récupère les différents obstacles
-		ArrayList<ObstacleRectangular> rectangularObstacles = obstacleManager.getRectangles();
-		ArrayList<ObstacleCircular> circleObstacles = obstacleManager.getFixedObstacles();
-		ArrayList<Segment> lineObstacles = obstacleManager.getLines();
-				
-		//Booléen indiquant si la liaison est possible
-		boolean ok = true;
-		
 		for(int i=0 ; i < nodes.size() ; i++)
 		{
 			for(int j=0 ; j < nodes.size() ; j++)
 			{
 				if(j>i)
 				{
-					
-					ok = true;
-					
-					//On vérifie l'intersection avec les cercles
-					for(int k=0 ; k<circleObstacles.size() ; k++)
-					{
-						if(Geometry.intersects(new Segment(nodes.get(j).getPosition(), nodes.get(i).getPosition()), circleObstacles.get(k).toCircle()))
-						{
-							ok = false;
-						}
-					}
-					
-					//On vérifie l'intersection avec les lignes
-					for(int k=0 ; k<lineObstacles.size() ; k++)
-					{
-						if(Geometry.intersects(new Segment(nodes.get(j).getPosition(), nodes.get(i).getPosition()), lineObstacles.get(k)))
-						{
-							ok = false;
-						}
-					}
-					
-					//On vérifie l'intersection
-					for(int k=0 ; k<rectangularObstacles.size() ; k++)
-					{
-						ArrayList<Segment> segments = rectangularObstacles.get(k).getSegments();
-						for(int l=0 ; l<segments.size() ; l++)
-						{
-							if(Geometry.intersects(new Segment(nodes.get(j).getPosition(), nodes.get(i).getPosition()), segments.get(l)))
-							{
-								ok = false;
-							}
-						}
-					}
-					
-					if(ok)
+					if(!isObstructed(nodes.get(i), nodes.get(j)))
 					{
 						links.add(new Link(nodes.get(j), nodes.get(i)));
 					}
@@ -171,54 +138,60 @@ public class Graph
 		//S'il existe déjà, on sort de la fonction
 		if(nodes.contains(node))
 			return;
-		
-		//On récupère les différents obstacles
-		ArrayList<ObstacleRectangular> rectangularObstacles = obstacleManager.getRectangles();
-		ArrayList<ObstacleCircular> circleObstacles = obstacleManager.getFixedObstacles();
-		ArrayList<Segment> lineObstacles = obstacleManager.getLines();
-						
-		//Booléen indiquant si la liaison est possible
-		boolean ok;
 				
 		for(int i=0 ; i<nodes.size() ; i++)
 		{
-			
-			ok = true;
-			
-			//On vérifie l'intersection avec les cercles
-			for(int k=0 ; k<circleObstacles.size() ; k++)
+			if(!isObstructed(node, nodes.get(i)))
 			{
-				if(Geometry.intersects(new Segment(node.getPosition(), nodes.get(i).getPosition()), circleObstacles.get(k).toCircle()))
-				{
-					ok = false;
-				}
+				links.add(new Link(node, nodes.get(i)));
 			}
-			
-			//On vérifie l'intersection avec les lignes
-			for(int k=0 ; k<lineObstacles.size() ; k++)
+		}
+		nodes.add(node);
+	}
+
+	/**
+	 * Relie tous les noeuds ensemble en vérifiant s'il n'y a pas d'intersection avec un obstacle ; méthode optimisée
+	 */
+	public void setAllLinksOptimised()
+	{
+		//On vide la liste des noeuds pour la reconstruire
+		links.clear();
+
+		for(int i=0 ; i < nodes.size() ; i++)
+		{
+			for(int j=0 ; j < nodes.size() ; j++)
 			{
-				if(Geometry.intersects(new Segment(node.getPosition(), nodes.get(i).getPosition()), lineObstacles.get(k)))
+				// On ne prend en compte que les noeuds proches
+				if(j>i && Segment.squaredLength(nodes.get(i).getPosition(), nodes.get(j).getPosition()) <= IGNORE_DISTANCE)
 				{
-					ok = false;
-				}
-			}
-			
-			//On vérifie l'intersection
-			for(int k=0 ; k<rectangularObstacles.size() ; k++)
-			{
-				ArrayList<Segment> segments = rectangularObstacles.get(k).getSegments();
-				for(int l=0 ; l<segments.size() ; l++)
-				{
-					if(Geometry.intersects(new Segment(node.getPosition(), nodes.get(i).getPosition()), segments.get(l)))
+					if(!isObstructed(nodes.get(i), nodes.get(j)))
 					{
-						ok = false;
+						links.add(new Link(nodes.get(i), nodes.get(j)));
 					}
 				}
 			}
-			
-			if(ok)
-			{
-				links.add(new Link(node, nodes.get(i)));
+		}
+	}
+
+	/**
+	 * Ajoute un noeud et crée tous les liens qui le relient ; méthode optimisée
+	 * @param node le noeud
+	 */
+	public void addNodeOptimised(Node node)
+	{
+		//S'il existe déjà, on sort de la fonction
+		if(nodes.contains(node))
+			return;
+
+		for(int i=0 ; i<nodes.size() ; i++)
+		{
+			// On le prend en compte que les noeuds proches
+			if(Segment.squaredLength(nodes.get(i).getPosition(), node.getPosition()) <= IGNORE_DISTANCE)
+            {
+				if (isObstructed(node, nodes.get(i)))
+                {
+					links.add(new Link(node, nodes.get(i)));
+				}
 			}
 		}
 		nodes.add(node);
@@ -249,7 +222,66 @@ public class Graph
 	{
 		return obstacleManager;
 	}
-	
+
+    /**
+     * Renvoie si un obstacle est sur le chemin entre les deux noeuds
+     * @param node1 noeud 1
+     * @param node2 noeud 2
+     */
+    public boolean isObstructed(Node node1, Node node2)
+    {
+        boolean ok = false;
+        //On récupère les différents obstacles
+        ArrayList<ObstacleRectangular> rectangularObstacles = obstacleManager.getRectangles();
+        ArrayList<ObstacleCircular> circleObstacles = obstacleManager.getFixedObstacles();
+        ArrayList<Segment> lineObstacles = obstacleManager.getLines();
+
+        //On vérifie l'intersection avec les cercles
+        for(int k=0 ; k<circleObstacles.size() ; k++)
+        {
+            if(Geometry.intersects(new Segment(node1.getPosition(), node2.getPosition()), circleObstacles.get(k).toCircle()))
+            {
+                ok = true;
+            }
+            if(ok)
+                break;
+        }
+        if(ok)
+            return ok;
+
+        //On vérifie l'intersection avec les lignes
+        for(int k=0 ; k<lineObstacles.size() ; k++)
+        {
+            if(Geometry.intersects(new Segment(node1.getPosition(), node2.getPosition()), lineObstacles.get(k)))
+            {
+                ok = true;
+            }
+            if(ok)
+                break;
+        }
+        if(ok)
+            return ok;
+
+        //On vérifie l'intersection
+        for(int k=0 ; k<rectangularObstacles.size() ; k++)
+        {
+            ArrayList<Segment> segments = rectangularObstacles.get(k).getSegments();
+            for(int l=0 ; l<segments.size() ; l++)
+            {
+                if(Geometry.intersects(new Segment(node1.getPosition(), node2.getPosition()), segments.get(l)))
+                {
+                    ok = true;
+                }
+                if(ok)
+                    break;
+            }
+            if(ok)
+                break;
+        }
+
+        return ok;
+    }
+
 	/**
 	 * Renvoie les nodes adjacents à tel node
 	 * @param node le node a tester
