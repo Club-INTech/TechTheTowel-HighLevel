@@ -20,6 +20,8 @@ import java.util.ArrayList;
 
 public class ObstacleManager
 {
+    //TODO déplacement d'obstacle (le Vec2 de position s'auto-ajuste mais il faut refaire les noeuds du graphe autour de l'obstacle et supprimer les anciens)
+
 	/** système de log sur lequel écrire. */
     private Log log;
 
@@ -205,6 +207,7 @@ public class ObstacleManager
       */
     public synchronized void addObstacle(final Vec2 position, final int radius, final int lifetime)
     {
+		this.hasBeenModified = true;
     	//si la position est dans la table on continue les tests 
     	// si la position est dans notre zone de depart, ca ne peut etre qu'une main 
     	if (position.x>-1500 && position.x<1500 && position.y>0 && position.y<2000 //la table

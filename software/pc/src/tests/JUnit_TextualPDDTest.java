@@ -40,13 +40,11 @@ public class JUnit_TextualPDDTest extends JUnit_Test
        // robot = (RobotReal)container.getService(ServiceNames.ROBOT_REAL);
         time = System.currentTimeMillis();
         pf = (PathDingDing)container.getService(ServiceNames.PATHDINGDING);
-        log.debug(System.currentTimeMillis() - time);
     }
     
     @Test
     public void test()
     {
-    	time = System.currentTimeMillis();
     	ArrayList<Node> path;
 		try {
 			path = pf.computePath(new Vec2(1000, 1750), new Vec2(-300, 1000));
