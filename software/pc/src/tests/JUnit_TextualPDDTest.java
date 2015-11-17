@@ -49,7 +49,7 @@ public class JUnit_TextualPDDTest extends JUnit_Test
     	time = System.currentTimeMillis();
     	ArrayList<Node> path;
 		try {
-			path = pf.computePath(new Vec2(0, 1750), new Vec2(-300, 1000));
+			path = pf.computePath(new Vec2(1000, 1750), new Vec2(-300, 1000));
 			
     		ArrayList<Vec2> pathVec = new ArrayList<Vec2>();
     		for(int i=0 ; i<path.size() ; i++)
