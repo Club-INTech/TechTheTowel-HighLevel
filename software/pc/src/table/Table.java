@@ -231,7 +231,7 @@ public class Table implements Service
 		//               puis les lignes du fond a l'avant à chaque niveau, 
 		//               et enfin les cubes de l'ennemi à nous à chaque ligne
 		//==================================================================================
-		
+
 
 		
 		//Cubes devant notre serviette
