@@ -182,29 +182,47 @@ public class Table implements Service
 		}
 		
 		//Cube au niveau 1, avant centré
-		centerCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(0, 2000-((3*sandSize)/2)), 1));
+		Vec2 pos = new Vec2(0, 2000-((3*sandSize)/2));
+		mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+		centerCubes.add(new Sand(Elements.SAND_CUBE, pos, 1));
 		
 		//Cylindre au sol tout à l'avant
-		centerCylinders.add(new Sand(Elements.SAND_CYLINDER, new Vec2(0, 2000-((5*sandSize)/2)), 0));
+		pos = new Vec2(0, 2000-((5*sandSize)/2));
+		mObstacleManager.addCircular(new ObstacleCircular(pos,sandSize/2));
+		centerCylinders.add(new Sand(Elements.SAND_CYLINDER, pos, 0));
 		
 		//Cylindres au niveau 1 (C'est le bordel, la flemme de mettre un commentaire pour chacun)
 		
 		//Cylindres formant les flancs de la montagne du côté ennemi
-		centerCylinders.add(new Sand(Elements.SAND_CYLINDER, new Vec2(-(sandSize*3), 2000-(sandSize/2)), 1));
-		centerCylinders.add(new Sand(Elements.SAND_CYLINDER, new Vec2(-(sandSize*2), 2000-(sandSize/2)), 1));
+		for(int i = 0 ; i < 2 ; i++)
+		{
+			pos = new Vec2(-(sandSize*(2+i)), 2000-(sandSize/2));
+			mObstacleManager.addCircular(new ObstacleCircular(pos,sandSize/2));
+			centerCylinders.add(new Sand(Elements.SAND_CYLINDER, pos, 1));
+		}
 		
 		//Cylindres formant les flancs de la montagne de notre côté
-		centerCylinders.add(new Sand(Elements.SAND_CYLINDER, new Vec2((sandSize*2), 2000-(sandSize/2)), 1));
-		centerCylinders.add(new Sand(Elements.SAND_CYLINDER, new Vec2((sandSize*3), 2000-(sandSize/2)), 1));
+		for(int i = 0 ; i < 2 ; i++)
+		{
+			pos = new Vec2((sandSize*(2+i)), 2000-(sandSize/2));
+			mObstacleManager.addCircular(new ObstacleCircular(pos,sandSize/2));
+			centerCylinders.add(new Sand(Elements.SAND_CYLINDER, pos, 1));
+		}
 		
 		// Cylindres à l'avant de la montagne 
-		centerCylinders.add(new Sand(Elements.SAND_CYLINDER, new Vec2(-sandSize, 2000-((3*sandSize)/2)), 1));
-		centerCylinders.add(new Sand(Elements.SAND_CYLINDER, new Vec2(sandSize, 2000-((3*sandSize)/2)), 1));
+		for(int i = -1 ; i < 2 ; i+=2)
+		{
+			pos = new Vec2(i*sandSize, 2000-((3*sandSize)/2));
+			mObstacleManager.addCircular(new ObstacleCircular(pos,sandSize/2));
+			centerCylinders.add(new Sand(Elements.SAND_CYLINDER, pos, 1));
+		}
 		
 		//Cylindres au niveau 2, au fond
 		for(int i=0; i < 5 ; i++)
 		{
-			centerCylinders.add(new Sand(Elements.SAND_CYLINDER, new Vec2(-(2*sandSize)+(i*sandSize), 2000-(sandSize/2)), 2));
+			pos = new Vec2(-(2*sandSize)+(i*sandSize), 2000-(sandSize/2));
+			mObstacleManager.addCircular(new ObstacleCircular(pos,sandSize/2));
+			centerCylinders.add(new Sand(Elements.SAND_CYLINDER, pos, 2));
 		}
 		
 		//Cylindre niveau 2 centré
@@ -236,33 +254,77 @@ public class Table implements Service
 
 		
 		//Cubes devant notre serviette
-		ourTowelCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(850-(sandSize/2), 1100+(sandSize/2)), 0));
-		ourTowelCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(850+(sandSize/2), 1100+(sandSize/2)), 0));
-		ourTowelCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(850-(sandSize/2), 1100-(sandSize/2)), 0));
-		ourTowelCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(850+(sandSize/2), 1100-(sandSize/2)), 0));
+		pos = new Vec2(850-(sandSize/2), 1100+(sandSize/2));
+		mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+		ourTowelCubes.add(new Sand(Elements.SAND_CUBE, pos, 0));
+		
+		pos = new Vec2(850+(sandSize/2), 1100+(sandSize/2));
+		mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+		ourTowelCubes.add(new Sand(Elements.SAND_CUBE, pos, 0));
+		
+		pos = new Vec2(850-(sandSize/2), 1100-(sandSize/2));
+		mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+		ourTowelCubes.add(new Sand(Elements.SAND_CUBE, pos, 0));
+		
+		pos = new Vec2(850+(sandSize/2), 1100-(sandSize/2));
+		mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+		ourTowelCubes.add(new Sand(Elements.SAND_CUBE, pos, 0));
 
 		//Cubes devant leur serviette
-		theirTowelCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(-850-(sandSize/2), 1100+(sandSize/2)), 0));
-		theirTowelCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(-850+(sandSize/2), 1100+(sandSize/2)), 0));
-		theirTowelCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(-850-(sandSize/2), 1100-(sandSize/2)), 0));
-		theirTowelCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(-850+(sandSize/2), 1100-(sandSize/2)), 0));
+		pos = new Vec2(-850-(sandSize/2), 1100+(sandSize/2));
+		mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+		theirTowelCubes.add(new Sand(Elements.SAND_CUBE, pos, 0));
+		
+		pos = new Vec2(-850+(sandSize/2), 1100+(sandSize/2));
+		mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+		theirTowelCubes.add(new Sand(Elements.SAND_CUBE, pos, 0));
+		
+		pos = new Vec2(-850-(sandSize/2), 1100-(sandSize/2));
+		mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+		theirTowelCubes.add(new Sand(Elements.SAND_CUBE, pos, 0));
+		
+		pos = new Vec2(-850+(sandSize/2), 1100-(sandSize/2));
+		mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+		theirTowelCubes.add(new Sand(Elements.SAND_CUBE, pos, 0));
 		
 		//Nos cubes devant la dune
 		for(int i=0 ; i<2 ;i++)
 		{
-			ourDuneCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(678-((3*sandSize)/2), 2000-(sandSize/2)), i));
-			ourDuneCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(678-(sandSize/2), 2000-(sandSize/2)), i));
-			ourDuneCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(678-((3*sandSize)/2), 2000-((3*sandSize)/2)), i));
-			ourDuneCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(678-(sandSize/2), 2000-((3*sandSize/2))), i));
+			pos = new Vec2(678-((3*sandSize)/2), 2000-(sandSize/2));
+			mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+			ourDuneCubes.add(new Sand(Elements.SAND_CUBE, pos, i));
+			
+			pos = new Vec2(678-(sandSize/2), 2000-(sandSize/2));
+			mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+			ourDuneCubes.add(new Sand(Elements.SAND_CUBE, pos, i));
+			
+			pos = new Vec2(678-((3*sandSize)/2), 2000-((3*sandSize)/2));
+			mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+			ourDuneCubes.add(new Sand(Elements.SAND_CUBE, pos, i));
+			
+			pos = new Vec2(678-(sandSize/2), 2000-((3*sandSize/2)));
+			mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+			ourDuneCubes.add(new Sand(Elements.SAND_CUBE, pos, i));
 		}
 		
 		//Leur cubes devant la dune
 		for(int i=0 ; i<2 ;i++)
 		{
-			theirDuneCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(-678+((3*sandSize)/2), 2000-(sandSize/2)), i));
-			theirDuneCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(-678+(sandSize/2), 2000-(sandSize/2)), i));
-			theirDuneCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(-678+((3*sandSize)/2), 2000-((3*sandSize)/2)), i));
-			theirDuneCubes.add(new Sand(Elements.SAND_CUBE, new Vec2(-678+(sandSize/2), 2000-((3*sandSize/2))), i));
+			pos = new Vec2(-678+((3*sandSize)/2), 2000-(sandSize/2));
+			mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+			theirDuneCubes.add(new Sand(Elements.SAND_CUBE, pos, i));
+			
+			pos = new Vec2(-678+(sandSize/2), 2000-(sandSize/2));
+			mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+			theirDuneCubes.add(new Sand(Elements.SAND_CUBE, pos, i));
+			
+			pos = new Vec2(-678+((3*sandSize)/2), 2000-((3*sandSize)/2));
+			mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+			theirDuneCubes.add(new Sand(Elements.SAND_CUBE, pos, i));
+			
+			pos = new Vec2(-678+(sandSize/2), 2000-((3*sandSize/2)));
+			mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+			theirDuneCubes.add(new Sand(Elements.SAND_CUBE, pos, i));
 		}
 		
 		//=======================================================================
