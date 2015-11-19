@@ -295,6 +295,7 @@ public class PathDingDing implements Service
         if(graph.getObstacleManager().hasBeenModified)
         {
             graph.setAllLinksOptimised();
+			graph.getObstacleManager().hasBeenModified = false;
         }
 	}
 	
