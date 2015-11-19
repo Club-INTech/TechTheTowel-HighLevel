@@ -63,6 +63,14 @@ public abstract class Robot implements Service
 	
 	private float aimThresold = 15;
 	
+
+	/** état du parasol */
+	public boolean stateParasol = false;
+
+	/** Booléen indiquant si les poissons sont récupérés, sert pour les versions du script Fishing */
+	public boolean AreFishesFished = false;
+
+	
 	
 	/**
 	 * Instancie le robot.
@@ -127,6 +135,24 @@ public abstract class Robot implements Service
 		return speed;
 	}
 	
+	/**
+	 * Change la valeur du booléen AreFishesFished
+	 * @param bool bouléen souhaité
+	 */
+	public void setAreFishesFished(boolean bool)
+	{
+		this.AreFishesFished = bool;
+	}
+	
+	/**
+	 * Indique si les poissons ont été pêchés ou pas
+	 * @return 
+	 * @return Poisson pris ou non
+	 */
+	public boolean getAreFishesFished()
+	{
+		return AreFishesFished;
+	}
 	/**
 	 * Immobilise le robot.
 	 * Après l'appel de cette fonction, le robot sera immobile sur la table
@@ -474,6 +500,16 @@ public abstract class Robot implements Service
 
 		followPath(path , hooksToConsider);
     }
+    
+
+	/**
+	 * Informe la classe Robot que le parasol est déployé.
+	 */
+	public void parasolUnfolded()
+	{
+		stateParasol = true;
+	}
+    
     
     /**
      * Active tout l'asservissement

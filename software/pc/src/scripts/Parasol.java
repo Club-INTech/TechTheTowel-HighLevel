@@ -23,10 +23,8 @@ import java.util.ArrayList;
 
 public class Parasol extends AbstractScript
 {
-	// TODO passer en documentation + plutot dans robot (concernant l'état du parasol)
-	// je n'ai pas très bien compris ce que tu veux dire ;
-	// j'ai créé un static parasolUnfolded dans la classe GameState pour connaître l'état du parasol, est-ce bon ?
 	
+	/** Constructeur du Parasol hérité de la classe abstraite AbstractScript */
 	public Parasol(HookFactory hookFactory, Config config, Log log)
 	{
 		super(hookFactory, config, log);
@@ -35,21 +33,22 @@ public class Parasol extends AbstractScript
 	/**
 	 * Exécution du script.
 	 * @param versionUnused paramètre inutilisé du prototype
-	 * @param stateToConsider le robot
+	 * @param actualState le robot
 	 * @param hooksToConsider hooks nécessaires pour l'exécution du script
 	 * @throws SerialConnexionException
 	 */
 	@Override
 	public void execute(int versionUnused, GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException
 	{
-		if (actualState.getTimeEllapsed() >= (long)90 && !actualState.getIsParasolUnfolded())
+		// le déploiement du parasol n'est possible que pendant la funny action et lorsque celui-ci n'est pas déjà déployé.
+		if (actualState.getTimeEllapsed() >= (long)90 && !actualState.robot.stateParasol)
 		{
 			try
 			{
 				// envoi du message d'ouverture du parasol au bas niveau
 				actualState.robot.useActuator(ActuatorOrder.OPEN_PARASOL, true);
 				// actualisation de l'état du parasol maintenant déployé
-				actualState.parasolUnfolded();
+				actualState.robot.parasolUnfolded();
 			
 			}
 			catch(SerialConnexionException e)
@@ -60,16 +59,24 @@ public class Parasol extends AbstractScript
 		}
 		else
 		{
-			// TODO throws new exception à définir si la méthode est appelée alors que le temps écoulé n'est pas 90s ?
+			log.critical("Vous essayez de déployer le parasol ou bien déjà déployé ou bien en dehors de la funny action.");
 		}
 	}
+
 	
-	//TODO le score varie en fonction de la position du parasol et du temps restant dans le match
-	// objection : le parasol est la funny action qui ne fait pas partie de la stratégie des 90s
 	@Override
-	public int remainingScoreOfVersion(int version, GameState<?> state)
+	public int remainingScoreOfVersion(int version, GameState<?> actualState)
 	{
-		return 20;
+		if (actualState.getTimeEllapsed() >= 90000 && !actualState.robot.stateParasol)
+		{
+			// le robot consulte l'action du parasol lors de la funny action
+			return 20;
+		}
+		else
+		{
+			// le robot consulte l'action du parasol en dehors de la funny action ou lorsque celui-ci est déjà déployé
+			return 0;
+		}
 	}
 
 
@@ -77,7 +84,7 @@ public class Parasol extends AbstractScript
 	public Circle entryPosition(int version, int ray, Vec2 robotPosition) 
 	{
 		// retour de la position actuelle du robot afin que celui-ci ne se déplace pas
-		return new Circle(robotPosition, 10);
+		return new Circle(robotPosition);
 	}
 
 	@Override

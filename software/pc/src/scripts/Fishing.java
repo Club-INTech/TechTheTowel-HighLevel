@@ -22,6 +22,8 @@ import java.util.ArrayList;
  * @author CF
  */
 
+// TODO Ce script est encore temporaire, surtout concernant le finalize, les exceptions,les versions et le booléen concernant la prose des poissons
+
 public class Fishing extends AbstractScript
 {
 	public Fishing(HookFactory hookFactory, Config config, Log log) 
@@ -30,9 +32,12 @@ public class Fishing extends AbstractScript
 		/**
 		 * Versions du script
 		 */
-		versions = new Integer[]{0};
+		versions = new Integer[]{0,1};
 		
 	}
+	
+	// Définition du booléen AreFishesFished déjà défini dans robot
+	private boolean AreFishesFished = false;
 	
 	/**
 	 * On lance le script choisi.
@@ -74,6 +79,9 @@ public class Fishing extends AbstractScript
 				// On lâche les poissons
 				stateToConsider.robot.useActuator(ActuatorOrder.FREE_FISHES, true);	
 				
+				// On indique que les poissons sont pris
+				stateToConsider.robot.setAreFishesFished(true);
+				
 				// Points gagnés max
 				stateToConsider.obtainedPoints += 40;
 				
@@ -111,6 +119,9 @@ public class Fishing extends AbstractScript
 					// On lâche les poissons
 					stateToConsider.robot.useActuator(ActuatorOrder.FREE_FISHES, true);	
 					
+					// On indique que les poissons sont pris
+					stateToConsider.robot.setAreFishesFished(true);
+					
 					// Points gagnés max
 					stateToConsider.obtainedPoints += 40;
 					
@@ -126,15 +137,18 @@ public class Fishing extends AbstractScript
 	}
 
 	@Override
-	public int remainingScoreOfVersion(int version, GameState<?> state) {
-		if (version == 0)
+	public int remainingScoreOfVersion(int version, GameState<?> state) 
+	{
+		// Pour les versions 0 et 1, et si les poissons sont pris, ont gagnent les points
+		if (version == 0 || version ==1)
 		{
-			return 40;
+			if (AreFishesFished)
+			{
+				return 40;
+			}
 		}
-		else
-		{
-			return 0;
-		}
+		// Dans le cas contraire, aucun points
+		return 0;
 	}
 
 	@Override
@@ -154,14 +168,24 @@ public class Fishing extends AbstractScript
 	}
 
 	@Override
-	public void finalize(GameState<?> state) throws SerialFinallyException {
-		// TODO 
-		
+	public void finalize(GameState<?> stateToConsider) throws SerialFinallyException 
+	{
+		try
+		{
+		stateToConsider.robot.useActuator(ActuatorOrder.STOP, true);
+		stateToConsider.robot.useActuator(ActuatorOrder.STOP, true);
+		}
+		catch (SerialConnexionException e) 
+		{
+			log.debug("erreur termine Fishing script : impossible de ranger");
+			throw new SerialFinallyException();
+		}
 	}
 
 	@Override
 	public Integer[] getVersion(GameState<?> stateToConsider) 
 	{
+		// Au vu des deux versions disponibles pour l'instant, on retourne les deux versions
 		return versions;
 	}
 	
