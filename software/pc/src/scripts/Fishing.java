@@ -18,7 +18,7 @@ import utils.Log;
 import java.util.ArrayList;
 /**
  * Script pour récuperer les poissons
- * Version 0: déplacement le long du bac pour récupérer les poissons, puis déplacement près du filet pour les lâcher. On suppose un seul aller suffisant.
+ * Version 0 et 1: déplacement le long du bac pour récupérer les poissons, puis déplacement près du filet pour les lâcher. On suppose un seul aller suffisant.
  * @author CF
  */
 
@@ -141,7 +141,7 @@ public class Fishing extends AbstractScript
 	public int remainingScoreOfVersion(int version, GameState<?> state) 
 	{
 		// Pour les versions 0 et 1, et si les poissons sont pris, ont gagnent les points
-		if (version == 0 || version ==1)
+		if (version == 0 | version ==1)
 		{
 			if (AreFishesFished)
 			{
@@ -156,7 +156,7 @@ public class Fishing extends AbstractScript
 	public Circle entryPosition(int version, int ray, Vec2 robotPosition) 
 	{
 		// TODO a modifier avec les phases de test
-		if (version == 0 || version == 1)
+		if (version == 0 | version == 1)
 		{
 			return new Circle(new Vec2(500,50));
 		}
@@ -173,7 +173,8 @@ public class Fishing extends AbstractScript
 	{
 		try
 		{
-		stateToConsider.robot.useActuator(ActuatorOrder.STOP, true);
+		// On remonte les deux bras simultanément en fin de script
+		stateToConsider.robot.useActuator(ActuatorOrder.STOP, false);
 		stateToConsider.robot.useActuator(ActuatorOrder.STOP, true);
 		}
 		catch (SerialConnexionException e) 
