@@ -9,5 +9,7 @@ package enums;
 public enum ScriptNames
 {
 	DROP_CARPET,
+	FISHING,
+	PARASOL,
 	CLOSE_DOORS;
 }
