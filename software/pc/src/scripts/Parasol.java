@@ -23,9 +23,6 @@ import java.util.ArrayList;
 
 public class Parasol extends AbstractScript
 {
-	// TODO passer en documentation + plutot dans robot (concernant l'état du parasol)
-	// je n'ai pas très bien compris ce que tu veux dire ;
-	// j'ai créé un static parasolUnfolded dans la classe GameState pour connaître l'état du parasol, est-ce bon ?
 	
 	public Parasol(HookFactory hookFactory, Config config, Log log)
 	{
@@ -35,21 +32,21 @@ public class Parasol extends AbstractScript
 	/**
 	 * Exécution du script.
 	 * @param versionUnused paramètre inutilisé du prototype
-	 * @param stateToConsider le robot
+	 * @param actualState le robot
 	 * @param hooksToConsider hooks nécessaires pour l'exécution du script
 	 * @throws SerialConnexionException
 	 */
 	@Override
 	public void execute(int versionUnused, GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException
 	{
-		if (actualState.getTimeEllapsed() >= (long)90 && !actualState.getIsParasolUnfolded())
+		if (actualState.getTimeEllapsed() >= (long)90 && !actualState.robot.getIsParasolUnfolded())
 		{
 			try
 			{
 				// envoi du message d'ouverture du parasol au bas niveau
 				actualState.robot.useActuator(ActuatorOrder.OPEN_PARASOL, true);
 				// actualisation de l'état du parasol maintenant déployé
-				actualState.parasolUnfolded();
+				actualState.robot.parasolUnfolded();
 			
 			}
 			catch(SerialConnexionException e)
@@ -67,9 +64,16 @@ public class Parasol extends AbstractScript
 	//TODO le score varie en fonction de la position du parasol et du temps restant dans le match
 	// objection : le parasol est la funny action qui ne fait pas partie de la stratégie des 90s
 	@Override
-	public int remainingScoreOfVersion(int version, GameState<?> state)
+	public int remainingScoreOfVersion(int version, GameState<?> actualState)
 	{
-		return 20;
+		if (actualState.getTimeEllapsed() >= 90000 && !actualState.robot.getIsParasolUnfolded())
+		{
+			return 20;
+		}
+		else
+		{
+			return 0;
+		}
 	}
 
 
@@ -77,7 +81,7 @@ public class Parasol extends AbstractScript
 	public Circle entryPosition(int version, int ray, Vec2 robotPosition) 
 	{
 		// retour de la position actuelle du robot afin que celui-ci ne se déplace pas
-		return new Circle(robotPosition, 10);
+		return new Circle(robotPosition);
 	}
 
 	@Override
