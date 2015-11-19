@@ -63,6 +63,9 @@ public abstract class Robot implements Service
 	
 	private float aimThresold = 15;
 	
+	// état du parasol
+	private static boolean stateParasol = false;
+	
 	
 	/**
 	 * Instancie le robot.
@@ -474,6 +477,20 @@ public abstract class Robot implements Service
 
 		followPath(path , hooksToConsider);
     }
+    
+    
+	// le parasol est-il déployé ?
+	public boolean getIsParasolUnfolded()
+	{
+		return stateParasol;
+	}
+
+	// "le parasol est maintenant déployé !"
+	public void parasolUnfolded()
+	{
+		stateParasol = true;
+	}
+    
     
     /**
      * Active tout l'asservissement
