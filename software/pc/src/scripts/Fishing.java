@@ -52,6 +52,7 @@ public class Fishing extends AbstractScript
 		/*
 		 * On ex�cute la version 0 si le robot est dans le terrain vert
 		 * et 1 s'il est dans la zone violette
+		 * Remarque : dans les deux versions, la première orientation vers pi est valide seulement si on possède des bras des deux côtés !
 		 */
 		if (versionToExecute == 0)
 		{
@@ -154,9 +155,9 @@ public class Fishing extends AbstractScript
 	@Override
 	public Circle entryPosition(int version, int ray, Vec2 robotPosition) 
 	{
-		if (version == 0)
+		// TODO a modifier avec les phases de test
+		if (version == 0 || version == 1)
 		{
-			// TODO a modifier avec les phases de test
 			return new Circle(new Vec2(500,50));
 		}
 		else
