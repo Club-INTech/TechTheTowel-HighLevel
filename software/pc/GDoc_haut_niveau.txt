@@ -1,0 +1,13 @@
+https://docs.google.com/spreadsheets/d/1NuH2UkRRypFcr82hrxe4lrxPV45wR8JvPICheR3zDWA/edit?usp=sharing
+
+Voici un GDoc pour l'attribution des tâches centrées sur le haut-niveau. Cela permettera un meilleur suivi des tâches, je metterai à jour les tâches 
+disponibles au fur et à mesure que j'en trouve (ou les 2A).
+Je vous prie de prendre des tâches relatives à votre niveau actuel, n'essayez pas de coder l'IA si vous n'avez fait qu'instancier des objets par 
+exemple.
+Essayez donc de prendre la tâche et d'indiquer votre avancement, beacoup sont en VALIDATION en attente de pouvoir tester sur la base roulante.
+Quand vous êtes disponibles, mettez vous dans la petite liste associée. Vous pouvez très bien vous mettre à plusieurs sur une tâche.
+
+Si vous avez un commentaire sur telle ou telle tâche, utilisez la fonction commentaire du GDoc au lieu de le polluer.
+
+Ce n'est cependant pas une méthode pour bosser exclusivement chez vous, venez au local pour travailler ensemble, ce GDoc est surtout là pour avoir un 
+historique et une liste pour s'organiser.
