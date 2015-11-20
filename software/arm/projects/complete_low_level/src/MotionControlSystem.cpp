@@ -27,7 +27,7 @@ MotionControlSystem::MotionControlSystem(): leftMotor(Side::LEFT), rightMotor(Si
 	rightSpeedPID.setOutputLimits(-255,255);
 
 	maxSpeed =3000; //Vitesse maximum, des moteurs (avec une marge au cas où on s'amuse à faire forcer un peu la bestiole).
-	maxAcceleration = 3000;
+	maxAcceleration = 50;
 
 	delayToStop = 100;
 	toleranceTranslation = 50;
@@ -123,8 +123,8 @@ void MotionControlSystem::control()
 	int32_t leftTicks = Counter::getLeftValue();
 
 
-	currentLeftSpeed = (leftTicks - previousLeftTicks)*400; // (nb-de-tick-passés)*(freq_asserv) (ticks/sec)
-	currentRightSpeed = (rightTicks - previousRightTicks)*400;
+	currentLeftSpeed = (leftTicks - previousLeftTicks)*2000; // (nb-de-tick-passés)*(freq_asserv) (ticks/sec)
+	currentRightSpeed = (rightTicks - previousRightTicks)*2000;
 
 	previousLeftTicks = leftTicks;
 	previousRightTicks = rightTicks;
@@ -132,7 +132,7 @@ void MotionControlSystem::control()
 	averageLeftSpeed.add(currentLeftSpeed);
 	averageRightSpeed.add(currentRightSpeed);
 
-	currentLeftSpeed = averageLeftSpeed.value();
+	currentLeftSpeed = averageLeftSpeed.value(); // On utilise pour l'asserv la valeur moyenne des dernieres current Speed
 	currentRightSpeed = averageRightSpeed.value();
 
 	currentDistance = (leftTicks + rightTicks) / 2;
@@ -383,6 +383,12 @@ void MotionControlSystem::resetTracking()
 	trackerCursor = 0;
 }
 
+void MotionControlSystem::setTestSpeed(int32_t speed) // set la valeur de la vitesse de test
+{
+	speedTest=speed;
+}
+
+
 void MotionControlSystem::testSpeed()
 {
 	translationControlled = false;
@@ -391,7 +397,7 @@ void MotionControlSystem::testSpeed()
 	rightSpeedControlled = true;
 
 	resetTracking();
-	translationSpeed = 2500;
+	translationSpeed = speedTest;
 	rotationSpeed = 0;
 	Delay(1000);
 	translationSpeed = 0;
@@ -407,7 +413,7 @@ void MotionControlSystem::testSpeedReverse()
 	rightSpeedControlled = true;
 
 	resetTracking();
-	translationSpeed = -2500;
+	translationSpeed = (-1)*speedTest;
 	rotationSpeed = 0;
 	Delay(1000);
 	translationSpeed = 0;

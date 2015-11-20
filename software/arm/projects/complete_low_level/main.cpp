@@ -203,6 +203,15 @@ int main(void)
 				motionControlSystem->resetPosition();
 				serial.printfln("Reset position");
 			}
+
+			else if(!strcmp("setTestSpeed", order))
+			{
+				int32_t speed = 1000;
+				serial.printfln("Vitesse :");
+				serial.read(speed);
+				motionControlSystem->setTestSpeed(speed);
+				serial.printfln("Vitesse changée.");
+			}
 			else if(!strcmp("testSpeed",order))//Reset position
 			{
 				motionControlSystem->testSpeed();
@@ -474,6 +483,7 @@ void TIM4_IRQHandler(void) { //2kHz = 0.0005s = 0.5ms
 
 		//Asservissement et mise à jour de la position
 		motionControlSystem->updatePosition();
+		motionControlSystem->control();
 
 		if (i >= 10) { //5ms
 			//Gestion de l'arrêt
@@ -482,7 +492,6 @@ void TIM4_IRQHandler(void) { //2kHz = 0.0005s = 0.5ms
 		}
 
 		if(j >= 5){ //5ms
-			motionControlSystem->control();
 			motionControlSystem->track();
 			j=0;
 		}

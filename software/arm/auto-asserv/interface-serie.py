@@ -78,7 +78,7 @@ while(m!='exit'):
 
         
     else:
-        time.sleep(1)
+        time.sleep(0.1)
         while(serialCom.attendre(com)>0):
             a+=serialCom.ecouter(com)
 
