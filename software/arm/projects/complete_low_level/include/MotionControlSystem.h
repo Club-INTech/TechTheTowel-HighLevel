@@ -24,10 +24,10 @@
 
 #if DEBUG
 #define TRACKER_SIZE 		1000
-#define AVERAGE_SPEED_SIZE	5
+#define AVERAGE_SPEED_SIZE	25
 #else
 #define TRACKER_SIZE 		1
-#define AVERAGE_SPEED_SIZE	1
+#define AVERAGE_SPEED_SIZE	25
 #endif
 
 enum MOVING_DIRECTION {FORWARD, BACKWARD, NONE};
@@ -86,6 +86,10 @@ private:
 	//	Pour faire de jolies courbes de réponse du système, la vitesse moyenne c'est mieux !
 	Average<int32_t, AVERAGE_SPEED_SIZE> averageLeftSpeed;
 	Average<int32_t, AVERAGE_SPEED_SIZE> averageRightSpeed;
+
+	// Définit la vitesse de testSpeed et testSpeedReverse
+
+	volatile int32_t speedTest = 1000;
 
 
 /*
@@ -215,9 +219,11 @@ public:
 	bool isMoveAbnormal() const;
 	MOVING_DIRECTION getMovingDirection() const;
 
+	void setTestSpeed(int32_t);
 	void testSpeed();
 	void testSpeedReverse();
 	void longTestSpeed();
+
 };
 
 #endif /* MOTION_CONTROL_H_ */

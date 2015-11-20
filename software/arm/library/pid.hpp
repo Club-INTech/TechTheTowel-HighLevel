@@ -26,7 +26,7 @@ public:
 		this->setPoint = setPoint;
 
 		setOutputLimits(-2147483647, 2147483647);
-		setTunings(0.125, 0.00007, 0);
+		setTunings(0.01, 0.00005, 0.01);
 		epsilon = 0;
 		pre_error = 0;
 		derivative = 0;
@@ -52,7 +52,6 @@ public:
 			result = outMin;
 		}*/
 
-		result = (result * 255) / 3000;
 
 
 		//Seuillage de la commande
