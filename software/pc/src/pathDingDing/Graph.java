@@ -276,6 +276,11 @@ public class Graph
         for(int k=0 ; k<rectangularObstacles.size() ; k++)
         {
             ArrayList<Segment> segments = rectangularObstacles.get(k).getSegments();
+			if(rectangularObstacles.get(k).isInObstacle(node2.getPosition()) || rectangularObstacles.get(k).isInObstacle(node1.getPosition()))
+            {
+                ok = true;
+                break;
+            }
             for(int l=0 ; l<segments.size() ; l++)
             {
                 if(Geometry.intersects(new Segment(node1.getPosition(), node2.getPosition()), segments.get(l)))
@@ -294,6 +299,7 @@ public class Graph
 
 	/**
 	 * Ajoute les noeuds aux coins des obstacles ; permet d'optimiser le PathDingDing
+     * On ajoute +1 ou -1 aux composantes pour être bien hors de l'obstacle
 	 */
 	public void addObstacleNodes()
 	{
@@ -302,18 +308,18 @@ public class Graph
 		for(int i = 0 ; i < rect.size() ; i++)
         {
             ObstacleRectangular r = rect.get(i);
-            nodes.add(new Node(new Vec2(r.getPosition().x + (r.getSizeX()/2), (r.getPosition().y - r.getSizeY()/2))));
-            nodes.add(new Node(new Vec2(r.getPosition().x + (r.getSizeX()/2), (r.getPosition().y + r.getSizeY()/2))));
-            nodes.add(new Node(new Vec2(r.getPosition().x - (r.getSizeX()/2), (r.getPosition().y - r.getSizeY()/2))));
-            nodes.add(new Node(new Vec2(r.getPosition().x - (r.getSizeX()/2), (r.getPosition().y + r.getSizeY()/2))));
+            nodes.add(new Node(new Vec2(r.getPosition().x + (r.getSizeX()/2) +1, (r.getPosition().y - r.getSizeY()/2) -1)));
+            nodes.add(new Node(new Vec2(r.getPosition().x + (r.getSizeX()/2) +1, (r.getPosition().y + r.getSizeY()/2) +1)));
+            nodes.add(new Node(new Vec2(r.getPosition().x - (r.getSizeX()/2) -1, (r.getPosition().y - r.getSizeY()/2) -1)));
+            nodes.add(new Node(new Vec2(r.getPosition().x - (r.getSizeX()/2) -1, (r.getPosition().y + r.getSizeY()/2) +1)));
 		}
         for(int i = 0 ; i < cir.size() ; i++)
         {
             ObstacleCircular c = cir.get(i);
-            nodes.add(new Node(new Vec2(c.getPosition().x, (c.getPosition().y - c.getRadius()))));
-            nodes.add(new Node(new Vec2(c.getPosition().x, (c.getPosition().y + c.getRadius()))));
-            nodes.add(new Node(new Vec2(c.getPosition().x - (c.getRadius()), c.getPosition().y )));
-            nodes.add(new Node(new Vec2(c.getPosition().x + (c.getRadius()), c.getPosition().y )));
+            nodes.add(new Node(new Vec2(c.getPosition().x, (c.getPosition().y - c.getRadius()) -1)));
+            nodes.add(new Node(new Vec2(c.getPosition().x, (c.getPosition().y + c.getRadius()) +1)));
+            nodes.add(new Node(new Vec2(c.getPosition().x - (c.getRadius()) -1, c.getPosition().y )));
+            nodes.add(new Node(new Vec2(c.getPosition().x + (c.getRadius()) +1, c.getPosition().y )));
         }
 	}
 

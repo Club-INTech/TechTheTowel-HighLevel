@@ -256,6 +256,7 @@ public class PathDingDing implements Service
 			result.add(0, currentNode);
 			currentNode = currentNode.getParent();
 		}
+        result.add(0, startNode);
 		
 		//Petite vérification
 		if(result.isEmpty())
@@ -268,11 +269,17 @@ public class PathDingDing implements Service
         //==================================
         for(int i=0 ; i<(result.size()-2) ; i++)
         {
-            // Si le noeud i et i+2 sont reliables, on les relie et on supprime le i+1
-            if(!graph.isObstructed(result.get(i), result.get(i+2)))
+            for(int j=i+2; j<(result.size()) ; j++)
             {
-                result.remove(i+1);
-                i--;
+                // Si le noeud i et j sont reliables, on les relie et on supprime les entres-deux
+                if (!graph.isObstructed(result.get(i), result.get(j))) {
+                    for(int k=i+1 ; k<j ; k++)
+                    {
+                        result.remove(k);
+                        k--;
+                        j--;
+                    }
+                }
             }
         }
 

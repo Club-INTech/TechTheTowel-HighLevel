@@ -72,7 +72,7 @@ public class TablePanel extends JPanel
 	    for(int i = 0; i < rects.size(); i++)
 	    {
 	    	g.fillRect((rects.get(i).getPosition().x - (rects.get(i).getSizeX() / 2) + 1500) * this.getWidth() / 3000, 
-	    			  -(rects.get(i).getPosition().y + rects.get(i).getSizeY()) * this.getHeight() / 2000 + this.getHeight(), 
+	    			  -(rects.get(i).getPosition().y + rects.get(i).getSizeY()/2) * this.getHeight() / 2000 + this.getHeight(),
 	    			  rects.get(i).getSizeX() * this.getWidth() / 3000, 
 	    			  rects.get(i).getSizeY() * this.getHeight() / 2000);
 	    }	    
@@ -82,7 +82,10 @@ public class TablePanel extends JPanel
 	    ArrayList<ObstacleCircular> fixedObstacles = mTable.getObstacleManager().getFixedObstacles();
 	    for(int i = 0; i < fixedObstacles.size(); i++)
 	    {
-	    	g.drawOval((fixedObstacles.get(i).getPosition().x - (fixedObstacles.get(i).getRadius() + mTable.getObstacleManager().getRobotRadius()) + 1500) * this.getWidth() / 3000, -(fixedObstacles.get(i).getPosition().y + fixedObstacles.get(i).getRadius() + mTable.getObstacleManager().getRobotRadius()) * this.getHeight() / 2000 + this.getHeight(), (2 * (fixedObstacles.get(i).getRadius() + mTable.getObstacleManager().getRobotRadius())) * this.getWidth() / 3000, (2 * (fixedObstacles.get(i).getRadius() + mTable.getObstacleManager().getRobotRadius())) * this.getHeight() / 2000);
+	    	g.drawOval((fixedObstacles.get(i).getPosition().x - (fixedObstacles.get(i).getRadius() + 1500) * this.getWidth() / 3000),
+                    -(fixedObstacles.get(i).getPosition().y + fixedObstacles.get(i).getRadius() ) * this.getHeight() / 2000 + this.getHeight(),
+                    (2 * (fixedObstacles.get(i).getRadius() )) * this.getWidth() / 3000,
+                    (2 * (fixedObstacles.get(i).getRadius() )) * this.getHeight() / 2000);
 	    }
 	    
 	    //les robots ennemis

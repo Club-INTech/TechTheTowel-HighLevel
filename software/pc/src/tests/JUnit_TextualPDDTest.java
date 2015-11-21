@@ -42,12 +42,12 @@ public class JUnit_TextualPDDTest extends JUnit_Test
         pf = (PathDingDing)container.getService(ServiceNames.PATHDINGDING);
     }
     
-   //@Test
+   @Test
     public void test()
     {
     	ArrayList<Node> path;
 		try {
-			path = pf.computePath(new Vec2(1000, 1750), new Vec2(-300, 1000));
+			path = pf.computePath(new Vec2(557, 671), new Vec2(-1044, 1630));
 			
     		ArrayList<Vec2> pathVec = new ArrayList<Vec2>();
     		for(int i=0 ; i<path.size() ; i++)
@@ -71,7 +71,7 @@ public class JUnit_TextualPDDTest extends JUnit_Test
     /**
      * Meme test, mais en plus muet : ne donne que les milliSecondes passées, sur plusieurs tests
      */
-    @Test
+    //@Test
     public void testMuted()
     {
     	String timeUsed = "";
