@@ -49,10 +49,10 @@ class LisseurGenetique:
         self.nPseudoPeriodique = self.nPop - self.nAperiodique
         for i in range(self.nPseudoPeriodique):
             self.population.append([])
-            self.population[i].append(math.pow(10, random.random()*6.5-4))
-            self.population[i].append(math.pow(10, random.random()*12-6))
-            self.population[i].append(math.pow(10, random.random()*12-6))
-            self.population[i].append(math.pow(10, random.random()*12-6))
+            self.population[i].append((-1)**random.choice([1,0])*math.pow(10, random.random()*6.5-4))
+            self.population[i].append((-1)**random.choice([1,0])*math.pow(10, random.random()*12-6))
+            self.population[i].append((-1)**random.choice([1,0])*math.pow(10, random.random()*12-6))
+            self.population[i].append((-1)**random.choice([1,0])*math.pow(10, random.random()*12-6))
             self.population[i].append("P") # "P" pour pseudo-périodique
         for i in range(self.nAperiodique):
             self.population.append([])
@@ -138,6 +138,7 @@ class LisseurGenetique:
     def __evoluer(self):
         #Les individus sont enregistrés dans population
         individus = self.population
+        self.meilleurs = []
         minTot = sys.maxint
         for i in range(self.generation):
             population = []
@@ -156,14 +157,15 @@ class LisseurGenetique:
                 population.append(self.__mutation(b, 0.2))
             #print population
             individus = population
-            """
+            
             #On trie pour garder le résultat le plus intéressant
-            mini = self.__evaluer(population[0], self.MESURES)
+            mini = self.__evaluer(population[0])
             chemin_choisi = 0
             for i in range(1, nPop):
-                if mini > self.__evaluer(population[i], self.MESURES):
+                if mini > self.__evaluer(population[i]):
                     chemin_choisi = i
-                    mini = self.__evaluer(population[i], self.MESURES)
+                    mini = self.__evaluer(population[i])
+                    self.meilleurs.append(population[i])
             #min est le chemin qui a la plus petite évaluation
             #A chaque fois qu'on a un meilleur résultat, on l'affiche
             if minTot > mini:
@@ -171,7 +173,7 @@ class LisseurGenetique:
                 print population[chemin_choisi], minTot
             if mini == 0:
                 break
-            """
+            
         self.population = population
 
     def meilleurs_resultats(self, n):
@@ -200,13 +202,13 @@ if __name__ == "__main__":
     #durée en ms
     duree = 1.500
     #nombre d'individus dans la population
-    nPop = 100
+    nPop = 10000
     #nombre de fonction apériodique
     nAperiodique = 0
     #nombre de génération
-    nGeneration = 20
+    nGeneration = 10
     #taux de mutation
-    taux = 0.2
+    taux = 0.05
     #nombre de meilleur résultat voulu
     nbResultat = 5
     #----------------------------------
@@ -227,6 +229,20 @@ if __name__ == "__main__":
         omega = res[i][1]
         A = res[i][2]
         B = res[i][3]
+        print beta, omega, A, B
+        valeur_modele = np.array([lisseur.f_pseudo_periodique(beta, omega, A, B, t) for t in T])
+        plt.plot(T, valeur_modele, 'r')
+        plt.plot(T, mesures_vitesse, "b")
+        plt.plot(T, mesures_commande, "y")
+        plt.plot(T, mesures_reponse, "g")
+        plt.autoscale()
+        plt.show()
+        plt.cla()
+    for i in lisseur.meilleurs:
+        beta = i[0]
+        omega = i[1]
+        A = i[2]
+        B = i[3]
         print beta, omega, A, B
         valeur_modele = np.array([lisseur.f_pseudo_periodique(beta, omega, A, B, t) for t in T])
         plt.plot(T, valeur_modele, 'r')
