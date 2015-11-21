@@ -171,6 +171,7 @@ public:
 	void track();//Stock les valeurs de débug
 	void printTrackingAll();//Affiche l'intégralité du tableau de tracking
 	void printTracking(); // Envoie des données pour l'asserv auto
+	void printPosition();
 	void resetTracking();// Reset le tableau de tracking
 
 	int getPWMTranslation() const;
@@ -223,6 +224,7 @@ public:
 	void testSpeed();
 	void testSpeedReverse();
 	void longTestSpeed();
+	void testPosition();
 
 };
 
