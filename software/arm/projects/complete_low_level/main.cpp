@@ -225,6 +225,10 @@ int main(void)
 			{
 				motionControlSystem->longTestSpeed();
 			}
+			else if(!strcmp("testPosition",order))
+			{
+				motionControlSystem->testPosition();
+			}
 
 
 

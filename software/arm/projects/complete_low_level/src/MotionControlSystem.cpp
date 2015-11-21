@@ -7,8 +7,8 @@ MotionControlSystem::MotionControlSystem(): leftMotor(Side::LEFT), rightMotor(Si
 	rotationPID(&currentAngle, &rotationSpeed, &rotationSetpoint),
 	averageLeftSpeed(), averageRightSpeed()
 {
-	translationControlled = false;
-	rotationControlled = false;
+	translationControlled = true;
+	rotationControlled = true;
 	leftSpeedControlled = true;
 	rightSpeedControlled = true;
 
@@ -27,11 +27,16 @@ MotionControlSystem::MotionControlSystem(): leftMotor(Side::LEFT), rightMotor(Si
 	rightSpeedPID.setOutputLimits(-255,255);
 
 	maxSpeed =3000; //Vitesse maximum, des moteurs (avec une marge au cas où on s'amuse à faire forcer un peu la bestiole).
-	maxAcceleration = 50;
+	maxAcceleration = 15;
 
 	delayToStop = 100;
 	toleranceTranslation = 50;
 	toleranceRotation = 25;
+
+	translationPID.setTunings(15, 0, 10);
+	rotationPID.setTunings(16,0,10);
+	leftSpeedPID.setTunings(0.01, 0.00005, 0.01);
+	rightSpeedPID.setTunings(0.01, 0.00005, 0.01);
 }
 
 void MotionControlSystem::init() {
@@ -355,6 +360,18 @@ void MotionControlSystem::printTracking() // Envoie les données nécessaires à l'
 						}
 }
 
+void MotionControlSystem::printPosition()
+{
+	for(int i=0; i<TRACKER_SIZE; i++)
+	{
+		serial.printf("%d\t%d\t%d\t",
+				trackArray[i].consigneTranslation , trackArray[i].translationCourante , trackArray[i].consigneVitesseTranslation);
+		serial.printf("%d\t%d\t%d\t",
+				trackArray[i].consigneRotation, trackArray[i].rotationCourante, trackArray[i].consigneVitesseRotation);
+		serial.printf("\r\n");
+	}
+}
+
 void MotionControlSystem::resetTracking()
 {
 	trackerType zero;
@@ -403,6 +420,22 @@ void MotionControlSystem::testSpeed()
 	translationSpeed = 0;
 	printTracking();
 	serial.printf("endtest");
+}
+
+void MotionControlSystem::testPosition()
+{
+	translationControlled = true;
+	rotationControlled = true;
+	leftSpeedControlled = true;
+	rightSpeedControlled = true;
+
+	resetTracking();
+	orderTranslation(200);
+	while(moving)
+	{;}
+	printPosition();
+	serial.printf("endtest");
+
 }
 
 void MotionControlSystem::testSpeedReverse()
