@@ -65,7 +65,7 @@ class LisseurGenetique:
     def __f_aperiodique(self, beta, alpha, A, B, t):
         return math.exp(-beta*t)*(A*math.exp(alpha*t)+B*math.exp(alpha*t))
 
-    def __f_pseudo_periodique(self, beta, omega, A, B, t):
+    def f_pseudo_periodique(self, beta, omega, A, B, t):
         return  math.exp(-beta*t)*(A*math.cos(omega*t)+B*math.sin(omega*t))
 
     def __evaluer(self, individu):
@@ -83,7 +83,7 @@ class LisseurGenetique:
         A = individu[2]
         B = individu[3]
         if individu[4] == "P":
-            valeurs_modele = np.array([self.__f_pseudo_periodique(beta, omega, A, B, t) for t in temps_modele])
+            valeurs_modele = np.array([self.f_pseudo_periodique(beta, omega, A, B, t) for t in temps_modele])
         elif individu[4] == "A":
             valeurs_modele = np.array([self.__f_aperiodique(beta, omega, A, B, t) for t in temps_modele])
         else:
@@ -224,7 +224,7 @@ if __name__ == "__main__":
     omega = res[1]
     A = res[2]
     B = res[3]
-    valeur_modele = np.array([LisseurGenetique.__f_pseudo_periodique(beta, omega, A, B, t) for t in T])
+    valeur_modele = np.array([LisseurGenetique.f_pseudo_periodique(beta, omega, A, B, t) for t in T])
     plt.plot(T, valeur_modele, 'r')
     plt.autoscale()
     plt.show()
