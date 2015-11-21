@@ -194,7 +194,9 @@ if __name__ == "__main__":
     #-----------------------------------
     #mesures
     mesures = np.genfromtxt(nom_fichier, delimiter = "\t")
-    mesures = mesures[:,1]
+    mesures_vitesse = mesures[:,1]
+    mesures_commande = mesures[:,2]
+    mesures_reponse = mesures[:,3]
     #durée en ms
     duree = 1.500
     #nombre d'individus dans la population
@@ -210,7 +212,7 @@ if __name__ == "__main__":
     #----------------------------------
     t1 = time.time()
 
-    lisseur = LisseurGenetique(mesures, duree, nPop, nAperiodique, nGeneration, taux)
+    lisseur = LisseurGenetique(mesures_vitesse, duree, nPop, nAperiodique, nGeneration, taux)
     t2 = time.time()
     res =  lisseur.meilleurs_resultats(nbResultat)
     print res
@@ -219,16 +221,19 @@ if __name__ == "__main__":
     print "génération : "+str(t2 - t1)
     print "tri : "+str(t3 - t2)
     #C'est ici qu'on récupère la valeur à donner
-    T= np.linspace(0, 1.5, len(mesures))
+    T= np.linspace(0, 1.5, len(mesures_vitesse))
     for i in range(nbResultat):
-	beta = res[i][0]
-	omega = res[i][1]
-	A = res[i][2]
-	B = res[i][3]
-	print beta, omega, A, B
-	valeur_modele = np.array([lisseur.f_pseudo_periodique(beta, omega, A, B, t) for t in T])
+        beta = res[i][0]
+        omega = res[i][1]
+        A = res[i][2]
+        B = res[i][3]
+        print beta, omega, A, B
+        valeur_modele = np.array([lisseur.f_pseudo_periodique(beta, omega, A, B, t) for t in T])
         plt.plot(T, valeur_modele, 'r')
-	plt.autoscale()
-	plt.show()
-	plt.cla()
+        plt.plot(T, mesures_vitesse, "b")
+        plt.plot(T, mesures_commande, "y")
+        plt.plot(T, mesures_reponse, "g")
+        plt.autoscale()
+        plt.show()
+        plt.cla()
 
