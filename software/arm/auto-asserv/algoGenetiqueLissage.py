@@ -49,21 +49,21 @@ class LisseurGenetique:
         self.nPseudoPeriodique = self.nPop - self.nAperiodique
         for i in range(self.nPseudoPeriodique):
             self.population.append([])
-            self.population[i].append(math.pow(10, random.random()*12-6))
+            self.population[i].append(math.pow(10, random.random()*6.5-4))
             self.population[i].append(math.pow(10, random.random()*12-6))
             self.population[i].append(math.pow(10, random.random()*12-6))
             self.population[i].append(math.pow(10, random.random()*12-6))
             self.population[i].append("P") # "P" pour pseudo-périodique
         for i in range(self.nAperiodique):
             self.population.append([])
-            self.population[i].append(math.pow(10, random.random()*12-6))
-            self.population[i].append(math.pow(10, random.random()*12-6))
+            self.population[i].append(math.pow(10, random.random()*6.5-6))
+            self.population[i].append(math.pow(10, random.random()*6-3))
             self.population[i].append(math.pow(10, random.random()*12-6))
             self.population[i].append(math.pow(10, random.random()*12-6))
             self.population[i].append("A") # "A" pour apériodique
 
-    def __f_aperiodique(self, beta, alpha, A, B, t):
-        return math.exp(-beta*t)*(A*math.exp(alpha*t)+B*math.exp(alpha*t))
+    def f_aperiodique(self, beta, alpha, A, B, t):
+        return math.exp(-beta*t)*(A*math.exp(alpha*t)+B*math.exp(-alpha*t))
 
     def f_pseudo_periodique(self, beta, omega, A, B, t):
         return  math.exp(-beta*t)*(A*math.cos(omega*t)+B*math.sin(omega*t))
@@ -85,7 +85,7 @@ class LisseurGenetique:
         if individu[4] == "P":
             valeurs_modele = np.array([self.f_pseudo_periodique(beta, omega, A, B, t) for t in temps_modele])
         elif individu[4] == "A":
-            valeurs_modele = np.array([self.__f_aperiodique(beta, omega, A, B, t) for t in temps_modele])
+            valeurs_modele = np.array([self.f_aperiodique(beta, omega, A, B, t) for t in temps_modele])
         else:
             raise ValueError
         diff = mesures - valeurs_modele
@@ -196,13 +196,13 @@ if __name__ == "__main__":
     mesures = np.genfromtxt(nom_fichier, delimiter = "\t")
     mesures = mesures[:,1]
     #durée en ms
-    duree = 1500
+    duree = 1.500
     #nombre d'individus dans la population
     nPop = 100
     #nombre de fonction apériodique
     nAperiodique = 0
     #nombre de génération
-    nGeneration = 200
+    nGeneration = 20
     #taux de mutation
     taux = 0.2
     #nombre de meilleur résultat voulu
@@ -220,13 +220,15 @@ if __name__ == "__main__":
     print "tri : "+str(t3 - t2)
     #C'est ici qu'on récupère la valeur à donner
     T= np.linspace(0, 1.5, len(mesures))
-    beta = res[0]
-    omega = res[1]
-    A = res[2]
-    B = res[3]
-    valeur_modele = np.array([LisseurGenetique.f_pseudo_periodique(beta, omega, A, B, t) for t in T])
-    plt.plot(T, valeur_modele, 'r')
-    plt.autoscale()
-    plt.show()
-    plt.cla()
+    for i in range(nbResultat):
+	beta = res[i][0]
+	omega = res[i][1]
+	A = res[i][2]
+	B = res[i][3]
+	print beta, omega, A, B
+	valeur_modele = np.array([lisseur.f_pseudo_periodique(beta, omega, A, B, t) for t in T])
+        plt.plot(T, valeur_modele, 'r')
+	plt.autoscale()
+	plt.show()
+	plt.cla()
 
