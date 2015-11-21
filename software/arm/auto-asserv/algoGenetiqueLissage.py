@@ -11,9 +11,10 @@ La solution sera ici trouvée (ou approchée) par un algorithme évolutionnaire.
 -le nombre d'individu dans la population
 """
 import random
-import math
+import time
 import numpy as np
 import math
+import matplotlib.pyplot as plt
 import sys #pour avoir le nombre maximal autorisé
 
 class LisseurGenetique:
@@ -64,7 +65,7 @@ class LisseurGenetique:
     def __f_aperiodique(self, beta, alpha, A, B, t):
         return math.exp(-beta*t)*(A*math.exp(alpha*t)+B*math.exp(alpha*t))
 
-    def __f_pseudo_periodique(self, beta, omega, A, B, t):
+    def f_pseudo_periodique(self, beta, omega, A, B, t):
         return  math.exp(-beta*t)*(A*math.cos(omega*t)+B*math.sin(omega*t))
 
     def __evaluer(self, individu):
@@ -82,7 +83,7 @@ class LisseurGenetique:
         A = individu[2]
         B = individu[3]
         if individu[4] == "P":
-            valeurs_modele = np.array([self.__f_pseudo_periodique(beta, omega, A, B, t) for t in temps_modele])
+            valeurs_modele = np.array([self.f_pseudo_periodique(beta, omega, A, B, t) for t in temps_modele])
         elif individu[4] == "A":
             valeurs_modele = np.array([self.__f_aperiodique(beta, omega, A, B, t) for t in temps_modele])
         else:
@@ -91,7 +92,7 @@ class LisseurGenetique:
         ecart  = np.dot(diff,diff.T)
         return ecart
 
-    def __crossover(self, parent1, parent2, mesures, duree):
+    def __crossover(self, parent1, parent2):
         """
         On crée les enfants par un simple crossingover si les parents entourent l'équilibre
         Si les deux parents sont d'un côté de l'équilibre, alors on garde celui qui est le plus proche de l'équilibre
@@ -106,19 +107,19 @@ class LisseurGenetique:
         if ev1 < ev2:
             enfant1 = parent1
             enfant2 = []
-            enfant2[0] = (3*parent1[0]+parent2[0])/4.
-            enfant2[1] = (3*parent1[1]+parent2[1])/4.
-            enfant2[2] = (3*parent1[2]+parent2[2])/4.
-            enfant2[3] = (3*parent1[3]+parent2[3])/4.
-            enfant2[4] = parent1[4]
+            enfant2.append((3*parent1[0]+parent2[0])/4.)
+            enfant2.append((3*parent1[1]+parent2[1])/4.)
+            enfant2.append((3*parent1[2]+parent2[2])/4.)
+            enfant2.append((3*parent1[3]+parent2[3])/4.)
+            enfant2.append(parent1[4])
         else:
             enfant1 = parent2
             enfant2 = []
-            enfant2[0] = (parent1[0]+3*parent2[0])/4.
-            enfant2[1] = (parent1[1]+3*parent2[1])/4.
-            enfant2[2] = (parent1[2]+3*parent2[2])/4.
-            enfant2[3] = (parent1[3]+3*parent2[3])/4.
-            enfant2[4] = parent2[4]
+            enfant2.append((parent1[0]+3*parent2[0])/4.)
+            enfant2.append((parent1[1]+3*parent2[1])/4.)
+            enfant2.append((parent1[2]+3*parent2[2])/4.)
+            enfant2.append((parent1[3]+3*parent2[3])/4.)
+            enfant2.append(parent2[4])
         return enfant1, enfant2
 
     def __mutation(self, individu, taux):
@@ -131,6 +132,8 @@ class LisseurGenetique:
         if random.random < taux:
             individu[random.randrange(4)] = math.pow(10,random.random()*12-6)
             return individu
+        else:
+            return individu
 
     def __evoluer(self):
         #Les individus sont enregistrés dans population
@@ -140,8 +143,14 @@ class LisseurGenetique:
             population = []
             random.shuffle(individus) #On mélange aléatoirement les individus dans la liste
             for j in range(self.nPop/2):
+                #print j
                 #La reproduction se fait avec deux individus proches dans la liste individus
-                a, b = self.__crossover(individus[j], individus[j+1])
+                # if individus[2*j] is None:
+                #     print "ok",2*j
+                # if individus[2*j+1] is None:
+                #     print "okk", 2*j+1
+                a, b = self.__crossover(individus[2*j], individus[2*j+1])
+
                 #print a,b, "parent enfant"
                 population.append(self.__mutation(a, 0.2))
                 population.append(self.__mutation(b, 0.2))
@@ -180,18 +189,18 @@ class LisseurGenetique:
 
 
 if __name__ == "__main__":
-    pass
+    nom_fichier = "donnees_vitesse.txt"
+
     #-----------------------------------
     #mesures
-    mesures = None
+    mesures = np.genfromtxt(nom_fichier, delimiter = "\t")
+    mesures = mesures[:,1]
     #durée en ms
-    duree = 1000
-    #nombre de génération
-    generation = 10
+    duree = 1500
     #nombre d'individus dans la population
     nPop = 100
     #nombre de fonction apériodique
-    nAperiodique = 50
+    nAperiodique = 0
     #nombre de génération
     nGeneration = 200
     #taux de mutation
@@ -199,7 +208,25 @@ if __name__ == "__main__":
     #nombre de meilleur résultat voulu
     nbResultat = 5
     #----------------------------------
+    t1 = time.time()
+
     lisseur = LisseurGenetique(mesures, duree, nPop, nAperiodique, nGeneration, taux)
-    lisseur.meilleurs_resultats(nbResultat)
+    t2 = time.time()
+    res =  lisseur.meilleurs_resultats(nbResultat)
+    print res
+    t3 = time.time()
+    print "en tout : "+str(t3 - t1)
+    print "génération : "+str(t2 - t1)
+    print "tri : "+str(t3 - t2)
     #C'est ici qu'on récupère la valeur à donner
+    T= np.linspace(0, 1.5, len(mesures))
+    beta = res[0]
+    omega = res[1]
+    A = res[2]
+    B = res[3]
+    valeur_modele = np.array([LisseurGenetique.f_pseudo_periodique(beta, omega, A, B, t) for t in T])
+    plt.plot(T, valeur_modele, 'r')
+    plt.autoscale()
+    plt.show()
+    plt.cla()
 
