@@ -79,7 +79,7 @@ public class PathDingDing implements Service
 	 * Calcule le chemin à parcourir à l'aide de l'algorithme A*
 	 * @param start noeud de départ
 	 * @param end noeud d'arrivée
-	 * @return Liste de noeuds à parcourir ; exception si échec
+	 * @return Liste de noeuds (Node) à parcourir ; exception si échec
 	 */
 	public ArrayList<Node> computePath(Vec2 start, Vec2 end) throws PointInObstacleException, PathNotFoundException
 	{
@@ -379,7 +379,30 @@ public class PathDingDing implements Service
 
     }
 
+    /**
+     * Calcule le chemin à parcourir à l'aide de l'algorithme A*
+     * @param start noeud de départ
+     * @param end noeud d'arrivée
+     * @return Liste de noeuds à parcourir (Vec2) ; exception si échec
+     */
+    public ArrayList<Vec2> computePathVec2(Vec2 start, Vec2 end) throws PointInObstacleException, PathNotFoundException {
+        ArrayList<Node> path = computePath(start, end);
+        ArrayList<Vec2> res = new ArrayList<Vec2>();
 
+        for(int i=0; i<path.size() ; i++)
+        {
+            res.add(path.get(i).getPosition());
+        }
+        return res;
+    }
+
+	/**
+	 * Renvoie le graphe
+     */
+	public Graph getGraph()
+	{
+		return graph;
+	}
 
     @Override
 	public void updateConfig() 
