@@ -2,6 +2,7 @@
 
 package graphics;
 
+import pathDingDing.Graph;
 import robot.Robot;
 import robot.RobotReal;
 import smartMath.Segment;
@@ -29,7 +30,9 @@ public class TablePanel extends JPanel
 	private Table mTable;
 	private Robot mRobot;
 	private boolean isRobotPresent = true;
-	
+	private boolean showGraph;
+	private Graph mGraph;
+
 	public TablePanel(Table table, RobotReal robot)
 	{
 		mPath = new ArrayList<Vec2>();
@@ -157,6 +160,13 @@ public class TablePanel extends JPanel
 	{
 		mPath = path;
 		repaint();
+	}
+
+	//permet d'afficher le graphe du pathdingding
+	public void drawGraph(Graph graph)
+	{
+		mGraph = graph;
+		showGraph = true;
 	}
 	
 	public Table getTable()
