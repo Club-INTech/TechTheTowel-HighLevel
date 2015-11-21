@@ -99,7 +99,7 @@ class CommunicationSerie:
         return a
 
     def parler(self, a_envoyer):
-        self.port_serie.write(a_envoyer)
+        self.port_serie.write(a_envoyer+"\r\n")
         return a_envoyer
 
     def attendre(self):
@@ -110,9 +110,11 @@ class CommunicationSerie:
 
 if __name__ == "__main__":
     com = CommunicationSerie("COM5")
+    print com
     print("--------------------------\n\n")
     m = ""
-    while m != 'exit':
+    a = ""
+    while m != "exit":
         m = raw_input("ordre : ")
         com.parler(m)
         if m in ("testSpeed", "testSpeedReverse"):
@@ -142,9 +144,11 @@ if __name__ == "__main__":
             plt.plot(T, pwmG, 'g')
             plt.show()
             plt.cla()
+            with open("donnees_vitesse.txt", "w") as fichier:
+                for t in range(len(T)):
+                    fichier.write(str(T[t])+"\t"+str(speedG[t])+"\t"+str(VcG[t])+"\t"+str(pwmG[t])+"\n")
         elif m == "exit":
             break
-
         else:
             time.sleep(0.1)
             while(com.attendre() > 0):
@@ -152,6 +156,4 @@ if __name__ == "__main__":
             print a
 
         a = ""
-    with open("donnees_vitesse.txt", "w") as fichier:
-        for t in range(len(T)):
-            fichier.write(str(T)+"\t"+str(speedG[t])+"\t"+str(VcG[t])+"\t"+str(pwmG)+"\n")
+        
