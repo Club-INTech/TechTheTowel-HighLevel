@@ -164,7 +164,7 @@ public class Table implements Service
 		for(int i = 0 ; i < 9 ; i++)
 		{
 			Vec2 pos = new Vec2(-(4*sandSize)+(i*sandSize),  2000-(sandSize/2));
-			mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+			//mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
 			centerCubes.add(new Sand(Elements.SAND_CUBE, pos, 0));
 		}
 		
@@ -172,7 +172,7 @@ public class Table implements Service
 		for(int i = 0 ; i < 3 ; i++)
 		{
 			Vec2 pos = new Vec2(-sandSize+(i*sandSize), 2000-((3*sandSize)/2));
-			mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+			//mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
 			centerCubes.add(new Sand(Elements.SAND_CUBE, pos , 0));
 		}
 		
@@ -180,18 +180,18 @@ public class Table implements Service
 		for(int i = 0 ; i < 3 ; i++)
 		{
 			Vec2 pos = new Vec2(-sandSize+(i*sandSize), 2000-(sandSize/2));
-			mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+			//mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
 			centerCubes.add(new Sand(Elements.SAND_CUBE, pos, 1));
 		}
 		
 		//Cube au niveau 1, avant centré
 		Vec2 pos = new Vec2(0, 2000-((3*sandSize)/2));
-		mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+		//mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
 		centerCubes.add(new Sand(Elements.SAND_CUBE, pos, 1));
 		
 		//Cylindre au sol tout à l'avant
 		pos = new Vec2(0, 2000-((5*sandSize)/2));
-		mObstacleManager.addCircular(new ObstacleCircular(pos,sandSize/2));
+		//mObstacleManager.addCircular(new ObstacleCircular(pos,sandSize/2));
 		centerCylinders.add(new Sand(Elements.SAND_CYLINDER, pos, 0));
 		
 		//Cylindres au niveau 1 (C'est le bordel, la flemme de mettre un commentaire pour chacun)
@@ -200,7 +200,7 @@ public class Table implements Service
 		for(int i = 0 ; i < 2 ; i++)
 		{
 			pos = new Vec2(-(sandSize*(2+i)), 2000-(sandSize/2));
-			mObstacleManager.addCircular(new ObstacleCircular(pos,sandSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos,sandSize/2));
 			centerCylinders.add(new Sand(Elements.SAND_CYLINDER, pos, 1));
 		}
 		
@@ -208,7 +208,7 @@ public class Table implements Service
 		for(int i = 0 ; i < 2 ; i++)
 		{
 			pos = new Vec2((sandSize*(2+i)), 2000-(sandSize/2));
-			mObstacleManager.addCircular(new ObstacleCircular(pos,sandSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos,sandSize/2));
 			centerCylinders.add(new Sand(Elements.SAND_CYLINDER, pos, 1));
 		}
 		
@@ -216,7 +216,7 @@ public class Table implements Service
 		for(int i = -1 ; i < 2 ; i+=2)
 		{
 			pos = new Vec2(i*sandSize, 2000-((3*sandSize)/2));
-			mObstacleManager.addCircular(new ObstacleCircular(pos,sandSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos,sandSize/2));
 			centerCylinders.add(new Sand(Elements.SAND_CYLINDER, pos, 1));
 		}
 		
@@ -224,7 +224,7 @@ public class Table implements Service
 		for(int i=0; i < 5 ; i++)
 		{
 			pos = new Vec2(-(2*sandSize)+(i*sandSize), 2000-(sandSize/2));
-			mObstacleManager.addCircular(new ObstacleCircular(pos,sandSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos,sandSize/2));
 			centerCylinders.add(new Sand(Elements.SAND_CYLINDER, pos, 2));
 		}
 		
@@ -258,55 +258,55 @@ public class Table implements Service
 		
 		//Cubes devant notre serviette
 		pos = new Vec2(850-(sandSize/2), 1100+(sandSize/2));
-		mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+		//mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
 		ourTowelCubes.add(new Sand(Elements.SAND_CUBE, pos, 0));
 		
 		pos = new Vec2(850+(sandSize/2), 1100+(sandSize/2));
-		mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+		//mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
 		ourTowelCubes.add(new Sand(Elements.SAND_CUBE, pos, 0));
 		
 		pos = new Vec2(850-(sandSize/2), 1100-(sandSize/2));
-		mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+		//mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
 		ourTowelCubes.add(new Sand(Elements.SAND_CUBE, pos, 0));
 		
 		pos = new Vec2(850+(sandSize/2), 1100-(sandSize/2));
-		mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+		//mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
 		ourTowelCubes.add(new Sand(Elements.SAND_CUBE, pos, 0));
 
 		//Cubes devant leur serviette
 		pos = new Vec2(-850-(sandSize/2), 1100+(sandSize/2));
-		mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+		//mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
 		theirTowelCubes.add(new Sand(Elements.SAND_CUBE, pos, 0));
 		
 		pos = new Vec2(-850+(sandSize/2), 1100+(sandSize/2));
-		mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+		//mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
 		theirTowelCubes.add(new Sand(Elements.SAND_CUBE, pos, 0));
 		
 		pos = new Vec2(-850-(sandSize/2), 1100-(sandSize/2));
-		mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+		//mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
 		theirTowelCubes.add(new Sand(Elements.SAND_CUBE, pos, 0));
 		
 		pos = new Vec2(-850+(sandSize/2), 1100-(sandSize/2));
-		mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+		//mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
 		theirTowelCubes.add(new Sand(Elements.SAND_CUBE, pos, 0));
 		
 		//Nos cubes devant la dune
 		for(int i=0 ; i<2 ;i++)
 		{
 			pos = new Vec2(678-((3*sandSize)/2), 2000-(sandSize/2));
-			mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+			//mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
 			ourDuneCubes.add(new Sand(Elements.SAND_CUBE, pos, i));
 			
 			pos = new Vec2(678-(sandSize/2), 2000-(sandSize/2));
-			mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+			//mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
 			ourDuneCubes.add(new Sand(Elements.SAND_CUBE, pos, i));
 			
 			pos = new Vec2(678-((3*sandSize)/2), 2000-((3*sandSize)/2));
-			mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+			//mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
 			ourDuneCubes.add(new Sand(Elements.SAND_CUBE, pos, i));
 			
 			pos = new Vec2(678-(sandSize/2), 2000-((3*sandSize/2)));
-			mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+			//mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
 			ourDuneCubes.add(new Sand(Elements.SAND_CUBE, pos, i));
 		}
 		
@@ -314,19 +314,19 @@ public class Table implements Service
 		for(int i=0 ; i<2 ;i++)
 		{
 			pos = new Vec2(-678+((3*sandSize)/2), 2000-(sandSize/2));
-			mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+			//mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
 			theirDuneCubes.add(new Sand(Elements.SAND_CUBE, pos, i));
 			
 			pos = new Vec2(-678+(sandSize/2), 2000-(sandSize/2));
-			mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+			//mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
 			theirDuneCubes.add(new Sand(Elements.SAND_CUBE, pos, i));
 			
 			pos = new Vec2(-678+((3*sandSize)/2), 2000-((3*sandSize)/2));
-			mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+			//mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
 			theirDuneCubes.add(new Sand(Elements.SAND_CUBE, pos, i));
 			
 			pos = new Vec2(-678+(sandSize/2), 2000-((3*sandSize/2)));
-			mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
+			//mObstacleManager.addRectangle(new ObstacleRectangular(pos, sandSize, sandSize));
 			theirDuneCubes.add(new Sand(Elements.SAND_CUBE, pos, i));
 		}
 		
@@ -341,335 +341,335 @@ public class Table implements Service
 		if (configShell == 1)
 		{
 			pos = new Vec2(-300,350);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			ourShells.add(new Shell(pos,Color.ALLY,0));
 			
 			pos = new Vec2(600,550);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			ourShells.add(new Shell(pos,Color.ALLY,0));
 			
 			pos = new Vec2(1300,75);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			ourShells.add(new Shell(pos,Color.ALLY,1));
 			
 			pos = new Vec2(1425,200);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			ourShells.add(new Shell(pos,Color.ALLY,1));
 			
 			pos = new Vec2(1425,75);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			ourShells.add(new Shell(pos,Color.ALLY,2));
 			
 			pos = new Vec2(-600,550);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			theirShells.add(new Shell(pos,Color.ENNEMY,0));
 			
 			pos = new Vec2(300,350);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			theirShells.add(new Shell(pos,Color.ENNEMY,0));
 			
 			pos = new Vec2(-1425,200);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			theirShells.add(new Shell(pos,Color.ENNEMY,1));
 			
 			pos = new Vec2(-1300,75);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			theirShells.add(new Shell(pos,Color.ENNEMY,1));
 			
 			pos = new Vec2(-1425,75);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			theirShells.add(new Shell(new Vec2(-1425,75),Color.ENNEMY,2));
 			
 			pos = new Vec2(-1300,750);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			neutralShells.add(new Shell(pos,Color.NEUTRAL,0));
 			
 			pos = new Vec2(-1300,450);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			neutralShells.add(new Shell(pos,Color.NEUTRAL,0));
 			
 			pos = new Vec2(0,450);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			neutralShells.add(new Shell(pos,Color.NEUTRAL,0));
 			
 			pos = new Vec2(0,150);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			neutralShells.add(new Shell(pos,Color.NEUTRAL,0));
 			
 			pos = new Vec2(1300,750);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			neutralShells.add(new Shell(pos,Color.NEUTRAL,0));
 			
 			pos = new Vec2(1300,450);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			neutralShells.add(new Shell(pos,Color.NEUTRAL,0));
 		}
 		
 		else if (configShell == 2)
 		{
 			pos = new Vec2(300,350);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			ourShells.add(new Shell(pos,Color.ALLY,0));
 			
 			pos = new Vec2(600,550);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			ourShells.add(new Shell(pos,Color.ALLY,0));
 			
 			pos = new Vec2(1300,750);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			ourShells.add(new Shell(pos,Color.ALLY,0));
 			
 			pos = new Vec2(1300,75);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			ourShells.add(new Shell(pos,Color.ALLY,1));
 			
 			pos = new Vec2(1425,200);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			ourShells.add(new Shell(pos,Color.ALLY,1));
 			
 			pos = new Vec2(-1300,750);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			theirShells.add(new Shell(pos,Color.ENNEMY,0));
 			
 			pos = new Vec2(-600,550);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			theirShells.add(new Shell(pos,Color.ENNEMY,0));
 			
 			pos = new Vec2(-300,350);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			theirShells.add(new Shell(pos,Color.ENNEMY,0));
 			
 			pos = new Vec2(-1425,200);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			theirShells.add(new Shell(pos,Color.ENNEMY,1));
 			
 			pos = new Vec2(-1300,75);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			theirShells.add(new Shell(pos,Color.ENNEMY,1));
 			
 			pos = new Vec2(-1300,450);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			neutralShells.add(new Shell(pos,Color.NEUTRAL,0));
 			
 			pos = new Vec2(0,450);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			neutralShells.add(new Shell(pos,Color.NEUTRAL,0));
 			
 			pos = new Vec2(0,150);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			neutralShells.add(new Shell(pos,Color.NEUTRAL,0));
 			
 			pos = new Vec2(1300,450);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			neutralShells.add(new Shell(pos,Color.NEUTRAL,0));
 			
 			pos = new Vec2(-1425,75);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			neutralShells.add(new Shell(pos,Color.NEUTRAL,1));
 			
 			pos = new Vec2(1425,75);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			neutralShells.add(new Shell(pos,Color.NEUTRAL,1));
 		}
 		
 		else if (configShell == 3)
 		{
 			pos = new Vec2(300,350);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			ourShells.add(new Shell(pos,Color.ALLY,0));
 			
 			pos = new Vec2(900,750);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			ourShells.add(new Shell(pos,Color.ALLY,0));
 			
 			pos = new Vec2(1300,750);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			ourShells.add(new Shell(pos,Color.ALLY,0));
 			
 			pos = new Vec2(1300,75);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			ourShells.add(new Shell(pos,Color.ALLY,1));
 			
 			pos = new Vec2(1425,200);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			ourShells.add(new Shell(pos,Color.ALLY,1));
 			
 			pos = new Vec2(-1300,750);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			theirShells.add(new Shell(pos,Color.ENNEMY,0));
 			
 			pos = new Vec2(-900,750);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			theirShells.add(new Shell(pos,Color.ENNEMY,0));
 			
 			pos = new Vec2(-300,350);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			theirShells.add(new Shell(pos,Color.ENNEMY,0));
 			
 			pos = new Vec2(-1425,200);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			theirShells.add(new Shell(pos,Color.ENNEMY,1));
 			
 			pos = new Vec2(-1300,75);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			theirShells.add(new Shell(pos,Color.ENNEMY,1));
 			
 			pos = new Vec2(-1300,450);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			neutralShells.add(new Shell(pos,Color.NEUTRAL,0));
 			
 			pos = new Vec2(-900,450);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			neutralShells.add(new Shell(pos,Color.NEUTRAL,0));
 			
 			pos = new Vec2(900,450);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			neutralShells.add(new Shell(pos,Color.NEUTRAL,0));
 			
 			pos = new Vec2(1300,450);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			neutralShells.add(new Shell(pos,Color.NEUTRAL,0));
 			
 			pos = new Vec2(-1425,75);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			neutralShells.add(new Shell(pos,Color.NEUTRAL,2));
 			
 			pos = new Vec2(1425,75);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			neutralShells.add(new Shell(pos,Color.NEUTRAL,2));
 		}
 		
 		else if (configShell == 4)
 		{
 			pos = new Vec2(900,750);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			ourShells.add(new Shell(pos,Color.ALLY,0));
 			
 			pos = new Vec2(1300,750);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			ourShells.add(new Shell(pos,Color.ALLY,0));
 			
 			pos = new Vec2(1300,450);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			ourShells.add(new Shell(pos,Color.ALLY,0));
 			
 			pos = new Vec2(-1425,200);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			ourShells.add(new Shell(pos,Color.ALLY,1));
 			
 			pos = new Vec2(-1300,75);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			ourShells.add(new Shell(pos,Color.ALLY,1));
 			
 			pos = new Vec2(-1300,750);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			theirShells.add(new Shell(pos,Color.ENNEMY,0));
 			
 			pos = new Vec2(-1300,450);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			theirShells.add(new Shell(pos,Color.ENNEMY,0));
 			
 			pos = new Vec2(-900,750);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			theirShells.add(new Shell(pos,Color.ENNEMY,0));
 			
 			pos = new Vec2(1300,75);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			theirShells.add(new Shell(pos,Color.ENNEMY,1));
 			
 			pos = new Vec2(1425,200);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			theirShells.add(new Shell(pos,Color.ENNEMY,1));
 			
 			pos = new Vec2(-900,450);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			neutralShells.add(new Shell(pos,Color.NEUTRAL,0));
 			
 			pos  = new Vec2(-300,350);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			neutralShells.add(new Shell(pos,Color.NEUTRAL,0));
 			
 			pos = new Vec2(300,350);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			neutralShells.add(new Shell(pos,Color.NEUTRAL,0));
 			
 			pos = new Vec2(900,450);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			neutralShells.add(new Shell(pos,Color.NEUTRAL,0));
 			
 			pos = new Vec2(-1425,75);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			neutralShells.add(new Shell(pos,Color.NEUTRAL,2));
 			
 			pos = new Vec2(1425,75);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			neutralShells.add(new Shell(pos,Color.NEUTRAL,2));
 		}
 		
 		else if (configShell == 5)
 		{
 			pos = new Vec2(-900,450);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			ourShells.add(new Shell(pos,Color.ALLY,0));
 			
 			pos = new Vec2(900,750);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			ourShells.add(new Shell(pos,Color.ALLY,0));
 			
 			pos = new Vec2(1300,750);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			ourShells.add(new Shell(pos,Color.ALLY,0));
 			
 			pos = new Vec2(1300,450);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			ourShells.add(new Shell(pos,Color.ALLY,0));
 			
 			pos = new Vec2(1300,450);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			ourShells.add(new Shell(pos,Color.ALLY,1));
 			
 			pos = new Vec2(-1300,750);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			theirShells.add(new Shell(pos,Color.ENNEMY,0));
 			
 			pos = new Vec2(-1300,450);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			theirShells.add(new Shell(pos,Color.ENNEMY,0));
 			
 			pos = new Vec2(-900,750);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			theirShells.add(new Shell(pos,Color.ENNEMY,0));
 			
 			pos = new Vec2(900,450);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			theirShells.add(new Shell(pos,Color.ENNEMY,0));
 			
 			pos = new Vec2(-1425,200);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			theirShells.add(new Shell(pos,Color.ENNEMY,1));
 			
 			pos = new Vec2(-900,150);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			neutralShells.add(new Shell(pos,Color.NEUTRAL,0));
 			
 			pos = new Vec2(900,150);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			neutralShells.add(new Shell(pos,Color.NEUTRAL,0));
 			
 			pos = new Vec2(-1300,75);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			neutralShells.add(new Shell(pos,Color.NEUTRAL,1));
 			
 			pos = new Vec2(1300,75);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			neutralShells.add(new Shell(pos,Color.NEUTRAL,1));
 			
 			pos = new Vec2(-1425,75);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			neutralShells.add(new Shell(pos,Color.NEUTRAL,2));
 			
 			pos = new Vec2(1425,75);
-			mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
+			//mObstacleManager.addCircular(new ObstacleCircular(pos, shellSize/2));
 			neutralShells.add(new Shell(pos,Color.NEUTRAL,2));
 		}
 		

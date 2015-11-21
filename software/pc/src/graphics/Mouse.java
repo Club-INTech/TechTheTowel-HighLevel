@@ -34,17 +34,17 @@ public class Mouse implements MouseListener
         if (e.getButton()==MouseEvent.BUTTON1)
         {
         	mLeftClickPosition.x = (e.getX()/* - 8*/) * 3000 / mPanel.getWidth() - 1500; // mettre 0 au lieu de 8 sous linux
-        	mLeftClickPosition.y = (-e.getY()/* + 31*/) * 2000 / mPanel.getHeight() + 2000; // mettre 0 au lieu de 31 sous windows
+        	mLeftClickPosition.y = (-e.getY() + 31) * 2000 / mPanel.getHeight() + 2000; // mettre 0 au lieu de 31 sous windows
         }
         if (e.getButton()==MouseEvent.BUTTON2)
         {
         	mMiddleClickPosition.x = (e.getX()/* - 8*/) * 3000 / mPanel.getWidth() - 1500; // mettre 0 au lieu de 8 sous linux
-        	mMiddleClickPosition.y = (-e.getY()/* + 31*/) * 2000 / mPanel.getHeight() + 2000; // mettre 0 au lieu de 31 sous windows
+        	mMiddleClickPosition.y = (-e.getY() + 31) * 2000 / mPanel.getHeight() + 2000; // mettre 0 au lieu de 31 sous windows
         }
         if (e.getButton()==MouseEvent.BUTTON3)
         {
         	mRightClickPosition.x = (e.getX()/* - 8*/) * 3000 / mPanel.getWidth() - 1500; // mettre 0 au lieu de 8 sous linux
-        	mRightClickPosition.y = (-e.getY()/* + 31*/) * 2000 / mPanel.getHeight() + 2000; // mettre 0 au lieu de 31 sous windows
+        	mRightClickPosition.y = (-e.getY() + 31) * 2000 / mPanel.getHeight() + 2000; // mettre 0 au lieu de 31 sous windows
         }
     }
 

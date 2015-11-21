@@ -98,21 +98,28 @@ public class ObstacleManager
       	mRectangles.add(new ObstacleRectangular(new Vec2(-711, 1900), 200 + mRobotRadius, 200 + mRobotRadius));
       	
       	//Vitre centrale
-      	mRectangles.add(new ObstacleRectangular(new Vec2(0, 950), 48 + mRobotRadius, 300 + mRobotRadius));
+      	mRectangles.add(new ObstacleRectangular(new Vec2(0, 950), 48 + mRobotRadius, 600 + mRobotRadius));
       	
       	//planches à côté de la vitre
-      	mRectangles.add(new ObstacleRectangular(new Vec2(288, 1239), 756 + mRobotRadius, 22 + mRobotRadius));
-      	mRectangles.add(new ObstacleRectangular(new Vec2(-288, 1239), 576 + mRobotRadius, 22 + mRobotRadius));
+      	mRectangles.add(new ObstacleRectangular(new Vec2(0, 1239), 1200 + mRobotRadius, 22 + mRobotRadius));
       	
       	//Rochers
       	mFixedObstacles.add(new ObstacleCircular(new Vec2(1500, 0), 250 + mRobotRadius));
       	mFixedObstacles.add(new ObstacleCircular(new Vec2(-1500, 0), 250 + mRobotRadius));
 
+		//Packs de sable (merci Sylvain)
+		mRectangles.add(new ObstacleRectangular(new Vec2(0, 1913), 522 + mRobotRadius , 174 + mRobotRadius));
+		mRectangles.add(new ObstacleRectangular(new Vec2(-620, 1942), 116 + mRobotRadius, 116 + mRobotRadius));
+		mRectangles.add(new ObstacleRectangular(new Vec2(620, 1942), 116 + mRobotRadius, 116 + mRobotRadius));
+		mRectangles.add(new ObstacleRectangular(new Vec2(850, 1100), 116 + mRobotRadius, 116 + mRobotRadius));
+		mRectangles.add(new ObstacleRectangular(new Vec2(-850, 1100), 116 + mRobotRadius, 116 + mRobotRadius));
 
 
 
 
-    }
+
+
+	}
 
 
     /**
