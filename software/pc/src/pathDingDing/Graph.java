@@ -417,6 +417,15 @@ public class Graph
      */
     public boolean isInObstacle(Vec2 point)
     {
+		// Si le point est en dehors de la table
+		if(point.x > (2000 - obstacleManager.mRobotRadius)
+			|| point.x < obstacleManager.mRobotRadius
+			|| point.y > (1500 - obstacleManager.mRobotRadius)
+			|| point.y < (-1500 + obstacleManager.mRobotRadius))
+		{
+			return true;
+		}
+
         ArrayList<ObstacleRectangular> rectangularObstacles = obstacleManager.getRectangles();
         for(int i=0 ; i<rectangularObstacles.size() ; i++)
         {

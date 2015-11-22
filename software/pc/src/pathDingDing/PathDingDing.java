@@ -119,26 +119,25 @@ public class PathDingDing implements Service
 		
 		// On ajoute le noeud de départ à la liste des nodes fermés
 		this.closedNodes.add(startNode);
-		
-		// Test d'isolation du point d'arrivée
-		ArrayList<Node> related = this.graph.getRelatedNodes(endNode);
-		if(related.isEmpty())
+
+		//Test d'isolation du point d'arrivée
+		if(graph.isInObstacle(end))
 		{
 			log.critical("PDD : noeud d'arrivée isolé (obstacle ?)");
 			throw new PointInObstacleException(endNode, graph.getObstacleManager());
 		}
 		
-		// D'abord, on ajoute les noeuds adjacents au depart dans la liste ouverte
-		related = this.graph.getRelatedNodes(startNode);
-		
 		// Idem test d'isolation du départ
 		// TODO Ajuster pour sortir de l'obstacle 
-		if(related.isEmpty())
+		if(graph.isInObstacle(start))
 		{
 			log.critical("PDD : noeud de départ isolé");
 			
 			throw new PointInObstacleException(startNode, graph.getObstacleManager());
 		}
+
+		// D'abord, on ajoute les noeuds adjacents au depart dans la liste ouverte
+		ArrayList<Node> related = this.graph.getRelatedNodes(startNode);
 		
 		for(int i=0 ; i < related.size() ; i++)
 		{
