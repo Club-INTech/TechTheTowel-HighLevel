@@ -349,21 +349,46 @@ public class Graph
 	{
 		ArrayList<ObstacleRectangular> rect = obstacleManager.getRectangles();
 		ArrayList<ObstacleCircular> cir = obstacleManager.getFixedObstacles();
+        Vec2 pos;
 		for(int i = 0 ; i < rect.size() ; i++)
         {
             ObstacleRectangular r = rect.get(i);
-            nodes.add(new Node(new Vec2(r.getPosition().x + (r.getSizeX()/2) +1, (r.getPosition().y - r.getSizeY()/2) -1)));
-            nodes.add(new Node(new Vec2(r.getPosition().x + (r.getSizeX()/2) +1, (r.getPosition().y + r.getSizeY()/2) +1)));
-            nodes.add(new Node(new Vec2(r.getPosition().x - (r.getSizeX()/2) -1, (r.getPosition().y - r.getSizeY()/2) -1)));
-            nodes.add(new Node(new Vec2(r.getPosition().x - (r.getSizeX()/2) -1, (r.getPosition().y + r.getSizeY()/2) +1)));
+
+            pos = new Vec2(r.getPosition().x + (r.getSizeX()/2) +1, (r.getPosition().y - r.getSizeY()/2) -1);
+            if(!isInObstacle(pos))
+                nodes.add(new Node(pos));
+
+            pos = new Vec2(r.getPosition().x + (r.getSizeX()/2) +1, (r.getPosition().y + r.getSizeY()/2) +1);
+            if(!isInObstacle(pos))
+                nodes.add(new Node(pos));
+
+            pos = new Vec2(r.getPosition().x - (r.getSizeX()/2) -1, (r.getPosition().y - r.getSizeY()/2) -1);
+            if(!isInObstacle(pos))
+                nodes.add(new Node(pos));
+
+            pos = new Vec2(r.getPosition().x - (r.getSizeX()/2) -1, (r.getPosition().y + r.getSizeY()/2) +1);
+            if(!isInObstacle(pos))
+                nodes.add(new Node(pos));
 		}
         for(int i = 0 ; i < cir.size() ; i++)
         {
             ObstacleCircular c = cir.get(i);
-            nodes.add(new Node(new Vec2(c.getPosition().x, (c.getPosition().y - c.getRadius()) -1)));
-            nodes.add(new Node(new Vec2(c.getPosition().x, (c.getPosition().y + c.getRadius()) +1)));
-            nodes.add(new Node(new Vec2(c.getPosition().x - (c.getRadius()) -1, c.getPosition().y )));
-            nodes.add(new Node(new Vec2(c.getPosition().x + (c.getRadius()) +1, c.getPosition().y )));
+
+            pos = new Vec2(c.getPosition().x, (c.getPosition().y - c.getRadius()) -1);
+            if(!isInObstacle(pos))
+                nodes.add(new Node(pos));
+
+            pos = new Vec2(c.getPosition().x, (c.getPosition().y + c.getRadius()) +1);
+            if(!isInObstacle(pos))
+                nodes.add(new Node(pos));
+
+            pos = new Vec2(c.getPosition().x - (c.getRadius()) -1, c.getPosition().y );
+            if(!isInObstacle(pos))
+                nodes.add(new Node(pos));
+
+            pos = new Vec2(c.getPosition().x + (c.getRadius()) +1, c.getPosition().y );
+            if(!isInObstacle(pos))
+                nodes.add(new Node(pos));
         }
 	}
 
@@ -385,6 +410,23 @@ public class Graph
 		return related;
 		
 	}
+
+    /**
+     * Vérifie si le point est dans un obstacle
+     * @param point point en question
+     */
+    public boolean isInObstacle(Vec2 point)
+    {
+        ArrayList<ObstacleRectangular> rectangularObstacles = obstacleManager.getRectangles();
+        for(int i=0 ; i<rectangularObstacles.size() ; i++)
+        {
+            if(rectangularObstacles.get(i).isInObstacle(point))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
 	
 	/**
