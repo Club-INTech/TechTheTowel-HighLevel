@@ -117,7 +117,7 @@ public class Node implements Comparable<Node>
 		//C'est la distance divisé par la vitesse de translation
 		double distance = Math.sqrt(Segment.squaredLength(this.getPosition(), start.getPosition()));
 
-		if(parent != null)
+		/*if(parent != null)
 		{
 			Vec2 vecteur1 = new Vec2(parent.getPosition().x - start.getPosition().x,parent.getPosition().y - start.getPosition().y);
 			Vec2 vecteur2 = new Vec2(this.getPosition().x - start.getPosition().x,this.getPosition().y - start.getPosition().y);
@@ -129,7 +129,7 @@ public class Node implements Comparable<Node>
 			double angle = Math.PI - Math.abs(Math.acos(produitscalaire));
 			// On retranche a pi l'angle calculé pour déterminer l'angle avec lequel se ré-oriente le robot
 			return ((distance)+(angle)+offset);
-		}
+		} */
 		return ((distance)+offset);
 
 	}
