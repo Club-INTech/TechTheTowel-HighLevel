@@ -160,8 +160,12 @@ public class Node implements Comparable<Node>
 		return (this.movementCost + this.heuristic);
 	}
 
-	
-	
+
+	public boolean equals(Node other)
+	{
+		return this.position.x == other.getPosition().x && this.position.y == other.getPosition().y;
+	}
+
 	/**
 	 * Permet de comparer deux nodes (donc de les classer), ceci est fait par leur coût
 	 * @param otherNode l'autre node à comparer avec celui-ci

@@ -262,7 +262,7 @@ public class Graph
     public boolean isObstructed(Node node1, Node node2)
     {
         // On évite de créer des liens sur le même noeud
-        if(node1 == node2)
+        if(node1.equals(node2))
         {
             return true;
         }
