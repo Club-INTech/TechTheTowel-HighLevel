@@ -1,5 +1,6 @@
 package pathDingDing;
 
+import smartMath.Segment;
 import smartMath.Vec2;
 
 /**
@@ -80,7 +81,7 @@ public class Node implements Comparable<Node>
 			// Une heuristique plus avancée peut-être envisageable, elle est actuellement à l'étude
 			double X = Math.abs(this.position.x - goal.getPosition().x);
 			double Y = Math.abs(this.position.y - goal.getPosition().y);
-			this.heuristic = Math.sqrt(X*X + Y*Y);
+			this.heuristic = Math.sqrt(X*X + Y*Y)/3;
 		}
 	}
 	
@@ -109,14 +110,12 @@ public class Node implements Comparable<Node>
 	 * @author CF
 	 * @param start noeud precedent
 	 * @param offset coût précédent à rajouter
-	 * @param speed vitesse du robot
 	 * @return le coût de déplacement
 	 */
 	public double computeMovementCost(Node start, double offset)
 	{
 		//C'est la distance divisé par la vitesse de translation
-		double distance = Math.sqrt(Math.pow(Math.abs(this.position.x - start.getPosition().x), 2) + Math.pow(Math.abs(this.position.y - start.getPosition().y), 2));
-		
+		double distance = Math.sqrt(Segment.squaredLength(this.getPosition(), start.getPosition()));
 
 		if(parent != null)
 		{
