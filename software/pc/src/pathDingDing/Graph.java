@@ -73,37 +73,20 @@ public class Graph
 	 */
 	private void createGraph()
 	{
-		//TODO Creer le graphe (LONG)
+		//TODO Améliorer le graphe
 		// On ajoute tous les nodes et on les relie ensemble en verifiant si on "intersect()" pas un obstacle
 		
-		//========================================
-		// CE GRAPHE N'EST PAS LE FINAL !!!
-		// IL NE SERT QUE DE TEST DU PATHDINGDING
-		//========================================
+
 		
-		nodes.add(new Node(new Vec2(-1350, 1000)));
-		nodes.add(new Node(new Vec2(-1050, 1750)));
-		nodes.add(new Node(new Vec2(-1050, 1500)));
-		nodes.add(new Node(new Vec2(-1050, 1000)));
-		nodes.add(new Node(new Vec2(-1050, 400)));
-		nodes.add(new Node(new Vec2(-800, 1500)));
-		nodes.add(new Node(new Vec2(-800, 1000)));
-		nodes.add(new Node(new Vec2(-800, 400)));
-		nodes.add(new Node(new Vec2(-300, 1000)));
-		
-		int k = nodes.size();
-		
-		for(int i=0 ; i<k ; i++)
-		{
-			nodes.add(new Node(new Vec2((-1*nodes.get(i).getPosition().x),nodes.get(i).getPosition().y)));
-		}
-		
-		nodes.add(new Node(new Vec2(0, 1500)));
-		nodes.add(new Node(new Vec2(0, 200)));
-		
-		//========================
-		// Fin du graphe à la con
-		//========================
+		nodes.add(new Node(new Vec2(-1100, 1400)));
+		nodes.add(new Node(new Vec2(1100, 1400)));
+		nodes.add(new Node(new Vec2(0, 400)));
+		nodes.add(new Node(new Vec2(-750, 600)));
+		nodes.add(new Node(new Vec2(750, 600)));
+		nodes.add(new Node(new Vec2(-1150, 750)));
+		nodes.add(new Node(new Vec2(1150, 750)));
+
+
         addObstacleNodes();
 		setAllLinksOptimised();
 	}
