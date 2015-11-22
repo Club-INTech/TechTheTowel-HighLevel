@@ -267,7 +267,6 @@ public class Graph
             return true;
         }
 
-        boolean ok = false;
         //On récupère les différents obstacles
         ArrayList<ObstacleRectangular> rectangularObstacles = obstacleManager.getRectangles();
         ArrayList<ObstacleCircular> circleObstacles = obstacleManager.getFixedObstacles();
@@ -278,26 +277,18 @@ public class Graph
         {
             if(Geometry.intersects(new Segment(node1.getPosition(), node2.getPosition()), circleObstacles.get(k).toCircle()))
             {
-                ok = true;
+                return true;
             }
-            if(ok)
-                break;
         }
-        if(ok)
-            return ok;
 
         //On vérifie l'intersection avec les lignes
         for(int k=0 ; k<lineObstacles.size() ; k++)
         {
             if(Geometry.intersects(new Segment(node1.getPosition(), node2.getPosition()), lineObstacles.get(k)))
             {
-                ok = true;
+                return true;
             }
-            if(ok)
-                break;
         }
-        if(ok)
-            return ok;
 
         //On vérifie l'intersection
         for(int k=0 ; k<rectangularObstacles.size() ; k++)
@@ -305,23 +296,18 @@ public class Graph
             ArrayList<Segment> segments = rectangularObstacles.get(k).getSegments();
 			if(rectangularObstacles.get(k).isInObstacle(node2.getPosition()) || rectangularObstacles.get(k).isInObstacle(node1.getPosition()))
             {
-                ok = true;
-                break;
+                return true;
             }
             for(int l=0 ; l<segments.size() ; l++)
             {
                 if(Geometry.intersects(new Segment(node1.getPosition(), node2.getPosition()), segments.get(l)))
                 {
-                    ok = true;
+                    return true;
                 }
-                if(ok)
-                    break;
             }
-            if(ok)
-                break;
         }
 
-        return ok;
+        return false;
     }
 
 	/**
@@ -417,6 +403,16 @@ public class Graph
                 return true;
             }
         }
+
+        ArrayList<ObstacleCircular> circularObstacles = obstacleManager.getFixedObstacles();
+        for(int i=0 ; i<circularObstacles.size() ; i++)
+        {
+            if(circularObstacles.get(i).isInObstacle(point))
+            {
+                return true;
+            }
+        }
+
         return false;
     }
 

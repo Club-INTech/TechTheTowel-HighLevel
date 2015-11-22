@@ -1,6 +1,7 @@
 package table.obstacles;
 
 import smartMath.Circle;
+import smartMath.Segment;
 import smartMath.Vec2;
 
 /**
@@ -57,6 +58,15 @@ public class ObstacleCircular extends Obstacle
 	{
 		other.position = position;
 		other.radius = radius;
+	}
+
+	/**
+	 * Vérifie si le point donné est dans l'obstacle
+	 * @param point le point à tester
+	 */
+	public boolean isInObstacle(Vec2 point)
+	{
+		return ((Segment.squaredLength(point, position) < radius*radius));
 	}
 
 	/**
