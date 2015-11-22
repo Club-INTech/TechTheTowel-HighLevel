@@ -116,7 +116,7 @@ public class ObstacleManager
 		mRectangles.add(new ObstacleRectangular(new Vec2(-900,1970 - mRobotRadius), 100 + mRobotRadius , 60 + mRobotRadius));
 		mRectangles.add(new ObstacleRectangular(new Vec2(-1200,1970 - mRobotRadius), 100 + mRobotRadius , 60 + mRobotRadius));
 
-
+        //TODO Gérer la symétrie pour ajouter le tapis adverse en temps qu'obstacle
 
 
 
