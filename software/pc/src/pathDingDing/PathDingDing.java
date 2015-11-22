@@ -365,7 +365,7 @@ public class PathDingDing implements Service
      */
     public void moveObstacle(ObstacleRectangular obs, Vec2 newPos)
     {
-    
+
 
         // On supprime les noeuds du graphe désormais inutiles
         graph.removeNode(new Vec2((obs.getPosition().x - obs.getSizeX()),(obs.getPosition().y + obs.getSizeY())));
