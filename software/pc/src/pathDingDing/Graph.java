@@ -116,6 +116,25 @@ public class Graph
 		}
 	}
 
+    /**
+     * Vérifie si le noeud indiqué n'est pas déjà dans la liste des noeuds
+     * @param node le noeud à vérifier
+     */
+    public boolean alreadyContains(Node node)
+    {
+        for(int i=0 ; i<nodes.size() ; i++)
+        {
+            if(nodes.get(i).getPosition().x == node.getPosition().x && nodes.get(i).getPosition().y == node.getPosition().y)
+            {
+                // on supprime l'ancien et on ajoute le nouveau
+                nodes.remove(i);
+                nodes.add(i, node);
+                return true;
+            }
+        }
+        return false;
+    }
+
 	/**
 	 * Relie tous les noeuds ensemble en vérifiant s'il n'y a pas d'intersection avec un obstacle
 	 */
@@ -146,9 +165,17 @@ public class Graph
 	public void addNode(Node node)
 	{
 		//S'il existe déjà, on sort de la fonction
-		if(nodes.contains(node))
-			return;
-				
+    if(alreadyContains(node))
+    {
+        for(int i=0 ; i<nodes.size() ; i++)
+        {
+            if(!isObstructed(node, nodes.get(i)))
+            {
+                links.add(new Link(node, nodes.get(i)));
+            }
+        }
+        return;
+    }
 		for(int i=0 ; i<nodes.size() ; i++)
 		{
 			if(!isObstructed(node, nodes.get(i)))
@@ -190,7 +217,7 @@ public class Graph
 	public void addNodeOptimised(Node node)
 	{
 		//S'il existe déjà, on sort de la fonction
-		if(nodes.contains(node))
+		if(alreadyContains(node))
 			return;
 
 		for(int i=0 ; i<nodes.size() ; i++)
@@ -234,12 +261,29 @@ public class Graph
 	}
 
     /**
+     * Remets les parents des noeuds à null, sinon un conflit peut apparaître
+     */
+    public void voidAllParents()
+    {
+        for(int i=0 ; i<nodes.size() ; i++)
+        {
+            nodes.get(i).setParent(null);
+        }
+    }
+
+    /**
      * Renvoie si un obstacle est sur le chemin entre les deux noeuds
      * @param node1 noeud 1
      * @param node2 noeud 2
      */
     public boolean isObstructed(Node node1, Node node2)
     {
+        // On évite de créer des liens sur le même noeud
+        if(node1 == node2)
+        {
+            return true;
+        }
+
         boolean ok = false;
         //On récupère les différents obstacles
         ArrayList<ObstacleRectangular> rectangularObstacles = obstacleManager.getRectangles();
@@ -341,14 +385,7 @@ public class Graph
 		return related;
 		
 	}
-	
-	/**
-	 * Supprime tous les liens dans l'optique de les reconstruire
-	 */
-	public void clearLinks()
-	{
-		links.clear();
-	}
+
 	
 	/**
 	 * Supprime un noeud du graphe

@@ -72,16 +72,14 @@ public class ObstacleRectangular extends Obstacle
 	}
 	
 	/**
-	 * Renvoie les Segments des côtés du rectangle
-	 * @return [ Segment nord , Segment est ; Segment sud ; Segment ouest ]
+	 * Renvoie les Segments des diagonales du rectangle
 	 */
 	public ArrayList<Segment> getSegments()
 	{
 		ArrayList<Segment> segments = new ArrayList<Segment>();
-		segments.add(new Segment(new Vec2(position.x - sizeX/2 , position.y + sizeY/2), new Vec2(position.x + sizeX/2 , position.y + sizeY/2)));
-		segments.add(new Segment(new Vec2(position.x + sizeX/2 , position.y + sizeY/2), new Vec2(position.x + sizeX/2 , position.y - sizeY/2)));
-		segments.add(new Segment(new Vec2(position.x + sizeX/2 , position.y - sizeY/2), new Vec2(position.x - sizeX/2 , position.y - sizeY/2)));
-		segments.add(new Segment(new Vec2(position.x - sizeX/2 , position.y - sizeY/2), new Vec2(position.x - sizeX/2 , position.y + sizeY/2)));
+		segments.add(new Segment(new Vec2(position.x + sizeX/2 , position.y + sizeY/2), new Vec2(position.x - sizeX/2 , position.y - sizeY/2)));
+		segments.add(new Segment(new Vec2(position.x + sizeX/2 , position.y - sizeY/2), new Vec2(position.x - sizeX/2 , position.y + sizeY/2)));
+
 
 		return segments;
 	}
