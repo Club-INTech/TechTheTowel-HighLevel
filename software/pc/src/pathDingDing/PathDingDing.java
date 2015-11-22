@@ -95,8 +95,8 @@ public class PathDingDing implements Service
 		}
 		
 		// Si on demande un calcul trivial (ALERTE AU GOGOLE!!)
-		if(end == start)
-		{
+		if(end.equals(start))
+        {
 			log.critical("Appel pathDingDing avec arrivée=départ !");
 			return new ArrayList<Node>();
 		}
@@ -145,8 +145,7 @@ public class PathDingDing implements Service
 			
 			// Cette ligne calcule le coût de déplacement et le met dans l'objet ; l'offset est à 0 car on débute le chemin
 			// Ce que j'appelle l'offset c'est le coût du déplacement déjà effectué qui s'y ajoute
-			double zero =0;
-			openNodes.get(i).setMovementCost(openNodes.get(i).computeMovementCost(startNode, zero));
+			openNodes.get(i).setMovementCost(openNodes.get(i).computeMovementCost(startNode, (double)0));
 			
 			openNodes.get(i).setParent(startNode);
 		}
