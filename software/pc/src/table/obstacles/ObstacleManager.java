@@ -36,10 +36,6 @@ public class ObstacleManager
      */
 	private ArrayList<ObstacleProximity> mUntestedMobileObstacles;
 
-	/**
-	 * Booléen indiquant s'il y a eu modification dans les obstacles
-	 */
-	public boolean hasBeenModified;
     
     //les bords de la table auxquels on ajoute le rayon du robot. Utilisé par le pathfinding.
     private ArrayList<Segment> mLines;
@@ -76,7 +72,7 @@ public class ObstacleManager
 		mRectangles = new ArrayList<ObstacleRectangular>();
 		
 		mUntestedMobileObstacles= new ArrayList<ObstacleProximity>();
-		this.hasBeenModified = false;
+
 		
 		updateConfig();
        
@@ -214,7 +210,6 @@ public class ObstacleManager
       */
     public synchronized void addObstacle(final Vec2 position, final int radius, final int lifetime)
     {
-		this.hasBeenModified = true;
     	//si la position est dans la table on continue les tests 
     	// si la position est dans notre zone de depart, ca ne peut etre qu'une main 
     	if (position.x>-1500 && position.x<1500 && position.y>0 && position.y<2000 //la table
@@ -303,7 +298,6 @@ public class ObstacleManager
     /**
 	 * Supprime du gestionnaire tout les obstacles dont la date de péremption est antérieure a la date fournie
      *
-     * @param date La date de péremption a partir de laquelle on garde les obstacles.
      */
     public synchronized void removeOutdatedObstacles()
     {

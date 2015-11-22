@@ -111,6 +111,9 @@ public class PathDingDing implements Service
 		// DEBUT DE L'ALGORITHME A* - INITIALISATION
 		//===========================================
 
+        //On remet les parent des noeuds à zéro
+        graph.voidAllParents();
+
 		//On calcule l'heuristique de chacun des noeuds
 		graph.computeAllHeuristic(endNode);
 		
@@ -299,7 +302,7 @@ public class PathDingDing implements Service
 			this.openNodes = new ArrayList<Node>();
 			this.closedNodes = new ArrayList<Node>();
 		}
-        if(graph.getObstacleManager().hasBeenModified)
+        if(true)
         {
             graph.setAllLinksOptimised();
 			graph.getObstacleManager().hasBeenModified = false;
