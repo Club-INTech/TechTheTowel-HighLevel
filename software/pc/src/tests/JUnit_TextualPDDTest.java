@@ -65,7 +65,7 @@ public class JUnit_TextualPDDTest extends JUnit_Test
     	}
 
     	try {
-			robot.moveToLocation(new Vec2(850, 500), new ArrayList<Hook>(), table);
+			robot.moveToLocation(new Vec2(850, 1500), new ArrayList<Hook>(), table);
 			//robot.moveLengthwise(200, new ArrayList<Hook>());
 		} catch (Exception e) {
 			e.printStackTrace();
