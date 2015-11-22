@@ -5,11 +5,7 @@ import org.junit.runner.JUnitCore;
 
 import pathDingDing.*;
 import table.Table;
-import smartMath.*;
 import enums.*;
-
-import java.util.ArrayList;
-import java.util.EnumSet;
 
 import exceptions.*;
 import graphics.Window;

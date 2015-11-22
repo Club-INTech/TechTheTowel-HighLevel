@@ -44,7 +44,7 @@ public class ObstacleManager
 
 	private int defaultObstacleRadius;
 	//le rayon de notre robot
-	private int mRobotRadius;
+	public int mRobotRadius;
 	
 	// TODO virer : juste du debugg / interface graphique
 	private int radiusDetectionDisc=0;
@@ -90,8 +90,8 @@ public class ObstacleManager
       	
       	//Les différents obstacles fixés sur la table
       	//planches au sud
-      	mRectangles.add(new ObstacleRectangular(new Vec2(711, 1900), 22 + mRobotRadius, 200 + mRobotRadius));
-      	mRectangles.add(new ObstacleRectangular(new Vec2(-711, 1900), 200 + mRobotRadius, 200 + mRobotRadius));
+      	mRectangles.add(new ObstacleRectangular(new Vec2(711, 1900 - mRobotRadius), 22 + mRobotRadius, 200 + mRobotRadius));
+      	mRectangles.add(new ObstacleRectangular(new Vec2(-711, 1900 - mRobotRadius), 200 + mRobotRadius, 200 + mRobotRadius));
       	
       	//Vitre centrale
       	mRectangles.add(new ObstacleRectangular(new Vec2(0, 950), 48 + mRobotRadius, 600 + mRobotRadius));
@@ -100,15 +100,22 @@ public class ObstacleManager
       	mRectangles.add(new ObstacleRectangular(new Vec2(0, 1239), 1200 + mRobotRadius, 22 + mRobotRadius));
       	
       	//Rochers
-      	mFixedObstacles.add(new ObstacleCircular(new Vec2(1500, 0), 250 + mRobotRadius));
-      	mFixedObstacles.add(new ObstacleCircular(new Vec2(-1500, 0), 250 + mRobotRadius));
+      	mFixedObstacles.add(new ObstacleCircular(new Vec2(1500 - mRobotRadius, 0 + mRobotRadius), 250 + mRobotRadius));
+      	mFixedObstacles.add(new ObstacleCircular(new Vec2(-1500 + mRobotRadius, 0 + mRobotRadius), 250 + mRobotRadius));
 
 		//Packs de sable (merci Sylvain)
-		mRectangles.add(new ObstacleRectangular(new Vec2(0, 1913), 522 + mRobotRadius , 174 + mRobotRadius));
-		mRectangles.add(new ObstacleRectangular(new Vec2(-620, 1942), 116 + mRobotRadius, 116 + mRobotRadius));
-		mRectangles.add(new ObstacleRectangular(new Vec2(620, 1942), 116 + mRobotRadius, 116 + mRobotRadius));
+		mRectangles.add(new ObstacleRectangular(new Vec2(0, 1913 - mRobotRadius), 522 + mRobotRadius , 174 + mRobotRadius));
+		mRectangles.add(new ObstacleRectangular(new Vec2(-620, 1942 - mRobotRadius), 116 + mRobotRadius, 116 + mRobotRadius));
+		mRectangles.add(new ObstacleRectangular(new Vec2(620, 1942 - mRobotRadius), 116 + mRobotRadius, 116 + mRobotRadius));
 		mRectangles.add(new ObstacleRectangular(new Vec2(850, 1100), 116 + mRobotRadius, 116 + mRobotRadius));
 		mRectangles.add(new ObstacleRectangular(new Vec2(-850, 1100), 116 + mRobotRadius, 116 + mRobotRadius));
+
+		//Portes
+		mRectangles.add(new ObstacleRectangular(new Vec2(900,1970 - mRobotRadius), 100 + mRobotRadius , 60 + mRobotRadius));
+		mRectangles.add(new ObstacleRectangular(new Vec2(1200,1970 - mRobotRadius), 100 + mRobotRadius , 60 + mRobotRadius));
+		mRectangles.add(new ObstacleRectangular(new Vec2(-900,1970 - mRobotRadius), 100 + mRobotRadius , 60 + mRobotRadius));
+		mRectangles.add(new ObstacleRectangular(new Vec2(-1200,1970 - mRobotRadius), 100 + mRobotRadius , 60 + mRobotRadius));
+
 
 
 
