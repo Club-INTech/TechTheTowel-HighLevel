@@ -183,11 +183,11 @@ public class PathDingDing implements Service
 					Node replicate = related.get(i);
 					while(related.remove(replicate))
 						i--;
-					Node newParent = lastClosedNode;
+
 					
 					//Si il existe, on recalcule le coût de déplacement (l'heuristique ne changeant pas)
 					//s'il est inférieur on change le noeud avec le nouveau coût, sinon on l'ignore
-					double newCost = replicate.computeMovementCost(newParent, newParent.getMovementCost());
+					double newCost = replicate.computeMovementCost(lastClosedNode, lastClosedNode.getMovementCost());
 					if(newCost < replicate.getMovementCost())
 					{
 						replicate.setMovementCost(newCost);
@@ -197,11 +197,11 @@ public class PathDingDing implements Service
 						//ayant un coût plus grand que lui-même (la liste est triée)
 						openNodes.remove(replicate);
 						int compteur = 0;
-						while(replicate.getCost() >  openNodes.get(compteur).getCost())
+						while(compteur < openNodes.size() && replicate.getCost() >  openNodes.get(compteur).getCost())
 						{
 							compteur++;
 						}
-						replicate.setParent(newParent);
+						replicate.setParent(lastClosedNode);
 						openNodes.add(compteur, replicate);
 					}
 				}
@@ -218,12 +218,12 @@ public class PathDingDing implements Service
 			for(int i=0 ; i < related.size() ; i++)
 			{
 				int compteur = 0;
+                related.get(i).setParent(lastClosedNode);
+				related.get(i).setMovementCost(related.get(i).computeMovementCost(lastClosedNode, lastClosedNode.getMovementCost()));
 				while(compteur < openNodes.size() && (related.get(i).getCost() >  openNodes.get(compteur).getCost()))
 				{
 					compteur++;
 				}
-				related.get(i).setParent(lastClosedNode);
-				related.get(i).setMovementCost(related.get(i).computeMovementCost(lastClosedNode, lastClosedNode.getMovementCost()));
 				openNodes.add(compteur, related.get(i));
 			}
 			
@@ -269,7 +269,7 @@ public class PathDingDing implements Service
         // On cherche à optimiser le chemin
         //==================================
         //FIXME Ne fonctionne pas correctement
-        for(int i=0 ; i<(result.size()-2) ; i++)
+        /*for(int i=0 ; i<(result.size()-2) ; i++)
         {
             for(int j=i+2; j<(result.size()) ; j++)
             {
@@ -284,7 +284,7 @@ public class PathDingDing implements Service
                     }
                 }
             }
-        }
+        }*/
 
 
         // ET C'EST FUCKING TERMINE !!!!
@@ -302,10 +302,7 @@ public class PathDingDing implements Service
 			this.openNodes = new ArrayList<Node>();
 			this.closedNodes = new ArrayList<Node>();
 		}
-        if(true)
-        {
-            graph.setAllLinksOptimised();
-        }
+        graph.setAllLinks();
 	}
 	
 	/**
