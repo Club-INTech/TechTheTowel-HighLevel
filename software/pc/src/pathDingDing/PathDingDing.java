@@ -305,7 +305,6 @@ public class PathDingDing implements Service
         if(true)
         {
             graph.setAllLinksOptimised();
-			graph.getObstacleManager().hasBeenModified = false;
         }
 	}
 	
@@ -337,8 +336,7 @@ public class PathDingDing implements Service
      */
     public void moveObstacle(ObstacleCircular obs, Vec2 newPos)
     {
-        // Pour informer qu'on a changé la table
-        table.getObstacleManager().hasBeenModified = true;
+
 
         // On supprime les noeuds du graphe désormais inutiles
         graph.removeNode(new Vec2((obs.getPosition().x - obs.getRadius()),(obs.getPosition().y)));
@@ -367,8 +365,7 @@ public class PathDingDing implements Service
      */
     public void moveObstacle(ObstacleRectangular obs, Vec2 newPos)
     {
-        // Pour informer qu'on a changé la table
-        table.getObstacleManager().hasBeenModified = true;
+    
 
         // On supprime les noeuds du graphe désormais inutiles
         graph.removeNode(new Vec2((obs.getPosition().x - obs.getSizeX()),(obs.getPosition().y + obs.getSizeY())));
