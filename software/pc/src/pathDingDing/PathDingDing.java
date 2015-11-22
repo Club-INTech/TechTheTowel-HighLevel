@@ -114,8 +114,6 @@ public class PathDingDing implements Service
         //On remet les parent des noeuds à zéro
         graph.voidAllParents();
 
-		//On calcule l'heuristique de chacun des noeuds
-		graph.computeAllHeuristic(endNode);
 		
 		// On ajoute le noeud de départ à la liste des nodes fermés
 		this.closedNodes.add(startNode);
@@ -146,6 +144,7 @@ public class PathDingDing implements Service
 			// Cette ligne calcule le coût de déplacement et le met dans l'objet ; l'offset est à 0 car on débute le chemin
 			// Ce que j'appelle l'offset c'est le coût du déplacement déjà effectué qui s'y ajoute
 			openNodes.get(i).setMovementCost(openNodes.get(i).computeMovementCost(startNode, (double)0));
+			openNodes.get(i).computeHeuristic(endNode);
 			
 			openNodes.get(i).setParent(startNode);
 		}
@@ -220,6 +219,7 @@ public class PathDingDing implements Service
 				int compteur = 0;
                 related.get(i).setParent(lastClosedNode);
 				related.get(i).setMovementCost(related.get(i).computeMovementCost(lastClosedNode, lastClosedNode.getMovementCost()));
+				related.get(i).computeHeuristic(endNode);
 				while(compteur < openNodes.size() && (related.get(i).getCost() >  openNodes.get(compteur).getCost()))
 				{
 					compteur++;
