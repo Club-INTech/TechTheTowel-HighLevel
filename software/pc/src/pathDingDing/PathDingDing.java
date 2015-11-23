@@ -95,8 +95,8 @@ public class PathDingDing implements Service
 		}
 		
 		// Si on demande un calcul trivial (ALERTE AU GOGOLE!!)
-		if(end == start)
-		{
+		if(end.equals(start))
+        {
 			log.critical("Appel pathDingDing avec arrivée=départ !");
 			return new ArrayList<Node>();
 		}
@@ -111,31 +111,31 @@ public class PathDingDing implements Service
 		// DEBUT DE L'ALGORITHME A* - INITIALISATION
 		//===========================================
 
-		//On calcule l'heuristique de chacun des noeuds
-		graph.computeAllHeuristic(endNode);
+        //On remet les parent des noeuds à zéro
+        graph.voidAllParents();
+
 		
 		// On ajoute le noeud de départ à la liste des nodes fermés
 		this.closedNodes.add(startNode);
-		
-		// Test d'isolation du point d'arrivée
-		ArrayList<Node> related = this.graph.getRelatedNodes(endNode);
-		if(related.isEmpty())
+
+		//Test d'isolation du point d'arrivée
+		if(graph.isInObstacle(end))
 		{
 			log.critical("PDD : noeud d'arrivée isolé (obstacle ?)");
 			throw new PointInObstacleException(endNode, graph.getObstacleManager());
 		}
 		
-		// D'abord, on ajoute les noeuds adjacents au depart dans la liste ouverte
-		related = this.graph.getRelatedNodes(startNode);
-		
 		// Idem test d'isolation du départ
 		// TODO Ajuster pour sortir de l'obstacle 
-		if(related.isEmpty())
+		if(graph.isInObstacle(start))
 		{
 			log.critical("PDD : noeud de départ isolé");
 			
 			throw new PointInObstacleException(startNode, graph.getObstacleManager());
 		}
+
+		// D'abord, on ajoute les noeuds adjacents au depart dans la liste ouverte
+		ArrayList<Node> related = this.graph.getRelatedNodes(startNode);
 		
 		for(int i=0 ; i < related.size() ; i++)
 		{
@@ -143,8 +143,8 @@ public class PathDingDing implements Service
 			
 			// Cette ligne calcule le coût de déplacement et le met dans l'objet ; l'offset est à 0 car on débute le chemin
 			// Ce que j'appelle l'offset c'est le coût du déplacement déjà effectué qui s'y ajoute
-			double zero =0;
-			openNodes.get(i).setMovementCost(openNodes.get(i).computeMovementCost(startNode, zero));
+			openNodes.get(i).setMovementCost(openNodes.get(i).computeMovementCost(startNode, (double)0));
+			openNodes.get(i).computeHeuristic(endNode);
 			
 			openNodes.get(i).setParent(startNode);
 		}
@@ -182,11 +182,11 @@ public class PathDingDing implements Service
 					Node replicate = related.get(i);
 					while(related.remove(replicate))
 						i--;
-					Node newParent = lastClosedNode;
+
 					
 					//Si il existe, on recalcule le coût de déplacement (l'heuristique ne changeant pas)
 					//s'il est inférieur on change le noeud avec le nouveau coût, sinon on l'ignore
-					double newCost = replicate.computeMovementCost(newParent, newParent.getMovementCost());
+					double newCost = replicate.computeMovementCost(lastClosedNode, lastClosedNode.getMovementCost());
 					if(newCost < replicate.getMovementCost())
 					{
 						replicate.setMovementCost(newCost);
@@ -196,11 +196,11 @@ public class PathDingDing implements Service
 						//ayant un coût plus grand que lui-même (la liste est triée)
 						openNodes.remove(replicate);
 						int compteur = 0;
-						while(replicate.getCost() >  openNodes.get(compteur).getCost())
+						while(compteur < openNodes.size() && replicate.getCost() >  openNodes.get(compteur).getCost())
 						{
 							compteur++;
 						}
-						replicate.setParent(newParent);
+						replicate.setParent(lastClosedNode);
 						openNodes.add(compteur, replicate);
 					}
 				}
@@ -217,12 +217,13 @@ public class PathDingDing implements Service
 			for(int i=0 ; i < related.size() ; i++)
 			{
 				int compteur = 0;
+                related.get(i).setParent(lastClosedNode);
+				related.get(i).setMovementCost(related.get(i).computeMovementCost(lastClosedNode, lastClosedNode.getMovementCost()));
+				related.get(i).computeHeuristic(endNode);
 				while(compteur < openNodes.size() && (related.get(i).getCost() >  openNodes.get(compteur).getCost()))
 				{
 					compteur++;
 				}
-				related.get(i).setParent(lastClosedNode);
-				related.get(i).setMovementCost(related.get(i).computeMovementCost(lastClosedNode, lastClosedNode.getMovementCost()));
 				openNodes.add(compteur, related.get(i));
 			}
 			
@@ -267,12 +268,14 @@ public class PathDingDing implements Service
         //==================================
         // On cherche à optimiser le chemin
         //==================================
-        for(int i=0 ; i<(result.size()-2) ; i++)
+        //FIXME Ne fonctionne pas correctement
+        /*for(int i=0 ; i<(result.size()-2) ; i++)
         {
             for(int j=i+2; j<(result.size()) ; j++)
             {
                 // Si le noeud i et j sont reliables, on les relie et on supprime les entres-deux
-                if (!graph.isObstructed(result.get(i), result.get(j))) {
+                if (!graph.isObstructed(result.get(i), result.get(j)))
+                {
                     for(int k=i+1 ; k<j ; k++)
                     {
                         result.remove(k);
@@ -281,7 +284,7 @@ public class PathDingDing implements Service
                     }
                 }
             }
-        }
+        }*/
 
 
         // ET C'EST FUCKING TERMINE !!!!
@@ -299,11 +302,7 @@ public class PathDingDing implements Service
 			this.openNodes = new ArrayList<Node>();
 			this.closedNodes = new ArrayList<Node>();
 		}
-        if(graph.getObstacleManager().hasBeenModified)
-        {
-            graph.setAllLinksOptimised();
-			graph.getObstacleManager().hasBeenModified = false;
-        }
+        graph.setAllLinks();
 	}
 	
 	/**
@@ -334,8 +333,7 @@ public class PathDingDing implements Service
      */
     public void moveObstacle(ObstacleCircular obs, Vec2 newPos)
     {
-        // Pour informer qu'on a changé la table
-        table.getObstacleManager().hasBeenModified = true;
+
 
         // On supprime les noeuds du graphe désormais inutiles
         graph.removeNode(new Vec2((obs.getPosition().x - obs.getRadius()),(obs.getPosition().y)));
@@ -364,8 +362,7 @@ public class PathDingDing implements Service
      */
     public void moveObstacle(ObstacleRectangular obs, Vec2 newPos)
     {
-        // Pour informer qu'on a changé la table
-        table.getObstacleManager().hasBeenModified = true;
+
 
         // On supprime les noeuds du graphe désormais inutiles
         graph.removeNode(new Vec2((obs.getPosition().x - obs.getSizeX()),(obs.getPosition().y + obs.getSizeY())));

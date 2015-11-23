@@ -1,5 +1,6 @@
 package pathDingDing;
 
+import smartMath.Segment;
 import smartMath.Vec2;
 
 /**
@@ -80,7 +81,7 @@ public class Node implements Comparable<Node>
 			// Une heuristique plus avancée peut-être envisageable, elle est actuellement à l'étude
 			double X = Math.abs(this.position.x - goal.getPosition().x);
 			double Y = Math.abs(this.position.y - goal.getPosition().y);
-			this.heuristic = Math.sqrt(X*X + Y*Y);
+			this.heuristic = Math.sqrt(X*X + Y*Y)/3;
 		}
 	}
 	
@@ -109,16 +110,14 @@ public class Node implements Comparable<Node>
 	 * @author CF
 	 * @param start noeud precedent
 	 * @param offset coût précédent à rajouter
-	 * @param speed vitesse du robot
 	 * @return le coût de déplacement
 	 */
 	public double computeMovementCost(Node start, double offset)
 	{
 		//C'est la distance divisé par la vitesse de translation
-		double distance = Math.sqrt(Math.pow(Math.abs(this.position.x - start.getPosition().x), 2) + Math.pow(Math.abs(this.position.y - start.getPosition().y), 2));
-		
+		double distance = Math.sqrt(Segment.squaredLength(this.getPosition(), start.getPosition()));
 
-		if(parent != null)
+		/*if(parent != null)
 		{
 			Vec2 vecteur1 = new Vec2(parent.getPosition().x - start.getPosition().x,parent.getPosition().y - start.getPosition().y);
 			Vec2 vecteur2 = new Vec2(this.getPosition().x - start.getPosition().x,this.getPosition().y - start.getPosition().y);
@@ -130,7 +129,7 @@ public class Node implements Comparable<Node>
 			double angle = Math.PI - Math.abs(Math.acos(produitscalaire));
 			// On retranche a pi l'angle calculé pour déterminer l'angle avec lequel se ré-oriente le robot
 			return ((distance)+(angle)+offset);
-		}
+		} */
 		return ((distance)+offset);
 
 	}
@@ -161,8 +160,12 @@ public class Node implements Comparable<Node>
 		return (this.movementCost + this.heuristic);
 	}
 
-	
-	
+
+	public boolean equals(Node other)
+	{
+		return this.position.x == other.getPosition().x && this.position.y == other.getPosition().y;
+	}
+
 	/**
 	 * Permet de comparer deux nodes (donc de les classer), ceci est fait par leur coût
 	 * @param otherNode l'autre node à comparer avec celui-ci

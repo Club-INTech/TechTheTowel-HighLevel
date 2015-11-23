@@ -1,9 +1,11 @@
 package tests;
 
 import enums.ServiceNames;
+import exceptions.Locomotion.UnableToMoveException;
 import exceptions.PathNotFoundException;
 import exceptions.PointInObstacleException;
 import graphics.Window;
+import hook.Hook;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
@@ -27,7 +29,7 @@ public class JUnit_TextualPDDTest extends JUnit_Test
 
 	public static void main(String[] args) throws Exception
 	{                    
-	   JUnitCore.main("tests.JUnit_Pathfinding");
+	   JUnitCore.main("tests.JUnit_TextualPDDTest");
 	}
 	
     @Before
@@ -37,9 +39,11 @@ public class JUnit_TextualPDDTest extends JUnit_Test
         
         log = (Log)container.getService(ServiceNames.LOG);
         table = (Table)container.getService(ServiceNames.TABLE);
-       // robot = (RobotReal)container.getService(ServiceNames.ROBOT_REAL);
+        robot = (RobotReal)container.getService(ServiceNames.ROBOT_REAL);
         time = System.currentTimeMillis();
         pf = (PathDingDing)container.getService(ServiceNames.PATHDINGDING);
+		robot.setPosition(Table.entryPosition);
+		robot.setOrientation(Math.PI);
     }
     
    @Test
@@ -47,7 +51,7 @@ public class JUnit_TextualPDDTest extends JUnit_Test
     {
     	ArrayList<Node> path;
 		try {
-			path = pf.computePath(new Vec2(557, 671), new Vec2(-1044, 1630));
+			path = pf.computePath(new Vec2(-396, 867), new Vec2(679, 818));
 			
     		ArrayList<Vec2> pathVec = new ArrayList<Vec2>();
     		for(int i=0 ; i<path.size() ; i++)
@@ -59,12 +63,13 @@ public class JUnit_TextualPDDTest extends JUnit_Test
     	} catch (PointInObstacleException | PathNotFoundException e) {
     		e.printStackTrace();
     	}
-    	/*
+
     	try {
 			robot.moveToLocation(new Vec2(-300, 1000), new ArrayList<Hook>(), table);
-		} catch (PathNotFoundException | UnableToMoveException e) {
+			//robot.moveLengthwise(200, new ArrayList<Hook>());
+		} catch (Exception e) {
 			e.printStackTrace();
-		} */
+		}
     	
     }
     

@@ -24,6 +24,9 @@ public enum ActuatorOrder
 	MIDLE_POSITION("mp"),
 	FREE_FISHES("ff"),
 	
+	// Consigne pour remettre les bras en position initiale
+	ARM_INIT("ai"),
+	
 	//Consigne d'ouverture du parasol
 	//TODO : mesurer la durée de déploiement du parasol, implémenter la commande "ps" au bas niveau
 	OPEN_PARASOL("ps",4),

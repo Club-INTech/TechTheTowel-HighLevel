@@ -37,6 +37,8 @@ MotionControlSystem::MotionControlSystem(): leftMotor(Side::LEFT), rightMotor(Si
 	rotationPID.setTunings(16,0,10);
 	leftSpeedPID.setTunings(0.01, 0.00005, 0.01);
 	rightSpeedPID.setTunings(0.01, 0.00005, 0.01);
+
+	speedTest = 1000;
 }
 
 void MotionControlSystem::init() {
@@ -267,10 +269,27 @@ void MotionControlSystem::orderTranslation(int32_t mmDistance) {
 }
 
 void MotionControlSystem::orderRotation(float angleConsigneRadian) {
+
+	static int32_t deuxPiTick = 2*PI / TICK_TO_RADIAN;
+	static int32_t piTick = PI / TICK_TO_RADIAN;
+
+	int32_t highLevelOffset = originalAngle / TICK_TO_RADIAN;
+
 	int32_t angleConsigneTick = angleConsigneRadian / TICK_TO_RADIAN;
-	int32_t angleCourantTick = currentAngle + originalAngle / TICK_TO_RADIAN;
-	double ptick = 2*PI / TICK_TO_RADIAN;
-	rotationSetpoint += angleConsigneTick % (int)ptick - angleCourantTick % (int)ptick;
+	int32_t angleCourantTick = currentAngle + highLevelOffset;
+
+	int32_t rotationTick = (angleConsigneTick % deuxPiTick) - (angleCourantTick % deuxPiTick);
+
+	if(rotationTick > piTick)
+	{
+		rotationTick -= deuxPiTick;
+	}
+	else if(rotationTick < -piTick)
+	{
+		rotationTick += deuxPiTick;
+	}
+
+	rotationSetpoint = angleCourantTick + rotationTick - highLevelOffset;
 
 	if(!moving)
 	{
