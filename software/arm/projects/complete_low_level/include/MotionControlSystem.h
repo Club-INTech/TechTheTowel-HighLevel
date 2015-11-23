@@ -19,15 +19,15 @@
 // ~1000 ticks par tour de roue
 // 17cm écartement des roues
 
-#define TICK_TO_MM 0.2077
-#define TICK_TO_RADIAN 0.0014468
+#define TICK_TO_MM 0.2077			// unité : mm/ticks
+#define TICK_TO_RADIAN 0.0014468	// unité : radians/ticks
+
+#define AVERAGE_SPEED_SIZE	25
 
 #if DEBUG
 #define TRACKER_SIZE 		1000
-#define AVERAGE_SPEED_SIZE	25
 #else
 #define TRACKER_SIZE 		1
-#define AVERAGE_SPEED_SIZE	25
 #endif
 
 enum MOVING_DIRECTION {FORWARD, BACKWARD, NONE};
@@ -42,40 +42,40 @@ private:
 
 /*
  * 		Définition des variables d'état du système (position, vitesse, consigne, ...)
+ *
  * 		Les unités sont :
  * 			Pour les distances		: ticks
- * 			Pour les vitesses		: ticks/1000000*[fréquence d'asservissement]
- * 			Pour les accélérations	: ticks/1000000*[fréquence d'asservissement]^2
- * 			La fréquence d'asservissement est exprimmée en Hz et vaut à priori 2kHz
- * 			On compte les vitesses en 'microTicks' car en pratique elles valent 0,1 ou 2 ticks*[fréquence d'asservissement]
- * 			c'est pas hyper précis du coup sur des int ^^
- * 			De même pour les accélérations, pour les mêmes raisons.
+ * 			Pour les vitesses		: ticks/seconde
+ * 			Pour les accélérations	: ticks/seconde^2
+ * 			Ces unités seront vraies pour une fréquence d'asservissement de 2kHz,
+ * 			si l'on souhaite changer la fréquence d'asservissement il faut adapter le calcul de la vitesse
+ * 			autrement les unitées ci-dessus ne seront plus valables.
  */
 
 
 	//	Asservissement en vitesse du moteur droit
 	PID rightSpeedPID;
-	volatile int32_t rightSpeedSetpoint;
-	volatile int32_t currentRightSpeed;
+	volatile int32_t rightSpeedSetpoint;	// ticks/seconde
+	volatile int32_t currentRightSpeed;		// ticks/seconde
 	volatile int32_t rightPWM;
 
 	//	Asservissement en vitesse du moteur gauche
 	PID leftSpeedPID;
-	volatile int32_t leftSpeedSetpoint;
-	volatile int32_t currentLeftSpeed;
+	volatile int32_t leftSpeedSetpoint;		// ticks/seconde
+	volatile int32_t currentLeftSpeed;		// ticks/seconde
 	volatile int32_t leftPWM;
 
 	//	Asservissement en position : translation
 	PID translationPID;
-	volatile int32_t translationSetpoint;
-	volatile int32_t currentDistance;
-	volatile int32_t translationSpeed;
+	volatile int32_t translationSetpoint;	// ticks
+	volatile int32_t currentDistance;		// ticks
+	volatile int32_t translationSpeed;		// ticks/seconde
 
 	//	Asservissement en position : rotation
 	PID rotationPID;
-	volatile int32_t rotationSetpoint;
-	volatile int32_t currentAngle;
-	volatile int32_t rotationSpeed;
+	volatile int32_t rotationSetpoint;		// ticks
+	volatile int32_t currentAngle;			// ticks
+	volatile int32_t rotationSpeed;			// ticks/seconde
 
 	//	Limitation de vitesse
 	volatile int32_t maxSpeed;
@@ -87,9 +87,8 @@ private:
 	Average<int32_t, AVERAGE_SPEED_SIZE> averageLeftSpeed;
 	Average<int32_t, AVERAGE_SPEED_SIZE> averageRightSpeed;
 
-	// Définit la vitesse de testSpeed et testSpeedReverse
-
-	volatile int32_t speedTest = 1000;
+	// Définit la vitesse à utiliser pour les tests d'asservissement (testSpeed et testSpeedReverse)
+	volatile int32_t speedTest;
 
 
 /*

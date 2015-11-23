@@ -36,10 +36,6 @@ public class ObstacleManager
      */
 	private ArrayList<ObstacleProximity> mUntestedMobileObstacles;
 
-	/**
-	 * Booléen indiquant s'il y a eu modification dans les obstacles
-	 */
-	public boolean hasBeenModified;
     
     //les bords de la table auxquels on ajoute le rayon du robot. Utilisé par le pathfinding.
     private ArrayList<Segment> mLines;
@@ -48,7 +44,7 @@ public class ObstacleManager
 
 	private int defaultObstacleRadius;
 	//le rayon de notre robot
-	private int mRobotRadius;
+	public int mRobotRadius;
 	
 	// TODO virer : juste du debugg / interface graphique
 	private int radiusDetectionDisc=0;
@@ -76,7 +72,7 @@ public class ObstacleManager
 		mRectangles = new ArrayList<ObstacleRectangular>();
 		
 		mUntestedMobileObstacles= new ArrayList<ObstacleProximity>();
-		this.hasBeenModified = false;
+
 		
 		updateConfig();
        
@@ -94,26 +90,33 @@ public class ObstacleManager
       	
       	//Les différents obstacles fixés sur la table
       	//planches au sud
-      	mRectangles.add(new ObstacleRectangular(new Vec2(711, 1900), 22 + mRobotRadius, 200 + mRobotRadius));
-      	mRectangles.add(new ObstacleRectangular(new Vec2(-711, 1900), 200 + mRobotRadius, 200 + mRobotRadius));
+      	mRectangles.add(new ObstacleRectangular(new Vec2(711, 1900), 22 + 2*mRobotRadius, 200 + 2*mRobotRadius));
+      	mRectangles.add(new ObstacleRectangular(new Vec2(-711, 1900), 200 + 2*mRobotRadius, 200 + 2*mRobotRadius));
       	
       	//Vitre centrale
-      	mRectangles.add(new ObstacleRectangular(new Vec2(0, 950), 48 + mRobotRadius, 600 + mRobotRadius));
+      	mRectangles.add(new ObstacleRectangular(new Vec2(0, 950), 48 + 2*mRobotRadius, 600 + 2*mRobotRadius));
       	
       	//planches à côté de la vitre
-      	mRectangles.add(new ObstacleRectangular(new Vec2(0, 1239), 1200 + mRobotRadius, 22 + mRobotRadius));
+      	mRectangles.add(new ObstacleRectangular(new Vec2(0, 1239), 1200 + 2*mRobotRadius, 22 + 2*mRobotRadius));
       	
       	//Rochers
       	mFixedObstacles.add(new ObstacleCircular(new Vec2(1500, 0), 250 + mRobotRadius));
       	mFixedObstacles.add(new ObstacleCircular(new Vec2(-1500, 0), 250 + mRobotRadius));
 
 		//Packs de sable (merci Sylvain)
-		mRectangles.add(new ObstacleRectangular(new Vec2(0, 1913), 522 + mRobotRadius , 174 + mRobotRadius));
-		mRectangles.add(new ObstacleRectangular(new Vec2(-620, 1942), 116 + mRobotRadius, 116 + mRobotRadius));
-		mRectangles.add(new ObstacleRectangular(new Vec2(620, 1942), 116 + mRobotRadius, 116 + mRobotRadius));
-		mRectangles.add(new ObstacleRectangular(new Vec2(850, 1100), 116 + mRobotRadius, 116 + mRobotRadius));
-		mRectangles.add(new ObstacleRectangular(new Vec2(-850, 1100), 116 + mRobotRadius, 116 + mRobotRadius));
+		mRectangles.add(new ObstacleRectangular(new Vec2(0, 1913), 522 + 2*mRobotRadius , 174 + 2*mRobotRadius));
+		mRectangles.add(new ObstacleRectangular(new Vec2(-620, 1942), 116 + 2*mRobotRadius, 116 + 2*mRobotRadius));
+		mRectangles.add(new ObstacleRectangular(new Vec2(620, 1942), 116 + 2*mRobotRadius, 116 + 2*mRobotRadius));
+		mRectangles.add(new ObstacleRectangular(new Vec2(850, 1100), 116 + 2*mRobotRadius, 116 + 2*mRobotRadius));
+		mRectangles.add(new ObstacleRectangular(new Vec2(-850, 1100), 116 + 2*mRobotRadius, 116 + 2*mRobotRadius));
 
+		//Portes
+		mRectangles.add(new ObstacleRectangular(new Vec2(900,1970), 100 + 2*mRobotRadius , 60 + 2*mRobotRadius));
+		mRectangles.add(new ObstacleRectangular(new Vec2(1200,1970), 100 + 2*mRobotRadius , 60 + 2*mRobotRadius));
+		mRectangles.add(new ObstacleRectangular(new Vec2(-900,1970), 100 + 2*mRobotRadius , 60 + 2*mRobotRadius));
+		mRectangles.add(new ObstacleRectangular(new Vec2(-1200,1970), 100 + 2*mRobotRadius , 60 + 2*mRobotRadius));
+
+        //TODO Gérer la symétrie pour ajouter le tapis adverse en temps qu'obstacle
 
 
 
@@ -214,7 +217,6 @@ public class ObstacleManager
       */
     public synchronized void addObstacle(final Vec2 position, final int radius, final int lifetime)
     {
-		this.hasBeenModified = true;
     	//si la position est dans la table on continue les tests 
     	// si la position est dans notre zone de depart, ca ne peut etre qu'une main 
     	if (position.x>-1500 && position.x<1500 && position.y>0 && position.y<2000 //la table
@@ -303,7 +305,6 @@ public class ObstacleManager
     /**
 	 * Supprime du gestionnaire tout les obstacles dont la date de péremption est antérieure a la date fournie
      *
-     * @param date La date de péremption a partir de laquelle on garde les obstacles.
      */
     public synchronized void removeOutdatedObstacles()
     {

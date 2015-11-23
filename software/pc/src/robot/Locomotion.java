@@ -94,7 +94,7 @@ public class Locomotion implements Service
     private double highLevelOrientation;
     
     /**
-     * vrai si on est a gauche de la table (x<0 et jaune)
+     * vrai si on est a gauche de la table (x<0 et violet)
      * faux sinon
      */
     private boolean symetry;
@@ -914,7 +914,7 @@ public class Locomotion implements Service
 	        distanceToDisengage = Integer.parseInt(config.getProperty("distance_degagement_robot"));
 	        feedbackLoopDelay = Integer.parseInt(config.getProperty("sleep_boucle_acquittement"));
 	        angleToDisengage = Double.parseDouble(config.getProperty("angle_degagement_robot"));
-			symetry = config.getProperty("couleur").replaceAll(" ","").equals("jaune");
+			symetry = config.getProperty("couleur").replaceAll(" ","").equals("violet");
 			robotLength = Integer.parseInt(config.getProperty("longueur_robot").replaceAll(" ",""));
     	}
     	catch (ConfigPropertyNotFoundException e)
