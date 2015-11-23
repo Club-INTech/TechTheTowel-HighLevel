@@ -69,6 +69,12 @@ public abstract class Robot implements Service
 
 	/** Booléen indiquant si les poissons sont récupérés, sert pour les versions du script Fishing */
 	public boolean AreFishesFished = false;
+	
+	/** Booléen indiquant la présence de poisson sur les actionneurs */
+	private boolean AreFishesOnBoard = false;
+	
+	/** Booléen indiquant la présence de sable dans le robot */
+	private boolean IsSandInside = false;
 
 	
 	
@@ -146,13 +152,49 @@ public abstract class Robot implements Service
 	
 	/**
 	 * Indique si les poissons ont été pêchés ou pas
-	 * @return 
 	 * @return Poisson pris ou non
 	 */
 	public boolean getAreFishesFished()
 	{
 		return AreFishesFished;
 	}
+	
+	/**
+	 * Change la valeur du booléen AreFishesOnBoard
+	 * @param booléen souhaité
+	 */
+	public void setAreFishesOnBoard(boolean areFishesOnBoard) 
+	{
+		this.AreFishesOnBoard = areFishesOnBoard;
+	}
+	
+	/**
+	 * Indique si les poissons sont sur le bras ou pas
+	 * @return Poisson sur bras ou non
+	 */
+	public boolean getAreFishesOnBoard() 
+	{
+		return AreFishesOnBoard;
+	}
+	
+	/**
+	 * Change la valeur du booléen IsSandInside
+	 * @param booléen souhaité
+	 */
+	public void setIsSandInside(boolean isSandInside) 
+	{
+		this.IsSandInside = isSandInside;
+	}
+	
+	/**
+	 * Indique si le sable est dans le robot ou pas
+	 * @return Sable pris ou non
+	 */
+	public boolean getIsSandInside() 
+	{
+		return IsSandInside;
+	}
+	
 	/**
 	 * Immobilise le robot.
 	 * Après l'appel de cette fonction, le robot sera immobile sur la table
