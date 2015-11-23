@@ -10,6 +10,7 @@ import java.awt.event.KeyListener;
 public class Keyboard implements KeyListener
 {
 	private RobotReal mRobot;
+	private boolean modeActual;
 	
 	
 	public Keyboard(RobotReal robot)
@@ -64,6 +65,10 @@ public class Keyboard implements KeyListener
 		{
 			
 		}
+		if(e.getKeyCode() == KeyEvent.VK_CONTROL)
+		{
+			modeActual = true;
+		}
 	}
 
 	@Override
@@ -88,6 +93,16 @@ public class Keyboard implements KeyListener
 				System.out.println("ça marche pas bien trololo");
 			}
 		}
+	}
+
+	public boolean isModeActual()
+	{
+		if(modeActual)
+		{
+			modeActual = false;
+			return true;
+		}
+		return false;
 	}
 
 	@Override

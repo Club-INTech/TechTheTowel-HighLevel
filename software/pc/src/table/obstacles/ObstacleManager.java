@@ -94,6 +94,7 @@ public class ObstacleManager
       	mRectangles.add(new ObstacleRectangular(new Vec2(-711, 1900), 200 + 2*mRobotRadius, 200 + 2*mRobotRadius));
       	
       	//Vitre centrale
+
       	mRectangles.add(new ObstacleRectangular(new Vec2(0, 950), 48 + 2*mRobotRadius, 600 + 2*mRobotRadius));
       	
       	//planches à côté de la vitre
