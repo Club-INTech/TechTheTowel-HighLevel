@@ -29,7 +29,7 @@ public class JUnit_TextualPDDTest extends JUnit_Test
 
 	public static void main(String[] args) throws Exception
 	{                    
-	   JUnitCore.main("tests.JUnit_Pathfinding");
+	   JUnitCore.main("tests.JUnit_TextualPDDTest");
 	}
 	
     @Before
