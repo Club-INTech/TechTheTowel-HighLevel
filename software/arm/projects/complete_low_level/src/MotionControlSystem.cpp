@@ -273,8 +273,10 @@ void MotionControlSystem::orderRotation(float angleConsigneRadian) {
 	static int32_t deuxPiTick = 2*PI / TICK_TO_RADIAN;
 	static int32_t piTick = PI / TICK_TO_RADIAN;
 
+	int32_t highLevelOffset = originalAngle / TICK_TO_RADIAN;
+
 	int32_t angleConsigneTick = angleConsigneRadian / TICK_TO_RADIAN;
-	int32_t angleCourantTick = currentAngle + originalAngle / TICK_TO_RADIAN;
+	int32_t angleCourantTick = currentAngle + highLevelOffset;
 
 	int32_t rotationTick = (angleConsigneTick % deuxPiTick) - (angleCourantTick % deuxPiTick);
 
@@ -287,7 +289,7 @@ void MotionControlSystem::orderRotation(float angleConsigneRadian) {
 		rotationTick += deuxPiTick;
 	}
 
-	rotationSetpoint = angleCourantTick + rotationTick;
+	rotationSetpoint = angleCourantTick + rotationTick - highLevelOffset;
 
 	if(!moving)
 	{
