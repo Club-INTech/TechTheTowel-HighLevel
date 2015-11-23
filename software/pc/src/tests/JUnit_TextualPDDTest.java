@@ -51,7 +51,7 @@ public class JUnit_TextualPDDTest extends JUnit_Test
     {
     	ArrayList<Node> path;
 		try {
-			path = pf.computePath(robot.getPosition(), new Vec2(-300, 1000));
+			path = pf.computePath(new Vec2(-396, 867), new Vec2(679, 818));
 			
     		ArrayList<Vec2> pathVec = new ArrayList<Vec2>();
     		for(int i=0 ; i<path.size() ; i++)
@@ -65,8 +65,8 @@ public class JUnit_TextualPDDTest extends JUnit_Test
     	}
 
     	try {
-			//robot.moveToLocation(new Vec2(-300, 1000), new ArrayList<Hook>(), table);
-			robot.moveLengthwise(200, new ArrayList<Hook>());
+			robot.moveToLocation(new Vec2(-300, 1000), new ArrayList<Hook>(), table);
+			//robot.moveLengthwise(200, new ArrayList<Hook>());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

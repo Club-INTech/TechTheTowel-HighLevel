@@ -19,14 +19,6 @@ import java.util.ArrayList;
  */
 public class Graph
 {
-	/**
-	 * Définit la distance maximale entre deux noeuds pour tenter le calcul d'un lien
-	 * Permet d'éviter un calcul en O(n²)
-     * Plus cette valeur est élevée, plus le calcul sera lent, mais plus le chemin sera optimisé
-     * Une valeur trop petite peut rendre un noeud isolé s'il est trop éloigné des autres
-     * Assimilable au clipping dans les moteurs 3D
-	 */
-	public static final double IGNORE_DISTANCE = 1000000;
 
 	/**
 	 * Nodes statiques du graphe, c'est a dire permaments sur la tables (pas utilises pour l'evitement)
@@ -88,7 +80,7 @@ public class Graph
 
 
         addObstacleNodes();
-		setAllLinksOptimised();
+		setAllLinks();
 	}
 
 	public void computeAllHeuristic(Node goal)
@@ -169,54 +161,8 @@ public class Graph
 		nodes.add(node);
 	}
 
-	/**
-	 * Relie tous les noeuds ensemble en vérifiant s'il n'y a pas d'intersection avec un obstacle ; méthode optimisée
-	 */
-	public void setAllLinksOptimised()
-	{
-		//On vide la liste des noeuds pour la reconstruire
-		links.clear();
 
-		for(int i=0 ; i < nodes.size() ; i++)
-		{
-			for(int j=0 ; j < nodes.size() ; j++)
-			{
-				// On ne prend en compte que les noeuds proches
-				if(j>i && Segment.squaredLength(nodes.get(i).getPosition(), nodes.get(j).getPosition()) <= IGNORE_DISTANCE)
-				{
-					if(!isObstructed(nodes.get(i), nodes.get(j)))
-					{
-						links.add(new Link(nodes.get(i), nodes.get(j)));
-					}
-				}
-			}
-		}
-	}
 
-	/**
-	 * Ajoute un noeud et crée tous les liens qui le relient ; méthode optimisée
-	 * @param node le noeud
-	 */
-	public void addNodeOptimised(Node node)
-	{
-		//S'il existe déjà, on sort de la fonction
-		if(alreadyContains(node))
-			return;
-
-		for(int i=0 ; i<nodes.size() ; i++)
-		{
-			// On le prend en compte que les noeuds proches
-			if(Segment.squaredLength(nodes.get(i).getPosition(), node.getPosition()) <= IGNORE_DISTANCE)
-            {
-				if (!isObstructed(node, nodes.get(i)))
-                {
-					links.add(new Link(node, nodes.get(i)));
-				}
-			}
-		}
-		nodes.add(node);
-	}
-	
 	/**
 	 * Renvoie le noeud numero i
 	 * @param i le numero du noeud

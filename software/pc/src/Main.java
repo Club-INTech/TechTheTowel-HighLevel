@@ -70,7 +70,7 @@ public class Main
 		String couleur = "";
 		while(!couleur.contains("jaune") && !couleur.contains("vert"))
 		{
-			System.out.println("Rentrez \"vert\" ou \"jaune\" : ");
+			System.out.println("Rentrez \"vert\" ou \"violet\" : ");
 			BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in)); 
 			 
 			try 
@@ -81,8 +81,8 @@ public class Main
 			{
 				System.out.println("Erreur IO: le clavier est il bien branché ?");
 			} 
-			if(couleur.contains("jaune"))
-				config.set("couleur","jaune");
+			if(couleur.contains("violet"))
+				config.set("couleur","violet");
 			else if(couleur.contains("vert"))
 				config.set("couleur", "vert");	
 		}
