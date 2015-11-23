@@ -18,9 +18,10 @@ import java.util.ArrayList;
 
 
 /**
- * @author julian
  * Script pour la fermeture des portes des cabines
  * Version 0 : Deplacement de la serviette aux portes puis fermeture en même temps ; aucune action prevue hors du deplacement ; aucun pathdingding/evitement ; si pb -> arret complet
+ * Version 1 : Identique à la version 0, sauf qu'on ferme les portes en marche avant
+ * @author julian
  */
 public class CloseDoors extends AbstractScript
 {
@@ -29,7 +30,7 @@ public class CloseDoors extends AbstractScript
 		/**
 		 * Versions du script
 		 */
-		versions = new Integer[]{0};
+		versions = new Integer[]{0,1};
 		
 	}
 	
@@ -47,7 +48,7 @@ public class CloseDoors extends AbstractScript
 		{
 			try
 			{
-				//On ralentit pour eviter de demonter les elements de jeu "Discord-style"
+				//On ralentit pour éviter de démonter les éléments de jeu "Discord-style"
 				//Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
 				//stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
 				
@@ -75,9 +76,41 @@ public class CloseDoors extends AbstractScript
 				finalize(stateToConsider);
 				throw new ExecuteException(e);
 			}
-			//TODO else
-			
 		}
+		
+		else if (versionToExecute == 1)
+		{
+			try
+			{
+				//On ralentit pour éviter de démonter les éléments de jeu "Discord-style"
+				//Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
+				//stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
+				
+				//On s'oriente vers les portes
+				stateToConsider.robot.turn((Math.PI / 2), hooksToConsider, false);
+				
+				//On ferme les portes
+				stateToConsider.robot.moveLengthwise(600, hooksToConsider, true);
+				
+				//PORTES FERMEES !
+				stateToConsider.obtainedPoints += 20;
+				stateToConsider.table.extDoorClosed = true;
+				stateToConsider.table.intDoorClosed = true;
+				
+				//On recule
+				stateToConsider.robot.moveLengthwise(-200, hooksToConsider, false);
+				
+				
+				//stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
+			
+			}
+			catch(UnableToMoveException e)
+			{
+				finalize(stateToConsider);
+				throw new ExecuteException(e);
+			}
+		}
+			
 	}
 
 	@Override
@@ -90,7 +123,7 @@ public class CloseDoors extends AbstractScript
 	@Override
 	public Circle entryPosition(int version, int ray, Vec2 robotPosition)
 	{
-		//TODO eviter la position d'entree du robot, a modifier quand le pathdingding sera fait
+		//TODO éviter la position d'entrée du robot, à modifier quand le pathdingding sera fait
 		if (version == 0)
 			return new Circle(Table.entryPosition);
 		else
