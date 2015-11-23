@@ -49,10 +49,10 @@ class LisseurGenetique:
         self.nPseudoPeriodique = self.nPop - self.nAperiodique
         for i in range(self.nPseudoPeriodique):
             self.population.append([])
-            self.population[i].append((-1)**random.choice([1,0])*math.pow(10, random.random()*6.5-4))
-            self.population[i].append((-1)**random.choice([1,0])*math.pow(10, random.random()*12-6))
-            self.population[i].append((-1)**random.choice([1,0])*math.pow(10, random.random()*12-6))
-            self.population[i].append((-1)**random.choice([1,0])*math.pow(10, random.random()*12-6))
+            self.population[i].append(math.pow(10, random.random()*1-1))
+            self.population[i].append((-1)**random.choice([1,0])*math.pow(10, random.random()*1-1))
+            self.population[i].append((-1)**random.choice([1,0])*math.pow(10, random.random()*1-1))
+            self.population[i].append((-1)**random.choice([1,0])*math.pow(10, random.random()*1-1))
             self.population[i].append("P") # "P" pour pseudo-périodique
         for i in range(self.nAperiodique):
             self.population.append([])
@@ -129,8 +129,8 @@ class LisseurGenetique:
         :param taux: permet d'ajuster le nombre de mutation
         :return:
         """
-        if random.random < taux:
-            individu[random.randrange(4)] = math.pow(10,random.random()*12-6)
+        if random.random() < taux:
+            individu[random.randrange(4)] = (-1)**random.choice([1,0])*math.pow(10,random.random()*12-6)
             return individu
         else:
             return individu
@@ -202,7 +202,7 @@ if __name__ == "__main__":
     #durée en ms
     duree = 1.500
     #nombre d'individus dans la population
-    nPop = 10000
+    nPop = 1000
     #nombre de fonction apériodique
     nAperiodique = 0
     #nombre de génération
