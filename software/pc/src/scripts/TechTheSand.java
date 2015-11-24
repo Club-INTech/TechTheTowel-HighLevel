@@ -3,6 +3,7 @@ package scripts;
 import enums.ActuatorOrder;
 import enums.ServiceNames;
 import enums.Speed;
+import enums.Turning;
 import exceptions.ExecuteException;
 import exceptions.PathNotFoundException;
 import exceptions.PointInObstacleException;

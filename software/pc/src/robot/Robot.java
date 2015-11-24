@@ -1,10 +1,7 @@
 package robot;
 
 import container.Service;
-import enums.ActuatorOrder;
-import enums.ContactSensors;
-import enums.Speed;
-import enums.USsensors;
+import enums.*;
 import exceptions.ConfigPropertyNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.PathNotFoundException;
@@ -344,7 +341,12 @@ public abstract class Robot implements Service
         turn(angle, null, false, false);
     }
 
-    
+    /**
+     * Met le sens de rotation dans Locomotion
+     * Refuse de mettre Turning.FASTEST s'il y a du sable dans le robot
+     */
+	public abstract boolean setTurning(Turning turning);
+
     
     
 	/**
