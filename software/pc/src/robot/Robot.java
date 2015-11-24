@@ -68,7 +68,7 @@ public abstract class Robot implements Service
 	public boolean stateParasol = false;
 
 	/** Booléen indiquant si les poissons sont récupérés, sert pour les versions du script Fishing */
-	public boolean AreFishesFished = false;
+	private boolean AreFishesFished = false;
 	
 	/** Booléen indiquant la présence de poisson sur les actionneurs */
 	private boolean AreFishesOnBoard = false;
