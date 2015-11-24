@@ -22,5 +22,7 @@ hardware/*/*.epf
 .metadata/
 .recommenders/
 
+**/software/arm/projects/**/*.coproj
+
 #Fichiers python compilés
 *.pyc
