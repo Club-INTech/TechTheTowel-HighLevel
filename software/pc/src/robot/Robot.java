@@ -65,7 +65,7 @@ public abstract class Robot implements Service
 	
 
 	/** état du parasol */
-	public boolean stateParasol = false;
+	public boolean isParasolUnfolded = false;
 
 	/** Booléen indiquant si les poissons sont récupérés, sert pour les versions du script Fishing */
 	private boolean AreFishesFished = false;
@@ -542,15 +542,6 @@ public abstract class Robot implements Service
 
 		followPath(path , hooksToConsider);
     }
-    
-
-	/**
-	 * Informe la classe Robot que le parasol est déployé.
-	 */
-	public void parasolUnfolded()
-	{
-		stateParasol = true;
-	}
     
     
     /**
