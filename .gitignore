@@ -21,3 +21,6 @@ hardware/*/*.epf
 /Debug/
 .metadata/
 .recommenders/
+
+#Fichiers python compilés
+*.pyc
