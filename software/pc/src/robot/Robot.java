@@ -223,7 +223,7 @@ public abstract class Robot implements Service
     public abstract void turn(double angle, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException;
     
 	/**
-	 * Fait avancer le robot de la distance spécifiée. Le robot garde son orientation actuelle et va simplement avancer.
+	 * Fait avancer le robot de la distanted PathDingDing pathDingDing;ce spécifiée. Le robot garde son orientation actuelle et va simplement avancer.
 	 * C'est la méthode que les utilisateurs (externes au développement du système de locomotion) vont utiliser
 	 * Cette méthode est bloquante: son exécution ne se termine que lorsque le robot a atteint le point d'arrivée
 	 * @param distance en mm que le robot doit franchir. Si cette distance est négative, le robot va reculer. Attention, en cas de distance négative, cette méthode ne vérifie pas s'il y a un système d'évitement a l'arrère du robot
@@ -586,5 +586,10 @@ public abstract class Robot implements Service
 	public abstract boolean getContactSensorValue(ContactSensors captor) throws SerialConnexionException;
 	
 	public abstract void turnWithoutDetection(double angle, ArrayList<Hook> hooks) throws UnableToMoveException;
+
+	public PathDingDing getPDD()
+	{
+		return pathDingDing;
+	}
 
 }
