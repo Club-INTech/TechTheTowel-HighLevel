@@ -1,6 +1,7 @@
 package tests;
 
 import enums.ServiceNames;
+import enums.Turning;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -90,7 +91,7 @@ public class JUnit_LocomotionCardWrapper extends JUnit_Test
         mLocomotionCardWrapper.enableTranslationnalFeedbackLoop();
 		log.debug("JUnit_DeplacementsTest.test_tourner()");
 		System.out.println("Avant tourner");
-		mLocomotionCardWrapper.turn((float)1.2);
+		mLocomotionCardWrapper.turn((float)1.2, Turning.FASTEST);
         System.out.println("Après tourner");
 		Thread.sleep(2000);
 		float[] infos_float = mLocomotionCardWrapper.getCurrentPositionAndOrientation();
