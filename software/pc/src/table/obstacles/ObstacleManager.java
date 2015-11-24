@@ -117,8 +117,18 @@ public class ObstacleManager
 		mRectangles.add(new ObstacleRectangular(new Vec2(-900,1970), 100 + 2*mRobotRadius , 60 + 2*mRobotRadius));
 		mRectangles.add(new ObstacleRectangular(new Vec2(-1200,1970), 100 + 2*mRobotRadius , 60 + 2*mRobotRadius));
 
-        //TODO GÃ©rer la symÃ©trie pour ajouter le tapis adverse en temps qu'obstacle
-
+		//Tapis Adverse
+		// TODO Récupérer la couleur du robot
+		
+		if (symmetry == 0)
+		{
+			mRectangles.add(new ObstacleRectangular(new Vec2(-1350,850), 300 + 2*mRobotRadius, 500 + 2*mRobotRadius));
+		}
+		else
+		{
+			mRectangles.add(new ObstacleRectangular(new Vec2(1350,850), 300 + 2*mRobotRadius, 500 + 2*mRobotRadius));
+		}
+		
 
 
 
