@@ -24,13 +24,12 @@ import utils.Log;
 import java.util.ArrayList;
 
 /**
- * Script pour récupérer le tas de sable central
+ * Script pour récupérer le tas de sable central, ne s'occupe pas de le ramener dans notre zone de construction
  * Version 0 et 1: En partant de notre côté, on avance vers le côté ennemi
  * @author CF
  */
 public class TechTheSand extends AbstractScript
 {
-	PathDingDing pf;
 	public TechTheSand(HookFactory hookFactory, Config config, Log log)
 	{
 		super (hookFactory,config,log);
@@ -51,8 +50,6 @@ public class TechTheSand extends AbstractScript
 	@Override
 	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException
 	{
-		// Déclaration d'une liste pour l'appel du PathDingDing
-		ArrayList<Vec2> path;
 		/*
 		 * On exécute la version 0 si le robot est dans le terrain vert
 		 * et 1 s'il est dans la zone violette
@@ -62,8 +59,8 @@ public class TechTheSand extends AbstractScript
 			try
 			{
 				// On prend une vitesse lente pour que le robot récupère efficacement le sable
-				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
-				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
+				//Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
+				//stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
 				
 				// On s'oriente vers le côté ennemi
 				stateToConsider.robot.turn((Math.PI), hooksToConsider, false);
@@ -84,6 +81,9 @@ public class TechTheSand extends AbstractScript
 				// On s'oriente vers notre serviette
 				stateToConsider.robot.turn(0);
 				
+				// On reprend notre vitesse habituelle
+				//stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
+				
 			}
 			catch (UnableToMoveException e)
 			{
@@ -98,8 +98,8 @@ public class TechTheSand extends AbstractScript
 			try
 			{
 				// On prend une vitesse lente pour que le robot récupère efficacement le sable
-				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
-				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
+				//Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
+				//stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
 				
 				// On s'oriente vers le côté ennemi
 				stateToConsider.robot.turn(0, hooksToConsider, false);
@@ -121,7 +121,7 @@ public class TechTheSand extends AbstractScript
 				stateToConsider.robot.turn((Math.PI));
 				
 				// On reprend notre vitesse habituelle
-				stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
+				//stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
 			}
 			catch (UnableToMoveException e)
 			{
@@ -136,7 +136,7 @@ public class TechTheSand extends AbstractScript
 	@Override
 	public int remainingScoreOfVersion(int version, GameState<?> state) 
 	{
-		// TODO
+		// TODO comment établir le nombre de point rendu par cette action ?
 		return 0;
 	}
 
@@ -162,7 +162,7 @@ public class TechTheSand extends AbstractScript
 	@Override
 	public void finalize(GameState<?> state) throws SerialFinallyException 
 	{
-		//TODO
+		//TODO arrêter la tige et le moteur de vitre
 	}
 
 	@Override
