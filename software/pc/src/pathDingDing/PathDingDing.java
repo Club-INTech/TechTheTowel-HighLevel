@@ -278,7 +278,7 @@ public class PathDingDing implements Service
 		}
         graph.setAllLinks();
 	}
-    
+
 
 
     /**
