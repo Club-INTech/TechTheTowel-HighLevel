@@ -2,6 +2,7 @@ package robot.cardsWrappers;
 
 
 import container.Service;
+import enums.Turning;
 import exceptions.ConfigPropertyNotFoundException;
 import exceptions.serial.SerialConnexionException;
 import robot.serial.SerialConnexion;
@@ -111,12 +112,24 @@ public class LocomotionCardWrapper implements Service
 	 * @param angle
 	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
 	 */
-	public void turn(double angle) throws SerialConnexionException
+	public void turn(double angle, Turning turning) throws SerialConnexionException
 	{
 		// tronque l'angle que l'on envoit a la série pour éviter les overflows
 		float angleTruncated = (float)angle;
-		String chaines[] = {"t", Float.toString(angleTruncated)};
-		locomotionCardSerial.communiquer(chaines, 0);		
+		if(turning == Turning.FASTEST) {
+			String chaines[] = {"t", Float.toString(angleTruncated)};
+			locomotionCardSerial.communiquer(chaines, 0);
+		}
+		else if(turning == Turning.RIGHT_ONLY)
+		{
+			String chaines[] = {"tor", Float.toString(angleTruncated)};
+			locomotionCardSerial.communiquer(chaines, 0);
+		}
+		else if(turning == Turning.LEFT_ONLY)
+		{
+			String chaines[] = {"tol", Float.toString(angleTruncated)};
+			locomotionCardSerial.communiquer(chaines, 0);
+		}
 	}
 	public void turnRelative(double angle) throws SerialConnexionException
 	{

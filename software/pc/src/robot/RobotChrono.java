@@ -1,9 +1,6 @@
 package robot;
 
-import enums.ActuatorOrder;
-import enums.ContactSensors;
-import enums.Speed;
-import enums.USsensors;
+import enums.*;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import hook.Hook;
@@ -279,6 +276,11 @@ public class RobotChrono extends Robot
 		
         return orientation;
     }
+
+	@Override
+	public void setTurning(Turning turning) {
+		//TODO do that TODO
+	}
 
 	@Override
 	public int getUSSensorValue(USsensors sensor) 
