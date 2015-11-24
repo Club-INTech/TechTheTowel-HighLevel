@@ -3,7 +3,7 @@
 *.so
 *.user
 *.project
-software/arm/*/*.cogui
+*.cogui
 software/arm/*/*.comarker
 software/arm/build
 software/bin/
@@ -21,3 +21,8 @@ hardware/*/*.epf
 /Debug/
 .metadata/
 .recommenders/
+
+**/software/arm/projects/**/*.coproj
+
+#Fichiers python compilés
+*.pyc
