@@ -43,6 +43,12 @@ public abstract class Robot implements Service
 	/**  la table est symétrisée si on est équipe jaune. */
 	protected boolean symmetry;
 	
+	/** getter de symmetry pour pouvoir le récupérer ailleurs dans le code */
+	public boolean getSymmetry()
+	{
+		return symmetry;
+	}
+	
 	/**  vitesse du robot sur la table. */
 	protected Speed speed;
 	
