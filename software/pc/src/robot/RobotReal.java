@@ -371,5 +371,5 @@ public class RobotReal extends Robot
 	{
 		return mLocomotion.isRobotMovingBackward;
 	}
-	
+
 }

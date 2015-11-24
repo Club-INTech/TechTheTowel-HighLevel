@@ -86,4 +86,9 @@ public class Window extends JFrame
 	{
 		return mMouse;
 	}
+
+	public Keyboard getKeyboard()
+	{
+		return mKeyboard;
+	}
 }

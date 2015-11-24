@@ -151,8 +151,7 @@ public class Table implements Service
 	
 	public void initialise() // initialise la table du debut du jeu
 	{
-		//TODO initialiser les obstacles de ObstacleManager (exemple fait pour les 3 premières boucles)
-		
+
 		//==================================================================================
 		// Instanciation des elements de sable centraux (VOIR LES REGLES POUR LES POSITIONS)
 		// L'ordre est : les niveaux du sol au ciel,
