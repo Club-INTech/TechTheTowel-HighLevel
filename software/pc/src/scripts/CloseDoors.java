@@ -123,9 +123,14 @@ public class CloseDoors extends AbstractScript
 	@Override
 	public Circle entryPosition(int version, int ray, Vec2 robotPosition)
 	{
-		if (version == 0 | version ==1)
-			// Point devant les portes, modification possible selon l'envergure du robot
+		if (version == 0)
+			// Point devant les portes côté vert, modification possible selon l'envergure du robot
 			return new Circle(new Vec2(1000,1650));
+		else if (version ==1)
+		{
+			// Point devant les portes côté violet
+			return new Circle(new Vec2(-1000,1650));
+		}
 		else
 		{
 			//TODO jetter une exception
