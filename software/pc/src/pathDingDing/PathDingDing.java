@@ -102,10 +102,10 @@ public class PathDingDing implements Service
 		}
 		
 		// On ajoute les noeuds de départ et d'arrivée au graphe (ignorés s'ils existent déjà)
-		ArrayList<Node> temp = addStartAndEnd(start, end);
-		Node startNode = temp.get(0);
-		Node endNode = temp.get(1);
-		temp.clear();
+		Node endNode = new Node(end);
+		Node startNode = new Node(start, endNode);
+		graph.addNode(startNode);
+		graph.addNode(endNode);
 		
 		//===========================================
 		// DEBUT DE L'ALGORITHME A* - INITIALISATION
@@ -148,11 +148,6 @@ public class PathDingDing implements Service
 			
 			openNodes.get(i).setParent(startNode);
 		}
-		
-		// On vérifie que l'on est pas dans un cas de bloquage :
-		// On etudie un seul point, et il n'y a rien autour.
-		if(openNodes.isEmpty())
-			return new ArrayList<Node>();
 		
 		// On classe ces noeuds par coût croissant grâce au service Collections et la méthode compareTo() dont hérite Node
 		Collections.sort(openNodes);
@@ -265,27 +260,6 @@ public class PathDingDing implements Service
 			log.critical("erreur : pathDingDing sans résultat");
 		}
 
-        //==================================
-        // On cherche à optimiser le chemin
-        //==================================
-        //FIXME Ne fonctionne pas correctement
-        /*for(int i=0 ; i<(result.size()-2) ; i++)
-        {
-            for(int j=i+2; j<(result.size()) ; j++)
-            {
-                // Si le noeud i et j sont reliables, on les relie et on supprime les entres-deux
-                if (!graph.isObstructed(result.get(i), result.get(j)))
-                {
-                    for(int k=i+1 ; k<j ; k++)
-                    {
-                        result.remove(k);
-                        k--;
-                        j--;
-                    }
-                }
-            }
-        }*/
-
 
         // ET C'EST FUCKING TERMINE !!!!
 		return result;
@@ -304,25 +278,7 @@ public class PathDingDing implements Service
 		}
         graph.setAllLinks();
 	}
-	
-	/**
-	 * Ajoute le départ et l'arrivée au graphe, crée les liens et les renvoie
-	 * @param start la position du noeud de départ
-	 * @param end la postion du noeud d'arrivée
-	 */
-	public ArrayList<Node> addStartAndEnd(Vec2 start, Vec2 end)
-	{
-		Node endNode = new Node(end);
-		Node startNode = new Node(start, endNode);
-		
-		graph.addNode(startNode);
-		graph.addNode(endNode);
-		
-		ArrayList<Node> array = new ArrayList<Node>();
-		array.add(startNode);
-		array.add(endNode);
-		return array;
-	}
+    
 
 
     /**
