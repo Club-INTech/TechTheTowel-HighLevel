@@ -71,6 +71,9 @@ public class Fishing extends AbstractScript
 				// On longe le bac
 				stateToConsider.robot.moveLengthwise(420, hooksToConsider, false);
 				
+				// On indique au robot que les poissons sont sur le bras
+				stateToConsider.robot.setAreFishesOnBoard(true);
+				
 				// On remonte le bras pour passer au dessus du filet
 				stateToConsider.robot.useActuator(ActuatorOrder.MIDLE_POSITION, true);
 				
@@ -79,6 +82,9 @@ public class Fishing extends AbstractScript
 				
 				// On lâche les poissons
 				stateToConsider.robot.useActuator(ActuatorOrder.FREE_FISHES, true);	
+				
+				// On indique au robot que les poissons ne sont plus sur le bras
+				stateToConsider.robot.setAreFishesOnBoard(false);
 				
 				// On indique que les poissons sont pris
 				stateToConsider.robot.setAreFishesFished(true);
@@ -111,6 +117,9 @@ public class Fishing extends AbstractScript
 					// On longe le bac
 					stateToConsider.robot.moveLengthwise(-420, hooksToConsider, false);
 					
+					// On indique au robot que les poissons sont sur le bras
+					stateToConsider.robot.setAreFishesOnBoard(true);
+					
 					// On remonte le bras pour passer au dessus du filet
 					stateToConsider.robot.useActuator(ActuatorOrder.MIDLE_POSITION, true);
 					
@@ -119,6 +128,9 @@ public class Fishing extends AbstractScript
 					
 					// On lâche les poissons
 					stateToConsider.robot.useActuator(ActuatorOrder.FREE_FISHES, true);	
+					
+					// On indique au robot que les poissons ne sont plus sur le bras
+					stateToConsider.robot.setAreFishesOnBoard(false);
 					
 					// On indique que les poissons sont pris
 					stateToConsider.robot.setAreFishesFished(true);
@@ -156,9 +168,14 @@ public class Fishing extends AbstractScript
 	public Circle entryPosition(int version, int ray, Vec2 robotPosition) 
 	{
 		// TODO a modifier avec les phases de test
-		if (version == 0 | version == 1)
+		if (version == 0)
 		{
-			return new Circle(new Vec2(500,50));
+			return new Circle(new Vec2(1000,200));
+		}
+		
+		else if (version == 1)
+		{
+			return new Circle (new Vec2(-1000,200));
 		}
 		else
 		{

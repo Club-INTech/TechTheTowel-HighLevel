@@ -123,9 +123,9 @@ public class CloseDoors extends AbstractScript
 	@Override
 	public Circle entryPosition(int version, int ray, Vec2 robotPosition)
 	{
-		//TODO éviter la position d'entrée du robot, à modifier quand le pathdingding sera fait
-		if (version == 0)
-			return new Circle(Table.entryPosition);
+		if (version == 0 | version ==1)
+			// Point devant les portes, modification possible selon l'envergure du robot
+			return new Circle(new Vec2(1000,1650));
 		else
 		{
 			//TODO jetter une exception
