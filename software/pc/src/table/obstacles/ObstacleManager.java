@@ -94,6 +94,7 @@ public class ObstacleManager
       	mRectangles.add(new ObstacleRectangular(new Vec2(-711, 1900), 200 + 2*mRobotRadius, 200 + 2*mRobotRadius));
       	
       	//Vitre centrale
+
       	mRectangles.add(new ObstacleRectangular(new Vec2(0, 950), 48 + 2*mRobotRadius, 600 + 2*mRobotRadius));
       	
       	//planches à côté de la vitre
@@ -116,12 +117,9 @@ public class ObstacleManager
 		mRectangles.add(new ObstacleRectangular(new Vec2(-900,1970), 100 + 2*mRobotRadius , 60 + 2*mRobotRadius));
 		mRectangles.add(new ObstacleRectangular(new Vec2(-1200,1970), 100 + 2*mRobotRadius , 60 + 2*mRobotRadius));
 
-        //TODO Gérer la symétrie pour ajouter le tapis adverse en temps qu'obstacle
-
-
-
-
-
+		//Tapis Adverse
+		mRectangles.add(new ObstacleRectangular(new Vec2(1350,850), 300 + 2*mRobotRadius, 500 + 2*mRobotRadius));
+		
 	}
 
 

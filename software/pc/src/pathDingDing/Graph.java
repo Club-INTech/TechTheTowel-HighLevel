@@ -265,6 +265,9 @@ public class Graph
 		ArrayList<ObstacleRectangular> rect = obstacleManager.getRectangles();
 		ArrayList<ObstacleCircular> cir = obstacleManager.getFixedObstacles();
         Vec2 pos;
+		/**
+		 * Les noeuds sont placés aux coins des rectangles
+		 */
 		for(int i = 0 ; i < rect.size() ; i++)
         {
             ObstacleRectangular r = rect.get(i);
@@ -285,23 +288,26 @@ public class Graph
             if(!isInObstacle(pos))
                 nodes.add(new Node(pos));
 		}
+		/**
+		 * Les noeuds sont placés à (+/-)pi/4 et (+/-)3*pi/4 ; d'où le 0.707 qui provient de sqrt(2)/2 = arccos(pi/4) = arcsin (pi/4)
+		 */
         for(int i = 0 ; i < cir.size() ; i++)
         {
             ObstacleCircular c = cir.get(i);
 
-            pos = new Vec2(c.getPosition().x, (c.getPosition().y - c.getRadius()) -1);
+            pos = new Vec2(c.getPosition().x + (int)(c.getRadius()*0.707) +1, c.getPosition().y + (int)(c.getRadius()*0.707) +1);
             if(!isInObstacle(pos))
                 nodes.add(new Node(pos));
 
-            pos = new Vec2(c.getPosition().x, (c.getPosition().y + c.getRadius()) +1);
+            pos = new Vec2(c.getPosition().x + (int)(c.getRadius()*0.707) +1, c.getPosition().y - (int)(c.getRadius()*0.707) -1);
             if(!isInObstacle(pos))
                 nodes.add(new Node(pos));
 
-            pos = new Vec2(c.getPosition().x - (c.getRadius()) -1, c.getPosition().y );
+            pos = new Vec2(c.getPosition().x - (int)(c.getRadius()*0.707) -1, c.getPosition().y + (int)(c.getRadius()*0.707) +1);
             if(!isInObstacle(pos))
                 nodes.add(new Node(pos));
 
-            pos = new Vec2(c.getPosition().x + (c.getRadius()) +1, c.getPosition().y );
+            pos = new Vec2(c.getPosition().x - (int)(c.getRadius()*0.707) -1, c.getPosition().y - (int)(c.getRadius()*0.707) -1);
             if(!isInObstacle(pos))
                 nodes.add(new Node(pos));
         }
