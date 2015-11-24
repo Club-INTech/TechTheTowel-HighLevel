@@ -100,7 +100,7 @@ public abstract class Robot implements Service
 	{
 		try 
 		{
-			symmetry = config.getProperty("couleur").replaceAll(" ","").equals("jaune");
+			symmetry = config.getProperty("couleur").replaceAll(" ","").equals("violet");
 	        robotRay = Integer.parseInt(config.getProperty("rayon_robot"));
 	        position = Table.entryPosition;
 	        orientation = Math.PI;
