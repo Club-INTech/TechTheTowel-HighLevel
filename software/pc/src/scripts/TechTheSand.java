@@ -25,7 +25,7 @@ import java.util.ArrayList;
 
 /**
  * Script pour récupérer le tas de sable central, ne s'occupe pas de le ramener dans notre zone de construction
- * Version 0 et 1: En partant de notre côté, on avance vers le côté ennemi
+ * Version 0 et 1: En partant de notre côté, on avance vers le côté ennemi, version 0 si l'on est du côté vert, 1 pour le côté violet
  * @author CF
  */
 public class TechTheSand extends AbstractScript

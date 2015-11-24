@@ -59,8 +59,8 @@ public class Fishing extends AbstractScript
 			try
 			{
 				// On prend une vitesse lente pour que les aimants puissent récupérer les poissons
-				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
-				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
+				//Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
+				//stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
 				
 				// On s'oriente vers le côté ennemi
 				stateToConsider.robot.turn((Math.PI), hooksToConsider, false);
@@ -92,7 +92,7 @@ public class Fishing extends AbstractScript
 				// Points gagnés max
 				stateToConsider.obtainedPoints += 40;
 				
-				stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
+				//stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
 			}
 			catch(UnableToMoveException | SerialConnexionException e)
 			{
@@ -105,8 +105,8 @@ public class Fishing extends AbstractScript
 			try
 				{
 					// On prend une vitesse lente pour que les aimants puissent récupérer les poissons
-					Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
-					stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
+					//Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
+					//stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
 					
 					// On s'oriente vers le côté ennemi
 					stateToConsider.robot.turn((Math.PI), hooksToConsider, false);
@@ -138,7 +138,7 @@ public class Fishing extends AbstractScript
 					// Points gagnés max
 					stateToConsider.obtainedPoints += 40;
 					
-					stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
+					//stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
 				}
 				catch(UnableToMoveException | SerialConnexionException e)
 				{
@@ -204,7 +204,7 @@ public class Fishing extends AbstractScript
 	@Override
 	public Integer[] getVersion(GameState<?> stateToConsider) 
 	{
-		// Au vu des deux versions disponibles pour l'instant, on retourne les deux versions
+		// Au vu des deux versions disponibles pour l'instant, sans informations sur le nombre de poissons pris, on retourne les deux versions
 		return versions;
 	}
 	
