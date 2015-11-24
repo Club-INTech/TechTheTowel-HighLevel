@@ -43,6 +43,12 @@ public abstract class Robot implements Service
 	/**  la table est symétrisée si on est équipe jaune. */
 	protected boolean symmetry;
 	
+	/** getter de symmetry pour pouvoir le récupérer ailleurs dans le code */
+	public boolean getSymmetry()
+	{
+		return symmetry;
+	}
+	
 	/**  vitesse du robot sur la table. */
 	protected Speed speed;
 	
@@ -65,10 +71,10 @@ public abstract class Robot implements Service
 	
 
 	/** état du parasol */
-	public boolean stateParasol = false;
+	public boolean isParasolUnfolded = false;
 
 	/** Booléen indiquant si les poissons sont récupérés, sert pour les versions du script Fishing */
-	public boolean AreFishesFished = false;
+	private boolean AreFishesFished = false;
 	
 	/** Booléen indiquant la présence de poisson sur les actionneurs */
 	private boolean AreFishesOnBoard = false;
@@ -542,15 +548,6 @@ public abstract class Robot implements Service
 
 		followPath(path , hooksToConsider);
     }
-    
-
-	/**
-	 * Informe la classe Robot que le parasol est déployé.
-	 */
-	public void parasolUnfolded()
-	{
-		stateParasol = true;
-	}
     
     
     /**
