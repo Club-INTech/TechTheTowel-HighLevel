@@ -53,8 +53,6 @@ public class ObstacleManager
 	/**	le temps donné aux obstacles pour qu'ils soit vérifiés */
 	private int timeToTestObstacle = 1000;
 
-	private boolean symetry;
-		
 	/**
      * Instancie un nouveau gestionnaire d'obstacle.
      *
@@ -120,9 +118,7 @@ public class ObstacleManager
 		mRectangles.add(new ObstacleRectangular(new Vec2(-1200,1970), 100 + 2*mRobotRadius , 60 + 2*mRobotRadius));
 
 		//Tapis Adverse
-		//TODO IL FAUT GERER LA SYMETRIE !! Là, vous mettez le tapis vert en obstacle peu importe notre couleur
-		// Utilisez symetry qui vaut true si on est violet ; false si on est vert (je vous l'ai récupérée dans updateConfig())
-		//mRectangles.add(new ObstacleRectangular(new Vec2(1350,850), 300 + 2*mRobotRadius, 500 + 2*mRobotRadius));
+		mRectangles.add(new ObstacleRectangular(new Vec2(-1350,850), 300 + 2*mRobotRadius, 500 + 2*mRobotRadius));
 
 		
 	}
@@ -660,7 +656,6 @@ public class ObstacleManager
 		{
 			mRobotRadius = Integer.parseInt(config.getProperty("rayon_robot"));
 		    defaultObstacleRadius = Integer.parseInt(config.getProperty("rayon_robot_adverse"));
-			symetry = config.getProperty("couleur").replaceAll(" ","").equals("violet");
 		}
 	    catch (ConfigPropertyNotFoundException e)
     	{
