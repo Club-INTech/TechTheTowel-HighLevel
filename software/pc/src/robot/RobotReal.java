@@ -334,11 +334,11 @@ public class RobotReal extends Robot
     }
 
 	@Override
-	public boolean setTurning(Turning turning)
+	public boolean setTurningStrategy(TurningStrategy turning)
 	{
-        if((getIsSandInside() && !(turning == Turning.FASTEST)) || !getIsSandInside())
+        if((getIsSandInside() && !(turning == TurningStrategy.FASTEST)) || !getIsSandInside())
         {
-            mLocomotion.turning = turning;
+            mLocomotion.setTurningOrders(turning);
             return true;
         }
         return false;

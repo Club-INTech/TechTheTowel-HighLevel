@@ -345,7 +345,7 @@ public abstract class Robot implements Service
      * Met le sens de rotation dans Locomotion
      * Refuse de mettre Turning.FASTEST s'il y a du sable dans le robot
      */
-	public abstract boolean setTurning(Turning turning);
+	public abstract boolean setTurningStrategy(TurningStrategy turning);
 
     
     

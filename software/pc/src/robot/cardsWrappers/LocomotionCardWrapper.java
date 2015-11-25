@@ -2,7 +2,7 @@ package robot.cardsWrappers;
 
 
 import container.Service;
-import enums.Turning;
+import enums.TurningStrategy;
 import exceptions.ConfigPropertyNotFoundException;
 import exceptions.serial.SerialConnexionException;
 import robot.serial.SerialConnexion;
@@ -107,25 +107,35 @@ public class LocomotionCardWrapper implements Service
 		locomotionCardSerial.communiquer(chaines, 0);
 	}
 
-	/** 
+	/**
 	 * Fait tourner le robot de maniere absolue. Méthode non bloquante
-	 * @param angle
+	 * utilise TurningStrategy.FASTEST
+	 * @param angle l'angle de tour
 	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
 	 */
-	public void turn(double angle, Turning turning) throws SerialConnexionException
+	public void turn(double angle) throws SerialConnexionException
+	{
+		turn(angle,TurningStrategy.FASTEST);
+	}
+	/** 
+	 * Fait tourner le robot de maniere absolue. Méthode non bloquante
+	 * @param angle l'angle de tour
+	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
+	 */
+	public void turn(double angle, TurningStrategy turning) throws SerialConnexionException
 	{
 		// tronque l'angle que l'on envoit a la série pour éviter les overflows
 		float angleTruncated = (float)angle;
-		if(turning == Turning.FASTEST) {
+		if(turning == TurningStrategy.FASTEST) {
 			String chaines[] = {"t", Float.toString(angleTruncated)};
 			locomotionCardSerial.communiquer(chaines, 0);
 		}
-		else if(turning == Turning.RIGHT_ONLY)
+		else if(turning == TurningStrategy.RIGHT_ONLY)
 		{
 			String chaines[] = {"tor", Float.toString(angleTruncated)};
 			locomotionCardSerial.communiquer(chaines, 0);
 		}
-		else if(turning == Turning.LEFT_ONLY)
+		else if(turning == TurningStrategy.LEFT_ONLY)
 		{
 			String chaines[] = {"tol", Float.toString(angleTruncated)};
 			locomotionCardSerial.communiquer(chaines, 0);
