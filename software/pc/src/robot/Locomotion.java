@@ -684,10 +684,14 @@ public class Locomotion implements Service
      */
     private void moveToPointSerialOrder(Vec2 symmetrisedAim, Vec2 givenPosition, double angle, double distance, boolean mustDetect,boolean turnOnly, boolean isCorrection) throws BlockedException, UnexpectedObstacleOnPathException
     {
+        // On copie la stratégie de rotation pour éviter qu'elle soit modifiée en plein mouvement
+        TurningStrategy cTurningStrategy = turningStrategy;
+
     	boolean trajectoire_courbe = false;
         double delta = (angle - lowLevelOrientation) % (2 * Math.PI);
 
-        if(turningStrategy == TurningStrategy.FASTEST) {
+
+        if(cTurningStrategy == TurningStrategy.FASTEST) {
             // Ce code fait juste un modulo 2*pi, avec un résultat entre -PI et +PI
             if (delta > Math.PI)
                 delta -= 2 * Math.PI;
@@ -716,7 +720,7 @@ public class Locomotion implements Service
                 if (isCorrection && Math.abs(delta) > maxRotationCorrectionThreeshold) {
                     isRobotTurning = true;// prochain ordre : on tourne
 
-                    //TODO utiliser la bonne strategie
+                    //On utilise la stratégie FASTEST pour les petits mouvements
                     deplacements.turn(angle, TurningStrategy.FASTEST);  // On ne tourne que si on est assez loin de l'orientation voulu
 
                     log.debug("Angle corrigé");
@@ -725,7 +729,7 @@ public class Locomotion implements Service
                     if (Math.abs(delta) > maxRotationCorrectionThreeshold) {// on ne tourne vraiment que si l'angle souhaité est vraiment different.
                         isRobotTurning = true;// prochain ordre : on tourne
                     }
-                    deplacements.turn(angle, turningStrategy);
+                    deplacements.turn(angle, cTurningStrategy);
                 }
 
                 // sans virage : la première rotation est bloquante
