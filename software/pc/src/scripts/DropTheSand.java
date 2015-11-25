@@ -1,7 +1,7 @@
 package scripts;
 
 
-import enums.Turning;
+import enums.TurningStrategy;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialFinallyException;
@@ -66,7 +66,7 @@ public class DropTheSand extends AbstractScript
 
     @Override
     public void finalize(GameState<?> state) throws UnableToMoveException, SerialFinallyException {
-        state.robot.setTurning(Turning.FASTEST);
+        state.robot.setTurningStrategy(TurningStrategy.FASTEST);
 
     }
 
