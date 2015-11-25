@@ -21,6 +21,15 @@ public class Graph
 {
 
 	/**
+	 * Définit la distance maximale entre deux noeuds pour tenter le calcul d'un lien
+	 * Permet d'éviter un calcul en O(n²)
+	 * Plus cette valeur est élevée, plus le calcul sera lent, mais plus le chemin sera optimisé
+	 * Une valeur trop petite peut rendre un noeud isolé s'il est trop éloigné des autres
+	 * Assimilable au clipping dans les moteurs 3D
+	 */
+	public static final double IGNORE_DISTANCE = 1000000;
+
+	/**
 	 * Nodes statiques du graphe, c'est a dire permaments sur la tables (pas utilises pour l'evitement)
 	 */
 	private ArrayList<Node> nodes;
@@ -80,7 +89,8 @@ public class Graph
 
 
         addObstacleNodes();
-		setAllLinks();
+		//setAllLinks();
+		setAllLinksOptimised();
 	}
 
 	public void computeAllHeuristic(Node goal)
@@ -161,7 +171,29 @@ public class Graph
 		nodes.add(node);
 	}
 
+	/**
+	 * Relie tous les noeuds ensemble en vérifiant s'il n'y a pas d'intersection avec un obstacle ; méthode optimisée
+	 */
+	public void setAllLinksOptimised()
+	{
+		//On vide la liste des noeuds pour la reconstruire
+		links.clear();
 
+		for(int i=0 ; i < nodes.size() ; i++)
+		{
+			for(int j=0 ; j < nodes.size() ; j++)
+			{
+				// On ne prend en compte que les noeuds proches
+				if(j>i && Segment.squaredLength(nodes.get(i).getPosition(), nodes.get(j).getPosition()) <= IGNORE_DISTANCE)
+				{
+					if(!isObstructed(nodes.get(i), nodes.get(j)))
+					{
+						links.add(new Link(nodes.get(i), nodes.get(j)));
+					}
+				}
+			}
+		}
+	}
 
 	/**
 	 * Renvoie le noeud numero i
