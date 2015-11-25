@@ -53,7 +53,6 @@ public class ObstacleManager
 	/**	le temps donné aux obstacles pour qu'ils soit vérifiés */
 	private int timeToTestObstacle = 1000;
 
-		
 	/**
      * Instancie un nouveau gestionnaire d'obstacle.
      *
@@ -72,6 +71,7 @@ public class ObstacleManager
 		mRectangles = new ArrayList<ObstacleRectangular>();
 		
 		mUntestedMobileObstacles= new ArrayList<ObstacleProximity>();
+
 
 		
 		updateConfig();
@@ -94,6 +94,7 @@ public class ObstacleManager
       	mRectangles.add(new ObstacleRectangular(new Vec2(-711, 1900), 200 + 2*mRobotRadius, 200 + 2*mRobotRadius));
       	
       	//Vitre centrale
+
       	mRectangles.add(new ObstacleRectangular(new Vec2(0, 950), 48 + 2*mRobotRadius, 600 + 2*mRobotRadius));
       	
       	//planches à côté de la vitre
@@ -108,7 +109,6 @@ public class ObstacleManager
 		mRectangles.add(new ObstacleRectangular(new Vec2(-620, 1942), 116 + 2*mRobotRadius, 116 + 2*mRobotRadius));
 		mRectangles.add(new ObstacleRectangular(new Vec2(620, 1942), 116 + 2*mRobotRadius, 116 + 2*mRobotRadius));
 		mRectangles.add(new ObstacleRectangular(new Vec2(850, 1100), 116 + 2*mRobotRadius, 116 + 2*mRobotRadius));
-		mRectangles.add(new ObstacleRectangular(new Vec2(-850, 1100), 116 + 2*mRobotRadius, 116 + 2*mRobotRadius));
 
 		//Portes
 		mRectangles.add(new ObstacleRectangular(new Vec2(900,1970), 100 + 2*mRobotRadius , 60 + 2*mRobotRadius));
@@ -116,12 +116,11 @@ public class ObstacleManager
 		mRectangles.add(new ObstacleRectangular(new Vec2(-900,1970), 100 + 2*mRobotRadius , 60 + 2*mRobotRadius));
 		mRectangles.add(new ObstacleRectangular(new Vec2(-1200,1970), 100 + 2*mRobotRadius , 60 + 2*mRobotRadius));
 
-        //TODO Gérer la symétrie pour ajouter le tapis adverse en temps qu'obstacle
+		//Tapis Adverse
+		mRectangles.add(new ObstacleRectangular(new Vec2(-1350,850), 300 + 2*mRobotRadius, 500 + 2*mRobotRadius));
 
-
-
-
-
+		// TODO ajouter les points d'accroche du filet (ils dépassent sur la table, on a pas envie de se les manger)
+		
 	}
 
 

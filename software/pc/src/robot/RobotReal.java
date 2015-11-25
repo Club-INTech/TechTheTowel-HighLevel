@@ -177,7 +177,6 @@ public class RobotReal extends Robot
 	 * @param hooksToConsider hooks a considérer lors de ce déplacement. Le hook n'est déclenché que s'il est dans cette liste et que sa condition d'activation est remplie	 
 	 * @param expectsWallImpact true si le robot doit s'attendre a percuter un mur au cours du déplacement. false si la route est sensée être dégagée.
 	 * @param mustDetect vrai si le robot doit detecter les obstacles sur son chemin
-	 * @param speed la vitesse du robot lors de son parcours
 	 * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
 	 */
 	@Override
@@ -335,6 +334,17 @@ public class RobotReal extends Robot
     }
 
 	@Override
+	public boolean setTurningStrategy(TurningStrategy turning)
+	{
+        if((getIsSandInside() && !(turning == TurningStrategy.FASTEST)) || !getIsSandInside())
+        {
+            mLocomotion.setTurningOrders(turning);
+            return true;
+        }
+        return false;
+	}
+
+	@Override
 	public void setLocomotionSpeed(Speed vitesse)
 	{
         try
@@ -371,5 +381,5 @@ public class RobotReal extends Robot
 	{
 		return mLocomotion.isRobotMovingBackward;
 	}
-	
+
 }

@@ -2,6 +2,7 @@ package asservissement;
 
 import container.Container;
 import enums.ServiceNames;
+import enums.TurningStrategy;
 import robot.cardsWrappers.LocomotionCardWrapper;
 
 import java.io.BufferedReader;
@@ -68,7 +69,7 @@ public class SearchConst
 
                     deplacements.changeRotationnalFeedbackParameters(kp, kd, pwm_max);
                     System.out.println(angle);
-                    deplacements.turn(angle);
+                    deplacements.turn(angle, TurningStrategy.FASTEST);
 
                 }
             }
