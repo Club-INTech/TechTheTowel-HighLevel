@@ -59,8 +59,8 @@ public class Fishing extends AbstractScript
 			try
 			{
 				// On prend une vitesse lente pour que les aimants puissent récupérer les poissons
-				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
-				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
+				//Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
+				//stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
 				
 				// On s'oriente vers le côté ennemi
 				stateToConsider.robot.turn((Math.PI), hooksToConsider, false);
@@ -71,6 +71,9 @@ public class Fishing extends AbstractScript
 				// On longe le bac
 				stateToConsider.robot.moveLengthwise(420, hooksToConsider, false);
 				
+				// On indique au robot que les poissons sont sur le bras
+				stateToConsider.robot.setAreFishesOnBoard(true);
+				
 				// On remonte le bras pour passer au dessus du filet
 				stateToConsider.robot.useActuator(ActuatorOrder.MIDLE_POSITION, true);
 				
@@ -80,13 +83,16 @@ public class Fishing extends AbstractScript
 				// On lâche les poissons
 				stateToConsider.robot.useActuator(ActuatorOrder.FREE_FISHES, true);	
 				
+				// On indique au robot que les poissons ne sont plus sur le bras
+				stateToConsider.robot.setAreFishesOnBoard(false);
+				
 				// On indique que les poissons sont pris
 				stateToConsider.robot.setAreFishesFished(true);
 				
 				// Points gagnés max
 				stateToConsider.obtainedPoints += 40;
 				
-				stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
+				//stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
 			}
 			catch(UnableToMoveException | SerialConnexionException e)
 			{
@@ -99,8 +105,8 @@ public class Fishing extends AbstractScript
 			try
 				{
 					// On prend une vitesse lente pour que les aimants puissent récupérer les poissons
-					Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
-					stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
+					//Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
+					//stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
 					
 					// On s'oriente vers le côté ennemi
 					stateToConsider.robot.turn((Math.PI), hooksToConsider, false);
@@ -111,6 +117,9 @@ public class Fishing extends AbstractScript
 					// On longe le bac
 					stateToConsider.robot.moveLengthwise(-420, hooksToConsider, false);
 					
+					// On indique au robot que les poissons sont sur le bras
+					stateToConsider.robot.setAreFishesOnBoard(true);
+					
 					// On remonte le bras pour passer au dessus du filet
 					stateToConsider.robot.useActuator(ActuatorOrder.MIDLE_POSITION, true);
 					
@@ -120,13 +129,16 @@ public class Fishing extends AbstractScript
 					// On lâche les poissons
 					stateToConsider.robot.useActuator(ActuatorOrder.FREE_FISHES, true);	
 					
+					// On indique au robot que les poissons ne sont plus sur le bras
+					stateToConsider.robot.setAreFishesOnBoard(false);
+					
 					// On indique que les poissons sont pris
 					stateToConsider.robot.setAreFishesFished(true);
 					
 					// Points gagnés max
 					stateToConsider.obtainedPoints += 40;
 					
-					stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
+					//stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
 				}
 				catch(UnableToMoveException | SerialConnexionException e)
 				{
@@ -156,9 +168,14 @@ public class Fishing extends AbstractScript
 	public Circle entryPosition(int version, int ray, Vec2 robotPosition) 
 	{
 		// TODO a modifier avec les phases de test
-		if (version == 0 | version == 1)
+		if (version == 0)
 		{
-			return new Circle(new Vec2(500,50));
+			return new Circle(new Vec2(1000,200));
+		}
+		
+		else if (version == 1)
+		{
+			return new Circle (new Vec2(-1000,200));
 		}
 		else
 		{
@@ -187,7 +204,7 @@ public class Fishing extends AbstractScript
 	@Override
 	public Integer[] getVersion(GameState<?> stateToConsider) 
 	{
-		// Au vu des deux versions disponibles pour l'instant, on retourne les deux versions
+		// Au vu des deux versions disponibles pour l'instant, sans informations sur le nombre de poissons pris, on retourne les deux versions
 		return versions;
 	}
 	

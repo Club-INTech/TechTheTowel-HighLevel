@@ -41,14 +41,14 @@ public class Parasol extends AbstractScript
 	public void execute(int versionUnused, GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException
 	{
 		// le déploiement du parasol n'est possible que pendant la funny action et lorsque celui-ci n'est pas déjà déployé.
-		if (actualState.getTimeEllapsed() >= (long)90 && !actualState.robot.stateParasol)
+		if (actualState.getTimeEllapsed() >= (long)90000 && !actualState.robot.isParasolUnfolded)
 		{
 			try
 			{
 				// envoi du message d'ouverture du parasol au bas niveau
 				actualState.robot.useActuator(ActuatorOrder.OPEN_PARASOL, true);
 				// actualisation de l'état du parasol maintenant déployé
-				actualState.robot.parasolUnfolded();
+				actualState.robot.isParasolUnfolded = true;
 			
 			}
 			catch(SerialConnexionException e)
@@ -67,7 +67,7 @@ public class Parasol extends AbstractScript
 	@Override
 	public int remainingScoreOfVersion(int version, GameState<?> actualState)
 	{
-		if (actualState.getTimeEllapsed() >= 90000 && !actualState.robot.stateParasol)
+		if (actualState.getTimeEllapsed() >= 90000 && !actualState.robot.isParasolUnfolded)
 		{
 			// le robot consulte l'action du parasol lors de la funny action
 			return 20;

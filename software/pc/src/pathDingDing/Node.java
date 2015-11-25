@@ -117,6 +117,7 @@ public class Node implements Comparable<Node>
 		//C'est la distance divisé par la vitesse de translation
 		double distance = Math.sqrt(Segment.squaredLength(this.getPosition(), start.getPosition()));
 
+		//TODO angle + constante
 		/*if(parent != null)
 		{
 			Vec2 vecteur1 = new Vec2(parent.getPosition().x - start.getPosition().x,parent.getPosition().y - start.getPosition().y);

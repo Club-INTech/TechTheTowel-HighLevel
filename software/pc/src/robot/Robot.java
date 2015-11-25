@@ -1,10 +1,7 @@
 package robot;
 
 import container.Service;
-import enums.ActuatorOrder;
-import enums.ContactSensors;
-import enums.Speed;
-import enums.USsensors;
+import enums.*;
 import exceptions.ConfigPropertyNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.PathNotFoundException;
@@ -42,6 +39,7 @@ public abstract class Robot implements Service
 
 	/**  la table est symétrisée si on est équipe jaune. */
 	protected boolean symmetry;
+
 	
 	/**  vitesse du robot sur la table. */
 	protected Speed speed;
@@ -65,10 +63,16 @@ public abstract class Robot implements Service
 	
 
 	/** état du parasol */
-	public boolean stateParasol = false;
+	public boolean isParasolUnfolded = false;
 
 	/** Booléen indiquant si les poissons sont récupérés, sert pour les versions du script Fishing */
-	public boolean AreFishesFished = false;
+	private boolean AreFishesFished = false;
+	
+	/** Booléen indiquant la présence de poisson sur les actionneurs */
+	private boolean AreFishesOnBoard = false;
+	
+	/** Booléen indiquant la présence de sable dans le robot */
+	private boolean IsSandInside = false;
 
 	
 	
@@ -96,7 +100,7 @@ public abstract class Robot implements Service
 	{
 		try 
 		{
-			symmetry = config.getProperty("couleur").replaceAll(" ","").equals("jaune");
+			symmetry = config.getProperty("couleur").replaceAll(" ","").equals("violet");
 	        robotRay = Integer.parseInt(config.getProperty("rayon_robot"));
 	        position = Table.entryPosition;
 	        orientation = Math.PI;
@@ -146,13 +150,49 @@ public abstract class Robot implements Service
 	
 	/**
 	 * Indique si les poissons ont été pêchés ou pas
-	 * @return 
 	 * @return Poisson pris ou non
 	 */
 	public boolean getAreFishesFished()
 	{
 		return AreFishesFished;
 	}
+	
+	/**
+	 * Change la valeur du booléen AreFishesOnBoard
+	 * @param booléen souhaité
+	 */
+	public void setAreFishesOnBoard(boolean areFishesOnBoard) 
+	{
+		this.AreFishesOnBoard = areFishesOnBoard;
+	}
+	
+	/**
+	 * Indique si les poissons sont sur le bras ou pas
+	 * @return Poisson sur bras ou non
+	 */
+	public boolean getAreFishesOnBoard() 
+	{
+		return AreFishesOnBoard;
+	}
+	
+	/**
+	 * Change la valeur du booléen IsSandInside
+	 * @param booléen souhaité
+	 */
+	public void setIsSandInside(boolean isSandInside) 
+	{
+		this.IsSandInside = isSandInside;
+	}
+	
+	/**
+	 * Indique si le sable est dans le robot ou pas
+	 * @return Sable pris ou non
+	 */
+	public boolean getIsSandInside() 
+	{
+		return IsSandInside;
+	}
+	
 	/**
 	 * Immobilise le robot.
 	 * Après l'appel de cette fonction, le robot sera immobile sur la table
@@ -181,7 +221,7 @@ public abstract class Robot implements Service
     public abstract void turn(double angle, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException;
     
 	/**
-	 * Fait avancer le robot de la distance spécifiée. Le robot garde son orientation actuelle et va simplement avancer.
+	 * Fait avancer le robot de la distanted PathDingDing pathDingDing;ce spécifiée. Le robot garde son orientation actuelle et va simplement avancer.
 	 * C'est la méthode que les utilisateurs (externes au développement du système de locomotion) vont utiliser
 	 * Cette méthode est bloquante: son exécution ne se termine que lorsque le robot a atteint le point d'arrivée
 	 * @param distance en mm que le robot doit franchir. Si cette distance est négative, le robot va reculer. Attention, en cas de distance négative, cette méthode ne vérifie pas s'il y a un système d'évitement a l'arrère du robot
@@ -301,7 +341,12 @@ public abstract class Robot implements Service
         turn(angle, null, false, false);
     }
 
-    
+    /**
+     * Met le sens de rotation dans Locomotion
+     * Refuse de mettre Turning.FASTEST s'il y a du sable dans le robot
+     */
+	public abstract boolean setTurningStrategy(TurningStrategy turning);
+
     
     
 	/**
@@ -501,15 +546,6 @@ public abstract class Robot implements Service
 		followPath(path , hooksToConsider);
     }
     
-
-	/**
-	 * Informe la classe Robot que le parasol est déployé.
-	 */
-	public void parasolUnfolded()
-	{
-		stateParasol = true;
-	}
-    
     
     /**
      * Active tout l'asservissement
@@ -544,5 +580,10 @@ public abstract class Robot implements Service
 	public abstract boolean getContactSensorValue(ContactSensors captor) throws SerialConnexionException;
 	
 	public abstract void turnWithoutDetection(double angle, ArrayList<Hook> hooks) throws UnableToMoveException;
+
+	public PathDingDing getPDD()
+	{
+		return pathDingDing;
+	}
 
 }

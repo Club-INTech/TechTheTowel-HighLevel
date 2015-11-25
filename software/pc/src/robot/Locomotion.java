@@ -1,6 +1,7 @@
 package robot;
 
 import container.Service;
+import enums.TurningStrategy;
 import enums.UnableToMoveReason;
 import exceptions.ConfigPropertyNotFoundException;
 import exceptions.Locomotion.BlockedException;
@@ -136,6 +137,9 @@ public class Locomotion implements Service
     public boolean isRobotMovingForward;
     public boolean isRobotMovingBackward;
 
+    /** Donne le sens de rotation */
+    private TurningStrategy turningStrategy = TurningStrategy.FASTEST;
+
 
     
     
@@ -222,7 +226,6 @@ public class Locomotion implements Service
      * @param hooks les potetniels hooks a prendre en compte (ne pas mettre null !)
      * @param wall vrai si on supppose qu'on vas se cogner dans un mur (et qu'il ne faut pas pousser dessus)
      * @param mustDetect true si on veut detecter, false sinon.
-     * @param speed la vitesse que doit prendre le robot pedant le deplacement (a donner imperativement si on utilise un hook)
      * @throws UnableToMoveException si le robot a un bloquage mecanique
      */
     public void moveLengthwise(int distance, ArrayList<Hook> hooks, boolean wall, boolean mustDetect) throws UnableToMoveException
@@ -367,7 +370,6 @@ public class Locomotion implements Service
      * @param hooks les potentiels hooks a prendre en compte (ne pas mettre null !)
      * @param isMovementForward vrai si on va en avant et faux si on va en arriere
      * @param headingToWall vrai si on suppose qu'on vas se cogner dans un mur (et qu'on veut s'arreter des qu'on cogne)
-     * @param isTurnRelative vrai si l'angle vise est relatif et pas absolu
      * @param turnOnly vrai si on veut uniquement tourner (et pas avancer)
      * @param mustDetect true si on veut detecter, false sinon.
      * @throws UnableToMoveException si le robot a un bloquage mecanique
@@ -398,7 +400,9 @@ public class Locomotion implements Service
     			log.critical( e.logStack());
                 log.critical("Haut : Catch de "+e+" dans moveToPointException");
                 
-                if (!headingToWall) // si on s'y attendait, on ne fais rien.
+             // si on s'y attendait, on ne fais rien.
+                
+                if (!headingToWall) //ici on ne s'y attendait pas donc on reagit
                 {
 	                if(maxRetriesIfBlocked!=0)
 	                {
@@ -421,7 +425,7 @@ public class Locomotion implements Service
 		                }
 
 	                }
-	                else
+	                else //if (maxRetriesIfBlocked==0)
 	                {
 		                unexpectedWallImpactCounter--;
 		                immobilise();
@@ -429,53 +433,44 @@ public class Locomotion implements Service
 		                /*
 		                 * En cas de blocage, on recule (si on allait tout droit) ou on avance.
 		                 */
-		                // Si on s'attendait à un mur, c'est juste normal de se le prendre.
-	               
-		                if(!headingToWall)
-		                {
-		                    try
-		                    {
-		                        log.warning("On n'arrive plus à avancer. On se dégage");
-		                        if(turnOnly)
-		                        {
-		                        	isRobotTurning=true;
-		                        	
-		                        	// TODO: les appels à déplacements sont non bloquants, il faut rajouter des sleeps
-		                        	// on alterne rotation à gauche et à droite
-		                        	if((unexpectedWallImpactCounter & 1) == 0)
-		                        		deplacements.turn(lowLevelOrientation+angleToDisengage);
-		                        	else
-		                        		deplacements.turn(lowLevelOrientation-angleToDisengage);                        	
-		                        }
-		                        else if(isMovementForward)
-		                            deplacements.moveLengthwise(distanceToDisengage);
-		                        else
-		                            deplacements.moveLengthwise(-distanceToDisengage);
-		                        while(!isMotionEnded());
-		                    		doItAgain = true; // si on est arrivé ici c'est qu'aucune exception n'a été levée
-		                    } 
-		                    catch (SerialConnexionException e1)
-		                    {
-		            			log.critical( e1.logStack());
-		                        log.debug("On ne fait rien après ceci: Catch de "+e1+" dans moveToPointException");
-		                    } 
-		                    catch (BlockedException e1)
-		                    {
-		            			log.critical( e1.logStack());
-		                        log.debug("Catch de "+e1+" dans moveToPointException");
-		                    	immobilise();                       
-		                        
+	
+	                    try
+	                    {
+	                        log.warning("On n'arrive plus à avancer. On se dégage");
+	                        if(turnOnly)
+	                        {
+	                        	isRobotTurning=true;
+	                        	
+	                        	// on alterne rotation à gauche et à droite
+	                        	if((unexpectedWallImpactCounter & 1) == 0)
+	                        		deplacements.turn(lowLevelOrientation+angleToDisengage);
+	                        	else
+	                        		deplacements.turn(lowLevelOrientation-angleToDisengage);
+	                        }
+	                        else if(isMovementForward)
+	                            deplacements.moveLengthwise(distanceToDisengage);
+	                        else
+	                            deplacements.moveLengthwise(-distanceToDisengage);
+	                        while(!isMotionEnded());
+	                    		doItAgain = true; // si on est arrivé ici c'est qu'aucune exception n'a été levée
+	                    } 
+	                    catch (SerialConnexionException e1)
+	                    {
+	            			log.critical( e1.logStack());
+	                        log.debug("On ne fait rien après ceci: Catch de "+e1+" dans moveToPointException");
+	                    } 
+	                    catch (BlockedException e1)
+	                    {
+	            			log.critical( e1.logStack());
+	                        log.debug("Catch de "+e1+" dans moveToPointException");
+	                    	immobilise();                       
+	                        
 
-			                    if(!doItAgain)
-			                    {
-			                        log.critical("Lancement de UnableToMoveException dans MoveToPointException, visant "+finalAim.x+" :: "+finalAim.y+" cause physique");
-			                        throw new UnableToMoveException(finalAim, UnableToMoveReason.PHYSICALLY_BLOCKED);
-			                    }
-							}
-		                }
-		                else 
-		                {
-	                        log.warning("On s'attendait à ce mur.");
+		                    if(!doItAgain)
+		                    {
+		                        log.critical("Lancement de UnableToMoveException dans MoveToPointException, visant "+finalAim.x+" :: "+finalAim.y+" cause physique");
+		                        throw new UnableToMoveException(finalAim, UnableToMoveReason.PHYSICALLY_BLOCKED);
+		                    }
 						}
 	                }
                 }
@@ -534,7 +529,6 @@ public class Locomotion implements Service
      * @param hooks les potentiels hooks a prendre en compte (ne pas mettre null !)
      * @param isMovementForward vrai si on va en avant et faux si on va en arriere
      * @param turnOnly vrai si on veut uniquement tourner (et pas avancer)
-     * @param isTurnRelative vrai si l'angle est relatif et pas absolu
      * @param mustDetect true si on veut detecter, false sinon.
      * @throws BlockedException si le robot a un bloquage mecanique
      * @throws UnexpectedObstacleOnPathException si le robot rencontre un obstacle inattendu sur son chemin (par les capteurs)
@@ -620,7 +614,6 @@ public class Locomotion implements Service
      * @param mustDetect si on autorise la detection pendant ce deplacement
      * @param turnOnly vrai si on veut uniquement tourner (et pas avancer)
      * @param isCorrection vrai si la consigne est une correction et pas un ordre de deplacement
-     * @param isTurnRelative vrai si l'angle est relatif et pas absolut
      * @throws BlockedException si le robot rencontre un obstacle innatendu sur son chemin (par les capteurs)
      * @throws UnexpectedObstacleOnPathException 
      */
@@ -691,77 +684,73 @@ public class Locomotion implements Service
      */
     private void moveToPointSerialOrder(Vec2 symmetrisedAim, Vec2 givenPosition, double angle, double distance, boolean mustDetect,boolean turnOnly, boolean isCorrection) throws BlockedException, UnexpectedObstacleOnPathException
     {
+        // On copie la stratégie de rotation pour éviter qu'elle soit modifiée en plein mouvement
+        TurningStrategy cTurningStrategy = turningStrategy;
+
     	boolean trajectoire_courbe = false;
+        double delta = (angle - lowLevelOrientation) % (2 * Math.PI);
 
-    	// Ce code fait juste un modulo 2*pi, avec un résultat entre -PI et +PI
-		double delta = (angle-lowLevelOrientation) % (2*Math.PI);
-		if(delta > Math.PI)
-			delta -= 2*Math.PI;
-		else if(delta < -Math.PI)
-			delta += 2*Math.PI;
-		
-		/**
-		 * Si on fait une correction, il faut vérifier la distance à la consigne et la correction
-		 * Si la distance est grande et l'angle petit, alors on fait la correction en angle sans s'arrêter
-		 * Sinon on annule la correction 
-		 * (par exemple, si le robot dépasse un peu la consigne, la correction le ferait se retourner ce qui n'est pas le résultat demandé)
-		 */
-		if(isCorrection)
-		{
-			//Si l'angle petit, alors on fait la correction en angle
-			if((Math.abs(delta) < Math.PI/8))
-			{
-				//on active la correction (on attendra pas d'avoir fini de tourner (le robot) pour reprendre le programme)
-				trajectoire_courbe = true;
-			}
-			else
-			{
-				log.debug("correction en abandon; delta :"+delta);
-				return;
-			}
-		}
 
-        try
-        {
-        	if(isCorrection && Math.abs(delta) > maxRotationCorrectionThreeshold)
-        	{
-        		isRobotTurning=true;// prochain ordre : on tourne
-                
-        		deplacements.turn(angle);  // On ne tourne que si on est assez loin de l'orientation voulu
-              
-        		log.debug("Angle corrigé");
-        	}
-        	else if(!isCorrection)// Si ca n'est pas  une correction
-        	{
-        		if(Math.abs(delta)>maxRotationCorrectionThreeshold)
-        		{// on ne tourne vraiment que si l'angle souhaité est vraiment different.
-	        		isRobotTurning=true;// prochain ordre : on tourne
-        		}
-                
-        		deplacements.turn(angle);
-        	}
-        	
-            // sans virage : la première rotation est bloquante
-            if(!trajectoire_courbe) 
-            	// on attend la fin du mouvement
-                while(!isMotionEnded()) 
-                {
-                	if(mustDetect)
-                		detectEnemyInDisk(true, true, highLevelPosition);
-                    Sleep.sleep(feedbackLoopDelay);
-                }
-            
-            isRobotTurning=false; // fin du turn
-            
-            if(!(turnOnly || isCorrection))
-            	deplacements.moveLengthwise(distance);
-        } 
-        catch (SerialConnexionException e)
-        {
-            log.critical("Catch de "+e+" dans moveToPointSerialOrder");
-			log.critical( e.logStack());
-            isRobotTurning=false; // Meme avec un catch, on a fini de tourner
+        if(cTurningStrategy == TurningStrategy.FASTEST) {
+            // Ce code fait juste un modulo 2*pi, avec un résultat entre -PI et +PI
+            if (delta > Math.PI)
+                delta -= 2 * Math.PI;
+            else if (delta < -Math.PI)
+                delta += 2 * Math.PI;
         }
+
+            /**
+             * Si on fait une correction, il faut vérifier la distance à la consigne et la correction
+             * Si la distance est grande et l'angle petit, alors on fait la correction en angle sans s'arrêter
+             * Sinon on annule la correction
+             * (par exemple, si le robot dépasse un peu la consigne, la correction le ferait se retourner ce qui n'est pas le résultat demandé)
+             */
+            if (isCorrection) {
+                //Si l'angle petit, alors on fait la correction en angle
+                if ((Math.abs(delta) < Math.PI / 8)) {
+                    //on active la correction (on attendra pas d'avoir fini de tourner (le robot) pour reprendre le programme)
+                    trajectoire_courbe = true;
+                } else {
+                    log.debug("correction en abandon; delta :" + delta);
+                    return;
+                }
+            }
+
+            try {
+                if (isCorrection && Math.abs(delta) > maxRotationCorrectionThreeshold) {
+                    isRobotTurning = true;// prochain ordre : on tourne
+
+                    //On utilise la stratégie FASTEST pour les petits mouvements
+                    deplacements.turn(angle, TurningStrategy.FASTEST);  // On ne tourne que si on est assez loin de l'orientation voulu
+
+                    log.debug("Angle corrigé");
+                } else if (!isCorrection)// Si ca n'est pas  une correction
+                {
+                    if (Math.abs(delta) > maxRotationCorrectionThreeshold) {// on ne tourne vraiment que si l'angle souhaité est vraiment different.
+                        isRobotTurning = true;// prochain ordre : on tourne
+                    }
+                    deplacements.turn(angle, cTurningStrategy);
+                }
+
+                // sans virage : la première rotation est bloquante
+                if (!trajectoire_courbe)
+                    // on attend la fin du mouvement
+                    while (!isMotionEnded()) {
+                        if (mustDetect)
+                            detectEnemyInDisk(true, true, highLevelPosition);
+                        Sleep.sleep(feedbackLoopDelay);
+                    }
+
+                isRobotTurning = false; // fin du turn
+
+                if (!(turnOnly || isCorrection))
+                    deplacements.moveLengthwise(distance);
+            } catch (SerialConnexionException e) {
+                log.critical("Catch de " + e + " dans moveToPointSerialOrder");
+                log.critical(e.logStack());
+                isRobotTurning = false; // Meme avec un catch, on a fini de tourner
+            }
+
     }
 
     
@@ -853,7 +842,6 @@ public class Locomotion implements Service
      * Lance une exception si un ennemi se trouve a une distance inférieure a celle spécifiée
      * @param distance distance jusqu'a un ennemi en mm en dessous de laquelle on doit abandonner le mouvement
      * @param movementDirection direction de mouvment du robot
-     * @param isMovementForward vrai si on va en avant et faux si on va en arriere
      * @throws UnexpectedObstacleOnPathException si obstacle sur le chemin
      */
     public void detectEnemyAtDistance(int distance, Vec2 movementDirection) throws UnexpectedObstacleOnPathException
@@ -871,7 +859,6 @@ public class Locomotion implements Service
     /**
      * Met à jour position et orientation via la carte d'asservissement.
      * Donne la veritable positions du robot sur la table
-     * @throws FinMatchException 
      * @throws SerialConnexionException
      */
     
@@ -926,7 +913,6 @@ public class Locomotion implements Service
 
     /**
      * Arrête le robot.
-     * @throws FinMatchException 
      */
     public void immobilise()
     {
@@ -945,8 +931,7 @@ public class Locomotion implements Service
     /**
      * Met à jour la position. A ne faire qu'en début de match.
      * @param positionWanted
-     * @throws SerialConnexionException 
-     * @throws FinMatchException 
+     * @throws SerialConnexionException
      */
     public void setPosition(Vec2 positionWanted)
     {
@@ -969,7 +954,6 @@ public class Locomotion implements Service
     /**
      * Met à jour l'orientation. A ne faire qu'en début de match.
      * @param orientation
-     * @throws FinMatchException 
      */
     public void setOrientation(double orientation)
     {
@@ -1005,6 +989,16 @@ public class Locomotion implements Service
     {
         updateCurrentPositionAndOrientation();
         return highLevelOrientation;
+    }
+    
+    public TurningStrategy getTurningOrders()
+    {
+    	return turningStrategy;
+    }
+    
+    public void setTurningOrders(TurningStrategy turning)
+    {
+    	this.turningStrategy = turning;
     }
 
     public void desasservit()

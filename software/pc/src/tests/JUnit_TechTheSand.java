@@ -1,5 +1,11 @@
 package tests;
 
+import java.util.ArrayList;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 import enums.ActuatorOrder;
 import enums.ScriptNames;
 import enums.ServiceNames;
@@ -9,28 +15,21 @@ import exceptions.PointInObstacleException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialFinallyException;
 import hook.Hook;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 import robot.Robot;
 import scripts.ScriptManager;
 import strategie.GameState;
 import table.Table;
-import java.util.ArrayList;
-
-//TODO Version du test temporaire jusqu'à meilleure connaissance des exceptions, et du fonctionnement général des JUnit 
 
 /**
- * teste la récupération des poissons des versions 0 et 1
+ * test des versions 0 et 1 de la prise du tas de sable central, ainsi que de son rapatriement
  * @author CF
- *
  */
-public class JUnit_Fishing extends JUnit_Test
+
+public class JUnit_TechTheSand extends JUnit_Test
 {
 	private GameState<Robot> theRobot;
-	private ScriptManager scriptManager;
 	private ArrayList<Hook> emptyHook = new ArrayList<Hook>();
+	private ScriptManager scriptManager;
 	
 	@SuppressWarnings("unchecked")
 	@Before
@@ -46,18 +45,17 @@ public class JUnit_Fishing extends JUnit_Test
 	@After
 	public void aftermath() throws Exception 
 	{
-		//on remonte les deux bras en même temps
-		theRobot.robot.useActuator(ActuatorOrder.ARM_INIT,false);
-		theRobot.robot.useActuator(ActuatorOrder.ARM_INIT,true);
+		//TODO à faire après avoir réglé la question de la communication avec le bas niveau, cf TechTheSand.java
 	}
 	
 	@Test
-	public void fishThem() throws UnableToMoveException
+	public void TechIt() throws UnableToMoveException
 	{
 		try
 		{
-			log.debug("Début de pêche");
-			scriptManager.getScript(ScriptNames.FISHING).execute(0, theRobot, emptyHook);
+			log.debug("Début de forage");
+			scriptManager.getScript(ScriptNames.TECH_THE_SAND).execute(0, theRobot, emptyHook);
+			scriptManager.getScript(ScriptNames.DROP_THE_SAND).execute(0, theRobot, emptyHook);
 		}
 		catch(ExecuteException | SerialFinallyException e)
 		{
@@ -73,4 +71,5 @@ public class JUnit_Fishing extends JUnit_Test
 			e.printStackTrace();
 		}
 	}
+
 }
