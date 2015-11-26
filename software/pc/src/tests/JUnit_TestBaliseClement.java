@@ -62,7 +62,7 @@ public class JUnit_TestBaliseClement extends JUnit_Test
 			}
 			catch (PointInObstacleException e)
 			{
-				log.debug("le point : "+point+" est dans un obtacle");
+				log.debug("le point : "+point+" est dans un obtacle (normal)");
 			}
 		}
 	}
