@@ -320,7 +320,7 @@ public class RobotChrono extends Robot
 	@Override
 	public void enableFeedbackLoop() throws SerialConnexionException 
 	{
-		// TODO Auto-generated method stub
+		// TODO
 	}
 
 }
