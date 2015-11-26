@@ -119,7 +119,9 @@ public class ObstacleManager
 		//Tapis Adverse
 		mRectangles.add(new ObstacleRectangular(new Vec2(-1350,850), 300 + 2*mRobotRadius, 500 + 2*mRobotRadius));
 
-		// TODO ajouter les points d'accroche du filet (ils dépassent sur la table, on a pas envie de se les manger)
+		// Points d'accroche du filet qui empiètent sur la mer
+		mRectangles.add(new ObstacleRectangular(new Vec2(561,1989),22 + 2*mRobotRadius, 22 + 2*mRobotRadius));
+		mRectangles.add(new ObstacleRectangular(new Vec2(-561,1989),22 + 2*mRobotRadius, 22 + 2*mRobotRadius));
 		
 	}
 
