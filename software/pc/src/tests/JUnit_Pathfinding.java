@@ -87,7 +87,7 @@ public class JUnit_Pathfinding extends JUnit_Test
             }
             else if(win.getMouse().hasClicked())
             {
-
+                robot.setTurningStrategy(win.getKeyboard().getTurningStrategy());
                 try
                 {
                     //table.getObstacleManager().setEnnemyRobot1Position(win.getMouse().getMiddleClickPosition());
