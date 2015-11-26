@@ -120,8 +120,8 @@ public class ObstacleManager
 		mRectangles.add(new ObstacleRectangular(new Vec2(-1350,850), 300 + 2*mRobotRadius, 500 + 2*mRobotRadius));
 
 		// Points d'accroche du filet qui empiètent sur la mer
-		mRectangles.add(new ObstacleRectangular(new Vec2(561,1989),22 + 2*mRobotRadius, 22 + 2*mRobotRadius));
-		mRectangles.add(new ObstacleRectangular(new Vec2(-561,1989),22 + 2*mRobotRadius, 22 + 2*mRobotRadius));
+		mRectangles.add(new ObstacleRectangular(new Vec2(561,11),22 + 2*mRobotRadius, 22 + 2*mRobotRadius));
+		mRectangles.add(new ObstacleRectangular(new Vec2(-561,11),22 + 2*mRobotRadius, 22 + 2*mRobotRadius));
 		
 	}
 

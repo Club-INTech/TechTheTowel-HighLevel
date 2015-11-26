@@ -52,7 +52,7 @@ public class JUnit_CloseDoors extends JUnit_Test
 		{
 			//On execute le script
 			log.debug("Script lance");
-			mRobot.robot.moveToLocation(new Vec2(-1000, 1500), new ArrayList<Hook>(), table);
+			mRobot.robot.moveToLocation(new Vec2(1000, 1500), new ArrayList<Hook>(), table);
 			scriptManager.getScript(ScriptNames.CLOSE_DOORS).execute(0, mRobot, emptyList);
 		}
 		catch(ExecuteException | SerialFinallyException e)
