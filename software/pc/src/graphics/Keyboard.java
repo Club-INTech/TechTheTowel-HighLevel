@@ -1,6 +1,7 @@
 package graphics;
 
 import enums.ActuatorOrder;
+import enums.TurningStrategy;
 import robot.RobotReal;
 
 import java.awt.event.KeyEvent;
@@ -11,6 +12,7 @@ public class Keyboard implements KeyListener
 {
 	//private RobotReal mRobot;
 	private boolean modeActual = false;
+	private TurningStrategy turningStr = TurningStrategy.FASTEST;
 	
 	
 	public Keyboard(/*RobotReal robot*/)
@@ -23,7 +25,7 @@ public class Keyboard implements KeyListener
 	{
 		if(e.getKeyCode() == KeyEvent.VK_Q)
 		{
-			
+			turningStr = TurningStrategy.LEFT_ONLY;
 		}
 		if(e.getKeyCode() == KeyEvent.VK_Z)
 		{
@@ -31,11 +33,11 @@ public class Keyboard implements KeyListener
 		}
 		if(e.getKeyCode() == KeyEvent.VK_S)
 		{
-			
+			turningStr = TurningStrategy.FASTEST;
 		}
-		if(e.getKeyCode() == KeyEvent.VK_I)
+		if(e.getKeyCode() == KeyEvent.VK_D)
 		{
-			
+			turningStr = TurningStrategy.RIGHT_ONLY;
 		}
 		if(e.getKeyCode() == KeyEvent.VK_A)
 		{
@@ -103,6 +105,11 @@ public class Keyboard implements KeyListener
 	public void resetModeActual()
 	{
 		modeActual = false;
+	}
+
+	public TurningStrategy getTurningStrategy()
+	{
+		return turningStr;
 	}
 
 	@Override
