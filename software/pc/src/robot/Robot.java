@@ -159,11 +159,11 @@ public abstract class Robot implements Service
 	
 	/**
 	 * Change la valeur du booléen AreFishesOnBoard
-	 * @param booléen souhaité
+	 * @param bool booléen souhaité
 	 */
-	public void setAreFishesOnBoard(boolean areFishesOnBoard) 
+	public void setAreFishesOnBoard(boolean bool) 
 	{
-		this.AreFishesOnBoard = areFishesOnBoard;
+		this.AreFishesOnBoard = bool;
 	}
 	
 	/**
