@@ -76,9 +76,6 @@ public class Graph
 	{
 		//TODO Améliorer le graphe
 		// On ajoute tous les nodes et on les relie ensemble en verifiant si on "intersect()" pas un obstacle
-		
-
-		
 		nodes.add(new Node(new Vec2(-1100, 1400)));
 		nodes.add(new Node(new Vec2(1100, 1400)));
 		nodes.add(new Node(new Vec2(0, 400)));
@@ -86,6 +83,15 @@ public class Graph
 		nodes.add(new Node(new Vec2(750, 600)));
 		nodes.add(new Node(new Vec2(-1150, 750)));
 		nodes.add(new Node(new Vec2(1150, 750)));
+
+		/*
+		nodes.add(new Node(new Vec2(-1100, 1400)));
+		nodes.add(new Node(new Vec2(1100, 1400)));
+		nodes.add(new Node(new Vec2(0, 400)));
+		nodes.add(new Node(new Vec2(-750, 600)));
+		nodes.add(new Node(new Vec2(750, 600)));
+		nodes.add(new Node(new Vec2(-1150, 750)));
+		nodes.add(new Node(new Vec2(1150, 750)));*/
 
 
         addObstacleNodes();
