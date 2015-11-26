@@ -65,7 +65,7 @@ public class JUnit_Pathfinding extends JUnit_Test
         {
             if(win.getKeyboard().isModeActual() && win.getMouse().hasClickedRight())
             {
-                robot.setTurningStrategy(win.getKeyboard().getTurningStrategy());
+            	robot.setTurningStrategy(win.getKeyboard().getTurningStrategy());
                 try
                 {
                     //table.getObstacleManager().setEnnemyRobot1Position(win.getMouse().getMiddleClickPosition());
@@ -83,7 +83,7 @@ public class JUnit_Pathfinding extends JUnit_Test
                 win.getPanel().repaint();
                 win.getKeyboard().resetModeActual();
                 win.getMouse().resetHasClicked();
-                robot.moveToLocation(win.getMouse().getRightClickPosition(), new ArrayList<Hook>(), table);
+                //robot.moveToLocation(win.getMouse().getRightClickPosition(), new ArrayList<Hook>(), table);
             }
             else if(win.getMouse().hasClicked())
             {

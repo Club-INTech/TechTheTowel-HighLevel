@@ -118,6 +118,7 @@ public class Node implements Comparable<Node>
 		double distance = Math.sqrt(Segment.squaredLength(this.getPosition(), start.getPosition()));
 
 		//TODO angle + constante
+		//TODO le produit scalaire échoue avec pour nodes (775,550) et (910,690)
 		/*if(parent != null)
 		{
 			Vec2 vecteur1 = new Vec2(parent.getPosition().x - start.getPosition().x,parent.getPosition().y - start.getPosition().y);
@@ -132,7 +133,6 @@ public class Node implements Comparable<Node>
 			return ((distance)+(angle)+offset);
 		} */
 		return ((distance)+offset);
-
 	}
 	
 	/**
