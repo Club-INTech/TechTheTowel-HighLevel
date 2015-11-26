@@ -37,7 +37,7 @@ public class JUnit_Pathfinding extends JUnit_Test
         log = (Log)container.getService(ServiceNames.LOG);
         win = new Window(table);
 
-        /*robot = (RobotReal)container.getService(ServiceNames.ROBOT_REAL);
+       /* robot = (RobotReal)container.getService(ServiceNames.ROBOT_REAL);
         robot.setPosition(Table.entryPosition);
         robot.setOrientation(Math.PI);*/
 
@@ -52,8 +52,30 @@ public class JUnit_Pathfinding extends JUnit_Test
         win.getPanel().drawGraph(pf.getGraph());
         while(true)
         {
-            if(win.getMouse().hasClicked())
+            if(win.getKeyboard().isModeActual() && win.getMouse().hasClickedRight())
             {
+                try
+                {
+                    //table.getObstacleManager().setEnnemyRobot1Position(win.getMouse().getMiddleClickPosition());
+                    win.getPanel().drawArrayList(pf.computePathVec2(robot.getPosition(), win.getMouse().getRightClickPosition()));
+
+                }
+                catch(PathNotFoundException e)
+                {
+                    log.debug("pas de chemin trouve entre "+robot.getPosition()+"et"+ win.getMouse().getRightClickPosition());
+                }
+                catch(PointInObstacleException e)
+                {
+                    log.debug("point d'arrivée dans un obstacle");
+                }
+                win.getPanel().repaint();
+                win.getKeyboard().resetModeActual();
+                win.getMouse().resetHasClicked();
+                //robot.moveToLocation(win.getMouse().getRightClickPosition(), new ArrayList<Hook>(), table);
+            }
+            else if(win.getMouse().hasClicked())
+            {
+
                 try
                 {
                     //table.getObstacleManager().setEnnemyRobot1Position(win.getMouse().getMiddleClickPosition());
@@ -72,25 +94,6 @@ public class JUnit_Pathfinding extends JUnit_Test
                 }
                 win.getPanel().repaint();
             }
-        /*    else if(win.getMouse().hasClicked() && win.getKeyboard().isModeActual())
-            {
-                try
-                {
-                    //table.getObstacleManager().setEnnemyRobot1Position(win.getMouse().getMiddleClickPosition());
-                    win.getPanel().drawArrayList(pf.computePathVec2(robot.getPosition(), win.getMouse().getRightClickPosition()));
-
-                }
-                catch(PathNotFoundException e)
-                {
-                    log.debug("pas de chemin trouve entre "+robot.getPosition()+"et"+ win.getMouse().getRightClickPosition());
-                }
-                catch(PointInObstacleException e)
-                {
-                    log.debug("point d'arrivée dans un obstacle");
-                }
-                win.getPanel().repaint();
-                robot.moveToLocation(win.getMouse().getRightClickPosition(), new ArrayList<Hook>(), table);
-            }*/
             else
                 Thread.sleep(200);
         }

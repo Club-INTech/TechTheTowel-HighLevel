@@ -9,13 +9,13 @@ import java.awt.event.KeyListener;
 
 public class Keyboard implements KeyListener
 {
-	private RobotReal mRobot;
-	private boolean modeActual;
+	//private RobotReal mRobot;
+	private boolean modeActual = false;
 	
 	
-	public Keyboard(RobotReal robot)
+	public Keyboard(/*RobotReal robot*/)
 	{
-		mRobot= robot;
+		//mRobot= robot;
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class Keyboard implements KeyListener
 		{
 			
 		}
-		if(e.getKeyCode() == KeyEvent.VK_CONTROL)
+		if(e.getKeyCode() == KeyEvent.VK_O)
 		{
 			modeActual = true;
 		}
@@ -86,7 +86,7 @@ public class Keyboard implements KeyListener
 		{
 			try
 			{
-				mRobot.useActuator(ActuatorOrder.STOP, false);
+				//mRobot.useActuator(ActuatorOrder.STOP, false);
 			}
 			catch(Exception exception)
 			{
@@ -97,12 +97,12 @@ public class Keyboard implements KeyListener
 
 	public boolean isModeActual()
 	{
-		if(modeActual)
-		{
-			modeActual = false;
-			return true;
-		}
-		return false;
+		return modeActual;
+	}
+
+	public void resetModeActual()
+	{
+		modeActual = false;
 	}
 
 	@Override

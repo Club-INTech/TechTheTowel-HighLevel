@@ -17,11 +17,13 @@ public class Mouse implements MouseListener
 	private Vec2 mLeftClickPosition;
 	private boolean mHasClicked;
 	private TablePanel mPanel;
+	private boolean mHasClickedRight;
 	
 	public Mouse(TablePanel pan)
 	{
 		mPanel = pan;
 		mHasClicked = false;
+		mHasClickedRight = false;
 		mRightClickPosition = new Vec2(0, 0);
 		mMiddleClickPosition = new Vec2(0, 0);
 		mLeftClickPosition = new Vec2(0, 0);
@@ -45,6 +47,8 @@ public class Mouse implements MouseListener
         {
         	mRightClickPosition.x = (e.getX()/* - 8*/) * 3000 / mPanel.getWidth() - 1500; // mettre 0 au lieu de 8 sous linux
         	mRightClickPosition.y = (-e.getY() + 31) * 2000 / mPanel.getHeight() + 2000; // mettre 0 au lieu de 31 sous windows
+			mHasClickedRight = true;
+
         }
     }
 
@@ -80,8 +84,25 @@ public class Mouse implements MouseListener
 		if(mHasClicked)
 		{
 			mHasClicked = false;
+            mHasClickedRight = false;
 			return true;
 		}
 		return false;
 	}
+
+	public boolean hasClickedRight()
+	{
+		if(mHasClickedRight)
+		{
+			mHasClickedRight = false;
+			return true;
+		}
+		return false;
+	}
+
+    public void resetHasClicked()
+    {
+        mHasClicked = false;
+    }
+
 }

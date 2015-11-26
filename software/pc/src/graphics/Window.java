@@ -36,7 +36,7 @@ public class Window extends JFrame
 	    mMouse = new Mouse(mPanel);
 	    addMouseListener(mMouse);
 	    
-	    mKeyboard = new Keyboard(robot);
+	    mKeyboard = new Keyboard();
 	    addKeyListener(mKeyboard);
 	}
 	
@@ -53,8 +53,8 @@ public class Window extends JFrame
 	    mMouse = new Mouse(mPanel);
 	    addMouseListener(mMouse);
 	    
-	    mMouse = new Mouse(mPanel);
-	    addMouseListener(mMouse);
+	    mKeyboard = new Keyboard();
+		addKeyListener(mKeyboard);
 	}
 	
 	public Window()
