@@ -15,6 +15,17 @@ import utils.Log;
 
 import java.util.ArrayList;
 
+
+/**
+ * Teste le PDD gràce à une inteface graphique ; peut aussi ordonner le robot à se déplacer à un point
+ * Commandes :
+ *        Clic gauche : pt de départ
+ *        Clic droit : pt d'arrivée
+ *        Touche O : le prochain clic sera un appel au robot, il se déplacera au dernier point spécifié par le clic droit
+ *        Touche S : Le robot peut tourner à gauche et à droite
+ *        Touche Q : Le robot ne peut tourner qu'à gauche
+ *        Touche D : Le robot ne peut tourner qu'à droite
+ */
 public class JUnit_Pathfinding extends JUnit_Test
 {
     Window win;
@@ -54,6 +65,7 @@ public class JUnit_Pathfinding extends JUnit_Test
         {
             if(win.getKeyboard().isModeActual() && win.getMouse().hasClickedRight())
             {
+                robot.setTurningStrategy(win.getKeyboard().getTurningStrategy());
                 try
                 {
                     //table.getObstacleManager().setEnnemyRobot1Position(win.getMouse().getMiddleClickPosition());
