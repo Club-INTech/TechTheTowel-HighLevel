@@ -289,7 +289,7 @@ public class ObstacleManager
 	 * Ajoute un obstacle rectangulaire
 	 * @param obs le ObstacleRectangular en question
      */
-	public void addRectangle(ObstacleRectangular obs)
+	public void addObstacle(ObstacleRectangular obs)
 	{
 		mRectangles.add(obs);
 	}
@@ -298,9 +298,27 @@ public class ObstacleManager
 	 * Ajoute un obstacle circulaire
 	 * @param obs le ObstacleCircular en question
      */
-	public void addCircular(ObstacleCircular obs)
+	public void addObstacle(ObstacleCircular obs)
 	{
 		mFixedObstacles.add(obs);
+	}
+
+	/**
+	 * Supprime la première occurence de cet obstacle
+	 * @param obs l'obstacle
+     */
+	public void removeObstacle(ObstacleCircular obs)
+	{
+		mFixedObstacles.remove(obs);
+	}
+
+	/**
+	 * Supprime la première occurence de cet obstacle
+	 * @param obs l'obstacle
+     */
+	public void removeObstacle(ObstacleRectangular obs)
+	{
+		mRectangles.remove(obs);
 	}
 
     /**
