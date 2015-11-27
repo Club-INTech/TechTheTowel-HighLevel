@@ -39,7 +39,7 @@ import java.util.Collections;
  *  Le code est commente a chaque etape, mais il est preferable de lire cet article pour une meilleure comprehension :
  *  http://www.gamedev.net/page/resources/_/technical/artificial-intelligence/a-pathfinding-for-beginners-r2003
  *  
- * @author julian
+ * @author discord
  *
  */
 public class PathDingDing implements Service
@@ -102,16 +102,15 @@ public class PathDingDing implements Service
 		}
 		
 		// On ajoute les noeuds de départ et d'arrivée au graphe (ignorés s'ils existent déjà)
-		Node endNode = new Node(end);
-		Node startNode = new Node(start, endNode);
-		graph.addNode(startNode);
-		graph.addNode(endNode);
+		Node endNode = 	graph.addNode(end);
+        Node startNode = graph.addNode(start, endNode);
+
 		
 		//===========================================
 		// DEBUT DE L'ALGORITHME A* - INITIALISATION
 		//===========================================
 
-        //On remet les parent des noeuds à zéro
+        //On remet les parent des noeuds à zéro ; c'est utile pour éviter les faux chemins
         graph.voidAllParents();
 
 		
@@ -167,6 +166,11 @@ public class PathDingDing implements Service
 			
 			//On prend les noeuds proches du dernier noeud fermé
 			related = this.graph.getRelatedNodes(lastClosedNode);
+
+            if(related.isEmpty())
+            {
+                log.critical("pas de lien pour "+lastClosedNode.getPosition());
+            }
 			
 			//On vérifie si un de ces noeuds n'existe pas déjà dans la liste des noeuds ouverts (pas de doublons)
 			// ou s'il est dans la liste des noeuds fermés
@@ -205,6 +209,8 @@ public class PathDingDing implements Service
 					while(related.remove(replicate))
 						i--;
 				}
+                if(i<0)
+                    break;
 			}
 			
 			
@@ -317,10 +323,10 @@ public class PathDingDing implements Service
         graph.removeNode(new Vec2((obs.getPosition().x),(obs.getPosition().y - obs.getRadius())));
 
         //on ajoute les nouveaux noeuds
-        graph.addNode(new Node(new Vec2((newPos.x + obs.getRadius()),(newPos.y))));
-        graph.addNode(new Node(new Vec2((newPos.x - obs.getRadius()),(newPos.y))));
-        graph.addNode(new Node(new Vec2((newPos.x),(newPos.y + obs.getRadius()))));
-        graph.addNode(new Node(new Vec2((newPos.x),(newPos.y - obs.getRadius()))));
+        graph.addNode(new Vec2((newPos.x + obs.getRadius()),(newPos.y)));
+        graph.addNode(new Vec2((newPos.x - obs.getRadius()),(newPos.y)));
+        graph.addNode(new Vec2((newPos.x),(newPos.y + obs.getRadius())));
+        graph.addNode(new Vec2((newPos.x),(newPos.y - obs.getRadius())));
 
         // On change les données du Vec2 au lieu de l'écraser par celui en argument
         // cela permet de changer la position en même temps dans la table
@@ -351,10 +357,10 @@ public class PathDingDing implements Service
         obs.getPosition().y = newPos.y;
 
         //on ajoute les nouveaux noeuds
-        graph.addNode(new Node(new Vec2((obs.getPosition().x - obs.getSizeX()),(obs.getPosition().y + obs.getSizeY()))));
-        graph.addNode(new Node(new Vec2((obs.getPosition().x - obs.getSizeX()),(obs.getPosition().y - obs.getSizeY()))));
-        graph.addNode(new Node(new Vec2((obs.getPosition().x + obs.getSizeX()),(obs.getPosition().y + obs.getSizeY()))));
-        graph.addNode(new Node(new Vec2((obs.getPosition().x + obs.getSizeX()),(obs.getPosition().y - obs.getSizeY()))));
+        graph.addNode(new Vec2((obs.getPosition().x - obs.getSizeX()),(obs.getPosition().y + obs.getSizeY())));
+        graph.addNode(new Vec2((obs.getPosition().x - obs.getSizeX()),(obs.getPosition().y - obs.getSizeY())));
+        graph.addNode(new Vec2((obs.getPosition().x + obs.getSizeX()),(obs.getPosition().y + obs.getSizeY())));
+        graph.addNode(new Vec2((obs.getPosition().x + obs.getSizeX()),(obs.getPosition().y - obs.getSizeY())));
 
     }
 

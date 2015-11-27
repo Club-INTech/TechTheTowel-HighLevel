@@ -26,6 +26,7 @@ public class Graph
 	 * Plus cette valeur est élevée, plus le calcul sera lent, mais plus le chemin sera optimisé
 	 * Une valeur trop petite peut rendre un noeud isolé s'il est trop éloigné des autres
 	 * Assimilable au clipping dans les moteurs 3D
+     * TODO L'améliorer
 	 */
 	public static final double IGNORE_DISTANCE = 1000000;
 
@@ -95,8 +96,8 @@ public class Graph
 
 
         addObstacleNodes();
-		//setAllLinks();
-		setAllLinksOptimised();
+		setAllLinks();
+		//setAllLinksOptimised();
 	}
 
 	public void computeAllHeuristic(Node goal)
@@ -117,9 +118,6 @@ public class Graph
         {
             if(nodes.get(i).getPosition().x == node.getPosition().x && nodes.get(i).getPosition().y == node.getPosition().y)
             {
-                // on supprime l'ancien et on ajoute le nouveau
-                nodes.remove(i);
-                nodes.add(i, node);
                 return true;
             }
         }
@@ -127,9 +125,25 @@ public class Graph
     }
 
 	/**
+	 * Vérifie si le Vec2 indiqué n'est pas déjà dans la liste des noeuds
+	 * @param point le lieu à vérifier
+	 */
+	public boolean alreadyContains(Vec2 point)
+	{
+		for(int i=0 ; i<nodes.size() ; i++)
+		{
+			if(nodes.get(i).getPosition().x == point.x && nodes.get(i).getPosition().y == point.y)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Relie tous les noeuds ensemble en vérifiant s'il n'y a pas d'intersection avec un obstacle
 	 */
-	public void setAllLinks()
+	public synchronized void setAllLinks()
 	{
 		//On vide la liste des noeuds pour la reconstruire
 		links.clear();
@@ -148,39 +162,71 @@ public class Graph
 			}
 		}
 	}
-	
-	/**
-	 * Ajoute un noeud et crée tous les liens qui le relient
-	 * @param node le noeud
-	 */
-	public void addNode(Node node)
-	{
-		//S'il existe déjà, on sort de la fonction
-    if(alreadyContains(node))
+
+    /**
+     * Créé les liens possibles entre le noeud donné et tous les autres noeuds du graphe
+     * @param node le noeud
+     */
+    private synchronized void setLinks(Node node)
     {
         for(int i=0 ; i<nodes.size() ; i++)
         {
-            if(!isObstructed(node, nodes.get(i)))
+            if(!nodes.get(i).equals(node) && !isObstructed(nodes.get(i), node))
             {
                 links.add(new Link(node, nodes.get(i)));
             }
         }
-        return;
     }
-		for(int i=0 ; i<nodes.size() ; i++)
-		{
-			if(!isObstructed(node, nodes.get(i)))
-			{
-				links.add(new Link(node, nodes.get(i)));
-			}
-		}
-		nodes.add(node);
-	}
+
+    /**
+     * Créé le noeud à partir d'un Vec2 et d'un but (calcul heuristique) ; le renvoie
+     * @param point la position
+     * @param goal le noeud d'arrivé (heuristique)
+     * @return le noeud crée ou trouvé si déjà existant
+     */
+    public synchronized Node addNode(Vec2 point, Node goal)
+    {
+        Node node = addNode(point);
+        node.computeHeuristic(goal);
+        return node;
+    }
+
+    /**
+     * Créé le noeud à partir d'un Vec2 ; le renvoie
+     * @param point la position
+     * @return le noeud crée ou trouvé si déjà existant
+     */
+    public synchronized Node addNode(Vec2 point)
+    {
+        // S'il n'existe pas, on le crée
+        if(!alreadyContains(point))
+        {
+            nodes.add(new Node(point));
+            setLinks(nodes.get(nodes.size()-1));
+            return nodes.get(nodes.size()-1);
+        }
+
+        //Sinon, on le cherche et on le renvoie
+        for(int i=0 ; i<nodes.size() ; i++)
+        {
+            if(nodes.get(i).getPosition().x == point.x && nodes.get(i).getPosition().y == point.y)
+            {
+                setLinks(nodes.get(i));
+                return nodes.get(i);
+            }
+        }
+        // Il n'est JAMAIS censé arriver là, mais bon... c'est conçu pour ne pas perturber le PDD en cas d'échec critique
+        log.critical("addNode a échoué à la position "+point+" revoit ton code, Discord !");
+        nodes.add(new Node(point));
+        setLinks(nodes.get(nodes.size()-1));
+        return nodes.get(nodes.size()-1);
+
+    }
 
 	/**
 	 * Relie tous les noeuds ensemble en vérifiant s'il n'y a pas d'intersection avec un obstacle ; méthode optimisée
 	 */
-	public void setAllLinksOptimised()
+	public synchronized void setAllLinksOptimised()
 	{
 		//On vide la liste des noeuds pour la reconstruire
 		links.clear();
@@ -253,32 +299,12 @@ public class Graph
 
         //On récupère les différents obstacles
         ArrayList<ObstacleRectangular> rectangularObstacles = obstacleManager.getRectangles();
-        ArrayList<ObstacleCircular> circleObstacles = obstacleManager.getFixedObstacles();
-        ArrayList<Segment> lineObstacles = obstacleManager.getLines();
 
-        //On vérifie l'intersection avec les cercles
-        for(int k=0 ; k<circleObstacles.size() ; k++)
-        {
-            if(Geometry.intersects(new Segment(node1.getPosition(), node2.getPosition()), circleObstacles.get(k).toCircle()))
-            {
-                return true;
-            }
-        }
-
-        //On vérifie l'intersection avec les lignes
-        for(int k=0 ; k<lineObstacles.size() ; k++)
-        {
-            if(Geometry.intersects(new Segment(node1.getPosition(), node2.getPosition()), lineObstacles.get(k)))
-            {
-                return true;
-            }
-        }
-
-        //On vérifie l'intersection
+        //On vérifie l'intersection avec les rectangles ; effectué en premier car plus probable
         for(int k=0 ; k<rectangularObstacles.size() ; k++)
         {
             ArrayList<Segment> segments = rectangularObstacles.get(k).getSegments();
-			if(rectangularObstacles.get(k).isInObstacle(node2.getPosition()) || rectangularObstacles.get(k).isInObstacle(node1.getPosition()))
+            if(rectangularObstacles.get(k).isInObstacle(node2.getPosition()) || rectangularObstacles.get(k).isInObstacle(node1.getPosition()))
             {
                 return true;
             }
@@ -291,6 +317,28 @@ public class Graph
             }
         }
 
+        ArrayList<ObstacleCircular> circleObstacles = obstacleManager.getFixedObstacles();
+
+        //On vérifie l'intersection avec les cercles
+        for(int k=0 ; k<circleObstacles.size() ; k++)
+        {
+            if(Geometry.intersects(new Segment(node1.getPosition(), node2.getPosition()), circleObstacles.get(k).toCircle()))
+            {
+                return true;
+            }
+        }
+
+        ArrayList<Segment> lineObstacles = obstacleManager.getLines();
+
+        //On vérifie l'intersection avec les lignes
+        for(int k=0 ; k<lineObstacles.size() ; k++)
+        {
+            if(Geometry.intersects(new Segment(node1.getPosition(), node2.getPosition()), lineObstacles.get(k)))
+            {
+                return true;
+            }
+        }
+
         return false;
     }
 
@@ -298,7 +346,7 @@ public class Graph
 	 * Ajoute les noeuds aux coins des obstacles ; permet d'optimiser le PathDingDing
      * On ajoute +1 ou -1 aux composantes pour être bien hors de l'obstacle
 	 */
-	public void addObstacleNodes()
+	public synchronized void addObstacleNodes()
 	{
 		ArrayList<ObstacleRectangular> rect = obstacleManager.getRectangles();
 		ArrayList<ObstacleCircular> cir = obstacleManager.getFixedObstacles();
@@ -311,19 +359,19 @@ public class Graph
             ObstacleRectangular r = rect.get(i);
 
             pos = new Vec2(r.getPosition().x + (r.getSizeX()/2) +1, (r.getPosition().y - r.getSizeY()/2) -1);
-            if(!isInObstacle(pos))
+            if(!isInObstacle(pos) && !alreadyContains(pos))
                 nodes.add(new Node(pos));
 
             pos = new Vec2(r.getPosition().x + (r.getSizeX()/2) +1, (r.getPosition().y + r.getSizeY()/2) +1);
-            if(!isInObstacle(pos))
+            if(!isInObstacle(pos) && !alreadyContains(pos))
                 nodes.add(new Node(pos));
 
             pos = new Vec2(r.getPosition().x - (r.getSizeX()/2) -1, (r.getPosition().y - r.getSizeY()/2) -1);
-            if(!isInObstacle(pos))
+            if(!isInObstacle(pos) && !alreadyContains(pos))
                 nodes.add(new Node(pos));
 
             pos = new Vec2(r.getPosition().x - (r.getSizeX()/2) -1, (r.getPosition().y + r.getSizeY()/2) +1);
-            if(!isInObstacle(pos))
+            if(!isInObstacle(pos) && !alreadyContains(pos))
                 nodes.add(new Node(pos));
 		}
 		/**
@@ -334,19 +382,19 @@ public class Graph
             ObstacleCircular c = cir.get(i);
 
             pos = new Vec2(c.getPosition().x + (int)(c.getRadius()*0.707) +1, c.getPosition().y + (int)(c.getRadius()*0.707) +1);
-            if(!isInObstacle(pos))
+            if(!isInObstacle(pos) && !alreadyContains(pos))
                 nodes.add(new Node(pos));
 
             pos = new Vec2(c.getPosition().x + (int)(c.getRadius()*0.707) +1, c.getPosition().y - (int)(c.getRadius()*0.707) -1);
-            if(!isInObstacle(pos))
+            if(!isInObstacle(pos) && !alreadyContains(pos))
                 nodes.add(new Node(pos));
 
             pos = new Vec2(c.getPosition().x - (int)(c.getRadius()*0.707) -1, c.getPosition().y + (int)(c.getRadius()*0.707) +1);
-            if(!isInObstacle(pos))
+            if(!isInObstacle(pos) && !alreadyContains(pos))
                 nodes.add(new Node(pos));
 
             pos = new Vec2(c.getPosition().x - (int)(c.getRadius()*0.707) -1, c.getPosition().y - (int)(c.getRadius()*0.707) -1);
-            if(!isInObstacle(pos))
+            if(!isInObstacle(pos) && !alreadyContains(pos))
                 nodes.add(new Node(pos));
         }
 	}
@@ -357,7 +405,6 @@ public class Graph
 	 */
 	public ArrayList<Node> getRelatedNodes(Node node)
 	{
-		//TODO Optimiser cette méthode pour réduire le temps de calcul
 		ArrayList<Node> related = new ArrayList<Node>();
 		
 		for(int i = 0 ; i < links.size() ; i++)
@@ -410,7 +457,7 @@ public class Graph
 	/**
 	 * Supprime un noeud du graphe
 	 */
-	public void removeNode(Vec2 pos)
+	public synchronized void removeNode(Vec2 pos)
 	{
 		for(int i =0 ; i<nodes.size() ; i++)
 		{
