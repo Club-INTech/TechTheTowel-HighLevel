@@ -24,7 +24,7 @@ public enum ActuatorOrder
 	MIDLE_POSITION("mp"),
 	FREE_FISHES("ff"),
 	
-	// Consigne pour remettre les bras en position initiale
+	// Consigne pour remettre les bras en position initiale, à implémenter au bas niveau
 	ARM_INIT("ai"),
 	
 	//Consigne d'ouverture du parasol
