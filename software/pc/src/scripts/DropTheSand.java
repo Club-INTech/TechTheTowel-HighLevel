@@ -55,8 +55,10 @@ public class DropTheSand extends AbstractScript
         return 0;
     }
 
+    /* Renvoie la position d'entree du script suivant la version en argument*/
     @Override
-    public Circle entryPosition(int version, int ray, Vec2 robotPosition) {
+    public Circle entryPosition(int version, int ray, Vec2 robotPosition)
+    {
         if(version == 0)
         {
             return new Circle(0, 1800, 0);
