@@ -127,7 +127,7 @@ public class ObstacleManager
 
 
     /**
-     * Rends le gestionnaire d'obstacle fourni en argument explicite égal a ce gestionnaire.
+     * Rend le gestionnaire d'obstacle fourni en argument explicite égal a ce gestionnaire.
      *
      * @param other les gestionnaire a modifier
      */
@@ -137,14 +137,14 @@ public class ObstacleManager
     }
 
     /**
-     *  Cette instance est elle dans le même état que celle fournie en arguement explicite ?
+     *  Cette instance est elle dans le même état que celle fournie en argument explicite ?
      *
      * @param other l'autre instance a comparer
-     * @return true, si les deux instance sont dans le meme etat
+     * @return true, si les deux instances sont dans le meme etat
      */
     public boolean equals(ObstacleManager other)
     {
-    	//TODO innutilise
+    	//TODO inutilise
     	boolean IDontKnow = false;
         return IDontKnow;
     }
@@ -274,7 +274,7 @@ public class ObstacleManager
     			mUntestedMobileObstacles.add(new ObstacleProximity(position, radius, timeToTestObstacle));
 
     			
-    		/*on ne test pas si la position est dans un obstcle deja existant 
+    		/*on ne test pas si la position est dans un obstacle deja existant 
     		 *on ne detecte pas les plots ni les gobelets (et si on les detectes on prefere ne pas prendre le risque et on les evites)
     		 * et si on detecte une deuxieme fois l'ennemi on rajoute un obstacle sur lui
     		 */
@@ -328,7 +328,7 @@ public class ObstacleManager
     public synchronized void removeOutdatedObstacles()
     {
     	
-    	// enlève les obstacles confirmées s'ils sont périmés
+    	// enlève les obstacles confirmés s'ils sont périmés
     	for(int i = 0; i < mMobileObstacles.size(); i++)
     		if(mMobileObstacles.get(i).getOutDatedTime() < System.currentTimeMillis())
     		{
