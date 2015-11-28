@@ -126,12 +126,75 @@ public class PathDingDing implements Service
 		}
 		
 		// Idem test d'isolation du départ
-		// TODO Ajuster pour sortir de l'obstacle 
+		// TODO Ajuster pour sortir de l'obstacle
+		
+		//======================================================================================================================
+		// Sortie d'obstacle - Partie traitant le cas où l'on doit sortir d'un obstacle avant de pouvoir débuter l'A* proprement
+		//======================================================================================================================
+		
 		if(graph.isInObstacle(start))
-		{
+		{/*
 			log.critical("PDD : noeud de départ isolé");
 			
 			throw new PointInObstacleException(startNode, graph.getObstacleManager());
+		 */
+			// Regarde quel est l'obstacle qui pose problème dans les différents obstacles possibles, ce qui est un peu lourd puisque Graph le fait déjà en amont
+			// Du coup, pourrait-on étendre les capacités de réponse de la méthode isInObstacle de Graph ? Y a-t-il bien plus simple et je suis aveugle ?
+			
+			// Dans les différents rectangles
+			ArrayList<ObstacleRectangular> rectObs = graph.getObstacleManager().getRectangles();
+			for (int i=0; i<rectObs.size(); i++)
+			{
+				// Si le point de départ coïncide avec un des éléments
+				if (rectObs.get(i).isInObstacle(start))
+				{
+					// On récupère l'élément problématique
+					ObstacleRectangular prob = new ObstacleRectangular(rectObs.get(i).getPosition(), rectObs.get(i).getSizeX(), rectObs.get(i).getSizeY());
+					
+					// On le supprime temporairement pour que le robot puisse en sortir
+					graph.getObstacleManager().removeObstacle(prob);
+					
+					/*
+					 * J'ai 2 idées à partir d'ici, il faut que j'en discute avec Julian et/ou les 2A
+					 * 
+					 * Soit je refais un appel au PDD pour que le robot parte immédiatement de l'obstacle comme il le souhaite, mais ça m'a l'air débile
+					 *
+					 * Soit on modifie légèrement l'A* pour ne pas vider en amont la liste des noeuds parents et on l'utilise pour que le robot "remonte le temps"
+					 * et accède à la position d'un noeud n'étant pas dans l'obstacle problématique. 
+					 * Ainsi, on serait sûr qu'il puisse bouger sans encombres, puis on initialise la liste des noeuds et on laisse le PDD originellement prévu reprendre.
+					 * 
+					 * Pour l'instant, j'écris la première idée
+					 */
+					
+					// Relance de l'A* sans l'obstacle problématique
+					this.computePath(start, end);
+					
+					// Rajout de l'obstacle en fin de calcul
+					graph.getObstacleManager().addObstacle(prob);
+					
+				}
+			}
+			
+			//Dans les différents cercles
+			ArrayList<ObstacleCircular> circObs = graph.getObstacleManager().getFixedObstacles();
+			for (int i=0; i<circObs.size();i++)
+			{
+				// Si le point de départ coïncide avec une des éléments
+				if (circObs.get(i).isInObstacle(start))
+				{
+					// On récupère l'élément problématique
+					ObstacleCircular prob = new ObstacleCircular(circObs.get(i).getPosition(), circObs.get(i).getRadius());
+					
+					// On le supprime temporairemnt pour que le robot puisse en sortir
+					graph.getObstacleManager().removeObstacle(prob);
+					
+					// Relance de l'A* sans l'obstacle problématique
+					this.computePath(start, end);
+					
+					// Rajout de l'obstacle en fin de calcul
+					graph.getObstacleManager().addObstacle(prob);
+				}
+			}
 		}
 
 		// D'abord, on ajoute les noeuds adjacents au depart dans la liste ouverte
