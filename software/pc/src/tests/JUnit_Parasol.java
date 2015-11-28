@@ -12,6 +12,8 @@ import robot.Robot;
 import scripts.ScriptManager;
 import strategie.GameState;
 
+// JUnit du magnifique proto de mon chef de projet préféré. Signé : Delphine
+
 public class JUnit_Parasol extends JUnit_Test
 {
 	private GameState<Robot> virtualState;
