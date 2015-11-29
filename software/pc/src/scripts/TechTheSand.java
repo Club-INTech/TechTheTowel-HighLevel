@@ -79,6 +79,9 @@ public class TechTheSand extends AbstractScript
 				// On indique au robot qu'il transporte du sable
 				stateToConsider.robot.setIsSandInside(true);
 				
+				// On desactive la tige accrochante
+				// TODO même tâche que celle au dessus: sur quel type de message communiquer avec le bas niveau ?
+				
 				// On s'oriente vers notre serviette
 				stateToConsider.robot.turn(0);
 				
@@ -117,6 +120,9 @@ public class TechTheSand extends AbstractScript
 				
 				// On indique au robot qu'il transporte du sable
 				stateToConsider.robot.setIsSandInside(true);
+				
+				// On desactive la tige accrochante
+				// TODO même tâche que celle au dessus: sur quel type de message communiquer avec le bas niveau ?
 				
 				// On s'oriente vers notre serviette
 				stateToConsider.robot.turn((Math.PI));

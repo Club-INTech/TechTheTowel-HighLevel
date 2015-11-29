@@ -22,7 +22,7 @@ import java.util.ArrayList;
  * @author CF
  */
 
-// TODO Ce script est encore temporaire, surtout concernant le finalize, les exceptions,les versions et le booléen concernant la prose des poissons
+// TODO Ce script est encore temporaire, surtout concernant le finalize, les exceptions,les versions et le booléen concernant la pose des poissons
 
 public class Fishing extends AbstractScript
 {
