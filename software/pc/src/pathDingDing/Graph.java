@@ -154,7 +154,7 @@ public class Graph
 			{
 				if(j>i)
 				{
-					if(!isObstructed(nodes.get(i), nodes.get(j)))
+					if(!isObstructed(nodes.get(i), nodes.get(j)) && !linkAlreadyExists(nodes.get(j), nodes.get(i)))
 					{
 						links.add(new Link(nodes.get(j), nodes.get(i)));
 					}

@@ -110,9 +110,6 @@ public class PathDingDing implements Service
 		// DEBUT DE L'ALGORITHME A* - INITIALISATION
 		//===========================================
 
-        //On remet les parent des noeuds à zéro ; c'est utile pour éviter les faux chemins
-        graph.voidAllParents();
-
 		
 		// On ajoute le noeud de départ à la liste des nodes fermés
 		this.closedNodes.add(startNode);
@@ -166,10 +163,11 @@ public class PathDingDing implements Service
 					 */
 					
 					// Relance de l'A* sans l'obstacle problématique
-					this.computePath(start, end);
+					ArrayList<Node> path = this.computePath(start, end);
 					
 					// Rajout de l'obstacle en fin de calcul
 					graph.getObstacleManager().addObstacle(prob);
+					return path;
 					
 				}
 			}
@@ -362,7 +360,8 @@ public class PathDingDing implements Service
 			this.openNodes = new ArrayList<Node>();
 			this.closedNodes = new ArrayList<Node>();
 		}
-        graph.setAllLinksOptimised();
+		//TODO empêcher un calcul inutile du graphe
+        //graph.setAllLinksOptimised();
 	}
 
 

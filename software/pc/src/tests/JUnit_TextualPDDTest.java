@@ -88,7 +88,7 @@ public class JUnit_TextualPDDTest extends JUnit_Test
 	    	ArrayList<Node> path;
 			try 
 			{
-				path = pf.computePath(new Vec2(300, 1000), new Vec2(1000, 1500));
+				path = pf.computePath(new Vec2(-300, 1000), new Vec2(1000, 1500));
 				
 	    		ArrayList<Vec2> pathVec = new ArrayList<Vec2>();
 	    		for(int i=0 ; i<path.size() ; i++)
