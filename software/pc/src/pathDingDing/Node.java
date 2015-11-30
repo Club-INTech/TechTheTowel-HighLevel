@@ -3,6 +3,8 @@ package pathDingDing;
 import smartMath.Segment;
 import smartMath.Vec2;
 
+import javax.lang.model.type.NullType;
+
 /**
  *  Noeud d'un graphe de pathDingDing
  * @author julian
@@ -118,20 +120,23 @@ public class Node implements Comparable<Node>
 		double distance = Math.sqrt(Segment.squaredLength(this.getPosition(), start.getPosition()));
 
 		//TODO angle + constante
-		//TODO le produit scalaire échoue avec pour nodes (775,550) et (910,690)
-		/*if(parent != null)
+
+		if(parent != null)
 		{
 			Vec2 vecteur1 = new Vec2(parent.getPosition().x - start.getPosition().x,parent.getPosition().y - start.getPosition().y);
 			Vec2 vecteur2 = new Vec2(this.getPosition().x - start.getPosition().x,this.getPosition().y - start.getPosition().y);
 			// Calcul des vecteurs entre le node start et le node parent, ainsi que le node start vers le node this
 			double produitscalaire = vecteur1.x*vecteur2.x + vecteur1.y*vecteur2.y;
-			// Calcul du produit scalaire de ces deux vecteurs
-			produitscalaire /= vecteur1.length()*vecteur2.length();
-			// Par division des normes, on obtient le cosinus de l'angle entre les deux vecteurs, donc l'angle via arcos
-			double angle = Math.PI - Math.abs(Math.acos(produitscalaire));
-			// On retranche a pi l'angle calculé pour déterminer l'angle avec lequel se ré-oriente le robot
-			return ((distance)+(angle)+offset);
-		} */
+            if(vecteur1.length() != 0 && vecteur2.length() != 0) //On a des pb de noeuds avec la même pos TODO A régler !
+            {
+                // Calcul du produit scalaire de ces deux vecteurs
+                produitscalaire /= vecteur1.length() * vecteur2.length();
+                // Par division des normes, on obtient le cosinus de l'angle entre les deux vecteurs, donc l'angle via arcos
+                double angle = Math.PI - Math.abs(Math.acos(produitscalaire));
+                // On retranche a pi l'angle calculé pour déterminer l'angle avec lequel se ré-oriente le robot
+                return ((distance) + (angle) + offset);
+            }
+		}
 		return ((distance)+offset);
 	}
 	

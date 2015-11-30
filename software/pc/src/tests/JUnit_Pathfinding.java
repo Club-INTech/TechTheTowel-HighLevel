@@ -47,10 +47,10 @@ public class JUnit_Pathfinding extends JUnit_Test
         table = (Table)container.getService(ServiceNames.TABLE);
         log = (Log)container.getService(ServiceNames.LOG);
         win = new Window(table);
-
+/*
         robot = (RobotReal)container.getService(ServiceNames.ROBOT_REAL);
         robot.setPosition(Table.entryPosition);
-        robot.setOrientation(Math.PI);
+        robot.setOrientation(Math.PI);*/
 
         pf = (PathDingDing)container.getService(ServiceNames.PATHDINGDING);
     }
@@ -65,7 +65,9 @@ public class JUnit_Pathfinding extends JUnit_Test
         {
             if(win.getKeyboard().isModeActual() && win.getMouse().hasClickedRight())
             {
-            	robot.setTurningStrategy(win.getKeyboard().getTurningStrategy());
+
+                //robot.setTurningStrategy(win.getKeyboard().getTurningStrategy());
+
                 try
                 {
                     //table.getObstacleManager().setEnnemyRobot1Position(win.getMouse().getMiddleClickPosition());
@@ -87,7 +89,7 @@ public class JUnit_Pathfinding extends JUnit_Test
             }
             else if(win.getMouse().hasClicked())
             {
-                robot.setTurningStrategy(win.getKeyboard().getTurningStrategy());
+               // robot.setTurningStrategy(win.getKeyboard().getTurningStrategy());
                 try
                 {
                     //table.getObstacleManager().setEnnemyRobot1Position(win.getMouse().getMiddleClickPosition());
