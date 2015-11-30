@@ -329,6 +329,7 @@ public class PathDingDing implements Service
 		//==================================
 		// On cherche à optimiser le chemin
 		//==================================
+		/*
 		for(int i=0 ; i<(result.size()-2) ; i++)
 		{
 			for(int j=i+2; j<(result.size()) ; j++)
@@ -343,7 +344,7 @@ public class PathDingDing implements Service
 					}
 				}
 			}
-		}
+		}*/
 
 
         // ET C'EST FUCKING TERMINE !!!!
