@@ -171,11 +171,24 @@ public class Graph
     {
         for(int i=0 ; i<nodes.size() ; i++)
         {
-            if(!nodes.get(i).equals(node) && !isObstructed(nodes.get(i), node))
+            if(!nodes.get(i).equals(node) && !isObstructed(nodes.get(i), node) && !linkAlreadyExists(nodes.get(i), node))
             {
                 links.add(new Link(node, nodes.get(i)));
             }
         }
+    }
+
+    /**
+     * Revoie vrai si un lien existe déjà entre ces noeuds
+     */
+    private boolean linkAlreadyExists(Node node1, Node node2)
+    {
+        for(int i=0 ; i<links.size() ; i++)
+        {
+            if(links.get(i).equals(node1, node2))
+                return true;
+        }
+        return false;
     }
 
     /**

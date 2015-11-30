@@ -65,4 +65,14 @@ public class Link
 		}
 		return endNode;
 	}
+
+	public boolean equals(Link other)
+	{
+		return other.isRelated(this.endNode) && other.isRelated(this.startNode);
+	}
+
+	public boolean equals(Node a, Node b)
+	{
+		return this.isRelated(a) && this.isRelated(b);
+	}
 }

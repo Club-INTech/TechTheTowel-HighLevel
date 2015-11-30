@@ -209,8 +209,6 @@ public class PathDingDing implements Service
 					while(related.remove(replicate))
 						i--;
 				}
-                if(i<0)
-                    break;
 			}
 			
 			
