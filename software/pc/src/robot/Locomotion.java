@@ -1015,7 +1015,7 @@ public class Locomotion implements Service
         }
     }
 
-    public void setRotationnalSpeed(float rotationSpeed) throws SerialConnexionException
+    public void setRotationnalSpeed(double rotationSpeed) throws SerialConnexionException
     {
         deplacements.setRotationnalSpeed(rotationSpeed);
     }

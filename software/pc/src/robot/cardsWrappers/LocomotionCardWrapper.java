@@ -256,10 +256,10 @@ public class LocomotionCardWrapper implements Service
 	 * @param rotationSpeed la nouvelle valeur maximum que peut prenvent prendre les pwm des moteurs lors d'une rotation
 	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
 	 */
-	public void setRotationnalSpeed(float rotationSpeed) throws SerialConnexionException
+	public void setRotationnalSpeed(double rotationSpeed) throws SerialConnexionException
 	{
 		// envoie a la carte d'asservissement le nouveau maximum du pwm
-		String chaines[] = {"crv", Float.toString(rotationSpeed)};
+		String chaines[] = {"crv", Double.toString(rotationSpeed)};
 		locomotionCardSerial.communiquer(chaines, 0);
 	}
 	
