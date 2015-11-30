@@ -26,7 +26,7 @@ public class JUnit_TextualPDDTest extends JUnit_Test
 	RobotReal robot;
 	Log log;
 	long time;
-	
+	int sum=0;
 
 	public static void main(String[] args) throws Exception
 	{                    
@@ -88,7 +88,7 @@ public class JUnit_TextualPDDTest extends JUnit_Test
 	    	ArrayList<Node> path;
 			try 
 			{
-				path = pf.computePath(new Vec2(-300, 1000), new Vec2(1000, 1500));
+				path = pf.computePath(new Vec2(-300, 1000), new Vec2(350, 1000));
 				
 	    		ArrayList<Vec2> pathVec = new ArrayList<Vec2>();
 	    		for(int i=0 ; i<path.size() ; i++)
@@ -100,9 +100,12 @@ public class JUnit_TextualPDDTest extends JUnit_Test
 			{
 	    		e.printStackTrace();
 			}
-			timeUsed+=System.currentTimeMillis()-time+"//";
+			long maBite = System.currentTimeMillis()-time;
+			sum+=maBite;
+			timeUsed+=maBite+"//";
     	}
     	log.debug(timeUsed);
+		log.debug((float)sum/30);
     }
     
 }
