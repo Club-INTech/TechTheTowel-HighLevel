@@ -186,10 +186,11 @@ public class PathDingDing implements Service
 					graph.getObstacleManager().removeObstacle(prob);
 					
 					// Relance de l'A* sans l'obstacle problématique
-					this.computePath(start, end);
+					ArrayList<Node> path = this.computePath(start, end);
 					
 					// Rajout de l'obstacle en fin de calcul
 					graph.getObstacleManager().addObstacle(prob);
+					return path;
 				}
 			}
 		}
@@ -357,8 +358,8 @@ public class PathDingDing implements Service
 	{
 		if(!openNodes.isEmpty() || !closedNodes.isEmpty())
 		{
-			this.openNodes = new ArrayList<Node>();
-			this.closedNodes = new ArrayList<Node>();
+			this.openNodes.clear();
+			this.closedNodes.clear();
 		}
 		//TODO empêcher un calcul inutile du graphe
         //graph.setAllLinksOptimised();
