@@ -224,7 +224,7 @@ public class Graph
         }
 
         //Sinon on le renvoie
-		setLinks(nodes.get(pos));
+		setLinks(nodes.get(pos)); //On refait ses liens car si l'arrivée et le départ sont visibles, on purra les relier
 		return nodes.get(pos);
     }
 

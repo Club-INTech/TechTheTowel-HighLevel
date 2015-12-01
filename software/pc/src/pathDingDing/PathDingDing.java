@@ -83,7 +83,7 @@ public class PathDingDing implements Service
 	 */
 	public ArrayList<Node> computePath(Vec2 start, Vec2 end) throws PointInObstacleException, PathNotFoundException
 	{
-		
+		long time = System.currentTimeMillis();
 		//On vide les listes de nodes pour un nouveau calcul
 		this.initialise();
 		
@@ -210,7 +210,7 @@ public class PathDingDing implements Service
 		// On ajoute le meilleur noeud (en premier dans openNodes) dans la liste fermée
 		closedNodes.add(openNodes.get(0));
 		openNodes.remove(0);
-		
+		log.debug("Temps d'init. A* = "+(System.currentTimeMillis()-time)+" ms");
 		//====================================================================
 		// Boucle principale - Recherche de l'arrivée en parcourant le graphe
 		//====================================================================
