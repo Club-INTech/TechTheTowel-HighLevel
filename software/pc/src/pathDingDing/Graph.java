@@ -111,33 +111,35 @@ public class Graph
     /**
      * Vérifie si le noeud indiqué n'est pas déjà dans la liste des noeuds
      * @param node le noeud à vérifier
+	 * @return -1 si inexistant , la position dans nodes sinon
      */
-    public boolean alreadyContains(Node node)
+    public int alreadyContains(Node node)
     {
         for(int i=0 ; i<nodes.size() ; i++)
         {
             if(nodes.get(i).getPosition().x == node.getPosition().x && nodes.get(i).getPosition().y == node.getPosition().y)
             {
-                return true;
+                return i;
             }
         }
-        return false;
+        return -1;
     }
 
 	/**
 	 * Vérifie si le Vec2 indiqué n'est pas déjà dans la liste des noeuds
 	 * @param point le lieu à vérifier
+	 * @return -1 si inexistant , la position dans nodes sinon
 	 */
-	public boolean alreadyContains(Vec2 point)
+	public int alreadyContains(Vec2 point)
 	{
 		for(int i=0 ; i<nodes.size() ; i++)
 		{
 			if(nodes.get(i).getPosition().x == point.x && nodes.get(i).getPosition().y == point.y)
 			{
-				return true;
+				return i;
 			}
 		}
-		return false;
+		return -1;
 	}
 
 	/**
@@ -154,7 +156,7 @@ public class Graph
 			{
 				if(j>i)
 				{
-					if(!isObstructed(nodes.get(i), nodes.get(j)) && !linkAlreadyExists(nodes.get(j), nodes.get(i)))
+					if(!isObstructed(nodes.get(i), nodes.get(j)) && (linkAlreadyExists(nodes.get(j), nodes.get(i))==-1))
 					{
 						links.add(new Link(nodes.get(j), nodes.get(i)));
 					}
@@ -171,7 +173,7 @@ public class Graph
     {
         for(int i=0 ; i<nodes.size() ; i++)
         {
-            if(!nodes.get(i).equals(node) && !isObstructed(nodes.get(i), node) && !linkAlreadyExists(nodes.get(i), node))
+            if(!nodes.get(i).equals(node) && !isObstructed(nodes.get(i), node) && (linkAlreadyExists(nodes.get(i), node)==-1))
             {
                 links.add(new Link(node, nodes.get(i)));
             }
@@ -179,16 +181,17 @@ public class Graph
     }
 
     /**
-     * Revoie vrai si un lien existe déjà entre ces noeuds
+     * Revoie la position dans links si un lien existe déjà entre ces noeuds
+	 * Sinon renvoie -1
      */
-    private boolean linkAlreadyExists(Node node1, Node node2)
+    private int linkAlreadyExists(Node node1, Node node2)
     {
         for(int i=0 ; i<links.size() ; i++)
         {
             if(links.get(i).equals(node1, node2))
-                return true;
+                return i;
         }
-        return false;
+        return -1;
     }
 
     /**
@@ -212,28 +215,17 @@ public class Graph
     public synchronized Node addNode(Vec2 point)
     {
         // S'il n'existe pas, on le crée
-        if(!alreadyContains(point))
+		int pos = alreadyContains(point);
+        if(pos == -1)
         {
             nodes.add(new Node(point));
             setLinks(nodes.get(nodes.size()-1));
             return nodes.get(nodes.size()-1);
         }
 
-        //Sinon, on le cherche et on le renvoie
-        for(int i=0 ; i<nodes.size() ; i++)
-        {
-            if(nodes.get(i).getPosition().x == point.x && nodes.get(i).getPosition().y == point.y)
-            {
-                setLinks(nodes.get(i));
-                return nodes.get(i);
-            }
-        }
-        // Il n'est JAMAIS censé arriver là, mais bon... c'est conçu pour ne pas perturber le PDD en cas d'échec critique
-        log.critical("addNode a échoué à la position "+point+" revoit ton code, Discord !");
-        nodes.add(new Node(point));
-        setLinks(nodes.get(nodes.size()-1));
-        return nodes.get(nodes.size()-1);
-
+        //Sinon on le renvoie
+		setLinks(nodes.get(pos));
+		return nodes.get(pos);
     }
 
 	/**
@@ -372,19 +364,19 @@ public class Graph
             ObstacleRectangular r = rect.get(i);
 
             pos = new Vec2(r.getPosition().x + (r.getSizeX()/2) +1, (r.getPosition().y - r.getSizeY()/2) -1);
-            if(!isInObstacle(pos) && !alreadyContains(pos))
+            if(!isInObstacle(pos) && (alreadyContains(pos)==-1))
                 nodes.add(new Node(pos));
 
             pos = new Vec2(r.getPosition().x + (r.getSizeX()/2) +1, (r.getPosition().y + r.getSizeY()/2) +1);
-            if(!isInObstacle(pos) && !alreadyContains(pos))
+            if(!isInObstacle(pos) && (alreadyContains(pos)==-1))
                 nodes.add(new Node(pos));
 
             pos = new Vec2(r.getPosition().x - (r.getSizeX()/2) -1, (r.getPosition().y - r.getSizeY()/2) -1);
-            if(!isInObstacle(pos) && !alreadyContains(pos))
+            if(!isInObstacle(pos) && (alreadyContains(pos)==-1))
                 nodes.add(new Node(pos));
 
             pos = new Vec2(r.getPosition().x - (r.getSizeX()/2) -1, (r.getPosition().y + r.getSizeY()/2) +1);
-            if(!isInObstacle(pos) && !alreadyContains(pos))
+            if(!isInObstacle(pos) && (alreadyContains(pos)==-1))
                 nodes.add(new Node(pos));
 		}
 		/**
@@ -395,19 +387,19 @@ public class Graph
             ObstacleCircular c = cir.get(i);
 
             pos = new Vec2(c.getPosition().x + (int)(c.getRadius()*0.707) +1, c.getPosition().y + (int)(c.getRadius()*0.707) +1);
-            if(!isInObstacle(pos) && !alreadyContains(pos))
+            if(!isInObstacle(pos) && (alreadyContains(pos)==-1))
                 nodes.add(new Node(pos));
 
             pos = new Vec2(c.getPosition().x + (int)(c.getRadius()*0.707) +1, c.getPosition().y - (int)(c.getRadius()*0.707) -1);
-            if(!isInObstacle(pos) && !alreadyContains(pos))
+            if(!isInObstacle(pos) && (alreadyContains(pos)==-1))
                 nodes.add(new Node(pos));
 
             pos = new Vec2(c.getPosition().x - (int)(c.getRadius()*0.707) -1, c.getPosition().y + (int)(c.getRadius()*0.707) +1);
-            if(!isInObstacle(pos) && !alreadyContains(pos))
+            if(!isInObstacle(pos) && (alreadyContains(pos)==-1))
                 nodes.add(new Node(pos));
 
             pos = new Vec2(c.getPosition().x - (int)(c.getRadius()*0.707) -1, c.getPosition().y - (int)(c.getRadius()*0.707) -1);
-            if(!isInObstacle(pos) && !alreadyContains(pos))
+            if(!isInObstacle(pos) && (alreadyContains(pos)==-1))
                 nodes.add(new Node(pos));
         }
 	}
