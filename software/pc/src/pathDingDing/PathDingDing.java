@@ -122,7 +122,6 @@ public class PathDingDing implements Service
 		}
 		
 		// Idem test d'isolation du départ
-		// TODO Ajuster pour sortir de l'obstacle
 		
 		//======================================================================================================================
 		// Sortie d'obstacle - Partie traitant le cas où l'on doit sortir d'un obstacle avant de pouvoir débuter l'A* proprement
@@ -149,18 +148,6 @@ public class PathDingDing implements Service
 					
 					// On le supprime temporairement pour que le robot puisse en sortir
 					graph.getObstacleManager().removeObstacle(prob);
-					
-					/*
-					 * J'ai 2 idées à partir d'ici, il faut que j'en discute avec Julian et/ou les 2A
-					 * 
-					 * Soit je refais un appel au PDD pour que le robot parte immédiatement de l'obstacle comme il le souhaite, mais ça m'a l'air débile
-					 *
-					 * Soit on modifie légèrement l'A* pour ne pas vider en amont la liste des noeuds parents et on l'utilise pour que le robot "remonte le temps"
-					 * et accède à la position d'un noeud n'étant pas dans l'obstacle problématique. 
-					 * Ainsi, on serait sûr qu'il puisse bouger sans encombres, puis on initialise la liste des noeuds et on laisse le PDD originellement prévu reprendre.
-					 * 
-					 * Pour l'instant, j'écris la première idée
-					 */
 					
 					// Relance de l'A* sans l'obstacle problématique
 					ArrayList<Node> path = this.computePath(start, end);
