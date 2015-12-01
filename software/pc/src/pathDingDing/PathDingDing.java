@@ -100,17 +100,24 @@ public class PathDingDing implements Service
 			log.critical("Appel pathDingDing avec arrivée=départ !");
 			return new ArrayList<Node>();
 		}
-		
+
+		/**
+		 * On copie les Vec2 afin d''éviter que leur composantes soient changées en dehors du PDD
+		 * Si elles sont changés, les liens eux ne bougent pas, d'où la possibilité de se
+		 * retrouver avec un lien qui coupe un obstacle
+		 */
+		Vec2 endCopy = end.makeCopy();
+		Vec2 startCopy = start.makeCopy();
+
 		// On ajoute les noeuds de départ et d'arrivée au graphe (ignorés s'ils existent déjà)
-		Node endNode = 	graph.addNode(end);
-        Node startNode = graph.addNode(start, endNode);
+		Node endNode = 	graph.addNode(endCopy);
+        Node startNode = graph.addNode(startCopy, endNode);
 
 		
 		//===========================================
 		// DEBUT DE L'ALGORITHME A* - INITIALISATION
 		//===========================================
 
-		
 		// On ajoute le noeud de départ à la liste des nodes fermés
 		this.closedNodes.add(startNode);
 
