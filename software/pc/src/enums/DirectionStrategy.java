@@ -1,4 +1,4 @@
-package robot;
+package enums;
 
 /**
  * Utilisé par Locomotion

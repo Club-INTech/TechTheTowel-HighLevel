@@ -347,6 +347,10 @@ public abstract class Robot implements Service
      */
 	public abstract boolean setTurningStrategy(TurningStrategy turning);
 
+	/**
+	 * Met la stratégie de translation dans Locomotion
+	 */
+	public abstract boolean setDirectionStrategy(DirectionStrategy motion);
     
     
 	/**

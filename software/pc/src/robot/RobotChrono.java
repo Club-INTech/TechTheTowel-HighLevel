@@ -282,6 +282,13 @@ public class RobotChrono extends Robot
 		//TODO do that TODO
 		return true;
 	}
+	
+	@Override
+	public boolean setDirectionStrategy(DirectionStrategy motion)
+	{
+		// TODO
+		return true;
+	}
 
 	@Override
 	public int getUSSensorValue(USsensors sensor) 

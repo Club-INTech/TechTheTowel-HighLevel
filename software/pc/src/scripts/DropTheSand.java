@@ -1,17 +1,15 @@
 package scripts;
 
 
+import enums.DirectionStrategy;
 import enums.TurningStrategy;
 import exceptions.ExecuteException;
-import exceptions.PathNotFoundException;
-import exceptions.PointInObstacleException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import hook.types.HookFactory;
 import pathDingDing.PathDingDing;
-import pathDingDing.Node;
 import robot.Robot;
 import smartMath.Circle;
 import smartMath.Vec2;
@@ -46,8 +44,6 @@ public class DropTheSand extends AbstractScript
     @Override
     public void execute(int versionToExecute, GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException
     {
-        pf = actualState.robot.getPDD();
-        ArrayList<Vec2> path;
         
         // Je ne sais pas encore comment gérer la symétrie avec la stratégie d'orientation. Du coup, je laisse les versions 1 et 2
         
@@ -56,12 +52,8 @@ public class DropTheSand extends AbstractScript
         {
         	try
         	{
-        		// Demande au robot de ne tourner que vers la gauche jussqu'à la zone de construction
-        		actualState.robot.setTurningStrategy(TurningStrategy.LEFT_ONLY);
-
-        		// Appel du PDD
-        		// TODO la position est arbitraire, à modifier avec les phases de test
-        		path = pf.computePathVec2(actualState.robot.getPosition(), new Vec2(1000,400));
+        		// On autorise la marche arrière au robot
+        		actualState.robot.setDirectionStrategy(DirectionStrategy.FASTEST);
         		
         		// On recule pour 'déposer' le sable
         		// TODO la distance est arbitraire, à modifier avec les phases de test
@@ -76,7 +68,7 @@ public class DropTheSand extends AbstractScript
         		actualState.robot.setTurningStrategy(TurningStrategy.FASTEST);
         	}
         	
-        	catch(UnableToMoveException | PointInObstacleException | PathNotFoundException e)
+        	catch(UnableToMoveException e)
             {
 				finalize(actualState);
 				throw new ExecuteException(e);
@@ -88,12 +80,8 @@ public class DropTheSand extends AbstractScript
         {
         	try
         	{
-        		// Demande au robot de ne tourner que vers la gauche jussqu'à la zone de construction
-        		actualState.robot.setTurningStrategy(TurningStrategy.RIGHT_ONLY);
-
-        		// Appel du PDD
-        		// TODO la position est arbitraire, à modifier avec les phases de test
-        		path = pf.computePathVec2(actualState.robot.getPosition(), new Vec2(-1000,400));
+        		// On autorise la marche arrière au robot
+        		actualState.robot.setDirectionStrategy(DirectionStrategy.FASTEST);
         		
         		// On recule pour 'déposer' le sable
         		// TODO la distance est arbitraire, à modifier avec les phases de test
@@ -108,7 +96,7 @@ public class DropTheSand extends AbstractScript
         		actualState.robot.setTurningStrategy(TurningStrategy.FASTEST);
         	}
         	
-        	catch(UnableToMoveException | PointInObstacleException | PathNotFoundException e)
+        	catch(UnableToMoveException e)
             {
 				finalize(actualState);
 				throw new ExecuteException(e);
@@ -118,17 +106,23 @@ public class DropTheSand extends AbstractScript
     }
 
     @Override
-    public int remainingScoreOfVersion(int version, GameState<?> state) {
+    public int remainingScoreOfVersion(int version, GameState<?> state) 
+    {
         return 0;
     }
 
-    /* Renvoie la position d'entree du script suivant la version en argument*/
+   /* Renvoie la position d'entree du script suivant la version en argument*/
     @Override
     public Circle entryPosition(int version, int ray, Vec2 robotPosition)
     {
         if(version == 0)
         {
-            return new Circle(0, 1800, 0);
+            return new Circle(1000, 400, 0);
+        }
+        
+        else if (version == 1)
+        {
+        	return new Circle (-1000,400,0);
         }
         
         else
@@ -140,9 +134,9 @@ public class DropTheSand extends AbstractScript
     }
 
     @Override
-    public void finalize(GameState<?> state) throws SerialFinallyException {
+    public void finalize(GameState<?> state) throws SerialFinallyException 
+    {
     	//TODO ranger la vitre
-        state.robot.setTurningStrategy(TurningStrategy.FASTEST);
 
     }
 

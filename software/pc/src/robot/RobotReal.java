@@ -343,6 +343,17 @@ public class RobotReal extends Robot
         }
         return false;
 	}
+	
+	@Override
+	public boolean setDirectionStrategy(DirectionStrategy motion)
+	{
+		if ( (getIsSandInside() && !(motion == DirectionStrategy.FASTEST)) || !getIsSandInside())
+		{
+			mLocomotion.setDirectionOrders(motion);
+			return true;
+		}
+		return false;
+	}
 
 	@Override
 	public void setLocomotionSpeed(Speed vitesse)

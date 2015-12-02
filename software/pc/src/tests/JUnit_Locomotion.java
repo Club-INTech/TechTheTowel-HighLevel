@@ -1,6 +1,7 @@
 package tests;
 
 
+import enums.DirectionStrategy;
 import enums.ServiceNames;
 import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -11,7 +12,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import robot.DirectionStrategy;
 import robot.Locomotion;
 import robot.cardsWrappers.LocomotionCardWrapper;
 import smartMath.Vec2;

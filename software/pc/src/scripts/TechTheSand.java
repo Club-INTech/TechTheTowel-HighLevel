@@ -1,24 +1,17 @@
 package scripts;
 
-import enums.ActuatorOrder;
-import enums.ServiceNames;
-import enums.Speed;
+import enums.DirectionStrategy;
 import enums.TurningStrategy;
 import exceptions.ExecuteException;
-import exceptions.PathNotFoundException;
-import exceptions.PointInObstacleException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import hook.types.HookFactory;
-import pathDingDing.Node;
-import pathDingDing.PathDingDing;
 import robot.Robot;
 import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
-import table.Table;
 import utils.Config;
 import utils.Log;
 
@@ -79,6 +72,12 @@ public class TechTheSand extends AbstractScript
 				// On indique au robot qu'il transporte du sable
 				stateToConsider.robot.setIsSandInside(true);
 				
+				// Demande au robot de ne tourner que vers la gauche pour ses prochains déplacements
+				stateToConsider.robot.setTurningStrategy(TurningStrategy.LEFT_ONLY);
+				
+				// Demande au robot de conserver une marche avant pour ses prochains déplacements avec le sable
+				stateToConsider.robot.setDirectionStrategy(DirectionStrategy.FORCE_FORWARD_MOTION);
+				
 				// On desactive la tige accrochante
 				// TODO même tâche que celle au dessus: sur quel type de message communiquer avec le bas niveau ?
 				
@@ -120,6 +119,12 @@ public class TechTheSand extends AbstractScript
 				
 				// On indique au robot qu'il transporte du sable
 				stateToConsider.robot.setIsSandInside(true);
+				
+				// Demande au robot de ne tourner que vers la droite pour ses prochains déplacements avec le sable
+        		stateToConsider.robot.setTurningStrategy(TurningStrategy.RIGHT_ONLY);
+        		
+        		// Demande au robot de conserver une marche avant pour ses prochains déplacements avec le sable
+				stateToConsider.robot.setDirectionStrategy(DirectionStrategy.FORCE_FORWARD_MOTION);
 				
 				// On desactive la tige accrochante
 				// TODO même tâche que celle au dessus: sur quel type de message communiquer avec le bas niveau ?
@@ -170,6 +175,7 @@ public class TechTheSand extends AbstractScript
 	public void finalize(GameState<?> state) throws SerialFinallyException 
 	{
 		//TODO arrêter la tige et le moteur de vitre
+		
 	}
 
 	@Override

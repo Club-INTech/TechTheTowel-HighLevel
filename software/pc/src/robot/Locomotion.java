@@ -1,6 +1,7 @@
 package robot;
 
 import container.Service;
+import enums.DirectionStrategy;
 import enums.TurningStrategy;
 import enums.UnableToMoveReason;
 import exceptions.ConfigPropertyNotFoundException;
@@ -139,6 +140,9 @@ public class Locomotion implements Service
 
     /** Donne le sens de rotation */
     private TurningStrategy turningStrategy = TurningStrategy.FASTEST;
+    
+    /**Donne la stratégie de translation */
+    private DirectionStrategy directionStrategy = DirectionStrategy.FASTEST;
 
 
     
@@ -999,6 +1003,16 @@ public class Locomotion implements Service
     public void setTurningOrders(TurningStrategy turning)
     {
     	this.turningStrategy = turning;
+    }
+    
+    public DirectionStrategy getDirectionStrategy()
+    {
+    	return directionStrategy;
+    }
+    
+    public void setDirectionOrders(DirectionStrategy motion)
+    {
+    	this.directionStrategy = motion;
     }
 
     public void desasservit()
