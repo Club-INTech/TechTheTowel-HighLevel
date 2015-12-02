@@ -6,7 +6,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import enums.ActuatorOrder;
 import enums.ScriptNames;
 import enums.ServiceNames;
 import exceptions.ExecuteException;
@@ -49,13 +48,13 @@ public class JUnit_TechTheSand extends JUnit_Test
 	}
 	
 	@Test
-	public void TechIt() throws UnableToMoveException
+	public void TechIt() throws Exception
 	{
 		try
 		{
 			log.debug("Début de forage");
-			scriptManager.getScript(ScriptNames.TECH_THE_SAND).execute(0, theRobot, emptyHook);
-			scriptManager.getScript(ScriptNames.DROP_THE_SAND).execute(0, theRobot, emptyHook);
+			scriptManager.getScript(ScriptNames.TECH_THE_SAND).goToThenExec(0, theRobot, emptyHook);
+			scriptManager.getScript(ScriptNames.DROP_THE_SAND).goToThenExec(0, theRobot, emptyHook);
 		}
 		catch(ExecuteException | SerialFinallyException e)
 		{

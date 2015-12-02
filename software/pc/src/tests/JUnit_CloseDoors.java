@@ -6,13 +6,13 @@ import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.PathNotFoundException;
 import exceptions.PointInObstacleException;
+import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import org.junit.Before;
 import org.junit.Test;
 import robot.Robot;
 import scripts.ScriptManager;
-import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
 
@@ -26,7 +26,6 @@ import java.util.ArrayList;
 public class JUnit_CloseDoors extends JUnit_Test
 {
 	private GameState<Robot> mRobot;
-	private Table table;
 	private ScriptManager scriptManager;
 
 	@SuppressWarnings("unchecked")
@@ -40,7 +39,6 @@ public class JUnit_CloseDoors extends JUnit_Test
 		mRobot.updateConfig();
 		mRobot.robot.setPosition(Table.entryPosition);
 		mRobot.robot.setOrientation(Math.PI);
-		table = (Table)container.getService(ServiceNames.TABLE);
 		scriptManager = (ScriptManager)container.getService(ServiceNames.SCRIPT_MANAGER);
 	}
 	
@@ -52,10 +50,9 @@ public class JUnit_CloseDoors extends JUnit_Test
 		{
 			//On execute le script
 			log.debug("Script lance");
-			mRobot.robot.moveToLocation(new Vec2(1000, 1500), new ArrayList<Hook>(), table);
-			scriptManager.getScript(ScriptNames.CLOSE_DOORS).execute(0, mRobot, emptyList);
+			scriptManager.getScript(ScriptNames.CLOSE_DOORS).goToThenExec(0, mRobot, emptyList);
 		}
-		catch(ExecuteException | SerialFinallyException e)
+		catch(SerialConnexionException | ExecuteException | SerialFinallyException e)
 		{
 			e.printStackTrace();
 		} catch (PointInObstacleException e) {

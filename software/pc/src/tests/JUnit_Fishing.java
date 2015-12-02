@@ -52,12 +52,12 @@ public class JUnit_Fishing extends JUnit_Test
 	}
 	
 	@Test
-	public void fishThem() throws UnableToMoveException
+	public void fishThem() throws Exception
 	{
 		try
 		{
 			log.debug("Début de pêche");
-			scriptManager.getScript(ScriptNames.FISHING).execute(0, theRobot, emptyHook);
+			scriptManager.getScript(ScriptNames.FISHING).goToThenExec(0, theRobot, emptyHook);
 		}
 		catch(ExecuteException | SerialFinallyException e)
 		{

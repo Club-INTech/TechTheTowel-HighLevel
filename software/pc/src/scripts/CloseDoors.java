@@ -1,6 +1,5 @@
 package scripts;
 
-import enums.Speed;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialFinallyException;
@@ -10,7 +9,6 @@ import robot.Robot;
 import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
-import table.Table;
 import utils.Config;
 import utils.Log;
 
@@ -124,8 +122,10 @@ public class CloseDoors extends AbstractScript
 	public Circle entryPosition(int version, int ray, Vec2 robotPosition)
 	{
 		if (version == 0)
+		{
 			// Point devant les portes côté vert, modification possible selon l'envergure du robot
 			return new Circle(new Vec2(1000,1650));
+		}
 		else if (version ==1)
 		{
 			// Point devant les portes côté violet

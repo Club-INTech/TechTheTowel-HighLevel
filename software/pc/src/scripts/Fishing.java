@@ -1,7 +1,6 @@
 package scripts;
 
 import enums.ActuatorOrder;
-import enums.Speed;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
