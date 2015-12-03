@@ -3,6 +3,7 @@ package pathDingDing;
 import container.Service;
 import exceptions.PathNotFoundException;
 import exceptions.PointInObstacleException;
+import smartMath.Segment;
 import smartMath.Vec2;
 import table.Table;
 import table.obstacles.ObstacleCircular;
@@ -59,6 +60,11 @@ public class PathDingDing implements Service
 
     //La table
     private Table table;
+
+	/**
+	 * TODO Doc
+	 */
+	private static final int BEAM_LENGTH = 3;
 	
 	/**
 	 * Constructeur du PathDIngDIng
@@ -84,6 +90,8 @@ public class PathDingDing implements Service
 	public ArrayList<Node> computePath(Vec2 start, Vec2 end) throws PointInObstacleException, PathNotFoundException
 	{
 		long time = System.currentTimeMillis();
+
+
 		//On vide les listes de nodes pour un nouveau calcul
 		this.initialise();
 		
@@ -101,6 +109,13 @@ public class PathDingDing implements Service
 			return new ArrayList<Node>();
 		}
 
+        if(!graph.isObstructed(end, start))
+        {
+            ArrayList<Node> path = new ArrayList<Node>();
+            path.add(new Node(start));
+            path.add(new Node(end));
+            return path;
+        }
 		/**
 		 * On copie les Vec2 afin d''éviter que leur composantes soient changées en dehors du PDD
 		 * Si elles sont changés, les liens eux ne bougent pas, d'où la possibilité de se
@@ -210,6 +225,10 @@ public class PathDingDing implements Service
 		// On ajoute le meilleur noeud (en premier dans openNodes) dans la liste fermée
 		closedNodes.add(openNodes.get(0));
 		openNodes.remove(0);
+
+		while(openNodes.size() > BEAM_LENGTH)
+			openNodes.remove(openNodes.size()-1);
+
 		log.debug("Temps d'init. A* = "+(System.currentTimeMillis()-time)+" ms");
 		//====================================================================
 		// Boucle principale - Recherche de l'arrivée en parcourant le graphe
@@ -293,6 +312,9 @@ public class PathDingDing implements Service
 				log.critical("pathDingDing : Le noeud demandé ("+endNode.getPosition().toString()+") est inacessible.");
 				throw new PathNotFoundException();
 			}
+
+			while(openNodes.size() > BEAM_LENGTH)
+				openNodes.remove(openNodes.size()-1);
 			
 			//ET ON RECOMMENCE !!!
 		} 

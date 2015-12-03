@@ -290,6 +290,64 @@ public class Graph
     }
 
     /**
+     * Renvoie si un obstacle est sur le chemin entre les deux noeuds (Vec2)
+     * @param node1 position noeud 1
+     * @param node2 position noeud 2
+     */
+    public boolean isObstructed(Vec2 node1, Vec2 node2)
+    {
+        // On évite de créer des liens sur le même noeud
+        if(node1.equals(node2))
+        {
+            return true;
+        }
+
+        //On récupère les différents obstacles
+        ArrayList<ObstacleRectangular> rectangularObstacles = obstacleManager.getRectangles();
+
+        //On vérifie l'intersection avec les rectangles ; effectué en premier car plus probable
+        for(int k=0 ; k<rectangularObstacles.size() ; k++)
+        {
+            ArrayList<Segment> segments = rectangularObstacles.get(k).getSegments();
+            if(rectangularObstacles.get(k).isInObstacle(node2) || rectangularObstacles.get(k).isInObstacle(node1))
+            {
+                return true;
+            }
+            for(int l=0 ; l<segments.size() ; l++)
+            {
+                if(Geometry.intersects(new Segment(node1, node2), segments.get(l)))
+                {
+                    return true;
+                }
+            }
+        }
+
+        ArrayList<ObstacleCircular> circleObstacles = obstacleManager.getFixedObstacles();
+
+        //On vérifie l'intersection avec les cercles
+        for(int k=0 ; k<circleObstacles.size() ; k++)
+        {
+            if(Geometry.intersects(new Segment(node1, node2), circleObstacles.get(k).toCircle()))
+            {
+                return true;
+            }
+        }
+
+        ArrayList<Segment> lineObstacles = obstacleManager.getLines();
+
+        //On vérifie l'intersection avec les lignes
+        for(int k=0 ; k<lineObstacles.size() ; k++)
+        {
+            if(Geometry.intersects(new Segment(node1, node2), lineObstacles.get(k)))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Renvoie si un obstacle est sur le chemin entre les deux noeuds
      * @param node1 noeud 1
      * @param node2 noeud 2
