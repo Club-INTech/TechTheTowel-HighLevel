@@ -422,6 +422,22 @@ public class Graph
 		
 	}
 
+	/**
+	 * Renvoie la liste des liens adjacents au noeud
+	 */
+	public ArrayList<Link> getRelatedLinks(Node node)
+	{
+		ArrayList<Link> related = new ArrayList<Link>();
+
+		for(int i = 0 ; i < links.size() ; i++)
+		{
+			if(links.get(i).isRelated(node))
+				related.add(links.get(i));
+		}
+
+		return related;
+	}
+
     /**
      * Vérifie si le point est dans un obstacle
      * @param point point en question

@@ -142,7 +142,7 @@ public class PathDingDing implements Service
 		 */
 			// Regarde quel est l'obstacle qui pose problème dans les différents obstacles possibles, ce qui est un peu lourd puisque Graph le fait déjà en amont
 			// Du coup, pourrait-on étendre les capacités de réponse de la méthode isInObstacle de Graph ? Y a-t-il bien plus simple et je suis aveugle ?
-			
+			//TODO S'en sortir si le robot est hors de la table (repositionnement à faire)?
 			// Dans les différents rectangles
 			ArrayList<ObstacleRectangular> rectObs = graph.getObstacleManager().getRectangles();
 			for (int i=0; i<rectObs.size(); i++)

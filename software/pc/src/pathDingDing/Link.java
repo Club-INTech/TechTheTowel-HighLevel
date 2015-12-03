@@ -1,5 +1,7 @@
 package pathDingDing;
 
+import smartMath.Segment;
+
 /**
  * Liens reliant les nodes du pathDingDing
  * @author julian
@@ -16,6 +18,7 @@ public class Link
 	 * Noeud d'arrivee
 	 */
 	private Node endNode;
+
 	
 	
 	/**
@@ -27,6 +30,8 @@ public class Link
 	{
 		this.startNode = start;
 		this.endNode = end;
+
+
 	}
 	
 	/**
@@ -75,4 +80,5 @@ public class Link
 	{
 		return this.isRelated(a) && this.isRelated(b);
 	}
+    
 }
