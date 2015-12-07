@@ -15,6 +15,7 @@ public class UnknownOrderException extends Exception
 	 */
 	public UnknownOrderException()
 	{
+		//TODO étoffer avec un string contenant l'ordre série
 		super();
 	}
 	
@@ -25,6 +26,7 @@ public class UnknownOrderException extends Exception
 	
 	public String logStack()
 	{
+		// TODO afficher la commande série qui a causé l'erreur (+ retenter la commande au cas où il s'agit d'une erreur de la série)
 		StringWriter sw = new StringWriter();
 		this.printStackTrace(new PrintWriter(sw));
 		
