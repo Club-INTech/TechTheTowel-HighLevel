@@ -203,7 +203,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 				for (int i = 0 ; i < nb_lignes_reponse; i++)
 				{
 					inputLines[i] = input.readLine();		
-					
+					//TODO exception UnknownOrder à placer ici (pas exactement ici hein...)
 					//TODO commenter.
 //					log.debug("Ligne "+i+": '"+inputLines[i]+"'",this); 
 					if(inputLines[i].equals(null) || inputLines[i].replaceAll(" ", "").equals("")|| inputLines[i].replaceAll(" ", "").equals("-"))
