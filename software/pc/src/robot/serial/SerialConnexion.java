@@ -258,7 +258,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	 * Utilisé que par createSerial de SerialManager
 	 * @return l'id de la carte
 	 */
-	synchronized String ping()
+	public synchronized String ping()
 	{
 		synchronized(output) {
 			String ping = null;
