@@ -44,6 +44,7 @@ public class BriztoutOutputStream extends BufferedOutputStream
      */
     public void clear()
     {
+        // L'ancien buffer sera destroy par le Garbage Collector (#Briztout)
         this.buf = new byte[bufferSize];
         this.count = 0;
     }
