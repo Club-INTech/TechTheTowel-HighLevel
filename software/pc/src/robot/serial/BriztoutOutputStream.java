@@ -25,6 +25,7 @@ public class BriztoutOutputStream extends BufferedOutputStream
         this.bufferSize = 8192;
     }
 
+
     /**
      * Encapsule l'OutputStream avec une taille de buffer donnée
      * @param outputStream l'OutpuStream à encapsuler
