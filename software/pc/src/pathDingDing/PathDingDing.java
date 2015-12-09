@@ -3,8 +3,11 @@ package pathDingDing;
 import container.Service;
 import exceptions.PathNotFoundException;
 import exceptions.PointInObstacleException;
+import robot.Locomotion;
+import robot.Robot;
 import smartMath.Segment;
 import smartMath.Vec2;
+import strategie.GameState;
 import table.Table;
 import table.obstacles.ObstacleCircular;
 import table.obstacles.ObstacleRectangular;
@@ -155,9 +158,9 @@ public class PathDingDing implements Service
 			
 			throw new PointInObstacleException(startNode, graph.getObstacleManager());
 		 */
-			// Regarde quel est l'obstacle qui pose problème dans les différents obstacles possibles, ce qui est un peu lourd puisque Graph le fait déjà en amont
-			// Du coup, pourrait-on étendre les capacités de réponse de la méthode isInObstacle de Graph ? Y a-t-il bien plus simple et je suis aveugle ?
+			// Regarde quel est l'obstacle qui pose problème dans les différents obstacles possibles
 			//TODO S'en sortir si le robot est hors de la table (repositionnement à faire)?
+			
 			// Dans les différents rectangles
 			ArrayList<ObstacleRectangular> rectObs = graph.getObstacleManager().getRectangles();
 			for (int i=0; i<rectObs.size(); i++)
