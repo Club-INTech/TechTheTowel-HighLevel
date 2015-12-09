@@ -2,6 +2,7 @@ package robot.serial;
 
 import container.Service;
 import enums.ServiceNames;
+import exceptions.UnknownOrderException;
 import exceptions.serial.SerialConnexionException;
 import gnu.io.*;
 import utils.Log;
@@ -202,8 +203,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 			{
 				for (int i = 0 ; i < nb_lignes_reponse; i++)
 				{
-					inputLines[i] = input.readLine();		
-					//TODO exception UnknownOrder à placer ici (pas exactement ici hein...)
+					inputLines[i] = input.readLine();
 					//TODO commenter.
 //					log.debug("Ligne "+i+": '"+inputLines[i]+"'",this); 
 					if(inputLines[i].equals(null) || inputLines[i].replaceAll(" ", "").equals("")|| inputLines[i].replaceAll(" ", "").equals("-"))
@@ -211,12 +211,28 @@ public class SerialConnexion implements SerialPortEventListener, Service
 						log.critical("='( , envoi de "+inputLines[i]+" envoi du message a nouveau");
 						communiquer(messages, nb_lignes_reponse);
 					}
-					
+					if(inputLines[i].equals("Ordre inconnu"))
+					{
+						throw new UnknownOrderException(messages, this);
+					}
 					if(!isAsciiExtended(inputLines[i]))
 					{
 						log.critical("='( , envoi de "+inputLines[i]+" envoi du message a nouveau");
 						communiquer(messages, nb_lignes_reponse); // On retente
 					}
+				}
+			}
+			catch (UnknownOrderException uoe)
+			{
+				if(UnknownOrderException.canCommunicate)
+				{
+					if (uoe.verifyConnexion()) communiquer(messages, nb_lignes_reponse);
+					else throw new SerialConnexionException();
+				}
+				else
+				{
+					UnknownOrderException.canCommunicate=!UnknownOrderException.canCommunicate;
+					throw new SerialConnexionException();
 				}
 			}
 			catch (Exception e)
