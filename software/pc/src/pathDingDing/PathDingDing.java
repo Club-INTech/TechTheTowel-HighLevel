@@ -67,7 +67,7 @@ public class PathDingDing implements Service
 	/**
 	 * TODO Doc
 	 */
-	private static final int BEAM_LENGTH = 3;
+	private static final int BEAM_LENGTH = 5;
 	
 	/**
 	 * Constructeur du PathDIngDIng
@@ -159,8 +159,6 @@ public class PathDingDing implements Service
 			throw new PointInObstacleException(startNode, graph.getObstacleManager());
 		 */
 			// Regarde quel est l'obstacle qui pose problème dans les différents obstacles possibles
-			//TODO S'en sortir si le robot est hors de la table (repositionnement à faire)?
-			
 			// Dans les différents rectangles
 			ArrayList<ObstacleRectangular> rectObs = graph.getObstacleManager().getRectangles();
 			for (int i=0; i<rectObs.size(); i++)
@@ -169,6 +167,7 @@ public class PathDingDing implements Service
 				if (rectObs.get(i).isInObstacle(start))
 				{
 					// On récupère l'élément problématique
+					// FIXME Ici, tu crée un nouvel obstacle que tu donne les mêmes coordonées que l'obstacle problématique, donc tu ne delete jamais celui qui pose problème
 					ObstacleRectangular prob = new ObstacleRectangular(rectObs.get(i).getPosition(), rectObs.get(i).getSizeX(), rectObs.get(i).getSizeY());
 					
 					// On le supprime temporairement pour que le robot puisse en sortir
@@ -192,6 +191,7 @@ public class PathDingDing implements Service
 				if (circObs.get(i).isInObstacle(start))
 				{
 					// On récupère l'élément problématique
+					// FIXME Ici, tu crée un nouvel obstacle que tu donne les mêmes coordonées que l'obstacle problématique, donc tu ne delete jamais celui qui pose problème
 					ObstacleCircular prob = new ObstacleCircular(circObs.get(i).getPosition(), circObs.get(i).getRadius());
 					
 					// On le supprime temporairemnt pour que le robot puisse en sortir
@@ -205,6 +205,10 @@ public class PathDingDing implements Service
 					return path;
 				}
 			}
+
+			log.critical("Robot hors de la table !");
+			ArrayList<Node> path = new ArrayList<Node>();
+			return path;
 		}
 
 		// D'abord, on ajoute les noeuds adjacents au depart dans la liste ouverte
@@ -348,7 +352,7 @@ public class PathDingDing implements Service
 		//==================================
 		// On cherche à optimiser le chemin
 		//==================================
-		/*
+
 		for(int i=0 ; i<(result.size()-2) ; i++)
 		{
 			for(int j=i+2; j<(result.size()) ; j++)
@@ -363,7 +367,7 @@ public class PathDingDing implements Service
 					}
 				}
 			}
-		}*/
+		}
 
 
         // ET C'EST FUCKING TERMINE !!!!
