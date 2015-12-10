@@ -171,6 +171,8 @@ public class PathDingDing implements Service
 					ObstacleRectangular prob = new ObstacleRectangular(rectObs.get(i).getPosition(), rectObs.get(i).getSizeX(), rectObs.get(i).getSizeY());
 					
 					// On le supprime temporairement pour que le robot puisse en sortir
+                    // removeObstacle(obs) supprime EXACTEMENT obs (son id d'instance) de la liste des obstacles,
+                    // même si l'on donne un obstacle avec les même paramètres, cela ne fonctionnera pas
 					graph.getObstacleManager().removeObstacle(prob);
 					
 					// Relance de l'A* sans l'obstacle problématique
@@ -195,6 +197,8 @@ public class PathDingDing implements Service
 					ObstacleCircular prob = new ObstacleCircular(circObs.get(i).getPosition(), circObs.get(i).getRadius());
 					
 					// On le supprime temporairemnt pour que le robot puisse en sortir
+                    // removeObstacle(obs) supprime EXACTEMENT obs (son id d'instance) de la liste des obstacles,
+                    // même si l'on donne un obstacle avec les même paramètres, cela ne fonctionnera pas
 					graph.getObstacleManager().removeObstacle(prob);
 					
 					// Relance de l'A* sans l'obstacle problématique
