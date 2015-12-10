@@ -3,11 +3,7 @@ package pathDingDing;
 import container.Service;
 import exceptions.PathNotFoundException;
 import exceptions.PointInObstacleException;
-import robot.Locomotion;
-import robot.Robot;
-import smartMath.Segment;
 import smartMath.Vec2;
-import strategie.GameState;
 import table.Table;
 import table.obstacles.ObstacleCircular;
 import table.obstacles.ObstacleRectangular;
@@ -172,12 +168,9 @@ public class PathDingDing implements Service
 				if (rectObs.get(i).isInObstacle(start))
 				{
 					// On récupère l'élément problématique
-					// FIXME Ici, tu crée un nouvel obstacle que tu donne les mêmes coordonées que l'obstacle problématique, donc tu ne delete jamais celui qui pose problème
-					ObstacleRectangular prob = new ObstacleRectangular(rectObs.get(i).getPosition(), rectObs.get(i).getSizeX(), rectObs.get(i).getSizeY());
+					ObstacleRectangular prob = rectObs.get(i);
 					
 					// On le supprime temporairement pour que le robot puisse en sortir
-                    // removeObstacle(obs) supprime EXACTEMENT obs (son id d'instance) de la liste des obstacles,
-                    // même si l'on donne un obstacle avec les même paramètres, cela ne fonctionnera pas
 					graph.getObstacleManager().removeObstacle(prob);
 					
 					// Relance de l'A* sans l'obstacle problématique
@@ -198,12 +191,9 @@ public class PathDingDing implements Service
 				if (circObs.get(i).isInObstacle(start))
 				{
 					// On récupère l'élément problématique
-					// FIXME Ici, tu crée un nouvel obstacle que tu donne les mêmes coordonées que l'obstacle problématique, donc tu ne delete jamais celui qui pose problème
-					ObstacleCircular prob = new ObstacleCircular(circObs.get(i).getPosition(), circObs.get(i).getRadius());
+					ObstacleCircular prob = circObs.get(i);
 					
 					// On le supprime temporairemnt pour que le robot puisse en sortir
-                    // removeObstacle(obs) supprime EXACTEMENT obs (son id d'instance) de la liste des obstacles,
-                    // même si l'on donne un obstacle avec les même paramètres, cela ne fonctionnera pas
 					graph.getObstacleManager().removeObstacle(prob);
 					
 					// Relance de l'A* sans l'obstacle problématique
