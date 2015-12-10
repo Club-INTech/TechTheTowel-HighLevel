@@ -16,7 +16,7 @@ import java.io.InputStreamReader;
  * Ce n'est pas un code utile en match, c'est une application a part
  * 
  * @author pf, kayou
- * 
+ * TODO Peut être delete, on a mieux fait en Python avec Rémi
  */
 public class SearchConst
 {

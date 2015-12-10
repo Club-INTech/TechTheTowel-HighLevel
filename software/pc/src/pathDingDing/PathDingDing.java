@@ -117,7 +117,7 @@ public class PathDingDing implements Service
             return path;
         }
 		/**
-		 * On copie les Vec2 afin d''éviter que leur composantes soient changées en dehors du PDD
+		 * On copie les Vec2 afin d'éviter que leur composantes soient changées en dehors du PDD
 		 * Si elles sont changés, les liens eux ne bougent pas, d'où la possibilité de se
 		 * retrouver avec un lien qui coupe un obstacle
 		 */
