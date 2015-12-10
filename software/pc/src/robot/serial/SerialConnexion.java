@@ -234,8 +234,15 @@ public class SerialConnexion implements SerialPortEventListener, Service
 			{
 				if(UnknownOrderException.canCommunicate)
 				{
-					if (uoe.verifyConnexion()) communiquer(messages, nb_lignes_reponse); //TODO N'utilise pas la syntaxe dégeulasse de Gibson stp...
-					else throw new SerialConnexionException();
+					//ATTENTION! verifyConnexion change la valeur de UnknownOrderException.canCommunicate !
+					if (uoe.verifyConnexion())
+					{
+						communiquer(messages, nb_lignes_reponse);
+					}
+					else
+					{
+						throw new SerialConnexionException();
+					}
 				}
 				else
 				{
