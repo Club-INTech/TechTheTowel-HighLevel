@@ -65,7 +65,12 @@ public class PathDingDing implements Service
     private Table table;
 
 	/**
-	 * TODO Doc
+	 * La technique Beam Search limite la liste des noeuds ouverts à un certaine taille, les "BEAM_LENGTH" meilleurs
+	 * noeuds seront gardés alors que le reste sera supprimé.
+	 * Si le chemin décrit par ces meilleurs noeuds ne converge pas, les noeuds préalablement supprimés de la liste
+	 * des noeuds ouverts seront repris dans la liste sans problème.
+	 * L'intérêt de cette méthode est un temps de calcul plus faible pour les chemins simples au prix d'un calcul
+	 * un peu plus long pour les chemins complexes. Or, dans notre cas 90% des chemins demandés sont simples.
 	 */
 	private static final int BEAM_LENGTH = 5;
 	
@@ -237,6 +242,7 @@ public class PathDingDing implements Service
 		closedNodes.add(openNodes.get(0));
 		openNodes.remove(0);
 
+		// On supprime les noeuds en trop ; voir doc de BEAM_LENGTH
 		while(openNodes.size() > BEAM_LENGTH)
 			openNodes.remove(openNodes.size()-1);
 

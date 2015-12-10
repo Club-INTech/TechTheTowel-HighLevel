@@ -2,7 +2,7 @@ package enums;
 
 /**
  * Differents elements de jeu, differentie les differents blocs de sable et coquillages
- * @author julian
+ * @author discord
  */
 
 public enum Elements 
