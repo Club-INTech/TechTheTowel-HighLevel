@@ -23,8 +23,7 @@ public class Shell extends GameElement
 	/** Hauteur en mm d'un coquillage*/
 	public double shellHeight = 25;
 	
-	/** Diamètre en mm d'un coquillage */
-	public static double shellDiam = 76.2;
+
 	/**
 	 * Constructeur du coquillage
 	 * @param color, SHELL_NEUTRAL, SHELL_ENEMY, ou SHELL_ALLY de l'enum Elements

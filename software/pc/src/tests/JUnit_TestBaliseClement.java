@@ -7,7 +7,7 @@ import exceptions.PointInObstacleException;
 import hook.Hook;
 import org.junit.Before;
 import org.junit.Test;
-import robot.Robot;
+import robot.RobotReal;
 import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
@@ -19,9 +19,9 @@ import java.util.Random;
 public class JUnit_TestBaliseClement extends JUnit_Test
 {
 
-	GameState<Robot> clement;
+	GameState<RobotReal> clement;
 	Table table;
-	// On utulise le log du robot au lieu de celui de JUnit pour le PDD et pour l'entraînement
+	// On utilise le log du robot au lieu de celui de JUnit pour le PDD et pour l'entraînement
 	Log log;
 	long time;
 	
@@ -31,7 +31,7 @@ public class JUnit_TestBaliseClement extends JUnit_Test
 	{
 		//creation des objets pour le test
 		super.setUp();                                                                                                                                
-		clement = (GameState<Robot>)container.getService(ServiceNames.GAME_STATE);
+		clement = (GameState<RobotReal>)container.getService(ServiceNames.GAME_STATE);
 		
 		//position initiale du robot
 		clement.robot.setPosition(Table.entryPosition);
@@ -46,7 +46,7 @@ public class JUnit_TestBaliseClement extends JUnit_Test
 	public void test() {
 		while((System.currentTimeMillis()-time)<90000)
 		{
-			Vec2 point = NextPoint();
+			Vec2 point = nextPoint();
 			try
 			{
 				clement.robot.moveToLocation(point, new ArrayList<Hook>(), table);
@@ -71,7 +71,7 @@ public class JUnit_TestBaliseClement extends JUnit_Test
 	 * La m�thode NextPoint renvoie un point g�n�r� al�atoirement
 	 * @return un point sur la table ([-1500,1500],[0,2000])
 	 */
-	private Vec2 NextPoint() 
+	private Vec2 nextPoint()
 	{
 		Random random = new Random();
 		Vec2 point = new Vec2(random.nextInt(3001)-1500,random.nextInt(2001));
