@@ -57,5 +57,4 @@ public class UnknownOrderException extends Exception
 		
 		return exceptionAsString;
 	}
-	//TODO Pouvoir renvoyer si l'erreur est vraie ou si c'etait juste un pb série exceptionnel
 }

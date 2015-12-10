@@ -220,6 +220,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 					}
 					if(inputLines[i].replaceAll(" ", "").equalsIgnoreCase("ordreinconnu"))
 					{
+						//TODO avant de throw, penses à vider le buffer de lecture à coups de input.read() qui renverra -1 une fois vidé.
 						throw new UnknownOrderException(messages, this); // Balance l'exception à la méthode parente et quitte la méthode actuelle
 					}
 					if(!isAsciiExtended(inputLines[i]))
@@ -229,12 +230,8 @@ public class SerialConnexion implements SerialPortEventListener, Service
 					}
 				}
 			}
-			catch (UnknownOrderException uoe) // FIXME N'est jamais appelée ! Si tu tombes sur un ordre inconnu, UnknownOrderException est lancée à la méthode parente
+			catch (UnknownOrderException uoe)
 			{
-				//Fais tes tests et relance communicate dans ton exception, pas ici, sinon elle n'a aucun intérêt
-				//Créé une méthode et appelle la dans le constructeur, la méthode parente devra pouvoir savoir si
-				//l'exception a pu envoyer le message avec succès ou non (erreur série exceptionnelle ou défault de prog)
-                //De plus, avant de throw, penses à vider le buffer de lecture à coups de input.read() qui renverra -1 une fois vidé.
 				if(UnknownOrderException.canCommunicate)
 				{
 					if (uoe.verifyConnexion()) communiquer(messages, nb_lignes_reponse); //TODO N'utilise pas la syntaxe dégeulasse de Gibson stp...
