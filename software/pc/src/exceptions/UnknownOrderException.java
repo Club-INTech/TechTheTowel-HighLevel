@@ -7,7 +7,7 @@ import robot.serial.SerialConnexion;
 public class UnknownOrderException extends Exception
 {
 	
-	private static final long serialVersionUID = 7149002583810463587L;
+	private static final long serialVersionUID = 7149002583820463587L;
 
 	/**
 	 * canCommunicate à true signifie qu'on peut renvoyer l'ordre au bas niveau
@@ -57,4 +57,5 @@ public class UnknownOrderException extends Exception
 		
 		return exceptionAsString;
 	}
+	//TODO Pouvoir renvoyer si l'erreur est vraie ou si c'etait juste un pb série exceptionnel
 }
