@@ -13,5 +13,6 @@ public enum ScriptNames
 	PARASOL,
 	CLOSE_DOORS,
 	TECH_THE_SAND,
-	DROP_THE_SAND;
+	DROP_THE_SAND,
+	PREQUEL;
 }
