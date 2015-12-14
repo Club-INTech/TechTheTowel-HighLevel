@@ -13,6 +13,7 @@ import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import robot.Robot;
 import scripts.ScriptManager;
+import smartMath.Vec2;
 import strategie.GameState;
 
 /**
@@ -34,6 +35,10 @@ public class JUnit_Prequel extends JUnit_Test
 		super.setUp();
 		scriptManager = (ScriptManager)container.getService(ServiceNames.SCRIPT_MANAGER);
 		theRobot = (GameState<Robot>)container.getService(ServiceNames.GAME_STATE);
+		
+		// Initialisation arbitraire du robot
+		theRobot.robot.setPosition(new Vec2(0,0));
+		
 		theRobot.robot.setOrientation(- Math.PI/2);
 	}
 	

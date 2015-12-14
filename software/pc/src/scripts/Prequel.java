@@ -30,14 +30,20 @@ public class Prequel extends AbstractScript
 	}
 	
 	/**
-	 * Distance entre l'arrière du robot et son centre
+	 * Distance en mm entre l'arrière du robot et son centre
 	 */
-	private int back_length = 150;
+	private int rear_length = 150;
 	
 	/**
-	 * Longueur de la cale pour le y
+	 * Longueur en mm de la cale pour le x
 	 */
-	private int wedge_length = 100;
+	private int wedge_x = 47;
+	
+	/**
+	 * Longueur en mm de la cale pour le y
+	 */
+	private int wedge_y = 90;
+	
 
 	@Override
 	public void execute(int versionToExecute, GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException 
@@ -53,20 +59,33 @@ public class Prequel extends AbstractScript
 				// Le robot regardant vers -pi/2 , on lui demande de reculer
 				actualState.robot.moveLengthwise(0, hooksToConsider, true);
 				
+				// On récupère la position en y du robot
+				actualState.robot.setPosition(new Vec2(actualState.robot.getPosition().x , 2000 - wedge_y - rear_length ));
+				
+				// On récupère l'orientation
+				actualState.robot.setOrientation(- Math.PI/2);
+				
 				// Vitesse normale 
-				actualState.robot.setLocomotionSpeed(Speed.SLOW);
+				//actualState.robot.setLocomotionSpeed(Speed.MEDIUM);
 				
 				// On rejoint la position Y finale que doit avoir le robot
-				actualState.robot.moveLengthwise(850 - back_length - wedge_length);
+				actualState.robot.moveLengthwise(850 - rear_length - wedge_y);
 				
 				// On s'oriente vers pi
 				actualState.robot.turn(Math.PI);
 				
 				// On reprend une vitesse lente
-				actualState.robot.setLocomotionSpeed(Speed.SLOW);
+				//actualState.robot.setLocomotionSpeed(Speed.SLOW);
 				
 				// On recule jusqu'à ce que la cale nous bloque en position x finale
 				actualState.robot.moveLengthwise(-1000, hooksToConsider, true);
+				
+				// Récupération du x
+				actualState.robot.setPosition(new Vec2(1500 - wedge_x - rear_length , actualState.robot.getPosition().y));
+				
+				// Orientation finale
+				actualState.robot.setOrientation(Math.PI);
+				
 			}
 			catch (UnableToMoveException e)
 			{
