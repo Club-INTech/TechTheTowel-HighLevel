@@ -30,10 +30,9 @@ public class Prequel extends AbstractScript
 	}
 	
 	/**
-	 * La position en y du robot
+	 * Distance entre l'arrière du robot et son centre
 	 */
-	private double y;
-	
+	private int back_length = 200;
 
 	@Override
 	public void execute(int versionToExecute, GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException 
@@ -46,11 +45,8 @@ public class Prequel extends AbstractScript
 				// On prend une vitesse de rotation lente pour ne pas exploser le coin du robot
 				actualState.robot.setLocomotionSpeed(Speed.SLOW);
 			
-				// Le robot regardant vers pi/2 , on lui demande de tourner vers pi
-				actualState.robot.turn(Math.PI, hooksToConsider, true);
-				
-				// Une fois bloqué, on récupère la position en y du robot
-				y =  (actualState.robot.robotRay) * Math.asin( actualState.robot.getOrientation() - (Math.PI/2));
+				// Le robot regardant vers pi/2 , on lui demande de reculer
+				actualState.robot.moveLengthwise(0, hooksToConsider, true);
 				
 				// On s'oriente vers pi/2
 				actualState.robot.turn(Math.PI/2);
@@ -59,7 +55,7 @@ public class Prequel extends AbstractScript
 				actualState.robot.setLocomotionSpeed(Speed.MEDIUM);
 				
 				// On rejoint la position Y finale que doit avoir le robot
-				actualState.robot.moveLengthwise((int) (1150 - y));
+				actualState.robot.moveLengthwise(1150 - back_length);
 				
 				// On s'oriente vers pi
 				actualState.robot.turn(Math.PI);
@@ -75,6 +71,11 @@ public class Prequel extends AbstractScript
 				finalize(actualState);
 				throw new ExecuteException(e);
 			}
+		}
+		
+		else
+		{
+			log.debug("Mauvaise version du script");
 		}
 		
 	}
