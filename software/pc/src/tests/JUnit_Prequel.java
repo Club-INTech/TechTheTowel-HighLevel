@@ -34,7 +34,7 @@ public class JUnit_Prequel extends JUnit_Test
 		super.setUp();
 		scriptManager = (ScriptManager)container.getService(ServiceNames.SCRIPT_MANAGER);
 		theRobot = (GameState<Robot>)container.getService(ServiceNames.GAME_STATE);
-		theRobot.robot.setOrientation(Math.PI/2);
+		theRobot.robot.setOrientation(- Math.PI/2);
 	}
 	
 	@After

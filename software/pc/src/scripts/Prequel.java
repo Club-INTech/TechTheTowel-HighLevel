@@ -17,7 +17,7 @@ import utils.Log;
 
 /**
  * Script permettant de positionner le robot avant le match, ou un Junit.
- * Version 0 : On pose le robot près des bacs à poisson, on fait cogner sa diagonale sur le mur qui nous donne la position en y, puis on se dirige vers la cale au niveau du tapis imposant le x
+ * Version 0 : On pose le robot près des portes avec une cale, ce qui nous donne la position en y. Puis on se dirige vers la cale au niveau du tapis imposant le x
  * @author CF
  */
 
@@ -32,7 +32,12 @@ public class Prequel extends AbstractScript
 	/**
 	 * Distance entre l'arrière du robot et son centre
 	 */
-	private int back_length = 200;
+	private int back_length = 150;
+	
+	/**
+	 * Longueur de la cale pour le y
+	 */
+	private int wedge_length = 100;
 
 	@Override
 	public void execute(int versionToExecute, GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException 
@@ -42,20 +47,17 @@ public class Prequel extends AbstractScript
 		{
 			try
 			{
-				// On prend une vitesse de rotation lente pour ne pas exploser le coin du robot
+				// On prend une vitesse de translation lente pour ne pas exploser le robot
 				actualState.robot.setLocomotionSpeed(Speed.SLOW);
 			
-				// Le robot regardant vers pi/2 , on lui demande de reculer
+				// Le robot regardant vers -pi/2 , on lui demande de reculer
 				actualState.robot.moveLengthwise(0, hooksToConsider, true);
 				
-				// On s'oriente vers pi/2
-				actualState.robot.turn(Math.PI/2);
-				
 				// Vitesse normale 
-				actualState.robot.setLocomotionSpeed(Speed.MEDIUM);
+				actualState.robot.setLocomotionSpeed(Speed.SLOW);
 				
 				// On rejoint la position Y finale que doit avoir le robot
-				actualState.robot.moveLengthwise(1150 - back_length);
+				actualState.robot.moveLengthwise(850 - back_length - wedge_length);
 				
 				// On s'oriente vers pi
 				actualState.robot.turn(Math.PI);
