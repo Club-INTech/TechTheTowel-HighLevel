@@ -184,8 +184,7 @@ public class Fishing extends AbstractScript
 	{
 		try
 		{
-		// On remonte les deux bras simultanément en fin de script
-		stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, false);
+		// On remonte le bras en fin de script
 		stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
 		}
 		catch (SerialConnexionException e) 

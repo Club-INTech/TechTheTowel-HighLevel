@@ -46,8 +46,7 @@ public class JUnit_Fishing extends JUnit_Test
 	@After
 	public void aftermath() throws Exception 
 	{
-		//on remonte les deux bras en même temps
-		theRobot.robot.useActuator(ActuatorOrder.ARM_INIT,false);
+		//on remonte le bras
 		theRobot.robot.useActuator(ActuatorOrder.ARM_INIT,true);
 	}
 	

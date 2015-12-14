@@ -47,7 +47,7 @@ public class Prequel extends AbstractScript
 				actualState.robot.setLocomotionSpeed(Speed.SLOW);
 			
 				// Le robot regardant vers pi/2 , on lui demande de tourner vers pi
-				actualState.robot.turn(Math.PI/2, hooksToConsider, true);
+				actualState.robot.turn(Math.PI, hooksToConsider, true);
 				
 				// Une fois bloqué, on récupère la position en y du robot
 				y =  (actualState.robot.robotRay) * Math.asin( actualState.robot.getOrientation() - (Math.PI/2));
@@ -87,6 +87,7 @@ public class Prequel extends AbstractScript
 	@Override
 	public void finalize(GameState<?> state) throws SerialFinallyException 
 	{
+		// Immobilisation du robot en fin de script
 		state.robot.immobilise();
 	}
 
