@@ -65,7 +65,7 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.turn((Math.PI), hooksToConsider, false);
 				
 				// On baisse le bras aimanté
-				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION_LEFT, true);
 				
 				// On longe le bac
 				stateToConsider.robot.moveLengthwise(420, hooksToConsider, false);
@@ -74,13 +74,13 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.setAreFishesOnBoard(true);
 				
 				// On remonte le bras pour passer au dessus du filet
-				stateToConsider.robot.useActuator(ActuatorOrder.MIDLE_POSITION, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.MIDLE_POSITION_LEFT, true);
 				
 				// On avance jusqu'au niveau du filet, distance à vérifier avec le robot final
 				stateToConsider.robot.moveLengthwise(200, hooksToConsider, false);
 				
 				// On lâche les poissons
-				stateToConsider.robot.useActuator(ActuatorOrder.FREE_FISHES, true);	
+				stateToConsider.robot.useActuator(ActuatorOrder.FREE_FISHES_LEFT, true);
 				
 				// On indique au robot que les poissons ne sont plus sur le bras
 				stateToConsider.robot.setAreFishesOnBoard(false);
@@ -111,22 +111,22 @@ public class Fishing extends AbstractScript
 					stateToConsider.robot.turn((Math.PI), hooksToConsider, false);
 					
 					// On baisse le bras aimanté
-					stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION, true);
+					stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION_RIGHT, true);
 					
 					// On longe le bac
-					stateToConsider.robot.moveLengthwise(-420, hooksToConsider, false);
+					stateToConsider.robot.moveLengthwise(420, hooksToConsider, false);
 					
 					// On indique au robot que les poissons sont sur le bras
 					stateToConsider.robot.setAreFishesOnBoard(true);
 					
 					// On remonte le bras pour passer au dessus du filet
-					stateToConsider.robot.useActuator(ActuatorOrder.MIDLE_POSITION, true);
+					stateToConsider.robot.useActuator(ActuatorOrder.MIDLE_POSITION_RIGHT, true);
 					
 					// On avance jusqu'au niveau du filet, distance à vérifier avec le robot final
-					stateToConsider.robot.moveLengthwise(-200, hooksToConsider, false);
+					stateToConsider.robot.moveLengthwise(200, hooksToConsider, false);
 					
 					// On lâche les poissons
-					stateToConsider.robot.useActuator(ActuatorOrder.FREE_FISHES, true);	
+					stateToConsider.robot.useActuator(ActuatorOrder.FREE_FISHES_RIGHT, true);
 					
 					// On indique au robot que les poissons ne sont plus sur le bras
 					stateToConsider.robot.setAreFishesOnBoard(false);
@@ -167,14 +167,9 @@ public class Fishing extends AbstractScript
 	public Circle entryPosition(int version, int ray, Vec2 robotPosition) 
 	{
 		// TODO a modifier avec les phases de test
-		if (version == 0)
+		if (version == 0 || version == 1)
 		{
 			return new Circle(new Vec2(1000,200));
-		}
-		
-		else if (version == 1)
-		{
-			return new Circle (new Vec2(-1000,200));
 		}
 		else
 		{

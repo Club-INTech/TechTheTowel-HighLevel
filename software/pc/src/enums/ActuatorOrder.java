@@ -20,12 +20,15 @@ public enum ActuatorOrder
 	TURN_LEFT("tg"),
 	
 	// Consignes pour les bras chargés de prendre les poissons
-	FISHING_POSITION("fp"),
-	MIDLE_POSITION("mp"),
-	FREE_FISHES("ff"),
+	FISHING_POSITION_LEFT("fpl"),
+	MIDLE_POSITION_LEFT("mpl"),
+	FREE_FISHES_LEFT("ffl"),
+	FISHING_POSITION_RIGHT("fpr"),
+	MIDLE_POSITION_RIGHT("mpr"),
+	FREE_FISHES_RIGHT("ffr"),
 	
 	// Consigne pour remettre les bras en position initiale, à implémenter au bas niveau
-	ARM_INIT("ai"),
+	ARM_INIT("aif"),
 	
 	//Consigne d'ouverture du parasol
 	//TODO : mesurer la durée de déploiement du parasol, implémenter la commande "ps" au bas niveau
