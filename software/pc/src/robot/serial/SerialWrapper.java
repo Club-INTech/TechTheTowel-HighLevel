@@ -13,11 +13,11 @@ import utils.Log;
 import utils.Sleep;
 
 /**
- * Prototype de wrapper pour la série incluant toutes les fonctions série. Diffère des différents CardWrapper car tout y
+ * Prototype de wrapper pour la série incluant toutes les méthodes série. Diffère des différents CardWrapper car tout y
  * est centralisé. Les CardWrapper étaient utiles quand on avait plusieures AVRs pour les différentes fonctions, désormais
  * tout est centralisé sur l'ARM, ces CardWrappers ne sont donc que des reliques à éliminer.
  *
- * N'EST PAS IMPLEMENTE DANS LE ROBOT POUR LE MOMENT
+ * N'EST PAS IMPLEMENTE DANS LE ROBOT POUR LE MOMENT ; TEST DANS LA BRANCHE serialwrapper
  *
  * @author pf, marsu, paul, discord
  */
