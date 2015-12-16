@@ -125,6 +125,8 @@ public abstract class Robot implements Service
      * C'est a utiliser au lieu d'attendre via Sleep.sleep, car dans robotChrono, au lieu d'attendre, on incrémente le chronomètre de la valeur coresspondante.
      * @param delay temps que le robot doit passer a attendre
      */
+
+	public abstract void setAX12Speed(int speed) throws SerialConnexionException;
 	
     public abstract void sleep(long delay);
     

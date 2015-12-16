@@ -47,7 +47,12 @@ public class RobotReal extends Robot
         rc.speed=speed;
         rc.orientation = getOrientation();
     }
-    
+
+	@Override
+	public void setAX12Speed(int speed) throws SerialConnexionException
+	{
+		mActuatorCardWrapper.setAX12Speed(speed);
+	}
 
 	@Override
 	public void useActuator(ActuatorOrder order, boolean waitForCompletion) throws SerialConnexionException
