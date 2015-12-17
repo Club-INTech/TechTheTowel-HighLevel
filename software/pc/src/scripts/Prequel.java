@@ -60,8 +60,8 @@ public class Prequel extends AbstractScript
 				// On fixe l'orientation
 				actualState.robot.setOrientation(- Math.PI/2);
 				
-				// Vitesse normale 
-				//actualState.robot.setLocomotionSpeed(Speed.MEDIUM);
+				//Vitesse normale 
+				//actualState.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 				
 				// On rejoint la position Y finale que doit avoir le robot
 				actualState.robot.moveLengthwise(850 - rear_length - wedge);
@@ -70,7 +70,7 @@ public class Prequel extends AbstractScript
 				actualState.robot.turn(Math.PI);
 				
 				// On reprend une vitesse lente
-				//actualState.robot.setLocomotionSpeed(Speed.SLOW);
+				//actualState.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 				
 				// On recule jusqu'à ce que le mur nous bloque
 				actualState.robot.moveLengthwise(-1000, hooksToConsider, true);
