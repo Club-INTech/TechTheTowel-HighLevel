@@ -152,7 +152,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	 * @return Un tableau contenant le message
 	 * @throws SerialConnexionException 
 	 */
-	public String[] communiquer(String[] messages, int nb_lignes_reponse) throws SerialConnexionException
+	public synchronized String[] communiquer(String[] messages, int nb_lignes_reponse) throws SerialConnexionException
 	{
 		synchronized(output)
 		{
@@ -187,7 +187,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 						{
 							//Vidage du buffer (expériemental)
 							output.clear();
-                            
+
 							output.write(m.getBytes());
 							output.flush();
 						}
