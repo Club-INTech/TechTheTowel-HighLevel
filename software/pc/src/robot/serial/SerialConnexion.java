@@ -8,6 +8,7 @@ import gnu.io.*;
 import utils.Log;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
@@ -50,6 +51,18 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	 */
 	private static final int TIME_OUT = 2000;
 	
+	/**
+	 * Sauvegarde d'un message à problème
+	 * (qui lève UnknownOrderException)
+	 */
+	private String[] unknownMessages = null;
+	
+	/**
+	 * Pointe vers l'emplacement du tableau messages courant qui pose problème
+	 * (qui lève UnknownOrderException)
+	 */
+	//TODO gérer les paramètres de merde dans le bas niveau en renvoyant "Ordre inconnu"
+	private int counter = -1;
 
 	/**
 	 * Construit une connexion s�rie
@@ -151,16 +164,20 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	 * @param nb_lignes_reponse Nombre de lignes que l'avr va répondre (sans compter les acquittements)
 	 * @return Un tableau contenant le message
 	 * @throws SerialConnexionException 
+	 * @throws IOException 
 	 */
 	public String[] communiquer(String[] messages, int nb_lignes_reponse) throws SerialConnexionException
 	{
 		synchronized(output)
 		{
 			String inputLines[] = new String[nb_lignes_reponse];
+			int c=-1;
 			try
 			{
+				while(input.read()!=-1);
 				for (String m : messages)
 				{
+					c++;
 					//Vidage du buffer (expérimental)
 					output.clear();
 
@@ -232,9 +249,10 @@ public class SerialConnexion implements SerialPortEventListener, Service
 			}
 			catch (UnknownOrderException uoe)
 			{
-				if(UnknownOrderException.canCommunicate)
+				if (!messages.equals(unknownMessages))
 				{
-					//ATTENTION! verifyConnexion change la valeur de UnknownOrderException.canCommunicate !
+					unknownMessages=messages;
+					counter=c;
 					if (uoe.verifyConnexion())
 					{
 						communiquer(messages, nb_lignes_reponse);
@@ -246,8 +264,12 @@ public class SerialConnexion implements SerialPortEventListener, Service
 				}
 				else
 				{
-					UnknownOrderException.canCommunicate=!UnknownOrderException.canCommunicate;
-					throw new SerialConnexionException();
+					log.critical("Ordre REALLYNIGGA inonnu");
+					uoe.logStack();
+					if (counter==c)
+					{
+						log.critical("Mention spéciale à -> "+messages[counter]);
+					}
 				}
 			}
 			catch (Exception e)
