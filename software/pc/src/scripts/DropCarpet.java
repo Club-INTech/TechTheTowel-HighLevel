@@ -124,7 +124,7 @@ public class DropCarpet extends AbstractScript
 				//le 2.98 a ete testé de façon experimentale (ainsi que le 606), a modifier si quelqu'un veut le calculer
 				stateToConsider.robot.turn(2.98);
 
-				stateToConsider.robot.moveLengthwise(606, hooksToConsider, false, true, Speed.SLOW);
+				stateToConsider.robot.moveLengthwise(606, hooksToConsider, false, true, Speed.SLOW_ALL);
 //				stateToConsider.table.removeGlassX(1);
 				
 				//on presente ses arrieres a l'escalier
@@ -187,7 +187,7 @@ public class DropCarpet extends AbstractScript
 			{
 				// Ralenti le robot pour ce script
 				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
-				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
+				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 				
 				//mise en place d'un hook pour attraper le gobelet 1.75 secondes après le début du script
 //				Hook hookGoblet = hookFactory.newHookTimer(System.currentTimeMillis() + 2350,500);
@@ -198,7 +198,7 @@ public class DropCarpet extends AbstractScript
 
 				//le 3.05 a ete testé de façon experimentale (ainsi que le 850), a modifier si quelqu'un veut le calculer
 				stateToConsider.robot.turn(3.05);
-				stateToConsider.robot.moveLengthwise(850, hooksToConsider, false, true, Speed.SLOW);
+				stateToConsider.robot.moveLengthwise(850, hooksToConsider, false, true, Speed.SLOW_ALL);
 //				stateToConsider.table.removeGlassX(1);
 				stateToConsider.robot.useActuator(ActuatorOrder.STOP, false);// on ferme dans tous les cas
 

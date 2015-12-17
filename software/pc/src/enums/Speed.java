@@ -9,13 +9,16 @@ package enums;
 
 public enum Speed
 {
-	//TODO régler les valeurs de vitesse en translations et rotations avec des phases de test
+	//TODO régler les valeurs de vitesse en translations et rotations avec des phases de test, décider des combinaisons de vitesses inutiles
 	
 	/** vitesse lente en translation, lente en rotation*/
 	SLOW_ALL(120, Math.PI/2),
 	
 	/** vitesse lente en translation, normale en rotation*/
 	SLOW_T_MEDIUM_R(120,Math.PI),
+	
+	/** vitesse standard en translation, lente en rotation*/
+	MEDIUMT_T_SLOW_R(400,Math.PI/2),
 	
 	/** Vitesse standard de déplacement et rotation*/
 	MEDIUM_ALL(400,2*(Math.PI)),
@@ -24,7 +27,7 @@ public enum Speed
 	MEDIUM_T_SLOW_R(400,Math.PI/2),
 	
 	/** vitesse rapide en translation et rotation*/
-	FAST(800,4*(Math.PI));
+	FAST_ALL(800,4*(Math.PI));
 	
 	///** vitesse en temps normal (pour des distances de 200mm à 1000 mm) */
 		//BETWEEN_SCRIPTS_SLOW(10, 10),

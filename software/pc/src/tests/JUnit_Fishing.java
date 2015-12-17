@@ -56,7 +56,7 @@ public class JUnit_Fishing extends JUnit_Test
 		try
 		{
 			log.debug("Début de pêche");
-			theRobot.robot.setLocomotionSpeed(Speed.SLOW);
+			theRobot.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 			scriptManager.getScript(ScriptNames.FISHING).goToThenExec(0, theRobot, emptyHook);
 		}
 		catch(ExecuteException | SerialFinallyException e)

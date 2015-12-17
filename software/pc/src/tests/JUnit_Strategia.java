@@ -66,7 +66,7 @@ public class JUnit_Strategia extends JUnit_Test
 		}		
 
 		real_state.robot.updateConfig();
-		real_state.robot.setLocomotionSpeed(Speed.SLOW);
+		real_state.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 		container.startAllThreads();
 	}
 	

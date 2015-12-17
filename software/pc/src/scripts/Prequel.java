@@ -49,7 +49,7 @@ public class Prequel extends AbstractScript
 			try
 			{
 				// On prend une vitesse de translation lente pour ne pas exploser le robot
-				actualState.robot.setLocomotionSpeed(Speed.SLOW);
+				actualState.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 			
 				// Le robot regardant vers -pi/2 , on lui demande de reculer
 				actualState.robot.moveLengthwise(-1000, hooksToConsider, true);

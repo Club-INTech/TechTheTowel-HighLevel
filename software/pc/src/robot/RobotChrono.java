@@ -133,7 +133,7 @@ public class RobotChrono extends Robot
 	@Override
 	public void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact, Boolean mustDetect) throws UnableToMoveException
 	{
-		Speed newSpeed = Speed.SLOW;
+		Speed newSpeed = Speed.SLOW_ALL;
 		
 		/*
     	if (distance<150)

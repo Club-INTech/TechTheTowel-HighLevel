@@ -464,7 +464,7 @@ public abstract class Robot implements Service
 
 		log.debug("appel de Robot.moveLengthwiseTowardWall(" + distance + "," + hooksToConsider + ")");
         Speed oldSpeed = speed; 
-        setLocomotionSpeed(Speed.SLOW);
+        setLocomotionSpeed(Speed.SLOW_ALL);
         moveLengthwise(distance, hooksToConsider, true, false);
         setLocomotionSpeed(oldSpeed);
     }

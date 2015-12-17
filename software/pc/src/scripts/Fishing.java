@@ -60,7 +60,7 @@ public class Fishing extends AbstractScript
 			{
 				// On prend une vitesse lente pour que les aimants puissent récupérer les poissons
 				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
-				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
+				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 				
 				// On s'oriente vers le côté ennemi
 				stateToConsider.robot.turn((Math.PI), hooksToConsider, true);
@@ -107,7 +107,7 @@ public class Fishing extends AbstractScript
 
 					// On prend une vitesse lente pour que les aimants puissent récupérer les poissons
 					Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
-					stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
+					stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 					
 					// On s'oriente vers le côté ennemi
 					stateToConsider.robot.turn((Math.PI), hooksToConsider, true);
