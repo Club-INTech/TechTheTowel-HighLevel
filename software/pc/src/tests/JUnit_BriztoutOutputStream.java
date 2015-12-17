@@ -53,7 +53,7 @@ public class JUnit_BriztoutOutputStream extends JUnit_Test
         }
     }
 
-    @Test
+    //@Test
     public void testRobot()
     {
         Locomotion loc;
@@ -67,5 +67,16 @@ public class JUnit_BriztoutOutputStream extends JUnit_Test
         } catch (SerialManagerException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void testFlow() throws IOException {
+        while(true)
+        {
+            out.write(val);
+            out.clear();
+
+        }
+
     }
 }

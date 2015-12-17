@@ -49,7 +49,7 @@ public class Prequel extends AbstractScript
 			try
 			{
 				// On prend une vitesse de translation lente pour ne pas exploser le robot
-				actualState.robot.setLocomotionSpeed(Speed.SLOW);
+				actualState.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 			
 				// Le robot regardant vers -pi/2 , on lui demande de reculer
 				actualState.robot.moveLengthwise(-1000, hooksToConsider, true);
@@ -60,8 +60,8 @@ public class Prequel extends AbstractScript
 				// On fixe l'orientation
 				actualState.robot.setOrientation(- Math.PI/2);
 				
-				// Vitesse normale 
-				//actualState.robot.setLocomotionSpeed(Speed.MEDIUM);
+				//Vitesse normale 
+				//actualState.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 				
 				// On rejoint la position Y finale que doit avoir le robot
 				actualState.robot.moveLengthwise(850 - rear_length - wedge);
@@ -70,13 +70,16 @@ public class Prequel extends AbstractScript
 				actualState.robot.turn(Math.PI);
 				
 				// On reprend une vitesse lente
-				//actualState.robot.setLocomotionSpeed(Speed.SLOW);
+				//actualState.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 				
-				// On recule jusqu'à ce que la cale nous bloque en position x finale
+				// On recule jusqu'à ce que le mur nous bloque
 				actualState.robot.moveLengthwise(-1000, hooksToConsider, true);
 				
+				// On se positionne en x final
+				actualState.robot.moveLengthwise(150, hooksToConsider, false);
+				
 				// Récupération du x
-				actualState.robot.setPosition(new Vec2(1500 - wedge - rear_length , actualState.robot.getPosition().y));
+				actualState.robot.setPosition(new Vec2(1500 - rear_length - 150, actualState.robot.getPosition().y));
 				
 				// Orientation finale
 				actualState.robot.setOrientation(Math.PI);

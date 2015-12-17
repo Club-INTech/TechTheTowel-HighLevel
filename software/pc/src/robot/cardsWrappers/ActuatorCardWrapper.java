@@ -49,16 +49,6 @@ public class ActuatorCardWrapper implements Service
 		actuatorCardSerial.communiquer(order.getSerialOrder(), 0);
 	}
 
-	/**
-	 * Donne une vitesse aux AX12
-	 * @param speed vitesse de 0 à 255
-	 */
-	public void setAX12Speed(int speed) throws SerialConnexionException
-	{
-		String chaines[] = {"caxs", Integer.toString(speed)};
-		actuatorCardSerial.communiquer(chaines, 0);
-	}
-
 	
 
 	

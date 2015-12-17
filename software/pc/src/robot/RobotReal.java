@@ -37,7 +37,7 @@ public class RobotReal extends Robot
 		this.mActuatorCardWrapper = mActuatorCardWrapper;
 		this.mLocomotion = deplacements;
 		updateConfig();
-		speed = Speed.SLOW;		
+		speed = Speed.SLOW_ALL;		
 	}
 	
     public void copy(RobotChrono rc)
@@ -48,11 +48,6 @@ public class RobotReal extends Robot
         rc.orientation = getOrientation();
     }
 
-	@Override
-	public void setAX12Speed(int speed) throws SerialConnexionException
-	{
-		mActuatorCardWrapper.setAX12Speed(speed);
-	}
 
 	@Override
 	public void useActuator(ActuatorOrder order, boolean waitForCompletion) throws SerialConnexionException
@@ -135,7 +130,7 @@ public class RobotReal extends Robot
     public void moveLengthwiseWithoutDetection(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
 	{	
 		log.debug("appel de RobotReal.moveLengthwiseWithoutDetection(" + distance + "," + hooksToConsider + "," + expectsWallImpact + ")");
-		Speed newSpeed = Speed.SLOW;
+		Speed newSpeed = Speed.SLOW_ALL;
 		/*
     	if (distance<150)
     		newSpeed = Speed.SLOW;
@@ -161,7 +156,7 @@ public class RobotReal extends Robot
 	 public void moveLengthwise(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact, Boolean mustDetect) throws UnableToMoveException
 	{	
 		log.debug("appel de RobotReal.moveLengthwise(" + distance + "," + hooksToConsider + "," + expectsWallImpact + "," + mustDetect + ")");
-		Speed newSpeed = Speed.SLOW;
+		Speed newSpeed = Speed.SLOW_ALL;
 		/*
     	if (distance<150)
     		newSpeed = Speed.SLOW;

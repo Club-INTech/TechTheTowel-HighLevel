@@ -58,10 +58,9 @@ public class Fishing extends AbstractScript
 		{
 			try
 			{
-				stateToConsider.robot.setAX12Speed(12);
 				// On prend une vitesse lente pour que les aimants puissent récupérer les poissons
 				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
-				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
+				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 				
 				// On s'oriente vers le côté ennemi
 				stateToConsider.robot.turn((Math.PI), hooksToConsider, true);
@@ -70,7 +69,7 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION_LEFT, true);
 				
 				// On longe le bac
-				stateToConsider.robot.moveLengthwise(400, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(300, hooksToConsider, true);
 				
 				// On indique au robot que les poissons sont sur le bras
 				stateToConsider.robot.setAreFishesOnBoard(true);
@@ -106,10 +105,9 @@ public class Fishing extends AbstractScript
 			try
 				{
 
-					stateToConsider.robot.setAX12Speed(12);
 					// On prend une vitesse lente pour que les aimants puissent récupérer les poissons
 					Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
-					stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
+					stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 					
 					// On s'oriente vers le côté ennemi
 					stateToConsider.robot.turn((Math.PI), hooksToConsider, true);
@@ -173,7 +171,7 @@ public class Fishing extends AbstractScript
 		// TODO a modifier avec les phases de test
 		if (version == 0 || version == 1)
 		{
-			return new Circle(new Vec2(1000,201));
+			return new Circle(new Vec2(850,231));
 		}
 		else
 		{

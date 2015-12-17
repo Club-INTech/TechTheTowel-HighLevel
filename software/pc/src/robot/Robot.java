@@ -126,8 +126,7 @@ public abstract class Robot implements Service
      * @param delay temps que le robot doit passer a attendre
      */
 
-	public abstract void setAX12Speed(int speed) throws SerialConnexionException;
-	
+
     public abstract void sleep(long delay);
     
 	/**
@@ -464,7 +463,7 @@ public abstract class Robot implements Service
 
 		log.debug("appel de Robot.moveLengthwiseTowardWall(" + distance + "," + hooksToConsider + ")");
         Speed oldSpeed = speed; 
-        setLocomotionSpeed(Speed.SLOW);
+        setLocomotionSpeed(Speed.SLOW_ALL);
         moveLengthwise(distance, hooksToConsider, true, false);
         setLocomotionSpeed(oldSpeed);
     }
