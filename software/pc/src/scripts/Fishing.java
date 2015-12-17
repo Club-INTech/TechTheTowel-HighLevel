@@ -69,7 +69,7 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION_LEFT, true);
 				
 				// On longe le bac
-				stateToConsider.robot.moveLengthwise(400, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(300, hooksToConsider, true);
 				
 				// On indique au robot que les poissons sont sur le bras
 				stateToConsider.robot.setAreFishesOnBoard(true);
@@ -171,7 +171,7 @@ public class Fishing extends AbstractScript
 		// TODO a modifier avec les phases de test
 		if (version == 0 || version == 1)
 		{
-			return new Circle(new Vec2(1000,231));
+			return new Circle(new Vec2(850,231));
 		}
 		else
 		{
