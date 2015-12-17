@@ -35,14 +35,9 @@ public class Prequel extends AbstractScript
 	private int rear_length = 150;
 	
 	/**
-	 * Longueur en mm de la cale pour le x
+	 * Longueur en mm de la cale pour place le x et le y 
 	 */
-	private int wedge_x = 47;
-	
-	/**
-	 * Longueur en mm de la cale pour le y
-	 */
-	private int wedge_y = 90;
+	private int wedge = 90;
 	
 
 	@Override
@@ -60,16 +55,16 @@ public class Prequel extends AbstractScript
 				actualState.robot.moveLengthwise(-1000, hooksToConsider, true);
 				
 				// On récupère la position en y du robot
-				actualState.robot.setPosition(new Vec2(actualState.robot.getPosition().x , 2000 - wedge_y - rear_length ));
+				actualState.robot.setPosition(new Vec2(actualState.robot.getPosition().x , 2000 - wedge - rear_length ));
 				
-				// On récupère l'orientation
+				// On fixe l'orientation
 				actualState.robot.setOrientation(- Math.PI/2);
 				
 				// Vitesse normale 
 				//actualState.robot.setLocomotionSpeed(Speed.MEDIUM);
 				
 				// On rejoint la position Y finale que doit avoir le robot
-				actualState.robot.moveLengthwise(850 - rear_length - wedge_y);
+				actualState.robot.moveLengthwise(850 - rear_length - wedge);
 				
 				// On s'oriente vers pi
 				actualState.robot.turn(Math.PI);
@@ -81,7 +76,7 @@ public class Prequel extends AbstractScript
 				actualState.robot.moveLengthwise(-1000, hooksToConsider, true);
 				
 				// Récupération du x
-				actualState.robot.setPosition(new Vec2(1500 - wedge_x - rear_length , actualState.robot.getPosition().y));
+				actualState.robot.setPosition(new Vec2(1500 - wedge - rear_length , actualState.robot.getPosition().y));
 				
 				// Orientation finale
 				actualState.robot.setOrientation(Math.PI);

@@ -21,10 +21,10 @@ public enum ActuatorOrder
 	
 	// Consignes pour les bras chargés de prendre les poissons
 	FISHING_POSITION_LEFT("fpl"),
-	MIDLE_POSITION_LEFT("mpl"),
+	MIDDLE_POSITION_LEFT("mpl"),
 	FREE_FISHES_LEFT("ffl"),
 	FISHING_POSITION_RIGHT("fpr"),
-	MIDLE_POSITION_RIGHT("mpr"),
+	MIDDLE_POSITION_RIGHT("mpr"),
 	FREE_FISHES_RIGHT("ffr"),
 	
 	// Consigne pour remettre les bras en position initiale, à implémenter au bas niveau
