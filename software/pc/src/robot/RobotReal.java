@@ -47,7 +47,7 @@ public class RobotReal extends Robot
         rc.speed=speed;
         rc.orientation = getOrientation();
     }
-	
+
 
 	@Override
 	public void useActuator(ActuatorOrder order, boolean waitForCompletion) throws SerialConnexionException
