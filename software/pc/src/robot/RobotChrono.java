@@ -59,10 +59,6 @@ public class RobotChrono extends Robot
 			this.chrono += order.getDuration();
 	}
 
-	@Override
-	public void setAX12Speed(int speed) throws SerialConnexionException {
-
-	}
 
 
 	public void turn(double angle, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
