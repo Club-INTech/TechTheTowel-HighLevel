@@ -62,6 +62,11 @@ public class Fishing extends AbstractScript
 				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 				
+				// On commence à se placer près du bord
+				stateToConsider.robot.turn(Math.PI - 0.34);
+				
+				stateToConsider.robot.moveLengthwise(-500, hooksToConsider, true);
+				
 				// On s'oriente vers le côté ennemi
 				stateToConsider.robot.turn((Math.PI), hooksToConsider, true);
 				
@@ -171,7 +176,7 @@ public class Fishing extends AbstractScript
 		// TODO a modifier avec les phases de test
 		if (version == 0 || version == 1)
 		{
-			return new Circle(new Vec2(850,231));
+			return new Circle(new Vec2(575,337));
 		}
 		else
 		{
