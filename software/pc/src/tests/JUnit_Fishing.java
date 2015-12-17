@@ -3,6 +3,7 @@ package tests;
 import enums.ActuatorOrder;
 import enums.ScriptNames;
 import enums.ServiceNames;
+import enums.Speed;
 import exceptions.ExecuteException;
 import exceptions.PathNotFoundException;
 import exceptions.PointInObstacleException;
@@ -39,8 +40,7 @@ public class JUnit_Fishing extends JUnit_Test
 		super.setUp();
 		scriptManager = (ScriptManager)container.getService(ServiceNames.SCRIPT_MANAGER);
 		theRobot = (GameState<Robot>)container.getService(ServiceNames.GAME_STATE);
-		theRobot.robot.setPosition(Table.entryPosition);
-		theRobot.robot.setOrientation(Math.PI);
+		scriptManager.getScript(ScriptNames.PREQUEL).execute(0, theRobot, emptyHook);
 	}
 	
 	@After
@@ -56,6 +56,7 @@ public class JUnit_Fishing extends JUnit_Test
 		try
 		{
 			log.debug("Début de pêche");
+			theRobot.robot.setLocomotionSpeed(Speed.SLOW);
 			scriptManager.getScript(ScriptNames.FISHING).goToThenExec(0, theRobot, emptyHook);
 		}
 		catch(ExecuteException | SerialFinallyException e)

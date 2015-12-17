@@ -11,19 +11,23 @@ public enum Speed
 {
 	//TODO régler les valeurs de vitesse en translations et rotations avec des phases de test
 	
-	/** vitesse lente */
-
-	SLOW(120, Math.PI),
-
-
-	/** vitesse en temps normal (pour des distances de 200mm à 1000 mm) */
-	BETWEEN_SCRIPTS_SLOW(10, 10),
+	/** vitesse lente en translation, lente en rotation*/
+	SLOW_ALL(120, Math.PI/2),
 	
-	/** Vitesse standard de déplacement */
-	MEDIUM(400,2*(Math.PI)),
+	/** vitesse lente en translation, normale en rotation*/
+	SLOW_T_MEDIUM_R(120,Math.PI),
 	
-	/** vitesse rapide */
+	/** Vitesse standard de déplacement et rotation*/
+	MEDIUM_ALL(400,2*(Math.PI)),
+	
+	/** vitesse standard de déplacement, lente en rotation*/
+	MEDIUM_T_SLOW_R(400,Math.PI/2),
+	
+	/** vitesse rapide en translation et rotation*/
 	FAST(800,4*(Math.PI));
+	
+	///** vitesse en temps normal (pour des distances de 200mm à 1000 mm) */
+		//BETWEEN_SCRIPTS_SLOW(10, 10),
 	
 	//buggé jusqu'a nouveau test
 //	/** vitesse en temps normal (distances de 1000+ mm) */

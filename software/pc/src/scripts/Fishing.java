@@ -58,7 +58,6 @@ public class Fishing extends AbstractScript
 		{
 			try
 			{
-				stateToConsider.robot.setAX12Speed(12);
 				// On prend une vitesse lente pour que les aimants puissent récupérer les poissons
 				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
@@ -106,7 +105,6 @@ public class Fishing extends AbstractScript
 			try
 				{
 
-					stateToConsider.robot.setAX12Speed(12);
 					// On prend une vitesse lente pour que les aimants puissent récupérer les poissons
 					Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
 					stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
@@ -173,7 +171,7 @@ public class Fishing extends AbstractScript
 		// TODO a modifier avec les phases de test
 		if (version == 0 || version == 1)
 		{
-			return new Circle(new Vec2(1000,201));
+			return new Circle(new Vec2(1000,231));
 		}
 		else
 		{
