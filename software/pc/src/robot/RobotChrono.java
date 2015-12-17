@@ -58,7 +58,11 @@ public class RobotChrono extends Robot
 		if(waitForCompletion)
 			this.chrono += order.getDuration();
 	}
-	
+
+
+		
+
+
 	public void turn(double angle, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
 	{
 		turn (angle, hooksToConsider, expectsWallImpact, false);

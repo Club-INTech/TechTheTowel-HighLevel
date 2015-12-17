@@ -5,9 +5,7 @@ import container.Service;
 import enums.Color;
 import enums.Elements;
 import smartMath.Vec2;
-import table.obstacles.ObstacleCircular;
 import table.obstacles.ObstacleManager;
-import table.obstacles.ObstacleRectangular;
 import utils.Config;
 import utils.Log;
 
@@ -132,7 +130,7 @@ public class Table implements Service
 
 	
 	/** point de depart du match a modifier a chaque base roulante */
-	public static final Vec2 entryPosition = new Vec2(1303,1150); //TODO position entree
+	public static final Vec2 entryPosition = new Vec2(1299,1150); //TODO position entree
 	
 	/**
 	 * Instancie une nouvelle table

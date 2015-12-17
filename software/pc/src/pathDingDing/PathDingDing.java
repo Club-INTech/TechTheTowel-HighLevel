@@ -94,6 +94,7 @@ public class PathDingDing implements Service
 	public ArrayList<Node> computePath(Vec2 start, Vec2 end) throws PointInObstacleException, PathNotFoundException
 	{
 		long time = System.currentTimeMillis();
+		log.debug("Appel au PDD vers : "+end);
 
 
 		//On vide les listes de nodes pour un nouveau calcul

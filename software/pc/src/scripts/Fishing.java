@@ -1,6 +1,7 @@
 package scripts;
 
 import enums.ActuatorOrder;
+import enums.Speed;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
@@ -58,8 +59,8 @@ public class Fishing extends AbstractScript
 			try
 			{
 				// On prend une vitesse lente pour que les aimants puissent récupérer les poissons
-				//Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
-				//stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
+				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
+				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
 				
 				// On s'oriente vers le côté ennemi
 				stateToConsider.robot.turn((Math.PI), hooksToConsider, false);
@@ -68,7 +69,7 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION_LEFT, true);
 				
 				// On longe le bac
-				stateToConsider.robot.moveLengthwise(420, hooksToConsider, false);
+				stateToConsider.robot.moveLengthwise(550, hooksToConsider, false);
 				
 				// On indique au robot que les poissons sont sur le bras
 				stateToConsider.robot.setAreFishesOnBoard(true);
@@ -91,7 +92,7 @@ public class Fishing extends AbstractScript
 				// Points gagnés max
 				stateToConsider.obtainedPoints += 40;
 				
-				//stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
+				stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
 			}
 			catch(UnableToMoveException | SerialConnexionException e)
 			{
@@ -104,8 +105,8 @@ public class Fishing extends AbstractScript
 			try
 				{
 					// On prend une vitesse lente pour que les aimants puissent récupérer les poissons
-					//Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
-					//stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
+					Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
+					stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
 					
 					// On s'oriente vers le côté ennemi
 					stateToConsider.robot.turn((Math.PI), hooksToConsider, false);
@@ -137,7 +138,7 @@ public class Fishing extends AbstractScript
 					// Points gagnés max
 					stateToConsider.obtainedPoints += 40;
 					
-					//stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
+					stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
 				}
 				catch(UnableToMoveException | SerialConnexionException e)
 				{
@@ -169,7 +170,7 @@ public class Fishing extends AbstractScript
 		// TODO a modifier avec les phases de test
 		if (version == 0 || version == 1)
 		{
-			return new Circle(new Vec2(1000,200));
+			return new Circle(new Vec2(1000,201));
 		}
 		else
 		{

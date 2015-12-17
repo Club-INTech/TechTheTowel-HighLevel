@@ -12,7 +12,9 @@ public enum Speed
 	//TODO régler les valeurs de vitesse en translations et rotations avec des phases de test
 	
 	/** vitesse lente */
-	SLOW(200, Math.PI),
+
+	SLOW(120, Math.PI),
+
 
 	/** vitesse en temps normal (pour des distances de 200mm à 1000 mm) */
 	BETWEEN_SCRIPTS_SLOW(10, 10),

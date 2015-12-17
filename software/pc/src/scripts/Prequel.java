@@ -1,7 +1,5 @@
 package scripts;
 
-import java.util.ArrayList;
-
 import enums.Speed;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -14,6 +12,8 @@ import smartMath.Vec2;
 import strategie.GameState;
 import utils.Config;
 import utils.Log;
+
+import java.util.ArrayList;
 
 /**
  * Script permettant de positionner le robot avant le match, ou un Junit.
@@ -57,7 +57,7 @@ public class Prequel extends AbstractScript
 				actualState.robot.setLocomotionSpeed(Speed.SLOW);
 			
 				// Le robot regardant vers -pi/2 , on lui demande de reculer
-				actualState.robot.moveLengthwise(0, hooksToConsider, true);
+				actualState.robot.moveLengthwise(-1000, hooksToConsider, true);
 				
 				// On récupère la position en y du robot
 				actualState.robot.setPosition(new Vec2(actualState.robot.getPosition().x , 2000 - wedge_y - rear_length ));
