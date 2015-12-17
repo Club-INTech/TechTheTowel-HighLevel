@@ -168,7 +168,6 @@ public class SerialConnexion implements SerialPortEventListener, Service
 					// ne jamais push un code avec cette ligne decommentee
 //					log.debug("Envoi serie : '" + m  + "'", this);
 					m += "\r";
-					
 					output.write(m.getBytes());
 					int nb_tests = 0;
 					char acquittement = ' ';
@@ -177,7 +176,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 					while (acquittement != '_')
 					{
 						nb_tests++;
-						
+
 						// affiche dans la console ce qu'on lit sur la série
 						String resposeFromCard = input.readLine();
 						//TODO commenter.
@@ -188,7 +187,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 						{
 							//Vidage du buffer (expériemental)
 							output.clear();
-
+                            
 							output.write(m.getBytes());
 							output.flush();
 						}
@@ -205,7 +204,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 				log.critical("Ne peut pas parler à la carte " + this.name + " lancement de "+e);
 				throw new SerialConnexionException();
 			}
-	
+
 			try
 			{
 				for (int i = 0 ; i < nb_lignes_reponse; i++)
@@ -220,7 +219,8 @@ public class SerialConnexion implements SerialPortEventListener, Service
 					}
 					if(inputLines[i].replaceAll(" ", "").equalsIgnoreCase("ordreinconnu"))
 					{
-						//TODO avant de throw, penses à vider le buffer de lecture à coups de input.read() qui renverra -1 une fois vidé.
+						// Avant de throw, on vide le buffer de lecture à coups de input.read() qui renverra -1 une fois vidé.
+						while(input.read()!=-1);
 						throw new UnknownOrderException(messages, this); // Balance l'exception à la méthode parente et quitte la méthode actuelle
 					}
 					if(!isAsciiExtended(inputLines[i]))
