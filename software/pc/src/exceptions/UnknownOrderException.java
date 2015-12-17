@@ -15,7 +15,7 @@ public class UnknownOrderException extends Exception
 	 * Son implémentation statique gère les différentes intanciations,
 	 * sachant que l'exception est levée dans un bloc synchronized.
 	**/
-	public static boolean canCommunicate = true;
+	//public static boolean canCommunicate = true;
 	
 	/**
 	 * Sauvegarde du message auquel le bas niveau répond "Ordre inconnu"
@@ -49,7 +49,6 @@ public class UnknownOrderException extends Exception
 	 */
 	public boolean verifyConnexion()
 	{
-		canCommunicate=!canCommunicate;
 		//ping de la série via la méthode éponyme de SerialConnexion
 		String ping = serialTest.ping();
 		//qui doit renvoyer "0"
