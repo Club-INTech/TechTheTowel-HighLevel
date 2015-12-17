@@ -182,7 +182,7 @@ public class Fishing extends AbstractScript
 	}
 
 	@Override
-	public void finalize(GameState<?> stateToConsider) throws SerialFinallyException 
+	public void finalize(GameState<?> stateToConsider) throws SerialFinallyException // TODO faire un joli finalize où l'on redépose les poissons en cas de rencontre avec robot adverse
 	{
 		try
 		{
