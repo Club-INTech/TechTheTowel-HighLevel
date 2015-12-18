@@ -174,7 +174,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 			int c=-1;
 			try
 			{
-				while(input.read()!=-1);
+				//while(input.read()!=-1); TODO Le vidage de buffer renvoie une exception s'il est vide
 				for (String m : messages)
 				{
 					c++;
@@ -237,7 +237,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 					if(inputLines[i].replaceAll(" ", "").equalsIgnoreCase("ordreinconnu"))
 					{
 						// Avant de throw, on vide le buffer de lecture à coups de input.read() qui renverra -1 une fois vidé.
-						while(input.read()!=-1);
+						//while(input.read()!=-1);
 						throw new UnknownOrderException(messages, this); // Balance l'exception à la méthode parente et quitte la méthode actuelle
 					}
 					if(!isAsciiExtended(inputLines[i]))
