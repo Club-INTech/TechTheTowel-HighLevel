@@ -14,6 +14,8 @@ import utils.Log;
 
 import java.util.ArrayList;
 
+import enums.Speed;
+
 
 /**
  * Script pour la fermeture des portes des cabines
@@ -47,8 +49,8 @@ public class CloseDoors extends AbstractScript
 			try
 			{
 				//On ralentit pour éviter de démonter les éléments de jeu "Discord-style"
-				//Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
-				//stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
+				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
+				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 				
 				//On s'oriente vers les portes
 				stateToConsider.robot.turn(-(Math.PI / 2), hooksToConsider, false);
@@ -62,10 +64,10 @@ public class CloseDoors extends AbstractScript
 				stateToConsider.table.intDoorClosed = true;
 			
 				//On avance
-				stateToConsider.robot.moveLengthwise(200, hooksToConsider, false);
+				stateToConsider.robot.moveLengthwise(100, hooksToConsider, false);
 				
 				
-				//stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
+				stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
 				
 				
 			}
@@ -124,12 +126,12 @@ public class CloseDoors extends AbstractScript
 		if (version == 0)
 		{
 			// Point devant les portes côté vert, modification possible selon l'envergure du robot
-			return new Circle(new Vec2(1000,1650));
+			return new Circle(new Vec2(1100,1600));
 		}
 		else if (version ==1)
 		{
 			// Point devant les portes côté violet
-			return new Circle(new Vec2(-1000,1650));
+			return new Circle(new Vec2(-1100,1600));
 		}
 		else
 		{
@@ -142,7 +144,7 @@ public class CloseDoors extends AbstractScript
 	@Override
 	public void finalize(GameState<?> state) throws SerialFinallyException
 	{
-		//TODO
+		state.robot.immobilise();
 		
 	}
 

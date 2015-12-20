@@ -40,7 +40,12 @@ public class JUnit_Fishing extends JUnit_Test
 		super.setUp();
 		scriptManager = (ScriptManager)container.getService(ServiceNames.SCRIPT_MANAGER);
 		theRobot = (GameState<Robot>)container.getService(ServiceNames.GAME_STATE);
-		scriptManager.getScript(ScriptNames.PREQUEL).execute(0, theRobot, emptyHook);
+		//scriptManager.getScript(ScriptNames.PREQUEL).execute(0, theRobot, emptyHook);
+		theRobot.robot.useActuator(ActuatorOrder.ARM_INIT, true);
+		theRobot.robot.setOrientation(Math.PI);
+		theRobot.robot.setPosition(Table.entryPosition);
+		theRobot.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+		theRobot.robot.moveLengthwise(100, emptyHook, false);
 	}
 	
 	@After

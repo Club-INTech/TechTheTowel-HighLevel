@@ -2,6 +2,7 @@ package tests;
 
 import enums.ScriptNames;
 import enums.ServiceNames;
+import enums.Speed;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.PathNotFoundException;
@@ -40,6 +41,8 @@ public class JUnit_CloseDoors extends JUnit_Test
 		mRobot.robot.setPosition(Table.entryPosition);
 		mRobot.robot.setOrientation(Math.PI);
 		scriptManager = (ScriptManager)container.getService(ServiceNames.SCRIPT_MANAGER);
+		mRobot.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+		mRobot.robot.moveLengthwise(100);
 	}
 	
 	@Test
@@ -49,8 +52,9 @@ public class JUnit_CloseDoors extends JUnit_Test
 		try
 		{
 			//On execute le script
-			log.debug("Script lance");
+			log.debug("Fermeture des portes.");
 			scriptManager.getScript(ScriptNames.CLOSE_DOORS).goToThenExec(0, mRobot, emptyList);
+			scriptManager.getScript(ScriptNames.FISHING).goToThenExec(0, mRobot, emptyList);
 		}
 		catch(SerialConnexionException | ExecuteException | SerialFinallyException e)
 		{
