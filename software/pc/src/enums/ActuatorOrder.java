@@ -20,14 +20,21 @@ public enum ActuatorOrder
 	TURN_LEFT("tg"),
 	
 	// Consignes pour les bras chargés de prendre les poissons
-	FISHING_POSITION_LEFT("fpl"),
-	MIDDLE_POSITION_LEFT("mpl"),
-	FREE_FISHES_LEFT("ffl"),
-	FISHING_POSITION_RIGHT("fpr"),
-	MIDDLE_POSITION_RIGHT("mpr"),
-	FREE_FISHES_RIGHT("ffr"),
+	FISHING_POSITION_LEFT("fpl"),   // bras aimanté gauche baissé pour récupérer les poissons
+	MIDDLE_POSITION_LEFT("mpl"),    // bras aimanté gauche en position medium 
+	LEFT_MAGNET_DOWN("lmd"),		// bras aimanté gauche pour lâcher les poissons
+	LEFT_MAGNET_UP("lmu"),			// bras aimanté gauche rangé
+	LEFT_FINGER_DOWN("lfd"),		// doigt gauche en position basse
+	LEFT_FINGER_UP("lfu"),			// doigt gauche rangé
 	
-	// Consigne pour remettre les bras en position initiale, à implémenter au bas niveau
+	FISHING_POSITION_RIGHT("fpr"),	// bras aimanté droit baissé pour récupérer les poissons
+	MIDDLE_POSITION_RIGHT("mpr"),	// bras aimanté droit en position medium
+	RIGHT_MAGNET_DOWN("rmd"),		// bras aimanté droit pour lâcher les poissons
+	RIGHT_MAGNET_UP("rmu"),			// bras aimanté droit rangé
+	RIGHT_FINGER_DOWN("rfd"),		// doigt droit en position basse
+	RIGHT_FINGER_UP("rfu"),			// doigt droit rangé
+	
+	// Consigne pour remettre les bras en position initiale
 	ARM_INIT("aif"),
 	
 	//Consigne d'ouverture du parasol

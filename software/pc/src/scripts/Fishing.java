@@ -64,20 +64,23 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 				
 				// On commence à se placer près du bord
-				stateToConsider.robot.turn(Math.PI - 0.22);
+				stateToConsider.robot.turn(Math.PI - 0.18);
 				
-				stateToConsider.robot.moveLengthwise(-300, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(-350, hooksToConsider, true);
 		
 				// On s'oriente vers le côté ennemi
 				stateToConsider.robot.turn((Math.PI), hooksToConsider, true);
 				
+				// Avance légère pour placer le bras au dessus du bac
+				stateToConsider.robot.moveLengthwise(30, hooksToConsider, false);
+			
 				// On baisse le bras aimanté
 				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION_LEFT, true);
 				
-				// Vitesse ultra lente
-				//stateToConsider.robot.setLocomotionSpeed(Speed.ULTRA_SLOW_ALL);
+				stateToConsider.robot.sleep(800);
+
 				// On longe le bac
-				stateToConsider.robot.moveLengthwise(340, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(280, hooksToConsider, true);
 
 				// On indique au robot que les poissons sont sur le bras
 				stateToConsider.robot.setAreFishesOnBoard(true);
@@ -85,28 +88,33 @@ public class Fishing extends AbstractScript
 				// On remonte le bras pour passer au dessus du filet
 				stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION_LEFT, true);
 				
-				// Reprise de vitesse lente
-				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+				// Petite attente
+				stateToConsider.robot.sleep(300);
 				
 				// On avance jusqu'au niveau du filet, distance à vérifier avec le robot final
-				stateToConsider.robot.moveLengthwise(200, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(240, hooksToConsider, true);
 				
 				// On lâche les poissons
-				stateToConsider.robot.useActuator(ActuatorOrder.FREE_FISHES_LEFT, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_MAGNET_DOWN, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_FINGER_DOWN, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_MAGNET_UP, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_FINGER_UP, true);
 				
 				// On indique au robot que les poissons ne sont plus sur le bras
-				//stateToConsider.robot.setAreFishesOnBoard(false);
+				stateToConsider.robot.setAreFishesOnBoard(false);
 				
 				// On indique que les poissons sont pris
-				//stateToConsider.robot.setAreFishesFished(true);
+				stateToConsider.robot.setAreFishesFished(true);
 				
 				stateToConsider.robot.turn(Math.PI, hooksToConsider, true);
 				
-				stateToConsider.robot.moveLengthwise(-550, hooksToConsider, false);
+				stateToConsider.robot.moveLengthwise(-440, hooksToConsider, false);
 				
 				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION_LEFT, true);
 				
-				stateToConsider.robot.moveLengthwise(340, hooksToConsider, true);
+				stateToConsider.robot.sleep(300);
+				
+				stateToConsider.robot.moveLengthwise(285, hooksToConsider, true);
 
 				// On indique au robot que les poissons sont sur le bras
 				stateToConsider.robot.setAreFishesOnBoard(true);
@@ -114,17 +122,17 @@ public class Fishing extends AbstractScript
 				// On remonte le bras pour passer au dessus du filet
 				stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION_LEFT, true);
 				
-				// Reprise de vitesse lente
-				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+				//Petite attente
+				stateToConsider.robot.sleep(800);
 				
 				// On avance jusqu'au niveau du filet, distance à vérifier avec le robot final
-				stateToConsider.robot.moveLengthwise(200, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(280, hooksToConsider, true);
 				
 				// On lâche les poissons
-				stateToConsider.robot.useActuator(ActuatorOrder.FREE_FISHES_LEFT, true);
-				
-				
-				
+				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_MAGNET_DOWN, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_FINGER_DOWN, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_MAGNET_UP, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_FINGER_UP, true);
 				
 				// Points gagnés max
 				stateToConsider.obtainedPoints += 40;
@@ -165,7 +173,10 @@ public class Fishing extends AbstractScript
 					stateToConsider.robot.moveLengthwise(200, hooksToConsider, true);
 					
 					// On lâche les poissons
-					stateToConsider.robot.useActuator(ActuatorOrder.FREE_FISHES_RIGHT, true);
+					stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_MAGNET_DOWN, true);
+					stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_FINGER_DOWN, true);
+					stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_MAGNET_UP, true);
+					stateToConsider.robot.useActuator(ActuatorOrder.RIGHT_FINGER_UP, true);
 					
 					// On indique au robot que les poissons ne sont plus sur le bras
 					stateToConsider.robot.setAreFishesOnBoard(false);
