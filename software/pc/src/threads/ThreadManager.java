@@ -81,6 +81,21 @@ public class ThreadManager
 		return instanciedThreads.get("threadCapteurs");
 	}
 
+	/**
+	 * Renvoie le thread graphique
+	 * @param config la config
+	 * @param log le log
+	 * @param table la table
+	 * @param robot le robot réel
+     */
+	public AbstractThread getThreadInterface(Config config, Log log, Table table, RobotReal robot)
+	{
+		AbstractThread thread = instanciedThreads.get("threadInterface");
+		if(thread == null)
+			instanciedThreads.put("threadInterface", new ThreadInterface(config, log, table, robot));
+		return instanciedThreads.get("threadInterface");
+	}
+
 
 	/**
 	 * Démarre tout les threads instanciés auparavant.

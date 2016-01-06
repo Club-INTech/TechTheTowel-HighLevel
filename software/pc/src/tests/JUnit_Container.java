@@ -216,18 +216,6 @@ public class JUnit_Container extends JUnit_Test {
 	}
 
 	/**
-	 * Test_thread laser.
-	 *
-	 * @throws Exception the exception
-	 */
-	@Test
-	public void test_threadLaser() throws Exception
-	{
-		log.debug("JUnit_ContainerTest.test_threadLaser()");
-		container.getService(ServiceNames.THREAD_BALISE);
-	}
-
-	/**
 	 * Test_thread capteurs.
 	 *
 	 * @throws Exception the exception

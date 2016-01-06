@@ -224,6 +224,13 @@ public class Container
 																	(Table)getService(ServiceNames.TABLE),
 																	(Log)getService(ServiceNames.LOG)
 																);
+		else if(serviceRequested == ServiceNames.THREAD_INTERFACE)
+			instanciedServices[serviceRequested.ordinal()] = 	(Service)threadManager.getThreadInterface(
+																	(Config)getService(ServiceNames.CONFIG),
+																	(Log)getService(ServiceNames.LOG),
+																	(Table)getService(ServiceNames.TABLE),
+					     											(RobotReal)getService(ServiceNames.ROBOT_REAL)
+																	);
 		
 		// si le service demandé n'est pas connu, alors on log une erreur.
 		else
