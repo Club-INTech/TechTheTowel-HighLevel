@@ -15,6 +15,7 @@ import robot.Robot;
 import scripts.ScriptManager;
 import smartMath.Vec2;
 import strategie.GameState;
+import threads.ThreadInterface;
 
 /**
  * Test l'initialisation de la position du robot avant le match ou les JUnit
@@ -40,6 +41,8 @@ public class JUnit_Prequel extends JUnit_Test
 		theRobot.robot.setPosition(new Vec2(0,0));
 		
 		theRobot.robot.setOrientation(- Math.PI/2);
+
+		container.getService(ServiceNames.THREAD_INTERFACE);
 	}
 	
 	@After
