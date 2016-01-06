@@ -18,7 +18,6 @@ import utils.Log;
 public class ThreadInterface extends AbstractThread
 {
     private Window win;
-    private Table table;
     private Log log;
     private RobotReal robot;
 
@@ -27,7 +26,7 @@ public class ThreadInterface extends AbstractThread
         super(config, log);
         Thread.currentThread().setPriority(3); // C'est le thread le moins prioritaire du lot
         this.log = log;
-        this.table = table;
+        this.robot = robot;
         this.win = new Window(table, robot);
     }
 
