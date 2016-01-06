@@ -24,7 +24,7 @@ public class ThreadInterface extends AbstractThread
     public ThreadInterface(Config config, Log log, Table table, RobotReal robot)
     {
         super(config, log);
-        Thread.currentThread().setPriority(2); // C'est le thread le moins prioritaire du lot
+        Thread.currentThread().setPriority(3); // C'est le thread le moins prioritaire du lot
         this.log = log;
         this.robot = robot;
         this.win = new Window(table, robot);
