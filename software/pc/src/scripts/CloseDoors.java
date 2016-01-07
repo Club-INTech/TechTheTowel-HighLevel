@@ -117,7 +117,23 @@ public class CloseDoors extends AbstractScript
 	public int remainingScoreOfVersion(int version, GameState<?> state) 
 	{
 		//TODO
-		return 0;
+		
+		// Score maximal possible de 20 points
+		int score = 20;
+		
+		// Score de 10 points fournis par porte fermée
+		if (version == 0 || version == 1)
+		{
+			if (state.table.extDoorClosed)
+			{
+				score-=10;
+			}
+			if (state.table.intDoorClosed)
+			{
+				score-=10;
+			}
+		}
+		return score;
 	}
 
 	@Override

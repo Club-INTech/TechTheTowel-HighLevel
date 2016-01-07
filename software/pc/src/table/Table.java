@@ -686,7 +686,6 @@ public class Table implements Service
 		
 	}
 
-	
 	public ObstacleManager getObstacleManager()
 	{
 		return mObstacleManager;

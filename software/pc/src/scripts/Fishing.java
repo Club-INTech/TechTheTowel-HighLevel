@@ -37,8 +37,6 @@ public class Fishing extends AbstractScript
 		
 	}
 	
-	// Définition du booléen AreFishesFished déjà défini dans robot
-	private boolean AreFishesFished = false;
 	
 	/**
 	 * On lance le script choisi.
@@ -210,16 +208,16 @@ public class Fishing extends AbstractScript
 	@Override
 	public int remainingScoreOfVersion(int version, GameState<?> state) 
 	{
-		// Pour les versions 0 et 1, et si les poissons sont pris, ont gagnent les points
+		// Score maximal possible de 40 points
+		int score=40;
+		
+		// Pour les versions 0 et 1, on gagne 10 points par poisson dans le filet
 		if (version == 0 | version ==1)
 		{
-			if (AreFishesFished)
-			{
-				return 40;
-			}
+			score-=((state.table.fishesFished)*10);
 		}
-		// Dans le cas contraire, aucun points
-		return 0;
+		
+		return score;
 	}
 
 	@Override
