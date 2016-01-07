@@ -88,9 +88,9 @@ public abstract class JUnit_Test
 	
 	public void returnToEntryPosition(GameState<Robot> state) throws PathNotFoundException, UnableToMoveException, PointInObstacleException
 	{
-		state.robot.moveToLocation(new Vec2(Table.entryPosition.x-250, Table.entryPosition.y),new ArrayList<Hook>(), state.table);
+		state.robot.moveToLocation(new Vec2(Table.entryPosition.x-100, Table.entryPosition.y),new ArrayList<Hook>(), state.table);
 		state.robot.turn(Math.PI);
-		state.robot.moveLengthwise(-250);
+		state.robot.moveLengthwise(-100);
 	}
 	
 

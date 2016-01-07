@@ -142,12 +142,12 @@ public class CloseDoors extends AbstractScript
 		if (version == 0)
 		{
 			// Point devant les portes côté vert, modification possible selon l'envergure du robot
-			return new Circle(new Vec2(1100,1600));
+			return new Circle(new Vec2(1135,1600));
 		}
 		else if (version ==1)
 		{
 			// Point devant les portes côté violet
-			return new Circle(new Vec2(-1100,1600));
+			return new Circle(new Vec2(-1135,1600));
 		}
 		else
 		{

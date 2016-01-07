@@ -10,6 +10,7 @@ import exceptions.PointInObstacleException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import hook.Hook;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import robot.Robot;
@@ -43,6 +44,8 @@ public class JUnit_CloseDoors extends JUnit_Test
 		scriptManager = (ScriptManager)container.getService(ServiceNames.SCRIPT_MANAGER);
 		mRobot.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 		mRobot.robot.moveLengthwise(100);
+		container.getService(ServiceNames.THREAD_INTERFACE);
+		container.startInstanciedThreads();
 	}
 	
 	@Test
@@ -54,7 +57,7 @@ public class JUnit_CloseDoors extends JUnit_Test
 			//On execute le script
 			log.debug("Fermeture des portes.");
 			scriptManager.getScript(ScriptNames.CLOSE_DOORS).goToThenExec(0, mRobot, emptyList);
-			scriptManager.getScript(ScriptNames.FISHING).goToThenExec(0, mRobot, emptyList);
+			//scriptManager.getScript(ScriptNames.FISHING).goToThenExec(0, mRobot, emptyList);
 		}
 		catch(SerialConnexionException | ExecuteException | SerialFinallyException e)
 		{
@@ -65,5 +68,10 @@ public class JUnit_CloseDoors extends JUnit_Test
 			e.printStackTrace();
 		}
 
+	}
+
+	@After
+	public void finish() throws UnableToMoveException, PathNotFoundException, PointInObstacleException {
+		super.returnToEntryPosition(mRobot);
 	}
 }
