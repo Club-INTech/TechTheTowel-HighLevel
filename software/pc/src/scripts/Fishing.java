@@ -100,11 +100,14 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_MAGNET_UP, true);
 				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_FINGER_UP, true);
 				
+				// Points gagnés moyen pour ce passage
+				stateToConsider.obtainedPoints += 20;
+				
 				// On indique au robot que les poissons ne sont plus sur le bras
 				stateToConsider.robot.setAreFishesOnBoard(false);
 				
-				// On indique que les poissons sont pris
-				stateToConsider.robot.setAreFishesFished(true);
+				// On indique que deux poissons en moyenne ont été pris
+				stateToConsider.table.fishesFished+=2;
 				
 				stateToConsider.robot.turn(Math.PI, hooksToConsider, true);
 				
@@ -114,7 +117,7 @@ public class Fishing extends AbstractScript
 				
 				stateToConsider.robot.sleep(300);
 				
-				stateToConsider.robot.moveLengthwise(285, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(280, hooksToConsider, true);
 
 				// On indique au robot que les poissons sont sur le bras
 				stateToConsider.robot.setAreFishesOnBoard(true);
@@ -134,8 +137,14 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_MAGNET_UP, true);
 				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_FINGER_UP, true);
 				
-				// Points gagnés max
-				stateToConsider.obtainedPoints += 40;
+				// On indique au robot que les poissons ne sont plus sur le bras
+				stateToConsider.robot.setAreFishesOnBoard(false);
+				
+				// On indique que deux poissons en moyenne ont été pris
+				stateToConsider.table.fishesFished+=2;
+				
+				// Points gagnés moyen pour ce passage
+				stateToConsider.obtainedPoints += 20;
 				
 				stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
 			}
@@ -182,7 +191,7 @@ public class Fishing extends AbstractScript
 					stateToConsider.robot.setAreFishesOnBoard(false);
 					
 					// On indique que les poissons sont pris
-					stateToConsider.robot.setAreFishesFished(true);
+					stateToConsider.table.fishesFished+=2;
 					
 					// Points gagnés max
 					stateToConsider.obtainedPoints += 40;

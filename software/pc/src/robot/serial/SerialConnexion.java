@@ -183,7 +183,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 
 					// affiche dans la console ce qu'on envois sur la série -> On cache ca, pour eviter le xy0? en permanence, mais ca peux etre interessant de le garder.
 					// ne jamais push un code avec cette ligne decommentee
-					log.debug("Envoi serie : '" + m  + "'");
+					//log.debug("Envoi serie : '" + m  + "'");
 					m += "\r";
 					output.write(m.getBytes());
 					int nb_tests = 0;

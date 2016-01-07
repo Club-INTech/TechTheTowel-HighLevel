@@ -65,8 +65,6 @@ public abstract class Robot implements Service
 	/** état du parasol */
 	public boolean isParasolUnfolded = false;
 
-	/** Booléen indiquant si les poissons sont récupérés, sert pour les versions du script Fishing */
-	private boolean AreFishesFished = false;
 	
 	/** Booléen indiquant la présence de poisson sur les actionneurs */
 	private boolean AreFishesOnBoard = false;
@@ -140,23 +138,6 @@ public abstract class Robot implements Service
 		return speed;
 	}
 	
-	/**
-	 * Change la valeur du booléen AreFishesFished
-	 * @param bool bouléen souhaité
-	 */
-	public void setAreFishesFished(boolean bool)
-	{
-		this.AreFishesFished = bool;
-	}
-	
-	/**
-	 * Indique si les poissons ont été pêchés ou pas
-	 * @return Poisson pris ou non
-	 */
-	public boolean getAreFishesFished()
-	{
-		return AreFishesFished;
-	}
 	
 	/**
 	 * Change la valeur du booléen AreFishesOnBoard

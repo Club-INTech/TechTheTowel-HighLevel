@@ -124,6 +124,9 @@ public class Table implements Service
 	/** poissons */
 	public ArrayList<Fish> ourFish = new ArrayList<Fish>(4);
 	
+	/** entier indiquant le nombre de poissons dans le filet */
+	public int fishesFished=0;
+	
 	/** portes fermées ou non */
 	public boolean extDoorClosed = false;
 	public boolean intDoorClosed = false;
