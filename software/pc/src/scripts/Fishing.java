@@ -162,7 +162,7 @@ public class Fishing extends AbstractScript
 				//On commence à se placer près du bord
 				stateToConsider.robot.turn(Math.PI + 0.94);
 				
-				stateToConsider.robot.moveLengthwise(186,hooksToConsider,false);
+				stateToConsider.robot.moveLengthwise(195,hooksToConsider,false);
 				
 				// On s'oriente vers le côté ennemi
 				stateToConsider.robot.turn((Math.PI), hooksToConsider, true);

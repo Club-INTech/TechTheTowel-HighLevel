@@ -35,7 +35,14 @@ public class JUnit_Flood extends JUnit_Test
 		while(true)
 		{
 			log.debug(compt++);
-			mLocomotion.getPosition();
+			try{
+				mLocomotion.getPosition();
+			}
+			catch (Exception e)
+			{
+				
+			}
+			
 		}
 	}	
 	
