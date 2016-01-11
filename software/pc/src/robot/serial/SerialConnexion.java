@@ -183,7 +183,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 
 					// affiche dans la console ce qu'on envois sur la série -> On cache ca, pour eviter le xy0? en permanence, mais ca peux etre interessant de le garder.
 					// ne jamais push un code avec cette ligne decommentee
-					log.debug("Envoi serie : '" + m  + "'");
+					//log.debug("Envoi serie : '" + m  + "'");
 					m += "\r";
 					output.write(m.getBytes());
 					int nb_tests = 0;
@@ -197,7 +197,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 						// affiche dans la console ce qu'on lit sur la série
 						String resposeFromCard = input.readLine();
 						//TODO commenter.
-						log.debug("Reception acquitement : '" + resposeFromCard  + "'");
+						// log.debug("Reception acquitement : '" + resposeFromCard  + "'");
 						
 						acquittement = resposeFromCard.charAt(0);
 						if (acquittement != '_')
@@ -228,7 +228,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 				{
 					inputLines[i] = input.readLine();
 					//TODO commenter.
-					log.debug("Ligne "+i+": '"+inputLines[i]+"'");
+					//log.debug("Ligne "+i+": '"+inputLines[i]+"'");
 					if(inputLines[i].equals(null) || inputLines[i].replaceAll(" ", "").equals("")|| inputLines[i].replaceAll(" ", "").equals("-"))
 					{
 						log.critical("='( , envoi de "+inputLines[i]+" envoi du message a nouveau");

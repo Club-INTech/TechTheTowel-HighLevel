@@ -162,12 +162,14 @@ public class Fishing extends AbstractScript
 				//On commence à se placer près du bord
 				stateToConsider.robot.turn(Math.PI + 0.94);
 				
-				stateToConsider.robot.moveLengthwise(195,hooksToConsider,false);
+				stateToConsider.robot.moveLengthwise(210,hooksToConsider,false);
 				
 				// On s'oriente vers le côté ennemi
 				stateToConsider.robot.turn((Math.PI), hooksToConsider, true);
-				
-				// On baisse le bras aimanté
+
+                //stateToConsider.robot.moveLengthwise(-0,hooksToConsider,false);
+
+                // On baisse le bras aimanté
 				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION_LEFT, true);
 				
 				stateToConsider.robot.sleep(800);
@@ -183,9 +185,11 @@ public class Fishing extends AbstractScript
 				
 				// Petite attente
 				stateToConsider.robot.sleep(300);
+
+				stateToConsider.robot.turn(stateToConsider.robot.getOrientation() - (Math.PI/25));
 				
 				// On avance jusqu'au niveau du filet, distance à vérifier avec le robot final
-				stateToConsider.robot.moveLengthwise(240, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(160, hooksToConsider, true);
 				
 				// On lâche les poissons
 				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_MAGNET_DOWN, true);
@@ -202,15 +206,19 @@ public class Fishing extends AbstractScript
 				// On indique que deux poissons en moyenne ont été pris
 				stateToConsider.table.fishesFished+=2;
 				
-				stateToConsider.robot.turn(Math.PI, hooksToConsider, true);
-				
-				stateToConsider.robot.moveLengthwise(-440, hooksToConsider, false);
+				//stateToConsider.robot.turn(Math.PI, hooksToConsider, true);
+
+				stateToConsider.robot.moveLengthwise(-260, hooksToConsider, false);
+
+				stateToConsider.robot.turn(Math.PI*(1 + 1/25));
+
+				stateToConsider.robot.moveLengthwise(-180, hooksToConsider, false);
 				
 				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION_LEFT, true);
 				
 				stateToConsider.robot.sleep(300);
 				
-				stateToConsider.robot.moveLengthwise(280, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(340, hooksToConsider, true);
 
 				// On indique au robot que les poissons sont sur le bras
 				stateToConsider.robot.setAreFishesOnBoard(true);
@@ -220,9 +228,13 @@ public class Fishing extends AbstractScript
 				
 				//Petite attente
 				stateToConsider.robot.sleep(800);
-				
+
+				stateToConsider.robot.turn(stateToConsider.robot.getOrientation() - (Math.PI/25));
+
 				// On avance jusqu'au niveau du filet, distance à vérifier avec le robot final
-				stateToConsider.robot.moveLengthwise(280, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(160, hooksToConsider, true);
+
+                stateToConsider.robot.turn(Math.PI);
 				
 				// On lâche les poissons
 				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_MAGNET_DOWN, true);
@@ -238,6 +250,8 @@ public class Fishing extends AbstractScript
 				
 				// Points gagnés moyen pour ce passage
 				stateToConsider.obtainedPoints += 20;
+
+                stateToConsider.robot.moveLengthwise(100);
 				
 				stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
 				
