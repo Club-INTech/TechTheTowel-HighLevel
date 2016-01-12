@@ -190,7 +190,12 @@ public class Fishing extends AbstractScript
 				
 				// On avance jusqu'au niveau du filet, distance à vérifier avec le robot final
 				stateToConsider.robot.moveLengthwise(160, hooksToConsider, true);
-				
+
+				stateToConsider.robot.turn(stateToConsider.robot.getOrientation() + 2*(Math.PI/25));
+
+				stateToConsider.robot.moveLengthwise(100, hooksToConsider, true);
+
+
 				// On lâche les poissons
 				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_MAGNET_DOWN, true);
 				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_FINGER_DOWN, true);
@@ -208,13 +213,19 @@ public class Fishing extends AbstractScript
 				
 				//stateToConsider.robot.turn(Math.PI, hooksToConsider, true);
 
-				stateToConsider.robot.moveLengthwise(-260, hooksToConsider, false);
+				stateToConsider.robot.moveLengthwise(-160, hooksToConsider, false);
 
-				stateToConsider.robot.turn(Math.PI*(1 + 1/25));
+				stateToConsider.robot.turn(stateToConsider.robot.getOrientation() - 2*(Math.PI/25));
 
 				stateToConsider.robot.moveLengthwise(-180, hooksToConsider, false);
+
+				stateToConsider.robot.turn(stateToConsider.robot.getOrientation() + (Math.PI/25));
+
+				stateToConsider.robot.moveLengthwise(-250, hooksToConsider, false);
 				
 				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION_LEFT, true);
+
+				stateToConsider.robot.turn(Math.PI);
 				
 				stateToConsider.robot.sleep(300);
 				
@@ -234,8 +245,9 @@ public class Fishing extends AbstractScript
 				// On avance jusqu'au niveau du filet, distance à vérifier avec le robot final
 				stateToConsider.robot.moveLengthwise(160, hooksToConsider, true);
 
-                stateToConsider.robot.turn(Math.PI);
-				
+                stateToConsider.robot.turn(stateToConsider.robot.getOrientation() + 2*(Math.PI/25));
+
+				stateToConsider.robot.moveLengthwise(100);
 				// On lâche les poissons
 				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_MAGNET_DOWN, true);
 				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_FINGER_DOWN, true);
