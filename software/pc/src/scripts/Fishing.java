@@ -3,7 +3,6 @@ package scripts;
 import enums.ActuatorOrder;
 import enums.Speed;
 import exceptions.ExecuteException;
-import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
@@ -33,7 +32,7 @@ public class Fishing extends AbstractScript
 		/**
 		 * Versions du script
 		 */
-		versions = new Integer[]{0,1};
+		versions = new Integer[]{0,1,2};
 		
 	}
 	
@@ -152,6 +151,105 @@ public class Fishing extends AbstractScript
 			}
 		}
 		else if (versionToExecute == 1)
+		{
+			try
+			{
+				// On prend une vitesse lente pour que les aimants puissent récupérer les poissons
+				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
+				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+
+				//On commence à se placer près du bord
+				stateToConsider.robot.turn(Math.PI + 0.94);
+
+				stateToConsider.robot.moveLengthwise(195,hooksToConsider,false);
+
+				// On s'oriente vers le côté ennemi
+				stateToConsider.robot.turn((Math.PI), hooksToConsider, true);
+
+				// On baisse le bras aimanté
+				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION_LEFT, true);
+
+				stateToConsider.robot.sleep(800);
+
+				// On longe le bac
+				stateToConsider.robot.moveLengthwise(280, hooksToConsider, true);
+
+				// On indique au robot que les poissons sont sur le bras
+				stateToConsider.robot.setAreFishesOnBoard(true);
+
+				// On remonte le bras pour passer au dessus du filet
+				stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION_LEFT, true);
+
+				// Petite attente
+				stateToConsider.robot.sleep(300);
+
+				// On avance jusqu'au niveau du filet, distance à vérifier avec le robot final
+				stateToConsider.robot.moveLengthwise(240, hooksToConsider, true);
+
+				// On lâche les poissons
+				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_MAGNET_DOWN, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_FINGER_DOWN, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_MAGNET_UP, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_FINGER_UP, true);
+
+				// Points gagnés moyen pour ce passage
+				stateToConsider.obtainedPoints += 20;
+
+				// On indique au robot que les poissons ne sont plus sur le bras
+				stateToConsider.robot.setAreFishesOnBoard(false);
+
+				// On indique que deux poissons en moyenne ont été pris
+				stateToConsider.table.fishesFished+=2;
+
+				stateToConsider.robot.turn(Math.PI, hooksToConsider, true);
+
+				stateToConsider.robot.moveLengthwise(-440, hooksToConsider, false);
+
+				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION_LEFT, true);
+
+				stateToConsider.robot.sleep(300);
+
+				stateToConsider.robot.moveLengthwise(280, hooksToConsider, true);
+
+				// On indique au robot que les poissons sont sur le bras
+				stateToConsider.robot.setAreFishesOnBoard(true);
+
+				// On remonte le bras pour passer au dessus du filet
+				stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION_LEFT, true);
+
+				//Petite attente
+				stateToConsider.robot.sleep(800);
+
+				// On avance jusqu'au niveau du filet, distance à vérifier avec le robot final
+				stateToConsider.robot.moveLengthwise(280, hooksToConsider, true);
+
+				// On lâche les poissons
+				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_MAGNET_DOWN, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_FINGER_DOWN, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_MAGNET_UP, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.LEFT_FINGER_UP, true);
+
+				// On indique au robot que les poissons ne sont plus sur le bras
+				stateToConsider.robot.setAreFishesOnBoard(false);
+
+				// On indique que deux poissons en moyenne ont été pris
+				stateToConsider.table.fishesFished+=2;
+
+				// Points gagnés moyen pour ce passage
+				stateToConsider.obtainedPoints += 20;
+
+				stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
+
+
+			}
+			catch (UnableToMoveException | SerialConnexionException e)
+			{
+				finalize(stateToConsider);
+				throw new ExecuteException(e);
+			}
+
+		}
+		else if (versionToExecute == 2)
 		{
 			try
 			{
@@ -285,7 +383,7 @@ public class Fishing extends AbstractScript
 		int score=40;
 		
 		// Pour les versions 0 et 1, on gagne 10 points par poisson dans le filet
-		if (version == 0 | version ==1)
+		if (version == 0 || version ==1 || version ==2)
 		{
 			score-=((state.table.fishesFished)*10);
 		}
@@ -301,7 +399,7 @@ public class Fishing extends AbstractScript
 		{
 			return new Circle(new Vec2(620,255));
 		}
-		else if (version == 1)
+		else if (version == 1 || version == 2)
 		{
 			return new Circle(new Vec2(1050,350));
 		}
