@@ -164,7 +164,6 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	 * @param nb_lignes_reponse Nombre de lignes que l'avr va répondre (sans compter les acquittements)
 	 * @return Un tableau contenant le message
 	 * @throws SerialConnexionException 
-	 * @throws IOException 
 	 */
 	public String[] communiquer(String[] messages, int nb_lignes_reponse) throws SerialConnexionException
 	{
@@ -172,6 +171,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 		{
 			String inputLines[] = new String[nb_lignes_reponse];
 			int c=-1;
+			emptyInputBuffer();
 			try
 			{
 				//while(input.read()!=-1); TODO Le vidage de buffer renvoie une exception s'il est vide
@@ -243,6 +243,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 					if(!isAsciiExtended(inputLines[i]))
 					{
 						log.critical("='( , envoi de "+inputLines[i]+" envoi du message a nouveau");
+						emptyInputBuffer();
 						communiquer(messages, nb_lignes_reponse); // On retente
 					}
 				}
@@ -278,6 +279,24 @@ public class SerialConnexion implements SerialPortEventListener, Service
 				throw new SerialConnexionException();
 			}
 			return inputLines;
+		}
+	}
+
+	/**
+	 * Vide le buffer de réception
+     */
+	private void emptyInputBuffer()
+	{
+		while(true)
+		{
+			try
+			{
+				input.readLine();
+			}
+			catch(IOException e)
+			{
+				return;
+			}
 		}
 	}
 
@@ -361,18 +380,16 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	@SuppressWarnings("javadoc")
 	public boolean isAsciiExtended(String inputLines) throws Exception
 	{
-		Boolean isAsciiExtended=true;
-		for (int i = 0; i < inputLines.length(); i++) 
+		for (int i = 0; i < inputLines.length(); i++)
 		{
 	        int characterSet = inputLines.charAt(i);
 	        if (characterSet > 259) 
 	        {
-				isAsciiExtended=false;
                 log.critical(inputLines+"n'est pas ASCII");
-				return isAsciiExtended;
+				return false;
 	        }
 	    }
-		return isAsciiExtended;
+		return true;
 	}
 
 
