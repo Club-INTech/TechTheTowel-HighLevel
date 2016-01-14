@@ -40,12 +40,12 @@ public class JUnit_Fishing extends JUnit_Test
 		super.setUp();
 		scriptManager = (ScriptManager)container.getService(ServiceNames.SCRIPT_MANAGER);
 		theRobot = (GameState<Robot>)container.getService(ServiceNames.GAME_STATE);
-		//scriptManager.getScript(ScriptNames.PREQUEL).execute(0, theRobot, emptyHook);
 		theRobot.robot.useActuator(ActuatorOrder.ARM_INIT, true);
 		theRobot.robot.setOrientation(Math.PI);
 		theRobot.robot.setPosition(Table.entryPosition);
 		theRobot.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 		theRobot.robot.moveLengthwise(100, emptyHook, false);
+		
 		// Lance le thread graphique
 		container.getService(ServiceNames.THREAD_INTERFACE);
 		container.startInstanciedThreads();
@@ -54,7 +54,7 @@ public class JUnit_Fishing extends JUnit_Test
 	@After
 	public void aftermath() throws Exception 
 	{
-		//on remonte le bras
+		//on remonte les bras
 		theRobot.robot.useActuator(ActuatorOrder.ARM_INIT,true);
 		try 
 		{
@@ -75,7 +75,7 @@ public class JUnit_Fishing extends JUnit_Test
 //			theRobot.robot.moveLengthwise(600, emptyHook);
 //			theRobot.robot.moveLengthwise(-300, emptyHook);
 //			scriptManager.getScript(ScriptNames.CLOSE_DOORS).goToThenExec(0, theRobot, emptyHook);
-			log.debug("Début de pêche");
+			log.debug("Début de pêche !");
 			theRobot.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 			scriptManager.getScript(ScriptNames.FISHING).goToThenExec(1, theRobot, emptyHook);
 			theRobot.robot.turn(Math.PI/2);

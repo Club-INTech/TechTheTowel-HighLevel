@@ -18,12 +18,12 @@ public class SymmetrizedActuatorOrderMap
      */
     public SymmetrizedActuatorOrderMap()
     {
-    	mCorrespondenceMap.put(ActuatorOrder.FISHING_POSITION_LEFT, ActuatorOrder.FISHING_POSITION_RIGHT);
-        mCorrespondenceMap.put(ActuatorOrder.MIDDLE_POSITION_LEFT, ActuatorOrder.MIDDLE_POSITION_RIGHT);
-        mCorrespondenceMap.put(ActuatorOrder.LEFT_MAGNET_DOWN, ActuatorOrder.RIGHT_MAGNET_DOWN);
-        mCorrespondenceMap.put(ActuatorOrder.LEFT_MAGNET_UP, ActuatorOrder.RIGHT_MAGNET_UP);
-        mCorrespondenceMap.put(ActuatorOrder.LEFT_FINGER_DOWN, ActuatorOrder.RIGHT_FINGER_DOWN);
-        mCorrespondenceMap.put(ActuatorOrder.LEFT_FINGER_UP, ActuatorOrder.RIGHT_FINGER_UP);
+    	mCorrespondenceMap.put(ActuatorOrder.FISHING_POSITION, ActuatorOrder.FISHING_POSITION_RIGHT);
+        mCorrespondenceMap.put(ActuatorOrder.MIDDLE_POSITION, ActuatorOrder.MIDDLE_POSITION_RIGHT);
+        mCorrespondenceMap.put(ActuatorOrder.MAGNET_DOWN, ActuatorOrder.RIGHT_MAGNET_DOWN);
+        mCorrespondenceMap.put(ActuatorOrder.MAGNET_UP, ActuatorOrder.RIGHT_MAGNET_UP);
+        mCorrespondenceMap.put(ActuatorOrder.FINGER_DOWN, ActuatorOrder.RIGHT_FINGER_DOWN);
+        mCorrespondenceMap.put(ActuatorOrder.FINGER_UP, ActuatorOrder.RIGHT_FINGER_UP);
         mCorrespondenceMap.put(ActuatorOrder.STOP, ActuatorOrder.STOP);
         mCorrespondenceMap.put(ActuatorOrder.ARM_INIT, ActuatorOrder.ARM_INIT);
     }
@@ -31,7 +31,7 @@ public class SymmetrizedActuatorOrderMap
     /**
      * 
      * @param order l'actionneur à symétriser
-     * @return l'actionneur à symétrisé
+     * @return l'actionneur à symétriser
      */
     public ActuatorOrder getSymmetrizedActuatorOrder(ActuatorOrder order)
     {
