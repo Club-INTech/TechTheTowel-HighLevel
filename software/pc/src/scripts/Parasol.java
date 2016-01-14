@@ -46,7 +46,7 @@ public class Parasol extends AbstractScript
 			try
 			{
 				// envoi du message d'ouverture du parasol au bas niveau
-				actualState.robot.useActuator(ActuatorOrder.OPEN_PARASOL, true);
+				actualState.robot.useActuator(ActuatorOrder.STOP, true);
 				// actualisation de l'état du parasol maintenant déployé
 				actualState.robot.isParasolUnfolded = true;
 			
