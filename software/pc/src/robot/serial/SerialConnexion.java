@@ -171,7 +171,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 		{
 			String inputLines[] = new String[nb_lignes_reponse];
 			int c=-1;
-			emptyInputBuffer();
+			//emptyInputBuffer();
 			try
 			{
 				//while(input.read()!=-1); TODO Le vidage de buffer renvoie une exception s'il est vide
