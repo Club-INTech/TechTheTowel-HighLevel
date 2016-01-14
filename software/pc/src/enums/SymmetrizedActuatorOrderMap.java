@@ -24,6 +24,8 @@ public class SymmetrizedActuatorOrderMap
         mCorrespondenceMap.put(ActuatorOrder.LEFT_MAGNET_UP, ActuatorOrder.RIGHT_MAGNET_UP);
         mCorrespondenceMap.put(ActuatorOrder.LEFT_FINGER_DOWN, ActuatorOrder.RIGHT_FINGER_DOWN);
         mCorrespondenceMap.put(ActuatorOrder.LEFT_FINGER_UP, ActuatorOrder.RIGHT_FINGER_UP);
+        mCorrespondenceMap.put(ActuatorOrder.STOP, ActuatorOrder.STOP);
+        mCorrespondenceMap.put(ActuatorOrder.ARM_INIT, ActuatorOrder.ARM_INIT);
     }
     
     /**

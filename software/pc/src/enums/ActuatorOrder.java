@@ -37,10 +37,6 @@ public enum ActuatorOrder
 	// Consigne pour remettre les bras en position initiale
 	ARM_INIT("aif"),
 	
-	//Consigne d'ouverture du parasol
-	//TODO : mesurer la durée de déploiement du parasol, implémenter la commande "ps" au bas niveau
-	OPEN_PARASOL("ps",4),
-	
 	STOP("stop");
 
 	/**
