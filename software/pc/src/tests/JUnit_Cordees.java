@@ -27,7 +27,7 @@ import java.util.Random;
 /**
  * JUnit pour la présentation pour les "Cordées de la réussite" (aussi nommée "Opération Mouillage de Loli")
  *
- * Il ferme les portes, se déplace un peu sur la table, lève les bras en mode racaille d'Evry-ghetto
+ * Il ferme les portes, fait les poissons, lève les bras en mode racaille d'Evry-ghetto
  *      et bouge encore pendant 30 sec
  * Il reste sur la demi-table à droite
  * Il faut le placer aux marques sur le tapis au départ
@@ -68,7 +68,7 @@ public class JUnit_Cordees extends JUnit_Test
         container.startInstanciedThreads();
         game.robot.moveLengthwise(100, new ArrayList<Hook>(), false);
         scriptManager.getScript(ScriptNames.CLOSE_DOORS).goToThenExec(0, game, new ArrayList<Hook>());
-        game.robot.moveToLocation(nextPoint(), new ArrayList<Hook>(), table);
+        scriptManager.getScript(ScriptNames.FISHING).goToThenExec(1, game, new ArrayList<Hook>());
         game.robot.useActuator(ActuatorOrder.FISHING_POSITION, true);
         game.robot.useActuator(ActuatorOrder.FISHING_POSITION_RIGHT, true);
         while((System.currentTimeMillis()-time)<30000)
