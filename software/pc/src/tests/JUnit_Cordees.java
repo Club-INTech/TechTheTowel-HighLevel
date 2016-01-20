@@ -3,6 +3,7 @@ package tests;
 import enums.ActuatorOrder;
 import enums.ScriptNames;
 import enums.ServiceNames;
+import enums.Speed;
 import exceptions.ContainerException;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -54,6 +55,7 @@ public class JUnit_Cordees extends JUnit_Test
         //position initiale du robot
         game.robot.setPosition(Table.entryPosition);
         game.robot.setOrientation(Math.PI);
+        game.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 
         scriptManager = (ScriptManager)container.getService(ServiceNames.SCRIPT_MANAGER);
         table = (Table)container.getService(ServiceNames.TABLE);
@@ -66,9 +68,10 @@ public class JUnit_Cordees extends JUnit_Test
         //container.getService(ServiceNames.THREAD_TIMER);
         container.getService(ServiceNames.THREAD_INTERFACE);
         container.startInstanciedThreads();
+        game.robot.useActuator(ActuatorOrder.ARM_INIT,true);
         game.robot.moveLengthwise(100, new ArrayList<Hook>(), false);
         scriptManager.getScript(ScriptNames.CLOSE_DOORS).goToThenExec(0, game, new ArrayList<Hook>());
-        scriptManager.getScript(ScriptNames.FISHING).goToThenExec(1, game, new ArrayList<Hook>());
+        //scriptManager.getScript(ScriptNames.FISHING).goToThenExec(1, game, new ArrayList<Hook>());
         game.robot.useActuator(ActuatorOrder.FISHING_POSITION, true);
         game.robot.useActuator(ActuatorOrder.FISHING_POSITION_RIGHT, true);
         while((System.currentTimeMillis()-time)<30000)
