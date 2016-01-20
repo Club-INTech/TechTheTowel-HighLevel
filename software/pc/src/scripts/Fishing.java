@@ -12,7 +12,6 @@ import robot.Robot;
 import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
-import sun.org.mozilla.javascript.ast.ThrowStatement;
 import utils.Config;
 import utils.Log;
 
