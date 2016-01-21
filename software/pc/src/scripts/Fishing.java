@@ -171,9 +171,9 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 
 				//On commence à se placer près du bord
-				stateToConsider.robot.turn(Math.PI + 0.60);
+				stateToConsider.robot.turn(Math.PI + 0.70);
 
-				stateToConsider.robot.moveLengthwise(190,hooksToConsider,false);
+				stateToConsider.robot.moveLengthwise(185,hooksToConsider,false);
 
 				// On s'oriente vers le côté ennemi
 				stateToConsider.robot.turn((Math.PI), hooksToConsider, true);
@@ -184,7 +184,7 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.sleep(800);
 
 				// On longe le bac
-				stateToConsider.robot.moveLengthwise(280, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(270, hooksToConsider, true);
 
 				// On indique au robot que les poissons sont sur le bras
 				stateToConsider.robot.setAreFishesOnBoard(true);
