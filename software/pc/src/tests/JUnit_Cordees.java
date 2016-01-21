@@ -74,6 +74,7 @@ public class JUnit_Cordees extends JUnit_Test
         //scriptManager.getScript(ScriptNames.FISHING).goToThenExec(1, game, new ArrayList<Hook>());
         game.robot.useActuator(ActuatorOrder.FISHING_POSITION, true);
         game.robot.useActuator(ActuatorOrder.FISHING_POSITION_RIGHT, true);
+        game.robot.useActuator(ActuatorOrder.ARM_INIT, true);
         while((System.currentTimeMillis()-time)<30000)
         {
             Vec2 point = nextPoint();
