@@ -4,6 +4,7 @@ package tests;
 import enums.ActuatorOrder;
 import enums.ScriptNames;
 import enums.ServiceNames;
+import exceptions.BadVersionException;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.PathNotFoundException;
@@ -64,7 +65,7 @@ public class JUnit_CarpetDropper extends JUnit_Test
 		try 
 		{
 			scriptManager.getScript(ScriptNames.DROP_CARPET).goToThenExec(0, game, emptyHook);
-		} catch (ExecuteException | UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException e) {
+		} catch (ExecuteException | BadVersionException | UnableToMoveException | SerialConnexionException | PathNotFoundException | SerialFinallyException e) {
 				e.printStackTrace();
 			}
 		log.debug("fin du depose tapis");

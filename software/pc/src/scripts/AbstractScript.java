@@ -3,6 +3,7 @@ package scripts;
 import container.Service;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
+import exceptions.BadVersionException;
 import exceptions.PathNotFoundException;
 import exceptions.PointInObstacleException;
 import exceptions.serial.SerialConnexionException;
@@ -68,7 +69,7 @@ public abstract class AbstractScript implements Service
 	 * @throws ExecuteException 
 	 * @throws PointInObstacleException 
 	 */
-	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialConnexionException, PathNotFoundException, SerialFinallyException, ExecuteException, PointInObstacleException
+	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, BadVersionException, SerialConnexionException, PathNotFoundException, SerialFinallyException, ExecuteException, PointInObstacleException
 	{
 		// va jusqu'au point d'entrée de la version demandée
 		try 
@@ -119,7 +120,7 @@ public abstract class AbstractScript implements Service
 	 * @param la taille du robot
 	 * @return la position du point d'entrée
 	 */
-	public abstract Circle entryPosition(int version, int ray, Vec2 robotPosition);
+	public abstract Circle entryPosition(int version, int ray, Vec2 robotPosition) throws BadVersionException;
 	
 	/**
 	 * Méthode toujours appelée à la fin du script via un finally. On des donc certain  que son exécution aura lieu.

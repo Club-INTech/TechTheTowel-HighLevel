@@ -72,6 +72,9 @@ public abstract class Robot implements Service
 	/** Booléen indiquant la présence de sable dans le robot */
 	private boolean IsSandInside = false;
 
+	/** Si on entraîne des coquillages ou non */
+	public boolean shellsOnBoard=false;
+
 	
 	
 	/**

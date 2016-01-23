@@ -3,6 +3,7 @@ package tests;
 import enums.ScriptNames;
 import enums.ServiceNames;
 import enums.Speed;
+import exceptions.BadVersionException;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.PathNotFoundException;
@@ -59,7 +60,7 @@ public class JUnit_CloseDoors extends JUnit_Test
 			scriptManager.getScript(ScriptNames.CLOSE_DOORS).goToThenExec(0, mRobot, emptyList);
 			//scriptManager.getScript(ScriptNames.FISHING).goToThenExec(0, mRobot, emptyList);
 		}
-		catch(SerialConnexionException | ExecuteException | SerialFinallyException e)
+		catch(SerialConnexionException | BadVersionException | ExecuteException | SerialFinallyException e)
 		{
 			e.printStackTrace();
 		} catch (PointInObstacleException e) {

@@ -1,6 +1,7 @@
 package table;
 
 import enums.Color;
+import smartMath.Circle;
 import smartMath.Vec2;
 
 /**
@@ -12,30 +13,38 @@ public class Shell extends GameElement
 {
 	/** Couleur du coquillage, enumeres dans enums/Elements.java */
 	private Color color;
-
-	/** Niveau de l'element
-	 *  0 = sur la table
-	 *  1 = sur le premier palier dans les coins
-	 *  2 = sur le deuxième palier dans les coins
-	 */
-	private int level;
 	
 	/** Hauteur en mm d'un coquillage*/
 	public double shellHeight = 25;
+
+	public Circle entryPosition;
 	
 
 	/**
 	 * Constructeur du coquillage
 	 * @param color, SHELL_NEUTRAL, SHELL_ENEMY, ou SHELL_ALLY de l'enum Elements
 	 * @param position, la position du coquillage
-	 * @param level, niveau de l'élément
+	 * @param entry, point d'entrée pour récupération
 	 */
-	public Shell(Vec2 position, Color color, int level)
+	public Shell(Vec2 position, Color color, Vec2 entry)
 	{
 		super(position);
 		this.color = color;
-		this.level = level;
+		this.entryPosition = new Circle(entry,0);
 	}
+
+    /**
+     * Constructeur du coquillage
+     * @param color, SHELL_NEUTRAL, SHELL_ENEMY, ou SHELL_ALLY de l'enum Elements
+     * @param position, la position du coquillage
+     * @param entry, point d'entrée pour récupération
+     */
+    public Shell(Vec2 position, Color color, Circle entry)
+    {
+        super(position);
+        this.color = color;
+        this.entryPosition = entry;
+    }
 	
 	/**
 	 * Renvoie la couleur du coquillage
@@ -63,24 +72,6 @@ public class Shell extends GameElement
 		return position.y;
 	}
 	
-	/**
-	 * Getter de la position de l'element de jeu
-	 * @return la position en Z de l'element de jeu
-	 */
-	public float getZ()
-	{
-		if (this.level == 0)
-		{
-			return (0);
-		}
-		else if (this.level == 1)
-		{
-			return (float)( 44+(shellHeight/2));
-		}
-		else 
-		{
-			return (float)(44+22+(shellHeight/2));
-		}
-	}
+
 	
 }

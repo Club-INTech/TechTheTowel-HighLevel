@@ -4,11 +4,8 @@ import enums.ActuatorOrder;
 import enums.ScriptNames;
 import enums.ServiceNames;
 import enums.Speed;
-import exceptions.ContainerException;
-import exceptions.ExecuteException;
+import exceptions.*;
 import exceptions.Locomotion.UnableToMoveException;
-import exceptions.PathNotFoundException;
-import exceptions.PointInObstacleException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import exceptions.serial.SerialManagerException;
@@ -64,7 +61,7 @@ public class JUnit_Cordees extends JUnit_Test
     }
 
     @Test
-    public void test() throws SerialManagerException, ContainerException, UnableToMoveException, PointInObstacleException, SerialConnexionException, ExecuteException, PathNotFoundException, SerialFinallyException {
+    public void test() throws SerialManagerException, BadVersionException, ContainerException, UnableToMoveException, PointInObstacleException, SerialConnexionException, ExecuteException, PathNotFoundException, SerialFinallyException {
         //container.getService(ServiceNames.THREAD_TIMER);
         container.getService(ServiceNames.THREAD_INTERFACE);
         container.startInstanciedThreads();
