@@ -2,6 +2,7 @@ package scripts;
 
 
 import enums.Speed;
+import enums.TurningStrategy;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.BadVersionException;
@@ -32,7 +33,7 @@ public class ShellGetter extends AbstractScript
         /**
          * Versions du script
          */
-        versions = new Integer[]{0,1};
+        versions = new Integer[]{0,1,2,3,4};
     }
 
     @Override
@@ -68,22 +69,28 @@ public class ShellGetter extends AbstractScript
                 e.printStackTrace();
             }
         }
-        if(versionToExecute == 1)
+        if(versionToExecute >= 1 && versionToExecute < 5)
         {
+            Shell selected = getTheShell(versionToExecute);;
+            try {
+                //Orientation vers le coquillage
+                stateToConsider.robot.turn(Math.atan((selected.getY() - stateToConsider.robot.getPosition().y) /
+                        (selected.getX() - stateToConsider.robot.getPosition().y)));
 
-        }
-        if(versionToExecute == 2)
-        {
+                //TODO ouvrir la porte droite
 
-        }
-        if(versionToExecute == 3)
-        {
+                
+                stateToConsider.robot.setTurningStrategy(TurningStrategy.LEFT_ONLY);
 
-        }
-        if(versionToExecute == 4)
-        {
+                stateToConsider.robot.turnRelative(Math.PI);
 
+                stateToConsider.robot.shellsOnBoard = true;
+
+            } catch (UnableToMoveException e) {
+                e.printStackTrace();
+            }
         }
+
     }
 
     @Override
@@ -99,22 +106,11 @@ public class ShellGetter extends AbstractScript
         }
         else if(version >= 1 && version < 5 )
         {
-            ArrayList<Shell> list = new ArrayList<Shell>();
-            list.addAll(Table.ourShells);
-            list.addAll(Table.neutralShells);
+            Shell selected;
+            if((selected = getTheShell(version)) == null)
+                throw new BadVersionException(true);
 
-            for(Shell i : list)
-            {
-                if(i.getX() >= 0) //Ceux de notre côté
-                {
-                    if(version == 1)
-                        return i.entryPosition;
-                    else
-                        version--;
-                }
-            }
-
-            throw new BadVersionException(true);
+            return selected.entryPosition;
 
         }
         else
@@ -133,6 +129,25 @@ public class ShellGetter extends AbstractScript
     @Override
     public Integer[] getVersion(GameState<?> stateToConsider) {
         return new Integer[0];
+    }
+
+    private Shell getTheShell(int t)
+    {
+        ArrayList<Shell> list = new ArrayList<Shell>();
+        list.addAll(Table.ourShells);
+        list.addAll(Table.neutralShells);
+
+        for(Shell i : list)
+        {
+            if(i.getX() >= 0) //Ceux de notre côté
+            {
+                if(t == 1)
+                    return i;
+                else
+                    t--;
+            }
+        }
+        return null;
     }
 
 }
