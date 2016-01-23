@@ -79,7 +79,7 @@ public class ShellGetter extends AbstractScript
 
                 //TODO ouvrir la porte droite
 
-                
+
                 stateToConsider.robot.setTurningStrategy(TurningStrategy.LEFT_ONLY);
 
                 stateToConsider.robot.turnRelative(Math.PI);

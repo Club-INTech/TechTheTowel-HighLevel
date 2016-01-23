@@ -140,7 +140,7 @@ public class Table implements Service
 
 	
 	/** point de depart du match a modifier a chaque base roulante */
-	public static final Vec2 entryPosition = new Vec2(1360,1050); //TODO position entree
+	public static final Vec2 entryPosition = new Vec2(1350,1150); //TODO position entree
 	
 	/**
 	 * Instancie une nouvelle table
