@@ -260,7 +260,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 					}
 					else
 					{
-						throw new SerialConnexionException();
+						throw new SerialConnexionException("Liaison série considérée défectueuse: réception récurrente d'une réponse bas-niveau non indexée");
 					}
 				}
 				else
