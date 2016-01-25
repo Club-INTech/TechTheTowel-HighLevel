@@ -231,6 +231,11 @@ public class Container
 																	(Table)getService(ServiceNames.TABLE),
 					     											(RobotReal)getService(ServiceNames.ROBOT_REAL)
 																	);
+		else if(serviceRequested == ServiceNames.THREAD_EYES)
+			instanciedServices[serviceRequested.ordinal()] = 	(Service)threadManager.getThreadEyes(
+					(Config)getService(ServiceNames.CONFIG),
+					(Log)getService(ServiceNames.LOG)
+			);
 		
 		// si le service demandé n'est pas connu, alors on log une erreur.
 		else
@@ -270,6 +275,7 @@ public class Container
 		}
 		try {
 			getService(ServiceNames.THREAD_TIMER);
+           // getService(ServiceNames.THREAD_EYES);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

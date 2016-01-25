@@ -1,6 +1,7 @@
 package tests;
 
 import enums.ServiceNames;
+import enums.Speed;
 import exceptions.ContainerException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.PathNotFoundException;
@@ -38,6 +39,7 @@ public class JUnit_TestBaliseClement extends JUnit_Test
 		//position initiale du robot
 		clement.robot.setPosition(Table.entryPosition);
 		clement.robot.setOrientation(Math.PI);
+		clement.robot.setLocomotionSpeed(Speed.FAST_ALL);
 		
 		table = (Table)container.getService(ServiceNames.TABLE);
 		log = (Log)container.getService(ServiceNames.LOG);

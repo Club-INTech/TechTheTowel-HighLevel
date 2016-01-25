@@ -79,7 +79,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	 * @param log Sortie de log a utiliser
 	 * @param name nom de la connexion série
 	 */
-	SerialConnexion (Log log, String name)
+	public SerialConnexion (Log log, String name)
 	{
 		super();
 		this.log = log;
@@ -91,7 +91,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	 * @param port_name : Le port o� est connect� la carte (/dev/ttyUSB ou /dev/ttyACM)
 	 * @param baudrate : Le baudrate que la carte utilise
 	 */
-	void initialize(String port_name, int baudrate)
+	public void initialize(String port_name, int baudrate)
 	{
 		CommPortIdentifier portId = null;
 		try

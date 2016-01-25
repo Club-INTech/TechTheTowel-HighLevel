@@ -96,6 +96,19 @@ public class ThreadManager
 		return instanciedThreads.get("threadInterface");
 	}
 
+	/**
+	 * Renvoie le thread pour les yeux
+	 * @param config la config
+	 * @param log le log
+	 */
+	public AbstractThread getThreadEyes(Config config, Log log)
+	{
+		AbstractThread thread = instanciedThreads.get("threadEyes");
+		if(thread == null)
+			instanciedThreads.put("threadEyes", new ThreadEyes(config, log));
+		return instanciedThreads.get("threadEyes");
+	}
+
 
 	/**
 	 * Démarre tout les threads instanciés auparavant.
