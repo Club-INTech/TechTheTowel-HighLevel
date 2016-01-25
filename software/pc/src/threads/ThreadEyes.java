@@ -10,8 +10,14 @@ import utils.Log;
  **/
 public class ThreadEyes extends AbstractThread
 {
+    /** Connexion série avec les arduinos */
+    private SerialConnexion serial;
 
-    SerialConnexion serial;
+    /**
+     * Constructeur du thread
+     * @param config la config
+     * @param log le log
+     */
     public ThreadEyes(Config config, Log log)
     {
         super(config, log);
@@ -20,8 +26,9 @@ public class ThreadEyes extends AbstractThread
     }
 
     @Override
-    public void run() {
-
+    public void run()
+    {
+        //TODO Traitement
     }
 
 }
