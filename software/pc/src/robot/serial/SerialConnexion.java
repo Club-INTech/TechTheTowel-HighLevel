@@ -242,9 +242,8 @@ public class SerialConnexion implements SerialPortEventListener, Service
 					}
 					if(!isAsciiExtended(inputLines[i]))
 					{
-						log.critical("='( , envoi de "+inputLines[i]+" envoi du message a nouveau");
-						emptyInputBuffer();
-						communiquer(messages, nb_lignes_reponse); // On retente
+						log.critical("='( , réception défectueuse: "+inputLines[i]);
+						throw new UnknownOrderException(messages, this);
 					}
 				}
 			}
@@ -256,6 +255,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 					counter=c;
 					if (uoe.verifyConnexion())
 					{
+						emptyInputBuffer();
 						communiquer(messages, nb_lignes_reponse);
 					}
 					else
