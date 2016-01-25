@@ -3,6 +3,7 @@ package tests;
 import enums.ServiceNames;
 import exceptions.serial.SerialConnexionException;
 import org.junit.Before;
+import org.junit.Test;
 import robot.serial.SerialConnexion;
 import utils.Log;
 
@@ -24,13 +25,14 @@ public class JUnit_UnknownOrderException extends JUnit_Test
 	private Log uoeLog;
 	private SerialConnexion serialTest;
 	
+	@Test
 	public void main() throws SerialConnexionException
 	{
 		try
 		{
 			//ordre "uoe" géré dans le bas-niveau qui dans le cadre du teste renvoie "Une fraise"
-			//(en plus de l'acquittement "_" bien entendu, ce qui comptabilise deux réponses attendues)
-			serialTest.communiquer("uoe", 2);
+			//(en plus de l'acquittement "_" non comptabilisé dans le nombre de réponses attendues)
+			serialTest.communiquer("uoe", 1);
 		}
 		catch(SerialConnexionException e)
 		{
