@@ -1,6 +1,7 @@
 package scripts;
 
 
+import enums.DirectionStrategy;
 import enums.Speed;
 import enums.TurningStrategy;
 import exceptions.ExecuteException;
@@ -73,7 +74,7 @@ public class ShellGetter extends AbstractScript
         }
         if(versionToExecute >= 1 && versionToExecute < 5)
         {
-            Shell selected = getTheShell(versionToExecute);;
+            Shell selected = getTheShell(versionToExecute);
             try {
                 //Orientation vers le coquillage
                 stateToConsider.robot.turn(Math.atan((selected.getY() - stateToConsider.robot.getPosition().y) /
@@ -83,6 +84,8 @@ public class ShellGetter extends AbstractScript
 
 
                 stateToConsider.robot.setTurningStrategy(TurningStrategy.LEFT_ONLY);
+
+                stateToConsider.robot.setDirectionStrategy(DirectionStrategy.FORCE_FORWARD_MOTION);
 
                 stateToConsider.robot.turnRelative(Math.PI);
 
