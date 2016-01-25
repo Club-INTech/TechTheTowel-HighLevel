@@ -337,7 +337,7 @@ public class RobotReal extends Robot
 	@Override
 	public boolean setTurningStrategy(TurningStrategy turning)
 	{
-        if((getIsSandInside() && !(turning == TurningStrategy.FASTEST)) || !getIsSandInside())
+        if(((getIsSandInside()||shellsOnBoard) && !(turning == TurningStrategy.FASTEST)) || (!getIsSandInside() && !shellsOnBoard))
         {
 			if(symmetry)
 			{
@@ -353,7 +353,7 @@ public class RobotReal extends Robot
 	@Override
 	public boolean setDirectionStrategy(DirectionStrategy motion)
 	{
-		if ( (getIsSandInside() && !(motion == DirectionStrategy.FASTEST)) || !getIsSandInside())
+        if(((getIsSandInside()||shellsOnBoard) && !(motion == DirectionStrategy.FASTEST)) || (!getIsSandInside() && !shellsOnBoard))
 		{
 			mLocomotion.setDirectionOrders(motion);
 			return true;

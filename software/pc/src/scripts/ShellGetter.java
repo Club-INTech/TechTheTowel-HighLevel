@@ -65,6 +65,8 @@ public class ShellGetter extends AbstractScript
 
                 stateToConsider.robot.moveLengthwise(200);
 
+                stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
+
             } catch (UnableToMoveException e) {
                 e.printStackTrace();
             }

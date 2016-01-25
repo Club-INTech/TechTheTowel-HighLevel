@@ -74,7 +74,9 @@ public abstract class Robot implements Service
 	 **/
 	private boolean IsSandInside = false;
 
-	/** Si on entraîne des coquillages ou non */
+	/** Si on entraîne des coquillages ou non
+     * IDEM, MUTEX DEBILE
+     **/
 	public boolean shellsOnBoard=false;
 
 	
