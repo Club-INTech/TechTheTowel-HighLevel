@@ -25,6 +25,7 @@ public class RobotReal extends Robot
 	private SensorsCardWrapper mSensorsCardWrapper;
 	
 	private SymmetrizedActuatorOrderMap mActuatorCorrespondenceMap = new SymmetrizedActuatorOrderMap();
+	private SymmetrizedTurningStrategy mTurningStrategyCorrespondenceMap = new SymmetrizedTurningStrategy();
 	/** Système de locomotion a utiliser pour déplacer le robot */
 	private Locomotion mLocomotion;
 	
@@ -338,6 +339,11 @@ public class RobotReal extends Robot
 	{
         if((getIsSandInside() && !(turning == TurningStrategy.FASTEST)) || !getIsSandInside())
         {
+			if(symmetry)
+			{
+				mLocomotion.setTurningOrders(mTurningStrategyCorrespondenceMap.getSymmetrizedTurningStrategy(turning));
+				return true;
+			}
             mLocomotion.setTurningOrders(turning);
             return true;
         }

@@ -30,7 +30,7 @@ public class TechTheSand extends AbstractScript
 		/**
 		 * Versions du script
 		 */
-		versions = new Integer[]{0,1};
+		versions = new Integer[]{0};
 	}
 	
 	
@@ -69,14 +69,14 @@ public class TechTheSand extends AbstractScript
 				// TODO la distance est arbitraire, à modifier avec les phases de test
 				stateToConsider.robot.moveLengthwise(400, hooksToConsider, true);
 				
-				// On indique au robot qu'il transporte du sable
-				stateToConsider.robot.setIsSandInside(true);
-				
 				// Demande au robot de ne tourner que vers la gauche pour ses prochains déplacements
 				stateToConsider.robot.setTurningStrategy(TurningStrategy.LEFT_ONLY);
-				
+
 				// Demande au robot de conserver une marche avant pour ses prochains déplacements avec le sable
 				stateToConsider.robot.setDirectionStrategy(DirectionStrategy.FORCE_FORWARD_MOTION);
+
+				// On indique au robot qu'il transporte du sable
+				stateToConsider.robot.setIsSandInside(true);
 				
 				// On desactive la tige accrochante
 				// TODO même tâche que celle au dessus: sur quel type de message communiquer avec le bas niveau ?
@@ -95,54 +95,6 @@ public class TechTheSand extends AbstractScript
 				throw new ExecuteException(e);
 			}
 		}
-		
-		else if (versionToExecute == 1)
-		{
-			try
-			{
-				// On prend une vitesse lente pour que le robot récupère efficacement le sable
-				//Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
-				//stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
-				
-				// On s'oriente vers le côté ennemi
-				stateToConsider.robot.turn(0, hooksToConsider, false);
-				
-				// On déploie la vitre gauche
-				// TODO créer un ordre ou autre pour communiquer avec le bas niveau sue l'utilisation du moteur de vitre
-				
-				// On active la tige accrochante
-				// TODO même tâche que celle au dessus: sur quel type de message communiquer avec le bas niveau ?
-				
-				// On avance pour récupérer le sable
-				// TODO la distance est arbitraire, à modifier avec les phases de test
-				stateToConsider.robot.moveLengthwise(400, hooksToConsider, true);
-				
-				// On indique au robot qu'il transporte du sable
-				stateToConsider.robot.setIsSandInside(true);
-				
-				// Demande au robot de ne tourner que vers la droite pour ses prochains déplacements avec le sable
-        		stateToConsider.robot.setTurningStrategy(TurningStrategy.RIGHT_ONLY);
-        		
-        		// Demande au robot de conserver une marche avant pour ses prochains déplacements avec le sable
-				stateToConsider.robot.setDirectionStrategy(DirectionStrategy.FORCE_FORWARD_MOTION);
-				
-				// On desactive la tige accrochante
-				// TODO même tâche que celle au dessus: sur quel type de message communiquer avec le bas niveau ?
-				
-				// On s'oriente vers notre serviette
-				stateToConsider.robot.turn((Math.PI));
-				
-				// On reprend notre vitesse habituelle
-				//stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
-			}
-			catch (UnableToMoveException e)
-			{
-				// TODO gérer cette exception, c'est-à-dire par exemple reprendre l'avancée avec plus de puissance
-				finalize(stateToConsider);
-				throw new ExecuteException(e);
-			}
-		}
-		
 	}
 
 	@Override
@@ -158,10 +110,6 @@ public class TechTheSand extends AbstractScript
 		if (version == 0)
 		{
 			return new Circle (new Vec2(400,1800));
-		}
-		else if (version == 1)
-		{
-			return new Circle (new Vec2(-400,1800));
 		}
 		else
 		{

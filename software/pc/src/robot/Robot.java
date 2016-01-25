@@ -69,7 +69,9 @@ public abstract class Robot implements Service
 	/** Booléen indiquant la présence de poisson sur les actionneurs */
 	private boolean AreFishesOnBoard = false;
 	
-	/** Booléen indiquant la présence de sable dans le robot */
+	/** Booléen indiquant la présence de sable dans le robot
+	 *  IL FAUT LE VOIR COMME UN MUTEX DEBILE
+	 **/
 	private boolean IsSandInside = false;
 
 	/** Si on entraîne des coquillages ou non */

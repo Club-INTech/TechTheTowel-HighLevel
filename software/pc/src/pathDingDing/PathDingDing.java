@@ -237,7 +237,7 @@ public class PathDingDing implements Service
 		while(openNodes.size() > BEAM_LENGTH)
 			openNodes.remove(openNodes.size()-1);
 
-		log.debug("Temps d'init. A* = "+(System.currentTimeMillis()-time)+" ms");
+		//log.debug("Temps d'init. A* = "+(System.currentTimeMillis()-time)+" ms");
 		//====================================================================
 		// Boucle principale - Recherche de l'arrivée en parcourant le graphe
 		//====================================================================
