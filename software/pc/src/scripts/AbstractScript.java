@@ -74,7 +74,7 @@ public abstract class AbstractScript implements Service
 		// va jusqu'au point d'entrée de la version demandée
 		try 
 		{
-			actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.robotRay, actualState.robot.getPosition()), hooksToConsider, actualState.table);
+			actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.getRobotRadius(), actualState.robot.getPosition()), hooksToConsider, actualState.table);
 		}
 		catch (UnableToMoveException | PathNotFoundException e)
 		{

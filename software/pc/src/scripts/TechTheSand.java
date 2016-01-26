@@ -1,6 +1,8 @@
 package scripts;
 
+import enums.ActuatorOrder;
 import enums.DirectionStrategy;
+import enums.Speed;
 import enums.TurningStrategy;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -24,7 +26,13 @@ import java.util.ArrayList;
  */
 public class TechTheSand extends AbstractScript
 {
-	public TechTheSand(HookFactory hookFactory, Config config, Log log)
+
+    /** TEMPORAIRE */
+    public static final int expandedRobotRadius = 400; //TODO a changer
+    public static final int retractedRobotRadius = 250; //TODO a changer
+
+
+    public TechTheSand(HookFactory hookFactory, Config config, Log log)
 	{
 		super (hookFactory,config,log);
 		/**
@@ -44,26 +52,25 @@ public class TechTheSand extends AbstractScript
 	@Override
 	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException
 	{
-		/*
-		 * On exécute la version 0 si le robot est dans le terrain vert
-		 * et 1 s'il est dans la zone violette
-		 */
+
 		if (versionToExecute == 0)
 		{
 			try
 			{
 				// On prend une vitesse lente pour que le robot récupère efficacement le sable
-				//Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
-				//stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
+				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
+				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 				
 				// On s'oriente vers le côté ennemi
 				stateToConsider.robot.turn((Math.PI), hooksToConsider, false);
 				
 				// On déploie la vitre droite
-				// TODO créer un ordre ou autre pour communiquer avec le bas niveau sue l'utilisation du moteur de vitre
+				stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, true);
+
+                stateToConsider.robot.setRobotRadius(TechTheSand.expandedRobotRadius);
 				
 				// On active la tige accrochante
-				// TODO même tâche que celle au dessus: sur quel type de message communiquer avec le bas niveau ?
+				stateToConsider.robot.useActuator(ActuatorOrder.START_AXIS, false);
 				
 				// On avance pour récupérer le sable
 				// TODO la distance est arbitraire, à modifier avec les phases de test
@@ -77,18 +84,17 @@ public class TechTheSand extends AbstractScript
 
 				// On indique au robot qu'il transporte du sable
 				stateToConsider.robot.setIsSandInside(true);
-				
-				// On desactive la tige accrochante
-				// TODO même tâche que celle au dessus: sur quel type de message communiquer avec le bas niveau ?
-				
+
 				// On s'oriente vers notre serviette
 				stateToConsider.robot.turn(0);
+
+				stateToConsider.robot.useActuator(ActuatorOrder.STOP_AXIS, false);
 				
 				// On reprend notre vitesse habituelle
-				//stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
+				stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
 				
 			}
-			catch (UnableToMoveException e)
+			catch (UnableToMoveException | SerialConnexionException e)
 			{
 				// TODO gérer cette exception, c'est-à-dire par exemple reprendre l'avancée avec plus de puissance
 				finalize(stateToConsider);
@@ -109,7 +115,7 @@ public class TechTheSand extends AbstractScript
 	{
 		if (version == 0)
 		{
-			return new Circle (new Vec2(400,1800));
+			return new Circle (new Vec2(400,1700));
 		}
 		else
 		{

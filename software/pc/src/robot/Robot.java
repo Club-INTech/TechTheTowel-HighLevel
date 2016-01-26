@@ -54,7 +54,7 @@ public abstract class Robot implements Service
 	protected double orientation;
 	
 	/** Rayon du robot provenant du fichier de config */
-	public int robotRay;
+	private int robotRay;
 
 	/** chemin en court par le robot, utilise par l'interface graphique */
 	public ArrayList<Vec2> cheminSuivi = new ArrayList<Vec2>();
@@ -78,6 +78,12 @@ public abstract class Robot implements Service
      * IDEM, MUTEX DEBILE
      **/
 	public boolean shellsOnBoard=false;
+
+	/**
+	 * Si la porte est ouverte
+	 * #MUTEX
+	 */
+	public boolean doorIsOpen=false;
 
 	
 	
@@ -577,6 +583,19 @@ public abstract class Robot implements Service
 	public PathDingDing getPDD()
 	{
 		return pathDingDing;
+	}
+
+	public void setRobotRadius(int radius)
+	{
+		if(!doorIsOpen || (doorIsOpen && radius<this.robotRay))
+			this.robotRay = radius;
+		else
+			log.critical("Réduction du rayon tentée mais booléen porte ouverte est à true !");
+	}
+
+	public int getRobotRadius()
+	{
+		return this.robotRay;
 	}
 
 }

@@ -1,6 +1,7 @@
 package scripts;
 
 
+import enums.ActuatorOrder;
 import enums.DirectionStrategy;
 import enums.TurningStrategy;
 import exceptions.ExecuteException;
@@ -54,16 +55,18 @@ public class DropTheSand extends AbstractScript
         		// TODO la distance est arbitraire, à modifier avec les phases de test
         		actualState.robot.moveLengthwise(-200, hooksToConsider, false);
         		
-        		//TODO ranger la vitre
-        		
-        		//On indique au robot qu'il ne transporte plus de sable
+                actualState.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
+
+                actualState.robot.setRobotRadius(TechTheSand.retractedRobotRadius);
+
+                //On indique au robot qu'il ne transporte plus de sable
         		actualState.robot.setIsSandInside(false);
         		
         		// On reprend une stratégie de mouvement optimale
         		actualState.robot.setTurningStrategy(TurningStrategy.FASTEST);
         	}
         	
-        	catch(UnableToMoveException e)
+        	catch(UnableToMoveException | SerialConnexionException e)
             {
 				finalize(actualState);
 				throw new ExecuteException(e);
@@ -97,7 +100,6 @@ public class DropTheSand extends AbstractScript
     @Override
     public void finalize(GameState<?> state) throws SerialFinallyException 
     {
-    	//TODO ranger la vitre
 
     }
 

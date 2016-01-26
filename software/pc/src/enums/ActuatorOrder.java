@@ -53,7 +53,23 @@ public enum ActuatorOrder
 	
 	/**Consigne pour remettre les bras en position initiale*/
 	ARM_INIT("aif"),
-	
+
+	/** Ouverture des portes */
+	OPEN_DOOR("odr"),
+	OPEN_DOOR_LEFT("odl"),
+
+	/** Fermeture des portes */
+	CLOSE_DOOR("lkceo"),
+	CLOSE_DOOR_RIGHT("fzfz"),
+
+	/** Lancement des axes */
+	START_AXIS_LEFT("cal"),
+	START_AXIS("car"),
+
+	/** Arret des axes */
+	STOP_AXIS_LEFT("fefgf"),
+	STOP_AXIS("nvkjrhjo"),
+
 	STOP("stop");
 
 	/**
