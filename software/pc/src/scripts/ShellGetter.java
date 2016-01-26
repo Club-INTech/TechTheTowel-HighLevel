@@ -1,12 +1,14 @@
 package scripts;
 
 
+import enums.ActuatorOrder;
 import enums.DirectionStrategy;
 import enums.Speed;
 import enums.TurningStrategy;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.BadVersionException;
+import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import hook.types.HookFactory;
@@ -81,7 +83,11 @@ public class ShellGetter extends AbstractScript
                         (selected.getX() - stateToConsider.robot.getPosition().y)));
 
                 //TODO ouvrir la porte droite
+                stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, true);
 
+                stateToConsider.robot.doorIsOpen = true;
+
+                stateToConsider.robot.setRobotRadius(TechTheSand.expandedRobotRadius);
 
                 stateToConsider.robot.setTurningStrategy(TurningStrategy.LEFT_ONLY);
 
@@ -92,6 +98,8 @@ public class ShellGetter extends AbstractScript
                 stateToConsider.robot.shellsOnBoard = true;
 
             } catch (UnableToMoveException e) {
+                e.printStackTrace();
+            } catch (SerialConnexionException e) {
                 e.printStackTrace();
             }
         }
