@@ -15,6 +15,6 @@ public class JUnit_Eyes extends JUnit_Test
     @Test
     public void test() throws SerialManagerException, ContainerException {
         container.getService(ServiceNames.THREAD_EYES);
-        container.startInstanciedThreads();
+        //container.startInstanciedThreads();
     }
 }

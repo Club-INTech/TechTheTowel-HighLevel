@@ -1,5 +1,6 @@
 package threads;
 
+import exceptions.ThreadException;
 import robot.RobotReal;
 import robot.cardsWrappers.ActuatorCardWrapper;
 import robot.cardsWrappers.LocomotionCardWrapper;
@@ -8,6 +9,7 @@ import table.Table;
 import utils.Config;
 import utils.Log;
 
+import java.io.IOException;
 import java.util.Hashtable;
 
 /**
@@ -101,8 +103,7 @@ public class ThreadManager
 	 * @param config la config
 	 * @param log le log
 	 */
-	public AbstractThread getThreadEyes(Config config, Log log)
-	{
+	public AbstractThread getThreadEyes(Config config, Log log) {
 		AbstractThread thread = instanciedThreads.get("threadEyes");
 		if(thread == null)
 			instanciedThreads.put("threadEyes", new ThreadEyes(config, log));
