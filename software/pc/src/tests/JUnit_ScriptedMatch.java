@@ -134,6 +134,14 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         {
             e.printStackTrace();
         }
+        try
+        {
+            scriptManager.getScript(ScriptNames.SHELL_DEPOSIT).goToThenExec(0,theRobot, emptyHook);
+        }
+        catch(ExecuteException | SerialFinallyException e)
+        {
+            e.printStackTrace();
+        }
 
     }
 }
