@@ -46,6 +46,7 @@ public class ScriptManager implements Service
 		instanciedScripts[ScriptNames.PREQUEL.ordinal()] = new Prequel(factory, config, log);
 		instanciedScripts[ScriptNames.TECH_THE_SAND.ordinal()] = new TechTheSand(factory, config, log);
 		instanciedScripts[ScriptNames.DROP_THE_SAND.ordinal()] = new DropTheSand(factory, config, log);
+		instanciedScripts[ScriptNames.SHELL_GETTER.ordinal()] = new ShellGetter(factory, config, log);
 
 		//TODO instancier les scripts
 	}

@@ -14,5 +14,6 @@ public enum ScriptNames
 	CLOSE_DOORS,
 	TECH_THE_SAND,
 	DROP_THE_SAND,
+	SHELL_GETTER,
 	PREQUEL;
 }
