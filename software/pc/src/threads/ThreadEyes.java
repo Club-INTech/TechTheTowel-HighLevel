@@ -133,12 +133,18 @@ public class ThreadEyes extends AbstractThread
      * @param frame l'image
      */
     private void sendFrame(boolean[] frame) throws SerialConnexionException {
+        String buffer = "";
         for(Boolean i : frame)
         {
             if(i)
-                serial.communiquer("T", 0);
+                buffer+="T";
             else
-                serial.communiquer("F", 0);
+                buffer+="F";
+        }
+        try {
+            serial.sendRaw(buffer);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

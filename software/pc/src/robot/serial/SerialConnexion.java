@@ -392,5 +392,16 @@ public class SerialConnexion implements SerialPortEventListener, Service
 		return true;
 	}
 
+	/**
+	 * Envoie un String sans chercher d'acquittement ou quoi que ce soit
+	 * SEULEMENT UTILE POUR LES YEUX
+	 * @param message le message
+     */
+	public void sendRaw(String message) throws IOException {
+		output.clear();
+		message += "\r";
+		output.write(message.getBytes());
+	}
+
 
 }
