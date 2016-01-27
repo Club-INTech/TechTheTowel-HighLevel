@@ -59,16 +59,19 @@ public enum ActuatorOrder
 	OPEN_DOOR_LEFT("odl"),
 
 	/** Fermeture des portes */
-	CLOSE_DOOR("lkceo"),
-	CLOSE_DOOR_RIGHT("fzfz"),
+	CLOSE_DOOR("cdl"),
+	CLOSE_DOOR_RIGHT("cdr"),
+
+	STOP_DOOR_LEFT("sdl"),
+	STOP_DOOR("sdr"),
 
 	/** Lancement des axes */
-	START_AXIS_LEFT("cal"),
-	START_AXIS("car"),
+	START_AXIS_LEFT("ral"),
+	START_AXIS("rar"),
 
 	/** Arret des axes */
-	STOP_AXIS_LEFT("fefgf"),
-	STOP_AXIS("nvkjrhjo"),
+	STOP_AXIS_LEFT("sal"),
+	STOP_AXIS("sar"),
 
 	STOP("stop");
 

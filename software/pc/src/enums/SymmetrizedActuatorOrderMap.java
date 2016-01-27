@@ -30,6 +30,7 @@ public class SymmetrizedActuatorOrderMap
         mCorrespondenceMap.put(ActuatorOrder.CLOSE_DOOR, ActuatorOrder.CLOSE_DOOR_RIGHT);
         mCorrespondenceMap.put(ActuatorOrder.START_AXIS, ActuatorOrder.START_AXIS_LEFT);
         mCorrespondenceMap.put(ActuatorOrder.STOP_AXIS, ActuatorOrder.STOP_AXIS_LEFT);
+        mCorrespondenceMap.put(ActuatorOrder.STOP_DOOR, ActuatorOrder.STOP_DOOR_LEFT);
     }
     
     /**
