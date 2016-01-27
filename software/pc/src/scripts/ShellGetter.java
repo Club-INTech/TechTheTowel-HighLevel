@@ -144,7 +144,7 @@ public class ShellGetter extends AbstractScript
         return new Integer[0];
     }
 
-    private Shell getTheShell(int t)
+    private Shell getTheShell(int version)
     {
         ArrayList<Shell> list = new ArrayList<Shell>();
         list.addAll(Table.ourShells);
@@ -154,10 +154,10 @@ public class ShellGetter extends AbstractScript
         {
             if(i.getX() >= 0) //Ceux de notre côté
             {
-                if(t == 1)
+                if(version == 1)
                     return i;
                 else
-                    t--;
+                    version--;
             }
         }
         return null;

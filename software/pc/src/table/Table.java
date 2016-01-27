@@ -4,6 +4,7 @@ package table;
 import container.Service;
 import enums.Color;
 import enums.Elements;
+import exceptions.ConfigPropertyNotFoundException;
 import smartMath.Circle;
 import smartMath.Vec2;
 import table.obstacles.ObstacleManager;
@@ -43,7 +44,7 @@ public class Table implements Service
 	private Config config;
 	
 	/** configuration pour les différents arrangements des coquillages, vaut au choix entre 1 et 5*/
-	private int configShell = 1;
+	public int configShell = 1;
 	//==================================
 	// Definition des elements de sable
 	//==================================
@@ -596,6 +597,11 @@ public class Table implements Service
 	public void updateConfig()
 	{
 		// TODO update config
+		try {
+			configShell = Integer.parseInt(config.getProperty("config_shell"));
+		} catch (ConfigPropertyNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 }
 
