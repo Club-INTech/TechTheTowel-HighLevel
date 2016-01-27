@@ -48,6 +48,7 @@ public class ScriptManager implements Service
 		instanciedScripts[ScriptNames.DROP_THE_SAND.ordinal()] = new DropTheSand(factory, config, log);
 		instanciedScripts[ScriptNames.SHELL_GETTER.ordinal()] = new ShellGetter(factory, config, log);
 		instanciedScripts[ScriptNames.SHELL_DEPOSIT.ordinal()] = new ShellDeposit(factory, config, log);
+		instanciedScripts[ScriptNames.CASTLE.ordinal()] = new ShellDeposit(factory, config, log);
 
 
 		//TODO instancier les scripts

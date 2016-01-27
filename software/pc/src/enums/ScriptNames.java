@@ -16,5 +16,6 @@ public enum ScriptNames
 	DROP_THE_SAND,
 	SHELL_GETTER,
 	SHELL_DEPOSIT,
-	PREQUEL;
+	PREQUEL,
+	CASTLE;
 }
