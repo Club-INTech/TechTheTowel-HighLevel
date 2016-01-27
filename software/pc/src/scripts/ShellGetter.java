@@ -80,7 +80,7 @@ public class ShellGetter extends AbstractScript
             try {
                 //Orientation vers le coquillage
                 stateToConsider.robot.turn(Math.atan((selected.getY() - stateToConsider.robot.getPosition().y) /
-                        (selected.getX() - stateToConsider.robot.getPosition().y)));
+                        (selected.getX() - stateToConsider.robot.getPosition().x)));
 
                 //TODO ouvrir la porte droite
                 stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, true);
