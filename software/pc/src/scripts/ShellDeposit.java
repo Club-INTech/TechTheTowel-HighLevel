@@ -2,9 +2,11 @@ package scripts;
 
 
 import enums.ActuatorOrder;
+import enums.ContactSensors;
 import enums.DirectionStrategy;
 import enums.TurningStrategy;
 import exceptions.BadVersionException;
+import exceptions.BlockedActuatorException;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialFinallyException;
@@ -71,6 +73,13 @@ public class ShellDeposit extends AbstractScript
                 // on ferme notre porte
                 actualState.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
                 
+                // on vérifie si la porte n'est pas bloquée lors de sa fermeture
+                if(!actualState.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
+                {
+                    actualState.robot.useActuator(ActuatorOrder.STOP_DOOR, false);
+                    throw new BlockedActuatorException("Porte bloquée !");
+                }
+                
                 // on l'indique au robot
                 actualState.robot.doorIsOpen = false;
                 
@@ -115,7 +124,25 @@ public class ShellDeposit extends AbstractScript
 
     @Override
     public void finalize(GameState<?> state) throws UnableToMoveException, SerialFinallyException {
-
+    	
+    	// on tente de ranger la porte avec changement de rayon
+    	try
+    	{
+    		state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
+    		if (state.robot.shellsOnBoard == true)
+    		{
+    			state.robot.setRobotRadius(TechTheSand.middleRobotRadius);
+    		}
+    		else
+    		{
+    			state.robot.setRobotRadius(TechTheSand.retractedRobotRadius);
+    		}
+    	}
+    	catch (Exception e)
+    	{
+    		log.debug("ShellDeposit : Impossible de ranger la porte !");
+    		throw new SerialFinallyException();
+    	}
     }
 
     @Override

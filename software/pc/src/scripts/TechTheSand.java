@@ -125,7 +125,7 @@ public class TechTheSand extends AbstractScript
 	@Override
 	public int remainingScoreOfVersion(int version, GameState<?> state) 
 	{
-		// TODO comment établir le nombre de point rendu par cette action ?
+		// TODO comment établir le nombre de points rendus par cette action ?
 		return 0;
 	}
 
@@ -147,7 +147,25 @@ public class TechTheSand extends AbstractScript
 	@Override
 	public void finalize(GameState<?> state) throws SerialFinallyException 
 	{
-		//TODO arrêter la tige et le moteur de vitre
+		// on tente d'arrêter la tige et de ranger la vitre
+		try 
+		{
+			state.robot.useActuator(ActuatorOrder.STOP_AXIS, true);
+			state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
+			if (state.robot.getIsSandInside() == true)
+			{
+				state.robot.setRobotRadius(middleRobotRadius);
+			}
+			else
+			{
+				state.robot.setRobotRadius(retractedRobotRadius);
+			}
+		}
+		catch (Exception e)
+		{
+			log.debug("TechTheSand : Impossible de stopper l'axe ou de ranger la vitre !");
+			throw new SerialFinallyException();
+		}
 		
 	}
 

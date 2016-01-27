@@ -2,12 +2,14 @@ package scripts;
 
 
 import enums.ActuatorOrder;
+import enums.ContactSensors;
 import enums.DirectionStrategy;
 import enums.Speed;
 import enums.TurningStrategy;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.BadVersionException;
+import exceptions.BlockedActuatorException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import hook.Hook;
@@ -78,6 +80,13 @@ public class ShellGetter extends AbstractScript
                 // on ferme notre porte
                 stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
                 
+                // on vérifie si la porte n'est pas bloquée lors de sa fermeture
+                if(!stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
+                {
+                    stateToConsider.robot.useActuator(ActuatorOrder.STOP_DOOR, false);
+                    throw new BlockedActuatorException("Porte bloquée !");
+                }
+                
                 // on l'indique au robot
                 stateToConsider.robot.doorIsOpen = false;
                 
@@ -108,6 +117,13 @@ public class ShellGetter extends AbstractScript
                 //TODO ouvrir la porte droite
                 stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, true);
                 
+                // on vérifie si la porte n'est pas bloquée lors de son ouverture
+                if(!stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_OPENED))
+                {
+                    stateToConsider.robot.useActuator(ActuatorOrder.STOP_DOOR, false);
+                    throw new BlockedActuatorException("Porte bloquée !");
+                }
+                
                 // booléen de vitre ouverte vrai
                 stateToConsider.robot.doorIsOpen = true;
                 
@@ -126,9 +142,8 @@ public class ShellGetter extends AbstractScript
                 // on indique que les coquillages sont dans le robot
                 stateToConsider.robot.shellsOnBoard = true;
 
-            } catch (UnableToMoveException e) {
-                e.printStackTrace();
-            } catch (SerialConnexionException e) {
+            } catch (Exception e) 
+            {
                 e.printStackTrace();
             }
         }
@@ -185,6 +200,25 @@ public class ShellGetter extends AbstractScript
 
     @Override
     public void finalize(GameState<?> state) throws UnableToMoveException, SerialFinallyException {
+    	
+    	// on tente de ranger la porte, avec changement de rayon
+    	try
+    	{
+    		state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
+    		if (state.robot.shellsOnBoard == true)
+    		{
+    			state.robot.setRobotRadius(TechTheSand.middleRobotRadius);
+    		}
+    		else
+    		{
+    			state.robot.setRobotRadius(TechTheSand.retractedRobotRadius);
+    		}
+    	}
+    	catch (Exception e)
+    	{
+    		log.debug("ShellGetter : Impossible de ranger la vitre !");
+    		throw new SerialFinallyException();
+    	}
 
     }
 

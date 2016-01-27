@@ -425,7 +425,7 @@ public class Fishing extends AbstractScript
 		}
 		catch (SerialConnexionException e) 
 		{
-			log.debug("erreur termine Fishing script : impossible de ranger");
+			log.debug("Fishing : Impossible de ranger les bras !");
 			throw new SerialFinallyException();
 		}
 	}

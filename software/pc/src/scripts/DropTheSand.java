@@ -2,8 +2,10 @@ package scripts;
 
 
 import enums.ActuatorOrder;
+import enums.ContactSensors;
 import enums.DirectionStrategy;
 import enums.TurningStrategy;
+import exceptions.BlockedActuatorException;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
@@ -56,6 +58,13 @@ public class DropTheSand extends AbstractScript
         		actualState.robot.moveLengthwise(-200, hooksToConsider, false);
         		
                 actualState.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
+                
+                // on vérifie si la porte n'est pas bloquée lors de sa fermeture
+                if(!actualState.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
+                {
+                    actualState.robot.useActuator(ActuatorOrder.STOP_DOOR, false);
+                    throw new BlockedActuatorException("Porte bloquée !");
+                }
 
                 actualState.robot.setRobotRadius(TechTheSand.retractedRobotRadius);
 
@@ -66,7 +75,7 @@ public class DropTheSand extends AbstractScript
         		actualState.robot.setTurningStrategy(TurningStrategy.FASTEST);
         	}
         	
-        	catch(UnableToMoveException | SerialConnexionException e)
+        	catch(Exception e)
             {
 				finalize(actualState);
 				throw new ExecuteException(e);
@@ -100,7 +109,24 @@ public class DropTheSand extends AbstractScript
     @Override
     public void finalize(GameState<?> state) throws SerialFinallyException 
     {
-
+    	// on tente de fermer la vitre avec changement de rayon
+    	try
+    	{
+    		state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
+    		if (state.robot.getIsSandInside() == true)
+    		{
+    			state.robot.setRobotRadius(TechTheSand.middleRobotRadius);
+    		}
+    		else
+    		{
+    			state.robot.setRobotRadius(TechTheSand.retractedRobotRadius);
+    		}
+    	}
+    	catch (Exception e)
+    	{
+    		log.debug("DropTheSand : Impossible de ranger la vitre !");
+    		throw new SerialFinallyException();
+    	}
     }
 
     @Override
