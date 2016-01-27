@@ -1,7 +1,5 @@
 package scripts;
 
-import com.sun.javafx.geom.Rectangle;
-import com.sun.org.apache.regexp.internal.RE;
 import enums.*;
 import exceptions.BlockedActuatorException;
 import exceptions.ExecuteException;
