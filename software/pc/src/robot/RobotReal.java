@@ -64,26 +64,6 @@ public class RobotReal extends Robot
 			sleep(order.getDuration());
 		}
 	}
-
-
-	public void useActuator(ActuatorOrder order, boolean waitForCompletion, boolean askLowLevel) throws SerialConnexionException
-	{
-		//redondance avec useActuator qui log.debug deja
-		//log.debug("appel de RobotReal.useActuator(" + order + "," + waitForCompletion + ")", this);
-		if(symmetry)
-			order = mActuatorCorrespondenceMap.getSymmetrizedActuatorOrder(order);
-		mActuatorCardWrapper.useActuator(order);
-
-		if(waitForCompletion)
-		{
-			sleep(order.getDuration());
-			if(askLowLevel)
-			{
-				;
-			}
-
-		}
-	}
 	
 	@Override
 	public int getUSSensorValue (USsensors sensor) throws SerialConnexionException
