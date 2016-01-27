@@ -22,6 +22,8 @@ public class SymmetrizedSensorNamesMap
     {
     	//TODO associer un capteur a son symetrique sur le robot (gauche droit)
     	//exemple : mCorrespondenceMap.put(SensorNames.LEFT_ZONE_SENSOR, SensorNames.RIGHT_ZONE_SENSOR);
+        mContactCorrespondenceMap.put(ContactSensors.DOOR_CLOSED, ContactSensors.DOOR_CLOSED_LEFT);
+        mContactCorrespondenceMap.put(ContactSensors.DOOR_OPENED, ContactSensors.DOOR_OPENED_LEFT);
     }
     
     /**

@@ -1,10 +1,9 @@
 package scripts;
 
-import enums.ActuatorOrder;
-import enums.DirectionStrategy;
-import enums.Speed;
-import enums.TurningStrategy;
+import enums.*;
+import exceptions.BlockedActuatorException;
 import exceptions.ExecuteException;
+import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
@@ -29,6 +28,7 @@ public class TechTheSand extends AbstractScript
 
     /** TEMPORAIRE */
     public static final int expandedRobotRadius = 400; //TODO a changer
+    public static final int middleRobotRadius = 350; //TODO a changer
     public static final int retractedRobotRadius = 250; //TODO a changer
 
 
@@ -67,6 +67,12 @@ public class TechTheSand extends AbstractScript
 				// On déploie la vitre droite
 				stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, true);
 
+				if(!stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_OPENED))
+                {
+                    stateToConsider.robot.useActuator(ActuatorOrder.STOP_DOOR, false);
+                    throw new BlockedActuatorException("Porte bloquée !");
+                }
+
                 stateToConsider.robot.setRobotRadius(TechTheSand.expandedRobotRadius);
 				
 				// On active la tige accrochante
@@ -85,7 +91,18 @@ public class TechTheSand extends AbstractScript
 				// On indique au robot qu'il transporte du sable
 				stateToConsider.robot.setIsSandInside(true);
 
-				// On s'oriente vers notre serviette
+                // On rétracte la vitre
+                stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
+
+                if(!stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
+                {
+                    stateToConsider.robot.useActuator(ActuatorOrder.STOP_DOOR, false);
+                    throw new BlockedActuatorException("Porte bloquée !");
+                }
+
+                stateToConsider.robot.setRobotRadius(TechTheSand.middleRobotRadius);
+
+                // On s'oriente vers notre serviette
 				stateToConsider.robot.turn(0);
 
 				stateToConsider.robot.useActuator(ActuatorOrder.STOP_AXIS, false);
@@ -99,6 +116,8 @@ public class TechTheSand extends AbstractScript
 				// TODO gérer cette exception, c'est-à-dire par exemple reprendre l'avancée avec plus de puissance
 				finalize(stateToConsider);
 				throw new ExecuteException(e);
+			} catch (BlockedActuatorException e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -115,7 +134,7 @@ public class TechTheSand extends AbstractScript
 	{
 		if (version == 0)
 		{
-			return new Circle (new Vec2(400,1700));
+			return new Circle (new Vec2(400,1999-ray));
 		}
 		else
 		{

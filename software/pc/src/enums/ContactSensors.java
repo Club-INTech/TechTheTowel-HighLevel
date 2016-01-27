@@ -4,8 +4,11 @@ public enum ContactSensors {
 	// Syntaxe: NOM_METHODE("protocole_serie", duree_action, valeur_par_default, nombre_de_ligne_reponse)
 	// exemple : JAW_SENSOR("ccm",10,true)
 
-	/** le capteur des machoires exemple a modifier*/
-	JAW_SENSOR("ccm",10,true),
+	DOOR_CLOSED_LEFT("ccm",10,true),
+	DOOR_CLOSED("vez",10,true),
+
+	DOOR_OPENED_LEFT("fzfe",10,true),
+	DOOR_OPENED("ddzf",10,true)
 
 	;
 
