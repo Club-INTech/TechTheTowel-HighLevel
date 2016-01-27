@@ -386,7 +386,7 @@ public class Fishing extends AbstractScript
 		// Score maximal possible de 40 points
 		int score=40;
 		
-		// Pour les versions 0 et 1, on gagne 10 points par poisson dans le filet
+		// Pour les versions 0,1 et 2 on gagne 10 points par poisson dans le filet
 		if (version == 0 || version ==1 || version ==2)
 		{
 			score-=((state.table.fishesFished)*10);
