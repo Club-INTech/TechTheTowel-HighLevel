@@ -18,6 +18,9 @@ import smartMath.Vec2;
 import strategie.GameState;
 import table.Shell;
 import table.Table;
+import table.obstacles.Obstacle;
+import table.obstacles.ObstacleCircular;
+import table.obstacles.ObstacleRectangular;
 import utils.Config;
 import utils.Log;
 
@@ -70,6 +73,17 @@ public class ShellGetter extends AbstractScript
 
                 stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
 
+                ArrayList<ObstacleCircular> cir = stateToConsider.table.getObstacleManager().getFixedObstacles();
+
+                //On supprime les obstacles de la table
+                for(ObstacleCircular i : cir)
+                {
+                    if(i.isInObstacle(new Vec2(1300,750)) || i.isInObstacle(new Vec2(1300,450)))
+                    {
+                        stateToConsider.table.getObstacleManager().removeObstacle(i);
+                    }
+                }
+
             } catch (UnableToMoveException e) {
                 e.printStackTrace();
             }
@@ -96,6 +110,18 @@ public class ShellGetter extends AbstractScript
                 stateToConsider.robot.turnRelative(Math.PI);
 
                 stateToConsider.robot.shellsOnBoard = true;
+
+                ArrayList<ObstacleCircular> cir = stateToConsider.table.getObstacleManager().getFixedObstacles();
+
+                //On supprime l'obstacle de la table
+                for(ObstacleCircular i : cir)
+                {
+                    if(i.isInObstacle(selected.getPosition()))
+                    {
+                        stateToConsider.table.getObstacleManager().removeObstacle(i);
+                        break;
+                    }
+                }
 
             } catch (UnableToMoveException e) {
                 e.printStackTrace();

@@ -1,5 +1,7 @@
 package scripts;
 
+import com.sun.javafx.geom.Rectangle;
+import com.sun.org.apache.regexp.internal.RE;
 import enums.*;
 import exceptions.BlockedActuatorException;
 import exceptions.ExecuteException;
@@ -13,6 +15,7 @@ import robot.Robot;
 import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
+import table.obstacles.ObstacleRectangular;
 import utils.Config;
 import utils.Log;
 
@@ -109,6 +112,20 @@ public class TechTheSand extends AbstractScript
 				
 				// On reprend notre vitesse habituelle
 				stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
+
+				ArrayList<ObstacleRectangular> rectangles = stateToConsider.table.getObstacleManager().getRectangles();
+
+                //On supprime l'obstacle de la table (le château)
+                for(ObstacleRectangular i : rectangles)
+                {
+                    if(i.isInObstacle(stateToConsider.robot.getPosition()))
+                    {
+                        stateToConsider.table.getObstacleManager().removeObstacle(i);
+                        break;
+                    }
+                }
+
+                //TODO Sortie de la zone
 				
 			}
 			catch (UnableToMoveException | SerialConnexionException e)
