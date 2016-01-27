@@ -2,9 +2,11 @@ package scripts;
 
 
 import enums.ActuatorOrder;
+import enums.ContactSensors;
 import enums.DirectionStrategy;
 import enums.TurningStrategy;
 import exceptions.BadVersionException;
+import exceptions.BlockedActuatorException;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialFinallyException;
@@ -16,6 +18,8 @@ import smartMath.Vec2;
 import strategie.GameState;
 import table.Shell;
 import table.Table;
+import table.obstacles.ObstacleManager;
+import table.obstacles.ObstacleRectangular;
 import utils.Config;
 import utils.Log;
 
@@ -45,21 +49,41 @@ public class ShellDeposit extends AbstractScript
         if(versionToExecute == 0)
         {
             try {
-
+            	
+            	// une fois à l'entrée du script, on a lâché les coquillages
                 actualState.robot.shellsOnBoard = false;
-
+                
+                // on incrémente leurs nombres sur notre tapis
+                actualState.table.shellsObtained+=1;
+                
+                // on rajoute le tapis en tant qu'obstacle pour na pas passer dessus par la suite
+                actualState.table.getObstacleManager().addObstacle(new ObstacleRectangular(new Vec2(1350,850), 300 + 2*actualState.robot.getRobotRadius(), 500 + 2*actualState.robot.getRobotRadius()));
+                
+                // on s'oriente vers pi/2
                 actualState.robot.turn(Math.PI/2);
-
+                
+                // on reprend un stratégie au plus rapide
                 actualState.robot.setDirectionStrategy(DirectionStrategy.FASTEST);
 
                 actualState.robot.setTurningStrategy(TurningStrategy.FASTEST);
-
+                
+                // on recule du tapis
                 actualState.robot.moveLengthwise(-300);
-
+                
+                // on ferme notre porte
                 actualState.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
-
+                
+                // on vérifie si la porte n'est pas bloquée lors de sa fermeture
+                if(!actualState.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
+                {
+                    actualState.robot.useActuator(ActuatorOrder.STOP_DOOR, false);
+                    throw new BlockedActuatorException("Porte bloquée !");
+                }
+                
+                // on l'indique au robot
                 actualState.robot.doorIsOpen = false;
-
+                
+                // on réduit nle rayon du rbot à celui initial
                 actualState.robot.setRobotRadius(TechTheSand.retractedRobotRadius);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -70,7 +94,18 @@ public class ShellDeposit extends AbstractScript
 
     @Override
     public int remainingScoreOfVersion(int version, GameState<?> state) {
-        return 0;
+    	
+    	// pour la version 0, si on ne possède aucun coquillages sur le tapis ou embarqués, on donne le score maximum
+        if (version == 0 && state.table.shellsObtained == 0 && state.robot.shellsOnBoard == true)
+        {
+        	return 2;
+        }
+        
+        // on donne 0 pour les autres cas
+        else
+        {
+        	return 0;
+        }
     }
 
     @Override
@@ -89,7 +124,25 @@ public class ShellDeposit extends AbstractScript
 
     @Override
     public void finalize(GameState<?> state) throws UnableToMoveException, SerialFinallyException {
-
+    	
+    	// on tente de ranger la porte avec changement de rayon
+    	try
+    	{
+    		state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
+    		if (state.robot.shellsOnBoard == true)
+    		{
+    			state.robot.setRobotRadius(TechTheSand.middleRobotRadius);
+    		}
+    		else
+    		{
+    			state.robot.setRobotRadius(TechTheSand.retractedRobotRadius);
+    		}
+    	}
+    	catch (Exception e)
+    	{
+    		log.debug("ShellDeposit : Impossible de ranger la porte !");
+    		throw new SerialFinallyException();
+    	}
     }
 
     @Override

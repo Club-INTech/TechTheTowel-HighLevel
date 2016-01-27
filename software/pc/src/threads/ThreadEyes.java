@@ -10,7 +10,6 @@ import utils.Sleep;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.function.BooleanSupplier;
 
 /**
  * Thread pour le pilotage des yeux ; A faire compléter par Aline
