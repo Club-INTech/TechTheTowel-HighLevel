@@ -28,8 +28,8 @@ public class TechTheSand extends AbstractScript
 {
 
     /** TEMPORAIRE */
-    public static final int expandedRobotRadius = 400; //TODO a changer
-    public static final int middleRobotRadius = 350; //TODO a changer
+    public static final int expandedRobotRadius = 290; //TODO a changer
+    public static final int middleRobotRadius = 270; //TODO a changer
     public static final int retractedRobotRadius = 250; //TODO a changer
 
 
