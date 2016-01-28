@@ -40,11 +40,14 @@ public class Castle extends AbstractScript
 		{
 			try
 			{
+				// on se tourne vers pi
+				stateToConsider.robot.turn(Math.PI);
+				
 				// on indique que le sable se trouve dans le robot
 				stateToConsider.robot.setIsSandInside(true);
 				
 				// on pousse le tas de sable dans la zone de contruction
-				stateToConsider.robot.moveLengthwise(400,hooksToConsider,false);
+				stateToConsider.robot.moveLengthwise(700,hooksToConsider,false);
 				
 				// on liste les obstacles rectangulaires 
 				ArrayList<ObstacleRectangular> mRectangles = stateToConsider.table.getObstacleManager().getRectangles();
@@ -92,7 +95,7 @@ public class Castle extends AbstractScript
 	{
 		if (version == 0)
 		{
-			return (new Circle(new Vec2(900 + ray, 900)));
+			return (new Circle(new Vec2(1200, 980)));
 		}
 		else
 		{
