@@ -1,16 +1,11 @@
 package scripts;
 
 
-import enums.ActuatorOrder;
-import enums.ContactSensors;
-import enums.DirectionStrategy;
-import enums.Speed;
-import enums.TurningStrategy;
-import exceptions.ExecuteException;
-import exceptions.Locomotion.UnableToMoveException;
+import enums.*;
 import exceptions.BadVersionException;
 import exceptions.BlockedActuatorException;
-import exceptions.serial.SerialConnexionException;
+import exceptions.ExecuteException;
+import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import hook.types.HookFactory;
@@ -93,7 +88,8 @@ public class ShellGetter extends AbstractScript
                 
                 // on reprend le rayon initial du robot
                 stateToConsider.robot.setRobotRadius(TechTheSand.retractedRobotRadius);
-                
+                stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
+
                 // on se tourne vers pi
                 stateToConsider.robot.turn(Math.PI);
                 
@@ -140,7 +136,8 @@ public class ShellGetter extends AbstractScript
                 
                 // on étend le rayon du robot avec la vitre ouverte
                 stateToConsider.robot.setRobotRadius(TechTheSand.expandedRobotRadius);
-                
+                stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
+
                 // on oblige le robot à tourner vers la gauche pour ne pas lâcher les coquillages
                 stateToConsider.robot.setTurningStrategy(TurningStrategy.LEFT_ONLY);
                 
@@ -230,11 +227,17 @@ public class ShellGetter extends AbstractScript
     		if (state.robot.shellsOnBoard == true)
     		{
     			state.robot.setRobotRadius(TechTheSand.middleRobotRadius);
-    		}
+
+                state.table.getObstacleManager().updateObstacles(TechTheSand.middleRobotRadius);
+
+            }
     		else
     		{
     			state.robot.setRobotRadius(TechTheSand.retractedRobotRadius);
-    		}
+
+                state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
+
+            }
     	}
     	catch (Exception e)
     	{

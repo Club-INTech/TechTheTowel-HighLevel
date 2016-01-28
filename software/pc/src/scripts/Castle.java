@@ -1,7 +1,5 @@
 package scripts;
 
-import java.util.ArrayList;
-
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialFinallyException;
@@ -14,6 +12,8 @@ import strategie.GameState;
 import table.obstacles.ObstacleRectangular;
 import utils.Config;
 import utils.Log;
+
+import java.util.ArrayList;
 
 /**
  * Script pour récupérer le tas de sable devant notre tapis
@@ -55,7 +55,7 @@ public class Castle extends AbstractScript
 				// et on supprime le tas de sable
 				for (int i=0;i< mRectangles.size();i++)
 				{
-					if (mRectangles.get(i).isInObstacle(new Vec2(580,1100)));
+					if (mRectangles.get(i).isInObstacle(new Vec2(580,1100)))
 					{
 						mRectangles.remove(i);
 					}

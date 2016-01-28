@@ -50,6 +50,7 @@ public class JUnit_Shells extends JUnit_Test
         theRobot.robot.setLocomotionSpeed(Speed.SLOW_ALL);
         theRobot.robot.moveLengthwise(100, emptyHook, false);
         theRobot.robot.setRobotRadius(TechTheSand.expandedRobotRadius);
+        theRobot.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
 
         // Lance le thread graphique
         container.getService(ServiceNames.THREAD_INTERFACE);
@@ -82,9 +83,9 @@ public class JUnit_Shells extends JUnit_Test
             // et on supprime le tas de sable
             for (int i=0;i< mRectangles.size();i++)
             {
-                if (mRectangles.get(i).isInObstacle(new Vec2(580,1100)));
+                if(mRectangles.get(i).isInObstacle(new Vec2(700,1100)))
                 {
-                    mRectangles.remove(i);
+                    theRobot.table.getObstacleManager().removeObstacle(mRectangles.get(i));
                 }
             }
 

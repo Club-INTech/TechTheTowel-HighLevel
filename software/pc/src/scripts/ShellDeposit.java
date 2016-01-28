@@ -16,15 +16,12 @@ import robot.Robot;
 import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
-import table.Shell;
 import table.Table;
-import table.obstacles.ObstacleManager;
 import table.obstacles.ObstacleRectangular;
 import utils.Config;
 import utils.Log;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 public class ShellDeposit extends AbstractScript
 {
@@ -85,6 +82,9 @@ public class ShellDeposit extends AbstractScript
                 
                 // on réduit nle rayon du rbot à celui initial
                 actualState.robot.setRobotRadius(TechTheSand.retractedRobotRadius);
+
+                actualState.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -132,11 +132,17 @@ public class ShellDeposit extends AbstractScript
     		if (state.robot.shellsOnBoard == true)
     		{
     			state.robot.setRobotRadius(TechTheSand.middleRobotRadius);
-    		}
+
+                state.table.getObstacleManager().updateObstacles(TechTheSand.middleRobotRadius);
+
+            }
     		else
     		{
     			state.robot.setRobotRadius(TechTheSand.retractedRobotRadius);
-    		}
+
+                state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
+
+            }
     	}
     	catch (Exception e)
     	{

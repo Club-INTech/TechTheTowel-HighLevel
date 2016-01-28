@@ -78,6 +78,11 @@ public class ObstacleCircular extends Obstacle
 	{
 		return radius;
 	}
+
+	public void setRadius(int radius)
+	{
+		this.radius = radius;
+	}
 	
 	/**
 	 * Convertit l'obstacle en cercle.

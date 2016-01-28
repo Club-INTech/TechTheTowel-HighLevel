@@ -688,4 +688,36 @@ public class ObstacleManager
     	return mUntestedMobileObstacles;
     }
 
+	/**
+	 * Permet de update les obstacles avec un nouveau rayon de robot
+	 * @param newRobotRadius le nouveau rayon
+     */
+	public void updateObstacles(int newRobotRadius)
+	{
+		if(this.mRobotRadius == newRobotRadius)
+			return;
+
+		for(ObstacleRectangular i : mRectangles)
+		{
+			i.changeDim(i.getSizeX()-2*mRobotRadius+2*newRobotRadius, i.getSizeY()-2*mRobotRadius+2*newRobotRadius);
+		}
+
+		for(ObstacleCircular i : mFixedObstacles)
+		{
+			i.setRadius(i.getRadius()-mRobotRadius+newRobotRadius);
+		}
+
+		for(ObstacleProximity i : mUntestedMobileObstacles)
+		{
+			i.setRadius(i.getRadius()-mRobotRadius+newRobotRadius);
+		}
+
+		for(ObstacleProximity i : mMobileObstacles)
+		{
+			i.setRadius(i.getRadius()-mRobotRadius+newRobotRadius);
+		}
+
+		this.mRobotRadius = newRobotRadius;
+	}
+
 }

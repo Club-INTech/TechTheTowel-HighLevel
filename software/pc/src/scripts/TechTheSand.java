@@ -3,7 +3,6 @@ package scripts;
 import enums.*;
 import exceptions.BlockedActuatorException;
 import exceptions.ExecuteException;
-import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
@@ -28,7 +27,7 @@ public class TechTheSand extends AbstractScript
 {
 
     /** TEMPORAIRE */
-    public static final int expandedRobotRadius = 290; //TODO a changer
+    public static final int expandedRobotRadius = 300; //TODO a changer
     public static final int middleRobotRadius = 270; //TODO a changer
     public static final int retractedRobotRadius = 250; //TODO a changer
 
@@ -75,7 +74,9 @@ public class TechTheSand extends AbstractScript
                 }
 
                 stateToConsider.robot.setRobotRadius(TechTheSand.expandedRobotRadius);
-				
+				stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
+
+
 				// On active la tige accrochante
 				stateToConsider.robot.useActuator(ActuatorOrder.START_AXIS, false);
 				
@@ -102,8 +103,9 @@ public class TechTheSand extends AbstractScript
                 }
 
                 stateToConsider.robot.setRobotRadius(TechTheSand.middleRobotRadius);
+				stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.middleRobotRadius);
 
-                // On s'oriente vers notre serviette
+				// On s'oriente vers notre serviette
 				stateToConsider.robot.turn(0);
 
 				stateToConsider.robot.useActuator(ActuatorOrder.STOP_AXIS, false);
@@ -170,10 +172,14 @@ public class TechTheSand extends AbstractScript
 			if (state.robot.getIsSandInside() == true)
 			{
 				state.robot.setRobotRadius(middleRobotRadius);
+				state.table.getObstacleManager().updateObstacles(TechTheSand.middleRobotRadius);
+
 			}
 			else
 			{
 				state.robot.setRobotRadius(retractedRobotRadius);
+				state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
+
 			}
 		}
 		catch (Exception e)

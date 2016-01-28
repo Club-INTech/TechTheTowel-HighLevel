@@ -588,7 +588,9 @@ public abstract class Robot implements Service
 	public void setRobotRadius(int radius)
 	{
 		if(!doorIsOpen || (doorIsOpen && radius<this.robotRay))
+		{
 			this.robotRay = radius;
+		}
 		else
 			log.critical("Réduction du rayon tentée mais booléen porte ouverte est à true !");
 	}
