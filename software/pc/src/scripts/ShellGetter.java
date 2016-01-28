@@ -199,7 +199,7 @@ public class ShellGetter extends AbstractScript
         // pour la version 0, on connait précisément l'endroit de départ du script
     	if (version == 0 )
         {
-            return new Circle(new Vec2(1150,300));
+            return new Circle(new Vec2(1050,300));
         }
         
         // pour les autres version, on fait appel à une méthode déterminant l'entrée du scrpit

@@ -16,8 +16,12 @@ import org.junit.Before;
 import org.junit.Test;
 import robot.Robot;
 import scripts.ScriptManager;
+import scripts.TechTheSand;
+import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
+import table.obstacles.ObstacleRectangular;
+
 import java.util.ArrayList;
 
 //TODO Version du test temporaire jusqu'à meilleure connaissance des exceptions, et du fonctionnement général des JUnit
@@ -43,8 +47,9 @@ public class JUnit_Shells extends JUnit_Test
         theRobot.robot.useActuator(ActuatorOrder.ARM_INIT, true);
         theRobot.robot.setOrientation(Math.PI);
         theRobot.robot.setPosition(Table.entryPosition);
-        theRobot.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+        theRobot.robot.setLocomotionSpeed(Speed.SLOW_ALL);
         theRobot.robot.moveLengthwise(100, emptyHook, false);
+        theRobot.robot.setRobotRadius(TechTheSand.expandedRobotRadius);
 
         // Lance le thread graphique
         container.getService(ServiceNames.THREAD_INTERFACE);
@@ -72,6 +77,17 @@ public class JUnit_Shells extends JUnit_Test
     {
         try
         {
+            ArrayList<ObstacleRectangular> mRectangles = theRobot.table.getObstacleManager().getRectangles();
+
+            // et on supprime le tas de sable
+            for (int i=0;i< mRectangles.size();i++)
+            {
+                if (mRectangles.get(i).isInObstacle(new Vec2(580,1100)));
+                {
+                    mRectangles.remove(i);
+                }
+            }
+
             scriptManager.getScript(ScriptNames.SHELL_GETTER).goToThenExec(0,theRobot, emptyHook);
             scriptManager.getScript(ScriptNames.SHELL_GETTER).goToThenExec(1,theRobot, emptyHook);
             //scriptManager.getScript(ScriptNames.SHELL_GETTER).goToThenExec(2,theRobot, emptyHook);
