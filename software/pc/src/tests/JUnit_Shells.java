@@ -5,21 +5,23 @@ import enums.ScriptNames;
 import enums.ServiceNames;
 import enums.Speed;
 import exceptions.ExecuteException;
+import exceptions.Locomotion.UnableToMoveException;
 import exceptions.PathNotFoundException;
 import exceptions.PointInObstacleException;
-import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialFinallyException;
 import hook.Hook;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import robot.Robot;
 import scripts.ScriptManager;
+import scripts.ShellGetter;
 import scripts.TechTheSand;
 import smartMath.Vec2;
 import strategie.GameState;
+import table.Shell;
 import table.Table;
+import table.obstacles.ObstacleCircular;
 import table.obstacles.ObstacleRectangular;
 
 import java.util.ArrayList;
@@ -89,10 +91,77 @@ public class JUnit_Shells extends JUnit_Test
             }
 
             scriptManager.getScript(ScriptNames.SHELL_GETTER).goToThenExec(0,theRobot, emptyHook);
+
+            Shell selected = ((ShellGetter)scriptManager.getScript(ScriptNames.SHELL_GETTER)).getTheShell(1);
+            ArrayList<ObstacleCircular> cir = theRobot.table.getObstacleManager().getFixedObstacles();
+
+            for(ObstacleCircular i : cir)
+            {
+                if(i.isInObstacle(selected.getPosition()))
+                {
+                    theRobot.table.getObstacleManager().removeObstacle(i);
+                    break;
+                }
+            }
+
             scriptManager.getScript(ScriptNames.SHELL_GETTER).goToThenExec(1,theRobot, emptyHook);
+
+            selected = ((ShellGetter)scriptManager.getScript(ScriptNames.SHELL_GETTER)).getTheShell(2);
+            cir = theRobot.table.getObstacleManager().getFixedObstacles();
+
+            for(ObstacleCircular i : cir)
+            {
+                if(i.isInObstacle(selected.getPosition()))
+                {
+                    theRobot.table.getObstacleManager().removeObstacle(i);
+                    break;
+                }
+            }
+
             //scriptManager.getScript(ScriptNames.SHELL_GETTER).goToThenExec(2,theRobot, emptyHook);
+
+            selected = ((ShellGetter)scriptManager.getScript(ScriptNames.SHELL_GETTER)).getTheShell(3);
+            cir = theRobot.table.getObstacleManager().getFixedObstacles();
+
+            for(ObstacleCircular i : cir)
+            {
+                if(i.isInObstacle(selected.getPosition()))
+                {
+                    theRobot.table.getObstacleManager().removeObstacle(i);
+                    break;
+                }
+            }
+
+            scriptManager.getScript(ScriptNames.SHELL_DEPOSIT).goToThenExec(0,theRobot, emptyHook);
+
             //scriptManager.getScript(ScriptNames.SHELL_GETTER).goToThenExec(3,theRobot, emptyHook);
+
+            selected = ((ShellGetter)scriptManager.getScript(ScriptNames.SHELL_GETTER)).getTheShell(4);
+            cir = theRobot.table.getObstacleManager().getFixedObstacles();
+
+            for(ObstacleCircular i : cir)
+            {
+                if(i.isInObstacle(selected.getPosition()))
+                {
+                    theRobot.table.getObstacleManager().removeObstacle(i);
+                    break;
+                }
+            }
+
             //scriptManager.getScript(ScriptNames.SHELL_GETTER).goToThenExec(4,theRobot, emptyHook);
+
+            selected = ((ShellGetter)scriptManager.getScript(ScriptNames.SHELL_GETTER)).getTheShell(5);
+            cir = theRobot.table.getObstacleManager().getFixedObstacles();
+
+            for(ObstacleCircular i : cir)
+            {
+                if(i.isInObstacle(selected.getPosition()))
+                {
+                    theRobot.table.getObstacleManager().removeObstacle(i);
+                    break;
+                }
+            }
+
             scriptManager.getScript(ScriptNames.SHELL_DEPOSIT).goToThenExec(0,theRobot, emptyHook);
         }
         catch(ExecuteException | SerialFinallyException e)

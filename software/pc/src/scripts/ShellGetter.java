@@ -264,7 +264,7 @@ public class ShellGetter extends AbstractScript
     }
     
     // méthode déterminant l'entrée du script des versions autres que 0
-    private Shell getTheShell(int version)
+    public Shell getTheShell(int version)
     {
     	// liste des coquillages alliés et neutres
         ArrayList<Shell> list = new ArrayList<Shell>();

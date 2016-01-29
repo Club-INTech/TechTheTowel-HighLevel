@@ -13,6 +13,7 @@ import pathDingDing.PathDingDing;
 import smartMath.Circle;
 import smartMath.Vec2;
 import table.Table;
+import table.obstacles.Obstacle;
 import utils.Config;
 import utils.Log;
 
@@ -498,7 +499,7 @@ public abstract class Robot implements Service
 
     	PathDingDing pdd = new PathDingDing(table, log);
     	// On lance le calcul
-    	ArrayList<Node> nodePath = pdd.computePath(position, aim.position);
+    	ArrayList<Node> nodePath = pdd.computePath(position, aim.position, new ArrayList<Obstacle>());
     	
     	// On transforme les noeuds en Vec2
     	ArrayList<Vec2> path = new ArrayList<Vec2>();

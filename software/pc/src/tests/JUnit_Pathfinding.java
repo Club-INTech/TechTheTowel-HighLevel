@@ -1,19 +1,19 @@
 package tests;
 
-import hook.Hook;
-import org.junit.*;
+import enums.ServiceNames;
+import exceptions.PathNotFoundException;
+import exceptions.PointInObstacleException;
+import graphics.Window;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.JUnitCore;
-
-import pathDingDing.*;
+import pathDingDing.PathDingDing;
 import robot.RobotReal;
 import scripts.TechTheSand;
 import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
-import enums.*;
-
-import exceptions.*;
-import graphics.Window;
+import table.obstacles.Obstacle;
 import table.obstacles.ObstacleRectangular;
 import utils.Log;
 
@@ -88,7 +88,7 @@ public class JUnit_Pathfinding extends JUnit_Test
                 try
                 {
                     //table.getObstacleManager().setEnnemyRobot1Position(win.getMouse().getMiddleClickPosition());
-                    win.getPanel().drawArrayList(pf.computePathVec2(game.robot.getPosition(), win.getMouse().getRightClickPosition()));
+                    win.getPanel().drawArrayList(pf.computePathVec2(game.robot.getPosition(), win.getMouse().getRightClickPosition(), new ArrayList<Obstacle>()));
 
                 }
                 catch(PathNotFoundException e)
@@ -111,7 +111,7 @@ public class JUnit_Pathfinding extends JUnit_Test
                 {
                     //table.getObstacleManager().setEnnemyRobot1Position(win.getMouse().getMiddleClickPosition());
                     long start = System.currentTimeMillis();
-                    win.getPanel().drawArrayList(pf.computePathVec2(win.getMouse().getLeftClickPosition(), win.getMouse().getRightClickPosition()));
+                    win.getPanel().drawArrayList(pf.computePathVec2(win.getMouse().getLeftClickPosition(), win.getMouse().getRightClickPosition(), new ArrayList<Obstacle>()));
                     long end = System.currentTimeMillis();
                     System.out.println("time elapsed : " + (end - start));
                 }
