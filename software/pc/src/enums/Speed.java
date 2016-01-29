@@ -12,23 +12,20 @@ public enum Speed
 	//TODO régler les valeurs de vitesse en translations et rotations avec des phases de test, décider des combinaisons de vitesses inutiles
 	
 	/** Vitesse ultra lente de translation, lente en rotation */
-	ULTRA_SLOW_ALL(50,Math.PI/4),
-	
+	ULTRA_SLOW_ALL(50,Math.PI/8),
+
 	/** vitesse lente en translation, lente en rotation*/
 	SLOW_ALL(120, Math.PI/4),
 	
 	/** vitesse lente en translation, normale en rotation*/
-	SLOW_T_MEDIUM_R(120,Math.PI),
-	
-	/** vitesse standard en translation, lente en rotation*/
-	MEDIUMT_T_SLOW_R(400,Math.PI/2),
+	SLOW_T_MEDIUM_R(120,Math.PI/2),
 	
 	/** Vitesse standard de déplacement et rotation*/
-	MEDIUM_ALL(400,2*(Math.PI)),
+	MEDIUM_ALL(400,(Math.PI/2)),
 	
 	/** vitesse standard de déplacement, lente en rotation*/
-	MEDIUM_T_SLOW_R(400,Math.PI/2),
-	
+	MEDIUM_T_SLOW_R(400,Math.PI/4),
+
 	/** vitesse rapide en translation et rotation*/
 	FAST_ALL(1000,(Math.PI));
 	

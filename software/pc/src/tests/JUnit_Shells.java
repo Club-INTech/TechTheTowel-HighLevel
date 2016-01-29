@@ -46,7 +46,7 @@ public class JUnit_Shells extends JUnit_Test
         theRobot.robot.useActuator(ActuatorOrder.ARM_INIT, true);
         theRobot.robot.setOrientation(Math.PI);
         theRobot.robot.setPosition(Table.entryPosition);
-        theRobot.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+        theRobot.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
         theRobot.robot.moveLengthwise(200, emptyHook, false);
         theRobot.changeRobotRadius(TechTheSand.expandedRobotRadius);
 

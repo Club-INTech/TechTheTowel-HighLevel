@@ -44,7 +44,7 @@ public class ShellGetter extends AbstractScript
         if(versionToExecute == 0) //Récupération des deux proches du tapis (jamais ennemis)
         {
             Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
-            stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL); // TODO A changer quand asserv OK
+            stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL); // TODO A changer quand asserv OK
 
             try {
                 //stateToConsider.robot.moveLengthwise(100);
