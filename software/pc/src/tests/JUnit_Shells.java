@@ -14,7 +14,6 @@ import org.junit.Before;
 import org.junit.Test;
 import robot.Robot;
 import scripts.ScriptManager;
-import scripts.ShellGetter;
 import scripts.TechTheSand;
 import smartMath.Vec2;
 import strategie.GameState;
@@ -90,8 +89,8 @@ public class JUnit_Shells extends JUnit_Test
 
             scriptManager.getScript(ScriptNames.SHELL_GETTER).goToThenExec(0,theRobot, emptyHook);
 
-            Vec2 selected = ((ShellGetter)scriptManager.getScript(ScriptNames.SHELL_GETTER)).entryPosition(1, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
-            ArrayList<ObstacleCircular> cir = theRobot.table.getObstacleManager().getFixedObstacles();
+            Vec2 selected = scriptManager.getScript(ScriptNames.SHELL_GETTER).entryPosition(1, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
+            ArrayList<ObstacleCircular> cir = (ArrayList<ObstacleCircular>)theRobot.table.getObstacleManager().getFixedObstacles().clone();
 
             for(ObstacleCircular i : cir)
             {
@@ -103,8 +102,8 @@ public class JUnit_Shells extends JUnit_Test
 
             scriptManager.getScript(ScriptNames.SHELL_GETTER).goToThenExec(1,theRobot, emptyHook);
 
-            selected = ((ShellGetter)scriptManager.getScript(ScriptNames.SHELL_GETTER)).entryPosition(2, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
-            cir = theRobot.table.getObstacleManager().getFixedObstacles();
+            selected = scriptManager.getScript(ScriptNames.SHELL_GETTER).entryPosition(2, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
+            cir = (ArrayList<ObstacleCircular>)theRobot.table.getObstacleManager().getFixedObstacles().clone();
 
             for(ObstacleCircular i : cir)
             {
@@ -116,8 +115,8 @@ public class JUnit_Shells extends JUnit_Test
 
             scriptManager.getScript(ScriptNames.SHELL_GETTER).goToThenExec(2,theRobot, emptyHook);
 
-            selected = ((ShellGetter)scriptManager.getScript(ScriptNames.SHELL_GETTER)).entryPosition(3, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
-            cir = theRobot.table.getObstacleManager().getFixedObstacles();
+            selected = scriptManager.getScript(ScriptNames.SHELL_GETTER).entryPosition(3, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
+            cir = (ArrayList<ObstacleCircular>)theRobot.table.getObstacleManager().getFixedObstacles().clone();
 
 
             for(ObstacleCircular i : cir)
@@ -132,8 +131,8 @@ public class JUnit_Shells extends JUnit_Test
 
             scriptManager.getScript(ScriptNames.SHELL_GETTER).goToThenExec(3,theRobot, emptyHook);
 
-            selected = ((ShellGetter)scriptManager.getScript(ScriptNames.SHELL_GETTER)).entryPosition(4, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
-            cir = theRobot.table.getObstacleManager().getFixedObstacles();
+            selected = scriptManager.getScript(ScriptNames.SHELL_GETTER).entryPosition(4, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
+            cir = (ArrayList<ObstacleCircular>)theRobot.table.getObstacleManager().getFixedObstacles().clone();
 
 
             for(ObstacleCircular i : cir)

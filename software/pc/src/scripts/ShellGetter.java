@@ -167,7 +167,7 @@ public class ShellGetter extends AbstractScript
                 // on indique que les coquillages sont dans le robot
                 stateToConsider.robot.shellsOnBoard = true;
 
-                ArrayList<ObstacleCircular> cir = stateToConsider.table.getObstacleManager().getFixedObstacles();
+                ArrayList<ObstacleCircular> cir = (ArrayList<ObstacleCircular>)stateToConsider.table.getObstacleManager().getFixedObstacles().clone();
 
                 //On supprime l'obstacle de la table
                 for(ObstacleCircular i : cir)
