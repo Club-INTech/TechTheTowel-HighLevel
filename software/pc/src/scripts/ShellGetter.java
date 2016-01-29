@@ -117,7 +117,7 @@ public class ShellGetter extends AbstractScript
                 // on reprend la vitesse pre-script
                 stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
 
-                ArrayList<ObstacleCircular> cir = stateToConsider.table.getObstacleManager().getFixedObstacles();
+                ArrayList<ObstacleCircular> cir = (ArrayList<ObstacleCircular>)stateToConsider.table.getObstacleManager().getFixedObstacles().clone();
 
                 //On supprime les obstacles de la table
                 for(ObstacleCircular i : cir)
