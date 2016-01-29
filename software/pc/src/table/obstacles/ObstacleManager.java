@@ -720,4 +720,34 @@ public class ObstacleManager
 		this.mRobotRadius = newRobotRadius;
 	}
 
+    /**
+     * Supprime tous les obstacles fixes qui superposent le point donné
+     * Utile pour forcer le passage si les obstacles vont subir un changement
+     * @param point le point à dégager
+     * @return les obstacles supprimés
+     */
+	public ArrayList<Obstacle> freePoint(Vec2 point)
+    {
+        ArrayList<Obstacle> deleted = new ArrayList<>();
+
+        for (int i=0;i< mFixedObstacles.size();i++)
+        {
+            if(mFixedObstacles.get(i).isInObstacle(point))
+            {
+                deleted.add(mFixedObstacles.get(i));
+                removeObstacle(mFixedObstacles.get(i));
+            }
+        }
+
+        for (int i=0;i< mRectangles.size();i++)
+        {
+            if(mRectangles.get(i).isInObstacle(point))
+            {
+                deleted.add(mRectangles.get(i));
+                removeObstacle(mRectangles.get(i));
+            }
+        }
+        return deleted;
+    }
+
 }

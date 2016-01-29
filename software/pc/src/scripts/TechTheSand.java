@@ -12,7 +12,6 @@ import robot.Robot;
 import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
-import table.obstacles.ObstacleRectangular;
 import utils.Config;
 import utils.Log;
 
@@ -111,17 +110,7 @@ public class TechTheSand extends AbstractScript
 				// On reprend notre vitesse habituelle
 				stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
 
-				ArrayList<ObstacleRectangular> rectangles = stateToConsider.table.getObstacleManager().getRectangles();
-
-                //On supprime l'obstacle de la table (le château)
-                for(ObstacleRectangular i : rectangles)
-                {
-                    if(i.isInObstacle(stateToConsider.robot.getPosition()))
-                    {
-                        stateToConsider.table.getObstacleManager().removeObstacle(i);
-                        break;
-                    }
-                }
+				stateToConsider.table.getObstacleManager().freePoint(stateToConsider.robot.getPosition());
 
                 //TODO Sortie de la zone
 				

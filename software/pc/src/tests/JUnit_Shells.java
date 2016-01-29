@@ -18,8 +18,6 @@ import scripts.TechTheSand;
 import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
-import table.obstacles.ObstacleCircular;
-import table.obstacles.ObstacleRectangular;
 
 import java.util.ArrayList;
 
@@ -76,72 +74,29 @@ public class JUnit_Shells extends JUnit_Test
     {
         try
         {
-            ArrayList<ObstacleRectangular> mRectangles = theRobot.table.getObstacleManager().getRectangles();
-
-            // et on supprime le tas de sable
-            for (int i=0;i< mRectangles.size();i++)
-            {
-                if(mRectangles.get(i).isInObstacle(new Vec2(700,1100)))
-                {
-                    theRobot.table.getObstacleManager().removeObstacle(mRectangles.get(i));
-                }
-            }
+            theRobot.table.getObstacleManager().freePoint(new Vec2(700,1100));
 
             scriptManager.getScript(ScriptNames.SHELL_GETTER).goToThenExec(0,theRobot, emptyHook);
 
             Vec2 selected = scriptManager.getScript(ScriptNames.SHELL_GETTER).entryPosition(1, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
-            ArrayList<ObstacleCircular> cir = (ArrayList<ObstacleCircular>)theRobot.table.getObstacleManager().getFixedObstacles().clone();
-
-            for(ObstacleCircular i : cir)
-            {
-                if(i.isInObstacle(selected))
-                {
-                    theRobot.table.getObstacleManager().removeObstacle(i);
-                }
-            }
+            theRobot.table.getObstacleManager().freePoint(selected);
 
             scriptManager.getScript(ScriptNames.SHELL_GETTER).goToThenExec(1,theRobot, emptyHook);
 
             selected = scriptManager.getScript(ScriptNames.SHELL_GETTER).entryPosition(2, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
-            cir = (ArrayList<ObstacleCircular>)theRobot.table.getObstacleManager().getFixedObstacles().clone();
-
-            for(ObstacleCircular i : cir)
-            {
-                if(i.isInObstacle(selected))
-                {
-                    theRobot.table.getObstacleManager().removeObstacle(i);
-                }
-            }
+            theRobot.table.getObstacleManager().freePoint(selected);
 
             scriptManager.getScript(ScriptNames.SHELL_GETTER).goToThenExec(2,theRobot, emptyHook);
 
             selected = scriptManager.getScript(ScriptNames.SHELL_GETTER).entryPosition(3, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
-            cir = (ArrayList<ObstacleCircular>)theRobot.table.getObstacleManager().getFixedObstacles().clone();
-
-
-            for(ObstacleCircular i : cir)
-            {
-                if(i.isInObstacle(selected))
-                {
-                    theRobot.table.getObstacleManager().removeObstacle(i);
-                }
-            }
+            theRobot.table.getObstacleManager().freePoint(selected);
 
             scriptManager.getScript(ScriptNames.SHELL_DEPOSIT).goToThenExec(0,theRobot, emptyHook);
 
             scriptManager.getScript(ScriptNames.SHELL_GETTER).goToThenExec(3,theRobot, emptyHook);
 
             selected = scriptManager.getScript(ScriptNames.SHELL_GETTER).entryPosition(4, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
-            cir = (ArrayList<ObstacleCircular>)theRobot.table.getObstacleManager().getFixedObstacles().clone();
-
-
-            for(ObstacleCircular i : cir)
-            {
-                if(i.isInObstacle(selected))
-                {
-                    theRobot.table.getObstacleManager().removeObstacle(i);
-                }
-            }
+            theRobot.table.getObstacleManager().freePoint(selected);
 
             scriptManager.getScript(ScriptNames.SHELL_GETTER).goToThenExec(4,theRobot, emptyHook);
 

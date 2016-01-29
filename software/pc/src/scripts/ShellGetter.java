@@ -17,7 +17,6 @@ import smartMath.Vec2;
 import strategie.GameState;
 import table.Shell;
 import table.Table;
-import table.obstacles.ObstacleCircular;
 import table.obstacles.ObstacleRectangular;
 import utils.Config;
 import utils.Log;
@@ -127,16 +126,9 @@ public class ShellGetter extends AbstractScript
                 // on reprend la vitesse pre-script
                 stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
 
-                ArrayList<ObstacleCircular> cir = (ArrayList<ObstacleCircular>)stateToConsider.table.getObstacleManager().getFixedObstacles().clone();
+                stateToConsider.table.getObstacleManager().freePoint(new Vec2(1300,750));
+                stateToConsider.table.getObstacleManager().freePoint(new Vec2(1300,450));
 
-                //On supprime les obstacles de la table
-                for(ObstacleCircular i : cir)
-                {
-                    if(i.isInObstacle(new Vec2(1300,750)) || i.isInObstacle(new Vec2(1300,450)))
-                    {
-                        stateToConsider.table.getObstacleManager().removeObstacle(i);
-                    }
-                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -184,17 +176,9 @@ public class ShellGetter extends AbstractScript
                 // on indique que les coquillages sont dans le robot
                 stateToConsider.robot.shellsOnBoard = true;
 
-                ArrayList<ObstacleCircular> cir = (ArrayList<ObstacleCircular>)stateToConsider.table.getObstacleManager().getFixedObstacles().clone();
-
                 //On supprime l'obstacle de la table
-                for(ObstacleCircular i : cir)
-                {
-                    if(i.isInObstacle(selected.getPosition()))
-                    {
-                        stateToConsider.table.getObstacleManager().removeObstacle(i);
-                        break;
-                    }
-                }
+                stateToConsider.table.getObstacleManager().freePoint(selected.getPosition());
+
             } catch (Exception e) 
             {
                 e.printStackTrace();
