@@ -44,7 +44,7 @@ public class JUnit_Fishing extends JUnit_Test
 		theRobot.robot.setOrientation(Math.PI);
 		theRobot.robot.setPosition(Table.entryPosition);
 		theRobot.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
-		theRobot.robot.moveLengthwise(100, emptyHook, false);
+		theRobot.robot.moveLengthwise(200, emptyHook, false);
 		
 		// Lance le thread graphique
 		container.getService(ServiceNames.THREAD_INTERFACE);
@@ -76,9 +76,10 @@ public class JUnit_Fishing extends JUnit_Test
 //			theRobot.robot.moveLengthwise(-300, emptyHook);
 //			scriptManager.getScript(ScriptNames.CLOSE_DOORS).goToThenExec(0, theRobot, emptyHook);
 			log.debug("Début de pêche !");
-			scriptManager.getScript(ScriptNames.FISHING).goToThenExec(1, theRobot, emptyHook);
-			theRobot.robot.turn(Math.PI/2);
-			theRobot.robot.moveLengthwise(100);
+
+			scriptManager.getScript(ScriptNames.FISHING).goToThenExec(0, theRobot, emptyHook);
+			theRobot.robot.turn(3*Math.PI/4);
+			theRobot.robot.moveLengthwise(200);
 		}
 		catch(ExecuteException | SerialFinallyException e)
 		{

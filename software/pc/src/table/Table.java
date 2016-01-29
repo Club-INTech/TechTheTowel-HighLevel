@@ -346,7 +346,7 @@ public class Table implements Service
 		//               du fond à l'avant,
 		//               d'abord les notres, puis les leurs et enfin les neutres
 		//=======================================================================
-		
+		/*
 		if (configShell == 1)
 		{
 			pos = new Vec2(-300,350);
@@ -572,7 +572,7 @@ public class Table implements Service
 			neutralShells.add(new Shell(pos,Color.NEUTRAL, new Vec2(pos.x+200, pos.y)));
 
 		}
-		
+		*/
 		
 		//=======================================================================
 		// Instanciation des Poissons

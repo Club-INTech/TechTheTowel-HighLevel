@@ -77,18 +77,18 @@ public class Fishing extends AbstractScript
 				// On commence à se placer près du bord
 				stateToConsider.robot.turn(Math.PI - 0.18);
 				
-				stateToConsider.robot.moveLengthwise(-350, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(-310, hooksToConsider, true);
 		
 				// On s'oriente vers le côté ennemi
 				stateToConsider.robot.turn((Math.PI), hooksToConsider, true);
 				
 				// Avance légère pour placer le bras au dessus du bac
-				stateToConsider.robot.moveLengthwise(30, hooksToConsider, false);
+				//stateToConsider.robot.moveLengthwise(30, hooksToConsider, false);
 			
 				// On baisse le bras aimanté
 				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION, true);
 				
-				stateToConsider.robot.sleep(800);
+				//stateToConsider.robot.sleep(800);
 
 				// On longe le bac
 				stateToConsider.robot.moveLengthwise(280, hooksToConsider, true);
@@ -119,13 +119,13 @@ public class Fishing extends AbstractScript
 				
 				stateToConsider.robot.turn(Math.PI, hooksToConsider, true);
 				
-				stateToConsider.robot.moveLengthwise(-440, hooksToConsider, false);
+				stateToConsider.robot.moveLengthwise(-460, hooksToConsider, false);
 				
 				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION, true);
 				
 				stateToConsider.robot.sleep(300);
 				
-				stateToConsider.robot.moveLengthwise(280, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(270, hooksToConsider, true);
 
 				// On indique au robot que les poissons sont sur le bras
 				stateToConsider.robot.setAreFishesOnBoard(true);
@@ -134,10 +134,10 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
 				
 				//Petite attente
-				stateToConsider.robot.sleep(800);
+				//stateToConsider.robot.sleep(800);
 				
 				//Légère modification d'orientation pour éviter de percuter le mur lors du retour du robot, à enlever pour un match
-				stateToConsider.robot.turn(Math.PI - Math.PI/25);
+				//stateToConsider.robot.turn(Math.PI - Math.PI/25);
 				
 				// On avance jusqu'au niveau du filet, distance à vérifier avec le robot final
 				stateToConsider.robot.moveLengthwise(280, hooksToConsider, true);
