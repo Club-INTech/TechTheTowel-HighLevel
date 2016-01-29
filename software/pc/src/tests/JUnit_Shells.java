@@ -48,7 +48,7 @@ public class JUnit_Shells extends JUnit_Test
         theRobot.robot.setOrientation(Math.PI);
         theRobot.robot.setPosition(Table.entryPosition);
         theRobot.robot.setLocomotionSpeed(Speed.SLOW_ALL);
-        theRobot.robot.moveLengthwise(100, emptyHook, false);
+        theRobot.robot.moveLengthwise(200, emptyHook, false);
         theRobot.changeRobotRadius(TechTheSand.expandedRobotRadius);
 
         // Lance le thread graphique

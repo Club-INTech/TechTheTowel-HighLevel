@@ -47,17 +47,36 @@ public class ShellGetter extends AbstractScript
             stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL); // TODO A changer quand asserv OK
 
             try {
-                stateToConsider.robot.moveLengthwise(100);
-                
+                //stateToConsider.robot.moveLengthwise(100);
+                stateToConsider.robot.turn(-1*Math.PI/2);
+                stateToConsider.robot.moveLengthwise(700);
+
+                stateToConsider.robot.setTurningStrategy(TurningStrategy.LEFT_ONLY);
+
                 // Orientation vers pi/2 
-                stateToConsider.robot.turn(Math.PI/2);
-                
+                stateToConsider.robot.turn(Math.PI/4);
+
+                stateToConsider.robot.setTurningStrategy(TurningStrategy.FASTEST);
+
+
                 // on déclare les coquillages comme étant dans le robot
                 stateToConsider.robot.shellsOnBoard=true;
                 
                 // on pousse les coquillages vers notre serviette
-                stateToConsider.robot.moveLengthwise(1000);
-                
+                stateToConsider.robot.moveLengthwise(200);
+
+                stateToConsider.robot.turn(Math.PI/2);
+
+                stateToConsider.robot.moveLengthwise(300);
+
+                stateToConsider.robot.turn(Math.PI/4);
+
+                stateToConsider.robot.moveLengthwise(150);
+
+                stateToConsider.robot.turn(Math.PI/2);
+
+                stateToConsider.robot.moveLengthwise(300);
+
                 // on incrémente le nombre de coquillage en notre possession
                 stateToConsider.table.shellsObtained+=2;
                 
@@ -68,11 +87,11 @@ public class ShellGetter extends AbstractScript
                 stateToConsider.table.getObstacleManager().addObstacle(new ObstacleRectangular(new Vec2(1350,850), 300 + 2*stateToConsider.robot.getRobotRadius(), 500 + 2*stateToConsider.robot.getRobotRadius()));
                 
                 // on s'éloigne de notre serviette
-                stateToConsider.robot.moveLengthwise(-200);
+                stateToConsider.robot.moveLengthwise(-500);
                 
                 // les coquillages ne sont plus embarqués
                 stateToConsider.robot.shellsOnBoard=false;
-                
+
                 // on ferme notre porte
                 stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
                 
@@ -194,7 +213,7 @@ public class ShellGetter extends AbstractScript
         // pour la version 0, on connait précisément l'endroit de départ du script
     	if (version == 0 )
         {
-            return new Circle(new Vec2(1050,300));
+            return new Circle(new Vec2(1000,1050));
         }
         
         // pour les autres version, on fait appel à une méthode déterminant l'entrée du scrpit

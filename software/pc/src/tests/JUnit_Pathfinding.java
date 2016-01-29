@@ -6,11 +6,15 @@ import org.junit.runner.JUnitCore;
 
 import pathDingDing.*;
 import robot.RobotReal;
+import scripts.TechTheSand;
+import smartMath.Vec2;
+import strategie.GameState;
 import table.Table;
 import enums.*;
 
 import exceptions.*;
 import graphics.Window;
+import table.obstacles.ObstacleRectangular;
 import utils.Log;
 
 import java.util.ArrayList;
@@ -32,7 +36,7 @@ public class JUnit_Pathfinding extends JUnit_Test
     Table table;
     PathDingDing pf;
     Log log;
-    RobotReal robot;
+    GameState<RobotReal> game;
 
 
     public static void main(String[] args) throws Exception
@@ -47,10 +51,23 @@ public class JUnit_Pathfinding extends JUnit_Test
         table = (Table)container.getService(ServiceNames.TABLE);
         log = (Log)container.getService(ServiceNames.LOG);
         win = new Window(table);
-/*
-        robot = (RobotReal)container.getService(ServiceNames.ROBOT_REAL);
-        robot.setPosition(Table.entryPosition);
-        robot.setOrientation(Math.PI);*/
+
+
+        game = (GameState<RobotReal>) container.getService(ServiceNames.GAME_STATE);
+        game.robot.setPosition(Table.entryPosition);
+        game.robot.setOrientation(Math.PI);
+        game.changeRobotRadius(TechTheSand.expandedRobotRadius);
+
+        ArrayList<ObstacleRectangular> mRectangles = game.table.getObstacleManager().getRectangles();
+
+        for (int i=0;i< mRectangles.size();i++)
+        {
+            if(mRectangles.get(i).isInObstacle(new Vec2(700,1100)))
+            {
+                game.table.getObstacleManager().removeObstacle(mRectangles.get(i));
+            }
+        }
+
 
         pf = (PathDingDing)container.getService(ServiceNames.PATHDINGDING);
     }
@@ -71,12 +88,12 @@ public class JUnit_Pathfinding extends JUnit_Test
                 try
                 {
                     //table.getObstacleManager().setEnnemyRobot1Position(win.getMouse().getMiddleClickPosition());
-                    win.getPanel().drawArrayList(pf.computePathVec2(robot.getPosition(), win.getMouse().getRightClickPosition()));
+                    win.getPanel().drawArrayList(pf.computePathVec2(game.robot.getPosition(), win.getMouse().getRightClickPosition()));
 
                 }
                 catch(PathNotFoundException e)
                 {
-                    log.debug("pas de chemin trouve entre "+robot.getPosition()+"et"+ win.getMouse().getRightClickPosition());
+                    log.debug("pas de chemin trouve entre "+game.robot.getPosition()+"et"+ win.getMouse().getRightClickPosition());
                 }
                 catch(PointInObstacleException e)
                 {
