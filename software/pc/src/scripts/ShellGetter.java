@@ -164,7 +164,7 @@ public class ShellGetter extends AbstractScript
                 
                 // booléen de vitre ouverte vrai
                 stateToConsider.robot.doorIsOpen = true;
-                
+
                 // on étend le rayon du robot avec la vitre ouverte
                 stateToConsider.changeRobotRadius(TechTheSand.expandedRobotRadius);
                 */

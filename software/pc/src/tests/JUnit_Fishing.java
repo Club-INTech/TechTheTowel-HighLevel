@@ -76,7 +76,6 @@ public class JUnit_Fishing extends JUnit_Test
 //			theRobot.robot.moveLengthwise(-300, emptyHook);
 //			scriptManager.getScript(ScriptNames.CLOSE_DOORS).goToThenExec(0, theRobot, emptyHook);
 			log.debug("Début de pêche !");
-			theRobot.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 			scriptManager.getScript(ScriptNames.FISHING).goToThenExec(1, theRobot, emptyHook);
 			theRobot.robot.turn(Math.PI/2);
 			theRobot.robot.moveLengthwise(100);
