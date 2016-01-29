@@ -7,7 +7,6 @@ import enums.DirectionStrategy;
 import enums.TurningStrategy;
 import exceptions.BlockedActuatorException;
 import exceptions.ExecuteException;
-import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import hook.Hook;
@@ -66,7 +65,7 @@ public class DropTheSand extends AbstractScript
                     throw new BlockedActuatorException("Porte bloquée !");
                 }
 
-                actualState.robot.setRobotRadius(TechTheSand.retractedRobotRadius);
+                actualState.changeRobotRadius(TechTheSand.retractedRobotRadius);
 
                 //On indique au robot qu'il ne transporte plus de sable
         		actualState.robot.setIsSandInside(false);
@@ -115,11 +114,11 @@ public class DropTheSand extends AbstractScript
     		state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
     		if (state.robot.getIsSandInside() == true)
     		{
-    			state.robot.setRobotRadius(TechTheSand.middleRobotRadius);
+                state.changeRobotRadius(TechTheSand.middleRobotRadius);
     		}
     		else
     		{
-    			state.robot.setRobotRadius(TechTheSand.retractedRobotRadius);
+                state.changeRobotRadius(TechTheSand.retractedRobotRadius);
     		}
     	}
     	catch (Exception e)

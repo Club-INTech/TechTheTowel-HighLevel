@@ -480,6 +480,14 @@ public class PathDingDing implements Service
 	{
 		// TODO update the config
 	}
+
+	/**
+	 * Recréé le graphe à zéro
+	 */
+	public void recomputeGraph()
+	{
+		this.graph = new Graph(table, log);
+	}
 }
 
 

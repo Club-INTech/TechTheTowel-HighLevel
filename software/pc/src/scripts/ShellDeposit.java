@@ -81,9 +81,7 @@ public class ShellDeposit extends AbstractScript
                 actualState.robot.doorIsOpen = false;
                 
                 // on réduit nle rayon du rbot à celui initial
-                actualState.robot.setRobotRadius(TechTheSand.retractedRobotRadius);
-
-                actualState.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
+                actualState.changeRobotRadius(TechTheSand.retractedRobotRadius);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -131,17 +129,11 @@ public class ShellDeposit extends AbstractScript
     		state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
     		if (state.robot.shellsOnBoard == true)
     		{
-    			state.robot.setRobotRadius(TechTheSand.middleRobotRadius);
-
-                state.table.getObstacleManager().updateObstacles(TechTheSand.middleRobotRadius);
-
+                state.changeRobotRadius(TechTheSand.middleRobotRadius);
             }
     		else
     		{
-    			state.robot.setRobotRadius(TechTheSand.retractedRobotRadius);
-
-                state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
-
+                state.changeRobotRadius(TechTheSand.retractedRobotRadius);
             }
     	}
     	catch (Exception e)

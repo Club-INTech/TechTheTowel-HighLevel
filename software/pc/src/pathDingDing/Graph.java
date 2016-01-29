@@ -4,7 +4,6 @@ import smartMath.Geometry;
 import smartMath.Segment;
 import smartMath.Vec2;
 import table.Table;
-import table.obstacles.Obstacle;
 import table.obstacles.ObstacleCircular;
 import table.obstacles.ObstacleManager;
 import table.obstacles.ObstacleRectangular;
@@ -459,6 +458,22 @@ public class Graph
             pos = new Vec2(c.getPosition().x - (int)(c.getRadius()*0.707) -1, c.getPosition().y - (int)(c.getRadius()*0.707) -1);
             if(!isInObstacle(pos) && (alreadyContains(pos)==-1))
                 nodes.add(new Node(pos));
+
+			pos = new Vec2(c.getPosition().x + (int)(c.getRadius()) +1, c.getPosition().y + (int)(c.getRadius()) +1);
+			if(!isInObstacle(pos) && (alreadyContains(pos)==-1))
+				nodes.add(new Node(pos));
+
+			pos = new Vec2(c.getPosition().x + (int)(c.getRadius()) +1, c.getPosition().y - (int)(c.getRadius()) -1);
+			if(!isInObstacle(pos) && (alreadyContains(pos)==-1))
+				nodes.add(new Node(pos));
+
+			pos = new Vec2(c.getPosition().x - (int)(c.getRadius()) -1, c.getPosition().y + (int)(c.getRadius()) +1);
+			if(!isInObstacle(pos) && (alreadyContains(pos)==-1))
+				nodes.add(new Node(pos));
+
+			pos = new Vec2(c.getPosition().x - (int)(c.getRadius()) -1, c.getPosition().y - (int)(c.getRadius()) -1);
+			if(!isInObstacle(pos) && (alreadyContains(pos)==-1))
+				nodes.add(new Node(pos));
         }
 	}
 

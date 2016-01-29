@@ -73,9 +73,7 @@ public class TechTheSand extends AbstractScript
                     throw new BlockedActuatorException("Porte bloquée !");
                 }
 
-                stateToConsider.robot.setRobotRadius(TechTheSand.expandedRobotRadius);
-				stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
-
+				stateToConsider.changeRobotRadius(TechTheSand.expandedRobotRadius);
 
 				// On active la tige accrochante
 				stateToConsider.robot.useActuator(ActuatorOrder.START_AXIS, false);
@@ -171,15 +169,11 @@ public class TechTheSand extends AbstractScript
 			state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
 			if (state.robot.getIsSandInside() == true)
 			{
-				state.robot.setRobotRadius(middleRobotRadius);
-				state.table.getObstacleManager().updateObstacles(TechTheSand.middleRobotRadius);
-
+				state.changeRobotRadius(middleRobotRadius);
 			}
 			else
 			{
-				state.robot.setRobotRadius(retractedRobotRadius);
-				state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
-
+				state.changeRobotRadius(retractedRobotRadius);
 			}
 		}
 		catch (Exception e)

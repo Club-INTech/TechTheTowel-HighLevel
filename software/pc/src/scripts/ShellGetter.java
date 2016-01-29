@@ -87,8 +87,7 @@ public class ShellGetter extends AbstractScript
                 stateToConsider.robot.doorIsOpen = false;
                 
                 // on reprend le rayon initial du robot
-                stateToConsider.robot.setRobotRadius(TechTheSand.retractedRobotRadius);
-                stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
+                stateToConsider.changeRobotRadius(TechTheSand.retractedRobotRadius);
 
                 // on se tourne vers pi
                 stateToConsider.robot.turn(Math.PI);
@@ -135,8 +134,7 @@ public class ShellGetter extends AbstractScript
                 stateToConsider.robot.doorIsOpen = true;
                 
                 // on étend le rayon du robot avec la vitre ouverte
-                stateToConsider.robot.setRobotRadius(TechTheSand.expandedRobotRadius);
-                stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
+                stateToConsider.changeRobotRadius(TechTheSand.expandedRobotRadius);
 
                 // on oblige le robot à tourner vers la gauche pour ne pas lâcher les coquillages
                 stateToConsider.robot.setTurningStrategy(TurningStrategy.LEFT_ONLY);
@@ -226,17 +224,11 @@ public class ShellGetter extends AbstractScript
     		state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
     		if (state.robot.shellsOnBoard == true)
     		{
-    			state.robot.setRobotRadius(TechTheSand.middleRobotRadius);
-
-                state.table.getObstacleManager().updateObstacles(TechTheSand.middleRobotRadius);
-
+                state.changeRobotRadius(TechTheSand.middleRobotRadius);
             }
     		else
     		{
-    			state.robot.setRobotRadius(TechTheSand.retractedRobotRadius);
-
-                state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
-
+                state.changeRobotRadius(TechTheSand.retractedRobotRadius);
             }
     	}
     	catch (Exception e)
