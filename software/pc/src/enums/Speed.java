@@ -3,7 +3,7 @@ package enums;
 /**
  * Définition des vitesses possibles de déplacement du robot.
  * Les deux arguments passés dans les vitesses correspondent à des valeurs en mm/s pour la translation puis en rad/s pour la rotation
- * @author pf, marsu
+ * @author pf, marsu, CF, Discord
  *
  */
 
