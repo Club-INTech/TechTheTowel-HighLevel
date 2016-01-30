@@ -8,6 +8,7 @@ import exceptions.serial.SerialManagerException;
 import hook.types.HookFactory;
 import pathDingDing.PathDingDing;
 import robot.Locomotion;
+import robot.Robot;
 import robot.RobotReal;
 import robot.cardsWrappers.ActuatorCardWrapper;
 import robot.cardsWrappers.LocomotionCardWrapper;
@@ -165,7 +166,7 @@ public class Container
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new HookFactory(
 																	(Config)getService(ServiceNames.CONFIG),
 																	(Log)getService(ServiceNames.LOG),
-																	(GameState<RobotReal>)getService(ServiceNames.GAME_STATE)
+																	(GameState<Robot>)getService(ServiceNames.GAME_STATE)
 																);
 		else if(serviceRequested == ServiceNames.ROBOT_REAL)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new RobotReal(

@@ -5,12 +5,12 @@ import enums.ScriptNames;
 import enums.ServiceNames;
 import enums.Speed;
 import exceptions.ExecuteException;
+import exceptions.Locomotion.UnableToMoveException;
 import exceptions.PathNotFoundException;
 import exceptions.PointInObstacleException;
-import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialFinallyException;
 import hook.Hook;
-
+import hook.types.HookFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,6 +18,7 @@ import robot.Robot;
 import scripts.ScriptManager;
 import strategie.GameState;
 import table.Table;
+
 import java.util.ArrayList;
 
 //TODO Version du test temporaire jusqu'à meilleure connaissance des exceptions, et du fonctionnement général des JUnit 
@@ -87,4 +88,17 @@ public class JUnit_Fishing extends JUnit_Test
 		}
 		
 	}
+
+	//@Test
+	public void fishThemWithHook()
+	{
+		ArrayList<Hook> hooks = new ArrayList<>();
+        HookFactory factory = new HookFactory(config, log, theRobot);
+		hooks.add(factory.fishingHook);
+        try {
+            scriptManager.getScript(ScriptNames.FISHING).goToThenExec(3, theRobot, hooks);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

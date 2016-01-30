@@ -33,7 +33,7 @@ public class Fishing extends AbstractScript
 		/**
 		 * Versions du script
 		 */
-		versions = new Integer[]{0,1,2};
+		versions = new Integer[]{0,1,2,3};
 		
 	}
 	
@@ -228,7 +228,7 @@ public class Fishing extends AbstractScript
 
 				//Petite attente
 				stateToConsider.robot.sleep(800);
-				
+
 				//Légère modification d'orientation pour éviter de percuter le mur lors du retour du robot, à enlever pour un match
 				stateToConsider.robot.turn(Math.PI - Math.PI/25);
 
@@ -378,6 +378,84 @@ public class Fishing extends AbstractScript
 			}
 				
 		}
+		else if(versionToExecute == 3) //Il s'agit de la version 0 mais avec un hook à donner pour la levée
+		{
+			try
+			{
+				// On prend une vitesse lente pour que les aimants puissent récupérer les poissons
+				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
+				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+
+				// On commence à se placer près du bord
+				stateToConsider.robot.turn(Math.PI - 0.18);
+
+				stateToConsider.robot.moveLengthwise(-310, hooksToConsider, true);
+
+				// On s'oriente vers le côté ennemi
+				stateToConsider.robot.turn((Math.PI), hooksToConsider, true);
+
+				// Avance légère pour placer le bras au dessus du bac
+				//stateToConsider.robot.moveLengthwise(30, hooksToConsider, false);
+
+				// On baisse le bras aimanté
+				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION, true);
+
+				//stateToConsider.robot.sleep(800);
+
+				// On longe le bac
+				stateToConsider.robot.moveLengthwise(520, hooksToConsider, true);
+
+				// Petite attente
+				stateToConsider.robot.sleep(300);
+
+				// On lâche les poissons
+				this.fishThem(stateToConsider);
+
+				// Points gagnés moyen pour ce passage
+				stateToConsider.obtainedPoints += 20;
+
+				// On indique au robot que les poissons ne sont plus sur le bras
+				stateToConsider.robot.setAreFishesOnBoard(false);
+
+				// On indique que deux poissons en moyenne ont été pris
+				stateToConsider.table.fishesFished+=2;
+
+				stateToConsider.robot.turn(Math.PI, hooksToConsider, true);
+
+				stateToConsider.robot.moveLengthwise(-460);
+
+				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION, true);
+
+				stateToConsider.robot.sleep(300);
+
+				stateToConsider.robot.moveLengthwise(520, hooksToConsider, true);
+
+				//Petite attente
+				stateToConsider.robot.sleep(300);
+
+				//Légère modification d'orientation pour éviter de percuter le mur lors du retour du robot, à enlever pour un match
+				//stateToConsider.robot.turn(Math.PI - Math.PI/25);
+
+				// On lâche les poissons
+				this.fishThem(stateToConsider);
+
+				// On indique au robot que les poissons ne sont plus sur le bras
+				stateToConsider.robot.setAreFishesOnBoard(false);
+
+				// On indique que deux poissons en moyenne ont été pris
+				stateToConsider.table.fishesFished+=2;
+
+				// Points gagnés moyen pour ce passage
+				stateToConsider.obtainedPoints += 20;
+
+				stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
+			}
+			catch(UnableToMoveException | SerialConnexionException e)
+			{
+				finalize(stateToConsider);
+				throw new ExecuteException(e);
+			}
+		}
 	}
 
 	@Override
@@ -387,7 +465,7 @@ public class Fishing extends AbstractScript
 		int score=40;
 		
 		// Pour les versions 0,1 et 2 on gagne 10 points par poisson dans le filet
-		if (version == 0 || version ==1 || version ==2)
+		if (version == 0 || version ==1 || version ==2 || version==3)
 		{
 			score-=((state.table.fishesFished)*10);
 		}
@@ -399,7 +477,7 @@ public class Fishing extends AbstractScript
 	public Circle entryPosition(int version, int ray, Vec2 robotPosition) 
 	{
 		// TODO a modifier avec les phases de test
-		if (version == 0 )
+		if (version == 0 || version == 3)
 		{
 			return new Circle(new Vec2(620,255));
 		}

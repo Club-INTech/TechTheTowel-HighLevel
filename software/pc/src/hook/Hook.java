@@ -1,5 +1,6 @@
 package hook;
 
+import robot.Robot;
 import robot.RobotReal;
 import strategie.GameState;
 import utils.Config;
@@ -26,7 +27,7 @@ abstract public class Hook
 	private Config config;
 	
 	/** Etat du jeu sur lequel on vérifie si le hook se déclenche ou non */
-	protected GameState<RobotReal> mState;
+	protected GameState<Robot> mState;
 
 	/**
 	 *  ce constructeur ne sera appellé que par les constructeurs des classes filles (des hooks bien précis)  
@@ -34,7 +35,7 @@ abstract public class Hook
 	 * @param log Système de log sur lequel écrire
 	 * @param gameState Etat du jeu sur lequel on vérifie si le hook se déclenche ou non
 	 */
-	public Hook(Config config, Log log, GameState<RobotReal> gameState)
+	public Hook(Config config, Log log, GameState<Robot> gameState)
 	{
 		this.config = config;
 		this.log = log;

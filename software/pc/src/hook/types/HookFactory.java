@@ -3,7 +3,8 @@ package hook.types;
 import container.Service;
 import exceptions.ConfigPropertyNotFoundException;
 import hook.Hook;
-import robot.RobotReal;
+import hook.HookFishing;
+import robot.Robot;
 import smartMath.Vec2;
 import strategie.GameState;
 import utils.Config;
@@ -24,7 +25,7 @@ public class HookFactory implements Service
 	private Log log;
 	
 	/**  robot a surveiller pour le déclenchement des hooks. */
-	private GameState<RobotReal> realState;
+	private GameState<Robot> realState;
 	
 	/**  la valeur de 20 est en mm, elle est remplcée par la valeur spécifié dans le fichier de config s'il y en a une. */
 	private int positionTolerancy = 20;
@@ -42,7 +43,7 @@ public class HookFactory implements Service
 	 * @param log système de log
 	 * @param realState état du jeu
 	 */
-	public HookFactory(Config config, Log log, GameState<RobotReal> realState)
+	public HookFactory(Config config, Log log, GameState<Robot> realState)
 	{
 		this.config = config;
 		this.log = log;
@@ -77,7 +78,8 @@ public class HookFactory implements Service
 	 * ======================================================================
 	 */
 	
-	//TODO Hooks EN STATIC !!!!!!! JE VEUX PAS VOIR DE FACTORY SANS STATIC !!!!!
+	//TODO Hooks
+    public Hook fishingHook = new HookFishing(this.config, this.log, this.realState);
 	
 
 	
@@ -102,7 +104,7 @@ public class HookFactory implements Service
    	 * ======================================================================
    	 */
     
-    /**
+    /**s
      * 
      * @param point : point de declenchement du hook
      * @param orientation : orientation de decle,chement du hook 

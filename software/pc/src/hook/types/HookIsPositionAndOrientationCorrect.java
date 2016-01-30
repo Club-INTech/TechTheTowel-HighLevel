@@ -1,7 +1,7 @@
 package hook.types;
 
 import hook.Hook;
-import robot.RobotReal;
+import robot.Robot;
 import smartMath.Vec2;
 import strategie.GameState;
 import utils.Config;
@@ -29,7 +29,7 @@ public class HookIsPositionAndOrientationCorrect extends Hook
 	// attention à comparer miliradians avec miliradians
 	private float mTolerancyOrientation;
 	
-	public HookIsPositionAndOrientationCorrect(Config config, Log log,GameState<RobotReal> realState, 
+	public HookIsPositionAndOrientationCorrect(Config config, Log log,GameState<Robot> realState,
 												Vec2 point, float orientation, float tolerancyPoint, float tolerancyOrientation) 
 	{
 		super(config, log, realState);
@@ -40,6 +40,7 @@ public class HookIsPositionAndOrientationCorrect extends Hook
 		this.mTolerancyOrientation=tolerancyOrientation;
 		
 	}
+
 
 	@Override
 	public boolean evaluate()
