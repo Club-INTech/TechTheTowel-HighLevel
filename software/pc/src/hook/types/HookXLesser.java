@@ -31,7 +31,7 @@ public class HookXLesser extends Hook
     @Override
     public boolean evaluate() {
         if(mState.robot.getPosition().x <= XValue)
-            return true;
+            return trigger();
         return false;
     }
 }
