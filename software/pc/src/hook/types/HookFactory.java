@@ -3,8 +3,7 @@ package hook.types;
 import container.Service;
 import exceptions.ConfigPropertyNotFoundException;
 import hook.Hook;
-import hook.HookFishing;
-import robot.Robot;
+import robot.RobotReal;
 import smartMath.Vec2;
 import strategie.GameState;
 import utils.Config;
@@ -25,7 +24,7 @@ public class HookFactory implements Service
 	private Log log;
 	
 	/**  robot a surveiller pour le déclenchement des hooks. */
-	private GameState<Robot> realState;
+	private GameState<RobotReal> realState;
 	
 	/**  la valeur de 20 est en mm, elle est remplcée par la valeur spécifié dans le fichier de config s'il y en a une. */
 	private int positionTolerancy = 20;
@@ -43,7 +42,7 @@ public class HookFactory implements Service
 	 * @param log système de log
 	 * @param realState état du jeu
 	 */
-	public HookFactory(Config config, Log log, GameState<Robot> realState)
+	public HookFactory(Config config, Log log, GameState<RobotReal> realState)
 	{
 		this.config = config;
 		this.log = log;
@@ -79,7 +78,10 @@ public class HookFactory implements Service
 	 */
 	
 	//TODO Hooks
-    public Hook fishingHook = new HookFishing(this.config, this.log, this.realState);
+    public Hook newPositionHook(Vec2 position, float orientation, float tolerancyPos, float tolerancyOr)
+	{
+		return new HookIsPositionAndOrientationCorrect(config, log, realState, position, orientation, tolerancyPos, tolerancyOr);
+	}
 	
 
 	
@@ -87,7 +89,12 @@ public class HookFactory implements Service
 	 * 							Hooks d'abscisse (sur X)
 	 * ======================================================================
 	 */
-	
+
+
+	public Hook newXLesserHook(int XValue)
+	{
+		return new HookXLesser(config, log, realState, XValue);
+	}
 
     
     

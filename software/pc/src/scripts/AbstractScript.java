@@ -51,7 +51,7 @@ public abstract class AbstractScript implements Service
 		AbstractScript.hookFactory = hookFactory;
 		AbstractScript.config = config;
 		AbstractScript.log = log;
-	}	
+	}
 		
 	/**
 	 * Va au point d'entrée du script (en utilisant le Pathfinding), puis l'exécute
@@ -86,7 +86,6 @@ public abstract class AbstractScript implements Service
 		// exécute la version demandée
 		execute(versionToExecute, actualState, hooksToConsider);
 	}
-	
 
 	   
 	/**

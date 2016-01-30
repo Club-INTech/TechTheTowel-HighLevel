@@ -6,7 +6,9 @@ import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
+import hook.Callback;
 import hook.Hook;
+import hook.methods.RiseArm;
 import hook.types.HookFactory;
 import robot.Robot;
 import smartMath.Circle;
@@ -386,6 +388,15 @@ public class Fishing extends AbstractScript
 				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 
+				// On crée le hook de position
+				Hook hook = hookFactory.newXLesserHook(565);
+
+                // On y ajoute un callback qui a pour action de lever le bras
+				hook.addCallback(new Callback(new RiseArm(), true, stateToConsider));
+
+                // On ajoute le hook à la liste
+				hooksToConsider.add(hook);
+
 				// On commence à se placer près du bord
 				stateToConsider.robot.turn(Math.PI - 0.18);
 
@@ -423,6 +434,9 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.turn(Math.PI, hooksToConsider, true);
 
 				stateToConsider.robot.moveLengthwise(-460);
+
+				// On y ajoute un callback qui a pour action de lever le bras
+				hook.addCallback(new Callback(new RiseArm(), true, stateToConsider));
 
 				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION, true);
 

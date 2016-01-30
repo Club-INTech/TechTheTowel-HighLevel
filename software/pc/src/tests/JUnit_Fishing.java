@@ -5,13 +5,8 @@ import enums.ScriptNames;
 import enums.ServiceNames;
 import enums.Speed;
 import exceptions.ExecuteException;
-import exceptions.Locomotion.UnableToMoveException;
-import exceptions.PathNotFoundException;
-import exceptions.PointInObstacleException;
 import exceptions.serial.SerialFinallyException;
 import hook.Hook;
-import hook.types.HookFactory;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import robot.Robot;
@@ -50,25 +45,11 @@ public class JUnit_Fishing extends JUnit_Test
 		// Lance le thread graphique
 		container.getService(ServiceNames.THREAD_INTERFACE);
 		container.startInstanciedThreads();
+
 	}
+
 	
-	@After
-	public void aftermath() throws Exception 
-	{
-		//on remonte les bras
-		theRobot.robot.useActuator(ActuatorOrder.ARM_INIT,true);
-		try 
-		{
-			returnToEntryPosition(theRobot);
-		} 
-		catch (UnableToMoveException | PathNotFoundException | PointInObstacleException e) 
-		{
-			// TODO
-			e.printStackTrace();
-		}
-	}
-	
-	@Test
+	//@Test
 	public void fishThem() throws Exception
 	{
 		try
@@ -89,14 +70,11 @@ public class JUnit_Fishing extends JUnit_Test
 		
 	}
 
-	//@Test
+	@Test
 	public void fishThemWithHook()
 	{
-		ArrayList<Hook> hooks = new ArrayList<>();
-        HookFactory factory = new HookFactory(config, log, theRobot);
-		hooks.add(factory.fishingHook);
         try {
-            scriptManager.getScript(ScriptNames.FISHING).goToThenExec(3, theRobot, hooks);
+            scriptManager.getScript(ScriptNames.FISHING).goToThenExec(3, theRobot, emptyHook);
         } catch (Exception e) {
             e.printStackTrace();
         }
