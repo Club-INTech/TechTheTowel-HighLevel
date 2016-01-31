@@ -80,10 +80,13 @@ public class Castle extends AbstractScript
 	@Override
 	public int remainingScoreOfVersion(int version, GameState<?> state) 
 	{
+		// le tas complet rapporte 12 points maximum
 		if (version == 0)
 		{
 			return 12;
 		}
+		
+		// 0 points par défaut
 		else
 		{
 			return 0;

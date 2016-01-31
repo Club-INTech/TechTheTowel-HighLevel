@@ -6,6 +6,7 @@ import hook.Executable;
 import robot.Robot;
 import strategie.GameState;
 
+// permet de prendre les poissons
 public class GetFish implements Executable
 {
 

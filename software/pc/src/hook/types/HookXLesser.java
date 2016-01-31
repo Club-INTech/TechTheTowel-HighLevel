@@ -29,6 +29,7 @@ public class HookXLesser extends Hook
     }
 
     @Override
+    // condition de déclenchement sur une abscisse inférieure à celle donnée en argument
     public boolean evaluate() {
         if(mState.robot.getPosition().x <= XValue)
             return trigger();

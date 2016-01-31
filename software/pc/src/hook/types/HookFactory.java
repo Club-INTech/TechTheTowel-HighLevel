@@ -90,12 +90,13 @@ public class HookFactory implements Service
 	 * ======================================================================
 	 */
 
-
+    // condition sur une abscisse inférieure à celle donnée en argument
 	public Hook newXLesserHook(int XValue)
 	{
 		return new HookXLesser(config, log, realState, XValue);
 	}
 	
+	// condition sur une abscisse supérieure à celle donnée en argument
 	public Hook newXGreaterHook(int XValue)
 	{
 		return new HookXGreater(config, log, realState, XValue);

@@ -6,6 +6,7 @@ import hook.Executable;
 import robot.Robot;
 import strategie.GameState;
 
+// permet de relâcher les poissons
 public class DropFish implements Executable
 {
 

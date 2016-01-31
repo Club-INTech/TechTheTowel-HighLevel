@@ -16,7 +16,7 @@ public class HookXGreater extends Hook
     private int XValue;
 
     /**
-     * ce constructeur ne sera appellé que par les constructeurs des classes filles (des hooks bien précis)
+     * Ce constructeur ne sera appelé que par les constructeurs des classes filles (des hooks bien précis)
      *
      * @param config    endroit ou lire la configuration du robot
      * @param log       Système de log sur lequel écrire
@@ -29,6 +29,7 @@ public class HookXGreater extends Hook
     }
 
     @Override
+    // La condition de déclenchement repose sur une abscisse supérieure à celle donnée
     public boolean evaluate() {
         if(mState.robot.getPosition().x > XValue)
             return trigger();
