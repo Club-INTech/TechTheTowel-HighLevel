@@ -9,6 +9,7 @@ import exceptions.serial.SerialFinallyException;
 import hook.Callback;
 import hook.Hook;
 import hook.methods.DropFish;
+import hook.methods.GetFish;
 import hook.methods.RiseArm;
 import hook.types.HookFactory;
 import robot.Robot;
@@ -406,7 +407,7 @@ public class Fishing extends AbstractScript
 				//stateToConsider.robot.sleep(800);
 
 				// On crée le hook de position
-				Hook hook = hookFactory.newXLesserHook(665);
+				Hook hook = hookFactory.newXLesserHook(660);
 
 				// On y ajoute un callback qui a pour action de lever le bras
 				hook.addCallback(new Callback(new RiseArm(), true, stateToConsider));
@@ -415,7 +416,7 @@ public class Fishing extends AbstractScript
 				hooksToConsider.add(hook);
 
 				// On crée le hook de position
-				Hook hook2 = hookFactory.newXLesserHook(540);
+				Hook hook2 = hookFactory.newXLesserHook(520);
 
 				// On y ajoute un callback qui a pour action de lever le bras
 				hook2.addCallback(new Callback(new DropFish(), true, stateToConsider));
@@ -442,23 +443,38 @@ public class Fishing extends AbstractScript
 				stateToConsider.table.fishesFished+=2;
 
 				stateToConsider.robot.turn(Math.PI, hooksToConsider, true);
+				
+				// On crée le hook de position
+				Hook hook3 = hookFactory.newXGreaterHook(750);
 
-				stateToConsider.robot.moveLengthwise(-460);
+				// On y ajoute un callback qui a pour action de lever le bras
+				hook3.addCallback(new Callback(new GetFish(), true, stateToConsider));
 
-				hook = hookFactory.newXLesserHook(660);
+				// On ajoute le hook à la liste
+				hooksToConsider.add(hook3);
+
+
+				stateToConsider.robot.moveLengthwise(-460, hooksToConsider, true);
+
+				hook = hookFactory.newXLesserHook(600);
 
 				// On y ajoute un callback qui a pour action de lever le bras
 				hook.addCallback(new Callback(new RiseArm(), true, stateToConsider));
 
 				hooksToConsider.add(hook);
+				
+				hook2 = hookFactory.newXLesserHook(480);
 
 				hook2.addCallback(new Callback(new DropFish(), true, stateToConsider));
+				
+				hooksToConsider.add(hook2);
 
-				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION, true);
+				//stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION, true);
 
-				stateToConsider.robot.sleep(300);
+				//stateToConsider.robot.sleep(300);
 
-				stateToConsider.robot.moveLengthwise(520, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(530, hooksToConsider, true);
+				
 
 				//Petite attente
 				stateToConsider.robot.sleep(300);

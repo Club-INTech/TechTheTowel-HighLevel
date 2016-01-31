@@ -39,7 +39,7 @@ public class JUnit_Fishing extends JUnit_Test
 		theRobot.robot.useActuator(ActuatorOrder.ARM_INIT, true);
 		theRobot.robot.setOrientation(Math.PI);
 		theRobot.robot.setPosition(Table.entryPosition);
-		theRobot.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+		theRobot.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 		theRobot.robot.moveLengthwise(200, emptyHook, false);
 		
 		// Lance le thread graphique
@@ -59,7 +59,7 @@ public class JUnit_Fishing extends JUnit_Test
 //			scriptManager.getScript(ScriptNames.CLOSE_DOORS).goToThenExec(0, theRobot, emptyHook);
 			log.debug("Début de pêche !");
 
-			scriptManager.getScript(ScriptNames.FISHING).goToThenExec(0, theRobot, emptyHook);
+			scriptManager.getScript(ScriptNames.FISHING).goToThenExec(3, theRobot, emptyHook);
 			theRobot.robot.turn(3*Math.PI/4);
 			theRobot.robot.moveLengthwise(200);
 		}

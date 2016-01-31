@@ -95,7 +95,11 @@ public class HookFactory implements Service
 	{
 		return new HookXLesser(config, log, realState, XValue);
 	}
-
+	
+	public Hook newXGreaterHook(int XValue)
+	{
+		return new HookXGreater(config, log, realState, XValue);
+	}
     
     
 
