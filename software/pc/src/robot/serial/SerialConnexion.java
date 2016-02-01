@@ -58,11 +58,18 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	private String[] unknownMessages = null;
 	
 	/**
+	 * Combien de fois unknownMessages a été enregistré ?
+	 * (correspond au nombre de fois que l'ordre
+	 * à l'origine de l'erreur UnknownOrderException a été relancé)
+	 */
+	private int unknownCounter = 0;
+	
+	/**
 	 * Pointe vers l'emplacement du tableau messages courant qui pose problème
 	 * (qui lève UnknownOrderException)
 	 */
 	//TODO gérer les paramètres de merde dans le bas niveau en renvoyant "Ordre inconnu"
-	private int counter = -1;
+	private int unknownLine = -1;
 
 	/**
 	 * Construit une connexion s�rie
@@ -252,7 +259,24 @@ public class SerialConnexion implements SerialPortEventListener, Service
 				if (!messages.equals(unknownMessages))
 				{
 					unknownMessages=messages;
-					counter=c;
+					unknownCounter=0;
+					unknownLine=c;
+					if (uoe.verifyConnexion())
+					{
+						emptyInputBuffer();
+						communiquer(messages, nb_lignes_reponse);
+					}
+					else
+					{
+						throw new SerialConnexionException("Liaison série considérée défectueuse: échec du ping de la carte");
+					}
+				}
+				
+				// l'ordre à problème est relancé 6 fois
+				else if (messages.equals(unknownMessages) && unknownCounter<5)
+				{
+					unknownCounter++;
+					unknownLine=c;
 					if (uoe.verifyConnexion())
 					{
 						emptyInputBuffer();
@@ -263,13 +287,17 @@ public class SerialConnexion implements SerialPortEventListener, Service
 						throw new SerialConnexionException("Liaison série considérée défectueuse: réception récurrente d'une réponse bas-niveau non indexée");
 					}
 				}
+				
 				else
 				{
-					log.critical("Ordre REALLYNIGGA inonnu");
+					unknownCounter=0;
+					// Ici un paradoxe se glisse car l'ordre est inconnu mais pas inonnu ! Et oui !
+					// Une fraise.
+					log.critical("Ordre REALLYNIGGA inonnu\n après "+unknownCounter+" tentatives");
 					uoe.logStack();
-					if (counter==c)
+					if (unknownLine==c)
 					{
-						log.critical("Mention spéciale à -> "+messages[counter]);
+						log.critical("Mention spéciale à -> "+messages[unknownLine]);
 					}
 				}
 			}
