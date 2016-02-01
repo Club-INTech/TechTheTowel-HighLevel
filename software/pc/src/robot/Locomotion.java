@@ -118,16 +118,22 @@ public class Locomotion implements Service
      * 	La distance maximale pour une correction rotationelle 
      * 	La correction ne sera effectuée que si le robot est loin de son point d'arrivée.
      */
-    private int maxLengthCorrectionThreeshold = 30;
+    private final int maxLengthCorrectionThreeshold = 30;
     
     /**
      * 	L'orientation maximale pour une correction rotationelle 
      * 	La correction ne sera effectuée que si le robot est assez eloigné de son orientation souhaitée.
      */
-    private double maxRotationCorrectionThreeshold = 0.05;
+    private final double maxRotationCorrectionThreeshold = 0.05;
 
-	
-	/**Booleen explicitant si le robot est pret à tourner, utile pour le cercle de detection */
+    /**
+     * L'orientation maximale pour ignorer le sens obligatoire de rotation
+     * Si l'angle y est inférieur, je tourne en FASTEST
+     */
+    private final double maxRotationTurningStrategyIgnore = Math.PI/4;
+
+
+    /**Booleen explicitant si le robot est pret à tourner, utile pour le cercle de detection */
 	public boolean isRobotTurning=false;	
 	
 	/** nombre d'essais maximum après une BlockedException*/
@@ -728,7 +734,15 @@ public class Locomotion implements Service
                     deplacements.turn(angle, TurningStrategy.FASTEST);  // On ne tourne que si on est assez loin de l'orientation voulu
 
                     log.debug("Angle corrigé");
-                } else if (!isCorrection)// Si ca n'est pas  une correction
+                }
+                else if(!isCorrection && Math.abs(delta) < maxRotationTurningStrategyIgnore)//Si ce n'est pas un correction
+                {
+                    if (Math.abs(delta) > maxRotationCorrectionThreeshold) {// on ne tourne vraiment que si l'angle souhaité est vraiment different.
+                        isRobotTurning = true;// prochain ordre : on tourne
+                    }
+                    deplacements.turn(angle, TurningStrategy.FASTEST);
+                }
+                else if (!isCorrection)// Si ca n'est pas  une correction et qu'on dépasse l'angle limite
                 {
                     if (Math.abs(delta) > maxRotationCorrectionThreeshold) {// on ne tourne vraiment que si l'angle souhaité est vraiment different.
                         isRobotTurning = true;// prochain ordre : on tourne
