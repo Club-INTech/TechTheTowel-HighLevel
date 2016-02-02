@@ -241,13 +241,13 @@ public class ShellGetter extends AbstractScript
     	// on tente de ranger la porte, avec changement de rayon
     	try
     	{
-    		state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
     		if (state.robot.shellsOnBoard == true)
     		{
                 state.changeRobotRadius(TechTheSand.middleRobotRadius);
             }
     		else
     		{
+    			state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
                 state.changeRobotRadius(TechTheSand.retractedRobotRadius);
             }
     	}

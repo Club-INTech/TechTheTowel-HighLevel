@@ -111,13 +111,13 @@ public class DropTheSand extends AbstractScript
     	// on tente de fermer la vitre avec changement de rayon
     	try
     	{
-    		state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
     		if (state.robot.getIsSandInside() == true)
     		{
                 state.changeRobotRadius(TechTheSand.middleRobotRadius);
     		}
     		else
     		{
+    			state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
                 state.changeRobotRadius(TechTheSand.retractedRobotRadius);
     		}
     	}
