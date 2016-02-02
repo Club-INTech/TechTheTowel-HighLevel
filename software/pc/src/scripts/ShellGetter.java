@@ -333,7 +333,7 @@ public class ShellGetter extends AbstractScript
         for(Shell i : list)
         {
         	// on ne regarde que ceux de notre côté
-            if(i.getX() >= 0)
+            if(i.getX() > 0)
             {	
             	// si la version vaut 1 on le considère comme étant celui à prendre
                 if(version == 1)
