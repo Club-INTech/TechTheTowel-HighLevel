@@ -6,9 +6,10 @@ import exceptions.serial.SerialConnexionException;
 import robot.serial.SerialConnexion;
 import utils.Config;
 import utils.Log;
-import utils.Sleep;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -18,9 +19,9 @@ import java.util.ArrayList;
 public class ThreadEyes extends AbstractThread
 {
 
-    private final int NUMBER_OF_COLUMNS = 14;
+    private final int NUMBER_OF_COLUMNS = 14;//TODO A changer
 
-    private final int NUMBER_OF_LINES = 7;
+    private final int NUMBER_OF_LINES = 7; //TODO A changer
 
     /** Liste des tableaux de booléens représentant l'image à envoyer aux arduinos */
     private ArrayList<boolean[]> frames = new ArrayList<>();
@@ -31,6 +32,7 @@ public class ThreadEyes extends AbstractThread
     /**
      * Liste des fichier à charger, initilisée par une classe anonyme
      * MERCI JAVA POUR TON INCAPACITE A INITIALISER DES LISTES CORRECTEMENT!
+     * TODO A remplir
      **/
     private final ArrayList<String> animList = new ArrayList<String>()
     {{
@@ -43,9 +45,14 @@ public class ThreadEyes extends AbstractThread
     private EyesEvent event = EyesEvent.IDLE;
 
     /**
-     * Permet d'indiquer si une animation est en cours ou non
+     * Animation suivante à effectuer
      */
-    private boolean eventEnded = true;
+    private EyesEvent next = EyesEvent.IDLE;
+
+    /**
+     * Nombre de frames déjà affichées durant l'animation actuelle
+     */
+    private int frame=0;
 
     /**
      * Constructeur du thread
@@ -70,10 +77,19 @@ public class ThreadEyes extends AbstractThread
         while(true)
         {
             //TODO Traitement
+            /** On affiche une image à la fois, si l'on arrive à la fin on reset frame à 0 et on met l'évènement
+             *   suivant dans event
+             **/
             switch (event)
             {
                 case IDLE:
-                    image = frames.get(0);
+                    if(frame==0)
+                        image = frames.get(0);
+                    else if(frame==1)
+                    {
+                        frame = 0;
+                        this.event = this.next;
+                    }
                     break;
                 case BLOCKED:
                     break;
@@ -87,7 +103,8 @@ public class ThreadEyes extends AbstractThread
             try
             {
                 sendFrame(image);
-                Thread.sleep(100);
+                frame++;
+                Thread.sleep(100);//Temps d'attente entre chaque image TODO A ajuster
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -153,7 +170,17 @@ public class ThreadEyes extends AbstractThread
      */
     public void setEvent(EyesEvent event)
     {
+        this.next = event;
+    }
+
+    /**
+     * Force l'activation immédiate d'une animation, un fois effectuée, il sera en IDLE
+     * @param event l''event à forcer
+     */
+    public void forceEvent(EyesEvent event)
+    {
         this.event = event;
-        eventEnded = false;
+        this.next = EyesEvent.IDLE;
+        frame = 0;
     }
 }

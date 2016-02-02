@@ -42,10 +42,15 @@ public class LocomotionCardWrapper implements Service
 	/**
 	 * Temps d'attente entre deux envois à la serie en ms
 	 */
-	
 	private int delayBetweenSend = 100; 
 	
 	public int compteur=1;
+	
+	/**
+	 * Permet de gérer le nombre de tentatives de communication
+	 * dans la méthode éponyme
+	 */
+	public int counterGetCurrentPositionAndOrientation=-1;
 
 	/**
 	 * Construit la surchouche de la carte d'asservissement
@@ -302,9 +307,26 @@ public class LocomotionCardWrapper implements Service
 		// on envois "?xyo" et on lis double (dans l'ordre : abscisse, ordonnée, orientation)
 		String[] infosBuffer = locomotionCardSerial.communiquer("?xyo", 3);
 		float[] parsedInfos = new float[3];
-		for(int i = 0; i < 3; i++)
-		    parsedInfos[i] = Float.parseFloat(infosBuffer[i]);
-
+		try
+		{
+			for(int i = 0; i < 3; i++)
+			{
+				parsedInfos[i] = Float.parseFloat(infosBuffer[i]);
+			}
+			counterGetCurrentPositionAndOrientation=-1;
+		}
+		catch(NumberFormatException e)
+		{
+			counterGetCurrentPositionAndOrientation++;
+			if(counterGetCurrentPositionAndOrientation<5)
+			{
+				getCurrentPositionAndOrientation();
+			}
+			else
+			{
+				throw new SerialConnexionException("Liaison série considérée défectueuse: réception récurrente d'une réponse bas-niveau non flottante");
+			}
+		}
 		return parsedInfos;
 	}
 
