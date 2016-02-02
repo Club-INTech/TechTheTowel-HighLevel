@@ -58,7 +58,6 @@ public class JUnit_CloseDoors extends JUnit_Test
 			//On execute le script
 			log.debug("Fermeture des portes.");
 			scriptManager.getScript(ScriptNames.CLOSE_DOORS).goToThenExec(0, mRobot, emptyList);
-			//scriptManager.getScript(ScriptNames.FISHING).goToThenExec(0, mRobot, emptyList);
 		}
 		catch(SerialConnexionException | BadVersionException | ExecuteException | SerialFinallyException e)
 		{
@@ -72,7 +71,8 @@ public class JUnit_CloseDoors extends JUnit_Test
 	}
 
 	@After
-	public void finish() throws UnableToMoveException, PathNotFoundException, PointInObstacleException {
+	public void finish() throws UnableToMoveException, PathNotFoundException, PointInObstacleException 
+	{
 		super.returnToEntryPosition(mRobot);
 	}
 }

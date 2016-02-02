@@ -116,7 +116,6 @@ public class CloseDoors extends AbstractScript
 	@Override
 	public int remainingScoreOfVersion(int version, GameState<?> state) 
 	{
-		//TODO
 		
 		// Score maximal possible de 20 points
 		int score = 20;

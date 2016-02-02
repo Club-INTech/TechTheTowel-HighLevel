@@ -72,7 +72,6 @@ public class JUnit_CarpetDropper extends JUnit_Test
 			try {
 				returnToEntryPosition(game);
 			} catch (PathNotFoundException | UnableToMoveException e) {
-				// TODO
 				e.printStackTrace();
 			}
 	}

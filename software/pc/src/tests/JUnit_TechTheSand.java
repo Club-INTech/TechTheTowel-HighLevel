@@ -44,7 +44,7 @@ public class JUnit_TechTheSand extends JUnit_Test
 	@After
 	public void aftermath() throws Exception 
 	{
-		//TODO à faire après avoir réglé la question de la communication avec le bas niveau, cf TechTheSand.java
+		super.returnToEntryPosition(theRobot);
 	}
 	
 	@Test
