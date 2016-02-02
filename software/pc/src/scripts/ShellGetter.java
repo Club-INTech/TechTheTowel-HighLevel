@@ -138,8 +138,8 @@ public class ShellGetter extends AbstractScript
             Shell selected = getTheShell(versionToExecute);
             try {
                 //Orientation vers le coquillage
-                stateToConsider.robot.turn(Math.atan((selected.getY() - stateToConsider.robot.getPosition().y) /
-                        (selected.getX() - stateToConsider.robot.getPosition().x)));
+                stateToConsider.robot.turn(Math.atan((selected.getY() - stateToConsider.robot.getPositionFast().y) /
+                        (selected.getX() - stateToConsider.robot.getPositionFast().x)));
 
                 //=========================================================================================
                 //            TODO A remettre une fois les capteurs de fin de course installés
@@ -184,7 +184,60 @@ public class ShellGetter extends AbstractScript
                 e.printStackTrace();
             }
         }
+        else if(versionToExecute == 5) //Version qui prends le coquillage le plus proche
+        {
+            Shell selected = getClosestShell(stateToConsider.robot.getPositionFast());
+            try {
+                //Orientation vers le coquillage
+                stateToConsider.robot.turn(Math.atan((selected.getY() - stateToConsider.robot.getPositionFast().y) /
+                        (selected.getX() - stateToConsider.robot.getPositionFast().x)));
 
+                //=========================================================================================
+                //            TODO A remettre une fois les capteurs de fin de course installés
+                //=========================================================================================
+                /*
+                stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, true);
+
+                // on vérifie si la porte n'est pas bloquée lors de son ouverture
+                if(!stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_OPENED))
+                {
+                    stateToConsider.robot.useActuator(ActuatorOrder.STOP_DOOR, false);
+                    throw new BlockedActuatorException("Porte bloquée !");
+                }
+
+                // booléen de vitre ouverte vrai
+                stateToConsider.robot.doorIsOpen = true;
+
+                // on étend le rayon du robot avec la vitre ouverte
+                stateToConsider.changeRobotRadius(TechTheSand.expandedRobotRadius);
+                */
+                //========================================================================================
+                //            ===================================================================
+                //========================================================================================
+
+                // on oblige le robot à tourner vers la gauche pour ne pas lâcher les coquillages
+                stateToConsider.robot.setTurningStrategy(TurningStrategy.LEFT_ONLY);
+
+                // on oblige également le robot à ne se déplacer que vers l'avant
+                stateToConsider.robot.setDirectionStrategy(DirectionStrategy.FORCE_FORWARD_MOTION);
+
+                // on tourne de 180 degrés pour chopper le coquillage
+                stateToConsider.robot.turnRelative(Math.PI);
+
+                // on indique que les coquillages sont dans le robot
+                stateToConsider.robot.shellsOnBoard = true;
+
+                //On supprime l'obstacle de la table
+                stateToConsider.table.getObstacleManager().freePoint(selected.getPosition());
+
+                Table.ourShells.remove(selected);
+                Table.neutralShells.remove(selected);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -226,6 +279,10 @@ public class ShellGetter extends AbstractScript
 
             return selected.entryPosition;
 
+        }
+        else if(version==5)
+        {
+            return getClosestShell(robotPosition).entryPosition;
         }
         else
         {
@@ -290,6 +347,29 @@ public class ShellGetter extends AbstractScript
         
         // cas par défaut si on ne trouve rien
         return null;
+    }
+
+    /**
+     * Récupère le coquillage le plus proche du robot
+     * @param robotPos la position du robot
+     * @return le coquillage (Shell) en question
+     */
+    public Shell getClosestShell(Vec2 robotPos)
+    {
+        ArrayList<Shell> list = new ArrayList<Shell>();
+        list.addAll(Table.ourShells);
+        list.addAll(Table.neutralShells);
+        double distance=list.get(0).getPosition().distance(robotPos);
+        Shell selected = list.get(0);
+
+        for(Shell i : list)
+        {
+            if(i.getPosition().distance(robotPos) < distance)
+            {
+                selected = i;
+            }
+        }
+        return selected;
     }
 
 }
