@@ -1,9 +1,6 @@
 package tests;
 
-import enums.ActuatorOrder;
-import enums.ScriptNames;
-import enums.ServiceNames;
-import enums.Speed;
+import enums.*;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.PathNotFoundException;
@@ -33,16 +30,30 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         super.setUp();
         scriptManager = (ScriptManager)container.getService(ServiceNames.SCRIPT_MANAGER);
         theRobot = (GameState<Robot>)container.getService(ServiceNames.GAME_STATE);
-        theRobot.robot.useActuator(ActuatorOrder.ARM_INIT, true);
+        initialize();
+
+        // Lance le thread graphique
+        container.getService(ServiceNames.THREAD_INTERFACE);
+        //container.getService(ServiceNames.THREAD_EYES);
+        container.startInstanciedThreads();
+    }
+
+    private void initialize() throws Exception
+    {
         theRobot.robot.setOrientation(Math.PI);
         theRobot.robot.setPosition(Table.entryPosition);
         theRobot.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
         theRobot.robot.moveLengthwise(100, emptyHook, false);
 
-        // Lance le thread graphique
-        container.getService(ServiceNames.THREAD_INTERFACE);
-        container.startInstanciedThreads();
+        theRobot.robot.useActuator(ActuatorOrder.ARM_INIT, true);
+
+        if(!theRobot.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
+        {
+            theRobot.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
+        }
+
     }
+
 
     @After
     public void aftermath() throws Exception
@@ -64,6 +75,14 @@ public class JUnit_ScriptedMatch extends JUnit_Test
     {
         try
         {
+            scriptManager.getScript(ScriptNames.CASTLE).goToThenExec(0, theRobot, emptyHook);
+        }
+        catch(ExecuteException|SerialFinallyException e)
+        {
+            e.printStackTrace();
+        }
+        try
+        {
             scriptManager.getScript(ScriptNames.TECH_THE_SAND).goToThenExec(0,theRobot, emptyHook);
         }
         catch(ExecuteException | SerialFinallyException e)
@@ -81,14 +100,6 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         try
         {
             scriptManager.getScript(ScriptNames.CLOSE_DOORS).goToThenExec(0,theRobot, emptyHook);
-        }
-        catch(ExecuteException | SerialFinallyException e)
-        {
-            e.printStackTrace();
-        }
-        try
-        {
-            scriptManager.getScript(ScriptNames.FISHING).goToThenExec(1, theRobot, emptyHook);
         }
         catch(ExecuteException | SerialFinallyException e)
         {
@@ -137,6 +148,14 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         try
         {
             scriptManager.getScript(ScriptNames.SHELL_DEPOSIT).goToThenExec(0,theRobot, emptyHook);
+        }
+        catch(ExecuteException | SerialFinallyException e)
+        {
+            e.printStackTrace();
+        }
+        try
+        {
+            scriptManager.getScript(ScriptNames.FISHING).goToThenExec(3, theRobot, emptyHook);
         }
         catch(ExecuteException | SerialFinallyException e)
         {

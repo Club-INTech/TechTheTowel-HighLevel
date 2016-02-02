@@ -155,13 +155,13 @@ public class TechTheSand extends AbstractScript
 		try 
 		{
 			state.robot.useActuator(ActuatorOrder.STOP_AXIS, true);
-			state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
 			if (state.robot.getIsSandInside() == true)
 			{
 				state.changeRobotRadius(middleRobotRadius);
 			}
 			else
 			{
+				state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
 				state.changeRobotRadius(retractedRobotRadius);
 			}
 		}

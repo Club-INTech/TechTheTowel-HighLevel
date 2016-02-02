@@ -54,7 +54,6 @@ public class JUnit_Castle extends JUnit_Test
 			//On execute le script
 			log.debug("Récupération du chateau !");
 			scriptManager.getScript(ScriptNames.CASTLE).goToThenExec(0, mRobot, emptyList);
-			//scriptManager.getScript(ScriptNames.FISHING).goToThenExec(0, mRobot, emptyList);
 		}
 		catch(SerialConnexionException | BadVersionException | ExecuteException | SerialFinallyException e)
 		{

@@ -31,7 +31,7 @@ abstract public class Hook
 
 	/**
 	 *  ce constructeur ne sera appellé que par les constructeurs des classes filles (des hooks bien précis)  
-	 * @param config endroit ou lire la configuration du robot 
+	 * @param config endroit où lire la configuration du robot 
 	 * @param log Système de log sur lequel écrire
 	 * @param gameState Etat du jeu sur lequel on vérifie si le hook se déclenche ou non
 	 */

@@ -7,7 +7,7 @@ import hook.Executable;
 import robot.Robot;
 import strategie.GameState;
 
-// permet de lever le bras des poissons au dessus du filet
+/** permet de lever le bras des poissons au dessus du filet */
 public class RiseArm implements Executable
 {
 

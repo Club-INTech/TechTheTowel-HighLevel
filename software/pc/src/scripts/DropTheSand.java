@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 /**
  * Script de rapatriement du sable ; utilise le PDD
- * Version 0 et 1: se déplace de la montagne à la zone de construction, choisit une stratégie d'orientation lors du chemin déterminé par le PDD pour ne pas perdre le sable
+ * Version 0 se déplace de la montagne à la zone de construction, choisit une stratégie d'orientation lors du chemin déterminé par le PDD pour ne pas perdre le sable
  * @author CF, discord
  */
 public class DropTheSand extends AbstractScript
@@ -111,13 +111,13 @@ public class DropTheSand extends AbstractScript
     	// on tente de fermer la vitre avec changement de rayon
     	try
     	{
-    		state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
     		if (state.robot.getIsSandInside() == true)
     		{
                 state.changeRobotRadius(TechTheSand.middleRobotRadius);
     		}
     		else
     		{
+    			state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
                 state.changeRobotRadius(TechTheSand.retractedRobotRadius);
     		}
     	}
