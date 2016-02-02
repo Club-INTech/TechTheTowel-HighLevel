@@ -37,7 +37,7 @@ public class HookPositionCorrect extends Hook
 	// condition de déclenchement sur une position égale, à la tolérance près, à celle donnée en argument
 	public boolean evaluate() 
 	{
-		if (Math.abs(mState.robot.getPosition().distance(pos)) <= tolerancy)
+		if ((mState.robot.getPosition().distance(pos)) <= tolerancy)
 		{
 			return trigger();
 		}

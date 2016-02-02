@@ -45,12 +45,11 @@ public class HookIsPositionAndOrientationCorrect extends Hook
 	@Override
 	public boolean evaluate()
 	{
-		if(  (mPoint.x-mState.robot.getPosition().x )*(mPoint.x-mState.robot.getPosition().x ) +
-			 (mPoint.y-mState.robot.getPosition().y )*(mPoint.y-mState.robot.getPosition().y ) < mTolerancyPoint*mTolerancyPoint ) //verification de la distance au point
+		if(  mState.robot.getPosition().distance(mPoint) < mTolerancyPoint ) //verification de la distance au point
 		{
 			if(Math.abs(mState.robot.getOrientation()-mOrientation) < mTolerancyOrientation)// verification de l'orientation 
 			{
-				System.out.println("en position ("+mState.robot.getPosition().x+", "+mState.robot.getPosition().y+") et orientation "+mState.robot.getOrientation()+" au trigger du Hook de position et d'orientation");
+				log.debug("en position ("+mState.robot.getPosition().x+", "+mState.robot.getPosition().y+") et orientation "+mState.robot.getOrientation()+" au trigger du Hook de position et d'orientation");
 				return trigger();
 			}
 		}
