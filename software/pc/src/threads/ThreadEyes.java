@@ -32,6 +32,7 @@ public class ThreadEyes extends AbstractThread
     /**
      * Liste des fichier à charger, initilisée par une classe anonyme
      * MERCI JAVA POUR TON INCAPACITE A INITIALISER DES LISTES CORRECTEMENT!
+     * TODO A remplir
      **/
     private final ArrayList<String> animList = new ArrayList<String>()
     {{
@@ -103,7 +104,7 @@ public class ThreadEyes extends AbstractThread
             {
                 sendFrame(image);
                 frame++;
-                Thread.sleep(100);
+                Thread.sleep(100);//Temps d'attente entre chaque image TODO A ajuster
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -170,5 +171,16 @@ public class ThreadEyes extends AbstractThread
     public void setEvent(EyesEvent event)
     {
         this.next = event;
+    }
+
+    /**
+     * Force l'activation immédiate d'une animation, un fois effectuée, il sera en IDLE
+     * @param event l''event à forcer
+     */
+    public void forceEvent(EyesEvent event)
+    {
+        this.event = event;
+        this.next = EyesEvent.IDLE;
+        frame = 0;
     }
 }
