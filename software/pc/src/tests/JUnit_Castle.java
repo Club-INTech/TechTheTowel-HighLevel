@@ -19,6 +19,8 @@ import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import robot.Robot;
 import scripts.ScriptManager;
+import smartMath.Circle;
+import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
 
@@ -53,7 +55,7 @@ public class JUnit_Castle extends JUnit_Test
 		{
 			//On execute le script
 			log.debug("Récupération du chateau !");
-			scriptManager.getScript(ScriptNames.CASTLE).goToThenExec(0, mRobot, emptyList);
+			scriptManager.getScript(ScriptNames.CASTLE).goToThenExec(1, mRobot, emptyList);
 		}
 		catch(SerialConnexionException | BadVersionException | ExecuteException | SerialFinallyException e)
 		{

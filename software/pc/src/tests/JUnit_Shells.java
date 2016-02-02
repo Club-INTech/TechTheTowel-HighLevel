@@ -21,8 +21,6 @@ import table.Table;
 
 import java.util.ArrayList;
 
-//TODO Version du test temporaire jusqu'à meilleure connaissance des exceptions, et du fonctionnement général des JUnit
-
 /**
  * teste la récupération des coquillages
  * @author Discord

@@ -168,7 +168,7 @@ public class Castle extends AbstractScript
 		else if (version == 1)
 		{
 			//TODO tester
-			return (new Circle(new Vec2(850, 930)));
+			return (new Circle(new Vec2(800, 800)));
 		}
 		else
 		{

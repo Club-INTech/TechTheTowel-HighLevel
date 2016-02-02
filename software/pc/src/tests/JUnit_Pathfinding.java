@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import pathDingDing.PathDingDing;
+import robot.Robot;
 import robot.RobotReal;
 import scripts.TechTheSand;
 import smartMath.Vec2;
@@ -36,7 +37,7 @@ public class JUnit_Pathfinding extends JUnit_Test
     Table table;
     PathDingDing pf;
     Log log;
-    GameState<RobotReal> game;
+   //GameState<Robot> game;
 
 
     public static void main(String[] args) throws Exception
@@ -53,12 +54,12 @@ public class JUnit_Pathfinding extends JUnit_Test
         win = new Window(table);
 
 
-        game = (GameState<RobotReal>) container.getService(ServiceNames.GAME_STATE);
-        game.robot.setPosition(Table.entryPosition);
-        game.robot.setOrientation(Math.PI);
-        game.changeRobotRadius(TechTheSand.expandedRobotRadius);
+//        game = (GameState<RobotReal>) container.getService(ServiceNames.GAME_STATE);
+//        game.robot.setPosition(Table.entryPosition);
+//        game.robot.setOrientation(Math.PI);
+//        game.changeRobotRadius(TechTheSand.expandedRobotRadius);
 
-        ArrayList<ObstacleRectangular> mRectangles = game.table.getObstacleManager().getRectangles();
+       /* ArrayList<ObstacleRectangular> mRectangles = game.table.getObstacleManager().getRectangles();
 
         for (int i=0;i< mRectangles.size();i++)
         {
@@ -66,7 +67,7 @@ public class JUnit_Pathfinding extends JUnit_Test
             {
                 game.table.getObstacleManager().removeObstacle(mRectangles.get(i));
             }
-        }
+        }*/
 
 
         pf = (PathDingDing)container.getService(ServiceNames.PATHDINGDING);
@@ -83,22 +84,22 @@ public class JUnit_Pathfinding extends JUnit_Test
             if(win.getKeyboard().isModeActual() && win.getMouse().hasClickedRight())
             {
 
-                //robot.setTurningStrategy(win.getKeyboard().getTurningStrategy());
+                /*robot.setTurningStrategy(win.getKeyboard().getTurningStrategy());
 
                 try
                 {
                     //table.getObstacleManager().setEnnemyRobot1Position(win.getMouse().getMiddleClickPosition());
-                    win.getPanel().drawArrayList(pf.computePathVec2(game.robot.getPosition(), win.getMouse().getRightClickPosition(), new ArrayList<Obstacle>()));
+                    //win.getPanel().drawArrayList(pf.computePathVec2(game.robot.getPosition(), win.getMouse().getRightClickPosition(), new ArrayList<Obstacle>()));
 
                 }
                 catch(PathNotFoundException e)
                 {
-                    log.debug("pas de chemin trouve entre "+game.robot.getPosition()+"et"+ win.getMouse().getRightClickPosition());
+                    //log.debug("pas de chemin trouve entre "+game.robot.getPosition()+"et"+ win.getMouse().getRightClickPosition());
                 }
                 catch(PointInObstacleException e)
                 {
                     log.debug("point d'arrivée dans un obstacle");
-                }
+                }*/
                 win.getPanel().repaint();
                 win.getKeyboard().resetModeActual();
                 win.getMouse().resetHasClicked();
@@ -110,10 +111,10 @@ public class JUnit_Pathfinding extends JUnit_Test
                 try
                 {
                     //table.getObstacleManager().setEnnemyRobot1Position(win.getMouse().getMiddleClickPosition());
-                    long start = System.currentTimeMillis();
+                    //long start = System.currentTimeMillis();
                     win.getPanel().drawArrayList(pf.computePathVec2(win.getMouse().getLeftClickPosition(), win.getMouse().getRightClickPosition(), new ArrayList<Obstacle>()));
-                    long end = System.currentTimeMillis();
-                    System.out.println("time elapsed : " + (end - start));
+                    //long end = System.currentTimeMillis();
+                    //System.out.println("time elapsed : " + (end - start));
                 }
                 catch(PathNotFoundException e)
                 {
