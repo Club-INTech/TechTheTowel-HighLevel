@@ -16,11 +16,11 @@ public class HookXLesser extends Hook
     private int XValue;
 
     /**
-     * ce constructeur ne sera appellé que par les constructeurs des classes filles (des hooks bien précis)
-     *
+     * Construit le hook se déclenchant en deçà de la position en x donnée
      * @param config    endroit ou lire la configuration du robot
      * @param log       Système de log sur lequel écrire
      * @param gameState Etat du jeu sur lequel on vérifie si le hook se déclenche ou non
+     * @param XValue position en x donnée
      */
     public HookXLesser(Config config, Log log, GameState<RobotReal> gameState, int XValue)
     {

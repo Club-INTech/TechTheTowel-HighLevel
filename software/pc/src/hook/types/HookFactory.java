@@ -83,20 +83,20 @@ public class HookFactory implements Service
 		return new HookIsPositionAndOrientationCorrect(config, log, realState, position, orientation, tolerancyPos, tolerancyOr);
 	}
 	
-
-	
 	/* ======================================================================
 	 * 							Hooks d'abscisse (sur X)
 	 * ======================================================================
 	 */
 
-    // condition sur une abscisse inférieure à celle donnée en argument
+    /** Hook déclenché pour un position en abscisse inférieure à celle donnée en argument
+     * @param XValue argument */
 	public Hook newXLesserHook(int XValue)
 	{
 		return new HookXLesser(config, log, realState, XValue);
 	}
 	
-	// condition sur une abscisse supérieure à celle donnée en argument
+	/** Hook déclenché pour une position en abscisse supérieure à celle donnée en argument
+	 * @param XValue argument en mm */
 	public Hook newXGreaterHook(int XValue)
 	{
 		return new HookXGreater(config, log, realState, XValue);
@@ -109,7 +109,19 @@ public class HookFactory implements Service
 	 * ======================================================================
 	 */
     
-
+	/** Hook déclenché pour une position en ordonnée inférieure à celle donnée en argument
+	 * @param Yvalue argument en mm */
+	public Hook newYLesserHook(int Yvalue)
+	{
+		return new HookYLesser(config, log, realState, Yvalue);
+	}
+	
+	/** Hook déclenché pour une position en ordonnée supérieure à celle donnée en argument
+	 * @param Yvalue argument en mm */
+	public Hook newYGreaterHook(int Yvalue)
+	{
+		return new HookYGreater(config, log, realState, Yvalue);
+	}
 
     /* ======================================================================
    	 * 							Hooks de position et orientation
@@ -121,12 +133,41 @@ public class HookFactory implements Service
      * @param point : point de declenchement du hook
      * @param orientation : orientation de decle,chement du hook 
      * @param tolerancyPoint : tolerance sur la distance au point : ne se declenche que si le robot est proche du point
-     * @param tolerancyOrientation : tolerance sur l'orientation du robot, le hook ne se declence que si la difference entre l'orrientation actuelle et l'orientation voulue est inferieure à cette toelrance
+     * @param tolerancyOrientation : tolerance sur l'orientation du robot, le hook ne se declence que si la difference entre l'orientation actuelle et l'orientation voulue est inferieure à cette toelrance
      * @return le hook
      */
-    
     public Hook newHookIsPositionAndOrientationCorrect(Vec2 point, float orientation, float tolerancyPoint, float tolerancyOrientation) 
     {
     	return new HookIsPositionAndOrientationCorrect(config, log, realState, point, orientation , tolerancyPoint, tolerancyOrientation);
+    }
+    
+    /** Hook déclenché pour une position donnée, avec une tolérance donnée
+     * @param pos argument
+     * @param tolerancy argument en mm*/
+    public Hook newPositionCorrectHook(Vec2 pos, float tolerancy)
+    {
+    	return new HookPositionCorrect(config, log, realState, pos, tolerancy);
+    }
+    
+    /** Hook déclenché pour une orientation donnée, avec une tolérance donnée
+     * @param orientation argument en radians
+     * @param tolerancy argument en radians*/
+    public Hook newOrientationCorrectHook(float orientation, float tolerancy)
+    {
+    	return new HookOrientationCorrect(config, log, realState, orientation, tolerancy);
+    }
+    
+    /** Hook déclenché pour une orientation inférieure à celle donnée en argument
+     * @param orientation argument en radians*/
+    public Hook newOrientationLesserHook(float orientation)
+    {
+    	return new HookOrientationLesser(config, log, realState, orientation);
+    }
+    
+    /** Hook déclenché pour une orientation supérieure à celle donnée en argument
+     * @param orientation argument en radians*/
+    public Hook newOrientationGreaterHook(float orientation)
+    {
+    	return new HookOrientationGreater(config, log, realState, orientation);
     }
 }

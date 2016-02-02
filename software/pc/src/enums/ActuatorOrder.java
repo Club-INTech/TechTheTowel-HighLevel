@@ -24,9 +24,9 @@ public enum ActuatorOrder
 	//========================================================
 	
 	//!\ Remarque : il n'y a pas de "left" pour les actuators du bras gauche, on se contente d'appeler une des consignes neutres /!\
-	//!\ La symétrie du jeu se chargera de déterminer si l'actuator concernée est le gauche ou le droit /!\
+	//!\ La symétrie du jeu se chargera de déterminer si l'actuator concerné est le gauche ou le droit /!\
 	
-	/** Bras aimanté gauche baissé pour récupérer les poissons */
+	/** Bras aimanté baissé pour récupérer les poissons */
 	FISHING_POSITION("fpl"),
 	
 	/** Bras aimanté en position medium */
@@ -61,7 +61,8 @@ public enum ActuatorOrder
 	/** Fermeture des portes */
 	CLOSE_DOOR("cdl",3000),
 	CLOSE_DOOR_RIGHT("cdr",3000),
-
+	
+	/** Arrêt des portes */
 	STOP_DOOR_LEFT("sdl"),
 	STOP_DOOR("sdr"),
 
