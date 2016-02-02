@@ -387,11 +387,11 @@ public class Table implements Service
 			
 			pos = new Vec2(0,450);
 			mObstacleManager.addObstacle(new ObstacleCircular(pos, shellSize/2 + mObstacleManager.mRobotRadius));
-			neutralShells.add(new Shell(pos,Color.NEUTRAL, new Vec2(pos.x+200, pos.y-200)));
+			neutralShells.add(new Shell(pos,Color.NEUTRAL, new Vec2(pos.x+200, pos.y-100)));
 			
 			pos = new Vec2(0,150);
 			mObstacleManager.addObstacle(new ObstacleCircular(pos, shellSize/2 + mObstacleManager.mRobotRadius));
-			neutralShells.add(new Shell(pos,Color.NEUTRAL, new Vec2(pos.x+200, pos.y+200)));
+			neutralShells.add(new Shell(pos,Color.NEUTRAL, new Vec2(pos.x+200, pos.y+100)));
 			
 			pos = new Vec2(1300,750);
 			mObstacleManager.addObstacle(new ObstacleCircular(pos, shellSize/2 + mObstacleManager.mRobotRadius));
@@ -433,11 +433,11 @@ public class Table implements Service
 
             pos = new Vec2(0, 450);
             mObstacleManager.addObstacle(new ObstacleCircular(pos, shellSize/2));
-            neutralShells.add(new Shell(pos, Color.NEUTRAL, new Vec2(pos.x+200, pos.y-200)));
+            neutralShells.add(new Shell(pos, Color.NEUTRAL, new Vec2(pos.x+200, pos.y-100)));
 
             pos = new Vec2(0, 150);
             mObstacleManager.addObstacle(new ObstacleCircular(pos, shellSize/2));
-            neutralShells.add(new Shell(pos, Color.NEUTRAL, new Vec2(pos.x+200, pos.y+200)));
+            neutralShells.add(new Shell(pos, Color.NEUTRAL, new Vec2(pos.x+200, pos.y+100)));
 
             pos = new Vec2(1300, 450);
             mObstacleManager.addObstacle(new ObstacleCircular(pos, shellSize/2));
