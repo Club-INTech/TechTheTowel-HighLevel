@@ -154,7 +154,8 @@ public class Castle extends AbstractScript
 				// -> modifier Locomotion.maxRotationTurningStrategyIgnore si besoin.
 				stateToConsider.robot.setTurningStrategy(TurningStrategy.LEFT_ONLY);
 
-				// on se tourne vers pi
+				// on se tourne vers pi avec un léger décalage pour gagner du temps
+				// (en effet on vient de la dune et le château est encore un obstacle)
 				stateToConsider.robot.turn(Math.PI-epsilon);
 				
 				// on indique que le sable se trouve dans le robot
@@ -242,8 +243,8 @@ public class Castle extends AbstractScript
 		}
 		else if (version == 2)
 		{
-			//TODO tester
-			return (new Circle(Table.entryPosition));
+			//TODO tester (basé sur Table.entryPosition)
+			return (new Circle(new Vec2(1350, 1050)));
 		}
 		else
 		{
