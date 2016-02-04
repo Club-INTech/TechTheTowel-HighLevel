@@ -57,7 +57,7 @@ public abstract class AbstractScript implements Service
 	 * Va au point d'entrée du script (en utilisant le Pathfinding), puis l'exécute
 	 * En fournissant un GameState<RobotChrono>, il est possible de chronométrer le temps que l'on metterait a exécuter ce script sans réellement l'exécuter
 	 *
-	 * @param versionToExecute la version du
+	 * @param versionToExecute la version du script
 	 * @param actualState l'état courrant du match.
 	 * @param hooksToConsider les hooks a considérer lors des déplacements vers ces scripts
 	 * @param enumObstacle les obstacles qu'on ne veut pas prendre ne compte dans le pathDingDing
@@ -69,7 +69,7 @@ public abstract class AbstractScript implements Service
 	 * @throws ExecuteException 
 	 * @throws PointInObstacleException 
 	 */
-	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, BadVersionException, SerialConnexionException, PathNotFoundException, SerialFinallyException, ExecuteException, PointInObstacleException
+	public void goToThenExec(int versionToExecute, GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, BadVersionException, SerialConnexionException, PathNotFoundException, SerialFinallyException, ExecuteException, PointInObstacleException
 	{
 		// va jusqu'au point d'entrée de la version demandée
 		try 

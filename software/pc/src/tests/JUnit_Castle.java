@@ -19,7 +19,6 @@ import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import robot.Robot;
 import scripts.ScriptManager;
-import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
@@ -30,6 +29,8 @@ public class JUnit_Castle extends JUnit_Test
 	
 	private ScriptManager scriptManager;
 	
+	private int versionToExecute = 1;
+	
 	@SuppressWarnings("unchecked")
 	@Before
 	public void setUp() throws Exception
@@ -38,6 +39,16 @@ public class JUnit_Castle extends JUnit_Test
 		mRobot = (GameState<Robot>)container.getService(ServiceNames.GAME_STATE);
 		//La position de depart est mise dans le updateConfig()
 		mRobot.updateConfig();
+		
+		//Supprime la position de départ du robot dans le script des obstacles de la table.
+		//Non nécessaire pour la version 0.
+		//A des fins de test uniquement !
+		if (versionToExecute != 0)
+		{
+			Vec2 entryPositionScriptCastle = scriptManager.getScript(ScriptNames.CASTLE).entryPosition(versionToExecute, mRobot.robot.getRobotRadius(), mRobot.robot.getPosition()).position;
+	        mRobot.table.getObstacleManager().freePoint(entryPositionScriptCastle);
+		}
+        
 		mRobot.robot.setPosition(Table.entryPosition);
 		mRobot.robot.setOrientation(Math.PI);
 		scriptManager = (ScriptManager)container.getService(ServiceNames.SCRIPT_MANAGER);
@@ -54,8 +65,8 @@ public class JUnit_Castle extends JUnit_Test
 		try
 		{
 			//On execute le script
-			log.debug("Récupération du chateau !");
-			scriptManager.getScript(ScriptNames.CASTLE).goToThenExec(1, mRobot, emptyList);
+			log.debug("Récupération du château !");
+			scriptManager.getScript(ScriptNames.CASTLE).goToThenExec(versionToExecute, mRobot, emptyList);
 		}
 		catch(SerialConnexionException | BadVersionException | ExecuteException | SerialFinallyException e)
 		{
@@ -67,7 +78,6 @@ public class JUnit_Castle extends JUnit_Test
 		{
 			e.printStackTrace();
 		}
-
 	}
 
 	@After
