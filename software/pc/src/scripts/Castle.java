@@ -10,7 +10,6 @@ import robot.Robot;
 import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
-import table.Table;
 import table.obstacles.ObstacleRectangular;
 import utils.Config;
 import utils.Log;
@@ -33,7 +32,7 @@ public class Castle extends AbstractScript
 	// epsilon doit permettre au robot d'exécuter la version 2 du script
 	// sans procéder à une putain de rotation d'un tour complet.
 	// Pour ce faire, nous devons avoir epsilon<Locomotion.maxRotationTurningStrategyIgnore.
-	private double epsilon = Math.PI/8.;
+	private double epsilon = 2.*Math.PI/17.;
 	
 	public Castle(HookFactory hookFactory, Config config, Log log) 
 	{
@@ -85,11 +84,13 @@ public class Castle extends AbstractScript
 			
 			else if(versionToExecute == 1)
 			{
+				/*
 				// déploiement du bras droit sous réserve qu'il n'est pas déjà ouvert
 				if (stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
 				{
 					stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, true);
 				}
+				*/
 				
 				// la rotation ne doit se faire que dans le sens trigo
 				// à priori ce sera déjà du fait que le robot vient de la mer mais on s'en assure
@@ -124,14 +125,16 @@ public class Castle extends AbstractScript
 				stateToConsider.robot.setIsSandInside(false);
 				
                 // on ferme le bras de droite
-                stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
+                //stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
 
                 // puis on s'assure que le bras est fermé
+				/*
                 if(!stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
                 {
                     stateToConsider.robot.useActuator(ActuatorOrder.STOP_DOOR, false);
                     throw new BlockedActuatorException("Porte bloquée !");
                 }
+                */
 
 				// on gagne théoriquement le nombre de points réglé grâce aux tests
 				stateToConsider.obtainedPoints+=remainingScoreOfVersion(1, stateToConsider);
@@ -143,26 +146,41 @@ public class Castle extends AbstractScript
 			else if(versionToExecute == 2)
 			{
 				// le bras droit est sensé être ouvert (et contenir du sable de la dune)
+				/*
 				if (stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
 				{
 					log.critical("Mauvais appel du script ou mauvaise version appelée:\n doit succéder à une première récupération de sable de la dune");
 					return;
 				}
+				*/
 				
 				// La rotation ne doit se faire que dans le sens trigo,
 				// surtout que le bras de droite est déjà sensé contenir une partie de la dune.
 				// -> modifier Locomotion.maxRotationTurningStrategyIgnore si besoin.
 				stateToConsider.robot.setTurningStrategy(TurningStrategy.LEFT_ONLY);
 
+				/*
+				
 				// on se tourne vers pi avec un léger décalage pour gagner du temps
 				// (en effet on vient de la dune et le château est encore un obstacle)
-				stateToConsider.robot.turn(Math.PI-epsilon);
+				stateToConsider.robot.turn(-Math.PI+epsilon);
 				
 				// on indique que le sable se trouve dans le robot
 				stateToConsider.robot.setIsSandInside(true);
 				
 				// on pousse le tas de sable dans la zone de contruction
-				stateToConsider.robot.moveLengthwise(730,hooksToConsider,false);
+				stateToConsider.robot.moveLengthwise(805,hooksToConsider,false);
+				
+				*/
+				
+				stateToConsider.robot.turn(-3*Math.PI/4.-Math.PI/50.);
+				stateToConsider.robot.moveLengthwise(567,hooksToConsider,false);
+				stateToConsider.robot.turn(-3*Math.PI/4.-epsilon);
+				stateToConsider.robot.moveLengthwise(157,hooksToConsider,false);
+				stateToConsider.robot.setIsSandInside(true);
+				stateToConsider.robot.turn(-3*Math.PI/4.-2*epsilon);
+				stateToConsider.robot.moveLengthwise(207,hooksToConsider,false);
+				
 				
 				// on liste les obstacles rectangulaires 
 				ArrayList<ObstacleRectangular> mRectangles = stateToConsider.table.getObstacleManager().getRectangles();
@@ -177,20 +195,22 @@ public class Castle extends AbstractScript
 				}
 				
 				// on s'éloigne de la zone de construction 
-				stateToConsider.robot.moveLengthwise(-200,hooksToConsider,false);
+				stateToConsider.robot.moveLengthwise(-290,hooksToConsider,false);
 				
 				// on indique qu'on ne transporte plus de sable
 				stateToConsider.robot.setIsSandInside(false);
 				
                 // on ferme le bras de droite
-                stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
+                //stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
 
                 // puis on s'assure que le bras est fermé
+                /*
                 if(!stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
                 {
                     stateToConsider.robot.useActuator(ActuatorOrder.STOP_DOOR, false);
                     throw new BlockedActuatorException("Porte bloquée !");
                 }
+                */
 
 				// on gagne théoriquement le nombre de points réglé grâce aux tests
 				stateToConsider.obtainedPoints+=remainingScoreOfVersion(2, stateToConsider);
@@ -234,6 +254,7 @@ public class Castle extends AbstractScript
 	{
 		if (version == 0)
 		{
+			// former: return (new Circle(new Vec2(1200, 980)));
 			return (new Circle(new Vec2(1200, 980)));
 		}
 		else if (version == 1)
@@ -243,8 +264,8 @@ public class Castle extends AbstractScript
 		}
 		else if (version == 2)
 		{
-			//TODO tester (basé sur Table.entryPosition)
-			return (new Circle(new Vec2(1350, 1050)));
+			//testé et approuvé
+			return (new Circle(new Vec2(1250, 1370)));
 		}
 		else
 		{

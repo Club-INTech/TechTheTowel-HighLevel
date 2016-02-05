@@ -29,7 +29,7 @@ public class JUnit_Castle extends JUnit_Test
 	
 	private ScriptManager scriptManager;
 	
-	private int versionToExecute = 1;
+	private int versionToExecute = 2;
 	
 	@SuppressWarnings("unchecked")
 	@Before
@@ -39,19 +39,15 @@ public class JUnit_Castle extends JUnit_Test
 		mRobot = (GameState<Robot>)container.getService(ServiceNames.GAME_STATE);
 		//La position de depart est mise dans le updateConfig()
 		mRobot.updateConfig();
-		
+
+		scriptManager = (ScriptManager)container.getService(ServiceNames.SCRIPT_MANAGER);
 		//Supprime la position de départ du robot dans le script des obstacles de la table.
-		//Non nécessaire pour la version 0.
 		//A des fins de test uniquement !
-		if (versionToExecute != 0)
-		{
-			Vec2 entryPositionScriptCastle = scriptManager.getScript(ScriptNames.CASTLE).entryPosition(versionToExecute, mRobot.robot.getRobotRadius(), mRobot.robot.getPosition()).position;
-	        mRobot.table.getObstacleManager().freePoint(entryPositionScriptCastle);
-		}
+		Vec2 entryPositionScriptCastle = scriptManager.getScript(ScriptNames.CASTLE).entryPosition(versionToExecute, mRobot.robot.getRobotRadius(), mRobot.robot.getPosition()).position;
+	    mRobot.table.getObstacleManager().freePoint(entryPositionScriptCastle);
         
 		mRobot.robot.setPosition(Table.entryPosition);
 		mRobot.robot.setOrientation(Math.PI);
-		scriptManager = (ScriptManager)container.getService(ServiceNames.SCRIPT_MANAGER);
 		mRobot.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 		mRobot.robot.moveLengthwise(100);
 		container.getService(ServiceNames.THREAD_INTERFACE);
