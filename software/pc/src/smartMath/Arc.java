@@ -44,6 +44,9 @@ public class Arc
 
         computeCenterRadiusLength();
         computeAngles();
+
+        if(endAngle < startAngle)
+            this.radius *= -1;
     }
 
     /***
@@ -57,12 +60,15 @@ public class Arc
     {
         this.start = start;
         this.end = end;
-        this.startAngle = Geometry.modulo(startAngle, Math.PI);
-        this.endAngle = Geometry.modulo(endAngle, Math.PI);
+        this.startAngle = Geometry.modulo(startAngle, 2*Math.PI);
+        this.endAngle = Geometry.modulo(endAngle, 2*Math.PI);
 
         computeCenterFromAngles();
         computeMaxPos();
         computeRadiusLength();
+
+        if(endAngle < startAngle)
+            this.radius *= -1;
     }
 
 
@@ -120,7 +126,7 @@ public class Arc
 
     private void computeAngles()
     {
-        this.startAngle = Geometry.modulo(start.minusNewVector(center).angle() - Math.PI/2, Math.PI);
-        this.endAngle = Geometry.modulo(end.minusNewVector(center).angle() - Math.PI/2, Math.PI);
+        this.startAngle = Geometry.modulo(start.minusNewVector(center).angle() - Math.PI/2, 2*Math.PI);
+        this.endAngle = Geometry.modulo(end.minusNewVector(center).angle() - Math.PI/2, 2*Math.PI);
     }
 }

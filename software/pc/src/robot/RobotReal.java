@@ -1,12 +1,14 @@
 package robot;
 
 import enums.*;
+import exceptions.Locomotion.BadArcEntryPosition;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import hook.Hook;
 import pathDingDing.PathDingDing;
 import robot.cardsWrappers.ActuatorCardWrapper;
 import robot.cardsWrappers.SensorsCardWrapper;
+import smartMath.Arc;
 import smartMath.Vec2;
 import utils.Config;
 import utils.Log;
@@ -127,7 +129,17 @@ public class RobotReal extends Robot
 	{	
 		log.debug("appel de RobotReal.moveLengthwise(" + distance + "," + hooksToConsider + "," + expectsWallImpact + ")");
 		moveLengthwise(distance, hooksToConsider, expectsWallImpact, true);
-	}	
+	}
+
+    /**
+     * Ordonne le déplacement selon un arc
+     * @param arc l'arc
+     * @param hooks les hooks à gérer
+     */
+	public void moveArc(Arc arc, ArrayList<Hook> hooks) throws BadArcEntryPosition, UnableToMoveException
+	{
+		mLocomotion.moveArc(arc,hooks);
+	}
 	
 	@Override
     public void moveLengthwiseWithoutDetection(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
