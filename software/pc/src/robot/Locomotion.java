@@ -292,8 +292,8 @@ public class Locomotion implements Service
     {
         updateCurrentPositionAndOrientation();
 
-        if(Math.abs(highLevelPosition.x = arc.start.x) > maxPositionArcThreshold ||
-                Math.abs(highLevelPosition.y = arc.start.y) > maxPositionArcThreshold)
+        if(Math.abs(highLevelPosition.x - arc.start.x) > maxPositionArcThreshold ||
+                Math.abs(highLevelPosition.y - arc.start.y) > maxPositionArcThreshold)
             throw new BadArcEntryPosition(arc.start, highLevelPosition);
 
         if(Math.abs(highLevelOrientation - arc.startAngle) > maxRotationCorrectionThreeshold)
@@ -883,15 +883,12 @@ public class Locomotion implements Service
     {
         try
         {
-            isRobotTurning = true;
             deplacements.moveArc(arc.length, arc.radius);
-            isRobotTurning = false;
         }
         catch(SerialConnexionException e)
         {
             log.critical("Catch de " + e + " dans moveToPointSerialOrder");
             log.critical(e.logStack());
-            isRobotTurning = false; // Meme avec un catch, on a fini de tourner
         }
     }
     

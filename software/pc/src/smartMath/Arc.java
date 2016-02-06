@@ -96,7 +96,7 @@ public class Arc
         Vec2 b = new Vec2((int)(1000*Math.cos(directeur2)), (int)(1000*Math.sin(directeur2)));
 
         Segment s = new Segment(start, start.plusNewVector(a));
-        Segment d = new Segment(end, start.plusNewVector(b));
+        Segment d = new Segment(end, end.plusNewVector(b));
         this.center = Geometry.intersection(s,d);
 
     }
@@ -108,13 +108,13 @@ public class Arc
 
         this.center = new Vec2((me.x - sm.x)/(me.y - sm.y), sm.y*((me.x - sm.x)/(me.y - sm.y)) - sm.x);
         this.radius = start.distance(center);
-        this.length = this.radius * (end.minusNewVector(center).angle() - start.minusNewVector(center).angle());
+        this.length = this.radius * Math.abs(end.minusNewVector(center).angle() - start.minusNewVector(center).angle());
     }
 
     private void computeRadiusLength()
     {
         this.radius = start.distance(center);
-        this.length = this.radius * (end.minusNewVector(center).angle() - start.minusNewVector(center).angle());
+        this.length = this.radius * Math.abs(end.minusNewVector(center).angle() - start.minusNewVector(center).angle());
     }
 
     private void computeMaxPos()
