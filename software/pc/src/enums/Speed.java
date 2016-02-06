@@ -52,8 +52,8 @@ public enum Speed
         
     /**
      * Constructeur d'une vitesse.
-     * @param PWM_translation la vitesse (entre 0 et 255) translationnel
-     * @param PWM_rotation la vitesse (entre 0 et 255) en rotation
+     * @param translationSpeed la vitesse (entre 0 et 255) translationnel
+     * @param rotationSpeed la vitesse (entre 0 et 255) en rotation
      */
     private Speed(int translationSpeed, double rotationSpeed)
     {

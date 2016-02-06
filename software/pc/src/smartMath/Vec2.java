@@ -9,6 +9,8 @@
 
 package smartMath;
 
+import exceptions.MatrixException;
+
 /**
  * Classe de calcul de vecteurs de dimension 2.
  *
@@ -281,7 +283,30 @@ public class Vec2
 	{
 	    other.x = x;
 	    other.y = y;
-	}	
+	}
+
+	/**
+	 * Angle du vecteur par rapport à l'abscisse
+	 * @return l'angle en radians
+     */
+	public double angle()
+	{
+		if(this.length() == 0)
+			return 0;
+
+		return Math.acos(this.dot(this) / (this.length()*this.length()));
+	}
+
+    /**
+     * Tourne le vecteur d'un angle donné et le renvoie sous forme d'un nouveau vecteur (original inchangé)
+     * @param angle l'angle en radians
+     * @return le nouveau vecteur
+     */
+    public Vec2 turnNewVector(double angle)
+    {
+        return new Vec2((int)(this.x * Math.cos(angle) - this.y * Math.sin(angle)),
+                (int)(this.x * Math.sin(angle) + this.y * Math.cos(angle)));
+    }
 
 	
 }
