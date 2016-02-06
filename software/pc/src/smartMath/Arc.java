@@ -66,6 +66,18 @@ public class Arc
     }
 
 
+    /**
+     * Inverse le mouvement, l'arrivée devient la fin et inversement
+     */
+    public void setReverse()
+    {
+        Vec2 temp = this.end;
+        this.end = this.start;
+        this.start = temp;
+        this.length *= -1;
+    }
+
+
     //======================================================================
     // Fonctions de calul des composantes, utilisées par les constructeurs
     //======================================================================

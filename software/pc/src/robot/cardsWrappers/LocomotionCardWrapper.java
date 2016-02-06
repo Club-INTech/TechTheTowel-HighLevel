@@ -112,6 +112,18 @@ public class LocomotionCardWrapper implements Service
 		locomotionCardSerial.communiquer(chaines, 0);
 	}
 
+    /**
+     * Fait suivre un arc au robot. Méthode non bloquante
+     * @param length la longueur de l'arc à suivre
+     * @param radius le rayon de courbure
+     * @throws SerialConnexionException pb de comm
+     */
+	public void moveArc(double length, double radius) throws SerialConnexionException
+    {
+        String chaines[] = {"dc", Float.toString((float)length), Float.toString((float)radius)};
+        locomotionCardSerial.communiquer(chaines, 0);
+	}
+
 	/**
 	 * Fait tourner le robot de maniere absolue. Méthode non bloquante
 	 * utilise TurningStrategy.FASTEST

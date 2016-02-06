@@ -5,12 +5,14 @@ import enums.DirectionStrategy;
 import enums.TurningStrategy;
 import enums.UnableToMoveReason;
 import exceptions.ConfigPropertyNotFoundException;
+import exceptions.Locomotion.BadArcEntryPosition;
 import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.Locomotion.UnexpectedObstacleOnPathException;
 import exceptions.serial.SerialConnexionException;
 import hook.Hook;
 import robot.cardsWrappers.LocomotionCardWrapper;
+import smartMath.Arc;
 import smartMath.Vec2;
 import table.Table;
 import utils.Config;
@@ -27,6 +29,9 @@ import java.util.ArrayList;
  * (les méthodes non-bloquantes s'exécutent très rapidement)
  * Les méthodes "bloquantes" se finissent alors que le robot est arrêté.
  * @author pf
+ * @author discord (trajectoires courbes)
+ *
+ * TODO faire une gestion complète des trajectoires courbes
  *
  */
 
@@ -132,6 +137,10 @@ public class Locomotion implements Service
      */
     private final double maxRotationTurningStrategyIgnore = Math.PI/6;
 
+    /**
+     * Limite pour laquelle la position du robot vaut la position d'entrée d'un arc.
+     */
+    private final int maxPositionArcThreshold = 10;
 
     /**Booleen explicitant si le robot est pret à tourner, utile pour le cercle de detection */
 	public boolean isRobotTurning=false;	
@@ -270,6 +279,37 @@ public class Locomotion implements Service
     	isRobotMovingBackward=false;
 
 		actualRetriesIfBlocked=0;// on reinitialise
+    }
+
+    /**
+     * Fait suivre au robot un arc de cercle (trajectoire courbe)
+     * @param arc l'arc à suivre
+     * @param hooks les hooks à prendre en compte
+     * @throws BadArcEntryPosition si la position actuelle du robot ne correspond pas au point d'entrée de l'arc
+     * @throws UnableToMoveException si le robot est bloqué
+     */
+    public void moveArc(Arc arc, ArrayList<Hook> hooks) throws BadArcEntryPosition, UnableToMoveException
+    {
+        updateCurrentPositionAndOrientation();
+
+        if(Math.abs(highLevelPosition.x = arc.start.x) > maxPositionArcThreshold ||
+                Math.abs(highLevelPosition.y = arc.start.y) > maxPositionArcThreshold)
+            throw new BadArcEntryPosition(arc.start, highLevelPosition);
+
+        if(Math.abs(highLevelOrientation - arc.startAngle) > maxRotationCorrectionThreeshold)
+        {
+            log.debug("Mauvaise orientation pour mouvement courbe, on tourne !");
+            turn(arc.startAngle, hooks);
+        }
+
+        if(arc.length>=0)
+            isRobotMovingForward=true;
+        else
+            isRobotMovingBackward=true;
+        moveArcException(arc, hooks, arc.length>=0);
+        isRobotMovingForward=false;
+        isRobotMovingBackward=false;
+
     }
         
     /**
@@ -531,6 +571,31 @@ public class Locomotion implements Service
     // Tout s'est bien passé
 
     }
+
+    /**
+     * Gère les excpetions
+     * @param arc l'arc
+     * @param hooks les hooks
+     * @param isForward si le mouvement est en avant
+     */
+    private void moveArcException(Arc arc, ArrayList<Hook> hooks, boolean isForward)
+    {
+        try
+        {
+            moveArcDetectEnnemy(arc, hooks, isForward);
+        }
+        catch (BlockedException e)
+        {
+            log.critical( e.logStack());
+            log.critical("Haut : Catch de "+e+" dans moveToPointException");
+        }
+        catch (UnexpectedObstacleOnPathException e)
+        {
+            log.warning("Ennemi detecté : Catch de "+e);
+            log.warning( e.logStack());
+            immobilise();
+        }
+    }
  
     /**
      * Bloquant. 
@@ -599,8 +664,32 @@ public class Locomotion implements Service
         	;
         
     }
-   
 
+    /**
+     * Gère les hooks et la détection d'ennemis
+     * @param arc l'arc
+     * @param hooks les hooks
+     * @param isMovementForward si on se déplace tout droit
+     * @throws UnexpectedObstacleOnPathException si un obstacle survient sur notre chemin
+     * @throws BlockedException si on est bloqué
+     */
+    private void moveArcDetectEnnemy(Arc arc, ArrayList<Hook> hooks, boolean isMovementForward) throws UnexpectedObstacleOnPathException, BlockedException {
+        moveArcSymmetry(arc, isMovementForward);
+        do
+        {
+            updateCurrentPositionAndOrientation();
+
+            detectEnemyAtDistance(85, arc.maxPos);
+            detectEnemyAtDistance(85, arc.end);
+
+            if(hooks != null)
+                for(Hook hook : hooks)
+                    hook.evaluate();
+
+        }
+        while(!isMotionEnded())
+                ;
+    }
 
     /**
      * donne une consigne d'un nouvel angle a atteindre (pour corriger la trajectoire en cours de mouvement)
@@ -677,7 +766,22 @@ public class Locomotion implements Service
         else 
         	moveToPointSerialOrder(aimSymmetrized, givenPosition, angle, distance, mustDetect, turnOnly, isCorrection);
     }
-    
+
+    /**
+     * Gère la symétrisation du mouvement
+     * @param arc l'arc
+     * @param isMovementForward si le mouvement est en avant
+     */
+    private void moveArcSymmetry(Arc arc, boolean isMovementForward)
+    {
+        updateCurrentPositionAndOrientation();
+
+        if(symetry) // miroir de l'arc
+        {
+            arc.radius  = -arc.radius;
+        }
+        moveArcSerialOrder(arc);
+    }
     
     /**
      * 
@@ -771,6 +875,25 @@ public class Locomotion implements Service
 
     }
 
+    /**
+     * Gère l'envoi de l'ordre à la série
+     * @param arc l'arc
+     */
+    private void moveArcSerialOrder(Arc arc)
+    {
+        try
+        {
+            isRobotTurning = true;
+            deplacements.moveArc(arc.length, arc.radius);
+            isRobotTurning = false;
+        }
+        catch(SerialConnexionException e)
+        {
+            log.critical("Catch de " + e + " dans moveToPointSerialOrder");
+            log.critical(e.logStack());
+            isRobotTurning = false; // Meme avec un catch, on a fini de tourner
+        }
+    }
     
     
     /**
