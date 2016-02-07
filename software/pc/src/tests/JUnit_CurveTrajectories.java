@@ -40,6 +40,8 @@ public class JUnit_CurveTrajectories extends JUnit_Test
         trajectory = new ArrayList<>();
 
         trajectory.add(new Arc(Table.entryPosition, new Vec2(900, 300), Math.PI, 3*Math.PI/4));
+        trajectory.add(new Arc(new Vec2(900, 300), new Vec2(300, 200), 3*Math.PI/4, Math.PI));
+
     }
 
     @Test
