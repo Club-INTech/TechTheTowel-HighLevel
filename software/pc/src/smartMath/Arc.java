@@ -81,6 +81,8 @@ public class Arc
         this.end = this.start;
         this.start = temp;
         this.length *= -1;
+        this.startAngle = Geometry.modulo(startAngle + Math.PI, 2*Math.PI);
+        this.endAngle = Geometry.modulo(endAngle + Math.PI, 2*Math.PI);
     }
 
     /**
@@ -143,19 +145,22 @@ public class Arc
     private void computeRadiusLength()
     {
         this.radius = start.distance(center);
-        this.length = this.radius * Math.abs(end.minusNewVector(center).angle() - start.minusNewVector(center).angle());
+        this.length = this.radius * Math.abs(endAngle - startAngle);
     }
 
     private void computeMaxPos()
     {
         Vec2 sc = start.minusNewVector(center);
-        double theta = 0.5*(end.minusNewVector(center).angle() - start.minusNewVector(center).angle());
+        double theta = 0.5*(endAngle - startAngle);
         this.maxPos = sc.turnNewVector(theta).plusNewVector(center);
     }
 
     private void computeAngles()
     {
+        int signe = 1;
+        if(radius<0)
+            signe=-1;
         this.startAngle = Geometry.modulo(start.minusNewVector(center).angle() - Math.PI/2, 2*Math.PI);
-        this.endAngle = Geometry.modulo(end.minusNewVector(center).angle() - Math.PI/2, 2*Math.PI);
+        this.endAngle = Geometry.modulo(end.minusNewVector(center).angle() + signe*Math.PI/2, 2*Math.PI);
     }
 }
