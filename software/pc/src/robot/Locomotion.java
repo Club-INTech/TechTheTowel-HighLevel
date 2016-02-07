@@ -5,7 +5,6 @@ import enums.DirectionStrategy;
 import enums.TurningStrategy;
 import enums.UnableToMoveReason;
 import exceptions.ConfigPropertyNotFoundException;
-import exceptions.Locomotion.BadArcEntryPosition;
 import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.Locomotion.UnexpectedObstacleOnPathException;
@@ -162,6 +161,9 @@ public class Locomotion implements Service
     /** Arc du mouvement en cours (utilisé qu'en mouvement courbe, duh...) */
     private Arc curveArc;
 
+    /** Position pour laquelle le robot a commencé à faire une trajectoire courbe */
+    private Vec2 posStartedCurve;
+
 
     
     
@@ -291,16 +293,12 @@ public class Locomotion implements Service
      * @throws BadArcEntryPosition si la position actuelle du robot ne correspond pas au point d'entrée de l'arc
      * @throws UnableToMoveException si le robot est bloqué
      */
-    public void moveArc(Arc arc, ArrayList<Hook> hooks) throws BadArcEntryPosition, UnableToMoveException
+    public void moveArc(Arc arc, ArrayList<Hook> hooks) throws UnableToMoveException
     {
         updateCurrentPositionAndOrientation();
 
-        //TODO Changer le système de trajectoire afin de pouvoir faire une courbe depuis n'importe où
-        if(Math.abs(highLevelPosition.x - arc.start.x) > maxPositionArcThreshold ||
-                Math.abs(highLevelPosition.y - arc.start.y) > maxPositionArcThreshold)
-            throw new BadArcEntryPosition(arc.start, highLevelPosition);
-
         this.curveArc = arc;
+        this.posStartedCurve = highLevelPosition.clone();
 
         if(Math.abs(highLevelOrientation - arc.startAngle) > maxRotationCorrectionThreeshold)
         {
@@ -607,7 +605,8 @@ public class Locomotion implements Service
 
                 if(isCurve)
                 {
-                    //TODO Faire les détections necessaires pour un arc
+                   detectEnemyInLocatedDisk(this.curveArc.getNextPosition(this.posStartedCurve, highLevelPosition.clone(),
+                           highLevelOrientation, detectionDistance));
                 }
         		
         		//si un ennemi est détecté à moins de 200, on diminue au minimum la vitesse
@@ -814,7 +813,7 @@ public class Locomotion implements Service
                 }
 
                 // sans virage : la première rotation est bloquante
-                if (!trajectoire_courbe)
+                if (!isCurve && !trajectoire_courbe)
                     // on attend la fin du mouvement
                     while (!isMotionEnded()) {
                         if (mustDetect)
@@ -910,6 +909,23 @@ public class Locomotion implements Service
         	detectionCenter=highLevelPosition;
         
         if(table.getObstacleManager().isDiscObstructed(detectionCenter, detectionDistance))
+        {
+            log.warning("Lancement de UnexpectedObstacleOnPathException dans detectEnemyInLocatedDisk");
+            throw new UnexpectedObstacleOnPathException();
+        }
+    }
+
+    /**
+     * vérifie que la zone spécifiée est libre de tout obstacle
+     * @param aim le centre de la zone à vérifier
+     * @throws UnexpectedObstacleOnPathException si obstacle sur le chemin
+     */
+    public void detectEnemyInLocatedDisk(Vec2 aim) throws UnexpectedObstacleOnPathException {
+
+        //rayon du cercle de detection
+        int detectionRadius = robotLength/2 + detectionDistance;
+
+        if(table.getObstacleManager().isDiscObstructed(aim, detectionRadius))
         {
             log.warning("Lancement de UnexpectedObstacleOnPathException dans detectEnemyInDisk");
             throw new UnexpectedObstacleOnPathException();

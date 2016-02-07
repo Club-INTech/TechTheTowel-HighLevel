@@ -2,7 +2,6 @@ package tests;
 
 import enums.ServiceNames;
 import enums.Speed;
-import exceptions.Locomotion.BadArcEntryPosition;
 import exceptions.Locomotion.UnableToMoveException;
 import hook.Hook;
 import org.junit.Before;
@@ -51,8 +50,6 @@ public class JUnit_CurveTrajectories extends JUnit_Test
         {
             try {
                 game.robot.moveArc(a, new ArrayList<Hook>());
-            } catch (BadArcEntryPosition badArcEntryPosition) {
-                badArcEntryPosition.printStackTrace();
             } catch (UnableToMoveException e) {
                 e.printStackTrace();
             }

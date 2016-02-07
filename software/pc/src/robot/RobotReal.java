@@ -1,7 +1,6 @@
 package robot;
 
 import enums.*;
-import exceptions.Locomotion.BadArcEntryPosition;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import hook.Hook;
@@ -136,7 +135,7 @@ public class RobotReal extends Robot
      * @param arc l'arc
      * @param hooks les hooks à gérer
      */
-	public void moveArc(Arc arc, ArrayList<Hook> hooks) throws BadArcEntryPosition, UnableToMoveException
+	public void moveArc(Arc arc, ArrayList<Hook> hooks) throws UnableToMoveException
 	{
 		mLocomotion.moveArc(arc,hooks);
 	}
