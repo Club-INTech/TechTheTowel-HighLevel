@@ -38,8 +38,8 @@ public class JUnit_CurveTrajectories extends JUnit_Test
         log = (Log)container.getService(ServiceNames.LOG);
         trajectory = new ArrayList<>();
 
-        trajectory.add(new Arc(Table.entryPosition, new Vec2(900, 300), Math.PI, 3*Math.PI/4));
-        trajectory.add(new Arc(new Vec2(900, 300), new Vec2(300, 200), 3*Math.PI/4, Math.PI));
+        trajectory.add(new Arc(Table.entryPosition, new Vec2(900, 1700), Math.PI, true));
+      //  trajectory.add(new Arc(Table.entryPosition, new Vec2(900, 1700), new Vec2(1200, 1550)));
 
     }
 
@@ -53,6 +53,10 @@ public class JUnit_CurveTrajectories extends JUnit_Test
             } catch (UnableToMoveException e) {
                 e.printStackTrace();
             }
+        }
+        while(true)
+        {
+            log.debug(game.robot.getPosition());
         }
     }
 }
