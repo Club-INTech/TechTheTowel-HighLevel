@@ -2,7 +2,7 @@ package smartMath;
 
 /**
  * Classe de calcul pour les arcs de cercle
- * @author discord(et wikipedia...)
+ * @author discord, paul(formules mathématiques)
  */
 public class Arc
 {
@@ -50,7 +50,7 @@ public class Arc
     }
 
     /***
-     * Créé un arc à partir de deux point et les angles des tangentes à la fin et au début
+     * Créé un arc à partir de deux point et l'angles de la tangente à la fin ou au début
      * @param start le point de départ
      * @param end le point d'arrivée
      * @param angle l'angle
@@ -72,6 +72,8 @@ public class Arc
             this.startAngle = angle;
             computeFromStartAngle();
         }
+
+        computeCenter(true);
 
         if(endAngle < startAngle)
             this.radius *= -1;
@@ -116,7 +118,7 @@ public class Arc
         //Ce vecteur va du centre de l'arc vers le point actuel
         Vec2 actualVect = actualPos.minusNewVector(tempArc.center);
 
-        //On tourne le vecteur de l''angle de balayage et on ajoute les coordonnées du centre, on revoie le résultat
+        //On tourne le vecteur de l'angle de balayage et on ajoute les coordonnées du centre, on revoie le résultat
         return actualVect.turnNewVector(signe*sweepAngle).plusNewVector(tempArc.center);
     }
 
@@ -126,23 +128,11 @@ public class Arc
     //======================================================================
     private void computeFromStartAngle()
     {
-        /*
-        double directeur1 = startAngle + Math.PI/2;
-        double directeur2 = endAngle + Math.PI/2;
-
-        Vec2 a = new Vec2((int)(1000*Math.cos(directeur1)), (int)(1000*Math.sin(directeur1)));
-        Vec2 b = new Vec2((int)(1000*Math.cos(directeur2)), (int)(1000*Math.sin(directeur2)));
-
-        Segment s = new Segment(start, start.plusNewVector(a));
-        Segment d = new Segment(end, end.plusNewVector(b));
-        this.center = Geometry.intersection(s,d);*/
-
         double alpha = startAngle - end.minusNewVector(start).angle();
 
         this.radius = start.distance(end) / (2.0*Math.cos(Math.PI/2 - Math.abs(alpha)));
         this.endAngle = startAngle - 2*alpha;
         this.length = this.radius*2.0*Math.abs(alpha);
-
     }
 
     private void computeFromEndAngle()
@@ -156,10 +146,15 @@ public class Arc
 
     private void computeCenterRadiusLength()
     {
-        int xc = (int)((((double)end.x*(double)end.x - (double)maxPos.x*(double)maxPos.x + (double)end.y*(double)end.y -(double)maxPos.y*(double)maxPos.y)/(2.0*((double)end.y-(double)maxPos.y)) - ((double)maxPos.x*(double)maxPos.x - (double)start.x*(double)start.x + (double)maxPos.y*(double)maxPos.y - (double)start.y*(double)start.y)/(2.0*((double)maxPos.y-(double)start.y)))/((((double)maxPos.x-(double)start.x)/((double)maxPos.y-(double)start.y)) - (((double)end.x-(double)maxPos.x)/((double)end.y-(double)maxPos.y))));
-        int yc = (int)((-1.0)*(double)xc*(((double)maxPos.x-(double)start.x)/((double)maxPos.y-(double)start.y)) + (((double)maxPos.x*(double)maxPos.x - (double)start.x*(double)start.x + (double)maxPos.y*(double)maxPos.y - (double)start.y*(double)start.y)/(2*((double)maxPos.y-(double)start.y))));
-
-        this.center = new Vec2(xc,yc);
+        double x1 = start.x;
+        double x2 = maxPos.x;
+        double x3 = end.x;
+        double y1 = start.y;
+        double y2 = maxPos.y;
+        double y3 = end.y;
+        double xc = (-1)*(y2*(y3*y3-y1*y1+x3*x3-x1*x1)+y1*(-y3*y3-x3*x3+x2*x2)+y1*y1*y3-x2*x2*y3 +x1*x1*y3+y2*y2*(y1-y3)) / (2*x2*y3-2*x1*y3+(2*x1-2*x3)*y2+(2*x3-2*x2)*y1);
+        double yc = (x2*(y3*y3+x3*x3-x1*x1)+x1*(-y3*y3-x3*x3)+(x1-x3)*y2*y2+(x3-x2)*y1*y1 +x1*x1*x3+x2*x2*(x1-x3)) /(2*x2*y3-2*x1*y3+(2*x1-2*x3)*y2+(2*x3-2*x2)*y1);
+        this.center = new Vec2((int)xc,(int)yc);
         this.radius = start.distance(center);
         this.length = this.radius * Math.abs(end.minusNewVector(center).angle() - start.minusNewVector(center).angle());
     }
@@ -170,11 +165,21 @@ public class Arc
         this.length = this.radius * Math.abs(endAngle - startAngle);
     }
 
-    private void computeMaxPos()
+    private void computeCenter(boolean way)
     {
-        Vec2 sc = start.minusNewVector(center);
-        double theta = 0.5*(endAngle - startAngle);
-        this.maxPos = sc.turnNewVector(theta).plusNewVector(center);
+        double theta;
+        if(way)
+            theta = startAngle + Math.PI/2;
+        else
+            theta= startAngle - Math.PI/2;
+
+        Vec2 movement = new Vec2((int)(this.radius * Math.cos(theta)),(int)(this.radius * Math.sin(theta)));
+        Vec2 supposedcenter = start.plusNewVector(movement);
+
+        if(way && (end.minusNewVector(supposedcenter).length() - this.radius) > 2)
+            this.computeCenter(false);
+        else
+            this.center = supposedcenter;
     }
 
     private void computeAngles()

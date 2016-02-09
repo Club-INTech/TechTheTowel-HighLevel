@@ -605,8 +605,8 @@ public class Locomotion implements Service
 
                 if(isCurve)
                 {
-               //    detectEnemyInLocatedDisk(this.curveArc.getNextPosition(this.posStartedCurve, highLevelPosition.clone(),
-                       //    highLevelOrientation, detectionDistance));
+                   detectEnemyInLocatedDisk(this.curveArc.getNextPosition(this.posStartedCurve, highLevelPosition.clone(),
+                           highLevelOrientation, detectionDistance));
                 }
         		
         		//si un ennemi est détecté à moins de 200, on diminue au minimum la vitesse
