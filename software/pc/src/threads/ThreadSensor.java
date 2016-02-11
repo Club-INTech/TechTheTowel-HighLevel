@@ -43,6 +43,10 @@ class ThreadSensor extends AbstractThread
      */
     private boolean symetry;
 
+    /**
+     * Rayon du robot
+     */
+    private int radius;
 
 	/**
 	 * Distance maximale fiable pour les capteurs : au dela, valeurs abberentes
@@ -169,7 +173,13 @@ class ThreadSensor extends AbstractThread
 				// On enleve les obstacles qu'on sait absents de la table : si le robot ennemi a bougé,
 				// On l'enleve de notre memoire
 				removeObstacle();
-				
+
+                for(int i=0 ; i<USvalues.size(); i++)
+                {
+                    if(USvalues.get(i) != 0)
+                        USvalues.set(i, USvalues.get(i)+radius);
+                }
+
 				//ajout d'obstacles mobiles dans l'obstacleManager
 				addObstacle();
 			}
@@ -384,6 +394,7 @@ class ThreadSensor extends AbstractThread
                 {
                     USvalues.set(i, 0);
                 }
+
             }
 		}
 		catch(SerialConnexionException e) {
@@ -408,6 +419,7 @@ class ThreadSensor extends AbstractThread
 			
 			robotWidth = Integer.parseInt(config.getProperty("largeur_robot"));
 			robotLenght = Integer.parseInt(config.getProperty("longueur_robot"));
+            radius = Integer.parseInt(config.getProperty("rayon_robot"));
 		}
 		catch (ConfigPropertyNotFoundException e)
 		{
