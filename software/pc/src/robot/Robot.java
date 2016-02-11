@@ -10,6 +10,7 @@ import exceptions.serial.SerialConnexionException;
 import hook.Hook;
 import pathDingDing.Node;
 import pathDingDing.PathDingDing;
+import smartMath.Arc;
 import smartMath.Circle;
 import smartMath.Vec2;
 import table.Table;
@@ -367,6 +368,15 @@ public abstract class Robot implements Service
         else
             turn(angle, null, false, false);
     }
+    
+    /**
+     * Ordonne le déplacement selon un arc
+     * @param arc l'arc à suivre
+     * @param hooks les hooks à gérer
+     * @throws UnableToMoveException bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
+     */
+    public abstract void moveArc(Arc arc, ArrayList<Hook> hooks) throws UnableToMoveException;
+ 
 
 	/**
 	 * Fait avancer le robot de la distance spécifiée. Le robot garde son orientation actuelle et va simplement avancer.

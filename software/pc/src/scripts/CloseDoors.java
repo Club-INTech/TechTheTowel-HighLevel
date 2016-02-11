@@ -6,9 +6,11 @@ import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import hook.types.HookFactory;
 import robot.Robot;
+import smartMath.Arc;
 import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
+import table.Table;
 import utils.Config;
 import utils.Log;
 
@@ -21,6 +23,7 @@ import enums.Speed;
  * Script pour la fermeture des portes des cabines
  * Version 0 : Deplacement de la serviette aux portes puis fermeture en même temps ; aucune action prevue hors du deplacement ; aucun pathdingding/evitement ; si pb -> arret complet
  * Version 1 : Identique à la version 0, sauf qu'on ferme les portes en marche avant
+ * Version 2 : Intégration des trajectoires courbes
  * @author Discord, CF
  */
 public class CloseDoors extends AbstractScript
@@ -110,6 +113,28 @@ public class CloseDoors extends AbstractScript
 				throw new ExecuteException(e);
 			}
 		}
+		else if (versionToExecute == 2)
+		{
+			try
+			{
+				//On ralentit pour éviter de démonter les éléments de jeu "Discord-style"
+				//Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
+				//stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
+				
+				// On suit une trajectoire courbe pour fermer les deux portes
+				stateToConsider.robot.moveArc(new Arc(Table.entryPosition, new Vec2(1100,1900-stateToConsider.robot.getRobotRadius()),Math.PI,true), hooksToConsider);
+				
+				//PORTES FERMEES !
+				stateToConsider.obtainedPoints += 20;
+				stateToConsider.table.extDoorClosed = true;
+				stateToConsider.table.intDoorClosed = true;
+			}
+			catch (UnableToMoveException e)
+			{
+				finalize(stateToConsider);
+				throw new ExecuteException(e);
+			}
+		}
 			
 	}
 
@@ -138,10 +163,14 @@ public class CloseDoors extends AbstractScript
 	@Override
 	public Circle entryPosition(int version, int ray, Vec2 robotPosition)
 	{
-		if (version == 0)
+		if (version == 0 || version == 1)
 		{
 			// modification possible selon l'envergure du robot
 			return new Circle(new Vec2(1135,1600));
+		}
+		else if (version == 2)
+		{
+			return new Circle(Table.entryPosition);
 		}
 		else
 		{
