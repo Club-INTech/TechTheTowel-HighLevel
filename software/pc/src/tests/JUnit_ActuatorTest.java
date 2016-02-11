@@ -22,6 +22,7 @@ public class JUnit_ActuatorTest extends JUnit_Test
         super.setUp();
         mRobot = (GameState<Robot>)container.getService(ServiceNames.GAME_STATE);
         mRobot.updateConfig();
+        mRobot.robot.useActuator(ActuatorOrder.ARM_INIT, true);
 
     }
 

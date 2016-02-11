@@ -5,6 +5,7 @@ import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import hook.Hook;
 import pathDingDing.PathDingDing;
+import smartMath.Arc;
 import smartMath.Vec2;
 import table.Table;
 import utils.Config;
@@ -330,6 +331,12 @@ public class RobotChrono extends Robot
 	public void enableFeedbackLoop() throws SerialConnexionException 
 	{
 		// TODO 
+	}
+
+	@Override
+	public void moveArc(Arc arc, ArrayList<Hook> hooks) throws UnableToMoveException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
