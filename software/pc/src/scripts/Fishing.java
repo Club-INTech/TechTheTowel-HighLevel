@@ -39,7 +39,7 @@ public class Fishing extends AbstractScript
 		/**
 		 * Versions du script
 		 */
-		versions = new Integer[]{0,1,2,3};
+		versions = new Integer[]{0,1,2,3,4};
 		
 	}
 	
@@ -510,7 +510,7 @@ public class Fishing extends AbstractScript
 				hooksToConsider.add(hook1);
 				
 				// Mouvement du robot suivant un arc pour se placer près du bac
-				stateToConsider.robot.moveArc(new Arc(Table.entryPosition, new Vec2(1030,355), -Math.PI/2,false), hooksToConsider);
+				stateToConsider.robot.moveArc(new Arc(stateToConsider.robot.getPosition(), new Vec2(1030,355), -Math.PI/2,false), hooksToConsider);
 				
 				// On s'oriente vers le côté ennemi, juste pour être sûr de l'orientation
 				stateToConsider.robot.turn((Math.PI), hooksToConsider, true);

@@ -33,7 +33,7 @@ public class CloseDoors extends AbstractScript
 		/**
 		 * Versions du script
 		 */
-		versions = new Integer[]{0,1};
+		versions = new Integer[]{0,1,2};
 		
 	}
 	
