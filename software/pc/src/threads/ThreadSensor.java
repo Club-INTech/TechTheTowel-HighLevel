@@ -44,7 +44,7 @@ class ThreadSensor extends AbstractThread
     private boolean symetry;
 
     /**
-     * Rayon du robot
+     * Rayon du robot adverse
      */
     private int radius;
 
@@ -419,7 +419,7 @@ class ThreadSensor extends AbstractThread
 			
 			robotWidth = Integer.parseInt(config.getProperty("largeur_robot"));
 			robotLenght = Integer.parseInt(config.getProperty("longueur_robot"));
-            radius = Integer.parseInt(config.getProperty("rayon_robot"));
+            radius = Integer.parseInt(config.getProperty("rayon_robot_adverse"));
 		}
 		catch (ConfigPropertyNotFoundException e)
 		{
