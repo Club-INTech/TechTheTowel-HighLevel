@@ -19,7 +19,7 @@ import java.util.ArrayList;
 //TODO Version du test temporaire jusqu'à meilleure connaissance des exceptions, et du fonctionnement général des JUnit 
 
 /**
- * teste la récupération des poissons des versions 0 et 1
+ * teste la récupération des poissons des versions 0,1,2,3 et 4
  * @author CF
  *
  */
@@ -50,6 +50,7 @@ public class JUnit_Fishing extends JUnit_Test
 
 	
 	//@Test
+	/*
 	public void fishThem() throws Exception
 	{
 		try
@@ -59,7 +60,7 @@ public class JUnit_Fishing extends JUnit_Test
 //			scriptManager.getScript(ScriptNames.CLOSE_DOORS).goToThenExec(0, theRobot, emptyHook);
 			log.debug("Début de pêche !");
 
-			scriptManager.getScript(ScriptNames.FISHING).goToThenExec(3, theRobot, emptyHook);
+			scriptManager.getScript(ScriptNames.FISHING).goToThenExec(2, theRobot, emptyHook);
 			theRobot.robot.turn(3*Math.PI/4);
 			theRobot.robot.moveLengthwise(200);
 		}
@@ -69,12 +70,13 @@ public class JUnit_Fishing extends JUnit_Test
 		}
 		
 	}
+	*/
 
 	@Test
 	public void fishThemWithHook()
 	{
         try {
-            scriptManager.getScript(ScriptNames.FISHING).goToThenExec(3, theRobot, emptyHook);
+            scriptManager.getScript(ScriptNames.FISHING).goToThenExec(4, theRobot, emptyHook);
         } catch (Exception e) {
             e.printStackTrace();
         }
