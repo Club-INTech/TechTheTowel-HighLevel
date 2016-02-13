@@ -579,7 +579,7 @@ public abstract class Robot implements Service
 	 * @return la valeur du capteur
 	 * @throws SerialConnexionException si la connexion avec le capteur est interrompue
 	 */
-	public abstract int getUSSensorValue(USsensors captor) throws SerialConnexionException;
+	public abstract ArrayList<Integer> getUSSensorValue(USsensors captor) throws SerialConnexionException;
 
 	/**
 	 * le robot demande l'etat de ses capteurs de contact

@@ -67,7 +67,7 @@ public class RobotReal extends Robot
 	}
 	
 	@Override
-	public int getUSSensorValue (USsensors sensor) throws SerialConnexionException
+	public ArrayList<Integer> getUSSensorValue (USsensors sensor) throws SerialConnexionException
 	{
 
 		// si il n'y a pas de symétrie, on renvoie la valeur brute du bas niveau

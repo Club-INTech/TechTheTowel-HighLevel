@@ -5,10 +5,7 @@ public enum USsensors {
 	// exemple : ULTRASOUND_BACK_SENSOR("us_ar",10,new int[]{0,0})
 
 	/**TODO les capteur ultrason exemple a modifier*/
-	ULTRASOUND_LEFT_FRONT("uslf",10,0),
-	ULTRASOUND_RIGHT_FRONT("usrf",10,0),
-	ULTRASOUND_LEFT_BACK("uslb",10,0),
-	ULTRASOUND_RIGHT_BACK("usrb",10,0)
+	ULTRASOUND("us",10,0)
 
 	;
 

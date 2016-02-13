@@ -57,16 +57,16 @@ public class JUnit_Sensors extends JUnit_Test
 		capteurs.updateConfig();
 		
 		container.getService(ServiceNames.THREAD_SENSOR);
-		container.getService(ServiceNames.THREAD_TIMER);
+		//container.getService(ServiceNames.THREAD_TIMER);
 		
 		//locomotion
 		mLocomotion = (Locomotion)container.getService(ServiceNames.LOCOMOTION);
 		mLocomotion.updateConfig();
 
 		//mLocomotion.setPosition(new Vec2 (1500-320-77,1000));
-		mLocomotion.setPosition(new Vec2 (300,1000));// milieu de table
+		mLocomotion.setPosition(Table.entryPosition);// milieu de table
 		mLocomotion.setOrientation(Math.PI);
-		
+		container.getService(ServiceNames.THREAD_INTERFACE);
 		container.startInstanciedThreads();
 
 	}
@@ -77,7 +77,7 @@ public class JUnit_Sensors extends JUnit_Test
 	 *
 	 * @throws Exception the exception
 	 */
-//	@Test
+/*	@Test
 	public void desactivation_capteur() throws Exception
 	{
 		log.debug("JUnit_CapteursTest.desactivation_capteur()");
@@ -101,7 +101,7 @@ public class JUnit_Sensors extends JUnit_Test
 	//	Assert.assertTrue(capteurs.mesurer_infrarouge() != 3000);
 		Assert.assertTrue(((int)capteurs.getUSSensorValue(USsensors.ULTRASOUND_LEFT_BACK)) != 3000);
 
-	}
+	}*/
 	
 //	@Test
 	public void testEvitement() throws PointInObstacleException
@@ -223,7 +223,7 @@ public class JUnit_Sensors extends JUnit_Test
 		}
 	}
 	
-	@Test
+	//@Test
 	public void testSensorEnnemyInDiscWithoutMovement()
 	{
 		log.debug("Test d'évitement fixe");
@@ -255,7 +255,7 @@ public class JUnit_Sensors extends JUnit_Test
 		}
 	}
 	
-	//@Test
+	@Test
 	public void testSensorEnnemyWithoutMovement()
 	{
 		log.debug("Test des capteurs fixe");

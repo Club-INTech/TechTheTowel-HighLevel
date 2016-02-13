@@ -365,21 +365,17 @@ class ThreadSensor extends AbstractThread
 	{
 		try 
 		{
-            if(!symetry)
+            USvalues = mSensorsCardWrapper.getUSSensorValue(USsensors.ULTRASOUND); //On récupère une liste de valeurs
+
+            if(symetry) //Inversion gauche/droite pour symétriser
             {
-                USvalues.set(0, mSensorsCardWrapper.getUSSensorValue(USsensors.ULTRASOUND_LEFT_FRONT));
-                USvalues.set(1, mSensorsCardWrapper.getUSSensorValue(USsensors.ULTRASOUND_RIGHT_FRONT));
-                USvalues.set(2, mSensorsCardWrapper.getUSSensorValue(USsensors.ULTRASOUND_LEFT_BACK));
-                USvalues.set(3, mSensorsCardWrapper.getUSSensorValue(USsensors.ULTRASOUND_RIGHT_BACK));
+                int temp = USvalues.get(0);
+                USvalues.set(0, USvalues.get(1));
+                USvalues.set(1, temp);
+                temp = USvalues.get(2);
+                USvalues.set(2, USvalues.get(3));
+                USvalues.set(3, temp);
             }
-            else
-            {
-                USvalues.set(1, mSensorsCardWrapper.getUSSensorValue(USsensors.ULTRASOUND_LEFT_FRONT));
-                USvalues.set(0, mSensorsCardWrapper.getUSSensorValue(USsensors.ULTRASOUND_RIGHT_FRONT));
-                USvalues.set(3, mSensorsCardWrapper.getUSSensorValue(USsensors.ULTRASOUND_LEFT_BACK));
-                USvalues.set(2, mSensorsCardWrapper.getUSSensorValue(USsensors.ULTRASOUND_RIGHT_BACK));
-            }
-			
 
             for(int i=0 ; i<USvalues.size() ; i++)
             {
