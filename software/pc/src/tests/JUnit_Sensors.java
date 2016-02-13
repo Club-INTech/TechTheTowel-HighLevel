@@ -20,6 +20,7 @@ import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
+import threads.ThreadInterface;
 import utils.Sleep;
 
 import java.util.ArrayList;
@@ -261,7 +262,7 @@ public class JUnit_Sensors extends JUnit_Test
 		log.debug("Test des capteurs fixe");
 		while(true)
 		{
-			;	
+			;
 		}
 	}
 	

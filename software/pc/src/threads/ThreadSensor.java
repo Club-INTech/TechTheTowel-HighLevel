@@ -79,8 +79,8 @@ class ThreadSensor extends AbstractThread
     /**
      * Angles des capteurs relatifs à l'axe avant-arrière du robot (radians) TODO A changer !
      */
-    private final double angleLF = 0;
-    private final double angleRF = 0;
+    private final double angleLF = 0.30;
+    private final double angleRF = 0.30;
     private final double angleLB = 0;
     private final double angleRB = 0;
 
@@ -88,8 +88,9 @@ class ThreadSensor extends AbstractThread
     /**
      * Positions relatives au centre du robot TODO A changer !
      */
-    private final Vec2 positionLF = new Vec2(0,0);
-    private final Vec2 positionRF = new Vec2(0,0);
+
+    private final Vec2 positionLF = new Vec2(120, -55);
+    private final Vec2 positionRF = new Vec2(120, 55);
     private final Vec2 positionLB = new Vec2(0,0);
     private final Vec2 positionRB = new Vec2(0,0);
 
@@ -143,14 +144,14 @@ class ThreadSensor extends AbstractThread
 		log.debug("Lancement du thread de capteurs");
 		updateConfig();
 		
-		// boucle d'attente de début de match
+	/*	// boucle d'attente de début de match
 		boolean jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
 		while(jumperWasAbsent || !mSensorsCardWrapper.isJumperAbsent())
 		{
 			
 			jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
 			mRobot.sleep(100);
-		}
+		}*/
 
 		// maintenant que le jumper est retiré, le match a commencé
 		ThreadTimer.matchEnded = false;
@@ -168,7 +169,7 @@ class ThreadSensor extends AbstractThread
 
 			getDistances();
 			
-			if( !USvalues.contains(-1) ) // si on n'a pas spammé
+			if( !USvalues.contains(-1) || true) // si on n'a pas spammé
 			{
 				// On enleve les obstacles qu'on sait absents de la table : si le robot ennemi a bougé,
 				// On l'enleve de notre memoire
@@ -228,7 +229,7 @@ class ThreadSensor extends AbstractThread
         if(Math.abs(USvalues.get(1) - USvalues.get(0)) <= distanceBetweenSensors) //Si on semble pointer vers le même ennemi des deux capteurs
         {
             //Position de l'ennemi
-            relativePositionSaloperie_1.y = (int) ((USvalues.get(0) * USvalues.get(0) - USvalues.get(1) * USvalues.get(1)) / (2 * distanceBetweenSensors));
+            relativePositionSaloperie_1.y = (int) (((USvalues.get(0) * USvalues.get(0)) - (USvalues.get(1) * USvalues.get(1))) / (2 * distanceBetweenSensors));
             relativePositionSaloperie_1.x = (int) (positionRF.x + Math.sqrt((USvalues.get(1) * USvalues.get(1)) - (relativePositionSaloperie_1.y - distanceBetweenSensors / 2) * (relativePositionSaloperie_1.y - distanceBetweenSensors / 2)));
             positionSaloperie_1 = changeRef(relativePositionSaloperie_1, mRobot.getPosition(), mRobot.getOrientation());
 
@@ -350,8 +351,8 @@ class ThreadSensor extends AbstractThread
      */
     private Vec2 changeRef(Vec2 posPoint, Vec2 posOrigin, double orientation)
     {
-        return new Vec2((int)(posPoint.x*Math.cos(orientation)+posOrigin.x),
-                (int)(posPoint.y*Math.sin(orientation)+posOrigin.y));
+        return new Vec2((int)(posPoint.x*Math.cos(orientation)-posPoint.y*Math.sin(orientation)+posOrigin.x),
+                (int)(posPoint.x*Math.sin(orientation)+posPoint.y*Math.cos(orientation)+posOrigin.y));
     }
 
 
