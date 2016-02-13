@@ -51,7 +51,10 @@ public class ObstacleManager
 	private Vec2 positionDetectionDisc=new Vec2(0,0);
 
 	/**	le temps donné aux obstacles pour qu'ils soit vérifiés */
-	private int timeToTestObstacle = 1000;
+	private final int timeToTestObstacle = 1000;
+
+	/** Temps de vie d'un robot ennemi */
+	private final int defaultLifetime = 2000;
 
 	/**
      * Instancie un nouveau gestionnaire d'obstacle.
@@ -205,7 +208,7 @@ public class ObstacleManager
      */
     public synchronized void addObstacle(final Vec2 position)
     {
-    	addObstacle(position,defaultObstacleRadius, 5000);
+    	addObstacle(position,defaultObstacleRadius, defaultLifetime);
     }
 
     
@@ -215,15 +218,15 @@ public class ObstacleManager
      * @param position position ou ajouter l'obstacle
      * @param radius rayon de l'obstacle a ajouter    
      * @param lifetime durée de vie (en ms) de l'obstace a ajouter
+     * TODO A réadapter à l'année en cours
       */
     public synchronized void addObstacle(final Vec2 position, final int radius, final int lifetime)
     {
-    	//si la position est dans la table on continue les tests 
-    	// si la position est dans notre zone de depart, ca ne peut etre qu'une main 
-    	if (position.x>-1500 && position.x<1500 && position.y>0 && position.y<2000 //la table
-    		&& !(position.x > 1200 && position.y<1200 && position.y>800) //notre position de depart
-    		&& !(position.y > 1420 && position.x < 533 && position.x > -533) // les marches
-    		&& !(position.y > 1800 ) ) // les distributeurs de pop corn
+    	//vérification que l'on ne détecte pas un obstacle "normal"
+    	if (position.x>-1500 && position.x<1500 && position.y>0 && position.y<2000 //hors de la table
+                && !( Geometry.isBetween(position.x, -25, 25) && Geometry.isBetween(position.y, 640, 1260)) //C'est la vitre
+                && !( Geometry.isBetween(position.x, -700, 700) && Geometry.isBetween(position.y, 1800, 2000)) //château de sable
+                )
     	{
     		boolean isThereAnObstacleIntersecting=false;
     		for (int i = 0; i<mUntestedMobileObstacles.size(); i++)

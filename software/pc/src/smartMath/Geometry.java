@@ -128,4 +128,24 @@ public class Geometry
 		
 		return new Vec2((int)(segment1.getA().x - k * (segment1.getB().x - segment1.getA().x)), (int)(segment1.getA().y - k * (segment1.getB().y - segment1.getA().y)));
 	}
+
+	/**
+	 * Vérifie si la valeur donnée est entre les bornes données (limites incluses), utilisé pour simplifier les if
+	 * @param val la valeur à tester
+	 * @param a borne inf
+	 * @param b borne sup
+     */
+	public static boolean isBetween(double val, double a, double b)
+	{
+		if(a>b) //Si le singe a mie de pain inf à la place de sup
+		{
+			double temp=b;
+			b=a;
+			a=temp;
+		}
+
+		if(val >= a && val <= b)
+			return true;
+		return false;
+	}
 }
