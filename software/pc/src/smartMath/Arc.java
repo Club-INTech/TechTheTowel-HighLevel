@@ -188,7 +188,7 @@ public class Arc
         int signe2 = 1;
         if(start.minusNewVector(center).angle() - end.minusNewVector(center).angle()>0)
             signe2=-1;
-        if(center.y > start.y)
+        if(center.y < start.y)
             signe1=-1;
         this.startAngle = (start.minusNewVector(center).angle() + signe1*Math.PI/2) % Math.PI;
         this.endAngle = (end.minusNewVector(center).angle() + signe2*Math.PI/2) % Math.PI;
