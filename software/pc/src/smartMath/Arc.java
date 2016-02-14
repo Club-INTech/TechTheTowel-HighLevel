@@ -38,9 +38,9 @@ public class Arc
      */
     public Arc(Vec2 start, Vec2 end, Vec2 maxPos)
     {
-        this.start = start;
-        this.end = end;
-        this.maxPos = maxPos;
+        this.start = start.clone();
+        this.end = end.clone();
+        this.maxPos = maxPos.clone();
 
         computeCenterRadiusLength();
         computeAngles();
@@ -59,8 +59,8 @@ public class Arc
     public Arc(Vec2 start, Vec2 end, double angle, boolean isEnd)
     {
 
-        this.start = start;
-        this.end = end;
+        this.start = start.clone();
+        this.end = end.clone();
 
         if(isEnd)
         {
