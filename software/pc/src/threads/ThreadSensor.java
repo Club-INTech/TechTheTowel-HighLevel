@@ -81,8 +81,8 @@ class ThreadSensor extends AbstractThread
      */
     private final double angleLF = 0.30;
     private final double angleRF = 0.30;
-    private final double angleLB = 0;
-    private final double angleRB = 0;
+    private final double angleLB = 0.20;
+    private final double angleRB = 0.20;
 
 
     /**
@@ -91,8 +91,8 @@ class ThreadSensor extends AbstractThread
 
     private final Vec2 positionLF = new Vec2(120, -55);
     private final Vec2 positionRF = new Vec2(120, 55);
-    private final Vec2 positionLB = new Vec2(0,0);
-    private final Vec2 positionRB = new Vec2(0,0);
+    private final Vec2 positionLB = new Vec2(120,-75);
+    private final Vec2 positionRB = new Vec2(120,75);
 
 
     /**
