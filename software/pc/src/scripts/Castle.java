@@ -1,5 +1,9 @@
 package scripts;
 
+
+// WARNING: ne pas supprimer les lignes taggées inutiles
+// car des lignes en commentaires eront intégrées dans le code
+// lorsque le bas niveau sera opérationnel
 import exceptions.BlockedActuatorException;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -7,6 +11,7 @@ import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import hook.types.HookFactory;
 import robot.Robot;
+import smartMath.Arc;
 import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
@@ -173,6 +178,8 @@ public class Castle extends AbstractScript
 				
 				*/
 				
+				// Version non courbe
+				/*
 				stateToConsider.robot.turn(-3*Math.PI/4.-Math.PI/50.);
 				stateToConsider.robot.moveLengthwise(567,hooksToConsider,false);
 				stateToConsider.robot.turn(-3*Math.PI/4.-epsilon);
@@ -180,6 +187,11 @@ public class Castle extends AbstractScript
 				stateToConsider.robot.setIsSandInside(true);
 				stateToConsider.robot.turn(-3*Math.PI/4.-2*epsilon);
 				stateToConsider.robot.moveLengthwise(207,hooksToConsider,false);
+				*/
+				
+				// Version trajectoires courbes
+				//TODO Tester
+				stateToConsider.robot.moveArc(new Arc(entryPosition(2, 0, stateToConsider.robot.getPosition()).position, new Vec2(850, 1050), new Vec2(400, 820)), hooksToConsider);
 				
 				
 				// on liste les obstacles rectangulaires 
