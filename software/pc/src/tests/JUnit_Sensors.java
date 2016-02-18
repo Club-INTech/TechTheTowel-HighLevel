@@ -66,7 +66,7 @@ public class JUnit_Sensors extends JUnit_Test
 
 		//mLocomotion.setPosition(new Vec2 (1500-320-77,1000));
 		mLocomotion.setPosition(Table.entryPosition);// milieu de table
-		mLocomotion.setOrientation(Math.PI);
+		mLocomotion.setOrientation(0);
 		container.getService(ServiceNames.THREAD_INTERFACE);
 		container.startInstanciedThreads();
 

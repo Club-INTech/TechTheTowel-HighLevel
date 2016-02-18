@@ -91,8 +91,8 @@ class ThreadSensor extends AbstractThread
 
     private final Vec2 positionLF = new Vec2(120, -55);
     private final Vec2 positionRF = new Vec2(120, 55);
-    private final Vec2 positionLB = new Vec2(120,-75);
-    private final Vec2 positionRB = new Vec2(120,75);
+    private final Vec2 positionLB = new Vec2(-120,-75);
+    private final Vec2 positionRB = new Vec2(-120,75);
 
 
     /**
@@ -265,7 +265,7 @@ class ThreadSensor extends AbstractThread
         {
             //Position de l'ennemi
             relativePositionSaloperie_1.y = (int) ((USvalues.get(2) * USvalues.get(2) - USvalues.get(3) * USvalues.get(3)) / (2 * distanceBetweenSensors));
-            relativePositionSaloperie_1.x = (int) (positionRF.x + Math.sqrt((USvalues.get(3) * USvalues.get(3)) - (relativePositionSaloperie_1.y - distanceBetweenSensors / 2) * (relativePositionSaloperie_1.y - distanceBetweenSensors / 2)));
+            relativePositionSaloperie_1.x = (int) (positionRF.x - Math.sqrt((USvalues.get(3) * USvalues.get(3)) - (relativePositionSaloperie_1.y + distanceBetweenSensors / 2) * (relativePositionSaloperie_1.y + distanceBetweenSensors / 2)));
             positionSaloperie_1 = changeRef(relativePositionSaloperie_1, mRobot.getPosition(), mRobot.getOrientation());
 
             mTable.getObstacleManager().addObstacle(positionSaloperie_1);
@@ -351,8 +351,8 @@ class ThreadSensor extends AbstractThread
      */
     private Vec2 changeRef(Vec2 posPoint, Vec2 posOrigin, double orientation)
     {
-        return new Vec2((int)(posPoint.x*Math.cos(orientation)-posPoint.y*Math.sin(orientation)+posOrigin.x),
-                (int)(posPoint.x*Math.sin(orientation)+posPoint.y*Math.cos(orientation)+posOrigin.y));
+        return new Vec2((int)(posPoint.x*Math.cos(orientation)+posPoint.y*Math.sin(orientation)+posOrigin.x),
+                (int)(posPoint.x*Math.sin(orientation)-posPoint.y*Math.cos(orientation)+posOrigin.y));
     }
 
 
