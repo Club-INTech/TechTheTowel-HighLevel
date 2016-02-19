@@ -12,6 +12,7 @@ import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import hook.types.HookFactory;
 import robot.Robot;
+import smartMath.Arc;
 import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
@@ -130,6 +131,65 @@ public class ShellGetter extends AbstractScript
                 stateToConsider.table.getObstacleManager().freePoint(new Vec2(1300,450));
 
             } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(versionToExecute == -1) //La version spéciale
+        {
+            try
+            {
+                Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
+                stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL); // TODO A changer quand asserv OK
+
+                stateToConsider.robot.turn(-1*Math.PI/2);
+                stateToConsider.robot.moveLengthwise(700);
+
+                stateToConsider.robot.setTurningStrategy(TurningStrategy.LEFT_ONLY);
+
+                stateToConsider.robot.setTurningStrategy(TurningStrategy.FASTEST);
+
+
+                // on déclare les coquillages comme étant dans le robot
+                stateToConsider.robot.shellsOnBoard=true;
+
+                // On créé l'arc de récupération
+                Arc getter = new Arc(stateToConsider.robot.getPosition(), new Vec2(1300-TechTheSand.expandedRobotRadius/2,750),
+                        new Vec2(1300-TechTheSand.expandedRobotRadius/2,1050));
+
+                //On la donne au robot
+                stateToConsider.robot.moveArc(getter, hooksToConsider);
+
+                Arc deposit = new Arc(stateToConsider.robot.getPosition(), new Vec2(1400,1200), Math.PI/2, true);
+
+                stateToConsider.robot.moveArc(deposit, hooksToConsider);
+
+                // on incrémente le nombre de coquillage en notre possession
+                stateToConsider.table.shellsObtained+=2;
+
+                // on incrémente également le nombre de points
+                stateToConsider.obtainedPoints += 4;
+
+                // on s'éloigne de notre serviette
+                stateToConsider.robot.moveLengthwise(-500);
+
+                // les coquillages ne sont plus embarqués
+                stateToConsider.robot.shellsOnBoard=false;
+
+                // on se tourne vers pi
+                stateToConsider.robot.turn(Math.PI);
+
+                // on se place pour repartir
+                stateToConsider.robot.moveLengthwise(200);
+
+                // on reprend la vitesse pre-script
+                stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
+
+                stateToConsider.table.getObstacleManager().freePoint(new Vec2(1300,750));
+                stateToConsider.table.getObstacleManager().freePoint(new Vec2(1300,450));
+
+            }
+            catch(Exception e)
+            {
                 e.printStackTrace();
             }
         }
@@ -265,7 +325,7 @@ public class ShellGetter extends AbstractScript
     @Override
     public Circle entryPosition(int version, int ray, Vec2 robotPosition) throws BadVersionException {
         // pour la version 0, on connait précisément l'endroit de départ du script
-    	if (version == 0 )
+    	if (version == 0 || version ==-1 )
         {
             return new Circle(new Vec2(1000,1050));
         }
@@ -338,7 +398,7 @@ public class ShellGetter extends AbstractScript
             	// si la version vaut 1 on le considère comme étant celui à prendre
                 if(version == 1)
                     return i;
-                
+
                 // sinon on décrémente les versions jusqu'à la première
                 else
                     version--;

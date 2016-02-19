@@ -74,7 +74,7 @@ public class JUnit_Shells extends JUnit_Test
         {
             theRobot.table.getObstacleManager().freePoint(new Vec2(700,1100));
 
-            scriptManager.getScript(ScriptNames.SHELL_GETTER).goToThenExec(0,theRobot, emptyHook);
+            scriptManager.getScript(ScriptNames.SHELL_GETTER).goToThenExec(-1,theRobot, emptyHook);
 
             Vec2 selected = scriptManager.getScript(ScriptNames.SHELL_GETTER).entryPosition(1, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
             theRobot.table.getObstacleManager().freePoint(selected);

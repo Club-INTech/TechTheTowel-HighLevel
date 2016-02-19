@@ -9,6 +9,7 @@ import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import hook.types.HookFactory;
 import robot.Robot;
+import smartMath.Arc;
 import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
@@ -124,6 +125,70 @@ public class TechTheSand extends AbstractScript
 				e.printStackTrace();
 			}
 		}
+		else if(versionToExecute == 1)
+		{
+            try
+            {
+                // On prend une vitesse lente pour que le robot récupère efficacement le sable
+                Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
+                stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+
+                // On déploie la vitre droite
+                stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, true);
+
+                if (!stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_OPENED)) {
+                    stateToConsider.robot.useActuator(ActuatorOrder.STOP_DOOR, false);
+                    throw new BlockedActuatorException("Porte bloquée !");
+                }
+
+                stateToConsider.changeRobotRadius(TechTheSand.expandedRobotRadius);
+
+                // On active la tige accrochante
+                stateToConsider.robot.useActuator(ActuatorOrder.START_AXIS, false);
+
+                Arc approach = new Arc(new Vec2(/*TODO*/), new Vec2(400,1999-TechTheSand.expandedRobotRadius), Math.PI, true);
+
+                //On se déplace en courbe pour se placer en face du château
+                stateToConsider.robot.moveArc(approach, hooksToConsider);
+
+                // On avance pour récupérer le sable
+                // TODO la distance est arbitraire, à modifier avec les phases de test
+                stateToConsider.robot.moveLengthwise(400, hooksToConsider, true);
+
+                // Demande au robot de ne tourner que vers la gauche pour ses prochains déplacements
+                stateToConsider.robot.setTurningStrategy(TurningStrategy.LEFT_ONLY);
+
+                // Demande au robot de conserver une marche avant pour ses prochains déplacements avec le sable
+                stateToConsider.robot.setDirectionStrategy(DirectionStrategy.FORCE_FORWARD_MOTION);
+
+                // On indique au robot qu'il transporte du sable
+                stateToConsider.robot.setIsSandInside(true);
+
+                // On rétracte la vitre
+                stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
+
+                if(!stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
+                {
+                    stateToConsider.robot.useActuator(ActuatorOrder.STOP_DOOR, false);
+                    throw new BlockedActuatorException("Porte bloquée !");
+                }
+
+                stateToConsider.robot.setRobotRadius(TechTheSand.middleRobotRadius);
+                stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.middleRobotRadius);
+
+                // On reprend notre vitesse habituelle
+                stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
+                stateToConsider.table.getObstacleManager().freePoint(stateToConsider.robot.getPosition());
+            }
+            catch (UnableToMoveException | SerialConnexionException e)
+            {
+                // TODO gérer cette exception, c'est-à-dire par exemple reprendre l'avancée avec plus de puissance
+                finalize(stateToConsider);
+                throw new ExecuteException(e);
+            } catch (BlockedActuatorException e) {
+                e.printStackTrace();
+            }
+		}
 	}
 
 	@Override
@@ -140,6 +205,11 @@ public class TechTheSand extends AbstractScript
 		{
 			return new Circle (new Vec2(400,1999-ray));
 		}
+        else if(version == 1)
+        {
+            //TODO
+            return new Circle(0,0);
+        }
 		else
 		{
 			//TODO jetter une exception
