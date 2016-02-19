@@ -152,6 +152,30 @@ public class ShellGetter extends AbstractScript
                 // on déclare les coquillages comme étant dans le robot
                 stateToConsider.robot.shellsOnBoard=true;
 
+                //=========================================================================================
+                //            TODO A remettre une fois les capteurs de fin de course installés
+                //=========================================================================================
+                /*
+                // on ferme notre porte
+                stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
+
+                // on vérifie si la porte n'est pas bloquée lors de sa fermeture
+                if(!stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
+                {
+                    stateToConsider.robot.useActuator(ActuatorOrder.STOP_DOOR, false);
+                    throw new BlockedActuatorException("Porte bloquée !");
+                }
+
+                // on l'indique au robot
+                stateToConsider.robot.doorIsOpen = false;
+
+                // on reprend le rayon initial du robot
+                stateToConsider.changeRobotRadius(TechTheSand.retractedRobotRadius);
+                */
+                //========================================================================================
+                //            ===================================================================
+                //========================================================================================
+
                 // On créé l'arc de récupération
                 Arc getter = new Arc(stateToConsider.robot.getPosition(), new Vec2(1300-TechTheSand.expandedRobotRadius/2,750),
                         new Vec2(1300-TechTheSand.expandedRobotRadius/2,1050));
