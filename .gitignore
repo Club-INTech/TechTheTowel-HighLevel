@@ -21,6 +21,7 @@ hardware/*/*.epf
 /Debug/
 .metadata/
 .recommenders/
+.idea
 
 **/software/arm/projects/**/*.coproj
 
