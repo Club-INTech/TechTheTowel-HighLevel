@@ -20,7 +20,8 @@ import java.util.ArrayList;
 
 /**
  * Script pour récupérer le tas de sable central, ne s'occupe pas de le ramener dans notre zone de construction
- * Version 0 et 1: En partant de notre côté, on avance vers le côté ennemi, version 0 si l'on est du côté vert, 1 pour le côté violet
+ * Version 0 : En partant de notre côté, on avance vers le côté ennemi
+ * Version 1 : Utilisation de trajectoire courbe
  * @author CF
  */
 public class TechTheSand extends AbstractScript
@@ -225,7 +226,7 @@ public class TechTheSand extends AbstractScript
 		try 
 		{
 			state.robot.useActuator(ActuatorOrder.STOP_AXIS, true);
-			if (state.robot.getIsSandInside() == true)
+			if (state.robot.getIsSandInside())
 			{
 				state.changeRobotRadius(middleRobotRadius);
 			}
