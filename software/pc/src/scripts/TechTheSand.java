@@ -20,8 +20,9 @@ import java.util.ArrayList;
 
 /**
  * Script pour récupérer le tas de sable central, ne s'occupe pas de le ramener dans notre zone de construction
- * Version 0 et 1: En partant de notre côté, on avance vers le côté ennemi, version 0 si l'on est du côté vert, 1 pour le côté violet
- * @author CF
+ * Version 0 : En partant de notre côté, on avance vers le côté ennemi
+ * Version 1 : Utilisation de trajectoire courbe
+ * @author CF, Discord
  */
 public class TechTheSand extends AbstractScript
 {
@@ -38,7 +39,7 @@ public class TechTheSand extends AbstractScript
 		/**
 		 * Versions du script
 		 */
-		versions = new Integer[]{0};
+		versions = new Integer[]{0,1};
 	}
 	
 	
@@ -145,8 +146,9 @@ public class TechTheSand extends AbstractScript
 
                 // On active la tige accrochante
                 stateToConsider.robot.useActuator(ActuatorOrder.START_AXIS, false);
-
-                Arc approach = new Arc(new Vec2(/*TODO*/), new Vec2(400,1999-TechTheSand.expandedRobotRadius), Math.PI, true);
+                
+                // Définition de l'arc à suivre, point de départ temporaire
+                Arc approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(400,1999-TechTheSand.expandedRobotRadius), Math.PI, true);
 
                 //On se déplace en courbe pour se placer en face du château
                 stateToConsider.robot.moveArc(approach, hooksToConsider);
@@ -208,7 +210,7 @@ public class TechTheSand extends AbstractScript
         else if(version == 1)
         {
             //TODO
-            return new Circle(0,0);
+            return new Circle(robotPosition);
         }
 		else
 		{
@@ -225,7 +227,7 @@ public class TechTheSand extends AbstractScript
 		try 
 		{
 			state.robot.useActuator(ActuatorOrder.STOP_AXIS, true);
-			if (state.robot.getIsSandInside() == true)
+			if (state.robot.getIsSandInside())
 			{
 				state.changeRobotRadius(middleRobotRadius);
 			}
