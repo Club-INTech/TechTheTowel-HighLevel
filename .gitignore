@@ -1,4 +1,4 @@
-*~
+﻿*~
 *.o
 *.so
 *.user
@@ -26,3 +26,4 @@ hardware/*/*.epf
 
 #Fichiers python compilés
 *.pyc
+pc.iml
