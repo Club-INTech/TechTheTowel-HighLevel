@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import enums.ScriptNames;
 import enums.ServiceNames;
+import enums.Speed;
 import exceptions.ExecuteException;
 import exceptions.PathNotFoundException;
 import exceptions.PointInObstacleException;
@@ -16,6 +17,7 @@ import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import robot.Robot;
 import scripts.ScriptManager;
+import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
 
@@ -39,6 +41,13 @@ public class JUnit_TechTheSand extends JUnit_Test
 		theRobot = (GameState<Robot>)container.getService(ServiceNames.GAME_STATE);
 		theRobot.robot.setPosition(Table.entryPosition);
 		theRobot.robot.setOrientation(Math.PI);
+		theRobot.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+		//supression de l'obstacle d'arrivé, pour tests
+		Vec2 sup = scriptManager.getScript(ScriptNames.TECH_THE_SAND).entryPosition(0, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
+		theRobot.table.getObstacleManager().freePoint(sup);
+		theRobot.robot.moveLengthwise(100);
+		container.getService(ServiceNames.THREAD_INTERFACE);
+		container.startInstanciedThreads();
 	}
 	
 	@After

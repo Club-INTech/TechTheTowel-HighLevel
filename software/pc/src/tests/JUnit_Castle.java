@@ -29,7 +29,7 @@ public class JUnit_Castle extends JUnit_Test
 	
 	private ScriptManager scriptManager;
 	
-	private int versionToExecute = 2;
+	private int versionToExecute = 0;
 	
 	@SuppressWarnings("unchecked")
 	@Before
@@ -48,7 +48,7 @@ public class JUnit_Castle extends JUnit_Test
         
 		mRobot.robot.setPosition(Table.entryPosition);
 		mRobot.robot.setOrientation(Math.PI);
-		mRobot.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+		mRobot.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 		mRobot.robot.moveLengthwise(100);
 		container.getService(ServiceNames.THREAD_INTERFACE);
 		container.startInstanciedThreads();

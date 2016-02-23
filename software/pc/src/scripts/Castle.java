@@ -267,7 +267,7 @@ public class Castle extends AbstractScript
 		if (version == 0)
 		{
 			// former: return (new Circle(new Vec2(1200, 980)));
-			return (new Circle(new Vec2(1200, 980)));
+			return (new Circle(new Vec2(1200, 1050)));
 		}
 		else if (version == 1)
 		{
@@ -289,7 +289,7 @@ public class Castle extends AbstractScript
 	@Override
 	public void finalize(GameState<?> state) throws UnableToMoveException, SerialFinallyException 
 	{
-		
+		state.robot.immobilise();
 	}
 
 	@Override
