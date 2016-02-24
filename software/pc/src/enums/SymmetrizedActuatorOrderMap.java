@@ -27,7 +27,7 @@ public class SymmetrizedActuatorOrderMap
         mCorrespondenceMap.put(ActuatorOrder.STOP, ActuatorOrder.STOP);
         mCorrespondenceMap.put(ActuatorOrder.ARM_INIT, ActuatorOrder.ARM_INIT);
         mCorrespondenceMap.put(ActuatorOrder.OPEN_DOOR, ActuatorOrder.OPEN_DOOR_LEFT);
-        mCorrespondenceMap.put(ActuatorOrder.CLOSE_DOOR, ActuatorOrder.CLOSE_DOOR_RIGHT);
+        mCorrespondenceMap.put(ActuatorOrder.CLOSE_DOOR, ActuatorOrder.CLOSE_DOOR_LEFT);
         mCorrespondenceMap.put(ActuatorOrder.START_AXIS, ActuatorOrder.START_AXIS_LEFT);
         mCorrespondenceMap.put(ActuatorOrder.STOP_AXIS, ActuatorOrder.STOP_AXIS_LEFT);
         mCorrespondenceMap.put(ActuatorOrder.STOP_DOOR, ActuatorOrder.STOP_DOOR_LEFT);

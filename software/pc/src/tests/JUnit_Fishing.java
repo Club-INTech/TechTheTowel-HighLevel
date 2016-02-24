@@ -76,8 +76,8 @@ public class JUnit_Fishing extends JUnit_Test
 	public void fishThemWithHook()
 	{
         try {
-			theRobot.table.getObstacleManager().freePoint(scriptManager.getScript(ScriptNames.FISHING).entryPosition(4, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position);
-            scriptManager.getScript(ScriptNames.FISHING).goToThenExec(4, theRobot, emptyHook);
+			theRobot.table.getObstacleManager().freePoint(scriptManager.getScript(ScriptNames.FISHING).entryPosition(1, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position);
+            scriptManager.getScript(ScriptNames.FISHING).goToThenExec(1, theRobot, emptyHook);
         } catch (Exception e) {
             e.printStackTrace();
         }

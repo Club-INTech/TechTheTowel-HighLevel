@@ -55,12 +55,12 @@ public enum ActuatorOrder
 	ARM_INIT("aif"),
 
 	/** Ouverture des portes */
-	OPEN_DOOR("odr",3000),
-	OPEN_DOOR_LEFT("odl",3000),
+	OPEN_DOOR("odr",6000),
+	OPEN_DOOR_LEFT("odl",6000),
 
 	/** Fermeture des portes */
-	CLOSE_DOOR("cdl",3000),
-	CLOSE_DOOR_RIGHT("cdr",3000),
+	CLOSE_DOOR("cdr",6000),
+	CLOSE_DOOR_LEFT("cdl",6000),
 	
 	/** Arrêt des portes */
 	STOP_DOOR_LEFT("sdl"),

@@ -2,6 +2,7 @@ package tests;
 
 import org.junit.Before;
 import org.junit.Test;
+
 import enums.ActuatorOrder;
 import enums.ContactSensors;
 import enums.ServiceNames;
@@ -10,9 +11,10 @@ import exceptions.serial.SerialConnexionException;
 import robot.Robot;
 import strategie.GameState;
 
-public class Junit_RetractDoors extends JUnit_Test
+public class JUnit_DoorsTest extends JUnit_Test
 {
-	private GameState<Robot> mRobot;
+
+private GameState<Robot> mRobot;
 	
 	@SuppressWarnings("unchecked")
 	@Before
@@ -28,23 +30,30 @@ public class Junit_RetractDoors extends JUnit_Test
 	{
 		try
 		{
-			if(!mRobot.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
+			mRobot.robot.useActuator(ActuatorOrder.OPEN_DOOR, true);
+			if(!mRobot.robot.getContactSensorValue(ContactSensors.DOOR_OPENED))
 			{
-				mRobot.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
+				mRobot.robot.useActuator(ActuatorOrder.STOP_DOOR, true);
+				throw new BlockedActuatorException("Porte droite bloquée !");
 			}
+			mRobot.robot.useActuator(ActuatorOrder.OPEN_DOOR_LEFT, true);
+			if(!mRobot.robot.getContactSensorValue(ContactSensors.DOOR_OPENED_LEFT))
+			{
+				mRobot.robot.useActuator(ActuatorOrder.STOP_DOOR_LEFT, true);
+				throw new BlockedActuatorException("Porte gauche bloquée !");
+			}
+			
+			mRobot.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
 			if(!mRobot.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
 			{
 				mRobot.robot.useActuator(ActuatorOrder.STOP_DOOR, true);
 				throw new BlockedActuatorException("Porte droite bloquée !");
 			}
 			
+			mRobot.robot.useActuator(ActuatorOrder.CLOSE_DOOR_LEFT, true);
 			if(!mRobot.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED_LEFT))
 			{
-				mRobot.robot.useActuator(ActuatorOrder.CLOSE_DOOR_LEFT, true);
-			}
-			if(!mRobot.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED_LEFT))
-			{
-				mRobot.robot.useActuator(ActuatorOrder.STOP_DOOR, true);
+				mRobot.robot.useActuator(ActuatorOrder.STOP_DOOR_LEFT, true);
 				throw new BlockedActuatorException("Porte gauche bloquée !");
 			}
 		}
