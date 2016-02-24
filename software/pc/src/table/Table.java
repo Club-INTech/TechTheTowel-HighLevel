@@ -1,14 +1,17 @@
 package table;
 
 
+import com.sun.deploy.panel.AbstractRadioPropertyGroup;
 import container.Service;
 import enums.Color;
 import enums.Elements;
 import exceptions.ConfigPropertyNotFoundException;
 import smartMath.Circle;
 import smartMath.Vec2;
+import table.obstacles.Obstacle;
 import table.obstacles.ObstacleCircular;
 import table.obstacles.ObstacleManager;
+import table.obstacles.ObstacleRectangular;
 import utils.Config;
 import utils.Log;
 
@@ -590,6 +593,36 @@ public class Table implements Service
 	{
 		return mObstacleManager;
 	}
+
+    /**
+     * Supprime tous les coquillages alliés et neutres de l'obstacle manager, les renvoie
+     * @return les obstacles supprimés
+     */
+	public ArrayList<ObstacleCircular> deleteAllTheShells()
+    {
+        ArrayList<ObstacleCircular> deleted = new ArrayList<>(); //Les obstacles que l'on a delete
+        ArrayList<Obstacle> temp; // Liste temporaire pour la vérif que l'on a bien delete un coquillage
+        ArrayList<Shell> copy = ourShells; // On copie la liste de nos coquillages
+        copy.addAll(neutralShells); // On y ajoute les neutres
+
+        for(Shell i : copy) // On la parcourt
+        {
+            temp = mObstacleManager.freePoint(i.position);
+            for(Obstacle j : temp)
+            {
+                if (j instanceof ObstacleCircular) //Si c'est bien un coquillage
+                {
+                    deleted.add((ObstacleCircular) j);
+                }
+                else //Sinon on le replace dans la table
+                {
+                    mObstacleManager.addObstacle((ObstacleRectangular) j);
+                }
+            }
+        }
+
+        return deleted;
+    }
 
 	/* (non-Javadoc)
 	 * @see container.Service#updateConfig()
