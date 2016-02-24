@@ -256,7 +256,14 @@ public class SerialConnexion implements SerialPortEventListener, Service
 			}
 			catch (UnknownOrderException uoe)
 			{
-				if (!messages.equals(unknownMessages))
+                try
+                {
+                    wait(100);
+                } catch (InterruptedException e)
+                {
+                    e.printStackTrace();
+                }
+                if (!messages.equals(unknownMessages))
 				{
 					unknownMessages=messages;
 					unknownCounter=0;

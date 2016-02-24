@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import robot.serial.SerialConnexion;
 
+
 public class UnknownOrderException extends Exception
 {
 	
@@ -49,10 +50,20 @@ public class UnknownOrderException extends Exception
 	 */
 	public boolean verifyConnexion()
 	{
-		//ping de la série via la méthode éponyme de SerialConnexion
 		String ping = serialTest.ping();
-		//qui doit renvoyer "0"
-		return (ping != null && ping.equals("0"));
+		int num = -1;
+		try
+		{
+			if (ping != null)
+				num = Integer.parseInt(ping);
+		}
+		catch(NumberFormatException e)
+		{
+			return false;
+		}
+
+		return(num == 0);
+
 	}
 	
 	public String logStack()
