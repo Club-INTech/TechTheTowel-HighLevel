@@ -56,15 +56,15 @@ public class JUnit_Shells extends JUnit_Test
     {
         //on remonte les bras
         theRobot.robot.useActuator(ActuatorOrder.ARM_INIT,true);
-        try
-        {
-            returnToEntryPosition(theRobot);
-        }
-        catch (UnableToMoveException | PathNotFoundException | PointInObstacleException e)
-        {
-            // TODO
-            e.printStackTrace();
-        }
+//        try
+//        {
+//            returnToEntryPosition(theRobot);
+//        }
+//        catch (UnableToMoveException | PathNotFoundException | PointInObstacleException e)
+//        {
+//            // TODO
+//            e.printStackTrace();
+//        }
     }
 
     @Test

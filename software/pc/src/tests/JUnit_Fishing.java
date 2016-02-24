@@ -48,9 +48,8 @@ public class JUnit_Fishing extends JUnit_Test
 
 	}
 
-	
-	//@Test
 	/*
+	@Test
 	public void fishThem() throws Exception
 	{
 		try
@@ -75,10 +74,12 @@ public class JUnit_Fishing extends JUnit_Test
 	@Test
 	public void fishThemWithHook()
 	{
-        try {
+        try 
+        {
 			theRobot.table.getObstacleManager().freePoint(scriptManager.getScript(ScriptNames.FISHING).entryPosition(1, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position);
             scriptManager.getScript(ScriptNames.FISHING).goToThenExec(1, theRobot, emptyHook);
-        } catch (Exception e) {
+        } catch (Exception e) 
+        {
             e.printStackTrace();
         }
     }

@@ -79,7 +79,7 @@ public class JUnit_Castle extends JUnit_Test
 	@After
 	public void finish() throws UnableToMoveException, PathNotFoundException, PointInObstacleException 
 	{
-		super.returnToEntryPosition(mRobot);
+//		super.returnToEntryPosition(mRobot);
 	}
 
 }

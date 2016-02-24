@@ -205,7 +205,7 @@ public class TechTheSand extends AbstractScript
 	{
 		if (version == 0)
 		{
-			return new Circle (new Vec2(400,1750));
+			return new Circle (new Vec2(400,1999-ray));
 		}
         else if(version == 1)
         {

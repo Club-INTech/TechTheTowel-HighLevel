@@ -45,7 +45,7 @@ public class JUnit_TechTheSand extends JUnit_Test
 		//supression de l'obstacle d'arrivé, pour tests
 		Vec2 sup = scriptManager.getScript(ScriptNames.TECH_THE_SAND).entryPosition(0, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
 		theRobot.table.getObstacleManager().freePoint(sup);
-		theRobot.robot.moveLengthwise(100);
+		theRobot.robot.moveLengthwise(200);
 		container.getService(ServiceNames.THREAD_INTERFACE);
 		container.startInstanciedThreads();
 	}
@@ -53,7 +53,7 @@ public class JUnit_TechTheSand extends JUnit_Test
 	@After
 	public void aftermath() throws Exception 
 	{
-		super.returnToEntryPosition(theRobot);
+//		super.returnToEntryPosition(theRobot);
 	}
 	
 	@Test
