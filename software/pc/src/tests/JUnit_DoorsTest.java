@@ -36,12 +36,6 @@ private GameState<Robot> mRobot;
 				mRobot.robot.useActuator(ActuatorOrder.STOP_DOOR, true);
 				throw new BlockedActuatorException("Porte droite bloquée !");
 			}
-			mRobot.robot.useActuator(ActuatorOrder.OPEN_DOOR_LEFT, true);
-			if(!mRobot.robot.getContactSensorValue(ContactSensors.DOOR_OPENED_LEFT))
-			{
-				mRobot.robot.useActuator(ActuatorOrder.STOP_DOOR_LEFT, true);
-				throw new BlockedActuatorException("Porte gauche bloquée !");
-			}
 			
 			mRobot.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
 			if(!mRobot.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
@@ -49,6 +43,14 @@ private GameState<Robot> mRobot;
 				mRobot.robot.useActuator(ActuatorOrder.STOP_DOOR, true);
 				throw new BlockedActuatorException("Porte droite bloquée !");
 			}
+			
+			mRobot.robot.useActuator(ActuatorOrder.OPEN_DOOR_LEFT, true);
+			if(!mRobot.robot.getContactSensorValue(ContactSensors.DOOR_OPENED_LEFT))
+			{
+				mRobot.robot.useActuator(ActuatorOrder.STOP_DOOR_LEFT, true);
+				throw new BlockedActuatorException("Porte gauche bloquée !");
+			}
+			
 			
 			mRobot.robot.useActuator(ActuatorOrder.CLOSE_DOOR_LEFT, true);
 			if(!mRobot.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED_LEFT))
