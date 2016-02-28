@@ -210,6 +210,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 						acquittement = resposeFromCard.charAt(0);
 						if (acquittement != '_')
 						{
+                            input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
 							//Vidage du buffer (expériemental)
 							output.clear();
 
@@ -262,11 +263,14 @@ public class SerialConnexion implements SerialPortEventListener, Service
 				try
 				{
 					wait(100);
+                    input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
 				} catch (InterruptedException e)
 				{
 					e.printStackTrace();
-				}
-				if (!messages.equals(unknownMessages))
+				} catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if (!messages.equals(unknownMessages))
 				{
 					unknownMessages=messages;
 					unknownCounter=0;
