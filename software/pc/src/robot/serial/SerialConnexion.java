@@ -174,6 +174,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	 */
 	public String[] communiquer(String[] messages, int nb_lignes_reponse) throws SerialConnexionException
 	{
+		boolean uoe = false;
 		synchronized(output)
 		{
 			String inputLines[] = new String[nb_lignes_reponse];
@@ -245,34 +246,35 @@ public class SerialConnexion implements SerialPortEventListener, Service
 					{
 						// Avant de throw, on vide le buffer de lecture à coups de input.read() qui renverra -1 une fois vidé.
 						//while(input.read()!=-1);
-						throw new UnknownOrderException(messages, this); // Balance l'exception à la méthode parente et quitte la méthode actuelle
+						uoe = true;
 					}
 					if(!isAsciiExtended(inputLines[i]))
 					{
 						log.critical("='( , réception défectueuse: "+inputLines[i]);
-						throw new UnknownOrderException(messages, this);
+						uoe = true;
 					}
 				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			catch (UnknownOrderException uoe)
+			if(uoe)
 			{
-                try
-                {
-                    wait(100);
-                } catch (InterruptedException e)
-                {
-                    e.printStackTrace();
-                }
-                if (!messages.equals(unknownMessages))
+				try
+				{
+					wait(100);
+				} catch (InterruptedException e)
+				{
+					e.printStackTrace();
+				}
+				if (!messages.equals(unknownMessages))
 				{
 					unknownMessages=messages;
 					unknownCounter=0;
 					unknownLine=c;
-					if (uoe.verifyConnexion())
+					if (verifyConnexion())
 					{
 						log.debug("On retente la communication, 1er test");
-						emptyInputBuffer();
-						communiquer(messages, nb_lignes_reponse);
+						inputLines = communiquer(messages, nb_lignes_reponse);
 					}
 					else
 					{
@@ -281,18 +283,17 @@ public class SerialConnexion implements SerialPortEventListener, Service
 						throw new SerialConnexionException("Liaison série considérée défectueuse: échec du ping de la carte");
 					}
 				}
-				
+
 				// l'ordre à problème est relancé 6 fois
 				else if (messages.equals(unknownMessages) && unknownCounter<5)
 				{
 					unknownCounter++;
 					unknownLine=c;
-					if (uoe.verifyConnexion())
+					if (verifyConnexion())
 					{
 						log.debug("On retente la communication, 2e-6e test");
 
-						emptyInputBuffer();
-						communiquer(messages, nb_lignes_reponse);
+						inputLines = communiquer(messages, nb_lignes_reponse);
 					}
 					else
 					{
@@ -301,46 +302,24 @@ public class SerialConnexion implements SerialPortEventListener, Service
 						throw new SerialConnexionException("Liaison série considérée défectueuse: réception récurrente d'une réponse bas-niveau non indexée");
 					}
 				}
-				
+
 				else
 				{
 					unknownCounter=0;
 					// Ici un paradoxe se glisse car l'ordre est inconnu mais pas inonnu ! Et oui !
 					// Une fraise.
 					log.critical("Ordre REALLYNIGGA inonnu\n après "+unknownCounter+" tentatives");
-					uoe.logStack();
 					if (unknownLine==c)
 					{
 						log.critical("Mention spéciale à -> "+messages[unknownLine]);
 					}
 				}
 			}
-			catch (Exception e)
-			{
-				log.critical("Ne peut pas parler à la carte " + this.name + " lancement de "+e);
-				throw new SerialConnexionException();
-			}
 			return inputLines;
 		}
 	}
 
-	/**
-	 * Vide le buffer de réception
-     */
-	private void emptyInputBuffer()
-	{
-		while(true)
-		{
-			try
-			{
-				input.readLine();
-			}
-			catch(IOException e)
-			{
-				return;
-			}
-		}
-	}
+
 
 	/**
 	 * Doit être appelé quand on arrête de se servir de la série
@@ -443,6 +422,30 @@ public class SerialConnexion implements SerialPortEventListener, Service
 		output.clear();
 		message += "\r";
 		output.write(message.getBytes());
+	}
+
+	/**
+	 *	ATTENTION! verifyConnexion inverse le bouléen canCommunicate ;
+	 car si cette méthode est appelée, la communication de l'ordre est potentiellement répétée
+	 (cf. SerialConnexion.communiquer)
+	 * @return true si la connexion série semble effective, false sinon
+	 */
+	public boolean verifyConnexion()
+	{
+		String ping = ping();
+		int num = -1;
+		try
+		{
+			if (ping != null)
+				num = Integer.parseInt(ping);
+		}
+		catch(NumberFormatException e)
+		{
+			return false;
+		}
+
+		return(num == 0);
+
 	}
 
 
