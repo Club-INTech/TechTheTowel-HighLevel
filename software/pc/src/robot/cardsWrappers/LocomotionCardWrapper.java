@@ -332,7 +332,7 @@ public class LocomotionCardWrapper implements Service
 			counterGetCurrentPositionAndOrientation++;
 			if(counterGetCurrentPositionAndOrientation<5)
 			{
-				getCurrentPositionAndOrientation();
+				parsedInfos = getCurrentPositionAndOrientation();
 			}
 			else
 			{
