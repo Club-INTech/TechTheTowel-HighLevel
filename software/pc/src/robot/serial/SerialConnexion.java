@@ -45,6 +45,9 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	 * Flux de sortie du port
 	 */
 	private BriztoutOutputStream output;
+
+    /** Mutex pour les appels série */
+    private static final Integer thyLock = 0;
 	
 	/**
 	 * TIME_OUT d'attente de r�ception d'un message
@@ -172,10 +175,10 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	 * @return Un tableau contenant le message
 	 * @throws SerialConnexionException 
 	 */
-	public String[] communiquer(String[] messages, int nb_lignes_reponse) throws SerialConnexionException
+	public synchronized String[] communiquer(String[] messages, int nb_lignes_reponse) throws SerialConnexionException
 	{
 		boolean uoe = false;
-		synchronized(output)
+		synchronized(thyLock)
 		{
 			String inputLines[] = new String[nb_lignes_reponse];
 			int c=-1;
@@ -197,6 +200,8 @@ public class SerialConnexion implements SerialPortEventListener, Service
 					int nb_tests = 0;
 					char acquittement = ' ';
 					output.flush();
+
+                    wait(2); // TEMP pour corriger le bug de série
 
 					while (acquittement != '_')
 					{
@@ -357,7 +362,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	 */
 	public synchronized String ping()
 	{
-		synchronized(output) {
+		synchronized(thyLock) {
 			String ping = null;
 			try
 			{
@@ -422,7 +427,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	 * SEULEMENT UTILE POUR LES YEUX
 	 * @param message le message
      */
-	public void sendRaw(String message) throws IOException {
+	public synchronized void sendRaw(String message) throws IOException {
 		output.clear();
 		message += "\r";
 		output.write(message.getBytes());

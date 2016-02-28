@@ -957,7 +957,7 @@ public class Locomotion implements Service
      * @throws SerialConnexionException
      */
     
-    private void updateCurrentPositionAndOrientation()
+    private synchronized void updateCurrentPositionAndOrientation()
     {
         try 
         {
