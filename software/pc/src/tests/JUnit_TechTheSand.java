@@ -41,7 +41,7 @@ public class JUnit_TechTheSand extends JUnit_Test
 		theRobot = (GameState<Robot>)container.getService(ServiceNames.GAME_STATE);
 		theRobot.robot.setPosition(Table.entryPosition);
 		theRobot.robot.setOrientation(Math.PI);
-		theRobot.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+		theRobot.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 		//supression de l'obstacle d'arrivé, pour tests
 		Vec2 sup = scriptManager.getScript(ScriptNames.TECH_THE_SAND).entryPosition(0, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
 		theRobot.table.getObstacleManager().freePoint(sup);

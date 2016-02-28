@@ -81,7 +81,7 @@ public class TechTheSand extends AbstractScript
 				
 				// On avance pour récupérer le sable
 				// TODO la distance est arbitraire, à modifier avec les phases de test
-				stateToConsider.robot.moveLengthwise(400, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(300, hooksToConsider, true);
 				
 				// Demande au robot de ne tourner que vers la gauche pour ses prochains déplacements
 				stateToConsider.robot.setTurningStrategy(TurningStrategy.LEFT_ONLY);
@@ -93,16 +93,16 @@ public class TechTheSand extends AbstractScript
 				stateToConsider.robot.setIsSandInside(true);
 
                 // On rétracte la vitre
-                stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
+                /*stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
 
                 if(!stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
                 {
                     stateToConsider.robot.useActuator(ActuatorOrder.STOP_DOOR, false);
                     throw new BlockedActuatorException("Porte bloquée !");
                 }
-
-                stateToConsider.robot.setRobotRadius(TechTheSand.middleRobotRadius);
-				stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.middleRobotRadius);
+*/
+                stateToConsider.robot.setRobotRadius(TechTheSand.expandedRobotRadius);
+				stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
 
 				// On s'oriente vers notre serviette
 				stateToConsider.robot.turn(0);
@@ -155,7 +155,7 @@ public class TechTheSand extends AbstractScript
 
                 // On avance pour récupérer le sable
                 // TODO la distance est arbitraire, à modifier avec les phases de test
-                stateToConsider.robot.moveLengthwise(400, hooksToConsider, true);
+                stateToConsider.robot.moveLengthwise(300, hooksToConsider, true);
 
                 // Demande au robot de ne tourner que vers la gauche pour ses prochains déplacements
                 stateToConsider.robot.setTurningStrategy(TurningStrategy.LEFT_ONLY);
@@ -167,16 +167,16 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.robot.setIsSandInside(true);
 
                 // On rétracte la vitre
-                stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
+               /* stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
 
                 if(!stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
                 {
                     stateToConsider.robot.useActuator(ActuatorOrder.STOP_DOOR, false);
                     throw new BlockedActuatorException("Porte bloquée !");
                 }
-
-                stateToConsider.robot.setRobotRadius(TechTheSand.middleRobotRadius);
-                stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.middleRobotRadius);
+*/
+                stateToConsider.robot.setRobotRadius(TechTheSand.expandedRobotRadius);
+                stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
 
                 // On reprend notre vitesse habituelle
                 stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
@@ -205,7 +205,7 @@ public class TechTheSand extends AbstractScript
 	{
 		if (version == 0)
 		{
-			return new Circle (new Vec2(400,1999-ray));
+			return new Circle (new Vec2(350,1999-ray));
 		}
         else if(version == 1)
         {
