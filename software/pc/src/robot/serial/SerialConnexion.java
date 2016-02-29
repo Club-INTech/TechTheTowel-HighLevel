@@ -179,10 +179,10 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	 * @return Un tableau contenant le message
 	 * @throws SerialConnexionException 
 	 */
-	public synchronized String[] communiquer(String[] messages, int nb_lignes_reponse) throws SerialConnexionException
+	public String[] communiquer(String[] messages, int nb_lignes_reponse) throws SerialConnexionException
 	{
 		boolean uoe = false;
-		synchronized(thyLock)
+		synchronized(output)
 		{
 			String inputLines[] = new String[nb_lignes_reponse];
 			int c=-1;
@@ -387,7 +387,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	 */
 	public synchronized String ping()
 	{
-		synchronized(thyLock) {
+		synchronized(output) {
 			String ping = null;
 			try
 			{
