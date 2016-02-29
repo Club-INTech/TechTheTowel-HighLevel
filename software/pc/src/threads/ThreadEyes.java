@@ -183,4 +183,6 @@ public class ThreadEyes extends AbstractThread
         this.next = EyesEvent.IDLE;
         frame = 0;
     }
+
+
 }
