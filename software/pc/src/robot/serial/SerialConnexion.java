@@ -9,6 +9,7 @@ import utils.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 
 /**
@@ -419,9 +420,17 @@ public class SerialConnexion implements SerialPortEventListener, Service
 		}
 	}
 
-    public synchronized void clearInputBuffer() throws IOException {
-        input.mark(Integer.MAX_VALUE);
-        input.reset();
+    private synchronized void clearInputBuffer() throws IOException {
+        try
+        {
+            InputStream st = serialPort.getInputStream();
+            st.skip(st.available());
+        }
+        catch(IOException e)
+        {
+            log.critical("DISCORD, TON CLEAR DU BUFFER D'INPUT C'EST DE LA MERDE !!!!");
+        }
+        this.input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
     }
 	
 	public void updateConfig()
