@@ -130,8 +130,8 @@ public class SerialConnexion implements SerialPortEventListener, Service
 					SerialPort.STOPBITS_1,
 					SerialPort.PARITY_NONE);
 
-            serialPort.enableReceiveTimeout(TIME_OUT);
-            serialPort.enableReceiveThreshold(0);
+            serialPort.disableReceiveTimeout();
+            serialPort.enableReceiveThreshold(1);
 
 			// ouverture des flux Input/Output
 			input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
