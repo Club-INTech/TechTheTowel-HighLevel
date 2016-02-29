@@ -423,7 +423,8 @@ public class SerialConnexion implements SerialPortEventListener, Service
         try
         {
             InputStream st = serialPort.getInputStream();
-            st.skip(st.available()-1);
+            if(st.available() > 0)
+                st.skip(st.available());
         }
         catch(IOException e)
         {
