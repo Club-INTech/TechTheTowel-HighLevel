@@ -26,6 +26,8 @@ public class JUnit_Flood extends JUnit_Test
 		mLocomotion.updateConfig();
 		mLocomotion.setPosition(new Vec2(-123, 456));
 		mLocomotion.setOrientation( Math.PI);
+		container.getService(ServiceNames.THREAD_SENSOR);
+		container.startInstanciedThreads();
 	}
 
 	@Test

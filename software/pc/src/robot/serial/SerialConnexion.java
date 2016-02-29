@@ -201,11 +201,11 @@ public class SerialConnexion implements SerialPortEventListener, Service
 					char acquittement = ' ';
 					output.flush();
 
-                    wait(2); // TEMP pour corriger le bug de série
-
 					while (acquittement != '_')
 					{
 						nb_tests++;
+
+                        while(!input.ready());
 
 						// affiche dans la console ce qu'on lit sur la série
 						String resposeFromCard = input.readLine();
@@ -215,7 +215,6 @@ public class SerialConnexion implements SerialPortEventListener, Service
 						acquittement = resposeFromCard.charAt(0);
 						if (acquittement != '_')
 						{
-                            input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
 							//Vidage du buffer (expériemental)
 							output.clear();
 
@@ -240,6 +239,8 @@ public class SerialConnexion implements SerialPortEventListener, Service
 			{
 				for (int i = 0 ; i < nb_lignes_reponse; i++)
 				{
+                    while(!input.ready());
+
 					inputLines[i] = input.readLine();
 					//TODO commenter.
 					log.debug("Ligne "+i+": '"+inputLines[i]+"'");
