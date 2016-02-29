@@ -290,10 +290,6 @@ public class SerialConnexion implements SerialPortEventListener, Service
 
                 //Evacuation de l'eventuel buffer indÃ©sirable
                 output.clear();
-                //evacuation de l'acquittement "_"
-                input.readLine();
-                //evacuation de reponse "Ordre inonnu"
-                input.readLine();
 
                 //ping
                 output.write("?\r".getBytes());
