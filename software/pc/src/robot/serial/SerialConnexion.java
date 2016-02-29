@@ -259,11 +259,13 @@ public class SerialConnexion implements SerialPortEventListener, Service
 						// Avant de throw, on vide le buffer de lecture à coups de input.read() qui renverra -1 une fois vidé.
 						//while(input.read()!=-1);
 						uoe = true;
+                        break;
 					}
 					if(!isAsciiExtended(inputLines[i]))
 					{
 						log.critical("='( , réception défectueuse: "+inputLines[i]);
 						uoe = true;
+                        break;
 					}
 				}
 			} catch (Exception e) {
@@ -273,11 +275,8 @@ public class SerialConnexion implements SerialPortEventListener, Service
 			{
 				try
 				{
-					wait(100);
                     input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
-				} catch (InterruptedException e)
-				{
-					e.printStackTrace();
+                    output.clear();
 				} catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -437,6 +436,8 @@ public class SerialConnexion implements SerialPortEventListener, Service
 		output.clear();
 		message += "\r";
 		output.write(message.getBytes());
+
+        output.flush();
 	}
 
 	/**
@@ -445,7 +446,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	 (cf. SerialConnexion.communiquer)
 	 * @return true si la connexion série semble effective, false sinon
 	 */
-	public boolean verifyConnexion()
+	public synchronized boolean verifyConnexion()
 	{
 		String ping = ping();
 		int num = -1;
