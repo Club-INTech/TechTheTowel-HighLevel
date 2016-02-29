@@ -275,7 +275,12 @@ public class SerialConnexion implements SerialPortEventListener, Service
 			{
 				try
 				{
-                    input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
+                    output.clear();
+                    output.write("?\r".getBytes());
+                    output.write("?\r".getBytes());
+                    output.write("?\r".getBytes());
+                    output.flush();
+                    clearInputBuffer();
                     output.clear();
 				} catch (IOException e) {
                     e.printStackTrace();
@@ -290,12 +295,16 @@ public class SerialConnexion implements SerialPortEventListener, Service
 						log.debug("On retente la communication, 1er test");
 						inputLines = communiquer(messages, nb_lignes_reponse);
 					}
-					else
-					{
-						log.debug("La connexion dans UOE a echoue");
-
-						throw new SerialConnexionException("Liaison série considérée défectueuse: échec du ping de la carte");
-					}
+                    else
+                    {
+                        log.critical("Echec du ping ; on retente quand même");
+                        try {
+                            clearInputBuffer();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        inputLines = communiquer(messages, nb_lignes_reponse);
+                    }
 				}
 
 				// l'ordre à problème est relancé 6 fois
@@ -309,12 +318,22 @@ public class SerialConnexion implements SerialPortEventListener, Service
 
 						inputLines = communiquer(messages, nb_lignes_reponse);
 					}
-					else
+					else if(unknownCounter>=5)
 					{
 						log.debug("La connexion dans UOE a echoue");
 
 						throw new SerialConnexionException("Liaison série considérée défectueuse: réception récurrente d'une réponse bas-niveau non indexée");
 					}
+                    else
+                    {
+                        log.critical("Echec du ping ; on retente quand même");
+                        try {
+                            clearInputBuffer();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        inputLines = communiquer(messages, nb_lignes_reponse);
+                    }
 				}
 
 				else
@@ -399,7 +418,11 @@ public class SerialConnexion implements SerialPortEventListener, Service
 			return ping;
 		}
 	}
-	
+
+    public synchronized void clearInputBuffer() throws IOException {
+        input.mark(Integer.MAX_VALUE);
+        input.reset();
+    }
 	
 	public void updateConfig()
 	{
