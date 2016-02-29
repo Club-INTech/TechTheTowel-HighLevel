@@ -313,7 +313,7 @@ public class LocomotionCardWrapper implements Service
 	 * @return un tableau de 3 cases: [x, y, orientation]
 	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
 	 */
-	public synchronized float[] getCurrentPositionAndOrientation() throws SerialConnexionException
+	public float[] getCurrentPositionAndOrientation() throws SerialConnexionException
 	{
 		// on demande a la carte des information a jour
 		// on envois "?xyo" et on lis double (dans l'ordre : abscisse, ordonnée, orientation)

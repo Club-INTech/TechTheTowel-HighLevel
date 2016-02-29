@@ -46,9 +46,6 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	 * Flux de sortie du port
 	 */
 	private BriztoutOutputStream output;
-
-    /** Mutex pour les appels série */
-    private static final Integer thyLock = 0;
 	
 	/**
 	 * TIME_OUT d'attente de r�ception d'un message
@@ -386,7 +383,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	 * Utilisé que par createSerial de SerialManager
 	 * @return l'id de la carte
 	 */
-	public synchronized String ping()
+	public String ping()
 	{
 		synchronized(output) {
 			String ping = null;
