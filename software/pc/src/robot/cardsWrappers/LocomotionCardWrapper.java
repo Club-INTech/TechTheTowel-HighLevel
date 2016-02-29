@@ -319,26 +319,9 @@ public class LocomotionCardWrapper implements Service
 		// on envois "?xyo" et on lis double (dans l'ordre : abscisse, ordonnée, orientation)
 		String[] infosBuffer = locomotionCardSerial.communiquer("?xyo", 3);
 		float[] parsedInfos = new float[3];
-		try
+		for(int i = 0; i < 3; i++)
 		{
-			for(int i = 0; i < 3; i++)
-			{
-				parsedInfos[i] = Float.parseFloat(infosBuffer[i]);
-			}
-			counterGetCurrentPositionAndOrientation=-1;
-		}
-		catch(NumberFormatException e)
-		{
-			counterGetCurrentPositionAndOrientation++;
-			if(counterGetCurrentPositionAndOrientation<5)
-			{
-				log.critical("GOGOL "+counterGetCurrentPositionAndOrientation);
-				parsedInfos = getCurrentPositionAndOrientation();
-			}
-			else
-			{
-				throw new SerialConnexionException("Liaison série considérée défectueuse: réception récurrente d'une réponse bas-niveau non flottante");
-			}
+			parsedInfos[i] = Float.parseFloat(infosBuffer[i]);
 		}
 		return parsedInfos;
 	}
