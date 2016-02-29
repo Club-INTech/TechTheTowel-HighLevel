@@ -104,7 +104,7 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.robot.setRobotRadius(TechTheSand.expandedRobotRadius);
 				stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
 				
-				Arc out = new Arc(stateToConsider.robot.getPosition(),new Vec2(-200,1500),stateToConsider.robot.getOrientation(),false);
+				Arc out = new Arc(stateToConsider.robot.getPosition(),new Vec2(-400,1300),stateToConsider.robot.getOrientation(),false);
 				
 				stateToConsider.robot.moveArc(out, hooksToConsider);
 

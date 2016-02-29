@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import robot.Robot;
 import scripts.ScriptManager;
+import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
 
@@ -39,9 +40,15 @@ public class JUnit_Fishing extends JUnit_Test
 		theRobot.robot.useActuator(ActuatorOrder.ARM_INIT, true);
 		theRobot.robot.setOrientation(Math.PI);
 		theRobot.robot.setPosition(Table.entryPosition);
-		theRobot.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+		theRobot.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 		theRobot.robot.moveLengthwise(200, emptyHook, false);
-		
+		theRobot.table.deleteAllTheShells();
+        Vec2 sup1 = new Vec2(1255,725);
+		Vec2 sup2 = new Vec2(1325,510);
+		Vec2 sup3 = new Vec2(1380,136);
+		theRobot.table.getObstacleManager().freePoint(sup1);
+		theRobot.table.getObstacleManager().freePoint(sup2);
+		theRobot.table.getObstacleManager().freePoint(sup3);
 		// Lance le thread graphique
 		container.getService(ServiceNames.THREAD_INTERFACE);
 		container.startInstanciedThreads();

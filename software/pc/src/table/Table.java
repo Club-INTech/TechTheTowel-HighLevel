@@ -603,6 +603,7 @@ public class Table implements Service
         ArrayList<Obstacle> temp; // Liste temporaire pour la vérif que l'on a bien delete un coquillage
         ArrayList<Shell> copy = ourShells; // On copie la liste de nos coquillages
         copy.addAll(neutralShells); // On y ajoute les neutres
+        copy.addAll(theirShells);
 
         for(Shell i : copy) // On la parcourt
         {

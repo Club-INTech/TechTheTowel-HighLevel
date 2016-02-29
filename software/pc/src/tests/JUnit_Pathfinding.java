@@ -50,9 +50,18 @@ public class JUnit_Pathfinding extends JUnit_Test
     {
         super.setUp();
         table = (Table)container.getService(ServiceNames.TABLE);
+        
+        // Pour dégager tous les coquillages de la table
+        /*table.deleteAllTheShells();
+        Vec2 sup1 = new Vec2(1255,725);
+		Vec2 sup2 = new Vec2(1325,510);
+		Vec2 sup3 = new Vec2(1380,136);
+		table.getObstacleManager().freePoint(sup1);
+		table.getObstacleManager().freePoint(sup2);
+		table.getObstacleManager().freePoint(sup3);*/
         log = (Log)container.getService(ServiceNames.LOG);
         win = new Window(table);
-
+        
 
 //        game = (GameState<RobotReal>) container.getService(ServiceNames.GAME_STATE);
 //        game.robot.setPosition(Table.entryPosition);
