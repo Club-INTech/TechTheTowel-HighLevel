@@ -19,8 +19,8 @@ import utils.Log;
 import container.Service;
 
 /**
- * Classe implÃ©mentant le concept d'une connexion sÃ©rie.
- * UtilisÃ©e pour parler aux cartes Ã©lectroniques.
+ * Classe implÃƒÂ©mentant le concept d'une connexion sÃƒÂ©rie.
+ * UtilisÃƒÂ©e pour parler aux cartes ÃƒÂ©lectroniques.
  * Chaque port a un nom (asserv par exemple), un id (0 par exemple), un port (/dev/ttyUSB0 par exemple)
  * et un baudrate (57600 par exemple, c'est la vitesse de communication).
  * @author karton, dede, kayou, pf
@@ -39,30 +39,30 @@ public class SerialConnexion implements SerialPortEventListener, Service
     Log log;
 
     /**
-     * Nom de la connexion sÃ©rie
+     * Nom de la connexion sÃƒÂ©rie
      */
     String name;
 
     /**
-     * Flux d'entï¿½e du port
+     * Flux d'entÃ¯Â¿Â½e du port
      */
     private BufferedReader input;
 
     /**
      * Flux de sortie du port
      */
-    private BriztoutOutputStream output;
+    private OutputStream output;
 
     /**
-     * TIME_OUT d'attente de rï¿½ception d'un message
+     * TIME_OUT d'attente de rÃ¯Â¿Â½ception d'un message
      */
     private static final int TIME_OUT = 2000;
 
 
     /**
-     * Construit une connexion sï¿½rie
+     * Construit une connexion sÃ¯Â¿Â½rie
      * @param log Sortie de log a utiliser
-     * @param name nom de la connexion sÃ©rie
+     * @param name nom de la connexion sÃƒÂ©rie
      */
     SerialConnexion (Log log, ServiceNames name)
     {
@@ -70,9 +70,9 @@ public class SerialConnexion implements SerialPortEventListener, Service
     }
 
     /**
-     * Construit une connexion sï¿½rie
+     * Construit une connexion sÃ¯Â¿Â½rie
      * @param log Sortie de log a utiliser
-     * @param name nom de la connexion sÃ©rie
+     * @param name nom de la connexion sÃƒÂ©rie
      */
     public SerialConnexion (Log log, String name)
     {
@@ -82,8 +82,8 @@ public class SerialConnexion implements SerialPortEventListener, Service
     }
 
     /**
-     * Appelï¿½ par le SerialManager, il donne ï¿½ la sï¿½rie tout ce qu'il faut pour fonctionner
-     * @param port_name : Le port oï¿½ est connectï¿½ la carte (/dev/ttyUSB ou /dev/ttyACM)
+     * AppelÃ¯Â¿Â½ par le SerialManager, il donne Ã¯Â¿Â½ la sÃ¯Â¿Â½rie tout ce qu'il faut pour fonctionner
+     * @param port_name : Le port oÃ¯Â¿Â½ est connectÃ¯Â¿Â½ la carte (/dev/ttyUSB ou /dev/ttyACM)
      * @param baudrate : Le baudrate que la carte utilise
      */
     void initialize(String port_name, int baudrate)
@@ -98,7 +98,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
             log.critical("Catch de "+e2+" dans initialize");
         }
 
-        // Ouverture du port sï¿½rie
+        // Ouverture du port sÃ¯Â¿Â½rie
         try
         {
             serialPort = (SerialPort) portId.open(this.getClass().getName(), TIME_OUT);
@@ -109,7 +109,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
         }
         try
         {
-            // rï¿½gle certains paramï¿½tres liï¿½ ï¿½ la sï¿½rie
+            // rÃ¯Â¿Â½gle certains paramÃ¯Â¿Â½tres liÃ¯Â¿Â½ Ã¯Â¿Â½ la sÃ¯Â¿Â½rie
             serialPort.setSerialPortParams(baudrate,
                     SerialPort.DATABITS_8,
                     SerialPort.STOPBITS_1,
@@ -117,7 +117,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 
             // ouverture des flux Input/Output
             input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
-            output = new BriztoutOutputStream(serialPort.getOutputStream());
+            output = serialPort.getOutputStream();
 
         }
         catch (Exception e)
@@ -137,11 +137,11 @@ public class SerialConnexion implements SerialPortEventListener, Service
     }
 
     /**
-     * Mï¿½thode pour communiquer ï¿½ la liaison sï¿½rie. Il ne faut absolument pas se tromper sur le nombre de lignes attendu en retour.
-     * (une ligne est dï¿½limitï¿½ par un "\r\n" sur une communication sï¿½rie. elle peut ï¿½tre envoyï¿½ par le bas niveau dans un:
-     * printf("\r\n") ou un printfln("...") oï¿½ ici le ln veut dire retour ï¿½ la ligne donc se charge de mettre "\r\n" ï¿½ la fin du message pour l'utilisateur).
-     * @param message Message Ã  envoyer
-     * @param nb_lignes_reponse Nombre de lignes que le bas niveau va rÃ©pondre (sans compter les acquittements)
+     * MÃ¯Â¿Â½thode pour communiquer Ã¯Â¿Â½ la liaison sÃ¯Â¿Â½rie. Il ne faut absolument pas se tromper sur le nombre de lignes attendu en retour.
+     * (une ligne est dÃ¯Â¿Â½limitÃ¯Â¿Â½ par un "\r\n" sur une communication sÃ¯Â¿Â½rie. elle peut Ã¯Â¿Â½tre envoyÃ¯Â¿Â½ par le bas niveau dans un:
+     * printf("\r\n") ou un printfln("...") oÃ¯Â¿Â½ ici le ln veut dire retour Ã¯Â¿Â½ la ligne donc se charge de mettre "\r\n" Ã¯Â¿Â½ la fin du message pour l'utilisateur).
+     * @param message Message ÃƒÂ  envoyer
+     * @param nb_lignes_reponse Nombre de lignes que le bas niveau va rÃƒÂ©pondre (sans compter les acquittements)
      * @return Un tableau contenant le message
      * @throws SerialConnexionException
      */
@@ -152,11 +152,11 @@ public class SerialConnexion implements SerialPortEventListener, Service
     }
 
     /**
-     * Mï¿½thode pour communiquer ï¿½ la liaison sï¿½rie. Il ne faut absolument pas se tromper sur le nombre de lignes attendu en retour.
-     * (une ligne est dï¿½limitï¿½ par un "\r\n" sur une communication sï¿½rie. elle peut ï¿½tre envoyï¿½ par le bas niveau dans un:
-     * printf("\r\n") ou un printfln("...") oï¿½ ici le ln veut dire retour ï¿½ la ligne donc se charge de mettre "\r\n" ï¿½ la fin du message pour l'utilisateur).
-     * @param messages Messages Ã  envoyer
-     * @param nb_lignes_reponse Nombre de lignes que l'avr va rÃ©pondre (sans compter les acquittements)
+     * MÃ¯Â¿Â½thode pour communiquer Ã¯Â¿Â½ la liaison sÃ¯Â¿Â½rie. Il ne faut absolument pas se tromper sur le nombre de lignes attendu en retour.
+     * (une ligne est dÃ¯Â¿Â½limitÃ¯Â¿Â½ par un "\r\n" sur une communication sÃ¯Â¿Â½rie. elle peut Ã¯Â¿Â½tre envoyÃ¯Â¿Â½ par le bas niveau dans un:
+     * printf("\r\n") ou un printfln("...") oÃ¯Â¿Â½ ici le ln veut dire retour Ã¯Â¿Â½ la ligne donc se charge de mettre "\r\n" Ã¯Â¿Â½ la fin du message pour l'utilisateur).
+     * @param messages Messages ÃƒÂ  envoyer
+     * @param nb_lignes_reponse Nombre de lignes que l'avr va rÃƒÂ©pondre (sans compter les acquittements)
      * @return Un tableau contenant le message
      * @throws SerialConnexionException
      */
@@ -169,13 +169,12 @@ public class SerialConnexion implements SerialPortEventListener, Service
             {
                 for (String m : messages)
                 {
-                    // affiche dans la console ce qu'on envois sur la sÃ©rie -> On cache ca, pour eviter le xy0? en permanence, mais ca peux etre interessant de le garder.
+                    // affiche dans la console ce qu'on envois sur la sÃƒÂ©rie -> On cache ca, pour eviter le xy0? en permanence, mais ca peux etre interessant de le garder.
                     // ne jamais push un code avec cette ligne decommentee
 //					log.debug("Envoi serie : '" + m  + "'", this);
                     m += "\r";
-                    output.clear();
+
                     output.write(m.getBytes());
-                    output.flush();
                     int nb_tests = 0;
                     char acquittement = ' ';
 
@@ -183,7 +182,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
                     {
                         nb_tests++;
 
-                        // affiche dans la console ce qu'on lit sur la sÃ©rie
+                        // affiche dans la console ce qu'on lit sur la sÃƒÂ©rie
                         String resposeFromCard = input.readLine();
                         //TODO commenter.
 //						log.debug("Reception acquitement : '" + resposeFromCard  + "'", this);
@@ -191,9 +190,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
                         acquittement = resposeFromCard.charAt(0);
                         if (acquittement != '_')
                         {
-                            output.clear();
                             output.write(m.getBytes());
-                            output.flush();
                         }
                         if (nb_tests > 10)
                         {
@@ -240,7 +237,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
     }
 
     /**
-     * Doit Ãªtre appelÃ© quand on arrÃªte de se servir de la sÃ©rie
+     * Doit ÃƒÂªtre appelÃƒÂ© quand on arrÃƒÂªte de se servir de la sÃƒÂ©rie
      */
     public void close()
     {
@@ -253,7 +250,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 
     /**
      * Handle an event on the serial port.
-     * NE PAS SUPPRIMER!!!!!! Cette mï¿½thode est essentielle au fonctionnement de la communication sï¿½rie, mï¿½me si elle est vide.
+     * NE PAS SUPPRIMER!!!!!! Cette mÃ¯Â¿Â½thode est essentielle au fonctionnement de la communication sÃ¯Â¿Â½rie, mÃ¯Â¿Â½me si elle est vide.
      */
     public synchronized void serialEvent(SerialPortEvent oEvent)
     {
@@ -267,18 +264,17 @@ public class SerialConnexion implements SerialPortEventListener, Service
     public synchronized void sendRaw(String message) throws IOException {
         message += "\r";
         output.write(message.getBytes());
-        output.flush();
 
     }
 
     /**
      * Ping de la carte.
-     * Peut envoyer un message d'erreur lors de l'exï¿½cution de createSerial() dans SerialManager.
+     * Peut envoyer un message d'erreur lors de l'exÃ¯Â¿Â½cution de createSerial() dans SerialManager.
      *
-     * (Avec la carte de test dans createSerial(), on ne sait pas encore si celle-ci va rï¿½pondre ou non, c'est ï¿½ dire,
-     * si il s'agit bien d'une liaison sï¿½rie, ou alors d'un autre pï¿½riphï¿½rique. Si il s'agit d'un autre pï¿½riphï¿½rique,
-     * alors cette mï¿½thode va catch une exception)
-     * UtilisÃ© que par createSerial de SerialManager
+     * (Avec la carte de test dans createSerial(), on ne sait pas encore si celle-ci va rÃ¯Â¿Â½pondre ou non, c'est Ã¯Â¿Â½ dire,
+     * si il s'agit bien d'une liaison sÃ¯Â¿Â½rie, ou alors d'un autre pÃ¯Â¿Â½riphÃ¯Â¿Â½rique. Si il s'agit d'un autre pÃ¯Â¿Â½riphÃ¯Â¿Â½rique,
+     * alors cette mÃ¯Â¿Â½thode va catch une exception)
+     * UtilisÃƒÂ© que par createSerial de SerialManager
      * @return l'id de la carte
      */
     public synchronized String ping()
@@ -288,12 +284,15 @@ public class SerialConnexion implements SerialPortEventListener, Service
             try
             {
 
-                //Evacuation de l'eventuel buffer indÃ©sirable
-                output.clear();
+                //Evacuation de l'eventuel buffer indÃƒÂ©sirable
+                output.write("CeciNestPasUnOrdre\r".getBytes());
+                //evacuation de l'acquittement "_"
+                input.readLine();
+                //evacuation de reponse "Ordre inonnu"
+                input.readLine();
 
                 //ping
                 output.write("?\r".getBytes());
-                output.flush();
                 //evacuation de l'acquittement
                 input.readLine();
 
