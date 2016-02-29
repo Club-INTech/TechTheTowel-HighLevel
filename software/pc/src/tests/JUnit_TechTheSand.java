@@ -46,7 +46,7 @@ public class JUnit_TechTheSand extends JUnit_Test
 		Vec2 sup = scriptManager.getScript(ScriptNames.TECH_THE_SAND).entryPosition(0, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
 		theRobot.table.getObstacleManager().freePoint(sup);
 		theRobot.table.getObstacleManager().freePoint(new Vec2(900,1150)); // test
-		theRobot.robot.moveLengthwise(theRobot.robot.getRobotRadius()+1);
+		theRobot.robot.moveLengthwise(200);
 		container.getService(ServiceNames.THREAD_INTERFACE);
 		container.startInstanciedThreads();
 	}
@@ -58,7 +58,7 @@ public class JUnit_TechTheSand extends JUnit_Test
 		try
 		{
 			log.debug("Début de forage");
-			scriptManager.getScript(ScriptNames.TECH_THE_SAND).goToThenExec(0, theRobot, emptyHook);
+			scriptManager.getScript(ScriptNames.TECH_THE_SAND).goToThenExec(1, theRobot, emptyHook);
 			scriptManager.getScript(ScriptNames.DROP_THE_SAND).goToThenExec(0, theRobot, emptyHook);
 		}
 		catch(ExecuteException | SerialFinallyException e)
