@@ -226,6 +226,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 
 							output.write(m.getBytes());
 							output.flush();
+                            log.debug("Renvoi ordre pour acquittement");
 						}
 						if (nb_tests > 10)
 						{
