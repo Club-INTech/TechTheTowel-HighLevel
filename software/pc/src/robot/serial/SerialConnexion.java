@@ -35,7 +35,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	/**
 	 * Nom de la connexion série
 	 */
-	String name;
+	private final String name;
 	
 	/**
 	 * Flux d'ent�e du port
@@ -129,7 +129,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 					SerialPort.PARITY_NONE);
 
             serialPort.disableReceiveTimeout();
-            
+
 			// ouverture des flux Input/Output
 			input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
 			output = new BriztoutOutputStream(serialPort.getOutputStream());
@@ -178,7 +178,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	public String[] communiquer(String[] messages, int nb_lignes_reponse) throws SerialConnexionException
 	{
 		boolean uoe = false;
-		synchronized(output)
+		synchronized(name)
 		{
 			String inputLines[] = new String[nb_lignes_reponse];
 			int c=-1;
@@ -217,6 +217,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 						acquittement = resposeFromCard.charAt(0);
 						if (acquittement != '_')
 						{
+                            clearInputBuffer();
 							//Vidage du buffer (expériemental)
 							output.clear();
 
@@ -384,7 +385,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	 */
 	public String ping()
 	{
-		synchronized(output) {
+		synchronized(name) {
 			String ping = null;
 			try
 			{
