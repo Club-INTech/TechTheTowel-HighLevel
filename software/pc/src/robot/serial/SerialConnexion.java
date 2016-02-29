@@ -255,14 +255,14 @@ public class SerialConnexion implements SerialPortEventListener, Service
                         clearInputBuffer();
 						inputLines = communiquer(messages, nb_lignes_reponse);
 					}
-					if(inputLines[i].replaceAll(" ", "").equalsIgnoreCase("ordreinconnu"))
+					else if(inputLines[i].replaceAll(" ", "").equalsIgnoreCase("ordreinconnu"))
 					{
 						// Avant de throw, on vide le buffer de lecture à coups de input.read() qui renverra -1 une fois vidé.
 						//while(input.read()!=-1);
 						uoe = true;
                         break;
 					}
-					if(!isAsciiExtended(inputLines[i]))
+					else if(!isAsciiExtended(inputLines[i]))
 					{
 						log.critical("='( , réception défectueuse: "+inputLines[i]);
 						uoe = true;
@@ -421,9 +421,9 @@ public class SerialConnexion implements SerialPortEventListener, Service
 	}
 
     private synchronized void clearInputBuffer() throws IOException {
+        InputStream st = serialPort.getInputStream();
         try
         {
-            InputStream st = serialPort.getInputStream();
             if(st.available() > 0)
                 st.skip(st.available());
         }
@@ -431,7 +431,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
         {
             log.critical("DISCORD, TON CLEAR DU BUFFER D'INPUT C'EST DE LA MERDE !!!!");
         }
-        this.input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
+        this.input = new BufferedReader(new InputStreamReader(st));
     }
 	
 	public void updateConfig()
