@@ -103,6 +103,10 @@ public class TechTheSand extends AbstractScript
 */
                 stateToConsider.robot.setRobotRadius(TechTheSand.expandedRobotRadius);
 				stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
+				
+				Arc out = new Arc(stateToConsider.robot.getPosition(),new Vec2(-200,1500),stateToConsider.robot.getOrientation(),false);
+				
+				stateToConsider.robot.moveArc(out, hooksToConsider);
 
 				// On s'oriente vers notre serviette
 				stateToConsider.robot.turn(0);
@@ -148,7 +152,7 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.robot.useActuator(ActuatorOrder.START_AXIS, false);
                 
                 // Définition de l'arc à suivre, point de départ temporaire
-                Arc approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(400,1999-TechTheSand.expandedRobotRadius), Math.PI, true);
+                Arc approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(400,1999-TechTheSand.middleRobotRadius), Math.PI, true);
 
                 //On se déplace en courbe pour se placer en face du château
                 stateToConsider.robot.moveArc(approach, hooksToConsider);
@@ -175,8 +179,8 @@ public class TechTheSand extends AbstractScript
                     throw new BlockedActuatorException("Porte bloquée !");
                 }
 */
-                stateToConsider.robot.setRobotRadius(TechTheSand.expandedRobotRadius);
-                stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
+                stateToConsider.robot.setRobotRadius(TechTheSand.middleRobotRadius);
+                stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.middleRobotRadius);
 
                 // On reprend notre vitesse habituelle
                 stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
@@ -210,7 +214,7 @@ public class TechTheSand extends AbstractScript
         else if(version == 1)
         {
             //TODO
-            return new Circle(800,1500);
+            return new Circle(1500-1000,2000-450);
         }
 		else
 		{

@@ -49,7 +49,7 @@ public class JUnit_Castle extends JUnit_Test
 		mRobot.robot.setPosition(Table.entryPosition);
 		mRobot.robot.setOrientation(Math.PI);
 		mRobot.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
-		mRobot.robot.moveLengthwise(100);
+		mRobot.robot.moveLengthwise(200);
 		container.getService(ServiceNames.THREAD_INTERFACE);
 		container.startInstanciedThreads();
 	}
