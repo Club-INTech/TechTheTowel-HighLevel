@@ -51,7 +51,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
     /**
      * Flux de sortie du port
      */
-    private OutputStream output;
+    private BriztoutOutputStream output;
 
     /**
      * TIME_OUT d'attente de rï¿½ception d'un message
@@ -117,7 +117,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 
             // ouverture des flux Input/Output
             input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
-            output = serialPort.getOutputStream();
+            output = new BriztoutOutputStream(serialPort.getOutputStream());
 
         }
         catch (Exception e)
@@ -173,8 +173,9 @@ public class SerialConnexion implements SerialPortEventListener, Service
                     // ne jamais push un code avec cette ligne decommentee
 //					log.debug("Envoi serie : '" + m  + "'", this);
                     m += "\r";
-
+                    output.clear();
                     output.write(m.getBytes());
+                    output.flush();
                     int nb_tests = 0;
                     char acquittement = ' ';
 
@@ -190,7 +191,9 @@ public class SerialConnexion implements SerialPortEventListener, Service
                         acquittement = resposeFromCard.charAt(0);
                         if (acquittement != '_')
                         {
+                            output.clear();
                             output.write(m.getBytes());
+                            output.flush();
                         }
                         if (nb_tests > 10)
                         {
@@ -264,6 +267,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
     public synchronized void sendRaw(String message) throws IOException {
         message += "\r";
         output.write(message.getBytes());
+        output.flush();
 
     }
 
@@ -285,7 +289,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
             {
 
                 //Evacuation de l'eventuel buffer indÃ©sirable
-                output.write("CeciNestPasUnOrdre\r".getBytes());
+                output.clear();
                 //evacuation de l'acquittement "_"
                 input.readLine();
                 //evacuation de reponse "Ordre inonnu"
@@ -293,6 +297,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 
                 //ping
                 output.write("?\r".getBytes());
+                output.flush();
                 //evacuation de l'acquittement
                 input.readLine();
 
