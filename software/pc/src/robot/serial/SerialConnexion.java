@@ -193,7 +193,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 					c++;
 					//Vidage du buffer (expérimental)
 					output.clear();
-					clearInputBuffer();
+
 
 					// affiche dans la console ce qu'on envois sur la série -> On cache ca, pour eviter le xy0? en permanence, mais ca peux etre interessant de le garder.
 					// ne jamais push un code avec cette ligne decommentee
@@ -252,7 +252,8 @@ public class SerialConnexion implements SerialPortEventListener, Service
 					if(inputLines[i].equals(null) || inputLines[i].replaceAll(" ", "").equals("")|| inputLines[i].replaceAll(" ", "").equals("-"))
 					{
 						log.critical("='( , envoi de "+inputLines[i]+" envoi du message a nouveau");
-						communiquer(messages, nb_lignes_reponse);
+                        clearInputBuffer();
+						inputLines = communiquer(messages, nb_lignes_reponse);
 					}
 					if(inputLines[i].replaceAll(" ", "").equalsIgnoreCase("ordreinconnu"))
 					{
