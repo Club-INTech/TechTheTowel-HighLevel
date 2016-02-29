@@ -130,6 +130,9 @@ public class SerialConnexion implements SerialPortEventListener, Service
 					SerialPort.STOPBITS_1,
 					SerialPort.PARITY_NONE);
 
+            serialPort.enableReceiveTimeout(TIME_OUT);
+            serialPort.enableReceiveThreshold(0);
+
 			// ouverture des flux Input/Output
 			input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
 			output = new BriztoutOutputStream(serialPort.getOutputStream());
@@ -188,7 +191,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 				//while(input.read()!=-1); TODO Le vidage de buffer renvoie une exception s'il est vide
 				for (String m : messages)
 				{
-					wait(100);
+					//wait(100);
 					c++;
 					//Vidage du buffer (expérimental)
 					output.clear();
@@ -206,7 +209,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 					{
 						nb_tests++;
 
-                        while(!input.ready());
+                        //while(!input.ready());
 
 						// affiche dans la console ce qu'on lit sur la série
 						String resposeFromCard = input.readLine();
@@ -240,7 +243,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 			{
 				for (int i = 0 ; i < nb_lignes_reponse; i++)
 				{
-                    while(!input.ready());
+                   // while(!input.ready());
 
 					inputLines[i] = input.readLine();
 					//TODO commenter.
