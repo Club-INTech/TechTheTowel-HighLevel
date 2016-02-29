@@ -129,8 +129,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 					SerialPort.PARITY_NONE);
 
             serialPort.disableReceiveTimeout();
-            serialPort.enableReceiveThreshold(1);
-
+            
 			// ouverture des flux Input/Output
 			input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
 			output = new BriztoutOutputStream(serialPort.getOutputStream());
