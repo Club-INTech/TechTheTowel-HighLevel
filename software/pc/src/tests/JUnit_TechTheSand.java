@@ -37,8 +37,8 @@ public class JUnit_TechTheSand extends JUnit_Test
 	public void setUp() throws Exception
 	{
 		super.setUp();
-		scriptManager = (ScriptManager)container.getService(ServiceNames.SCRIPT_MANAGER);
 		theRobot = (GameState<Robot>)container.getService(ServiceNames.GAME_STATE);
+		scriptManager = (ScriptManager)container.getService(ServiceNames.SCRIPT_MANAGER);
 		theRobot.robot.setPosition(Table.entryPosition);
 		theRobot.robot.setOrientation(Math.PI);
 		theRobot.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
