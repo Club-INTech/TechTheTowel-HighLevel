@@ -41,20 +41,16 @@ public class JUnit_TechTheSand extends JUnit_Test
 		theRobot = (GameState<Robot>)container.getService(ServiceNames.GAME_STATE);
 		theRobot.robot.setPosition(Table.entryPosition);
 		theRobot.robot.setOrientation(Math.PI);
-		theRobot.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+		theRobot.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 		//supression de l'obstacle d'arrivé, pour tests
 		Vec2 sup = scriptManager.getScript(ScriptNames.TECH_THE_SAND).entryPosition(0, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
 		theRobot.table.getObstacleManager().freePoint(sup);
-		theRobot.robot.moveLengthwise(200);
+		theRobot.table.getObstacleManager().freePoint(new Vec2(900,1150)); // test
+		theRobot.robot.moveLengthwise(theRobot.robot.getRobotRadius()+1);
 		container.getService(ServiceNames.THREAD_INTERFACE);
 		container.startInstanciedThreads();
 	}
 	
-	@After
-	public void aftermath() throws Exception 
-	{
-//		super.returnToEntryPosition(theRobot);
-	}
 	
 	@Test
 	public void TechIt() throws Exception
@@ -69,15 +65,12 @@ public class JUnit_TechTheSand extends JUnit_Test
 		{
 			e.printStackTrace();
 		}
-		try 
-		{
-			returnToEntryPosition(theRobot);
-		} 
-		catch (UnableToMoveException | PathNotFoundException | PointInObstacleException e) 
-		{
-			// TODO
-			e.printStackTrace();
-		}
+	}
+	
+	@After
+	public void aftermath() throws Exception 
+	{
+		theRobot.robot.immobilise();
 	}
 
 }

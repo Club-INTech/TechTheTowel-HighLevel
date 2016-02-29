@@ -188,7 +188,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 				//while(input.read()!=-1); TODO Le vidage de buffer renvoie une exception s'il est vide
 				for (String m : messages)
 				{
-					wait(100);
+					//wait(10);
 					c++;
 					//Vidage du buffer (expérimental)
 					output.clear();
