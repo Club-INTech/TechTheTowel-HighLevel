@@ -210,7 +210,7 @@ public class TechTheSand extends AbstractScript
         else if(version == 1)
         {
             //TODO
-            return new Circle(robotPosition);
+            return new Circle(800,1500);
         }
 		else
 		{
