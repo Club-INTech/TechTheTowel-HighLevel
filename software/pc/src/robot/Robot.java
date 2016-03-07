@@ -510,7 +510,10 @@ public abstract class Robot implements Service
     	PathDingDing pdd = new PathDingDing(table, log);
     	// On lance le calcul
     	ArrayList<Node> nodePath = pdd.computePath(position, aim.position, new ArrayList<Obstacle>());
-    	
+
+		if(nodePath.isEmpty())
+			return;
+
     	// On transforme les noeuds en Vec2
     	ArrayList<Vec2> path = new ArrayList<Vec2>();
     	for(int i=0 ; i<nodePath.size() ; i++)
