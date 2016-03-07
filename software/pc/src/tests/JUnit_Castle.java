@@ -29,8 +29,6 @@ public class JUnit_Castle extends JUnit_Test
 	
 	private ScriptManager scriptManager;
 	
-	private int versionToExecute = 0;
-	
 	@SuppressWarnings("unchecked")
 	@Before
 	public void setUp() throws Exception
@@ -43,15 +41,21 @@ public class JUnit_Castle extends JUnit_Test
 		scriptManager = (ScriptManager)container.getService(ServiceNames.SCRIPT_MANAGER);
 		//Supprime la position de départ du robot dans le script des obstacles de la table.
 		//A des fins de test uniquement !
-		Vec2 entryPositionScriptCastle = scriptManager.getScript(ScriptNames.CASTLE).entryPosition(versionToExecute, mRobot.robot.getRobotRadius(), mRobot.robot.getPosition()).position;
-	    mRobot.table.getObstacleManager().freePoint(entryPositionScriptCastle);
-        
+	    mRobot.table.deleteAllTheShells();
+        Vec2 sup1 = new Vec2(1255,725);
+		Vec2 sup2 = new Vec2(1325,510);
+		Vec2 sup3 = new Vec2(1380,136);
+		Vec2 sup4 = new Vec2(850,1150);
+		mRobot.table.getObstacleManager().freePoint(sup1);
+		mRobot.table.getObstacleManager().freePoint(sup2);
+		mRobot.table.getObstacleManager().freePoint(sup3);
+		mRobot.table.getObstacleManager().freePoint(sup4);
 		mRobot.robot.setPosition(Table.entryPosition);
 		mRobot.robot.setOrientation(Math.PI);
 		mRobot.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
-		mRobot.robot.moveLengthwise(200);
-		container.getService(ServiceNames.THREAD_INTERFACE);
-		container.startInstanciedThreads();
+		mRobot.robot.moveLengthwise(100);
+		//container.getService(ServiceNames.THREAD_INTERFACE);
+		//container.startInstanciedThreads();
 	}
 	
 	@Test
@@ -62,7 +66,7 @@ public class JUnit_Castle extends JUnit_Test
 		{
 			//On execute le script
 			log.debug("Récupération du château !");
-			scriptManager.getScript(ScriptNames.CASTLE).goToThenExec(versionToExecute, mRobot, emptyList);
+			scriptManager.getScript(ScriptNames.CASTLE).goToThenExec(0, mRobot, emptyList);
 		}
 		catch(SerialConnexionException | BadVersionException | ExecuteException | SerialFinallyException e)
 		{
@@ -79,7 +83,7 @@ public class JUnit_Castle extends JUnit_Test
 	@After
 	public void finish() throws UnableToMoveException, PathNotFoundException, PointInObstacleException 
 	{
-//		super.returnToEntryPosition(mRobot);
+		mRobot.robot.moveLengthwise(-500);
+		mRobot.robot.immobilise();
 	}
-
 }
