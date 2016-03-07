@@ -238,7 +238,7 @@ public class Castle extends AbstractScript
 				log.debug("Entrée dans le script");
 				
 				// création de l'arc à suivre
-				Arc arc = new Arc(stateToConsider.robot.getPosition(),new Vec2(1000,1100), -3*Math.PI/4,false);
+				Arc arc = new Arc(stateToConsider.robot.getPosition(),new Vec2(400,800), 3*Math.PI/4, true);
 				
 				// déplacement selon cet arc
 				stateToConsider.robot.moveArc(arc, hooksToConsider);
