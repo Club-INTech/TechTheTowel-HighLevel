@@ -333,7 +333,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
             if (characterSet > 259)
             {
                 isAsciiExtended=false;
-                log.critical(inputLines+"n'est pas ASCII");
+                log.critical(inputLines+" n'est pas ASCII");
                 return isAsciiExtended;
             }
         }
