@@ -19,6 +19,7 @@ import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import robot.Robot;
 import scripts.ScriptManager;
+import smartMath.Arc;
 import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
@@ -66,7 +67,7 @@ public class JUnit_Castle extends JUnit_Test
 		{
 			//On execute le script
 			log.debug("Récupération du château !");
-			scriptManager.getScript(ScriptNames.CASTLE).goToThenExec(0, mRobot, emptyList);
+			scriptManager.getScript(ScriptNames.CASTLE).goToThenExec(3, mRobot, emptyList);
 		}
 		catch(SerialConnexionException | BadVersionException | ExecuteException | SerialFinallyException e)
 		{
@@ -83,7 +84,8 @@ public class JUnit_Castle extends JUnit_Test
 	@After
 	public void finish() throws UnableToMoveException, PathNotFoundException, PointInObstacleException 
 	{
-		mRobot.robot.moveLengthwise(-500);
+		// uniquement pratique pour la version 0
+		//mRobot.robot.moveLengthwise(-500);
 		mRobot.robot.immobilise();
 	}
 }

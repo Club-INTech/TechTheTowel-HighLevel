@@ -30,6 +30,7 @@ import enums.TurningStrategy;
  * Version 0 : pousse le tas de sable en ligne droite jusqu'à la zone de construction
  * Version 1 : lorsque le robot vient de la mer, tourne pour choper le château puis le déplace dans la zone de construction
  * Version 2 : chope le château alors que le robot revient de la dune et en contient déjà une partie
+ * Version 3 : équivalent de la version 0 avec une trajectoire courbe
  * @author CF, Cérézas
  */
 public class Castle extends AbstractScript
@@ -46,7 +47,7 @@ public class Castle extends AbstractScript
 		/**
 		 * Versions du script
 		 */
-		versions = new Integer[]{0,1,2};
+		versions = new Integer[]{0,1,2,3};
 	}
 
 	@Override
@@ -230,6 +231,21 @@ public class Castle extends AbstractScript
 				// la version 1 force la rotation dans le sens trigo, ce qu'il faut changer
 				stateToConsider.robot.setTurningStrategy(TurningStrategy.FASTEST);
 			}
+			
+			else if(versionToExecute==3)
+			{
+				// log de test avec un appel au PDD dont node arrivée = node départ
+				log.debug("Entrée dans le script");
+				
+				// création de l'arc à suivre
+				Arc arc = new Arc(stateToConsider.robot.getPosition(),new Vec2(1000,1100), -3*Math.PI/4,false);
+				
+				// déplacement selon cet arc
+				stateToConsider.robot.moveArc(arc, hooksToConsider);
+				
+				// sortie de la zone de construction 
+				stateToConsider.robot.moveLengthwise(-300);
+			}
 		}
 		catch (Exception e)
 		{
@@ -243,7 +259,7 @@ public class Castle extends AbstractScript
 	{
 		// le tas complet rapporte 16 points maximum
 		// à savoir 6 éléments (6*2) de sables et une tour (+4)
-		if (version == 0 | version == 1)
+		if (version == 0 | version == 1 | version ==3)
 		{
 			return 16;
 		}
@@ -278,6 +294,10 @@ public class Castle extends AbstractScript
 		{
 			//testé et approuvé
 			return (new Circle(new Vec2(1250, 1370)));
+		}
+		else if (version == 3)
+		{
+			return new Circle(new Vec2(1150,1150));
 		}
 		else
 		{
