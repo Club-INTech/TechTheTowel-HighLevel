@@ -37,7 +37,7 @@ public class JUnit_Pathfinding extends JUnit_Test
     Table table;
     PathDingDing pf;
     Log log;
-   //GameState<Robot> game;
+    GameState<RobotReal> game;
 
 
     public static void main(String[] args) throws Exception
@@ -52,21 +52,21 @@ public class JUnit_Pathfinding extends JUnit_Test
         table = (Table)container.getService(ServiceNames.TABLE);
         
         // Pour dégager tous les coquillages de la table
-        /*table.deleteAllTheShells();
+        table.deleteAllTheShells();
         Vec2 sup1 = new Vec2(1255,725);
 		Vec2 sup2 = new Vec2(1325,510);
 		Vec2 sup3 = new Vec2(1380,136);
 		table.getObstacleManager().freePoint(sup1);
 		table.getObstacleManager().freePoint(sup2);
-		table.getObstacleManager().freePoint(sup3);*/
+		table.getObstacleManager().freePoint(sup3);
+        game = (GameState<RobotReal>) container.getService(ServiceNames.GAME_STATE);
         log = (Log)container.getService(ServiceNames.LOG);
-        win = new Window(table);
+        win = new Window(table, game.robot);
         
 
-//        game = (GameState<RobotReal>) container.getService(ServiceNames.GAME_STATE);
-//        game.robot.setPosition(Table.entryPosition);
-//        game.robot.setOrientation(Math.PI);
-//        game.changeRobotRadius(TechTheSand.expandedRobotRadius);
+        game.robot.setPosition(Table.entryPosition);
+        game.robot.setOrientation(Math.PI);
+        game.changeRobotRadius(TechTheSand.retractedRobotRadius);
 
        /* ArrayList<ObstacleRectangular> mRectangles = game.table.getObstacleManager().getRectangles();
 
@@ -80,6 +80,7 @@ public class JUnit_Pathfinding extends JUnit_Test
 
 
         pf = (PathDingDing)container.getService(ServiceNames.PATHDINGDING);
+        game.robot.moveLengthwise(250);
     }
 
 
@@ -93,30 +94,30 @@ public class JUnit_Pathfinding extends JUnit_Test
             if(win.getKeyboard().isModeActual() && win.getMouse().hasClickedRight())
             {
 
-                /*robot.setTurningStrategy(win.getKeyboard().getTurningStrategy());
+                game.robot.setTurningStrategy(win.getKeyboard().getTurningStrategy());
 
                 try
                 {
                     //table.getObstacleManager().setEnnemyRobot1Position(win.getMouse().getMiddleClickPosition());
-                    //win.getPanel().drawArrayList(pf.computePathVec2(game.robot.getPosition(), win.getMouse().getRightClickPosition(), new ArrayList<Obstacle>()));
+                    win.getPanel().drawArrayList(pf.computePathVec2(game.robot.getPosition(), win.getMouse().getRightClickPosition(), new ArrayList<Obstacle>()));
 
                 }
                 catch(PathNotFoundException e)
                 {
-                    //log.debug("pas de chemin trouve entre "+game.robot.getPosition()+"et"+ win.getMouse().getRightClickPosition());
+                    log.debug("pas de chemin trouve entre "+game.robot.getPosition()+"et"+ win.getMouse().getRightClickPosition());
                 }
                 catch(PointInObstacleException e)
                 {
                     log.debug("point d'arrivée dans un obstacle");
-                }*/
+                }
                 win.getPanel().repaint();
                 win.getKeyboard().resetModeActual();
                 win.getMouse().resetHasClicked();
-                //robot.moveToLocation(win.getMouse().getRightClickPosition(), new ArrayList<Hook>(), table);
+                game.robot.moveToLocation(win.getMouse().getRightClickPosition(), new ArrayList<hook.Hook>(), table);
             }
             else if(win.getMouse().hasClicked())
             {
-               // robot.setTurningStrategy(win.getKeyboard().getTurningStrategy());
+                game.robot.setTurningStrategy(win.getKeyboard().getTurningStrategy());
                 try
                 {
                     //table.getObstacleManager().setEnnemyRobot1Position(win.getMouse().getMiddleClickPosition());
