@@ -190,6 +190,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
                         acquittement = resposeFromCard.charAt(0);
                         if (acquittement != '_')
                         {
+                            clearInputBuffer();
                             output.write(m.getBytes());
                         }
                         if (nb_tests > 10)
@@ -217,12 +218,14 @@ public class SerialConnexion implements SerialPortEventListener, Service
                     if(inputLines[i].equals(null) || inputLines[i].replaceAll(" ", "").equals("")|| inputLines[i].replaceAll(" ", "").equals("-"))
                     {
                         log.critical("='( , envoi de "+inputLines[i]+" envoi du message a nouveau");
+                        clearInputBuffer();
                         communiquer(messages, nb_lignes_reponse);
                     }
 
                     if(!isAsciiExtended(inputLines[i]))
                     {
                         log.critical("='( , envoi de "+inputLines[i]+" envoi du message a nouveau");
+                        clearInputBuffer();
                         communiquer(messages, nb_lignes_reponse); // On retente
                     }
                 }
@@ -335,5 +338,21 @@ public class SerialConnexion implements SerialPortEventListener, Service
             }
         }
         return isAsciiExtended;
+    }
+
+    public synchronized void clearInputBuffer()
+    {
+        try
+        {
+            while(input.read() != -1);
+        }
+        catch (IOException e)
+        {
+            try {
+                input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
     }
 }

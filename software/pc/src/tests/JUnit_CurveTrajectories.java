@@ -27,22 +27,22 @@ public class JUnit_CurveTrajectories extends JUnit_Test
     {
         //creation des objets pour le test
         super.setUp();
-        game = (GameState<RobotReal>)container.getService(ServiceNames.GAME_STATE);
+       // game = (GameState<RobotReal>)container.getService(ServiceNames.GAME_STATE);
 
         //position initiale du robot
-        game.robot.setPosition(Table.entryPosition);
-        game.robot.setOrientation(Math.PI);
-        game.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+      //  game.robot.setPosition(Table.entryPosition);
+      //  game.robot.setOrientation(Math.PI);
+      //  game.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 
         table = (Table)container.getService(ServiceNames.TABLE);
         log = (Log)container.getService(ServiceNames.LOG);
         trajectory = new ArrayList<>();
         
         // sortie de serviette
-        game.robot.moveLengthwise(100);
+//        game.robot.moveLengthwise(100);
         
        // trajectory.add(new Arc(Table.entryPosition, new Vec2(900, 1700), Math.PI, true));
-        trajectory.add(new Arc(Table.entryPosition, new Vec2(900, 1700), new Vec2(1200, 1550)));
+        trajectory.add(new Arc(new Vec2(1150,1150), new Vec2(1000,1100), -3*Math.PI/4, false));
 
     }
 
