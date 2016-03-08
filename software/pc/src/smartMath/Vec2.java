@@ -294,7 +294,7 @@ public class Vec2
 		if(this.length() == 0)
 			return 0;
 
-		return Math.acos(this.x / this.length());
+		return Math.atan(this.y / this.x);
 	}
 
     /**
