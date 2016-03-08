@@ -1,5 +1,7 @@
 package smartMath;
 
+
+
 /**
  * Classe de calcul pour les arcs de cercle
  * @author discord, paul(formules mathématiques)
@@ -45,7 +47,7 @@ public class Arc
         computeCenterRadiusLength();
         computeAngles();
 
-        if(Math.abs(endAngle) < Math.abs(startAngle))
+        if(endAngle < startAngle)
             this.radius *= -1;
     }
 
@@ -75,7 +77,7 @@ public class Arc
 
         computeCenter(true);
 
-        if(Math.abs(endAngle) < Math.abs(startAngle))
+        if(endAngle < startAngle)
             this.radius *= -1;
     }
 
@@ -130,7 +132,7 @@ public class Arc
     {
         double alpha = startAngle - end.minusNewVector(start).angle();
 
-        this.radius = start.distance(end) / (2.0*Math.sin(Math.abs(alpha)));
+        this.radius = start.distance(end) / (2.0*Math.cos(Math.PI/2 - Math.abs(alpha)));
         this.endAngle = startAngle + 2*alpha;
         this.length = this.radius*2.0*Math.abs(alpha);
     }

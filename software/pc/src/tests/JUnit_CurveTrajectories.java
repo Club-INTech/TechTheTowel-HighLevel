@@ -42,7 +42,7 @@ public class JUnit_CurveTrajectories extends JUnit_Test
 //        game.robot.moveLengthwise(100);
         
        // trajectory.add(new Arc(Table.entryPosition, new Vec2(900, 1700), Math.PI, true));
-        trajectory.add(new Arc(new Vec2(1150,1150), new Vec2(1000,1100), -3*Math.PI/4, false));
+        trajectory.add(new Arc(new Vec2(1150,1150), new Vec2(1000,1100), -3*Math.PI/4, true));
 
     }
 
