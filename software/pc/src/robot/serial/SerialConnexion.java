@@ -326,22 +326,20 @@ public class SerialConnexion implements SerialPortEventListener, Service
     @SuppressWarnings("javadoc")
     public boolean isAsciiExtended(String inputLines) throws Exception
     {
-        Boolean isAsciiExtended=true;
         for (int i = 0; i < inputLines.length(); i++)
         {
-            int characterSet = inputLines.charAt(i);
-            if (characterSet > 259)
+            if (inputLines.charAt(i) > 259)
             {
-                isAsciiExtended=false;
                 log.critical(inputLines+" n'est pas ASCII");
-                return isAsciiExtended;
+                return false;
             }
         }
-        return isAsciiExtended;
+        return true;
     }
 
     public synchronized void clearInputBuffer()
     {
+        log.debug("SerialConnexion : Tentative de clean du buffer d'input");
         try
         {
             while(input.read() != -1);
