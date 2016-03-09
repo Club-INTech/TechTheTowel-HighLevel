@@ -152,14 +152,14 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.robot.useActuator(ActuatorOrder.START_AXIS, false);
                 
                 // Définition de l'arc à suivre, point de départ temporaire
-                Arc approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(400,1999-TechTheSand.middleRobotRadius), Math.PI, true);
+                Arc approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(280,2015-TechTheSand.expandedRobotRadius), Math.PI, true);
 
                 //On se déplace en courbe pour se placer en face du château
                 stateToConsider.robot.moveArc(approach, hooksToConsider);
 
                 // On avance pour récupérer le sable
                 // TODO la distance est arbitraire, à modifier avec les phases de test
-                stateToConsider.robot.moveLengthwise(300, hooksToConsider, true);
+                stateToConsider.robot.moveLengthwise(150, hooksToConsider, true);
 
                 // Demande au robot de ne tourner que vers la gauche pour ses prochains déplacements
                 stateToConsider.robot.setTurningStrategy(TurningStrategy.LEFT_ONLY);
@@ -171,14 +171,20 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.robot.setIsSandInside(true);
 
                 // On rétracte la vitre
-               /* stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
+             /*   stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
 
                 if(!stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
                 {
                     stateToConsider.robot.useActuator(ActuatorOrder.STOP_DOOR, false);
                     throw new BlockedActuatorException("Porte bloquée !");
-                }
-*/
+                }*/
+
+                // Définition de l'arc à suivre, point de départ temporaire
+                approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(-150,1600), stateToConsider.robot.getOrientation(), false);
+
+                //On se déplace en courbe pour se placer en face du château
+                stateToConsider.robot.moveArc(approach, hooksToConsider);
+
                 stateToConsider.robot.setRobotRadius(TechTheSand.middleRobotRadius);
                 stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.middleRobotRadius);
 
@@ -209,12 +215,12 @@ public class TechTheSand extends AbstractScript
 	{
 		if (version == 0)
 		{
-			return new Circle (new Vec2(350,1999-ray));
+			return new Circle (new Vec2(340,1990-ray));
 		}
         else if(version == 1)
         {
             //TODO
-            return new Circle(1500-1000,2000-450);
+            return new Circle(385,2000-360);
         }
 		else
 		{

@@ -291,14 +291,14 @@ public class Vec2
      */
 	public double angle()
 	{
-		int signe=1;
+		int signe=0;
 		if(this.length() == 0)
 			return 0;
 
 		if(this.y<0)
-			signe=-1;
+			signe=-2;
 
-		return signe*Math.acos(this.x / this.length());
+		return Math.abs(signe*Math.PI+Math.acos(this.x / this.length()));
 	}
 
     /**

@@ -133,7 +133,7 @@ public class Arc
         double alpha = startAngle - end.minusNewVector(start).angle();
 
         this.radius = start.distance(end) / (2.0*Math.cos(Math.PI/2 - Math.abs(alpha)));
-        this.endAngle = startAngle + 2*alpha;
+        this.endAngle = startAngle - 2*alpha;
         this.length = this.radius*2.0*Math.abs(alpha);
     }
 

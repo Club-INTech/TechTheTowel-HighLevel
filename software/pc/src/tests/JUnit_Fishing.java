@@ -41,13 +41,13 @@ public class JUnit_Fishing extends JUnit_Test
 		theRobot.robot.useActuator(ActuatorOrder.ARM_INIT, true);
 		theRobot.robot.setOrientation(Math.PI);
 		theRobot.robot.setPosition(Table.entryPosition);
-		theRobot.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+		theRobot.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 		theRobot.robot.moveLengthwise(232);
-		theRobot.robot.turn(Math.PI/2);
+		/*theRobot.robot.turn(Math.PI/2);
 		theRobot.robot.moveLengthwise(200);
 		theRobot.robot.turn(Math.PI);
 		Arc test = new Arc(theRobot.robot.getPosition(),new Vec2(800,500),-Math.PI/2, true);
-		theRobot.robot.moveArc(test, emptyHook);
+		theRobot.robot.moveArc(test, emptyHook);*/
 		theRobot.table.deleteAllTheShells();
         Vec2 sup1 = new Vec2(1255,725);
 		Vec2 sup2 = new Vec2(1325,510);
@@ -89,8 +89,8 @@ public class JUnit_Fishing extends JUnit_Test
 	{
         try 
         {
-			theRobot.table.getObstacleManager().freePoint(scriptManager.getScript(ScriptNames.FISHING).entryPosition(1, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position);
-            scriptManager.getScript(ScriptNames.FISHING).goToThenExec(1, theRobot, emptyHook);
+			theRobot.table.getObstacleManager().freePoint(scriptManager.getScript(ScriptNames.FISHING).entryPosition(3, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position);
+            scriptManager.getScript(ScriptNames.FISHING).goToThenExec(3, theRobot, emptyHook);
         } catch (Exception e) 
         {
             e.printStackTrace();

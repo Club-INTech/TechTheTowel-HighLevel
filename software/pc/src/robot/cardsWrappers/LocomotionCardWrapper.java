@@ -120,7 +120,7 @@ public class LocomotionCardWrapper implements Service
      */
 	public void moveArc(double length, double radius) throws SerialConnexionException
     {
-        String chaines[] = {"dc", Float.toString((float)length), Float.toString((float)radius)};
+        String chaines[] = {"dc", Integer.toString((int)length), Integer.toString((int)radius)};
         locomotionCardSerial.communiquer(chaines, 0);
 	}
 

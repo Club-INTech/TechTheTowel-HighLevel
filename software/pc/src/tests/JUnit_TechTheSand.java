@@ -2,13 +2,13 @@ package tests;
 
 import java.util.ArrayList;
 
+import enums.*;
+import exceptions.BlockedActuatorException;
+import exceptions.serial.SerialConnexionException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import enums.ScriptNames;
-import enums.ServiceNames;
-import enums.Speed;
 import exceptions.ExecuteException;
 import exceptions.PathNotFoundException;
 import exceptions.PointInObstacleException;
@@ -45,10 +45,39 @@ public class JUnit_TechTheSand extends JUnit_Test
 		//supression de l'obstacle d'arrivé, pour tests
 		Vec2 sup = scriptManager.getScript(ScriptNames.TECH_THE_SAND).entryPosition(0, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
 		theRobot.table.getObstacleManager().freePoint(sup);
-		theRobot.table.getObstacleManager().freePoint(new Vec2(900,1150)); // test
+        sup = scriptManager.getScript(ScriptNames.DROP_THE_SAND).entryPosition(0, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
+        theRobot.table.getObstacleManager().freePoint(sup);
+        theRobot.table.getObstacleManager().freePoint(new Vec2(900,1150)); // test
 		theRobot.robot.moveLengthwise(200);
 		container.getService(ServiceNames.THREAD_INTERFACE);
 		container.startInstanciedThreads();
+
+		try
+		{
+			if(!theRobot.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
+			{
+				theRobot.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
+			}
+			if(!theRobot.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
+			{
+				theRobot.robot.useActuator(ActuatorOrder.STOP_DOOR, true);
+				throw new BlockedActuatorException("Porte droite bloquée !");
+			}
+
+			if(!theRobot.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED_LEFT))
+			{
+				theRobot.robot.useActuator(ActuatorOrder.CLOSE_DOOR_LEFT, true);
+			}
+			if(!theRobot.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED_LEFT))
+			{
+				theRobot.robot.useActuator(ActuatorOrder.STOP_DOOR, true);
+				throw new BlockedActuatorException("Porte gauche bloquée !");
+			}
+		}
+		catch (SerialConnexionException e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	
@@ -58,7 +87,7 @@ public class JUnit_TechTheSand extends JUnit_Test
 		try
 		{
 			log.debug("Début de forage");
-			scriptManager.getScript(ScriptNames.TECH_THE_SAND).goToThenExec(0, theRobot, emptyHook);
+			scriptManager.getScript(ScriptNames.TECH_THE_SAND).goToThenExec(1, theRobot, emptyHook);
 			scriptManager.getScript(ScriptNames.DROP_THE_SAND).goToThenExec(0, theRobot, emptyHook);
 		}
 		catch(ExecuteException | SerialFinallyException e)
