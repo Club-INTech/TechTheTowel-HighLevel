@@ -47,11 +47,6 @@ public class JUnit_Fishing extends JUnit_Test
 		theRobot.robot.setPosition(Table.entryPosition);
 		theRobot.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 		theRobot.robot.moveLengthwise(232);
-		/*theRobot.robot.turn(Math.PI/2);
-		theRobot.robot.moveLengthwise(200);
-		theRobot.robot.turn(Math.PI);
-		Arc test = new Arc(theRobot.robot.getPosition(),new Vec2(800,500),-Math.PI/2, true);
-		theRobot.robot.moveArc(test, emptyHook);*/
 		theRobot.table.deleteAllTheShells();
         Vec2 sup1 = new Vec2(1255,725);
 		Vec2 sup2 = new Vec2(1325,510);
