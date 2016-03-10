@@ -384,7 +384,7 @@ public class ShellGetter extends AbstractScript
     	{
     		if (state.robot.shellsOnBoard == true)
     		{
-                state.changeRobotRadius(TechTheSand.middleRobotRadius);
+                state.changeRobotRadius(TechTheSand.expandedRobotRadius);
             }
     		else
     		{
