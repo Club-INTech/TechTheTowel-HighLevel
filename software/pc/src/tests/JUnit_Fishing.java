@@ -5,8 +5,12 @@ import enums.ScriptNames;
 import enums.ServiceNames;
 import enums.Speed;
 import exceptions.ExecuteException;
+import exceptions.Locomotion.UnableToMoveException;
+import exceptions.PathNotFoundException;
+import exceptions.PointInObstacleException;
 import exceptions.serial.SerialFinallyException;
 import hook.Hook;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import robot.Robot;
@@ -41,7 +45,7 @@ public class JUnit_Fishing extends JUnit_Test
 		theRobot.robot.useActuator(ActuatorOrder.ARM_INIT, true);
 		theRobot.robot.setOrientation(Math.PI);
 		theRobot.robot.setPosition(Table.entryPosition);
-		theRobot.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+		theRobot.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 		theRobot.robot.moveLengthwise(232);
 		theRobot.table.deleteAllTheShells();
         Vec2 sup1 = new Vec2(1255,725);
@@ -91,4 +95,18 @@ public class JUnit_Fishing extends JUnit_Test
             e.printStackTrace();
         }
     }
+
+	@After
+	public void after()
+	{
+		try {
+			returnToEntryPosition(theRobot);
+		} catch (PathNotFoundException e) {
+			e.printStackTrace();
+		} catch (UnableToMoveException e) {
+			e.printStackTrace();
+		} catch (PointInObstacleException e) {
+			e.printStackTrace();
+		}
+	}
 }
