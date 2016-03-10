@@ -113,7 +113,7 @@ public class DropTheSand extends AbstractScript
     	{
     		if (state.robot.getIsSandInside() == true)
     		{
-                state.changeRobotRadius(TechTheSand.middleRobotRadius);
+                state.changeRobotRadius(TechTheSand.expandedRobotRadius);
     		}
     		else
     		{

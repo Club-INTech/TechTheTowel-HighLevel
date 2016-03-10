@@ -43,15 +43,11 @@ public class JUnit_TechTheSand extends JUnit_Test
 		theRobot.robot.setOrientation(Math.PI);
 		theRobot.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 		//supression de l'obstacle d'arrivé, pour tests
-		Vec2 sup = scriptManager.getScript(ScriptNames.TECH_THE_SAND).entryPosition(0, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
+		Vec2 sup = scriptManager.getScript(ScriptNames.TECH_THE_SAND).entryPosition(1, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
 		theRobot.table.getObstacleManager().freePoint(sup);
         sup = scriptManager.getScript(ScriptNames.DROP_THE_SAND).entryPosition(0, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
         theRobot.table.getObstacleManager().freePoint(sup);
         theRobot.table.getObstacleManager().freePoint(new Vec2(900,1150)); // test
-		theRobot.robot.moveLengthwise(200);
-		container.getService(ServiceNames.THREAD_INTERFACE);
-		container.startInstanciedThreads();
-
 		try
 		{
 			if(!theRobot.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
@@ -63,21 +59,17 @@ public class JUnit_TechTheSand extends JUnit_Test
 				theRobot.robot.useActuator(ActuatorOrder.STOP_DOOR, true);
 				throw new BlockedActuatorException("Porte droite bloquée !");
 			}
-
-			if(!theRobot.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED_LEFT))
-			{
-				theRobot.robot.useActuator(ActuatorOrder.CLOSE_DOOR_LEFT, true);
-			}
-			if(!theRobot.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED_LEFT))
-			{
-				theRobot.robot.useActuator(ActuatorOrder.STOP_DOOR, true);
-				throw new BlockedActuatorException("Porte gauche bloquée !");
-			}
 		}
 		catch (SerialConnexionException e)
 		{
 			e.printStackTrace();
 		}
+		theRobot.robot.moveLengthwise(200);
+		container.getService(ServiceNames.THREAD_INTERFACE);
+		container.startInstanciedThreads();
+
+
+
 	}
 	
 	
