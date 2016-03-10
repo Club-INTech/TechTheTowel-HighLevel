@@ -29,8 +29,7 @@ public class TechTheSand extends AbstractScript
 
     /** TEMPORAIRE */
     public static final int expandedRobotRadius = 300; //TODO a changer
-    public static final int middleRobotRadius = 270; //TODO a changer
-    public static final int retractedRobotRadius = 250; //TODO a changer
+	public static final int retractedRobotRadius = 250; //TODO a changer
 
 
     public TechTheSand(HookFactory hookFactory, Config config, Log log)
@@ -180,13 +179,10 @@ public class TechTheSand extends AbstractScript
                 }*/
 
                 // Définition de l'arc à suivre, point de départ temporaire
-                approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(-150,1600), stateToConsider.robot.getOrientation(), false);
+                approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(-50,1600), stateToConsider.robot.getOrientation(), false);
 
                 //On se déplace en courbe pour se placer en face du château
                 stateToConsider.robot.moveArc(approach, hooksToConsider);
-
-                stateToConsider.robot.setRobotRadius(TechTheSand.middleRobotRadius);
-                stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.middleRobotRadius);
 
                 // On reprend notre vitesse habituelle
                 stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
@@ -239,7 +235,7 @@ public class TechTheSand extends AbstractScript
 			state.robot.useActuator(ActuatorOrder.STOP_AXIS, true);
 			if (state.robot.getIsSandInside())
 			{
-				state.changeRobotRadius(middleRobotRadius);
+				state.changeRobotRadius(expandedRobotRadius);
 			}
 			else
 			{

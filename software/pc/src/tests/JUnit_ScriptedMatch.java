@@ -83,7 +83,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         }
         try
         {
-            scriptManager.getScript(ScriptNames.TECH_THE_SAND).goToThenExec(0,theRobot, emptyHook);
+            scriptManager.getScript(ScriptNames.TECH_THE_SAND).goToThenExec(1,theRobot, emptyHook);
         }
         catch(ExecuteException | SerialFinallyException e)
         {

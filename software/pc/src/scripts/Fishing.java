@@ -424,7 +424,7 @@ public class Fishing extends AbstractScript
 				hooksToConsider.add(hook2);
 
 				// On longe le bac
-				stateToConsider.robot.moveLengthwise(520, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(460, hooksToConsider, true);
 				
 				//On indique ques les poissons se trouvent sur le bras
 				stateToConsider.robot.setAreFishesOnBoard(true);
