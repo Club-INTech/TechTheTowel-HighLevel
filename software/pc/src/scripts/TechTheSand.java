@@ -3,6 +3,7 @@ package scripts;
 import enums.*;
 import exceptions.BlockedActuatorException;
 import exceptions.ExecuteException;
+import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
@@ -151,14 +152,23 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.robot.useActuator(ActuatorOrder.START_AXIS, false);
                 
                 // Définition de l'arc à suivre, point de départ temporaire
-                Arc approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(300,2015-TechTheSand.expandedRobotRadius), Math.PI, true);
+                Arc approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(50,2000-300), Math.PI*1.05, true);
 
-                //On se déplace en courbe pour se placer en face du château
-                stateToConsider.robot.moveArc(approach, hooksToConsider);
+				try {
+					//On se déplace en courbe pour se placer en face du château
+					stateToConsider.robot.moveArc(approach, hooksToConsider);
+				}
+				catch (UnableToMoveException e)
+				{
+					e.printStackTrace();
+				}
+
+				stateToConsider.robot.moveLengthwise(-30);
+				stateToConsider.robot.turn(Math.PI);
 
                 // On avance pour récupérer le sable
                 // TODO la distance est arbitraire, à modifier avec les phases de test
-                stateToConsider.robot.moveLengthwise(150, hooksToConsider, true);
+                stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x-stateToConsider.robot.getRobotRadius(), hooksToConsider, true);
 
                 // Demande au robot de ne tourner que vers la gauche pour ses prochains déplacements
                 stateToConsider.robot.setTurningStrategy(TurningStrategy.LEFT_ONLY);
@@ -178,8 +188,10 @@ public class TechTheSand extends AbstractScript
                     throw new BlockedActuatorException("Porte bloquée !");
                 }*/
 
-                // Définition de l'arc à suivre, point de départ temporaire
-                approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(-50,1600), stateToConsider.robot.getOrientation(), false);
+				stateToConsider.robot.moveLengthwise(-20);
+
+				// Définition de l'arc à suivre, point de départ temporaire
+                approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(-300,1600), stateToConsider.robot.getOrientation(), false);
 
                 //On se déplace en courbe pour se placer en face du château
                 stateToConsider.robot.moveArc(approach, hooksToConsider);
@@ -216,7 +228,7 @@ public class TechTheSand extends AbstractScript
         else if(version == 1)
         {
             //TODO
-            return new Circle(500,2000-500);
+            return new Circle(430,2000-400);
         }
 		else
 		{
