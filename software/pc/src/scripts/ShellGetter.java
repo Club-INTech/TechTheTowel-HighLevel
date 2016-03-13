@@ -1,11 +1,9 @@
 package scripts;
 
 
-import enums.ActuatorOrder;
-import enums.DirectionStrategy;
-import enums.Speed;
-import enums.TurningStrategy;
+import enums.*;
 import exceptions.BadVersionException;
+import exceptions.BlockedActuatorException;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialFinallyException;
@@ -49,6 +47,22 @@ public class ShellGetter extends AbstractScript
             stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL); // TODO A changer quand asserv OK
 
             try {
+                stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, true);
+
+                // on vérifie si la porte n'est pas bloquée lors de son ouverture
+                if(!stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_OPENED))
+                {
+                    stateToConsider.robot.useActuator(ActuatorOrder.STOP_DOOR, false);
+                    throw new BlockedActuatorException("Porte bloquée !");
+                }
+
+                // booléen de vitre ouverte vrai
+                stateToConsider.robot.doorIsOpen = true;
+
+                // on étend le rayon du robot avec la vitre ouverte
+                stateToConsider.changeRobotRadius(TechTheSand.expandedRobotRadius);
+                stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
+
                 //stateToConsider.robot.moveLengthwise(100);
                 stateToConsider.robot.turn(-1*Math.PI/2);
                 stateToConsider.robot.moveLengthwise(700);
@@ -94,30 +108,6 @@ public class ShellGetter extends AbstractScript
                 // les coquillages ne sont plus embarqués
                 stateToConsider.robot.shellsOnBoard=false;
 
-                //=========================================================================================
-                //            TODO A remettre une fois les capteurs de fin de course installés
-                //=========================================================================================
-                /*
-                // on ferme notre porte
-                stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
-                
-                // on vérifie si la porte n'est pas bloquée lors de sa fermeture
-                if(!stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
-                {
-                    stateToConsider.robot.useActuator(ActuatorOrder.STOP_DOOR, false);
-                    throw new BlockedActuatorException("Porte bloquée !");
-                }
-                
-                // on l'indique au robot
-                stateToConsider.robot.doorIsOpen = false;
-                
-                // on reprend le rayon initial du robot
-                stateToConsider.changeRobotRadius(TechTheSand.retractedRobotRadius);
-                */
-                //========================================================================================
-                //            ===================================================================
-                //========================================================================================
-
                 // on se tourne vers pi
                 stateToConsider.robot.turn(Math.PI);
                 
@@ -141,6 +131,22 @@ public class ShellGetter extends AbstractScript
                 Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
                 stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL); // TODO A changer quand asserv OK
 
+                stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, true);
+
+                // on vérifie si la porte n'est pas bloquée lors de son ouverture
+                if(!stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_OPENED))
+                {
+                    stateToConsider.robot.useActuator(ActuatorOrder.STOP_DOOR, false);
+                    throw new BlockedActuatorException("Porte bloquée !");
+                }
+
+                // booléen de vitre ouverte vrai
+                stateToConsider.robot.doorIsOpen = true;
+
+                // on étend le rayon du robot avec la vitre ouverte
+                stateToConsider.changeRobotRadius(TechTheSand.expandedRobotRadius);
+                stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
+
                 stateToConsider.robot.turn(-1*Math.PI/2);
                 stateToConsider.robot.moveLengthwise(700);
 
@@ -151,30 +157,6 @@ public class ShellGetter extends AbstractScript
 
                 // on déclare les coquillages comme étant dans le robot
                 stateToConsider.robot.shellsOnBoard=true;
-
-                //=========================================================================================
-                //            TODO A remettre une fois les capteurs de fin de course installés
-                //=========================================================================================
-                /*
-                // on ferme notre porte
-                stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
-
-                // on vérifie si la porte n'est pas bloquée lors de sa fermeture
-                if(!stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
-                {
-                    stateToConsider.robot.useActuator(ActuatorOrder.STOP_DOOR, false);
-                    throw new BlockedActuatorException("Porte bloquée !");
-                }
-
-                // on l'indique au robot
-                stateToConsider.robot.doorIsOpen = false;
-
-                // on reprend le rayon initial du robot
-                stateToConsider.changeRobotRadius(TechTheSand.retractedRobotRadius);
-                */
-                //========================================================================================
-                //            ===================================================================
-                //========================================================================================
 
                 // On créé l'arc de récupération
                 Arc getter = new Arc(stateToConsider.robot.getPosition(), new Vec2(1300-TechTheSand.expandedRobotRadius/2,750),
@@ -225,10 +207,6 @@ public class ShellGetter extends AbstractScript
                 stateToConsider.robot.turn(Math.atan((selected.getY() - stateToConsider.robot.getPositionFast().y) /
                         (selected.getX() - stateToConsider.robot.getPositionFast().x)));
 
-                //=========================================================================================
-                //            TODO A remettre une fois les capteurs de fin de course installés
-                //=========================================================================================
-                /*
                 stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, true);
 
                 // on vérifie si la porte n'est pas bloquée lors de son ouverture
@@ -243,10 +221,7 @@ public class ShellGetter extends AbstractScript
 
                 // on étend le rayon du robot avec la vitre ouverte
                 stateToConsider.changeRobotRadius(TechTheSand.expandedRobotRadius);
-                */
-                //========================================================================================
-                //            ===================================================================
-                //========================================================================================
+                stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
 
                 // on oblige le robot à tourner vers la gauche pour ne pas lâcher les coquillages
                 stateToConsider.robot.setTurningStrategy(TurningStrategy.LEFT_ONLY);
@@ -276,10 +251,6 @@ public class ShellGetter extends AbstractScript
                 stateToConsider.robot.turn(Math.atan((selected.getY() - stateToConsider.robot.getPositionFast().y) /
                         (selected.getX() - stateToConsider.robot.getPositionFast().x)));
 
-                //=========================================================================================
-                //            TODO A remettre une fois les capteurs de fin de course installés
-                //=========================================================================================
-                /*
                 stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, true);
 
                 // on vérifie si la porte n'est pas bloquée lors de son ouverture
@@ -294,10 +265,8 @@ public class ShellGetter extends AbstractScript
 
                 // on étend le rayon du robot avec la vitre ouverte
                 stateToConsider.changeRobotRadius(TechTheSand.expandedRobotRadius);
-                */
-                //========================================================================================
-                //            ===================================================================
-                //========================================================================================
+                stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
+
 
                 // on oblige le robot à tourner vers la gauche pour ne pas lâcher les coquillages
                 stateToConsider.robot.setTurningStrategy(TurningStrategy.LEFT_ONLY);
@@ -382,14 +351,19 @@ public class ShellGetter extends AbstractScript
     	// on tente de ranger la porte, avec changement de rayon
     	try
     	{
-    		if (state.robot.shellsOnBoard == true)
-    		{
+            if (state.robot.shellsOnBoard)
+            {
                 state.changeRobotRadius(TechTheSand.expandedRobotRadius);
+                state.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
             }
-    		else
-    		{
-    			state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
-                state.changeRobotRadius(TechTheSand.retractedRobotRadius);
+            else
+            {
+                state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
+                if(!state.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED)) {
+                    state.changeRobotRadius(TechTheSand.retractedRobotRadius);
+                    state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
+                    state.robot.setDoor(false);
+                }
             }
     	}
     	catch (Exception e)

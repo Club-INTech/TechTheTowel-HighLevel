@@ -56,11 +56,22 @@ public class RobotReal extends Robot
 	{
 		//redondance avec useActuator qui log.debug deja
 		//log.debug("appel de RobotReal.useActuator(" + order + "," + waitForCompletion + ")", this);
+        int door = (order == ActuatorOrder.OPEN_DOOR ? 2 : 0) + (order == ActuatorOrder.CLOSE_DOOR ? 1 : 0);
 		if(symmetry)
 			order = mActuatorCorrespondenceMap.getSymmetrizedActuatorOrder(order);
 		mActuatorCardWrapper.useActuator(order);
-		
-		if(waitForCompletion)
+
+        if(waitForCompletion && door == 1)
+        {
+            long time = System.currentTimeMillis();
+            while(!getContactSensorValue(ContactSensors.DOOR_CLOSED) && System.currentTimeMillis()-time < order.getDuration());
+        }
+        else if(waitForCompletion && door == 2)
+        {
+            long time = System.currentTimeMillis();
+            while(!getContactSensorValue(ContactSensors.DOOR_OPENED) && System.currentTimeMillis()-time < order.getDuration());
+        }
+		else if(waitForCompletion)
 		{
 			sleep(order.getDuration());
 		}
@@ -411,5 +422,6 @@ public class RobotReal extends Robot
 	{
 		return mLocomotion.isRobotMovingBackward;
 	}
+
 
 }

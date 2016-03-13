@@ -63,9 +63,12 @@ public class DropTheSand extends AbstractScript
                 {
                     actualState.robot.useActuator(ActuatorOrder.STOP_DOOR, false);
                     throw new BlockedActuatorException("Porte bloquée !");
+                } else {
+                    actualState.robot.setDoor(false);
                 }
 
                 actualState.changeRobotRadius(TechTheSand.retractedRobotRadius);
+                actualState.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
 
                 //On indique au robot qu'il ne transporte plus de sable
         		actualState.robot.setIsSandInside(false);
@@ -114,11 +117,16 @@ public class DropTheSand extends AbstractScript
     		if (state.robot.getIsSandInside() == true)
     		{
                 state.changeRobotRadius(TechTheSand.expandedRobotRadius);
-    		}
+                state.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
+            }
     		else
     		{
     			state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
-                state.changeRobotRadius(TechTheSand.retractedRobotRadius);
+                if(!state.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED)) {
+                    state.changeRobotRadius(TechTheSand.retractedRobotRadius);
+                    state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
+                    state.robot.setDoor(false);
+                }
     		}
     	}
     	catch (Exception e)

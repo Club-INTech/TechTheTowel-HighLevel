@@ -72,9 +72,12 @@ public class TechTheSand extends AbstractScript
                 {
                     stateToConsider.robot.useActuator(ActuatorOrder.STOP_DOOR, false);
                     throw new BlockedActuatorException("Porte bloquée !");
+                } else {
+                    stateToConsider.robot.setDoor(true);
                 }
 
 				stateToConsider.changeRobotRadius(TechTheSand.expandedRobotRadius);
+                stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
 
 				// On active la tige accrochante
 				stateToConsider.robot.useActuator(ActuatorOrder.START_AXIS, false);
@@ -92,18 +95,6 @@ public class TechTheSand extends AbstractScript
 				// On indique au robot qu'il transporte du sable
 				stateToConsider.robot.setIsSandInside(true);
 
-                // On rétracte la vitre
-                /*stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
-
-                if(!stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
-                {
-                    stateToConsider.robot.useActuator(ActuatorOrder.STOP_DOOR, false);
-                    throw new BlockedActuatorException("Porte bloquée !");
-                }
-*/
-                stateToConsider.robot.setRobotRadius(TechTheSand.expandedRobotRadius);
-				stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
-				
 				Arc out = new Arc(stateToConsider.robot.getPosition(),new Vec2(-400,1300),stateToConsider.robot.getOrientation(),false);
 				
 				stateToConsider.robot.moveArc(out, hooksToConsider);
@@ -144,9 +135,12 @@ public class TechTheSand extends AbstractScript
                 if (!stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_OPENED)) {
                     stateToConsider.robot.useActuator(ActuatorOrder.STOP_DOOR, false);
                     throw new BlockedActuatorException("Porte bloquée !");
+                } else {
+                    stateToConsider.robot.setDoor(true);
                 }
 
                 stateToConsider.changeRobotRadius(TechTheSand.expandedRobotRadius);
+                stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
 
                 // On active la tige accrochante
                 stateToConsider.robot.useActuator(ActuatorOrder.START_AXIS, false);
@@ -178,15 +172,6 @@ public class TechTheSand extends AbstractScript
 
                 // On indique au robot qu'il transporte du sable
                 stateToConsider.robot.setIsSandInside(true);
-
-                // On rétracte la vitre
-             /*   stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
-
-                if(!stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
-                {
-                    stateToConsider.robot.useActuator(ActuatorOrder.STOP_DOOR, false);
-                    throw new BlockedActuatorException("Porte bloquée !");
-                }*/
 
 				stateToConsider.robot.moveLengthwise(-20);
 
@@ -245,15 +230,20 @@ public class TechTheSand extends AbstractScript
 		try 
 		{
 			state.robot.useActuator(ActuatorOrder.STOP_AXIS, true);
-			if (state.robot.getIsSandInside())
-			{
-				state.changeRobotRadius(expandedRobotRadius);
-			}
-			else
-			{
-				state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
-				state.changeRobotRadius(retractedRobotRadius);
-			}
+            if (state.robot.getIsSandInside())
+            {
+                state.changeRobotRadius(TechTheSand.expandedRobotRadius);
+                state.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
+            }
+            else
+            {
+                state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
+                if(!state.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED)) {
+                    state.changeRobotRadius(TechTheSand.retractedRobotRadius);
+                    state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
+                    state.robot.setDoor(false);
+                }
+            }
 		}
 		catch (Exception e)
 		{

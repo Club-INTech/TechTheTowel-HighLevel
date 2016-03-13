@@ -189,6 +189,11 @@ public abstract class Robot implements Service
 	{
 		return IsSandInside;
 	}
+
+	public void setDoor(boolean state)
+	{
+		this.doorIsOpen = state;
+	}
 	
 	/**
 	 * Immobilise le robot.

@@ -122,7 +122,7 @@ public class Locomotion implements Service
      * 	La distance maximale pour une correction rotationelle 
      * 	La correction ne sera effectuée que si le robot est loin de son point d'arrivée.
      */
-    private final int maxLengthCorrectionThreeshold = 30;
+    private final int maxLengthCorrectionThreeshold = 20;
     
     /**
      * 	L'orientation maximale pour une correction rotationelle 
@@ -135,11 +135,6 @@ public class Locomotion implements Service
      * Si l'angle y est inférieur, je tourne en FASTEST
      */
     private final double maxRotationTurningStrategyIgnore = Math.PI/6;
-
-    /**
-     * Limite pour laquelle la position du robot vaut la position d'entrée d'un arc.
-     */
-    private final int maxPositionArcThreshold = 10;
 
     /**Booleen explicitant si le robot est pret à tourner, utile pour le cercle de detection */
 	public boolean isRobotTurning=false;	
@@ -290,7 +285,6 @@ public class Locomotion implements Service
      * Fait suivre au robot un arc de cercle (trajectoire courbe)
      * @param arc l'arc à suivre
      * @param hooks les hooks à prendre en compte
-     * @throws BadArcEntryPosition si la position actuelle du robot ne correspond pas au point d'entrée de l'arc
      * @throws UnableToMoveException si le robot est bloqué
      */
     public void moveArc(Arc arc, ArrayList<Hook> hooks) throws UnableToMoveException
