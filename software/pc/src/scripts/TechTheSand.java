@@ -190,10 +190,10 @@ public class TechTheSand extends AbstractScript
 
 				stateToConsider.robot.moveLengthwise(-20);
 
+				double distanceCod = 0;
 				// Définition de l'arc à suivre, point de départ temporaire
-                approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(-300,1600), stateToConsider.robot.getOrientation(), false);
+                approach = new Arc(distanceCod, distanceCod*Math.PI/2, stateToConsider.robot.getOrientation(), false);
 
-                //On se déplace en courbe pour se placer en face du château
                 stateToConsider.robot.moveArc(approach, hooksToConsider);
 
                 // On reprend notre vitesse habituelle

@@ -54,7 +54,7 @@ public class DropTheSand extends AbstractScript
         		
         		// On recule pour 'déposer' le sable
         		// TODO la distance est arbitraire, à modifier avec les phases de test
-        		actualState.robot.moveLengthwise(-200, hooksToConsider, false);
+        		actualState.robot.moveLengthwise(-400, hooksToConsider, false);
         		
                 actualState.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
                 
@@ -95,7 +95,7 @@ public class DropTheSand extends AbstractScript
     {
         if(version == 0)
         {
-            return new Circle(1000, 400, 0);
+            return new Circle(300, 900, 0);
         }
         else
         {

@@ -81,6 +81,21 @@ public class Arc
             this.radius *= -1;
     }
 
+    public Arc(double radius, double length, double angle, boolean isEnd)
+    {
+        this.radius = radius;
+        this.length = length;
+
+        if(isEnd)
+        {
+            this.endAngle = angle;
+            this.startAngle = angle - length/radius;
+        } else {
+            this.startAngle = angle;
+            this.endAngle = angle + length/radius;
+        }
+    }
+
 
     /**
      * Inverse le mouvement, l'arrivée devient la fin et inversement
