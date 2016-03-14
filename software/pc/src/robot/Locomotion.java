@@ -689,44 +689,50 @@ public class Locomotion implements Service
         
         // position donnée par le bas niveau avec un traitement dans UpdateCurrentPositionAndOrientation
         Vec2 givenPosition = highLevelPosition.clone();
-        
-        // Le point qu'on vise, donné par le haut niveau donc comme si on etais vert
-        Vec2 aimSymmetrized = aim.clone();   
-        
-        if(symetry) // miroir des positions
-        {
-        	givenPosition.x  = -givenPosition.x;
-        	aimSymmetrized.x = -aimSymmetrized.x;
-            if(isCurve)
-                this.curveArc.radius *= -1;
-        }
-        Vec2 delta = aimSymmetrized.clone();
-        
-        delta.minus(givenPosition);
- 
-        
-        //calcul de la nouvelle distance et du nouvel angle
-        double distance = delta.length();
+
+        double distance;
         double angle;
+        Vec2 aimSymmetrized = null;
+
+        if(!isCurve)
+        {
+            // Le point qu'on vise, donné par le haut niveau donc comme si on etais vert
+            aimSymmetrized = aim.clone();
+
+            if (symetry) // miroir des positions
+            {
+                givenPosition.x = -givenPosition.x;
+                aimSymmetrized.x = -aimSymmetrized.x;
+            }
+            Vec2 delta = aimSymmetrized.clone();
+
+            delta.minus(givenPosition);
+
+
+            //calcul de la nouvelle distance et du nouvel angle
+            distance = delta.length();
         /*
         if(symetry)
         	  angle = Math.atan2(-delta.y, delta.x);//Angle en absolu 
         else */
-    	angle = Math.atan2(delta.y, delta.x);//Angle en absolu
+            angle = Math.atan2(delta.y, delta.x);//Angle en absolu
 
-        
-        // si on a besoin de se retourner pour suivre la consigne de isMovementForward on le fait ici
-        if(isMovementForward && distance < 0 || (!isMovementForward && distance > 0))
-        {
-            distance *= -1;
-            angle += Math.PI;
+            // si on a besoin de se retourner pour suivre la consigne de isMovementForward on le fait ici
+            if (isMovementForward && distance < 0 || (!isMovementForward && distance > 0)) {
+                distance *= -1;
+                angle += Math.PI;
+            }
         }
 
         //Si on fait une trajectoire courbe, on ignore la distance et l'angle de rotation
-        if(isCurve)
+        else
         {
             distance=0;
             angle=0;
+            if(symetry)
+            {
+                this.curveArc.radius *= -1;
+            }
         }
 
         if(isForcing)
@@ -744,18 +750,18 @@ public class Locomotion implements Service
                 this.timeExpected = System.currentTimeMillis() + (long)(4*Math.abs(distance)*this.transSpeed);
             }
         }
-                
+
         // on annule la correction si on est trop proche de la destination
-        if(isCorrection && !isCurve)
+        if(!isCurve && isCorrection)
         {
            Vec2 vectorTranslation = aimSymmetrized;
            vectorTranslation.minus( givenPosition );
-           if( (  vectorTranslation.length() >  maxLengthCorrectionThreeshold )) 
+           if( (  vectorTranslation.length() >  maxLengthCorrectionThreeshold ))
 	        	moveToPointSerialOrder(aimSymmetrized, givenPosition, angle, distance, mustDetect, turnOnly, isCorrection, false);
-	        else 
+	        else
 	        	return;// Si on est trop proche, on ne fais rien.
         }
-        else 
+        else
         	moveToPointSerialOrder(aimSymmetrized, givenPosition, angle, distance, mustDetect, turnOnly, isCorrection, isCurve);
     }
     
