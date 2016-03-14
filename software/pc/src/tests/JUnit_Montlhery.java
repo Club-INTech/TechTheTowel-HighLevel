@@ -77,7 +77,7 @@ public class JUnit_Montlhery extends JUnit_Test
     {
         try {
             state.robot.moveArc(new Arc(state.robot.getPosition(), state.robot.getPosition().plusNewVector(new Vec2(0,-500)),
-                    state.robot.getPosition().plusNewVector(new Vec2(-500, -250))), new ArrayList<Hook>());
+                    state.robot.getPosition().plusNewVector(new Vec2(-250, -250))), new ArrayList<Hook>());
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
