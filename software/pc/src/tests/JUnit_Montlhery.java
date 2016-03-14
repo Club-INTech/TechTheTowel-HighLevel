@@ -4,13 +4,19 @@ import enums.ActuatorOrder;
 import enums.ServiceNames;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
+import hook.Hook;
+import javafx.scene.control.Tab;
 import org.junit.Before;
 import org.junit.Test;
 import robot.Locomotion;
 import robot.Robot;
 import robot.cardsWrappers.SensorsCardWrapper;
+import smartMath.Arc;
+import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
+
+import java.util.ArrayList;
 
 /**
  * JUnit pour la prés. aux collègiens
@@ -48,8 +54,8 @@ public class JUnit_Montlhery extends JUnit_Test
         mLocomotion.updateConfig();
 
         //mLocomotion.setPosition(new Vec2 (1500-320-77,1000));
-        mLocomotion.setPosition(Table.entryPosition);// milieu de table
-        mLocomotion.setOrientation(0);
+        mLocomotion.setPosition(new Vec2(Table.entryPosition.x, Table.entryPosition.y+350));// milieu de table
+        mLocomotion.setOrientation(Math.PI);
         container.getService(ServiceNames.THREAD_INTERFACE);
         container.startInstanciedThreads();
 
@@ -59,9 +65,20 @@ public class JUnit_Montlhery extends JUnit_Test
     public void dansLeTas()
     {
         try {
-            state.robot.moveLengthwise(1000);
+            state.robot.moveLengthwise(1500);
             state.robot.useActuator(ActuatorOrder.FISHING_POSITION, false);
         } catch (UnableToMoveException | SerialConnexionException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //@Test
+    public void moveArc()
+    {
+        try {
+            state.robot.moveArc(new Arc(state.robot.getPosition(), state.robot.getPosition().plusNewVector(new Vec2(0,-500)),
+                    state.robot.getPosition().plusNewVector(new Vec2(-500, -250))), new ArrayList<Hook>());
+        } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
     }

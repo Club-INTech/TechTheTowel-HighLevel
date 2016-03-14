@@ -79,18 +79,18 @@ class ThreadSensor extends AbstractThread
     /**
      * Angles des capteurs relatifs à l'axe avant-arrière du robot (radians) TODO A changer !
      */
-    private final double angleLF = 0.30;
-    private final double angleRF = 0.30;
-    private final double angleLB = 0.20;
-    private final double angleRB = 0.20;
+    private final double angleLF = 0;
+    private final double angleRF = 0;
+    private final double angleLB = 0;
+    private final double angleRB = 0;
 
 
     /**
      * Positions relatives au centre du robot TODO A changer !
      */
 
-    private final Vec2 positionLF = new Vec2(120, -55);
-    private final Vec2 positionRF = new Vec2(120, 55);
+    private final Vec2 positionLF = new Vec2(170, -150);
+    private final Vec2 positionRF = new Vec2(170, 150);
     private final Vec2 positionLB = new Vec2(-120,-75);
     private final Vec2 positionRB = new Vec2(-120,75);
 
