@@ -18,6 +18,7 @@ public enum ActuatorOrder
 	MOVE_BACKWARD("rc"),
 	TURN_RIGHT("td"),
 	TURN_LEFT("tg"),
+	MONTLHERY("montlhery"),
 	
 	//========================================================
 	// Consignes pour les bras chargés de prendre les poissons
