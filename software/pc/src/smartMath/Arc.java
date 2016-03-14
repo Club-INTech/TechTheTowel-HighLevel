@@ -98,7 +98,7 @@ public class Arc
 
 
     /**
-     * Inverse le mouvement, l'arrivée devient la fin et inversement
+     * Inverse le mouvement, l'arrivée devient la fin et inversement, le robot ira en arrière
      */
     public void setReverse()
     {
@@ -106,8 +106,9 @@ public class Arc
         this.end = this.start;
         this.start = temp;
         this.length *= -1;
-        this.startAngle = Geometry.modulo(startAngle + Math.PI, 2*Math.PI);
-        this.endAngle = Geometry.modulo(endAngle + Math.PI, 2*Math.PI);
+        double ang = startAngle;
+        this.startAngle = this.endAngle;
+        this.endAngle = ang;
     }
 
     /**

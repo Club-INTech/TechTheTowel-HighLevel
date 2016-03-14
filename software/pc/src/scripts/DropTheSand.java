@@ -122,7 +122,7 @@ public class DropTheSand extends AbstractScript
     		else
     		{
     			state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
-                if(!state.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED)) {
+                if(state.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED)) {
                     state.changeRobotRadius(TechTheSand.retractedRobotRadius);
                     state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
                     state.robot.setDoor(false);

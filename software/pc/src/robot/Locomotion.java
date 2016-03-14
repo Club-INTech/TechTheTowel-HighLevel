@@ -29,7 +29,7 @@ import java.util.ArrayList;
  * (les méthodes non-bloquantes s'exécutent très rapidement)
  * Les méthodes "bloquantes" se finissent alors que le robot est arrêté.
  * @author pf
- * @author discord (trajectoires courbes)
+ * @author discord (trajectoires courbes + mouvement forcé)
  *
  * TODO faire une gestion complète des trajectoires courbes
  *
@@ -643,7 +643,7 @@ public class Locomotion implements Service
 	                hook.evaluate();
                         
             // le fait de faire de nombreux appels permet de corriger la trajectoire
-            if(!isCurve)
+            if(!isCurve && !isForcing)
                 correctAngle(aim, isMovementForward, mustDetect);
             
             //log.critical("Temps pour finir la boucle d'asservissement "+(System.currentTimeMillis()-time), this);
@@ -660,6 +660,7 @@ public class Locomotion implements Service
 
     /**
      * donne une consigne d'un nouvel angle a atteindre (pour corriger la trajectoire en cours de mouvement)
+     * N'EST PAS LANCE EN TRAJECTOIRE COURBE ET EN MOUVEMENT FORCE
      * @param aim la point vise (non symetrisee)
      * @param isMovementForward vrai si on va en avant et faux si on va en arriere
      * @throws BlockedException si le robot a un bloquage mecanique
@@ -896,7 +897,7 @@ public class Locomotion implements Service
             {
                 log.critical("Le robot force, on l'arrête.");
                 this.immobilise();
-                return false;
+                throw new BlockedException();
             }
             else {
                 return !infos[0];//toujours pas arrivé

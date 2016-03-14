@@ -163,7 +163,7 @@ public class TechTheSand extends AbstractScript
 
                 // On avance pour récupérer le sable
                 // TODO la distance est arbitraire, à modifier avec les phases de test
-                stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x, hooksToConsider, true);
+                stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 100, hooksToConsider, true);
 
                 // Demande au robot de ne tourner que vers la gauche pour ses prochains déplacements
                 stateToConsider.robot.setTurningStrategy(TurningStrategy.LEFT_ONLY);
@@ -177,15 +177,49 @@ public class TechTheSand extends AbstractScript
 				stateToConsider.robot.moveLengthwise(-20);
 
 				double distanceCod = 145;
+				// Définition de l'arc à suivre, point de départ temporaire
+				Arc approach2 = new Arc(distanceCod, distanceCod*Math.PI/2, Math.PI, false);
 
-				try {
-                    // Définition de l'arc à suivre, point de départ temporaire
-                    approach = new Arc(distanceCod, distanceCod*Math.PI/2, Math.PI, false);
-					stateToConsider.robot.moveArc(approach, hooksToConsider);
-				} catch (Exception e)
+				//=============================================================================================
+				// Bouclage récursif de sortie
+				// On tente de sortir 3x en reculant un peu à chaque tentative, si on échoue les 3 tentatives,
+				//   on abandonne le sable
+				//=============================================================================================
+				try
+				{
+					stateToConsider.robot.moveArc(approach2, hooksToConsider);
+				}
+				catch (UnableToMoveException e)
 				{
 					e.printStackTrace();
+					stateToConsider.robot.moveLengthwise(-30);
+					try
+					{
+						stateToConsider.robot.moveArc(approach2, hooksToConsider);
+					}
+					catch (UnableToMoveException e2)
+					{
+						e2.printStackTrace();
+						stateToConsider.robot.moveLengthwise(-30);
+						try
+						{
+							stateToConsider.robot.moveArc(approach2, hooksToConsider);
+						}
+						catch (UnableToMoveException e3)
+						{
+							e3.printStackTrace();
+							log.critical("Impossible de se dégager, abandon du sable");
+							stateToConsider.robot.setIsSandInside(false);
+							stateToConsider.robot.setTurningStrategy(TurningStrategy.FASTEST);
+							stateToConsider.robot.setDirectionStrategy(DirectionStrategy.FASTEST);
+							stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 300);
+							approach.setReverse();
+							stateToConsider.robot.moveArc(approach, hooksToConsider);
+
+						}
+					}
 				}
+				//==============================================================================================
 
                 stateToConsider.robot.setForceMovement(false);
 
@@ -237,6 +271,7 @@ public class TechTheSand extends AbstractScript
 		// on tente d'arrêter la tige et de ranger la vitre
 		try 
 		{
+			state.robot.setForceMovement(false);
 			state.robot.useActuator(ActuatorOrder.STOP_AXIS, true);
             if (state.robot.getIsSandInside())
             {
@@ -246,7 +281,7 @@ public class TechTheSand extends AbstractScript
             else
             {
                 state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
-                if(!state.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED)) {
+                if(state.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED)) {
                     state.changeRobotRadius(TechTheSand.retractedRobotRadius);
                     state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
                     state.robot.setDoor(false);
