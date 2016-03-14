@@ -18,6 +18,7 @@ public enum ActuatorOrder
 	MOVE_BACKWARD("rc"),
 	TURN_RIGHT("td"),
 	TURN_LEFT("tg"),
+	SSTOP("sstop"),
 	MONTLHERY("montlhery"),
 	
 	//========================================================

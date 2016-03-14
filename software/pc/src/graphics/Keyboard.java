@@ -111,7 +111,7 @@ public class Keyboard implements KeyListener
 		{
 			try
 			{
-				mRobot.useActuator(ActuatorOrder.STOP, false);
+				mRobot.useActuator(ActuatorOrder.SSTOP, false);
 			}
 			catch(Exception exception)
 			{
