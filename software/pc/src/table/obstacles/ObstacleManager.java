@@ -753,4 +753,15 @@ public class ObstacleManager
         return deleted;
     }
 
+	/**
+	 * Supprime TOUS les obstacles fixes de la table
+     * http://cdn.meme.am/instances/500x/21541512.jpg
+	 */
+	public void destroyEverything()
+	{
+		mRectangles.clear();
+		mLines.clear();
+		mFixedObstacles.clear();
+	}
+
 }

@@ -2,10 +2,10 @@ package tests;
 
 import enums.ActuatorOrder;
 import enums.ServiceNames;
+import enums.Speed;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import hook.Hook;
-import javafx.scene.control.Tab;
 import org.junit.Before;
 import org.junit.Test;
 import robot.Locomotion;
@@ -56,6 +56,8 @@ public class JUnit_Montlhery extends JUnit_Test
         //mLocomotion.setPosition(new Vec2 (1500-320-77,1000));
         mLocomotion.setPosition(new Vec2(Table.entryPosition.x, Table.entryPosition.y+350));// milieu de table
         mLocomotion.setOrientation(Math.PI);
+        state.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+        state.table.getObstacleManager().destroyEverything();
         container.getService(ServiceNames.THREAD_INTERFACE);
         container.startInstanciedThreads();
 
@@ -76,10 +78,35 @@ public class JUnit_Montlhery extends JUnit_Test
     public void moveArc()
     {
         try {
-            state.robot.moveArc(new Arc(state.robot.getPosition(), state.robot.getPosition().plusNewVector(new Vec2(0,-500)),
-                    state.robot.getPosition().plusNewVector(new Vec2(-250, -250))), new ArrayList<Hook>());
+            state.robot.moveArc(new Arc(state.robot.getPosition(), state.robot.getPosition().plusNewVector(new Vec2(0,-1000)),
+                    state.robot.getPosition().plusNewVector(new Vec2(-500, -500))), new ArrayList<Hook>());
         } catch (UnableToMoveException e) {
             e.printStackTrace();
+        }
+    }
+
+    //@Test
+    public void esquive()
+    {
+        try
+        {
+            state.robot.moveLengthwise(1500);
+        }
+        catch (UnableToMoveException e)
+        {
+            log.critical("GOGOL détecté");
+            try
+            {
+                state.robot.moveLengthwise(-150);
+                state.robot.moveArc(new Arc(state.robot.getPosition(), state.robot.getPosition().plusNewVector(new Vec2(0,-1000)),
+                        state.robot.getPosition().plusNewVector(new Vec2(-500, -500))), new ArrayList<Hook>());
+            }
+            catch (UnableToMoveException e1)
+            {
+                log.critical("Le GOGOL a bougé son pied !!");
+                e1.printStackTrace();
+            }
+
         }
     }
 }
