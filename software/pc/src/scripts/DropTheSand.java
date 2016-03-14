@@ -51,6 +51,8 @@ public class DropTheSand extends AbstractScript
         	{
         		// On autorise la marche arrière au robot
         		actualState.robot.setDirectionStrategy(DirectionStrategy.FASTEST);
+
+                actualState.robot.turn(Math.PI);
         		
         		// On recule pour 'déposer' le sable
         		// TODO la distance est arbitraire, à modifier avec les phases de test
@@ -98,7 +100,7 @@ public class DropTheSand extends AbstractScript
     {
         if(version == 0)
         {
-            return new Circle(300, 900, 0);
+            return new Circle(400, 870, 0);
         }
         else
         {

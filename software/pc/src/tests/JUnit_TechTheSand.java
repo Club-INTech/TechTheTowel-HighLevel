@@ -47,7 +47,8 @@ public class JUnit_TechTheSand extends JUnit_Test
 		theRobot.table.getObstacleManager().freePoint(sup);
         sup = scriptManager.getScript(ScriptNames.DROP_THE_SAND).entryPosition(0, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
         theRobot.table.getObstacleManager().freePoint(sup);
-        theRobot.table.getObstacleManager().freePoint(new Vec2(900,1150)); // test
+        theRobot.table.getObstacleManager().freePoint(Table.entryPosition.plusNewVector(new Vec2(-400,0))); // test
+		theRobot.table.deleteAllTheShells();
 		try
 		{
 			if(!theRobot.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
