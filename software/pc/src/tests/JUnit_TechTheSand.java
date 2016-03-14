@@ -81,6 +81,7 @@ public class JUnit_TechTheSand extends JUnit_Test
 		{
 			log.debug("Début de forage");
 			scriptManager.getScript(ScriptNames.TECH_THE_SAND).goToThenExec(1, theRobot, emptyHook);
+			log.critical("FINI DE FORER");
 			scriptManager.getScript(ScriptNames.DROP_THE_SAND).goToThenExec(0, theRobot, emptyHook);
 		}
 		catch(ExecuteException | SerialFinallyException e)

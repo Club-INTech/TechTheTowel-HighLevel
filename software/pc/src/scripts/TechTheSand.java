@@ -201,7 +201,7 @@ public class TechTheSand extends AbstractScript
 
 				double distanceCod = 145;
 				// Définition de l'arc à suivre, point de départ temporaire
-				Arc approach2 = new Arc(distanceCod, distanceCod*Math.PI/2, Math.PI, false);
+				Arc approach2 = new Arc(distanceCod, distanceCod*3*Math.PI/4, Math.PI, false);
                 stateToConsider.robot.setLocomotionSpeed(Speed.ULTRA_SLOW_ALL);
 
 				//=============================================================================================

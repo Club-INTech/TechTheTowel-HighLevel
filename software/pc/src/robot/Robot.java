@@ -522,7 +522,7 @@ public abstract class Robot implements Service
     	ArrayList<Node> nodePath = pdd.computePath(position, aim.position, new ArrayList<Obstacle>());
 
 		if(nodePath.isEmpty())
-			return;
+			throw new PathNotFoundException();
 
     	// On transforme les noeuds en Vec2
     	ArrayList<Vec2> path = new ArrayList<Vec2>();
