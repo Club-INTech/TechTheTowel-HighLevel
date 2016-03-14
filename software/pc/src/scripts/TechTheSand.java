@@ -162,13 +162,13 @@ public class TechTheSand extends AbstractScript
 					stateToConsider.robot.setForceMovement(true);
 					stateToConsider.robot.moveLengthwise(-30);
 
-				} catch(UnableToMoveException e)
+				} catch(Exception e)
 				{
 					e.printStackTrace();
 				}
 				try {
 					stateToConsider.robot.turn(Math.PI);
-				} catch (UnableToMoveException e)
+				} catch (Exception e)
 				{
 					e.printStackTrace();
 				}
@@ -178,7 +178,7 @@ public class TechTheSand extends AbstractScript
 					// On avance pour récupérer le sable
 					// TODO la distance est arbitraire, à modifier avec les phases de test
 					stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 200, hooksToConsider, true);
-				} catch (UnableToMoveException e)
+				} catch (Exception e)
 				{
 					e.printStackTrace();
 				}
@@ -190,8 +190,14 @@ public class TechTheSand extends AbstractScript
 
                 // On indique au robot qu'il transporte du sable
                 stateToConsider.robot.setIsSandInside(true);
-
-				stateToConsider.robot.moveLengthwise(-20);
+                try
+                {
+				    stateToConsider.robot.moveLengthwise(-20);
+                }
+                catch(Exception e)
+                {
+                     e.printStackTrace();
+                }
 
 				double distanceCod = 145;
 				// Définition de l'arc à suivre, point de départ temporaire
@@ -207,7 +213,7 @@ public class TechTheSand extends AbstractScript
 				{
 					stateToConsider.robot.moveArc(approach2, hooksToConsider);
 				}
-				catch (UnableToMoveException e)
+				catch (Exception e)
 				{
 					e.printStackTrace();
 					stateToConsider.robot.moveLengthwise(-30);
@@ -215,7 +221,7 @@ public class TechTheSand extends AbstractScript
 					{
 						stateToConsider.robot.moveArc(approach2, hooksToConsider);
 					}
-					catch (UnableToMoveException e2)
+					catch (Exception e2)
 					{
 						e2.printStackTrace();
 						stateToConsider.robot.moveLengthwise(-30);
@@ -223,7 +229,7 @@ public class TechTheSand extends AbstractScript
 						{
 							stateToConsider.robot.moveArc(approach2, hooksToConsider);
 						}
-						catch (UnableToMoveException e3)
+						catch (Exception e3)
 						{
 							e3.printStackTrace();
 							log.critical("Impossible de se dégager, abandon du sable");
