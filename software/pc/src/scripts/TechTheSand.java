@@ -146,7 +146,7 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.robot.useActuator(ActuatorOrder.START_AXIS, false);
                 
                 // Définition de l'arc à suivre, point de départ temporaire
-                Arc approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(50,2000-300), Math.PI*1.05, true);
+                Arc approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(50,2000-290), Math.PI*1.05, true);
 
 				try {
 					//On se déplace en courbe pour se placer en face du château
@@ -157,12 +157,13 @@ public class TechTheSand extends AbstractScript
 					e.printStackTrace();
 				}
 
+                stateToConsider.robot.setForceMovement(true);
 				stateToConsider.robot.moveLengthwise(-30);
 				stateToConsider.robot.turn(Math.PI);
 
                 // On avance pour récupérer le sable
                 // TODO la distance est arbitraire, à modifier avec les phases de test
-                stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x-stateToConsider.robot.getRobotRadius(), hooksToConsider, true);
+                stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x, hooksToConsider, true);
 
                 // Demande au robot de ne tourner que vers la gauche pour ses prochains déplacements
                 stateToConsider.robot.setTurningStrategy(TurningStrategy.LEFT_ONLY);
@@ -176,10 +177,17 @@ public class TechTheSand extends AbstractScript
 				stateToConsider.robot.moveLengthwise(-20);
 
 				double distanceCod = 145;
-				// Définition de l'arc à suivre, point de départ temporaire
-                approach = new Arc(distanceCod, distanceCod*Math.PI/2, stateToConsider.robot.getOrientation(), false);
 
-                stateToConsider.robot.moveArc(approach, hooksToConsider);
+				try {
+                    // Définition de l'arc à suivre, point de départ temporaire
+                    approach = new Arc(distanceCod, distanceCod*Math.PI/2, stateToConsider.robot.getOrientation(), false);
+					stateToConsider.robot.moveArc(approach, hooksToConsider);
+				} catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+
+                stateToConsider.robot.setForceMovement(false);
 
                 // On reprend notre vitesse habituelle
                 stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);

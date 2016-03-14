@@ -87,6 +87,11 @@ public abstract class Robot implements Service
 	 */
 	public boolean doorIsOpen=false;
 
+	/**
+	 * Si le robot force dans ses mouvements
+	 */
+	protected boolean isForcing = false;
+
 	
 	
 	/**
@@ -606,7 +611,7 @@ public abstract class Robot implements Service
 
 	public void setRobotRadius(int radius)
 	{
-		if(!doorIsOpen || (doorIsOpen && radius<this.robotRay))
+		if(!doorIsOpen || radius >= this.robotRay)
 		{
 			this.robotRay = radius;
 		}
@@ -618,5 +623,7 @@ public abstract class Robot implements Service
 	{
 		return this.robotRay;
 	}
+
+	public abstract void setForceMovement(boolean state);
 
 }

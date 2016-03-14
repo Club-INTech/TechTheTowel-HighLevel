@@ -240,8 +240,21 @@ public class RobotReal extends Robot
     		throw e;
     	}
     }
-    
-    @Override
+
+	@Override
+	public void setForceMovement(boolean state)
+	{
+		try {
+			mLocomotion.setForceMovement(state);
+		} catch (SerialConnexionException e) {
+			e.printStackTrace();
+			log.critical("Erreur critique série : Forcing non changé !");
+			return;
+		}
+		this.isForcing = true;
+	}
+
+	@Override
     public void turn(double angle, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
     {
 		log.debug("appel de RobotReal.turn(" + angle + "," + hooksToConsider + "," + expectsWallImpact + ")");

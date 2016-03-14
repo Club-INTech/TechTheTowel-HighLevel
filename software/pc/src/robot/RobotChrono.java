@@ -325,6 +325,11 @@ public class RobotChrono extends Robot
 	}
 
 	@Override
+	public synchronized void setForceMovement(boolean state) {
+		this.isForcing = state;
+	}
+
+	@Override
 	public Speed getLocomotionSpeed() {
 
 		return speed;

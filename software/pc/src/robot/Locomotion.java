@@ -2,6 +2,7 @@ package robot;
 
 import container.Service;
 import enums.DirectionStrategy;
+import enums.Speed;
 import enums.TurningStrategy;
 import enums.UnableToMoveReason;
 import exceptions.ConfigPropertyNotFoundException;
@@ -158,6 +159,18 @@ public class Locomotion implements Service
 
     /** Position pour laquelle le robot a commencé à faire une trajectoire courbe */
     private Vec2 posStartedCurve;
+
+    /** Si le robot est censé forcer le mouvement */
+    private boolean isForcing= false;
+
+    /** Temps prévu de fin de mouvement */
+    private long timeExpected = 0;
+
+    /** Vitesse de translation */
+    private double transSpeed = Speed.MEDIUM_ALL.translationSpeed;
+
+    /** Vitesse de rotation */
+    private double rotSpeed = Speed.MEDIUM_ALL.rotationSpeed;;
 
 
     
@@ -402,7 +415,7 @@ public class Locomotion implements Service
 	        isRobotMovingForward = false;
 	        isRobotMovingBackward = false;
     	}
-    	
+
     	log.debug("Arrivés en "+aim+" vraie position : "+lowLevelPosition);
     	
 		actualRetriesIfBlocked=0;// on reinitialise
@@ -715,6 +728,22 @@ public class Locomotion implements Service
             distance=0;
             angle=0;
         }
+
+        if(isForcing)
+        {
+            if(turnOnly)
+            {
+                this.timeExpected = System.currentTimeMillis() + (long)(this.rotSpeed*4*Math.PI);
+            }
+            else if(isCurve)
+            {
+                this.timeExpected = System.currentTimeMillis() + (long)(2*Math.abs(this.curveArc.length)*this.transSpeed);
+            }
+            else
+            {
+                this.timeExpected = System.currentTimeMillis() + (long)(2*Math.abs(distance)*this.transSpeed);
+            }
+        }
                 
         // on annule la correction si on est trop proche de la destination
         if(isCorrection && !isCurve)
@@ -840,31 +869,33 @@ public class Locomotion implements Service
      */
     private boolean isMotionEnded() throws BlockedException
     {
-        try 
-        {
-        	// récupérations des informations d'acquittement
-        	boolean[] infos=deplacements.isRobotMovingAndAbnormal();
-        	// 0-false : le robot ne bouge pas
-        	
-        	//log.debug("Test deplacement : reponse "+ infos[0] +" :: "+ infos[1], this);
-        	
-        	if(!infos[0])//si le robot ne bouge plus
-        	{
-        		if(infos[1])//si le robot patine, il est bloqué
-        		{
+        try {
+            // récupérations des informations d'acquittement
+            boolean[] infos = deplacements.isRobotMovingAndAbnormal();
+            // 0-false : le robot ne bouge pas
+
+            //log.debug("Test deplacement : reponse "+ infos[0] +" :: "+ infos[1], this);
+
+            if (!infos[0])//si le robot ne bouge plus
+            {
+                if (infos[1])//si le robot patine, il est bloqué
+                {
                     log.critical("Robot bloqué, lancement de BlockedException dans isMotionEnded");
                     throw new BlockedException();
-        		}
-        		else
-        		{
-        			return !infos[0];//On est arrivés
-        		}
-        	}
-        	else
-        	{    
-        		return !infos[0];//toujours pas arrivé
-        	}
-        } 
+                } else {
+                    return !infos[0];//On est arrivés
+                }
+            }
+            else if(isForcing && System.currentTimeMillis() > this.timeExpected)
+            {
+                log.critical("Le robot force, on l'arrête.");
+                this.immobilise();
+                return false;
+            }
+            else {
+                return !infos[0];//toujours pas arrivé
+            }
+        }
         catch (SerialConnexionException e) 
         {
             log.critical("Catch de "+e+" dans isMotionEnded");
@@ -1145,6 +1176,16 @@ public class Locomotion implements Service
 	{
 		deplacements.disableTranslationnalFeedbackLoop();
 	}
+
+    /**
+     * Change le type de mouvement forcé/normal
+     * @param choice true pour forcer les mouvements
+     */
+    public synchronized void setForceMovement(boolean choice) throws SerialConnexionException
+    {
+        deplacements.setForceMovement(choice);
+        this.isForcing = choice;
+    }
 
 	public void close()
 	{

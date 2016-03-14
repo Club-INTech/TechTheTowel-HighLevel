@@ -306,6 +306,24 @@ public class LocomotionCardWrapper implements Service
 		locomotionCardSerial.communiquer(chaines, 0);
 	}
 
+    /**
+     * Change le type de mouvement forcé/normal
+     * @param choice true pour forcer les mouvements
+     */
+	public synchronized void setForceMovement(boolean choice) throws SerialConnexionException
+	{
+		if(choice)
+		{
+			String chaines[] = {"efm"};
+			locomotionCardSerial.communiquer(chaines, 0);
+		}
+		else
+		{
+			String chaines[] = {"dfm"};
+			locomotionCardSerial.communiquer(chaines, 0);
+		}
+	}
+
 
 	/**
 	 * Demande a la carte d'asservissement la position et l'orientation courrante du robot sur la table.
