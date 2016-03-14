@@ -366,6 +366,7 @@ public class ShellGetter extends AbstractScript
                 }
                 else
                 {
+                    state.robot.setDoor(true);
                     state.robot.shellsOnBoard = true;
                 }
             }

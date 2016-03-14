@@ -289,6 +289,7 @@ public class TechTheSand extends AbstractScript
                 else
                 {
                     state.robot.setIsSandInside(true);
+                    state.robot.setDoor(true);
                 }
             }
 		}

@@ -143,6 +143,8 @@ public class ShellDeposit extends AbstractScript
                 else
                 {
                     state.robot.shellsOnBoard = true;
+                    state.robot.setDoor(true);
+
                 }
             }
     	}
