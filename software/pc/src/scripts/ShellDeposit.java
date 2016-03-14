@@ -140,6 +140,10 @@ public class ShellDeposit extends AbstractScript
                     state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
                     state.robot.setDoor(false);
                 }
+                else
+                {
+                    state.robot.shellsOnBoard = true;
+                }
             }
     	}
     	catch (Exception e)

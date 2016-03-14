@@ -286,6 +286,10 @@ public class TechTheSand extends AbstractScript
                     state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
                     state.robot.setDoor(false);
                 }
+                else
+                {
+                    state.robot.setIsSandInside(true);
+                }
             }
 		}
 		catch (Exception e)
