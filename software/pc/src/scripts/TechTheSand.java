@@ -157,14 +157,31 @@ public class TechTheSand extends AbstractScript
 					e.printStackTrace();
 				}
 
-                stateToConsider.robot.setForceMovement(true);
-				stateToConsider.robot.moveLengthwise(-30);
-				stateToConsider.robot.turn(Math.PI);
+				try
+				{
+					stateToConsider.robot.setForceMovement(true);
+					stateToConsider.robot.moveLengthwise(-30);
 
-                // On avance pour récupérer le sable
-                // TODO la distance est arbitraire, à modifier avec les phases de test
-                stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 100, hooksToConsider, true);
+				} catch(UnableToMoveException e)
+				{
+					e.printStackTrace();
+				}
+				try {
+					stateToConsider.robot.turn(Math.PI);
+				} catch (UnableToMoveException e)
+				{
+					e.printStackTrace();
+				}
 
+				try {
+
+					// On avance pour récupérer le sable
+					// TODO la distance est arbitraire, à modifier avec les phases de test
+					stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 200, hooksToConsider, true);
+				} catch (UnableToMoveException e)
+				{
+					e.printStackTrace();
+				}
                 // Demande au robot de ne tourner que vers la gauche pour ses prochains déplacements
                 stateToConsider.robot.setTurningStrategy(TurningStrategy.LEFT_ONLY);
 
@@ -179,6 +196,7 @@ public class TechTheSand extends AbstractScript
 				double distanceCod = 145;
 				// Définition de l'arc à suivre, point de départ temporaire
 				Arc approach2 = new Arc(distanceCod, distanceCod*Math.PI/2, Math.PI, false);
+                stateToConsider.robot.setLocomotionSpeed(Speed.ULTRA_SLOW_ALL);
 
 				//=============================================================================================
 				// Bouclage récursif de sortie
