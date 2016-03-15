@@ -84,6 +84,25 @@ public class JUnit_Montlhery extends JUnit_Test
     }
 
     //@Test
+    public void fishIt()
+    {
+        try {
+            state.robot.useActuator(ActuatorOrder.FISHING_POSITION, true);
+            state.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+            state.robot.moveLengthwise(200);
+            state.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, false);
+            state.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+            state.robot.moveLengthwise(500);
+            state.robot.useActuator(ActuatorOrder.MAGNET_DOWN, true);
+            state.robot.useActuator(ActuatorOrder.MAGNET_UP, false);
+            state.robot.useActuator(ActuatorOrder.FINGER_DOWN, true);
+            state.robot.useActuator(ActuatorOrder.FINGER_UP, true);
+        } catch (SerialConnexionException | UnableToMoveException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //@Test
     public void moveArc()
     {
         try {
