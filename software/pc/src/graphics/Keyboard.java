@@ -5,6 +5,7 @@ import java.awt.event.KeyListener;
 
 import enums.ActuatorOrder;
 import enums.TurningStrategy;
+import exceptions.serial.SerialConnexionException;
 import robot.RobotReal;
 
 
@@ -28,15 +29,27 @@ public class Keyboard implements KeyListener
 		}
 		if(e.getKeyCode() == KeyEvent.VK_Z)
 		{
-			//Bras
+			try {
+				mRobot.useActuator(ActuatorOrder.FISHING_POSITION, false);
+			} catch (SerialConnexionException e1) {
+				e1.printStackTrace();
+			}
 		}
 		if(e.getKeyCode() == KeyEvent.VK_S)
 		{
-			turningStr = TurningStrategy.FASTEST;
+			try {
+				mRobot.useActuator(ActuatorOrder.MAGNET_UP, false);
+			} catch (SerialConnexionException e1) {
+				e1.printStackTrace();
+			}
 		}
 		if(e.getKeyCode() == KeyEvent.VK_I)
 		{
-			//Clap
+			try {
+				mRobot.useActuator(ActuatorOrder.OPEN_DOOR, false);
+			} catch (SerialConnexionException e1) {
+				e1.printStackTrace();
+			}
 		}
 		if(e.getKeyCode() == KeyEvent.VK_A)
 		{
@@ -44,7 +57,11 @@ public class Keyboard implements KeyListener
 		}
 		if(e.getKeyCode() == KeyEvent.VK_K)
 		{
-			//Carpet
+			try {
+				mRobot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
+			} catch (SerialConnexionException e1) {
+				e1.printStackTrace();
+			}
 		}
 		if(e.getKeyCode() == KeyEvent.VK_R || e.getKeyCode() == KeyEvent.VK_UP)
 		{

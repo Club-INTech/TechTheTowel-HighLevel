@@ -4,6 +4,7 @@ import enums.ActuatorOrder;
 import enums.ServiceNames;
 import enums.Speed;
 import exceptions.Locomotion.UnableToMoveException;
+import exceptions.Locomotion.UnexpectedObstacleOnPathException;
 import exceptions.serial.SerialConnexionException;
 import hook.Hook;
 import org.junit.Before;
@@ -15,6 +16,7 @@ import smartMath.Arc;
 import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
+import threads.ThreadSensor;
 
 import java.util.ArrayList;
 
@@ -29,6 +31,8 @@ public class JUnit_Montlhery extends JUnit_Test
     private Locomotion mLocomotion;
 
     GameState<Robot> state;
+
+    private ThreadSensor sensors;
 
     /* (non-Javadoc)
      * @see tests.JUnit_Test#setUp()
@@ -46,7 +50,7 @@ public class JUnit_Montlhery extends JUnit_Test
         config.set("capteurs_on", "true");
         capteurs.updateConfig();
 
-        container.getService(ServiceNames.THREAD_SENSOR);
+        sensors = (ThreadSensor) container.getService(ServiceNames.THREAD_SENSOR);
         //container.getService(ServiceNames.THREAD_TIMER);
 
         //locomotion
@@ -63,43 +67,53 @@ public class JUnit_Montlhery extends JUnit_Test
 
     }
 
-    @Test
+    //@Test
     public void dansLeTas()
     {
         try {
-            state.robot.moveLengthwise(1500);
-            state.robot.useActuator(ActuatorOrder.FISHING_POSITION, false);
-        } catch (UnableToMoveException | SerialConnexionException e) {
+            state.robot.moveLengthwise(4000);
+        } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
+        try {
+            state.robot.useActuator(ActuatorOrder.FISHING_POSITION, false);
+        } catch (SerialConnexionException e) {
+            e.printStackTrace();
+        }
+
     }
 
     //@Test
     public void moveArc()
     {
         try {
-            state.robot.moveArc(new Arc(state.robot.getPosition(), state.robot.getPosition().plusNewVector(new Vec2(0,-1000)),
-                    state.robot.getPosition().plusNewVector(new Vec2(-500, -500))), new ArrayList<Hook>());
+            state.robot.moveArc(new Arc(state.robot.getPosition(), state.robot.getPosition().plusNewVector(new Vec2(-1500,0)),
+                    2*Math.PI/3, true), new ArrayList<Hook>());
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
     }
 
-    //@Test
+    @Test
     public void esquive()
     {
         try
         {
-            state.robot.moveLengthwise(1500);
+            state.robot.moveLengthwise(4000);
         }
         catch (UnableToMoveException e)
         {
             log.critical("GOGOL détecté");
             try
             {
-                state.robot.moveLengthwise(-150);
-                state.robot.moveArc(new Arc(state.robot.getPosition(), state.robot.getPosition().plusNewVector(new Vec2(0,-1000)),
-                        state.robot.getPosition().plusNewVector(new Vec2(-500, -500))), new ArrayList<Hook>());
+                sensors.stop();
+                state.table.getObstacleManager().destroyEverything();
+                //state.robot.setForceMovement(true);
+                state.robot.moveLengthwise(-400);
+                state.robot.moveArc(new Arc(state.robot.getPosition(), state.robot.getPosition().plusNewVector(new Vec2(-1500,0)),
+                        4*Math.PI/3, false), new ArrayList<Hook>());
+                state.robot.turn(Math.PI);
+                state.robot.moveLengthwise(500);
             }
             catch (UnableToMoveException e1)
             {

@@ -18,7 +18,7 @@ import java.util.ArrayList;
  * @author pf, Krissprolls, marsu, paul, pingu
  */
 
-class ThreadSensor extends AbstractThread
+public class ThreadSensor extends AbstractThread
 {
 	/** Le robot */
 	private RobotReal mRobot;
@@ -79,8 +79,8 @@ class ThreadSensor extends AbstractThread
     /**
      * Angles des capteurs relatifs à l'axe avant-arrière du robot (radians) TODO A changer !
      */
-    private final double angleLF = -0.1;
-    private final double angleRF = -0.1;
+    private final double angleLF = -0.4;
+    private final double angleRF = -0.4;
     private final double angleLB = 0;
     private final double angleRB = 0;
 

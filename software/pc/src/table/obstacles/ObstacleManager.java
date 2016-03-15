@@ -762,6 +762,8 @@ public class ObstacleManager
 		mRectangles.clear();
 		mLines.clear();
 		mFixedObstacles.clear();
+		mMobileObstacles.clear();
+		mUntestedMobileObstacles.clear();
 	}
 
 }
