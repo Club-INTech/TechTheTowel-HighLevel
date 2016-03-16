@@ -299,7 +299,7 @@ public class ThreadSensor extends AbstractThread
 
         if(isLeft)
         {
-            relativePositionSaloperie_1.x = (int)(distance*Math.cos(angleLF)+positionLF.x);
+            relativePositionSaloperie_1.x = (int)(distance*Math.cos(angleLF)+positionLF.x)-100;
             relativePositionSaloperie_1.y = (int)(-distance*Math.sin(angleLF)-distanceBetweenSensors/2);
             positionSaloperie_1 = changeRef(relativePositionSaloperie_1, mRobot.getPosition(), mRobot.getOrientation());
 
@@ -307,7 +307,7 @@ public class ThreadSensor extends AbstractThread
         }
         else
         {
-            relativePositionSaloperie_2.x = (int)(distance*Math.cos(angleRF)+positionRF.x);
+            relativePositionSaloperie_2.x = (int)(distance*Math.cos(angleRF)+positionRF.x)-100;
             relativePositionSaloperie_2.y = (int)(distance*Math.sin(angleRF)+distanceBetweenSensors/2);
             positionSaloperie_2 = changeRef(relativePositionSaloperie_2, mRobot.getPosition(), mRobot.getOrientation());
 

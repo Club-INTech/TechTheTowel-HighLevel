@@ -40,7 +40,7 @@ public class JUnit_BorneArcade extends JUnit_Test
 		//FIXME : bug pour la position en y :(
 		real_state.robot.setPosition(new Vec2(0, 500));
 		real_state.robot.setOrientation(Math.PI/2);
-		real_state.robot.setLocomotionSpeed(Speed.FAST_ALL);
+		real_state.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 		
 		real_state.robot.updateConfig();
 		real_state.robot.useActuator(ActuatorOrder.MONTLHERY, false);

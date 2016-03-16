@@ -83,20 +83,22 @@ public class JUnit_Montlhery extends JUnit_Test
 
     }
 
-    //@Test
+    @Test
     public void fishIt()
     {
+        sensors.stop();
+        state.table.getObstacleManager().destroyEverything();
         try {
             state.robot.useActuator(ActuatorOrder.FISHING_POSITION, true);
             state.robot.setLocomotionSpeed(Speed.SLOW_ALL);
-            state.robot.moveLengthwise(200);
+            state.robot.moveLengthwise(400);
             state.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, false);
             state.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
             state.robot.moveLengthwise(500);
             state.robot.useActuator(ActuatorOrder.MAGNET_DOWN, true);
-            state.robot.useActuator(ActuatorOrder.MAGNET_UP, false);
             state.robot.useActuator(ActuatorOrder.FINGER_DOWN, true);
-            state.robot.useActuator(ActuatorOrder.FINGER_UP, true);
+            state.robot.useActuator(ActuatorOrder.MAGNET_UP, true);
+            state.robot.useActuator(ActuatorOrder.FINGER_UP, false);
         } catch (SerialConnexionException | UnableToMoveException e) {
             e.printStackTrace();
         }
@@ -113,7 +115,7 @@ public class JUnit_Montlhery extends JUnit_Test
         }
     }
 
-    @Test
+    //@Test
     public void esquive()
     {
         try
@@ -122,24 +124,42 @@ public class JUnit_Montlhery extends JUnit_Test
         }
         catch (UnableToMoveException e)
         {
-            log.critical("GOGOL détecté");
             try
             {
                 sensors.stop();
                 state.table.getObstacleManager().destroyEverything();
                 //state.robot.setForceMovement(true);
                 state.robot.moveLengthwise(-400);
-                state.robot.moveArc(new Arc(state.robot.getPosition(), state.robot.getPosition().plusNewVector(new Vec2(-1500,0)),
+                state.robot.moveArc(new Arc(state.robot.getPosition(), state.robot.getPosition().plusNewVector(new Vec2(-2000,0)),
                         4*Math.PI/3, false), new ArrayList<Hook>());
                 state.robot.turn(Math.PI);
                 state.robot.moveLengthwise(500);
             }
             catch (UnableToMoveException e1)
             {
-                log.critical("Le GOGOL a bougé son pied !!");
                 e1.printStackTrace();
             }
 
+        }
+    }
+
+    //@Test
+    public void testLive()
+    {
+
+    }
+
+    //@Test
+    public void test()
+    {
+        try
+        {
+            //Fait avancer le robot de 10 cm
+            state.robot.moveLengthwise(100);
+        }
+        catch (UnableToMoveException e)
+        {
+            e.printStackTrace();
         }
     }
 }
