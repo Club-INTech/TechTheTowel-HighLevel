@@ -1156,11 +1156,13 @@ public class Locomotion implements Service
     public void setRotationnalSpeed(double rotationSpeed) throws SerialConnexionException
     {
         deplacements.setRotationnalSpeed(rotationSpeed);
+        this.rotSpeed = rotationSpeed;
     }
 
     public void setTranslationnalSpeed(float speed) throws SerialConnexionException
     {
         deplacements.setTranslationnalSpeed(speed);
+        this.transSpeed = speed;
     }
 
     

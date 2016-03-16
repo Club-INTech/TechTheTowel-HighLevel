@@ -100,7 +100,7 @@ public class DropTheSand extends AbstractScript
     {
         if(version == 0)
         {
-            return new Circle(400, 870, 0);
+            return new Circle(373, 914, 0);
         }
         else
         {
