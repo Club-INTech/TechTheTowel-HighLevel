@@ -6,10 +6,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import enums.ActuatorOrder;
+import enums.ContactSensors;
 import enums.ScriptNames;
 import enums.ServiceNames;
 import enums.Speed;
 import exceptions.BadVersionException;
+import exceptions.BlockedActuatorException;
 import exceptions.ExecuteException;
 import exceptions.PathNotFoundException;
 import exceptions.PointInObstacleException;
@@ -55,6 +58,12 @@ public class JUnit_Castle extends JUnit_Test
 		mRobot.robot.setOrientation(Math.PI);
 		mRobot.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 		mRobot.robot.moveLengthwise(100);
+
+		if(mRobot.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
+        {
+			mRobot.robot.useActuator(ActuatorOrder.OPEN_DOOR, true);
+        }
+		
 		//container.getService(ServiceNames.THREAD_INTERFACE);
 		//container.startInstanciedThreads();
 	}
@@ -67,15 +76,15 @@ public class JUnit_Castle extends JUnit_Test
 		{
 			//On execute le script
 			log.debug("Récupération du château !");
-			scriptManager.getScript(ScriptNames.CASTLE).goToThenExec(3, mRobot, emptyList);
+			scriptManager.getScript(ScriptNames.CASTLE).goToThenExec(2, mRobot, emptyList);
 		}
 		catch(SerialConnexionException | BadVersionException | ExecuteException | SerialFinallyException e)
 		{
 			e.printStackTrace();
-		} catch (PointInObstacleException e) 
+		} catch (PointInObstacleException e)
 		{
 			e.printStackTrace();
-		} catch (PathNotFoundException e) 
+		} catch (PathNotFoundException e)
 		{
 			e.printStackTrace();
 		}

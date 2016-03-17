@@ -152,32 +152,25 @@ public class Castle extends AbstractScript
 			else if(versionToExecute == 2)
 			{
 				// le bras droit est sensé être ouvert (et contenir du sable de la dune)
-				/*
 				if (stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
 				{
 					log.critical("Mauvais appel du script ou mauvaise version appelée:\n doit succéder à une première récupération de sable de la dune");
 					return;
 				}
-				*/
 				
 				// La rotation ne doit se faire que dans le sens trigo,
 				// surtout que le bras de droite est déjà sensé contenir une partie de la dune.
 				// -> modifier Locomotion.maxRotationTurningStrategyIgnore si besoin.
 				stateToConsider.robot.setTurningStrategy(TurningStrategy.LEFT_ONLY);
 
-				/*
 				
 				// on se tourne vers pi avec un léger décalage pour gagner du temps
 				// (en effet on vient de la dune et le château est encore un obstacle)
-				stateToConsider.robot.turn(-Math.PI+epsilon);
+				//stateToConsider.robot.turn(-3.*Math.PI/4.);
 				
 				// on indique que le sable se trouve dans le robot
 				stateToConsider.robot.setIsSandInside(true);
 				
-				// on pousse le tas de sable dans la zone de contruction
-				stateToConsider.robot.moveLengthwise(805,hooksToConsider,false);
-				
-				*/
 				
 				// Version non courbe
 				/*
@@ -191,8 +184,10 @@ public class Castle extends AbstractScript
 				*/
 				
 				// Version trajectoires courbes
-				//TODO Tester
-				stateToConsider.robot.moveArc(new Arc(entryPosition(2, 0, stateToConsider.robot.getPosition()).position, new Vec2(850, 1050), new Vec2(400, 820)), hooksToConsider);
+				Arc arc = new Arc(entryPosition(2, 0, stateToConsider.robot.getPosition()).position, new Vec2(333, 820), Math.PI+epsilon/3., true);
+				
+
+				stateToConsider.robot.moveArc(arc, hooksToConsider);
 				
 				
 				// on liste les obstacles rectangulaires 
@@ -208,22 +203,20 @@ public class Castle extends AbstractScript
 				}
 				
 				// on s'éloigne de la zone de construction 
-				stateToConsider.robot.moveLengthwise(-290,hooksToConsider,false);
+				stateToConsider.robot.moveLengthwise(-400,hooksToConsider,false);
 				
 				// on indique qu'on ne transporte plus de sable
 				stateToConsider.robot.setIsSandInside(false);
 				
                 // on ferme le bras de droite
-                //stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
+                stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
 
                 // puis on s'assure que le bras est fermé
-                /*
                 if(!stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
                 {
                     stateToConsider.robot.useActuator(ActuatorOrder.STOP_DOOR, false);
                     throw new BlockedActuatorException("Porte bloquée !");
                 }
-                */
 
 				// on gagne théoriquement le nombre de points réglé grâce aux tests
 				stateToConsider.obtainedPoints+=remainingScoreOfVersion(2, stateToConsider);
@@ -232,20 +225,6 @@ public class Castle extends AbstractScript
 				stateToConsider.robot.setTurningStrategy(TurningStrategy.FASTEST);
 			}
 			
-			else if(versionToExecute==3)
-			{
-				// log de test avec un appel au PDD dont node arrivée = node départ
-				log.debug("Entrée dans le script");
-				
-				// création de l'arc à suivre
-				Arc arc = new Arc(stateToConsider.robot.getPosition(),new Vec2(400,800), 3*Math.PI/4, true);
-				
-				// déplacement selon cet arc
-				stateToConsider.robot.moveArc(arc, hooksToConsider);
-				
-				// sortie de la zone de construction 
-				stateToConsider.robot.moveLengthwise(-300);
-			}
 		}
 		catch (Exception e)
 		{
@@ -259,7 +238,7 @@ public class Castle extends AbstractScript
 	{
 		// le tas complet rapporte 16 points maximum
 		// à savoir 6 éléments (6*2) de sables et une tour (+4)
-		if (version == 0 | version == 1 | version ==3)
+		if (version == 0 | version == 1)
 		{
 			return 16;
 		}
@@ -292,12 +271,8 @@ public class Castle extends AbstractScript
 		}
 		else if (version == 2)
 		{
-			//testé et approuvé
-			return (new Circle(new Vec2(1250, 1370)));
-		}
-		else if (version == 3)
-		{
-			return new Circle(new Vec2(1150,1150));
+			//testé et approuvé: (1250, 1370)
+			return (new Circle(new Vec2(1150, 1370)));
 		}
 		else
 		{
