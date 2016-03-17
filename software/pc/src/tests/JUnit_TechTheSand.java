@@ -45,9 +45,7 @@ public class JUnit_TechTheSand extends JUnit_Test
 		//supression de l'obstacle d'arrivé, pour tests
 		Vec2 sup = scriptManager.getScript(ScriptNames.TECH_THE_SAND).entryPosition(1, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
 		theRobot.table.getObstacleManager().freePoint(sup);
-        sup = scriptManager.getScript(ScriptNames.DROP_THE_SAND).entryPosition(0, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
-        theRobot.table.getObstacleManager().freePoint(sup);
-        theRobot.table.getObstacleManager().freePoint(Table.entryPosition.plusNewVector(new Vec2(-400,0))); // test
+
 		theRobot.table.deleteAllTheShells();
 		try
 		{
@@ -82,7 +80,7 @@ public class JUnit_TechTheSand extends JUnit_Test
 			log.debug("Début de forage");
 			scriptManager.getScript(ScriptNames.TECH_THE_SAND).goToThenExec(1, theRobot, emptyHook);
 			log.critical("FINI DE FORER");
-			scriptManager.getScript(ScriptNames.DROP_THE_SAND).goToThenExec(0, theRobot, emptyHook);
+			scriptManager.getScript(ScriptNames.CASTLE).execute(2, theRobot, emptyHook);
 		}
 		catch(ExecuteException | SerialFinallyException e)
 		{

@@ -275,7 +275,7 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.robot.setForceMovement(false);
 
                 try {
-                    stateToConsider.robot.moveLengthwise(1000 - stateToConsider.robot.getPosition().x);
+                    stateToConsider.robot.moveLengthwise(1150 - stateToConsider.robot.getPosition().x);
                 } catch (Exception e)
                 {
                     e.printStackTrace();
@@ -288,7 +288,7 @@ public class TechTheSand extends AbstractScript
                     e.printStackTrace();
                 }
 
-                try {
+               /* try {
                     stateToConsider.robot.moveLengthwise(700);
                 } catch (Exception e)
                 {
@@ -314,7 +314,7 @@ public class TechTheSand extends AbstractScript
                 } catch (Exception e)
                 {
                     e.printStackTrace();
-                }
+                }*/
 
                 // On reprend notre vitesse habituelle
                 stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);

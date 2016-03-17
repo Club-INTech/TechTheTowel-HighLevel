@@ -182,15 +182,14 @@ public class Castle extends AbstractScript
 				stateToConsider.robot.turn(-3*Math.PI/4.-2*epsilon);
 				stateToConsider.robot.moveLengthwise(207,hooksToConsider,false);
 				*/
-				
+				stateToConsider.robot.setForceMovement(true);
 				// Version trajectoires courbes
 				Arc arc = new Arc(entryPosition(2, 0, stateToConsider.robot.getPosition()).position, new Vec2(333, 820), Math.PI+epsilon/3., true);
 				
 
 				stateToConsider.robot.moveArc(arc, hooksToConsider);
-				
-				
-				// on liste les obstacles rectangulaires 
+
+				// on liste les obstacles rectangulaires
 				ArrayList<ObstacleRectangular> mRectangles = stateToConsider.table.getObstacleManager().getRectangles();
 				
 				// et on supprime le tas de sable
