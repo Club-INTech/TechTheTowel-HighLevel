@@ -152,22 +152,23 @@ public class ShellGetter extends AbstractScript
 
                 stateToConsider.robot.setTurningStrategy(TurningStrategy.LEFT_ONLY);
 
-                stateToConsider.robot.setTurningStrategy(TurningStrategy.FASTEST);
-
 
                 // on déclare les coquillages comme étant dans le robot
                 stateToConsider.robot.shellsOnBoard=true;
 
                 // On créé l'arc de récupération
-                Arc getter = new Arc(stateToConsider.robot.getPosition(), new Vec2(1300-TechTheSand.expandedRobotRadius/2,750),
-                        new Vec2(1300-TechTheSand.expandedRobotRadius/2,1050));
+                //Arc getter = new Arc(stateToConsider.robot.getPosition(), new Vec2(1300-TechTheSand.expandedRobotRadius/2,750),
+                        //new Vec2(1300-TechTheSand.expandedRobotRadius/2,1050));
+
+                Arc getter = new Arc(stateToConsider.robot.getPosition(), new Vec2(1150,1200), Math.PI/2, true);
 
                 //On la donne au robot
                 stateToConsider.robot.moveArc(getter, hooksToConsider);
 
-                Arc deposit = new Arc(stateToConsider.robot.getPosition(), new Vec2(1400,1200), Math.PI/2, true);
+                stateToConsider.robot.setTurningStrategy(TurningStrategy.FASTEST);
+                //Arc deposit = new Arc(stateToConsider.robot.getPosition(), new Vec2(1150,1200), Math.PI/2, true);
 
-                stateToConsider.robot.moveArc(deposit, hooksToConsider);
+                //stateToConsider.robot.moveArc(deposit, hooksToConsider);
 
                 // on incrémente le nombre de coquillage en notre possession
                 stateToConsider.table.shellsObtained+=2;

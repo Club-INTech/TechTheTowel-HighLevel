@@ -63,7 +63,7 @@ public class JUnit_TechTheSand extends JUnit_Test
 		{
 			e.printStackTrace();
 		}
-		theRobot.robot.moveLengthwise(200);
+		//theRobot.robot.moveLengthwise(200);
 		container.getService(ServiceNames.THREAD_INTERFACE);
 		container.startInstanciedThreads();
 
@@ -78,9 +78,9 @@ public class JUnit_TechTheSand extends JUnit_Test
 		try
 		{
 			log.debug("Début de forage");
-			scriptManager.getScript(ScriptNames.TECH_THE_SAND).goToThenExec(1, theRobot, emptyHook);
+			scriptManager.getScript(ScriptNames.TECH_THE_SAND).execute(2, theRobot, emptyHook);
 			log.critical("FINI DE FORER");
-			scriptManager.getScript(ScriptNames.CASTLE).execute(2, theRobot, emptyHook);
+			//scriptManager.getScript(ScriptNames.CASTLE).execute(2, theRobot, emptyHook);
 		}
 		catch(ExecuteException | SerialFinallyException e)
 		{

@@ -184,7 +184,7 @@ public class Castle extends AbstractScript
 				*/
 				stateToConsider.robot.setForceMovement(true);
 				// Version trajectoires courbes
-				Arc arc = new Arc(entryPosition(2, 0, stateToConsider.robot.getPosition()).position, new Vec2(333, 820), Math.PI+epsilon/3., true);
+				Arc arc = new Arc(stateToConsider.robot.getPosition(), new Vec2(500,500), Math.PI+epsilon/3., true);
 				
 
 				stateToConsider.robot.moveArc(arc, hooksToConsider);

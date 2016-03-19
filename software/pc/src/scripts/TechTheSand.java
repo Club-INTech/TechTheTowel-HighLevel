@@ -14,6 +14,7 @@ import smartMath.Arc;
 import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
+import table.Table;
 import utils.Config;
 import utils.Log;
 
@@ -39,7 +40,7 @@ public class TechTheSand extends AbstractScript
 		/**
 		 * Versions du script
 		 */
-		versions = new Integer[]{0,1};
+		versions = new Integer[]{0,1,2};
 	}
 	
 	
@@ -121,7 +122,42 @@ public class TechTheSand extends AbstractScript
 				e.printStackTrace();
 			}
 		}
-		else if(versionToExecute == 1)
+		else if(versionToExecute == 2)
+		{
+			Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
+			stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+
+			try {
+				stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, false);
+
+				stateToConsider.changeRobotRadius(TechTheSand.expandedRobotRadius);
+				stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
+
+               /* try {
+                    stateToConsider.robot.moveLengthwise(70);
+                } catch (UnableToMoveException e) {
+                    e.printStackTrace();
+                }*/
+                Arc entry = new Arc(entryPosition(1, 0, stateToConsider.robot.getPositionFast()).position, new Vec2(100,2000-220), Math.PI, true);
+
+				Arc start = new Arc(stateToConsider.robot.getPosition(), entry.start, entry.startAngle, true);
+
+				try {
+					//On se déplace en courbe pour se placer en face du château
+					stateToConsider.robot.moveArc(start, hooksToConsider);
+				}
+				catch (UnableToMoveException e)
+				{
+					e.printStackTrace();
+				}
+
+                stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
+
+            } catch (SerialConnexionException e) {
+				e.printStackTrace();
+			}
+		}
+		if(versionToExecute == 1 || versionToExecute == 2)
 		{
             try
             {
@@ -146,7 +182,7 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.robot.useActuator(ActuatorOrder.START_AXIS, false);
                 
                 // Définition de l'arc à suivre, point de départ temporaire
-                Arc approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(100,2000-220), Math.PI, true);
+                Arc approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(100,2000-200), Math.PI, true);
 
 				try {
 					//On se déplace en courbe pour se placer en face du château
@@ -192,7 +228,7 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.robot.setIsSandInside(true);
                 try
                 {
-				    stateToConsider.robot.moveLengthwise(-20);
+				    stateToConsider.robot.moveLengthwise(-90);
                 }
                 catch(Exception e)
                 {
@@ -281,14 +317,14 @@ public class TechTheSand extends AbstractScript
                     e.printStackTrace();
                 }
 
-                try {
+              /*  try {
                     stateToConsider.robot.turn(-Math.PI/2);
                 } catch (Exception e)
                 {
                     e.printStackTrace();
                 }
 
-               /* try {
+                try {
                     stateToConsider.robot.moveLengthwise(700);
                 } catch (Exception e)
                 {
@@ -348,7 +384,11 @@ public class TechTheSand extends AbstractScript
         else if(version == 1)
         {
             //TODO
-            return new Circle(430,2000-400);
+            return new Circle(460,2000-390);
+        }
+        else if(version == 2)
+        {
+            return new Circle(robotPosition,0);
         }
 		else
 		{

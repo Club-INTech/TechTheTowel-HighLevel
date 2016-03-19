@@ -644,7 +644,7 @@ public class Locomotion implements Service
 	                hook.evaluate();
                         
             // le fait de faire de nombreux appels permet de corriger la trajectoire
-            if(!isCurve && !isForcing)
+            if(false && !isCurve && !isForcing)
                 correctAngle(aim, isMovementForward, mustDetect);
             
             //log.critical("Temps pour finir la boucle d'asservissement "+(System.currentTimeMillis()-time), this);
@@ -741,15 +741,15 @@ public class Locomotion implements Service
         {
             if(turnOnly)
             {
-                this.timeExpected = System.currentTimeMillis() + (long)(this.rotSpeed*4*1000*Math.PI);
+                this.timeExpected = System.currentTimeMillis() + (long)(this.rotSpeed*3*1000*Math.PI);
             }
             else if(isCurve)
             {
-                this.timeExpected = System.currentTimeMillis() + (long)(4*1000*Math.abs(this.curveArc.length)*this.transSpeed);
+                this.timeExpected = System.currentTimeMillis() + (long)(3*1000*Math.abs(this.curveArc.length)*this.transSpeed);
             }
             else
             {
-                this.timeExpected = System.currentTimeMillis() + (long)(4*1000*Math.abs(distance)*this.transSpeed);
+                this.timeExpected = System.currentTimeMillis() + (long)(3*1000*Math.abs(distance)*this.transSpeed);
             }
         }
 

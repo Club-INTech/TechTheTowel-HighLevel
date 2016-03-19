@@ -1,13 +1,12 @@
 package tests;
 
-import enums.ActuatorOrder;
-import enums.ScriptNames;
-import enums.ServiceNames;
-import enums.Speed;
+import enums.*;
+import exceptions.BlockedActuatorException;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.PathNotFoundException;
 import exceptions.PointInObstacleException;
+import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import org.junit.Before;
@@ -43,6 +42,22 @@ public class JUnit_Shells extends JUnit_Test
         theRobot.robot.setOrientation(Math.PI);
         theRobot.robot.setPosition(Table.entryPosition);
         theRobot.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+        try
+        {
+            if(!theRobot.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
+            {
+                theRobot.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
+            }
+            if(!theRobot.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
+            {
+                theRobot.robot.useActuator(ActuatorOrder.STOP_DOOR, true);
+                throw new BlockedActuatorException("Porte droite bloquée !");
+            }
+        }
+        catch (SerialConnexionException e)
+        {
+            e.printStackTrace();
+        }
         theRobot.robot.moveLengthwise(200, emptyHook, false);
         theRobot.changeRobotRadius(TechTheSand.expandedRobotRadius);
 

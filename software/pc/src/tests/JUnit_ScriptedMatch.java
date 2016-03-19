@@ -1,10 +1,12 @@
 package tests;
 
 import enums.*;
+import exceptions.BlockedActuatorException;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.PathNotFoundException;
 import exceptions.PointInObstacleException;
+import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import org.junit.After;
@@ -12,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 import robot.Robot;
 import scripts.ScriptManager;
+import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
 
@@ -43,13 +46,24 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         theRobot.robot.setOrientation(Math.PI);
         theRobot.robot.setPosition(Table.entryPosition);
         theRobot.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
-        theRobot.robot.moveLengthwise(100, emptyHook, false);
+        theRobot.robot.moveLengthwise(200, emptyHook, false);
 
         theRobot.robot.useActuator(ActuatorOrder.ARM_INIT, true);
 
-        if(!theRobot.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
+        try
         {
-            theRobot.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
+            if(!theRobot.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
+            {
+                theRobot.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
+            }
+            if(!theRobot.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
+            {
+                theRobot.robot.useActuator(ActuatorOrder.STOP_DOOR, true);
+                throw new BlockedActuatorException("Porte droite bloquée !");
+            }
+        }catch (SerialConnexionException e)
+        {
+            e.printStackTrace();
         }
 
     }
@@ -75,14 +89,8 @@ public class JUnit_ScriptedMatch extends JUnit_Test
     {
         try
         {
-            scriptManager.getScript(ScriptNames.CASTLE).goToThenExec(0, theRobot, emptyHook);
-        }
-        catch(ExecuteException|SerialFinallyException e)
-        {
-            e.printStackTrace();
-        }
-        try
-        {
+            Vec2 sup = scriptManager.getScript(ScriptNames.TECH_THE_SAND).entryPosition(1, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
+            theRobot.table.getObstacleManager().freePoint(sup);
             scriptManager.getScript(ScriptNames.TECH_THE_SAND).goToThenExec(1,theRobot, emptyHook);
         }
         catch(ExecuteException | SerialFinallyException e)
@@ -91,14 +99,15 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         }
         try
         {
-            scriptManager.getScript(ScriptNames.DROP_THE_SAND).goToThenExec(0, theRobot, emptyHook);
+            scriptManager.getScript(ScriptNames.CASTLE).execute(2, theRobot, emptyHook);
         }
-        catch(ExecuteException | SerialFinallyException e)
+        catch(ExecuteException|SerialFinallyException e)
         {
             e.printStackTrace();
         }
         try
         {
+            theRobot.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
             scriptManager.getScript(ScriptNames.CLOSE_DOORS).goToThenExec(0,theRobot, emptyHook);
         }
         catch(ExecuteException | SerialFinallyException e)
@@ -107,7 +116,15 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         }
         try
         {
-            scriptManager.getScript(ScriptNames.SHELL_GETTER).goToThenExec(0,theRobot, emptyHook);
+            scriptManager.getScript(ScriptNames.SHELL_GETTER).goToThenExec(-1,theRobot, emptyHook);
+        }
+        catch(ExecuteException | SerialFinallyException e)
+        {
+            e.printStackTrace();
+        }
+        try
+        {
+            scriptManager.getScript(ScriptNames.FISHING).goToThenExec(0, theRobot, emptyHook);
         }
         catch(ExecuteException | SerialFinallyException e)
         {
@@ -153,14 +170,5 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         {
             e.printStackTrace();
         }
-        try
-        {
-            scriptManager.getScript(ScriptNames.FISHING).goToThenExec(3, theRobot, emptyHook);
-        }
-        catch(ExecuteException | SerialFinallyException e)
-        {
-            e.printStackTrace();
-        }
-
     }
 }
