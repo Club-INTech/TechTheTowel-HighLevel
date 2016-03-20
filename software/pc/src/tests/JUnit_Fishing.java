@@ -88,8 +88,8 @@ public class JUnit_Fishing extends JUnit_Test
 	{
         try 
         {
-			theRobot.table.getObstacleManager().freePoint(scriptManager.getScript(ScriptNames.FISHING).entryPosition(0, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position);
-            scriptManager.getScript(ScriptNames.FISHING).goToThenExec(0, theRobot, emptyHook);
+			theRobot.table.getObstacleManager().freePoint(scriptManager.getScript(ScriptNames.FISHING).entryPosition(4, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position);
+            scriptManager.getScript(ScriptNames.FISHING).goToThenExec(4, theRobot, emptyHook);
         } catch (Exception e) 
         {
             e.printStackTrace();
@@ -99,14 +99,6 @@ public class JUnit_Fishing extends JUnit_Test
 	@After
 	public void after()
 	{
-		try {
-			returnToEntryPosition(theRobot);
-		} catch (PathNotFoundException e) {
-			e.printStackTrace();
-		} catch (UnableToMoveException e) {
-			e.printStackTrace();
-		} catch (PointInObstacleException e) {
-			e.printStackTrace();
-		}
+		theRobot.robot.immobilise();
 	}
 }
