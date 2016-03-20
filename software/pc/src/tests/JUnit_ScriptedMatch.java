@@ -25,6 +25,12 @@ public class JUnit_ScriptedMatch extends JUnit_Test
     private GameState<Robot> theRobot;
     private ScriptManager scriptManager;
     private ArrayList<Hook> emptyHook = new ArrayList<Hook>();
+    
+    /** Version des scripts à lancer */
+    private final int techTheSandVersion = 2;
+    private final int fishingVersion = 0;
+    private final int closeDoorsVersion = 0;
+    private final int shellDepositVersion = 0;
 
     @SuppressWarnings("unchecked")
     @Before
@@ -73,14 +79,16 @@ public class JUnit_ScriptedMatch extends JUnit_Test
     public void aftermath() throws Exception
     {
         //on remonte les bras
-        theRobot.robot.useActuator(ActuatorOrder.ARM_INIT,true);
         try
         {
-            returnToEntryPosition(theRobot);
+        	theRobot.robot.useActuator(ActuatorOrder.ARM_INIT,true);
+            theRobot.robot.immobilise();
+            log.debug("Fin de match !");
         }
-        catch (UnableToMoveException | PathNotFoundException | PointInObstacleException e)
+        catch (SerialConnexionException e)
         {
             e.printStackTrace();
+            log.debug("Impossible de ranger les bras !");
         }
     }
 
@@ -91,7 +99,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         {
             Vec2 sup = scriptManager.getScript(ScriptNames.TECH_THE_SAND).entryPosition(1, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
             theRobot.table.getObstacleManager().freePoint(sup);
-            scriptManager.getScript(ScriptNames.TECH_THE_SAND).goToThenExec(2,theRobot, emptyHook);
+            scriptManager.getScript(ScriptNames.TECH_THE_SAND).goToThenExec(techTheSandVersion,theRobot, emptyHook);
         }
         catch(ExecuteException | SerialFinallyException e)
         {
@@ -107,9 +115,9 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         }
         try
         {
-            Vec2 sup = scriptManager.getScript(ScriptNames.CLOSE_DOORS).entryPosition(0, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
+            Vec2 sup = scriptManager.getScript(ScriptNames.CLOSE_DOORS).entryPosition(closeDoorsVersion, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
             theRobot.table.getObstacleManager().freePoint(sup);
-            scriptManager.getScript(ScriptNames.CLOSE_DOORS).goToThenExec(0,theRobot, emptyHook);
+            scriptManager.getScript(ScriptNames.CLOSE_DOORS).goToThenExec(closeDoorsVersion,theRobot, emptyHook);
         }
         catch(ExecuteException | SerialFinallyException e)
         {
@@ -128,9 +136,9 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         try
         {
             theRobot.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
-            Vec2 sup = scriptManager.getScript(ScriptNames.FISHING).entryPosition(0, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
+            Vec2 sup = scriptManager.getScript(ScriptNames.FISHING).entryPosition(fishingVersion, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
             theRobot.table.getObstacleManager().freePoint(sup);
-            scriptManager.getScript(ScriptNames.FISHING).goToThenExec(0, theRobot, emptyHook);
+            scriptManager.getScript(ScriptNames.FISHING).goToThenExec(fishingVersion, theRobot, emptyHook);
         }
         catch(ExecuteException | SerialFinallyException e)
         {
@@ -170,7 +178,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         }
         try
         {
-            scriptManager.getScript(ScriptNames.SHELL_DEPOSIT).goToThenExec(0,theRobot, emptyHook);
+            scriptManager.getScript(ScriptNames.SHELL_DEPOSIT).goToThenExec(shellDepositVersion,theRobot, emptyHook);
         }
         catch(ExecuteException | SerialFinallyException e)
         {
