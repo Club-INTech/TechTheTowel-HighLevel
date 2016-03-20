@@ -206,7 +206,7 @@ public class Castle extends AbstractScript
 				
 				// on indique qu'on ne transporte plus de sable
 				stateToConsider.robot.setIsSandInside(false);
-				
+				/*
                 // on ferme le bras de droite
                 stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
 
@@ -215,7 +215,7 @@ public class Castle extends AbstractScript
                 {
                     stateToConsider.robot.useActuator(ActuatorOrder.STOP_DOOR, false);
                     throw new BlockedActuatorException("Porte bloquée !");
-                }
+                }*/
 
 				// on gagne théoriquement le nombre de points réglé grâce aux tests
 				stateToConsider.obtainedPoints+=remainingScoreOfVersion(2, stateToConsider);

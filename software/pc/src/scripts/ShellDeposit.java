@@ -54,7 +54,7 @@ public class ShellDeposit extends AbstractScript
                 actualState.table.shellsObtained+=1;
                 
                 // on rajoute le tapis en tant qu'obstacle pour na pas passer dessus par la suite
-                actualState.table.getObstacleManager().addObstacle(new ObstacleRectangular(new Vec2(1350,850), 300 + 2*actualState.robot.getRobotRadius(), 500 + 2*actualState.robot.getRobotRadius()));
+               // actualState.table.getObstacleManager().addObstacle(new ObstacleRectangular(new Vec2(1350,850), 300 + 2*actualState.robot.getRobotRadius(), 500 + 2*actualState.robot.getRobotRadius()));
                 
                 // on s'oriente vers pi/2
                 actualState.robot.turn(Math.PI/2);

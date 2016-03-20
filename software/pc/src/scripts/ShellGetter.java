@@ -182,11 +182,13 @@ public class ShellGetter extends AbstractScript
                 // les coquillages ne sont plus embarqués
                 stateToConsider.robot.shellsOnBoard=false;
 
-                // on se tourne vers pi
+              /*  // on se tourne vers pi
                 stateToConsider.robot.turn(Math.PI);
 
                 // on se place pour repartir
-                stateToConsider.robot.moveLengthwise(200);
+                stateToConsider.robot.moveLengthwise(200);*/
+
+                stateToConsider.robot.moveArc(new Arc(900, -400, stateToConsider.robot.getOrientationFast(), false), hooksToConsider);
 
                 // on reprend la vitesse pre-script
                 stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);

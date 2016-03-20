@@ -107,7 +107,6 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         }
         try
         {
-            theRobot.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
             Vec2 sup = scriptManager.getScript(ScriptNames.CLOSE_DOORS).entryPosition(0, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
             theRobot.table.getObstacleManager().freePoint(sup);
             scriptManager.getScript(ScriptNames.CLOSE_DOORS).goToThenExec(0,theRobot, emptyHook);
@@ -128,6 +127,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         }
         try
         {
+            theRobot.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
             Vec2 sup = scriptManager.getScript(ScriptNames.FISHING).entryPosition(0, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
             theRobot.table.getObstacleManager().freePoint(sup);
             scriptManager.getScript(ScriptNames.FISHING).goToThenExec(0, theRobot, emptyHook);
