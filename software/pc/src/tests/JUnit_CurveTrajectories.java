@@ -29,22 +29,22 @@ public class JUnit_CurveTrajectories extends JUnit_Test
     {
         //creation des objets pour le test
         super.setUp();
-        //game = (GameState<RobotReal>)container.getService(ServiceNames.GAME_STATE);
+        game = (GameState<RobotReal>)container.getService(ServiceNames.GAME_STATE);
 
         //position initiale du robot
-        //game.robot.setPosition(Table.entryPosition);
-        //game.robot.setOrientation(Math.PI);
-        //game.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+        game.robot.setPosition(Table.entryPosition);
+        game.robot.setOrientation(Math.PI);
+        game.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 
         table = (Table)container.getService(ServiceNames.TABLE);
         log = (Log)container.getService(ServiceNames.LOG);
         trajectory = new ArrayList<>();
         
         // sortie de serviette
-        //game.robot.moveLengthwise(200);
+        game.robot.moveLengthwise(200);
         
-       // trajectory.add(new Arc(Table.entryPosition, new Vec2(900, 1700), Math.PI, true));
-        trajectory.add(new Arc(new Vec2(460,2000-390), new Vec2(100,2000-220), Math.PI, true));
+        trajectory.add(new Arc(game.robot.getPosition(), new Vec2(Table.entryPosition.x-500, Table.entryPosition.y-500), Math.PI, true));
+        //trajectory.add(new Arc(new Vec2(1000,500), new Vec2(1100,500), Math.PI, true));
 
     }
 
@@ -55,6 +55,7 @@ public class JUnit_CurveTrajectories extends JUnit_Test
         {
             try {
                 game.robot.moveArc(a, new ArrayList<Hook>());
+                //game.robot.turn(Math.PI);
             } catch (UnableToMoveException e) {
                 e.printStackTrace();
             }
