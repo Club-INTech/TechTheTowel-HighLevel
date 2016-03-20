@@ -52,7 +52,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         theRobot.robot.setOrientation(Math.PI);
         theRobot.robot.setPosition(Table.entryPosition);
         theRobot.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
-        theRobot.robot.moveLengthwise(200, emptyHook, false);
+        //theRobot.robot.moveLengthwise(200, emptyHook, false);
 
         theRobot.robot.useActuator(ActuatorOrder.ARM_INIT, true);
 
@@ -99,7 +99,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         {
             Vec2 sup = scriptManager.getScript(ScriptNames.TECH_THE_SAND).entryPosition(1, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
             theRobot.table.getObstacleManager().freePoint(sup);
-            scriptManager.getScript(ScriptNames.TECH_THE_SAND).goToThenExec(techTheSandVersion,theRobot, emptyHook);
+            scriptManager.getScript(ScriptNames.TECH_THE_SAND).execute(techTheSandVersion,theRobot, emptyHook);
         }
         catch(ExecuteException | SerialFinallyException e)
         {

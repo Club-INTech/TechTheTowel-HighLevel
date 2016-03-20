@@ -184,7 +184,7 @@ public class Castle extends AbstractScript
 				*/
 				stateToConsider.robot.setForceMovement(true);
 				// Version trajectoires courbes
-				Arc arc = new Arc(stateToConsider.robot.getPosition(), new Vec2(600,500), Math.PI+epsilon/3., true);
+				Arc arc = new Arc(stateToConsider.robot.getPosition(), new Vec2(600,500), new Vec2(850,1100));
 				
 
 				stateToConsider.robot.moveArc(arc, hooksToConsider);
@@ -200,6 +200,8 @@ public class Castle extends AbstractScript
 						mRectangles.remove(i);
 					}
 				}
+
+				stateToConsider.robot.setForceMovement(false);
 				
 				// on s'éloigne de la zone de construction 
 				stateToConsider.robot.moveLengthwise(-400,hooksToConsider,false);
