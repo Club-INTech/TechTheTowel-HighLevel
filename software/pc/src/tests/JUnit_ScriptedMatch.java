@@ -91,7 +91,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         {
             Vec2 sup = scriptManager.getScript(ScriptNames.TECH_THE_SAND).entryPosition(1, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
             theRobot.table.getObstacleManager().freePoint(sup);
-            scriptManager.getScript(ScriptNames.TECH_THE_SAND).goToThenExec(1,theRobot, emptyHook);
+            scriptManager.getScript(ScriptNames.TECH_THE_SAND).goToThenExec(2,theRobot, emptyHook);
         }
         catch(ExecuteException | SerialFinallyException e)
         {
@@ -108,6 +108,8 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         try
         {
             theRobot.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
+            Vec2 sup = scriptManager.getScript(ScriptNames.CLOSE_DOORS).entryPosition(0, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
+            theRobot.table.getObstacleManager().freePoint(sup);
             scriptManager.getScript(ScriptNames.CLOSE_DOORS).goToThenExec(0,theRobot, emptyHook);
         }
         catch(ExecuteException | SerialFinallyException e)
@@ -116,6 +118,8 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         }
         try
         {
+            Vec2 sup = scriptManager.getScript(ScriptNames.SHELL_GETTER).entryPosition(-1, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
+            theRobot.table.getObstacleManager().freePoint(sup);
             scriptManager.getScript(ScriptNames.SHELL_GETTER).goToThenExec(-1,theRobot, emptyHook);
         }
         catch(ExecuteException | SerialFinallyException e)
@@ -124,6 +128,8 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         }
         try
         {
+            Vec2 sup = scriptManager.getScript(ScriptNames.FISHING).entryPosition(0, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
+            theRobot.table.getObstacleManager().freePoint(sup);
             scriptManager.getScript(ScriptNames.FISHING).goToThenExec(0, theRobot, emptyHook);
         }
         catch(ExecuteException | SerialFinallyException e)

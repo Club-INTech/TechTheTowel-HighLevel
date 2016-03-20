@@ -24,6 +24,7 @@ import java.util.ArrayList;
  * Script pour récupérer le tas de sable central, ne s'occupe pas de le ramener dans notre zone de construction
  * Version 0 : En partant de notre côté, on avance vers le côté ennemi
  * Version 1 : Utilisation de trajectoire courbe
+ * Version 2 : Départ du tapis en courbe puis execution version 1
  * @author CF, Discord
  */
 public class TechTheSand extends AbstractScript
@@ -133,27 +134,21 @@ public class TechTheSand extends AbstractScript
 				stateToConsider.changeRobotRadius(TechTheSand.expandedRobotRadius);
 				stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
 
-               /* try {
-                    stateToConsider.robot.moveLengthwise(70);
-                } catch (UnableToMoveException e) {
-                    e.printStackTrace();
-                }*/
-                Arc entry = new Arc(entryPosition(1, 0, stateToConsider.robot.getPositionFast()).position, new Vec2(100,2000-220), Math.PI, true);
+                //Arc entry = new Arc(entryPosition(1, 0, stateToConsider.robot.getPositionFast()).position, new Vec2(100,2000-220), Math.PI, true);
 
-				Arc start = new Arc(stateToConsider.robot.getPosition(), entry.start, entry.startAngle, true);
+				//Arc start = new Arc(stateToConsider.robot.getPosition(), entry.start, entry.startAngle, true);
 
-				try {
-					//On se déplace en courbe pour se placer en face du château
-					stateToConsider.robot.moveArc(start, hooksToConsider);
-				}
-				catch (UnableToMoveException e)
-				{
-					e.printStackTrace();
-				}
+				Arc start = new Arc(-893, 400, Math.PI, false);
+
+                //On se déplace en courbe pour se placer en face du château
+                stateToConsider.robot.moveArc(start, hooksToConsider);
+
+                stateToConsider.robot.moveLengthwise(550);
+
 
                 stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
 
-            } catch (SerialConnexionException e) {
+            } catch (SerialConnexionException|UnableToMoveException e) {
 				e.printStackTrace();
 			}
 		}
@@ -316,41 +311,6 @@ public class TechTheSand extends AbstractScript
                 {
                     e.printStackTrace();
                 }
-
-              /*  try {
-                    stateToConsider.robot.turn(-Math.PI/2);
-                } catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-
-                try {
-                    stateToConsider.robot.moveLengthwise(700);
-                } catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-
-                try {
-                    stateToConsider.robot.turn(Math.PI);
-                } catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-
-                try {
-                    stateToConsider.robot.moveLengthwise(700);
-                } catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-
-                try {
-                    stateToConsider.robot.moveLengthwise(-500);
-                } catch (Exception e)
-                {
-                    e.printStackTrace();
-                }*/
 
                 // On reprend notre vitesse habituelle
                 stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);

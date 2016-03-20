@@ -22,6 +22,7 @@ public class JUnit_CurveTrajectories extends JUnit_Test
     Table table;
     Log log;
     ArrayList<Arc> trajectory;
+    private double epsilon = 2.*Math.PI/17.;
 
     @Before
     public void setUp() throws Exception
@@ -43,7 +44,7 @@ public class JUnit_CurveTrajectories extends JUnit_Test
         //game.robot.moveLengthwise(200);
         
        // trajectory.add(new Arc(Table.entryPosition, new Vec2(900, 1700), Math.PI, true));
-        trajectory.add(new Arc(new Vec2(0,1800), new Vec2(-350,1500), Math.PI, false));
+        trajectory.add(new Arc(new Vec2(460,2000-390), new Vec2(100,2000-220), Math.PI, true));
 
     }
 
