@@ -28,7 +28,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
     
     /** Version des scripts à lancer */
     private final int techTheSandVersion = 2;
-    private final int fishingVersion = 0;
+    private final int fishingVersion = 3;
     private final int closeDoorsVersion = 0;
     private final int shellDepositVersion = 0;
 

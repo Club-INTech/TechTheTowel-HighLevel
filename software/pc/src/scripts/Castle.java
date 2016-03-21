@@ -184,10 +184,12 @@ public class Castle extends AbstractScript
 				*/
 				stateToConsider.robot.setForceMovement(true);
 				// Version trajectoires courbes
-				Arc arc = new Arc(stateToConsider.robot.getPosition(), new Vec2(600,500), new Vec2(850,1100));
+				Arc arc = new Arc(-1200, 1400, Math.PI, true);
 				
 
 				stateToConsider.robot.moveArc(arc, hooksToConsider);
+
+				stateToConsider.robot.moveLengthwise(150);
 
 				// on liste les obstacles rectangulaires
 				ArrayList<ObstacleRectangular> mRectangles = stateToConsider.table.getObstacleManager().getRectangles();
@@ -202,6 +204,8 @@ public class Castle extends AbstractScript
 				}
 
 				stateToConsider.robot.setForceMovement(false);
+
+				stateToConsider.robot.turn(Math.PI - Math.PI/6);
 				
 				// on s'éloigne de la zone de construction 
 				stateToConsider.robot.moveLengthwise(-400,hooksToConsider,false);

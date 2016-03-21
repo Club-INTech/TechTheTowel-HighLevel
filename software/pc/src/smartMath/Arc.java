@@ -208,7 +208,7 @@ public class Arc
             signe2=-1;
         if(center.y < start.y)
             signe1=-1;
-        this.startAngle = (start.minusNewVector(center).angle() + signe1*Math.PI/2) % Math.PI;
-        this.endAngle = (end.minusNewVector(center).angle() + signe2*Math.PI/2) % Math.PI;
+        this.startAngle = Geometry.modulo((start.minusNewVector(center).angle() + signe1*Math.PI/2), Math.PI);
+        this.endAngle = Geometry.modulo((end.minusNewVector(center).angle() + signe2*Math.PI/2), Math.PI);
     }
 }
