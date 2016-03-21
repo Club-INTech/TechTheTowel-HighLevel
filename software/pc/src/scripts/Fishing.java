@@ -393,12 +393,12 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 
 				// On commence à se placer près du bord
-				stateToConsider.robot.turn(Math.PI - 0.18);
+				stateToConsider.robot.turn(Math.PI - 0.17);
 
-				stateToConsider.robot.moveLengthwise(-310, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(-200, hooksToConsider, true);
 
 				// On s'oriente vers le côté ennemi
-				stateToConsider.robot.turn((Math.PI), hooksToConsider, true);
+				stateToConsider.robot.turn((Math.PI-0.02), hooksToConsider, true);
 
 				// On baisse le bras aimanté
 				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION, true);
@@ -439,7 +439,7 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.setAreFishesOnBoard(false);
 				
 				// On crée le hook de position
-				Hook hook3 = hookFactory.newXGreaterHook(750);
+				Hook hook3 = hookFactory.newXGreaterHook(720);
 
 				// On y ajoute un callback qui a pour action de prendre les poissons
 				hook3.addCallback(new Callback(new GetFish(), true, stateToConsider));
@@ -460,7 +460,7 @@ public class Fishing extends AbstractScript
 				hooksToConsider.add(hook);
 				
 				// nouvelle condition pour le hook lâchant les poissons
-				hook2 = hookFactory.newXLesserHook(480);
+				hook2 = hookFactory.newXLesserHook(450);
 				
 				// On y ajoute un callback qui a pour action de lâcher les poissons
 				hook2.addCallback(new Callback(new DropFish(), true, stateToConsider));
@@ -506,7 +506,7 @@ public class Fishing extends AbstractScript
 				hooksToConsider.add(hook1);
 				
 				// Mouvement du robot suivant un arc pour se placer près du bac
-				stateToConsider.robot.moveArc(new Arc(stateToConsider.robot.getPosition(), new Vec2(930,230), Math.PI, true), hooksToConsider);
+				stateToConsider.robot.moveArc(new Arc(new Vec2(1260,600), new Vec2(900,240), Math.PI, true),hooksToConsider);
 				
 				// On crée le hook de position pour lever le bras près du filet, puis ajout à la liste de hooks
 				Hook hook2 = hookFactory.newXLesserHook(660);
@@ -606,7 +606,7 @@ public class Fishing extends AbstractScript
 		}
 		else if (version ==4)
 		{
-			return new Circle(new Vec2(1250,560));
+			return new Circle(new Vec2(1260,600));
 		}
 		else
 		{
