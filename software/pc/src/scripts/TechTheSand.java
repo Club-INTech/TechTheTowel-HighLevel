@@ -249,6 +249,7 @@ public class TechTheSand extends AbstractScript
 				catch (Exception e)
 				{
 					e.printStackTrace();
+					stateToConsider.robot.turn(Math.PI);
 					stateToConsider.robot.moveLengthwise(-30);
 					try
 					{
@@ -257,6 +258,7 @@ public class TechTheSand extends AbstractScript
 					catch (Exception e2)
 					{
 						e2.printStackTrace();
+						stateToConsider.robot.turn(Math.PI);
 						stateToConsider.robot.moveLengthwise(-30);
 						try
 						{
