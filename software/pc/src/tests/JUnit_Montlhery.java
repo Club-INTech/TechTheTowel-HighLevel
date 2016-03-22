@@ -60,7 +60,7 @@ public class JUnit_Montlhery extends JUnit_Test
         //mLocomotion.setPosition(new Vec2 (1500-320-77,1000));
         mLocomotion.setPosition(new Vec2(Table.entryPosition.x, Table.entryPosition.y+350));// milieu de table
         mLocomotion.setOrientation(Math.PI);
-        state.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+        state.robot.setLocomotionSpeed(Speed.SLOW_ALL);
         state.table.getObstacleManager().destroyEverything();
         container.getService(ServiceNames.THREAD_INTERFACE);
         container.startInstanciedThreads();
@@ -83,7 +83,7 @@ public class JUnit_Montlhery extends JUnit_Test
 
     }
 
-    @Test
+    //@Test
     public void fishIt()
     {
         sensors.stop();
@@ -102,6 +102,12 @@ public class JUnit_Montlhery extends JUnit_Test
         } catch (SerialConnexionException | UnableToMoveException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void dansTaMere() throws UnableToMoveException {
+        state.robot.setForceMovement(true);
+        state.robot.moveLengthwise(-100);
     }
 
     //@Test

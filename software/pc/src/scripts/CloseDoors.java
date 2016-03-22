@@ -135,7 +135,6 @@ public class CloseDoors extends AbstractScript
 				throw new ExecuteException(e);
 			}
 		}
-			
 	}
 
 	@Override

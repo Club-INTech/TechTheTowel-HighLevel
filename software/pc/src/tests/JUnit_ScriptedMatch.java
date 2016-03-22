@@ -117,7 +117,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         {
             Vec2 sup = scriptManager.getScript(ScriptNames.CLOSE_DOORS).entryPosition(closeDoorsVersion, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
             theRobot.table.getObstacleManager().freePoint(sup);
-            scriptManager.getScript(ScriptNames.CLOSE_DOORS).goToThenExec(closeDoorsVersion,theRobot, emptyHook);
+            scriptManager.getScript(ScriptNames.CLOSE_DOORS).execute(closeDoorsVersion,theRobot, emptyHook);
         }
         catch(ExecuteException | SerialFinallyException e)
         {

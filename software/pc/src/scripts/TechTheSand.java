@@ -177,7 +177,7 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.robot.useActuator(ActuatorOrder.START_AXIS, false);
                 
                 // Définition de l'arc à suivre, point de départ temporaire
-                Arc approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(100,2000-240), Math.PI, true);
+                Arc approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(100,2000-235), Math.PI, true);
 
 				try {
 					//On se déplace en courbe pour se placer en face du château
@@ -223,8 +223,7 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.robot.setIsSandInside(true);
                 try
                 {
-                    stateToConsider.robot.moveLengthwise(100);
-				    stateToConsider.robot.moveLengthwise(-210);
+				    stateToConsider.robot.moveLengthwise(-90);
                 }
                 catch(Exception e)
                 {
@@ -235,7 +234,7 @@ public class TechTheSand extends AbstractScript
 				double distanceCod = 115;
 				// Définition de l'arc à suivre, point de départ temporaire
 				Arc approach2 = new Arc(distanceCod, distanceCod*Math.PI/4, Math.PI, false);
-                stateToConsider.robot.setLocomotionSpeed(Speed.ULTRA_SLOW_ALL);
+                stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 
 				//=============================================================================================
 				// Bouclage récursif de sortie
@@ -250,7 +249,7 @@ public class TechTheSand extends AbstractScript
 				{
 					e.printStackTrace();
 					stateToConsider.robot.turn(Math.PI);
-					stateToConsider.robot.moveLengthwise(-30);
+					stateToConsider.robot.moveLengthwise(-80);
 					try
 					{
 						stateToConsider.robot.moveArc(approach2, hooksToConsider);
@@ -259,7 +258,7 @@ public class TechTheSand extends AbstractScript
 					{
 						e2.printStackTrace();
 						stateToConsider.robot.turn(Math.PI);
-						stateToConsider.robot.moveLengthwise(-30);
+						stateToConsider.robot.moveLengthwise(-80);
 						try
 						{
 							stateToConsider.robot.moveArc(approach2, hooksToConsider);

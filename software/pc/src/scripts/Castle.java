@@ -183,13 +183,14 @@ public class Castle extends AbstractScript
 				stateToConsider.robot.moveLengthwise(207,hooksToConsider,false);
 				*/
 				stateToConsider.robot.setForceMovement(true);
+
+                stateToConsider.robot.turn(-Math.PI/2);
+                stateToConsider.robot.moveLengthwise(100);
 				// Version trajectoires courbes
-				Arc arc = new Arc(-1200, 1400, Math.PI, true);
+				Arc arc = new Arc(-1000, 1300, -Math.PI/2, false);
 				
 
 				stateToConsider.robot.moveArc(arc, hooksToConsider);
-
-				stateToConsider.robot.moveLengthwise(150);
 
 				// on liste les obstacles rectangulaires
 				ArrayList<ObstacleRectangular> mRectangles = stateToConsider.table.getObstacleManager().getRectangles();
@@ -203,13 +204,12 @@ public class Castle extends AbstractScript
 					}
 				}
 
+				arc = new Arc(-1000, -1300, stateToConsider.robot.getOrientationFast(), false);
+
+				stateToConsider.robot.moveArc(arc, hooksToConsider);
+
 				stateToConsider.robot.setForceMovement(false);
 
-				stateToConsider.robot.turn(Math.PI - Math.PI/6);
-				
-				// on s'éloigne de la zone de construction 
-				stateToConsider.robot.moveLengthwise(-400,hooksToConsider,false);
-				
 				// on indique qu'on ne transporte plus de sable
 				stateToConsider.robot.setIsSandInside(false);
 				/*

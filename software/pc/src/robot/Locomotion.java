@@ -317,7 +317,7 @@ public class Locomotion implements Service
             isRobotMovingForward=true;
         else
             isRobotMovingBackward=true;
-        moveToPointException(arc.end, hooks, arc.length>=0, true, false, true, true);
+        moveToPointException(arc.end, hooks, arc.length>=0, false, false, true, true);
         isRobotMovingForward=false;
         isRobotMovingBackward=false;
 
@@ -463,7 +463,7 @@ public class Locomotion implements Service
                 
              // si on s'y attendait, on ne fais rien.
                 
-                if (!headingToWall) //ici on ne s'y attendait pas donc on reagit
+                if (!headingToWall && !isForcing) //ici on ne s'y attendait pas donc on reagit
                 {
 	                if(maxRetriesIfBlocked!=0)
 	                {
@@ -534,6 +534,11 @@ public class Locomotion implements Service
 		                    }
 						}
 	                }
+                }
+                else if(!headingToWall)
+                {
+                    log.critical("Lancement de UnableToMoveException dans MoveToPointException, visant "+finalAim.x+" :: "+finalAim.y+" cause physique");
+                    throw new UnableToMoveException(finalAim, UnableToMoveReason.PHYSICALLY_BLOCKED);
                 }
             }
             
@@ -741,15 +746,15 @@ public class Locomotion implements Service
         {
             if(turnOnly)
             {
-                this.timeExpected = System.currentTimeMillis() + (long)(Math.PI*3*1000/this.rotSpeed);
+                this.timeExpected = System.currentTimeMillis() + (long)(Math.PI*5*1000/this.rotSpeed);
             }
             else if(isCurve)
             {
-                this.timeExpected = System.currentTimeMillis() + (long)(3*1000*Math.abs(this.curveArc.length)/this.transSpeed);
+                this.timeExpected = System.currentTimeMillis() + (long)(5*1000*Math.abs(this.curveArc.length)/this.transSpeed);
             }
             else
             {
-                this.timeExpected = System.currentTimeMillis() + (long)(3*1000*Math.abs(distance)/this.transSpeed);
+                this.timeExpected = System.currentTimeMillis() + (long)(5*1000*Math.abs(distance)/this.transSpeed);
             }
         }
 
