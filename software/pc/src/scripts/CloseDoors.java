@@ -45,96 +45,87 @@ public class CloseDoors extends AbstractScript
 	 * @param hooksToConsider Les hooks necessaires pour l'execution du script
 	 */
 	@Override
-	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException
+	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException, UnableToMoveException
 	{
 		//Les parametres de cette version ont ete determines experimentalement, fonctionnel sur robot 2015
-		if(versionToExecute == 0)
+		
+		try
 		{
-			try
+		
+			if(versionToExecute == 0)
 			{
+
 				//On ralentit pour éviter de démonter les éléments de jeu "Discord-style"
 				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
-				
+
 				//On s'oriente vers les portes
 				stateToConsider.robot.turn(-(Math.PI / 2), hooksToConsider, false);
-				
+
 				//On ferme les portes
 				stateToConsider.robot.moveLengthwise(-600, hooksToConsider, true);
-						
+
 				//PORTES FERMEES !
 				stateToConsider.obtainedPoints += 20;
 				stateToConsider.table.extDoorClosed = true;
 				stateToConsider.table.intDoorClosed = true;
-			
+
 				//On avance
 				stateToConsider.robot.moveLengthwise(100, hooksToConsider, false);
-				
-				
+
+
 				stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
-				
-				
+
 			}
-			catch(UnableToMoveException e)
+
+			else if (versionToExecute == 1)
 			{
-				finalize(stateToConsider);
-				throw new ExecuteException(e);
-			}
-		}
-		
-		else if (versionToExecute == 1)
-		{
-			try
-			{
+
+
 				//On ralentit pour éviter de démonter les éléments de jeu "Discord-style"
 				//Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
 				//stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
-				
+
 				//On s'oriente vers les portes
 				stateToConsider.robot.turn((Math.PI / 2), hooksToConsider, false);
-				
+
 				//On ferme les portes
 				stateToConsider.robot.moveLengthwise(600, hooksToConsider, true);
-				
+
 				//PORTES FERMEES !
 				stateToConsider.obtainedPoints += 20;
 				stateToConsider.table.extDoorClosed = true;
 				stateToConsider.table.intDoorClosed = true;
-				
+
 				//On recule
 				stateToConsider.robot.moveLengthwise(-200, hooksToConsider, false);
-				
-				
+
+
 				//stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
-			
+
 			}
-			catch(UnableToMoveException e)
+			else if (versionToExecute == 2)
 			{
-				finalize(stateToConsider);
-				throw new ExecuteException(e);
-			}
-		}
-		else if (versionToExecute == 2)
-		{
-			try
-			{
+
+
 				//On ralentit pour éviter de démonter les éléments de jeu "Discord-style"
 				//Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
 				//stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
-				
+
 				// On suit une trajectoire courbe pour fermer les deux portes
 				stateToConsider.robot.moveArc(new Arc(Table.entryPosition, new Vec2(1100,1900-stateToConsider.robot.getRobotRadius()),Math.PI,true), hooksToConsider);
-				
+
 				//PORTES FERMEES !
 				stateToConsider.obtainedPoints += 20;
 				stateToConsider.table.extDoorClosed = true;
 				stateToConsider.table.intDoorClosed = true;
+
 			}
-			catch (UnableToMoveException e)
-			{
-				finalize(stateToConsider);
-				throw new ExecuteException(e);
-			}
+		}
+		catch(Exception e)
+		{
+			finalize(stateToConsider);
+			throw e;
 		}
 	}
 

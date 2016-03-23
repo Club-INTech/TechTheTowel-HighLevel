@@ -66,16 +66,16 @@ public class Fishing extends AbstractScript
 	 * @throws ExecuteException
 	 */
 	@Override
-	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException
+	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException, SerialConnexionException, UnableToMoveException
 	{
 		/*
 		 * On exécute la version 0 pour que le robot effectue un créneau depuis la vitre centrale 
 		 * La version 1 le fait s'approcher en marche avant depuis le coin de la table
 		 */
 		
-		if (versionToExecute == 0)
+		try
 		{
-			try
+			if (versionToExecute == 0)
 			{
 				// On prend une vitesse lente pour que les aimants puissent récupérer les poissons
 				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
@@ -163,15 +163,9 @@ public class Fishing extends AbstractScript
 				
 				stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
 			}
-			catch(UnableToMoveException | SerialConnexionException e)
-			{
-				finalize(stateToConsider);
-				throw new ExecuteException(e);
-			}
-		}
-		else if (versionToExecute == 1)
-		{
-			try
+
+		
+			else if (versionToExecute == 1)
 			{
 				// On prend une vitesse lente pour que les aimants puissent récupérer les poissons
 				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
@@ -258,16 +252,8 @@ public class Fishing extends AbstractScript
 
 
 			}
-			catch (UnableToMoveException | SerialConnexionException e)
-			{
-				finalize(stateToConsider);
-				throw new ExecuteException(e);
-			}
 
-		}
-		else if (versionToExecute == 2)
-		{
-			try
+			else if (versionToExecute == 2)
 			{
 				// On prend une vitesse lente pour que les aimants puissent récupérer les poissons
 				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
@@ -378,16 +364,8 @@ public class Fishing extends AbstractScript
 				
 				
 			}
-			catch (UnableToMoveException | SerialConnexionException e)
-			{
-				finalize(stateToConsider);
-				throw new ExecuteException(e);
-			}
-				
-		}
-		else if(versionToExecute == 3)
-		{
-			try
+
+			else if(versionToExecute == 3)
 			{
 				// On prend une vitesse lente pour que les aimants puissent récupérer les poissons
 				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
@@ -486,16 +464,8 @@ public class Fishing extends AbstractScript
 
 				stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
 			}
-			catch(UnableToMoveException | SerialConnexionException e)
-			{
-				finalize(stateToConsider);
-				throw new ExecuteException(e);
-			}
-		}
-			
-		else if (versionToExecute == 4)
-		{
-			try
+
+			else if (versionToExecute == 4)
 			{
 				// On prend une vitesse lente pour que les aimants puissent récupérer les poissons
 				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
@@ -570,11 +540,11 @@ public class Fishing extends AbstractScript
 				// reprise de vitesse d'avant script
 				stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
 			}
-			catch(UnableToMoveException e)
-			{
-				finalize(stateToConsider);
-				throw new ExecuteException(e);
-			}
+		}
+		catch(Exception e)
+		{
+			finalize(stateToConsider);
+			throw e;
 		}
 	}
 

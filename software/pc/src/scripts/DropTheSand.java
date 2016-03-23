@@ -8,6 +8,7 @@ import enums.TurningStrategy;
 import exceptions.BadVersionException;
 import exceptions.BlockedActuatorException;
 import exceptions.ExecuteException;
+import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import hook.Hook;
@@ -43,12 +44,12 @@ public class DropTheSand extends AbstractScript
      * @throws SerialConnexionException
      */
     @Override
-    public void execute(int versionToExecute, GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException
+    public void execute(int versionToExecute, GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException, UnableToMoveException, SerialConnexionException, BlockedActuatorException
     {
 
-        if(versionToExecute == 0)
+        try
         {
-        	try
+        	if(versionToExecute == 0)
         	{
         		// On autorise la marche arrière au robot
         		actualState.robot.setDirectionStrategy(DirectionStrategy.FASTEST);
@@ -80,11 +81,11 @@ public class DropTheSand extends AbstractScript
         		actualState.robot.setTurningStrategy(TurningStrategy.FASTEST);
         	}
         	
-        	catch(Exception e)
-            {
-				finalize(actualState);
-				throw new ExecuteException(e);
-			}
+        }
+        catch(Exception e)
+        {
+        	finalize(actualState);
+        	throw e;
         }
 
     }

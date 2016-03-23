@@ -6,6 +6,7 @@ import exceptions.BadVersionException;
 import exceptions.BlockedActuatorException;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
+import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import hook.types.HookFactory;
@@ -39,14 +40,16 @@ public class ShellGetter extends AbstractScript
     }
 
     @Override
-    public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException {
-
-        if(versionToExecute == 0) //Récupération des deux proches du tapis (jamais ennemis)
+    public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException, UnableToMoveException, SerialConnexionException, BlockedActuatorException 
+    {
+        try
         {
-            Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
-            stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL); // TODO A changer quand asserv OK
 
-            try {
+            if(versionToExecute == 0) //Récupération des deux proches du tapis (jamais ennemis)
+            {
+            	 Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
+                 stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL); // TODO A changer quand asserv OK
+            
                 stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, true);
 
                 // on vérifie si la porte n'est pas bloquée lors de son ouverture
@@ -119,14 +122,10 @@ public class ShellGetter extends AbstractScript
 
                 stateToConsider.table.getObstacleManager().freePoint(new Vec2(1300,750));
                 stateToConsider.table.getObstacleManager().freePoint(new Vec2(1300,450));
-
-            } catch (Exception e) {
-                e.printStackTrace();
+        
+        
             }
-        }
-        if(versionToExecute == -1) //La version spéciale
-        {
-            try
+        	if(versionToExecute == -1) //La version spéciale
             {
                 Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
                 stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL); // TODO A changer quand asserv OK
@@ -197,15 +196,11 @@ public class ShellGetter extends AbstractScript
                 stateToConsider.table.getObstacleManager().freePoint(new Vec2(1300,450));
 
             }
-            catch(Exception e)
+            
+            if(versionToExecute >= 1 && versionToExecute < 5) 
             {
-                e.printStackTrace();
-            }
-        }
-        if(versionToExecute >= 1 && versionToExecute < 5)
-        {
-            Shell selected = getTheShell(versionToExecute);
-            try {
+            	Shell selected = getTheShell(versionToExecute);
+            
                 //Orientation vers le coquillage
                 stateToConsider.robot.turn(Math.atan((selected.getY() - stateToConsider.robot.getPositionFast().y) /
                         (selected.getX() - stateToConsider.robot.getPositionFast().x)));
@@ -241,15 +236,12 @@ public class ShellGetter extends AbstractScript
                 //On supprime l'obstacle de la table
                 stateToConsider.table.getObstacleManager().freePoint(selected.getPosition());
 
-            } catch (Exception e) 
-            {
-                e.printStackTrace();
             }
-        }
-        else if(versionToExecute == 5) //Version qui prends le coquillage le plus proche
-        {
-            Shell selected = getClosestShell(stateToConsider.robot.getPositionFast());
-            try {
+            
+            else if(versionToExecute == 5) //Version qui prends le coquillage le plus proche 
+            {
+            	Shell selected = getClosestShell(stateToConsider.robot.getPositionFast());
+            	
                 //Orientation vers le coquillage
                 stateToConsider.robot.turn(Math.atan((selected.getY() - stateToConsider.robot.getPositionFast().y) /
                         (selected.getX() - stateToConsider.robot.getPositionFast().x)));
@@ -289,10 +281,11 @@ public class ShellGetter extends AbstractScript
                 Table.ourShells.remove(selected);
                 Table.neutralShells.remove(selected);
             }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
+        }
+        catch(Exception e)
+        {
+        	finalize(stateToConsider);
+        	throw e;
         }
     }
 

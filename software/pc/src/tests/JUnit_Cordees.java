@@ -61,7 +61,8 @@ public class JUnit_Cordees extends JUnit_Test
     }
 
     @Test
-    public void test() throws SerialManagerException, BadVersionException, ContainerException, UnableToMoveException, PointInObstacleException, SerialConnexionException, ExecuteException, PathNotFoundException, SerialFinallyException {
+    public void test() throws SerialManagerException, BadVersionException, ContainerException, UnableToMoveException, PointInObstacleException, SerialConnexionException, ExecuteException, PathNotFoundException, SerialFinallyException, BlockedActuatorException 
+    {
         //container.getService(ServiceNames.THREAD_TIMER);
         container.getService(ServiceNames.THREAD_INTERFACE);
         container.startInstanciedThreads();

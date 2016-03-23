@@ -8,6 +8,7 @@ import exceptions.BadVersionException;
 import exceptions.BlockedActuatorException;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
+import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import hook.types.HookFactory;
@@ -52,7 +53,7 @@ public class Castle extends AbstractScript
 	}
 
 	@Override
-	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException 
+	public void execute(int versionToExecute, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException, SerialConnexionException, UnableToMoveException 
 	{
 		try
 		{
@@ -234,7 +235,8 @@ public class Castle extends AbstractScript
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			finalize(stateToConsider);
+			throw e;
 		}
 		
 	}
@@ -288,7 +290,7 @@ public class Castle extends AbstractScript
 	}
 
 	@Override
-	public void finalize(GameState<?> state) throws UnableToMoveException, SerialFinallyException 
+	public void finalize(GameState<?> state)
 	{
 		state.robot.immobilise();
 	}

@@ -9,6 +9,7 @@ import exceptions.BadVersionException;
 import exceptions.BlockedActuatorException;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
+import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import hook.types.HookFactory;
@@ -42,10 +43,11 @@ public class ShellDeposit extends AbstractScript
     }
 
     @Override
-    public void execute(int versionToExecute, GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException {
-        if(versionToExecute == 0)
+    public void execute(int versionToExecute, GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException,UnableToMoveException, BlockedActuatorException, SerialConnexionException
+    {
+        try
         {
-            try {
+        	if(versionToExecute == 0) {
             	
             	// une fois à l'entrée du script, on a lâché les coquillages
                 actualState.robot.shellsOnBoard = false;
@@ -83,13 +85,14 @@ public class ShellDeposit extends AbstractScript
                 // on réduit nle rayon du rbot à celui initial
                 actualState.changeRobotRadius(TechTheSand.retractedRobotRadius);
                 actualState.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        	}
         }
-
-    }
+        catch (Exception e) 
+        {
+            finalize(actualState);
+            throw e;
+        }
+    } 
 
     @Override
     public int remainingScoreOfVersion(int version, GameState<?> state) {

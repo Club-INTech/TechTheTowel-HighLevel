@@ -115,7 +115,7 @@ public class JUnit_Shells extends JUnit_Test
 
             scriptManager.getScript(ScriptNames.SHELL_DEPOSIT).goToThenExec(0,theRobot, emptyHook);
         }
-        catch(ExecuteException | SerialFinallyException e)
+        catch(Exception e)
         {
             e.printStackTrace();
         }

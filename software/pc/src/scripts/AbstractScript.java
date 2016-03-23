@@ -4,6 +4,7 @@ import container.Service;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.BadVersionException;
+import exceptions.BlockedActuatorException;
 import exceptions.PathNotFoundException;
 import exceptions.PointInObstacleException;
 import exceptions.serial.SerialConnexionException;
@@ -69,7 +70,7 @@ public abstract class AbstractScript implements Service
 	 * @throws ExecuteException 
 	 * @throws PointInObstacleException 
 	 */
-	public void goToThenExec(int versionToExecute, GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, BadVersionException, SerialConnexionException, PathNotFoundException, SerialFinallyException, ExecuteException, PointInObstacleException
+	public void goToThenExec(int versionToExecute, GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, BadVersionException, SerialConnexionException, PathNotFoundException, SerialFinallyException, ExecuteException, PointInObstacleException, BlockedActuatorException
 	{
 		// va jusqu'au point d'entrée de la version demandée
 		try 
@@ -98,7 +99,7 @@ public abstract class AbstractScript implements Service
 	 * @throws SerialFinallyException s'il y a un problème de communication avec une des cartes électroniques lors du finallize
 	 * @throws ExecuteException 
 	 */
-	public abstract void execute(int versionToExecute, GameState<Robot> actualState,ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException;
+	public abstract void execute(int versionToExecute, GameState<Robot> actualState,ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialFinallyException, ExecuteException, SerialConnexionException, BlockedActuatorException;
 
 	/**
 	 * Renvoie le score que peut fournir une version d'un script.
@@ -114,7 +115,7 @@ public abstract class AbstractScript implements Service
 	 * Retourne la position d'entrée associée à la version.
 	 *
 	 * @param version version dont on veut le point d'entrée
-	 * @param ray 
+	 * @param ray : rayon du robot
 	 * @param robotPosition la position du robot actuelle
 	 * @param la taille du robot
 	 * @return la position du point d'entrée

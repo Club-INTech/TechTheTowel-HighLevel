@@ -31,7 +31,7 @@ import java.util.ArrayList;
 public class TechTheSand extends AbstractScript
 {
 
-    /** TEMPORAIRE */
+    // TEMPORAIRE 
     public static final int expandedRobotRadius = 330; //TODO a changer
 	public static final int retractedRobotRadius = 250; //TODO a changer
 
@@ -54,12 +54,12 @@ public class TechTheSand extends AbstractScript
 	 * @throws SerialConnexionException 
 	 */
 	@Override
-	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException
+	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException, UnableToMoveException, SerialConnexionException, BlockedActuatorException
 	{
 
-		if (versionToExecute == 0)
+		try
 		{
-			try
+			if (versionToExecute == 0)
 			{
 				// On prend une vitesse lente pour que le robot récupère efficacement le sable
 				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
@@ -115,21 +115,11 @@ public class TechTheSand extends AbstractScript
                 //TODO Sortie de la zone
 				
 			}
-			catch (UnableToMoveException | SerialConnexionException e)
-			{
-				// TODO gérer cette exception, c'est-à-dire par exemple reprendre l'avancée avec plus de puissance
-				finalize(stateToConsider);
-				throw new ExecuteException(e);
-			} catch (BlockedActuatorException e) {
-				e.printStackTrace();
-			}
-		}
-		else if(versionToExecute == 2)
-		{
-			Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
-			stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 
-			try {
+			else if(versionToExecute == 2)
+			{
+				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
+				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 				stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, false);
 
 				stateToConsider.changeRobotRadius(TechTheSand.expandedRobotRadius);
@@ -149,13 +139,9 @@ public class TechTheSand extends AbstractScript
 
                 stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
 
-            } catch (SerialConnexionException|UnableToMoveException e) {
-				e.printStackTrace();
 			}
-		}
-		if(versionToExecute == 1 || versionToExecute == 2)
-		{
-            try
+		
+			if(versionToExecute == 1 || versionToExecute == 2)
             {
                 // On prend une vitesse lente pour que le robot récupère efficacement le sable
                 Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
@@ -321,14 +307,11 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
                 stateToConsider.table.getObstacleManager().freePoint(stateToConsider.robot.getPosition());
             }
-            catch (UnableToMoveException | SerialConnexionException e)
-            {
-                // TODO gérer cette exception, c'est-à-dire par exemple reprendre l'avancée avec plus de puissance
-                finalize(stateToConsider);
-                throw new ExecuteException(e);
-            } catch (BlockedActuatorException e) {
-                e.printStackTrace();
-            }
+		}
+		catch(Exception e)
+		{
+			finalize(stateToConsider);
+			throw e;
 		}
 	}
 

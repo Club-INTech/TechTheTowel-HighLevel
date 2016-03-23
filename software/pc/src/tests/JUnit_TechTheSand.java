@@ -82,7 +82,7 @@ public class JUnit_TechTheSand extends JUnit_Test
 			log.critical("FINI DE FORER");
 			scriptManager.getScript(ScriptNames.CASTLE).execute(2, theRobot, emptyHook);
 		}
-		catch(ExecuteException | SerialFinallyException e)
+		catch(Exception e)
 		{
 			e.printStackTrace();
 		}

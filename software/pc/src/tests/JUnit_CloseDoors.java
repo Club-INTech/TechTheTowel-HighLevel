@@ -50,7 +50,7 @@ public class JUnit_CloseDoors extends JUnit_Test
 	}
 	
 	@Test
-	public void closeThatDoors() throws UnableToMoveException
+	public void closeThatDoors()
 	{
 		ArrayList<Hook> emptyList = new ArrayList<Hook>();
 		try
@@ -59,19 +59,15 @@ public class JUnit_CloseDoors extends JUnit_Test
 			log.debug("Fermeture des portes.");
 			scriptManager.getScript(ScriptNames.CLOSE_DOORS).goToThenExec(0, mRobot, emptyList);
 		}
-		catch(SerialConnexionException | BadVersionException | ExecuteException | SerialFinallyException e)
+		catch(Exception e)
 		{
-			e.printStackTrace();
-		} catch (PointInObstacleException e) {
-			e.printStackTrace();
-		} catch (PathNotFoundException e) {
 			e.printStackTrace();
 		}
 
 	}
 
 	@After
-	public void finish() throws UnableToMoveException, PathNotFoundException, PointInObstacleException 
+	public void finish()
 	{
 		mRobot.robot.immobilise();
 	}
