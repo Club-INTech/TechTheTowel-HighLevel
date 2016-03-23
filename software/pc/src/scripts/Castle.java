@@ -187,6 +187,13 @@ public class Castle extends AbstractScript
 				stateToConsider.robot.setForceMovement(true);
 
                 stateToConsider.robot.turn(-Math.PI/2);
+                
+                /* Fermeture des cabines en revenant du sable
+                int yTemp = stateToConsider.robot.getPosition().y;
+                stateToConsider.robot.moveLengthwise(-600, hooksToConsider, true);
+                stateToConsider.robot.moveLengthwise(2000-yTemp);
+                */
+                
                 stateToConsider.robot.moveLengthwise(100);
 				// Version trajectoires courbes
 				Arc arc = new Arc(-1000, 1300, -Math.PI/2, false);
@@ -207,6 +214,9 @@ public class Castle extends AbstractScript
 				}
 
 				//lstateToConsider.robot.moveLengthwise(-100);
+				
+				// on coupe l'axe
+				stateToConsider.robot.useActuator(ActuatorOrder.STOP_AXIS, false);
 
 				arc = new Arc(-1000, -1300, stateToConsider.robot.getOrientation(), false);
 
@@ -230,8 +240,7 @@ public class Castle extends AbstractScript
 				// on gagne théoriquement le nombre de points réglé grâce aux tests
 				stateToConsider.obtainedPoints+=remainingScoreOfVersion(2, stateToConsider);
 				
-				// on ferme la porte et coupe l'axe
-				stateToConsider.robot.useActuator(ActuatorOrder.STOP_AXIS, false);
+				// on ferme la porte
                 //stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
 				
 				// la version 1 force la rotation dans le sens trigo, ce qu'il faut changer
