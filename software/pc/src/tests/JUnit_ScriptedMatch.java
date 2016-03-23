@@ -26,7 +26,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
     private ScriptManager scriptManager;
     private ArrayList<Hook> emptyHook = new ArrayList<Hook>();
     
-    /** Version des scripts à lancer */
+    // Version des scripts à lancer
     private final int techTheSandVersion = 2;
     private final int fishingVersion = 3;
     private final int closeDoorsVersion = 0;
