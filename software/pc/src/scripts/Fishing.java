@@ -2,6 +2,7 @@ package scripts;
 
 import enums.ActuatorOrder;
 import enums.Speed;
+import exceptions.BadVersionException;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
@@ -593,9 +594,9 @@ public class Fishing extends AbstractScript
 	}
 
 	@Override
-	public Circle entryPosition(int version, int ray, Vec2 robotPosition) 
+	public Circle entryPosition(int version, int ray, Vec2 robotPosition) throws BadVersionException
 	{
-		// TODO a modifier avec les phases de test
+		// Modifiable avec les phases de test
 		if (version == 0 || version == 3)
 		{
 			return new Circle(new Vec2(620,255));
@@ -610,9 +611,8 @@ public class Fishing extends AbstractScript
 		}
 		else
 		{
-			//TODO jetter une exception
 			log.debug("erreur : mauvaise version de script");
-			return new Circle(new Vec2(0,0));
+			throw new BadVersionException();
 		}
 	}
 

@@ -1,6 +1,7 @@
 package scripts;
 
 
+import exceptions.BadVersionException;
 // WARNING: ne pas supprimer les lignes taggées inutiles
 // car des lignes en commentaires eront intégrées dans le code
 // lorsque le bas niveau sera opérationnel
@@ -262,7 +263,7 @@ public class Castle extends AbstractScript
 	}
 
 	@Override
-	public Circle entryPosition(int version, int ray, Vec2 robotPosition)
+	public Circle entryPosition(int version, int ray, Vec2 robotPosition) throws BadVersionException
 	{
 		if (version == 0)
 		{
@@ -282,7 +283,7 @@ public class Castle extends AbstractScript
 		else
 		{
 			log.debug("erreur : mauvaise version de script");
-			return new Circle(new Vec2(0,0));
+			throw new BadVersionException();
 		}
 	}
 

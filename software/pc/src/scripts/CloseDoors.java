@@ -1,5 +1,6 @@
 package scripts;
 
+import exceptions.BadVersionException;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialFinallyException;
@@ -160,7 +161,7 @@ public class CloseDoors extends AbstractScript
 	}
 
 	@Override
-	public Circle entryPosition(int version, int ray, Vec2 robotPosition)
+	public Circle entryPosition(int version, int ray, Vec2 robotPosition) throws BadVersionException
 	{
 		if (version == 0 || version == 1)
 		{
@@ -173,9 +174,8 @@ public class CloseDoors extends AbstractScript
 		}
 		else
 		{
-			//TODO jetter une exception
 			log.debug("erreur : mauvaise version de script");
-			return new Circle(new Vec2(0,0));
+			throw new BadVersionException();
 		}
 	}
 

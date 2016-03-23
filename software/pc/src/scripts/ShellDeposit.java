@@ -108,14 +108,14 @@ public class ShellDeposit extends AbstractScript
     }
 
     @Override
-    public Circle entryPosition(int version, int ray, Vec2 robotPosition) throws BadVersionException {
+    public Circle entryPosition(int version, int ray, Vec2 robotPosition) throws BadVersionException 
+    {
         if (version == 0 )
         {
             return new Circle(new Vec2(Table.entryPosition.x-100, Table.entryPosition.y));
         }
         else
         {
-            //TODO jetter une exception
             log.debug("erreur : mauvaise version de script");
             throw new BadVersionException();
         }

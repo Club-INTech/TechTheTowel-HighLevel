@@ -1,6 +1,7 @@
 package tests;
 
 import enums.*;
+import exceptions.BadVersionException;
 import exceptions.BlockedActuatorException;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -101,7 +102,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
             theRobot.table.getObstacleManager().freePoint(sup);
             scriptManager.getScript(ScriptNames.TECH_THE_SAND).execute(techTheSandVersion,theRobot, emptyHook);
         }
-        catch(ExecuteException | SerialFinallyException e)
+        catch(Exception e)
         {
         	log.debug("Problème d'exécution dans Tech the Sand");
             e.printStackTrace();
@@ -110,7 +111,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         {
             scriptManager.getScript(ScriptNames.CASTLE).execute(2, theRobot, emptyHook);
         }
-        catch(ExecuteException|SerialFinallyException e)
+        catch(Exception e)
         {
         	log.debug("Problème d'exécution dans Castle");
             e.printStackTrace();
@@ -121,7 +122,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
             theRobot.table.getObstacleManager().freePoint(sup);
             scriptManager.getScript(ScriptNames.CLOSE_DOORS).execute(closeDoorsVersion,theRobot, emptyHook);
         }
-        catch(ExecuteException | SerialFinallyException e)
+        catch(Exception e)
         {
         	log.debug("Problème d'exécution dans Close Doors");
             e.printStackTrace();
@@ -132,7 +133,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
             theRobot.table.getObstacleManager().freePoint(sup);
             scriptManager.getScript(ScriptNames.SHELL_GETTER).goToThenExec(-1,theRobot, emptyHook);
         }
-        catch(ExecuteException | SerialFinallyException e)
+        catch(Exception e)
         {
         	log.debug("Problème d'exécution dans Shell Getter v -1");
             e.printStackTrace();
@@ -144,7 +145,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
             theRobot.table.getObstacleManager().freePoint(sup);
             scriptManager.getScript(ScriptNames.FISHING).goToThenExec(fishingVersion, theRobot, emptyHook);
         }
-        catch(ExecuteException | SerialFinallyException e)
+        catch(Exception e)
         {
         	log.debug("Problème d'exécution dans Fishing");
             e.printStackTrace();
@@ -153,7 +154,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         {
             scriptManager.getScript(ScriptNames.SHELL_GETTER).goToThenExec(1,theRobot, emptyHook);
         }
-        catch(ExecuteException | SerialFinallyException e)
+        catch(Exception e)
         {
         	log.debug("Problème d'exécution Shell Getter v2");
             e.printStackTrace();
@@ -162,7 +163,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         {
             scriptManager.getScript(ScriptNames.SHELL_GETTER).goToThenExec(2,theRobot, emptyHook);
         }
-        catch(ExecuteException | SerialFinallyException e)
+        catch(Exception e)
         {
         	log.debug("Problème d'exécution dans Shell Getter v2");
             e.printStackTrace();
@@ -171,7 +172,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         {
             scriptManager.getScript(ScriptNames.SHELL_GETTER).goToThenExec(3,theRobot, emptyHook);
         }
-        catch(ExecuteException | SerialFinallyException e)
+        catch(Exception e)
         {
         	log.debug("Problème d'exécution dans Shell Getter v3");
             e.printStackTrace();
@@ -180,7 +181,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         {
             scriptManager.getScript(ScriptNames.SHELL_GETTER).goToThenExec(4,theRobot, emptyHook);
         }
-        catch(ExecuteException | SerialFinallyException e)
+        catch(Exception e)
         {
         	log.debug("Problème d'exécution dans Shell Getter v4");
             e.printStackTrace();
@@ -189,7 +190,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         {
             scriptManager.getScript(ScriptNames.SHELL_DEPOSIT).goToThenExec(shellDepositVersion,theRobot, emptyHook);
         }
-        catch(ExecuteException | SerialFinallyException e)
+        catch(Exception e)
         {	
         	log.debug("Problème d'exécution dans Shell Deposit");
             e.printStackTrace();

@@ -5,6 +5,7 @@ import enums.ActuatorOrder;
 import enums.ContactSensors;
 import enums.DirectionStrategy;
 import enums.TurningStrategy;
+import exceptions.BadVersionException;
 import exceptions.BlockedActuatorException;
 import exceptions.ExecuteException;
 import exceptions.serial.SerialConnexionException;
@@ -96,7 +97,7 @@ public class DropTheSand extends AbstractScript
 
    /* Renvoie la position d'entree du script suivant la version en argument*/
     @Override
-    public Circle entryPosition(int version, int ray, Vec2 robotPosition)
+    public Circle entryPosition(int version, int ray, Vec2 robotPosition) throws BadVersionException
     {
         if(version == 0)
         {
@@ -104,9 +105,8 @@ public class DropTheSand extends AbstractScript
         }
         else
         {
-			//TODO jetter une exception
 			log.debug("erreur : mauvaise version de script");
-			return new Circle(0,0,0);
+			throw new BadVersionException();
 		}
     }
 

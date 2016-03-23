@@ -319,7 +319,8 @@ public class ShellGetter extends AbstractScript
     }
 
     @Override
-    public Circle entryPosition(int version, int ray, Vec2 robotPosition) throws BadVersionException {
+    public Circle entryPosition(int version, int ray, Vec2 robotPosition) throws BadVersionException 
+    {
         // pour la version 0, on connait précisément l'endroit de départ du script
     	if (version == 0 || version ==-1 )
         {
@@ -342,7 +343,6 @@ public class ShellGetter extends AbstractScript
         }
         else
         {
-            //TODO jetter une exception
             log.debug("erreur : mauvaise version de script");
             throw new BadVersionException();
         }
