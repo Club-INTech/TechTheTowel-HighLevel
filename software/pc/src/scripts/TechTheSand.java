@@ -298,7 +298,7 @@ public class TechTheSand extends AbstractScript
 				stateToConsider.robot.setSmoothAcceleration(true);
 
                 try {
-                    stateToConsider.robot.moveLengthwise(1150 - stateToConsider.robot.getPosition().x);
+                    stateToConsider.robot.moveLengthwise(850 - stateToConsider.robot.getPosition().x);
                 } catch (Exception e)
                 {
                     e.printStackTrace();

@@ -237,6 +237,39 @@ public class Castle extends AbstractScript
 				// la version 1 force la rotation dans le sens trigo, ce qu'il faut changer
 				stateToConsider.robot.setTurningStrategy(TurningStrategy.FASTEST);
 			}
+			else if(versionToExecute == 3)
+			{
+				stateToConsider.robot.setForceMovement(true);
+
+				stateToConsider.robot.moveArc(new Arc(-330, 1100, stateToConsider.robot.getOrientation(), false), hooksToConsider);
+
+				stateToConsider.robot.useActuator(ActuatorOrder.STOP_AXIS, false);
+
+
+				Arc arc = new Arc(-1000, -1300, stateToConsider.robot.getOrientation(), false);
+
+				stateToConsider.robot.moveArc(arc, hooksToConsider);
+
+				// on liste les obstacles rectangulaires
+				ArrayList<ObstacleRectangular> mRectangles = stateToConsider.table.getObstacleManager().getRectangles();
+
+				// et on supprime le tas de sable
+				for (int i=0;i< mRectangles.size();i++)
+				{
+					if (mRectangles.get(i).isInObstacle(new Vec2(580,1100)))
+					{
+						mRectangles.remove(i);
+					}
+				}
+
+				stateToConsider.robot.setForceMovement(false);
+
+				// on indique qu'on ne transporte plus de sable
+				stateToConsider.robot.setIsSandInside(false);
+
+				// la version 1 force la rotation dans le sens trigo, ce qu'il faut changer
+				stateToConsider.robot.setTurningStrategy(TurningStrategy.FASTEST);
+			}
 			
 		}
 		catch (Exception e)
