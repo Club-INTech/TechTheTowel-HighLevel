@@ -206,7 +206,9 @@ public class Castle extends AbstractScript
 					}
 				}
 
-				arc = new Arc(-1000, -1300, stateToConsider.robot.getOrientationFast(), false);
+				//lstateToConsider.robot.moveLengthwise(-100);
+
+				arc = new Arc(-1000, -1300, stateToConsider.robot.getOrientation(), false);
 
 				stateToConsider.robot.moveArc(arc, hooksToConsider);
 
@@ -230,7 +232,7 @@ public class Castle extends AbstractScript
 				
 				// on ferme la porte et coupe l'axe
 				stateToConsider.robot.useActuator(ActuatorOrder.STOP_AXIS, false);
-                stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
+                //stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
 				
 				// la version 1 force la rotation dans le sens trigo, ce qu'il faut changer
 				stateToConsider.robot.setTurningStrategy(TurningStrategy.FASTEST);
