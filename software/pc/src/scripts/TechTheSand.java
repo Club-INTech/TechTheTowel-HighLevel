@@ -302,7 +302,7 @@ public class TechTheSand extends AbstractScript
                 {
                     e.printStackTrace();
                 }
-
+                
                 // On reprend notre vitesse habituelle
                 stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
                 stateToConsider.table.getObstacleManager().freePoint(stateToConsider.robot.getPosition());

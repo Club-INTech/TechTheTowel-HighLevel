@@ -228,6 +228,10 @@ public class Castle extends AbstractScript
 				// on gagne théoriquement le nombre de points réglé grâce aux tests
 				stateToConsider.obtainedPoints+=remainingScoreOfVersion(2, stateToConsider);
 				
+				// on ferme la porte et coupe l'axe
+				stateToConsider.robot.useActuator(ActuatorOrder.STOP_AXIS, false);
+                stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
+				
 				// la version 1 force la rotation dans le sens trigo, ce qu'il faut changer
 				stateToConsider.robot.setTurningStrategy(TurningStrategy.FASTEST);
 			}

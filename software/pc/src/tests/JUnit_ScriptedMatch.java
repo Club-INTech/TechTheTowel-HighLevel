@@ -109,6 +109,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         }
         try
         {
+        	
             scriptManager.getScript(ScriptNames.CASTLE).execute(2, theRobot, emptyHook);
         }
         catch(Exception e)
