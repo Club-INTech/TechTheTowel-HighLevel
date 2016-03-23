@@ -103,6 +103,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         }
         catch(ExecuteException | SerialFinallyException e)
         {
+        	log.debug("Problème d'exécution dans Tech the Sand");
             e.printStackTrace();
         }
         try
@@ -111,6 +112,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         }
         catch(ExecuteException|SerialFinallyException e)
         {
+        	log.debug("Problème d'exécution dans Castle");
             e.printStackTrace();
         }
         try
@@ -121,6 +123,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         }
         catch(ExecuteException | SerialFinallyException e)
         {
+        	log.debug("Problème d'exécution dans Close Doors");
             e.printStackTrace();
         }
         try
@@ -131,6 +134,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         }
         catch(ExecuteException | SerialFinallyException e)
         {
+        	log.debug("Problème d'exécution dans Shell Getter v -1");
             e.printStackTrace();
         }
         try
@@ -142,6 +146,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         }
         catch(ExecuteException | SerialFinallyException e)
         {
+        	log.debug("Problème d'exécution dans Fishing");
             e.printStackTrace();
         }
         try
@@ -150,6 +155,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         }
         catch(ExecuteException | SerialFinallyException e)
         {
+        	log.debug("Problème d'exécution Shell Getter v2");
             e.printStackTrace();
         }
         try
@@ -158,6 +164,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         }
         catch(ExecuteException | SerialFinallyException e)
         {
+        	log.debug("Problème d'exécution dans Shell Getter v2");
             e.printStackTrace();
         }
         try
@@ -166,6 +173,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         }
         catch(ExecuteException | SerialFinallyException e)
         {
+        	log.debug("Problème d'exécution dans Shell Getter v3");
             e.printStackTrace();
         }
         try
@@ -174,6 +182,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         }
         catch(ExecuteException | SerialFinallyException e)
         {
+        	log.debug("Problème d'exécution dans Shell Getter v4");
             e.printStackTrace();
         }
         try
@@ -181,7 +190,8 @@ public class JUnit_ScriptedMatch extends JUnit_Test
             scriptManager.getScript(ScriptNames.SHELL_DEPOSIT).goToThenExec(shellDepositVersion,theRobot, emptyHook);
         }
         catch(ExecuteException | SerialFinallyException e)
-        {
+        {	
+        	log.debug("Problème d'exécution dans Shell Deposit");
             e.printStackTrace();
         }
     }
