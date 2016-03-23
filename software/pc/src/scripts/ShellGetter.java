@@ -187,7 +187,7 @@ public class ShellGetter extends AbstractScript
                 // on se place pour repartir
                 stateToConsider.robot.moveLengthwise(200);*/
 
-                stateToConsider.robot.moveArc(new Arc(900, -400, stateToConsider.robot.getOrientationFast(), false), hooksToConsider);
+                stateToConsider.robot.moveArc(new Arc(200, -400, stateToConsider.robot.getOrientationFast(), false), hooksToConsider);
 
                 // on reprend la vitesse pre-script
                 stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
