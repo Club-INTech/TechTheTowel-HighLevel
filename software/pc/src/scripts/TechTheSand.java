@@ -348,9 +348,10 @@ public class TechTheSand extends AbstractScript
 	@Override
 	public void finalize(GameState<?> state) throws SerialFinallyException 
 	{
-		// on tente d'arrêter la tige et de ranger la vitre
+		// on tente d'arrêter la tige et de ranger la porte
 		try 
 		{
+			state.robot.immobilise();
 			state.robot.setForceMovement(false);
 			state.robot.useActuator(ActuatorOrder.STOP_AXIS, true);
             if (state.robot.getIsSandInside())
@@ -361,21 +362,24 @@ public class TechTheSand extends AbstractScript
             else
             {
                 state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
-                if(state.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED)) {
+                if(state.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED)) 
+                {
                     state.changeRobotRadius(TechTheSand.retractedRobotRadius);
                     state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
                     state.robot.setDoor(false);
                 }
                 else
                 {
+                	state.robot.useActuator(ActuatorOrder.STOP_AXIS, true);
+                	state.table.getObstacleManager().updateObstacles(expandedRobotRadius);
                     state.robot.setIsSandInside(true);
                     state.robot.setDoor(true);
                 }
             }
 		}
-		catch (Exception e)
+		catch (SerialConnexionException e)
 		{
-			log.debug("TechTheSand : Impossible de stopper l'axe ou de ranger la vitre !");
+			log.debug("TechTheSand : Impossible de stopper l'axe ou de ranger la porte !");
 			throw new SerialFinallyException();
 		}
 		

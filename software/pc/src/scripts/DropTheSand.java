@@ -117,6 +117,8 @@ public class DropTheSand extends AbstractScript
     	// on tente de fermer la vitre avec changement de rayon
     	try
     	{
+    		state.robot.immobilise();
+    		
     		if (state.robot.getIsSandInside())
     		{
                 state.changeRobotRadius(TechTheSand.expandedRobotRadius);
@@ -125,21 +127,25 @@ public class DropTheSand extends AbstractScript
     		else
     		{
     			state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
-                if(state.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED)) {
+                if(state.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED)) 
+                {
                     state.changeRobotRadius(TechTheSand.retractedRobotRadius);
                     state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
                     state.robot.setDoor(false);
                 }
                 else
                 {
+                	state.robot.useActuator(ActuatorOrder.STOP_DOOR, true);
                     state.robot.setIsSandInside(true);
                     state.robot.setDoor(true);
+                    state.changeRobotRadius(TechTheSand.expandedRobotRadius);
+                    state.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
                 }
     		}
     	}
-    	catch (Exception e)
+    	catch (SerialConnexionException e)
     	{
-    		log.debug("DropTheSand : Impossible de ranger la vitre !");
+    		log.debug("TechTheSand : impossible de fermer la porte !");
     		throw new SerialFinallyException();
     	}
     }

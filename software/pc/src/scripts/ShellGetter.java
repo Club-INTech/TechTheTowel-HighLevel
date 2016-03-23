@@ -342,11 +342,13 @@ public class ShellGetter extends AbstractScript
     }
 
     @Override
-    public void finalize(GameState<?> state) throws UnableToMoveException, SerialFinallyException {
+    public void finalize(GameState<?> state) throws  SerialFinallyException {
     	
     	// on tente de ranger la porte, avec changement de rayon
     	try
     	{
+    		state.robot.immobilise();
+    		
             if (state.robot.shellsOnBoard)
             {
                 state.changeRobotRadius(TechTheSand.expandedRobotRadius);
@@ -355,21 +357,24 @@ public class ShellGetter extends AbstractScript
             else
             {
                 state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
-                if(state.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED)) {
+                if(state.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED)) 
+                {
                     state.changeRobotRadius(TechTheSand.retractedRobotRadius);
                     state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
                     state.robot.setDoor(false);
                 }
                 else
                 {
+                	state.robot.useActuator(ActuatorOrder.STOP_DOOR, true);
+                	state.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
                     state.robot.setDoor(true);
                     state.robot.shellsOnBoard = true;
                 }
             }
     	}
-    	catch (Exception e)
+    	catch (SerialConnexionException e)
     	{
-    		log.debug("ShellGetter : Impossible de ranger la vitre !");
+    		log.debug("ShellGetter : impossible de ranger la porte !");
     		throw new SerialFinallyException();
     	}
 

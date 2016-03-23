@@ -587,7 +587,7 @@ public class Fishing extends AbstractScript
 	}
 
 	@Override
-	public void finalize(GameState<?> stateToConsider) throws SerialFinallyException // TODO faire un joli finalize où l'on redépose les poissons en cas de rencontre avec robot adverse
+	public void finalize(GameState<?> stateToConsider) throws SerialFinallyException 
 	{
 		try
 		{
@@ -597,7 +597,7 @@ public class Fishing extends AbstractScript
 		}
 		catch (SerialConnexionException e) 
 		{
-			log.debug("Fishing : Impossible de ranger les bras !");
+			log.debug("Fishing : impossible de ranger les bras !");
 			throw new SerialFinallyException();
 		}
 	}

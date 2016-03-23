@@ -125,11 +125,13 @@ public class ShellDeposit extends AbstractScript
     }
 
     @Override
-    public void finalize(GameState<?> state) throws UnableToMoveException, SerialFinallyException {
+    public void finalize(GameState<?> state) throws SerialFinallyException {
     	
     	// on tente de ranger la porte avec changement de rayon
     	try
     	{
+    		state.robot.immobilise();
+    		
             if (state.robot.shellsOnBoard)
             {
                 state.changeRobotRadius(TechTheSand.expandedRobotRadius);
@@ -138,20 +140,22 @@ public class ShellDeposit extends AbstractScript
             else
             {
                 state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
-                if(state.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED)) {
+                if(state.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED)) 
+                {
                     state.changeRobotRadius(TechTheSand.retractedRobotRadius);
                     state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
                     state.robot.setDoor(false);
                 }
                 else
                 {
+                	state.robot.useActuator(ActuatorOrder.STOP_DOOR, true);
+                	state.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
                     state.robot.shellsOnBoard = true;
                     state.robot.setDoor(true);
-
                 }
             }
     	}
-    	catch (Exception e)
+    	catch (SerialConnexionException e)
     	{
     		log.debug("ShellDeposit : Impossible de ranger la porte !");
     		throw new SerialFinallyException();
