@@ -1202,6 +1202,14 @@ public class Locomotion implements Service
         this.isForcing = choice;
     }
 
+    /**
+     * Change l'accélération en plus fluide mais plus lente
+     */
+    public synchronized void setSmoothAcceleration(boolean choice) throws SerialConnexionException
+    {
+        deplacements.setSmoothAcceleration(choice);
+    }
+
 	public void close()
 	{
 		deplacements.closeLocomotion();

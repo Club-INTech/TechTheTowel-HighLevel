@@ -255,6 +255,12 @@ public class RobotReal extends Robot
 	}
 
 	@Override
+	public void setSmoothAcceleration(boolean state) throws SerialConnexionException
+	{
+		this.mLocomotion.setSmoothAcceleration(state);
+	}
+
+	@Override
     public void turn(double angle, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
     {
 		log.debug("appel de RobotReal.turn(" + angle + "," + hooksToConsider + "," + expectsWallImpact + ")");

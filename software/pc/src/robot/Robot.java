@@ -625,5 +625,6 @@ public abstract class Robot implements Service
 	}
 
 	public abstract void setForceMovement(boolean state);
+	public abstract void setSmoothAcceleration(boolean state) throws SerialConnexionException;
 
 }

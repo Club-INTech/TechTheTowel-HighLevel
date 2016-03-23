@@ -330,6 +330,11 @@ public class RobotChrono extends Robot
 	}
 
 	@Override
+	public void setSmoothAcceleration(boolean state) {
+
+	}
+
+	@Override
 	public Speed getLocomotionSpeed() {
 
 		return speed;

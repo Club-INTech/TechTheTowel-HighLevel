@@ -324,6 +324,23 @@ public class LocomotionCardWrapper implements Service
 		}
 	}
 
+	/**
+	 * Change l'accélération en plus fluide mais plus lente
+     */
+	public synchronized void setSmoothAcceleration(boolean choice) throws SerialConnexionException
+	{
+		if(choice)
+		{
+			String chaines[] = {"ssa"};
+			locomotionCardSerial.communiquer(chaines, 0);
+		}
+		else
+		{
+			String chaines[] = {"sva"};
+			locomotionCardSerial.communiquer(chaines, 0);
+		}
+	}
+
 
 	/**
 	 * Demande a la carte d'asservissement la position et l'orientation courrante du robot sur la table.
