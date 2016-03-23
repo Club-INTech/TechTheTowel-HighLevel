@@ -141,6 +141,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         }
         try
         {
+        	theRobot.robot.setTurningStrategy(TurningStrategy.FASTEST);
             theRobot.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
             Vec2 sup = scriptManager.getScript(ScriptNames.FISHING).entryPosition(fishingVersion, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
             theRobot.table.getObstacleManager().freePoint(sup);
