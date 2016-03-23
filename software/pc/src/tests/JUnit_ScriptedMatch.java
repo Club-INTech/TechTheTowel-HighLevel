@@ -100,6 +100,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         {
             Vec2 sup = scriptManager.getScript(ScriptNames.TECH_THE_SAND).entryPosition(1, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
             theRobot.table.getObstacleManager().freePoint(sup);
+            theRobot.robot.setLocomotionSpeed(Speed.FAST_ALL);
             scriptManager.getScript(ScriptNames.TECH_THE_SAND).execute(techTheSandVersion,theRobot, emptyHook);
         }
         catch(Exception e)
@@ -110,14 +111,14 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         try
         {
         	
-            scriptManager.getScript(ScriptNames.CASTLE).execute(2, theRobot, emptyHook);
+            scriptManager.getScript(ScriptNames.CASTLE).execute(3, theRobot, emptyHook);
         }
         catch(Exception e)
         {
         	log.debug("Problème d'exécution dans Castle");
             e.printStackTrace();
         }
-        try
+       /* try
         {
             Vec2 sup = scriptManager.getScript(ScriptNames.CLOSE_DOORS).entryPosition(closeDoorsVersion, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
             theRobot.table.getObstacleManager().freePoint(sup);
@@ -127,9 +128,11 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         {
         	log.debug("Problème d'exécution dans Close Doors");
             e.printStackTrace();
-        }
+        }*/
         try
         {
+        	// à décommenter si a version 3 de Castle n'est pas utilisée et le close doors non utilisé
+        	theRobot.robot.moveLengthwise(200);
             Vec2 sup = scriptManager.getScript(ScriptNames.SHELL_GETTER).entryPosition(-1, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
             theRobot.table.getObstacleManager().freePoint(sup);
             scriptManager.getScript(ScriptNames.SHELL_GETTER).goToThenExec(-1,theRobot, emptyHook);

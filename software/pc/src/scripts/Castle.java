@@ -25,6 +25,7 @@ import java.util.ArrayList;
 
 import enums.ActuatorOrder;
 import enums.ContactSensors;
+import enums.Speed;
 import enums.TurningStrategy;
 
 /**
@@ -250,15 +251,20 @@ public class Castle extends AbstractScript
 			{
 				stateToConsider.robot.setForceMovement(true);
 
-				stateToConsider.robot.moveArc(new Arc(-330, 1100, stateToConsider.robot.getOrientation(), false), hooksToConsider);
+				stateToConsider.robot.moveArc(new Arc(-480, 950, stateToConsider.robot.getOrientation(), false), hooksToConsider);
+				
+				stateToConsider.robot.moveLengthwise(300,hooksToConsider,true);
 
 				stateToConsider.robot.useActuator(ActuatorOrder.STOP_AXIS, false);
+				
+				stateToConsider.robot.setForceMovement(false);
+				
+				// on indique qu'on ne transporte plus de sable
+				stateToConsider.robot.setIsSandInside(false);
 
-
-				Arc arc = new Arc(-1000, -1300, stateToConsider.robot.getOrientation(), false);
-
-				stateToConsider.robot.moveArc(arc, hooksToConsider);
-
+				// la version 1 force la rotation dans le sens trigo, ce qu'il faut changer
+				stateToConsider.robot.setTurningStrategy(TurningStrategy.FASTEST);
+				
 				// on liste les obstacles rectangulaires
 				ArrayList<ObstacleRectangular> mRectangles = stateToConsider.table.getObstacleManager().getRectangles();
 
@@ -270,14 +276,20 @@ public class Castle extends AbstractScript
 						mRectangles.remove(i);
 					}
 				}
+				
+				// partie bloquante pour fermer les cabines sans lancer l'appel à close doors
+				try
+				{
+					stateToConsider.robot.setLocomotionSpeed(Speed.FAST_ALL);
+					Arc arc = new Arc(-1000, -1300, stateToConsider.robot.getOrientation(), false);
+					stateToConsider.robot.moveArc(arc, hooksToConsider);
+				}
+				catch(UnableToMoveException u)
+				{
+					stateToConsider.robot.moveLengthwise(200);
+					return;
+				}
 
-				stateToConsider.robot.setForceMovement(false);
-
-				// on indique qu'on ne transporte plus de sable
-				stateToConsider.robot.setIsSandInside(false);
-
-				// la version 1 force la rotation dans le sens trigo, ce qu'il faut changer
-				stateToConsider.robot.setTurningStrategy(TurningStrategy.FASTEST);
 			}
 			
 		}
