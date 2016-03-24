@@ -23,6 +23,8 @@ import utils.Config;
 import utils.Log;
 
 import java.util.ArrayList;
+
+import com.sun.xml.internal.bind.v2.model.core.MaybeElement;
 /**
  * Script pour récuperer les poissons
  * Version 0 et 1: déplacement le long du bac pour récupérer les poissons, puis déplacement près du filet pour les lâcher. On suppose deux allers suffisant.
@@ -367,25 +369,28 @@ public class Fishing extends AbstractScript
 
 			else if(versionToExecute == 3)
 			{
-				// On prend une vitesse lente pour que les aimants puissent récupérer les poissons
+				// Vitesse rapide jusqu'au début de pêche
 				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
-				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+				stateToConsider.robot.setLocomotionSpeed(Speed.FAST_ALL);
 
 				// On commence à se placer près du bord
-				stateToConsider.robot.turn(Math.PI - 0.17);
+				stateToConsider.robot.turn(Math.PI - 0.16);
 
-				stateToConsider.robot.moveLengthwise(-200, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(-230, hooksToConsider, true);
 
+				// reprise de vitesse medium
+				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+				
 				// On s'oriente vers le côté ennemi
-				stateToConsider.robot.turn((Math.PI-0.02), hooksToConsider, true);
-
+				stateToConsider.robot.turn((Math.PI-0.04), hooksToConsider, true);
+				
 				// On baisse le bras aimanté
 				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION, true);
 
 				//stateToConsider.robot.sleep(800);
 
 				// On crée le hook de position
-				Hook hook = hookFactory.newXLesserHook(660);
+				Hook hook = hookFactory.newXLesserHook(600);
 
 				// On y ajoute un callback qui a pour action de lever le bras
 				hook.addCallback(new Callback(new RiseArm(), true, stateToConsider));
@@ -394,7 +399,7 @@ public class Fishing extends AbstractScript
 				hooksToConsider.add(hook);
 
 				// On crée le hook de position
-				Hook hook2 = hookFactory.newXLesserHook(520);
+				Hook hook2 = hookFactory.newXLesserHook(450);
 
 				// On y ajoute un callback qui a pour action de lâcher les poissons
 				hook2.addCallback(new Callback(new DropFish(), true, stateToConsider));
@@ -403,7 +408,7 @@ public class Fishing extends AbstractScript
 				hooksToConsider.add(hook2);
 
 				// On longe le bac
-				stateToConsider.robot.moveLengthwise(460, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(480, hooksToConsider, true);
 				
 				//On indique ques les poissons se trouvent sur le bras
 				stateToConsider.robot.setAreFishesOnBoard(true);
@@ -417,34 +422,24 @@ public class Fishing extends AbstractScript
 				// On indique au robot que les poissons ne sont plus sur le bras
 				stateToConsider.robot.setAreFishesOnBoard(false);
 				
-				// On crée le hook de position
-				Hook hook3 = hookFactory.newXGreaterHook(720);
-
-				// On y ajoute un callback qui a pour action de prendre les poissons
+				// On crée le hook de position pour prendre les poissons et ajout à la liste
+				Hook hook3 = hookFactory.newXGreaterHook(700);
 				hook3.addCallback(new Callback(new GetFish(), true, stateToConsider));
-
-				// On ajoute le hook à la liste
 				hooksToConsider.add(hook3);
 
-				// on repart chercher d'autre poissons
+				// on repart chercher d'autre poissons rapidement 
+				stateToConsider.robot.setLocomotionSpeed(Speed.FAST_ALL);
 				stateToConsider.robot.moveLengthwise(-460, hooksToConsider, true);
+				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 				
-				// nouvelle condition pour le hook levant le bras
-				hook = hookFactory.newXLesserHook(600);
-
-				// On y ajoute un callback qui a pour action de lever le bras
+				// nouvelle condition pour le hook levant le bras et mise à jour dans la liste
+				hook = hookFactory.newXLesserHook(570);
 				hook.addCallback(new Callback(new RiseArm(), true, stateToConsider));
-				
-				// mise à jour du hook avec la nouvelle condition
 				hooksToConsider.add(hook);
 				
-				// nouvelle condition pour le hook lâchant les poissons
+				// nouvelle condition pour le hook lâchant les poissons et mise à jour dans la liste
 				hook2 = hookFactory.newXLesserHook(450);
-				
-				// On y ajoute un callback qui a pour action de lâcher les poissons
 				hook2.addCallback(new Callback(new DropFish(), true, stateToConsider));
-				
-				// mise à jour du hook
 				hooksToConsider.add(hook2);
 				
 				// on indique que les poissons sont sur le bras 
@@ -461,7 +456,15 @@ public class Fishing extends AbstractScript
 
 				// Points gagnés moyen pour ce passage
 				stateToConsider.obtainedPoints += 20;
+				
+				// arc pour sortir du bord de table
+				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+				Arc disengage = new Arc(-200,100,stateToConsider.robot.getOrientation(),false);
+				stateToConsider.robot.moveArc(disengage, hooksToConsider);
+				stateToConsider.robot.turn(Math.PI/2);
+				stateToConsider.robot.moveLengthwise(100,hooksToConsider,false);
 
+				// reprise de vitesse inter script
 				stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
 			}
 
@@ -543,8 +546,7 @@ public class Fishing extends AbstractScript
 		}
 		catch(Exception e)
 		{
-			finalize(stateToConsider);
-			throw e;
+			finalize(stateToConsider, e);
 		}
 	}
 
@@ -587,13 +589,13 @@ public class Fishing extends AbstractScript
 	}
 
 	@Override
-	public void finalize(GameState<?> stateToConsider) throws SerialFinallyException 
+	public void finalize(GameState<?> stateToConsider, Exception ex) throws SerialFinallyException 
 	{
+		log.debug("Exception " + ex + "dans Fishing : Lancement du Finalize !");
 		try
 		{
 			// On remonte le bras en fin de script, puis arrêt du robot
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
-			stateToConsider.robot.immobilise();
 		}
 		catch (SerialConnexionException e) 
 		{

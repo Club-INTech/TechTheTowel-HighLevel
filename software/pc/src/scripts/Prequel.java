@@ -87,8 +87,7 @@ public class Prequel extends AbstractScript
 			}
 			catch (UnableToMoveException e)
 			{
-				finalize(actualState);
-				throw new ExecuteException(e);
+				finalize(actualState,e);
 			}
 		}
 		
@@ -105,7 +104,7 @@ public class Prequel extends AbstractScript
 	}
 
 	@Override
-	public void finalize(GameState<?> state) throws SerialFinallyException 
+	public void finalize(GameState<?> state, Exception e) throws SerialFinallyException 
 	{
 		// Immobilisation du robot en fin de script
 		state.robot.immobilise();

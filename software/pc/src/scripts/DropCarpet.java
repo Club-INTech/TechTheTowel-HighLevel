@@ -107,7 +107,7 @@ public class DropCarpet extends AbstractScript
 			}
 			catch (UnableToMoveException | SerialConnexionException e)
 			{
-				finalize(stateToConsider);
+				finalize(stateToConsider,e);
 				throw new ExecuteException(e);
 			}
 		else if(versionToExecute == 0)
@@ -175,7 +175,7 @@ public class DropCarpet extends AbstractScript
 			}
 			catch(UnableToMoveException | SerialConnexionException e)
 			{
-				finalize(stateToConsider);
+				finalize(stateToConsider,e);
 				throw new ExecuteException(e);
 			}
 		}
@@ -266,7 +266,7 @@ public class DropCarpet extends AbstractScript
 			}
 			catch(UnableToMoveException | SerialConnexionException e)
 			{
-				finalize(stateToConsider);
+				finalize(stateToConsider, e);
 				throw new ExecuteException(e);
 			}
 		}
@@ -302,7 +302,7 @@ public class DropCarpet extends AbstractScript
 	}
 
 	@Override
-	public void finalize(GameState<?> stateToConsider) throws SerialFinallyException 
+	public void finalize(GameState<?> stateToConsider, Exception ex) throws SerialFinallyException 
 	{
 		try 
 		{

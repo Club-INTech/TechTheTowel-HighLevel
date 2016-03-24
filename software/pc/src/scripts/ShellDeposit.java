@@ -89,8 +89,7 @@ public class ShellDeposit extends AbstractScript
         }
         catch (Exception e) 
         {
-            finalize(actualState);
-            throw e;
+            finalize(actualState,e);
         }
     } 
 
@@ -125,12 +124,12 @@ public class ShellDeposit extends AbstractScript
     }
 
     @Override
-    public void finalize(GameState<?> state) throws SerialFinallyException {
-    	
+    public void finalize(GameState<?> state, Exception e) throws SerialFinallyException 
+    {
+    	log.debug("Exception " + e + " dans Shell Deposit : Lancement du Finalize !");
     	// on tente de ranger la porte avec changement de rayon
     	try
     	{
-    		state.robot.immobilise();
     		
             if (state.robot.shellsOnBoard)
             {
@@ -154,8 +153,9 @@ public class ShellDeposit extends AbstractScript
                     state.robot.setDoor(true);
                 }
             }
+            
     	}
-    	catch (SerialConnexionException e)
+    	catch (SerialConnexionException ex)
     	{
     		log.debug("ShellDeposit : Impossible de ranger la porte !");
     		throw new SerialFinallyException();

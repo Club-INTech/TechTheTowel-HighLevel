@@ -284,8 +284,7 @@ public class ShellGetter extends AbstractScript
         }
         catch(Exception e)
         {
-        	finalize(stateToConsider);
-        	throw e;
+        	finalize(stateToConsider,e);
         }
     }
 
@@ -342,12 +341,13 @@ public class ShellGetter extends AbstractScript
     }
 
     @Override
-    public void finalize(GameState<?> state) throws  SerialFinallyException {
-    	
+    public void finalize(GameState<?> state, Exception e) throws  SerialFinallyException 
+    {
+    	 log.debug("Exception " + e + " dans Shell Getter : Lancement du Finalize !");
+    	 
     	// on tente de ranger la porte, avec changement de rayon
     	try
     	{
-    		state.robot.immobilise();
     		
             if (state.robot.shellsOnBoard)
             {
@@ -371,8 +371,9 @@ public class ShellGetter extends AbstractScript
                     state.robot.shellsOnBoard = true;
                 }
             }
+            
     	}
-    	catch (SerialConnexionException e)
+    	catch (SerialConnexionException ex)
     	{
     		log.debug("ShellGetter : impossible de ranger la porte !");
     		throw new SerialFinallyException();

@@ -297,8 +297,11 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.robot.setForceMovement(false);
 				stateToConsider.robot.setSmoothAcceleration(true);
 
-                try {
-                    stateToConsider.robot.moveLengthwise(850 - stateToConsider.robot.getPosition().x);
+                try 
+                {
+                	// version à décommenter pour la version 2 de Castle
+                	// stateToConsider.robot.moveLengthwise(1150-stateToConsider.robot.getPosition().x);
+                    stateToConsider.robot.moveLengthwise(650 - stateToConsider.robot.getPosition().x);
                 } catch (Exception e)
                 {
                     e.printStackTrace();
@@ -313,8 +316,7 @@ public class TechTheSand extends AbstractScript
 		}
 		catch(Exception e)
 		{
-			finalize(stateToConsider);
-			throw e;
+			finalize(stateToConsider,e);
 		}
 	}
 
@@ -349,12 +351,13 @@ public class TechTheSand extends AbstractScript
 	}
 
 	@Override
-	public void finalize(GameState<?> state) throws SerialFinallyException 
+	public void finalize(GameState<?> state, Exception e) throws SerialFinallyException 
 	{
+		log.debug("Exception " + e + " dans Tech The Sand : Lancement du Finalize !");
+		
 		// on tente d'arrêter la tige et de ranger la porte
 		try 
 		{
-			state.robot.immobilise();
 			state.robot.setForceMovement(false);
 			state.robot.useActuator(ActuatorOrder.STOP_AXIS, true);
             if (state.robot.getIsSandInside())
@@ -379,8 +382,9 @@ public class TechTheSand extends AbstractScript
                     state.robot.setDoor(true);
                 }
             }
+            
 		}
-		catch (SerialConnexionException e)
+		catch (SerialConnexionException ex)
 		{
 			log.debug("TechTheSand : Impossible de stopper l'axe ou de ranger la porte !");
 			throw new SerialFinallyException();
