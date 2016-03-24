@@ -18,6 +18,7 @@ import scripts.ScriptManager;
 import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
+import utils.Sleep;
 
 import java.util.ArrayList;
 
@@ -68,7 +69,12 @@ public class JUnit_ScriptedMatch extends JUnit_Test
                 theRobot.robot.useActuator(ActuatorOrder.STOP_DOOR, true);
                 throw new BlockedActuatorException("Porte droite bloquée !");
             }
-        }catch (SerialConnexionException e)
+            
+            // petit temps d'attente pour éviter de faire planter les portes #LeHautNiveauDemandeDeLaMerde
+            theRobot.robot.sleep(100);
+            
+        }
+        catch (SerialConnexionException e)
         {
             e.printStackTrace();
         }
@@ -104,6 +110,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
             theRobot.table.getObstacleManager().freePoint(sup);
             theRobot.robot.setLocomotionSpeed(Speed.FAST_ALL);
             scriptManager.getScript(ScriptNames.TECH_THE_SAND).execute(techTheSandVersion,theRobot, emptyHook);
+            log.debug("Fin de Tech The Sand !");
         }
         catch(Exception e)
         {

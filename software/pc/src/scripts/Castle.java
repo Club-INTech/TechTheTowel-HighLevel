@@ -288,6 +288,7 @@ public class Castle extends AbstractScript
 				
 				catch(UnableToMoveException u)
 				{
+					stateToConsider.robot.setForceMovement(false);
 					stateToConsider.robot.moveLengthwise(200);
 					return;
 				}
@@ -297,8 +298,7 @@ public class Castle extends AbstractScript
 		}
 		catch (Exception e)
 		{
-			finalize(stateToConsider);
-			throw e;
+			finalize(stateToConsider, e);
 		}
 		
 	}
@@ -352,9 +352,9 @@ public class Castle extends AbstractScript
 	}
 
 	@Override
-	public void finalize(GameState<?> state)
+	public void finalize(GameState<?> state, Exception e)
 	{
-		log.debug("Fin du Castle !");
+		log.debug("Exception " + e + " dans Castle : Lancement du Finalize !");
 	}
 
 	@Override

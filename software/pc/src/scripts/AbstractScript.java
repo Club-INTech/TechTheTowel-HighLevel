@@ -123,16 +123,16 @@ public abstract class AbstractScript implements Service
 	public abstract Circle entryPosition(int version, int ray, Vec2 robotPosition) throws BadVersionException;
 	
 	/**
-	 * Méthode toujours appelée à la fin du script via un finally. On des donc certain  que son exécution aura lieu.
-	 * Le repli des actionneurs lors de la fin du script a sa place ici et pas ailleurs: si un bras reste déployé en cours de match, il risque de se faire arracher !  
-	 * Ainsi, les exceptions lancés par cette méthodes sont les plus critiques que l'on peut imaginer: elles préviennent qu'on peut casser la méca si on ne réagit pas bien !
-	 *
-	 * @param state Etat du jeu au sein duquel il faut finaliser le script
+	 * Méthode appelée à la fin du script si une exception a lieu.
+	 * Le repli des actionneurs est impératif à demander au sein de cette méthode : si un bras reste déployé en cours de match, il risque de se faire arracher !  
+	 * Ainsi, les exceptions lancées par cette méthode sont les plus critiques que l'on puisse imaginer : elles préviennent qu'on peut casser la méca si on ne réagit pas bien !
+	 * @param state : état du jeu au sein duquel il faut finaliser le script
+	 * @param e : l'exception qui a déclenché le finalize 
 	 * @throws UnableToMoveException losrque le robot veut se déplacer et que quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
 	 * @throws SerialFinallyException 
 	 * @throws SerialConnexionException s'il y a un problème de communication avec une des cartes électroniques
 	 */
-	public abstract void finalize(GameState<?> state) throws UnableToMoveException, SerialFinallyException;
+	public abstract void finalize(GameState<?> state, Exception e) throws UnableToMoveException, SerialFinallyException;
 	
 	/* (non-Javadoc)
 	 * @see container.Service#updateConfig()

@@ -458,9 +458,11 @@ public class Fishing extends AbstractScript
 				stateToConsider.obtainedPoints += 20;
 				
 				// arc pour sortir du bord de table
+				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 				Arc disengage = new Arc(-200,100,stateToConsider.robot.getOrientation(),false);
 				stateToConsider.robot.moveArc(disengage, hooksToConsider);
 				stateToConsider.robot.turn(Math.PI/2);
+				stateToConsider.robot.moveLengthwise(100,hooksToConsider,false);
 
 				// reprise de vitesse inter script
 				stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
@@ -544,8 +546,7 @@ public class Fishing extends AbstractScript
 		}
 		catch(Exception e)
 		{
-			finalize(stateToConsider);
-			throw e;
+			finalize(stateToConsider, e);
 		}
 	}
 
@@ -588,15 +589,13 @@ public class Fishing extends AbstractScript
 	}
 
 	@Override
-	public void finalize(GameState<?> stateToConsider) throws SerialFinallyException 
+	public void finalize(GameState<?> stateToConsider, Exception ex) throws SerialFinallyException 
 	{
+		log.debug("Exception " + ex + "dans Fishing : Lancement du Finalize !");
 		try
 		{
 			// On remonte le bras en fin de script, puis arrêt du robot
 			stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
-			log.debug("Fin du Fishing !");
-			
-			
 		}
 		catch (SerialConnexionException e) 
 		{

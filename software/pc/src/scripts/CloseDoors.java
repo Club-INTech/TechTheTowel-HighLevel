@@ -124,8 +124,7 @@ public class CloseDoors extends AbstractScript
 		}
 		catch(Exception e)
 		{
-			finalize(stateToConsider);
-			throw e;
+			finalize(stateToConsider,e);
 		}
 	}
 
@@ -171,9 +170,9 @@ public class CloseDoors extends AbstractScript
 	}
 
 	@Override
-	public void finalize(GameState<?> state) throws SerialFinallyException
+	public void finalize(GameState<?> state, Exception e) throws SerialFinallyException
 	{
-		log.debug("Fin du Close Doors !");
+		log.debug("Exception " + e + "dans Close Doors : Lancement du Finalize !");
 	}
 
 	@Override

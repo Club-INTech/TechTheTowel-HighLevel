@@ -316,8 +316,7 @@ public class TechTheSand extends AbstractScript
 		}
 		catch(Exception e)
 		{
-			finalize(stateToConsider);
-			throw e;
+			finalize(stateToConsider,e);
 		}
 	}
 
@@ -352,8 +351,10 @@ public class TechTheSand extends AbstractScript
 	}
 
 	@Override
-	public void finalize(GameState<?> state) throws SerialFinallyException 
+	public void finalize(GameState<?> state, Exception e) throws SerialFinallyException 
 	{
+		log.debug("Exception " + e + " dans Tech The Sand : Lancement du Finalize !");
+		
 		// on tente d'arrêter la tige et de ranger la porte
 		try 
 		{
@@ -382,9 +383,8 @@ public class TechTheSand extends AbstractScript
                 }
             }
             
-            log.debug("Fin du Tech The Sand !");
 		}
-		catch (SerialConnexionException e)
+		catch (SerialConnexionException ex)
 		{
 			log.debug("TechTheSand : Impossible de stopper l'axe ou de ranger la porte !");
 			throw new SerialFinallyException();

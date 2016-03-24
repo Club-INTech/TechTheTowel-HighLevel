@@ -84,7 +84,7 @@ public class DropTheSand extends AbstractScript
         }
         catch(Exception e)
         {
-        	finalize(actualState);
+        	finalize(actualState,e);
         	throw e;
         }
 
@@ -112,8 +112,10 @@ public class DropTheSand extends AbstractScript
     }
 
     @Override
-    public void finalize(GameState<?> state) throws SerialFinallyException 
+    public void finalize(GameState<?> state, Exception ex) throws SerialFinallyException 
     {
+    	
+    	log.debug("Exception " + ex + "dans Drop The Sand : Lancement du Finalize !");
     	// on tente de fermer la vitre avec changement de rayon
     	try
     	{
@@ -142,7 +144,6 @@ public class DropTheSand extends AbstractScript
                 }
     		}
     		
-    		log.debug("Fin du Drop The Sand !");
     	}
     	catch (SerialConnexionException e)
     	{
