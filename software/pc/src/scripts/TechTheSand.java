@@ -131,8 +131,12 @@ public class TechTheSand extends AbstractScript
 
 				Arc start = new Arc(-893, 400, Math.PI, false);
 
+				stateToConsider.robot.setForceMovement(true);
+				
                 //On se déplace en courbe pour se placer en face du château
                 stateToConsider.robot.moveArc(start, hooksToConsider);
+
+				stateToConsider.robot.setForceMovement(false);
 
                 stateToConsider.robot.moveLengthwise(550);
 
@@ -164,7 +168,7 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.robot.useActuator(ActuatorOrder.START_AXIS, false);
                 
                 // Définition de l'arc à suivre, point de départ temporaire
-                Arc approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(100,2000-235), Math.PI, true);
+                Arc approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(100,2000-225), Math.PI, true);
 
 				try {
 					//On se déplace en courbe pour se placer en face du château
