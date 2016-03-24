@@ -357,7 +357,6 @@ public class TechTheSand extends AbstractScript
 		// on tente d'arrêter la tige et de ranger la porte
 		try 
 		{
-			state.robot.immobilise();
 			state.robot.setForceMovement(false);
 			state.robot.useActuator(ActuatorOrder.STOP_AXIS, true);
             if (state.robot.getIsSandInside())
@@ -382,6 +381,8 @@ public class TechTheSand extends AbstractScript
                     state.robot.setDoor(true);
                 }
             }
+            
+            log.debug("Fin du Tech The Sand !");
 		}
 		catch (SerialConnexionException e)
 		{

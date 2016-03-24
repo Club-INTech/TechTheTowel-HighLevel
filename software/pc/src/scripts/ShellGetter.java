@@ -347,7 +347,6 @@ public class ShellGetter extends AbstractScript
     	// on tente de ranger la porte, avec changement de rayon
     	try
     	{
-    		state.robot.immobilise();
     		
             if (state.robot.shellsOnBoard)
             {
@@ -371,6 +370,8 @@ public class ShellGetter extends AbstractScript
                     state.robot.shellsOnBoard = true;
                 }
             }
+            
+            log.debug("Fin du Shell Getter ! ");
     	}
     	catch (SerialConnexionException e)
     	{

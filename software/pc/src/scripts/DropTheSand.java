@@ -117,7 +117,6 @@ public class DropTheSand extends AbstractScript
     	// on tente de fermer la vitre avec changement de rayon
     	try
     	{
-    		state.robot.immobilise();
     		
     		if (state.robot.getIsSandInside())
     		{
@@ -142,6 +141,8 @@ public class DropTheSand extends AbstractScript
                     state.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
                 }
     		}
+    		
+    		log.debug("Fin du Drop The Sand !");
     	}
     	catch (SerialConnexionException e)
     	{

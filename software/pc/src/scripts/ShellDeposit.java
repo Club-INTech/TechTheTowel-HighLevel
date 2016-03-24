@@ -130,7 +130,6 @@ public class ShellDeposit extends AbstractScript
     	// on tente de ranger la porte avec changement de rayon
     	try
     	{
-    		state.robot.immobilise();
     		
             if (state.robot.shellsOnBoard)
             {
@@ -154,6 +153,8 @@ public class ShellDeposit extends AbstractScript
                     state.robot.setDoor(true);
                 }
             }
+            
+            log.debug("Fin du Shell Deposit !");
     	}
     	catch (SerialConnexionException e)
     	{

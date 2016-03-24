@@ -173,8 +173,7 @@ public class CloseDoors extends AbstractScript
 	@Override
 	public void finalize(GameState<?> state) throws SerialFinallyException
 	{
-		state.robot.immobilise();
-		
+		log.debug("Fin du Close Doors !");
 	}
 
 	@Override

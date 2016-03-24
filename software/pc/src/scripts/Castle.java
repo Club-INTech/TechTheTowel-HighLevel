@@ -352,7 +352,7 @@ public class Castle extends AbstractScript
 	@Override
 	public void finalize(GameState<?> state)
 	{
-		state.robot.immobilise();
+		log.debug("Fin du Castle !");
 	}
 
 	@Override
