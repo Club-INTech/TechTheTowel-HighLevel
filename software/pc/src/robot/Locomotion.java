@@ -1000,8 +1000,11 @@ public class Locomotion implements Service
         try 
         {
             float[] infos = deplacements.getCurrentPositionAndOrientation();
+
+            if(infos == null)
+                return;
             
-            lowLevelPosition.x = (int)infos[0];            
+            lowLevelPosition.x = (int)infos[0];
             lowLevelPosition.y = (int)infos[1];
             lowLevelOrientation = infos[2]; // car getCurrentPositionAndOrientation renvoie des radians
             

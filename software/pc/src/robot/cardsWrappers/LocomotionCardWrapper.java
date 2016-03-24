@@ -356,7 +356,12 @@ public class LocomotionCardWrapper implements Service
 		float[] parsedInfos = new float[3];
 		for(int i = 0; i < 3; i++)
 		{
+			try{
 			parsedInfos[i] = Float.parseFloat(infosBuffer[i]);
+			} catch (NumberFormatException e)
+			{
+				return null;
+			}
 		}
 		return parsedInfos;
 	}
