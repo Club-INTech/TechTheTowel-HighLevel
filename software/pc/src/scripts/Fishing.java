@@ -385,7 +385,7 @@ public class Fishing extends AbstractScript
 				//stateToConsider.robot.sleep(800);
 
 				// On crée le hook de position
-				Hook hook = hookFactory.newXLesserHook(660);
+				Hook hook = hookFactory.newXLesserHook(600);
 
 				// On y ajoute un callback qui a pour action de lever le bras
 				hook.addCallback(new Callback(new RiseArm(), true, stateToConsider));
@@ -394,7 +394,7 @@ public class Fishing extends AbstractScript
 				hooksToConsider.add(hook);
 
 				// On crée le hook de position
-				Hook hook2 = hookFactory.newXLesserHook(520);
+				Hook hook2 = hookFactory.newXLesserHook(480);
 
 				// On y ajoute un callback qui a pour action de lâcher les poissons
 				hook2.addCallback(new Callback(new DropFish(), true, stateToConsider));

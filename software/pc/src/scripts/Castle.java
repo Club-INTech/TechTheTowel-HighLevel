@@ -311,7 +311,7 @@ public class Castle extends AbstractScript
 			return 16;
 		}
 		
-		else if (version == 2)
+		else if (version == 2 | version==3)
 		{
 			//TODO changer selon le caractère destructif de la version ou les pertes constatées
 			return 12;
