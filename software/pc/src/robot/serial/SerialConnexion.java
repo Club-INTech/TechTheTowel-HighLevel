@@ -233,7 +233,8 @@ public class SerialConnexion implements SerialPortEventListener, Service
             catch (Exception e)
             {
                 log.critical("Ne peut pas parler a la carte " + this.name + " lancement de "+e);
-                throw new SerialConnexionException();
+                clearInputBuffer();
+                communiquer(messages, nb_lignes_reponse);
             }
             return inputLines;
         }
