@@ -251,13 +251,12 @@ public class Castle extends AbstractScript
 			{
 				stateToConsider.robot.setForceMovement(true);
 
-				stateToConsider.robot.moveArc(new Arc(-480, 950, stateToConsider.robot.getOrientation(), false), hooksToConsider);
+				stateToConsider.robot.moveArc(new Arc(-500, 950, stateToConsider.robot.getOrientation(), false), hooksToConsider);
 				
 				stateToConsider.robot.moveLengthwise(300,hooksToConsider,true);
 
 				stateToConsider.robot.useActuator(ActuatorOrder.STOP_AXIS, false);
 				
-				stateToConsider.robot.setForceMovement(false);
 				
 				// on indique qu'on ne transporte plus de sable
 				stateToConsider.robot.setIsSandInside(false);
@@ -281,9 +280,12 @@ public class Castle extends AbstractScript
 				try
 				{
 					stateToConsider.robot.setLocomotionSpeed(Speed.FAST_ALL);
-					Arc arc = new Arc(-1000, -1300, stateToConsider.robot.getOrientation(), false);
+					Arc arc = new Arc(-1100, -1300, stateToConsider.robot.getOrientation(), false);
 					stateToConsider.robot.moveArc(arc, hooksToConsider);
+					stateToConsider.robot.setForceMovement(false);
 				}
+				
+				
 				catch(UnableToMoveException u)
 				{
 					stateToConsider.robot.moveLengthwise(200);

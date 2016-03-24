@@ -96,6 +96,8 @@ public class JUnit_ScriptedMatch extends JUnit_Test
     @Test
     public void match() throws Exception
     {
+    	log.debug("Début de match scripté !");
+    	
         try
         {
             Vec2 sup = scriptManager.getScript(ScriptNames.TECH_THE_SAND).entryPosition(1, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
