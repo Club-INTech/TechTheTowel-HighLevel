@@ -1,34 +1,67 @@
 package strategie;
 
 import container.Service;
+import exceptions.ConfigPropertyNotFoundException;
+import hook.types.HookFactory;
+import robot.RobotReal;
+import scripts.AbstractScript;
+import scripts.ScriptManager;
+import table.Table;
+import utils.Config;
+import utils.Log;
 
 
 /**
- *	Classe de l'IA
- * @author Paul, marsu
+ * IA
+ * @author discord
  */
 
 
 
 public class Strategie implements Service
 {
+	private Log log;
 
-/**
+	private Config config;
+
+	private Table table;
+
+	private GameState<RobotReal> state;
+
+	private ScriptManager scriptmanager;
+
+	private HookFactory hookFactory;
+
+    private boolean dangerousOpponent;
+
+ /**
  * Crée la strategie, l'IA decisionnelle
  * @param config
  * @param log
  * @param state
- * @param scriptManager
- * @param trouveurDeChemin
  */
-	public Strategie()
+	public Strategie(Log log, Config config, Table table, GameState<RobotReal> state)
 	{
-		//TODO constructeur IA
+		this.log = log;
+		this.config = config;
+		this.table = table;
+		this.state = state;
+		this.hookFactory = new HookFactory(config, log, state);
+		this.scriptmanager = new ScriptManager(hookFactory, config, log);
 	}
 
 	public void updateConfig() 
 	{
-		//TODO update IA
+        table.updateConfig();
+        state.robot.updateConfig();
+        try
+        {
+            dangerousOpponent = Boolean.parseBoolean(config.getProperty("cDesFousEnFace"));
+        }
+        catch (ConfigPropertyNotFoundException e)
+        {
+            log.debug("Revoir le code : impossible de trouver la propriete "+e.getPropertyNotFound());
+        }
 	}
 	
 	/**
@@ -41,10 +74,13 @@ public class Strategie implements Service
 		scriptedMatch();
 	}
 
+    public AbstractScript decide()
+    {
+        return null;
+    }
 
 	/**
 	 * 	Lance le match scripté de l'IA, suite de scripts
-	 * @param gameState l'etat de la table
 	 */
 	private void scriptedMatch()
 	{
