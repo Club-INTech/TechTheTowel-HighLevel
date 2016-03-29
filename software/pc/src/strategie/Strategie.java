@@ -1,5 +1,6 @@
 package strategie;
 
+import container.Container;
 import container.Service;
 import enums.ActuatorOrder;
 import enums.ScriptNames;
@@ -15,6 +16,7 @@ import robot.RobotReal;
 import scripts.*;
 import table.Table;
 import table.obstacles.ObstacleCircular;
+import threads.ThreadTimer;
 import utils.Config;
 import utils.Log;
 
@@ -84,6 +86,7 @@ public class Strategie implements Service
      */
     private ArrayList<ObstacleCircular> shells;
 
+
  /**
  * Crée la strategie, l'IA decisionnelle
  * @param config
@@ -149,10 +152,13 @@ public class Strategie implements Service
                 e.printStackTrace();
             }
 
-            if(state.robot.getIsSandInside())
+            if(state.robot.getIsSandInside() && state.robot.getPositionFast().x < 850)
                 sandTaken = true;
             else if(sandTaken && !state.robot.getIsSandInside())
                 castleTaken = true;
+            else if(abnormalMatch && state.robot.getIsSandInside()) //Si on est trop loin pour déclencher Castle
+                castleTaken = true;
+
             if(state.table.fishesFished > 0)
                 fishedOnce = true;
             if(!abnormalMatch && state.table.shellsObtained>0)
@@ -208,17 +214,49 @@ public class Strategie implements Service
 
             if (script instanceof Castle) //Dégagement en cas de bloquage en essayant de déposer le sable (trop greedy)
             {
+                state.robot.setForceMovement(true);
                 if (state.robot.getPositionFast().x > 650)
                 {
                     state.robot.moveLengthwise(-100);
                 }
-                else if (state.robot.getPositionFast().x <= 650)
+                else
                 {
                     state.robot.moveLengthwise(100);
                     state.robot.turn(Math.PI);
                     state.robot.moveLengthwise(-400);
                 }
+                state.robot.setForceMovement(false);
+                castleTaken = true;
                 return;
+            }
+            else if(script instanceof ShellGetter) //Si on s'est pris la vitre (shit happens)
+            {
+                int signe=1;
+                if(state.robot.getPositionFast().x < 0)
+                {
+                    signe = -1;
+                }
+
+                if(state.robot.getOrientationFast() > Math.PI/2)
+                {
+                    state.robot.moveLengthwise(200*signe);
+                }
+                else if(state.robot.getOrientationFast() > -Math.PI/2)
+                {
+                    state.robot.moveLengthwise(-200*signe);
+                }
+                else if(state.robot.getOrientationFast() == Math.PI/2)
+                {
+                    state.robot.moveLengthwise(-state.robot.getRobotRadius());
+                }
+                else if(state.robot.getOrientationFast() == -Math.PI/2)
+                {
+                    state.robot.moveLengthwise(state.robot.getRobotRadius());
+                }
+                else
+                {
+                    state.robot.moveLengthwise(signe*200);
+                }
             }
         }
         catch (UnableToMoveException e)
@@ -270,13 +308,21 @@ public class Strategie implements Service
         {
             abnormalMatch = false;
 
-            if(state.robot.getIsSandInside()) //On spam castle jusqu'à la dépose du sable
+            if(state.robot.getIsSandInside())
                 return scriptmanager.getScript(ScriptNames.CASTLE);
+
+            if(state.robot.getIsSandInside() && castleTaken)
+                return scriptmanager.getScript(ScriptNames.DROP_THE_SAND);
 
             if(!sandTaken && !dangerousOpponent)
                 return scriptmanager.getScript(ScriptNames.TECH_THE_SAND);
+            else if(!sandTaken && state.robot.getPositionFast().x < 850)
+                return scriptmanager.getScript(ScriptNames.CASTLE);
             else if(!sandTaken)
-                    return scriptmanager.getScript(ScriptNames.CASTLE);
+            {
+                castleTaken = true;
+                return scriptmanager.getScript(ScriptNames.CLOSE_DOORS);
+            }
 
 
         }
@@ -298,6 +344,8 @@ public class Strategie implements Service
             return 3;
         else if(script instanceof ShellGetter)
             return -1;
+        else if(script instanceof DropTheSand)
+            return 0;
         else if(script instanceof TechTheSand && start)
         {
             start = false;
