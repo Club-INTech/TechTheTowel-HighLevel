@@ -121,7 +121,9 @@ public class PathDingDing implements Service
 		if(end.equals(start))
         {
 			log.critical("Appel pathDingDing avec arrivée=départ !");
-			return new ArrayList<Node>(){{ add(new Node(end)); }};
+			ArrayList<Node> res = new ArrayList<>();
+			res.add(new Node(end));
+			return res;
 		}
 
         if(!graph.isObstructed(end, start))
