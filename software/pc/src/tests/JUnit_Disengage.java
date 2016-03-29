@@ -7,9 +7,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import enums.ServiceNames;
+import enums.Speed;
 import exceptions.Locomotion.UnableToMoveException;
 import hook.Hook;
 import robot.Robot;
+import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
 
@@ -29,21 +31,23 @@ public class JUnit_Disengage extends JUnit_Test
 		super.setUp();
 		state = (GameState<Robot>)container.getService(ServiceNames.GAME_STATE);
 		state.updateConfig();
+		state.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 		// à modifier en début de test
-		//state.robot.setOrientation(Math.PI);
-		//state.robot.setPosition(Table.entryPosition);
+		state.robot.setOrientation(1.01*Math.PI/2);
+		state.robot.setPosition(new Vec2(1330,1115));
 	}
 	
 	@Test
 	public void test()
 	{	
+		log.debug("Début de test Disengage !");
 		// axe x limite entre la table et sa sortie
 		int zone = 1500-state.robot.getRobotRadius();
 		
 		try
 		{
 			// cas où l'on est entre pi/2 et 3pi/2
-			if(state.robot.getOrientation()>-Math.PI/2 && state.robot.getOrientationFast()<Math.PI/2)
+			if(state.robot.getOrientation()>Math.PI/2 && state.robot.getOrientationFast()<3*Math.PI/2)
 			{
 				reverse=false;
 				state.robot.turn(Math.PI, hooks, true);
@@ -54,6 +58,19 @@ public class JUnit_Disengage extends JUnit_Test
 				reverse=true;
 				state.robot.turn(0,hooks,true);
 			}
+
+
+			int move = Math.abs(zone-state.robot.getPosition().x);
+
+			if(reverse)
+			{
+				move=-move;
+			}
+			
+			// on sort des limites de la table
+			state.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+			state.robot.moveLengthwise(move);
+
 		}
 		catch(UnableToMoveException e)
 		{
@@ -90,13 +107,15 @@ public class JUnit_Disengage extends JUnit_Test
 				}
 				
 				// dans le cas favorable, on se déplace en ligne droite
-				int d = (int) (safe/Math.cos(theta));
+				int d = (int) Math.abs((safe/Math.cos(theta)));
 				if(reverse)
 				{
 					d=-d;
 				}
-
+				
+				state.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 				state.robot.moveLengthwise(d);
+				state.robot.turn(Math.PI);
 			}
 			catch(UnableToMoveException ex)
 			{
