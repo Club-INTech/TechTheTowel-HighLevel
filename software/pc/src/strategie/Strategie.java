@@ -1,6 +1,5 @@
 package strategie;
 
-import container.Container;
 import container.Service;
 import enums.ScriptNames;
 import exceptions.*;
@@ -8,7 +7,6 @@ import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import hook.Hook;
-import hook.methods.CloseDoor;
 import hook.types.HookFactory;
 import robot.Robot;
 import robot.RobotReal;
@@ -41,8 +39,6 @@ public class Strategie implements Service
 
 	private HookFactory hookFactory;
 
-    private Container container;
-
     private ArrayList<Hook> hooks = new ArrayList<>();
 
     private boolean dangerousOpponent;
@@ -56,6 +52,8 @@ public class Strategie implements Service
 	private boolean fishedOnce = false;
 
     private boolean abnormalMatch = false;
+
+    private boolean done = false;
 
  /**
  * Crée la strategie, l'IA decisionnelle
@@ -103,6 +101,7 @@ public class Strategie implements Service
             } catch (BlockedActuatorException e) {
                 e.printStackTrace();
             } catch (ExecuteException e) {
+                log.critical("Je sais pas comment t'as fait Billy, cette exception ne tombe jamais...");
                 e.printStackTrace();
             } catch (SerialConnexionException | SerialFinallyException e) {
                 log.critical("It was at this moment that the robot knew, that he fucked up.");
@@ -115,18 +114,19 @@ public class Strategie implements Service
                 if(!(nextScript instanceof ShellGetter))
                     log.critical("Un gogol s'est planté de version pour "+nextScript.toString());
                 e.printStackTrace();
-            } catch (PointInObstacleException e) {
-                e.printStackTrace();
-            } catch (PathNotFoundException e) {
+            } catch (PointInObstacleException | PathNotFoundException e) {
+                disengage();
                 e.printStackTrace();
             }
 
             if(state.robot.getIsSandInside())
                 sandTaken = true;
-            if(sandTaken && !state.robot.getIsSandInside())
+            else if(sandTaken && !state.robot.getIsSandInside())
                 castleTaken = true;
             if(state.table.fishesFished > 0)
                 fishedOnce = true;
+            if(!abnormalMatch && state.table.shellsObtained>0)
+                done = true;
         }
 		//scriptedMatch();
 	}
@@ -163,18 +163,9 @@ public class Strategie implements Service
         {
             if(start)
             {
-                start = false;
                 return scriptmanager.getScript(ScriptNames.TECH_THE_SAND);
             }
-            else if(sandTaken)
-            {
-                return scriptmanager.getScript(ScriptNames.CASTLE);
-            }
-            else if(castleTaken)
-            {
-                return scriptmanager.getScript(ScriptNames.CLOSE_DOORS);
-            }
-            else if(state.table.extDoorClosed && state.table.intDoorClosed)
+            else if(done)
             {
                 return scriptmanager.getScript(ScriptNames.FISHING);
             }
@@ -182,10 +173,28 @@ public class Strategie implements Service
             {
                 return scriptmanager.getScript(ScriptNames.SHELL_GETTER);
             }
-            else
+            else if(state.table.extDoorClosed && state.table.intDoorClosed)
             {
                 return scriptmanager.getScript(ScriptNames.FISHING);
             }
+            else if(castleTaken)
+            {
+                return scriptmanager.getScript(ScriptNames.CLOSE_DOORS);
+            }
+            else if(sandTaken)
+            {
+                return scriptmanager.getScript(ScriptNames.CASTLE);
+            }
+            else
+            {
+                abnormalMatch = true;
+                return decide();
+            }
+        }
+        else
+        {
+            if(sandTaken)
+                return scriptmanager.getScript(ScriptNames.CASTLE);
         }
         return null;
     }
@@ -206,7 +215,10 @@ public class Strategie implements Service
         else if(script instanceof ShellGetter)
             return -1;
         else if(script instanceof TechTheSand && start)
+        {
+            start = false;
             return 2;
+        }
         else if(script instanceof TechTheSand)
             return 1;
         return 0;
