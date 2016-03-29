@@ -128,7 +128,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
         // permet d'avoir un readLine non bloquant
         try
         {
-            serialPort.enableReceiveTimeout(1000);
+            serialPort.enableReceiveTimeout(500);
         }
         catch (UnsupportedCommOperationException e)
         {

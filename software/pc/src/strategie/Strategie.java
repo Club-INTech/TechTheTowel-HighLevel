@@ -14,6 +14,7 @@ import robot.Robot;
 import robot.RobotReal;
 import scripts.*;
 import table.Table;
+import table.obstacles.ObstacleCircular;
 import utils.Config;
 import utils.Log;
 
@@ -78,6 +79,11 @@ public class Strategie implements Service
      */
     private boolean done = false;
 
+    /**
+     * Permet de sauvegarder les coquillages si l'on a dû les supprimer
+     */
+    private ArrayList<ObstacleCircular> shells;
+
  /**
  * Crée la strategie, l'IA decisionnelle
  * @param config
@@ -121,9 +127,7 @@ public class Strategie implements Service
             try
             {
                 nextScript.goToThenExec(version(nextScript), state, hooks);
-            } catch (BlockedActuatorException e) {
-                e.printStackTrace();
-            } catch (ExecuteException e) {
+            } catch (ExecuteException|BlockedActuatorException e) {
                 log.critical("Je sais pas comment t'as fait Billy, cette exception ne tombe jamais...");
                 e.printStackTrace();
             } catch (SerialConnexionException | SerialFinallyException e) {
@@ -141,6 +145,7 @@ public class Strategie implements Service
                 e.printStackTrace();
             } catch (PointInObstacleException | PathNotFoundException e) {
                 disengage(nextScript);
+                this.shells = state.table.deleteAllTheShells();
                 e.printStackTrace();
             }
 
@@ -160,6 +165,11 @@ public class Strategie implements Service
                 } catch (SerialConnexionException e) {
                     e.printStackTrace();
                 }
+            }
+
+            if(state.robot.getAreFishesOnBoard())
+            {
+                //TODO script de dépose simple des poissons
             }
 
 
@@ -198,7 +208,7 @@ public class Strategie implements Service
 
             if (script instanceof Castle) //Dégagement en cas de bloquage en essayant de déposer le sable (trop greedy)
             {
-                if (state.robot.getPosition().x > 650)
+                if (state.robot.getPositionFast().x > 650)
                 {
                     state.robot.moveLengthwise(-100);
                 }
@@ -265,7 +275,7 @@ public class Strategie implements Service
 
             if(!sandTaken && !dangerousOpponent)
                 return scriptmanager.getScript(ScriptNames.TECH_THE_SAND);
-            else if(!sandTaken && dangerousOpponent)
+            else if(!sandTaken)
                     return scriptmanager.getScript(ScriptNames.CASTLE);
 
 
@@ -303,6 +313,6 @@ public class Strategie implements Service
 	 */
 	private void scriptedMatch()
 	{
-		//TODO faire un match scripté à lancer si la strategie échoue
+		//TODO faire un match scripté à lancer si la strategie échoue -> HOW ABOUT NO ?!
 	}
 }
