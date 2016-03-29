@@ -1,7 +1,9 @@
 package strategie;
 
 import container.Service;
+import enums.ActuatorOrder;
 import enums.ScriptNames;
+import enums.UnableToMoveReason;
 import exceptions.*;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
@@ -20,7 +22,7 @@ import java.util.ArrayList;
 
 /**
  * IA
- * @author discord
+ * @author discord, CF
  */
 
 
@@ -41,18 +43,39 @@ public class Strategie implements Service
 
     private ArrayList<Hook> hooks = new ArrayList<>();
 
+    /**
+     * Si l'adversaire est de haut-niveau
+     */
     private boolean dangerousOpponent;
 
+    /**
+     * Utile au noyau décisionnel pour lancer le script de sortie
+     */
 	private boolean start = true;
 
+    /**
+     * Si le sable a été pris
+     */
 	private boolean sandTaken= false;
 
+    /**
+     * Si le sable a été déposé
+     */
 	private boolean castleTaken = false;
 
+    /**
+     * Si on a pêché au moins une fois
+     */
 	private boolean fishedOnce = false;
 
+    /**
+     * Mode match anormal, soit on a eu un blocage mécanique, soit l'adversaire est venu nous les briser
+     */
     private boolean abnormalMatch = false;
 
+    /**
+     * Utile en mode match parfait, permet d'indiquer que l'on a terminé les actions principale, on spam Fishing
+     */
     private boolean done = false;
 
  /**
@@ -108,14 +131,16 @@ public class Strategie implements Service
                 e.printStackTrace();
             } catch (UnableToMoveException e) {
                 abnormalMatch = true;
-                disengage();
+                if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED) //On a vu l'ennemi, c'est anormal
+                    dangerousOpponent = true;
+                disengage(nextScript);
                 e.printStackTrace();
             } catch (BadVersionException e) {
                 if(!(nextScript instanceof ShellGetter))
                     log.critical("Un gogol s'est planté de version pour "+nextScript.toString());
                 e.printStackTrace();
             } catch (PointInObstacleException | PathNotFoundException e) {
-                disengage();
+                disengage(nextScript);
                 e.printStackTrace();
             }
 
@@ -127,6 +152,17 @@ public class Strategie implements Service
                 fishedOnce = true;
             if(!abnormalMatch && state.table.shellsObtained>0)
                 done = true;
+
+            if(!state.robot.getIsSandInside() && !state.robot.shellsOnBoard && !abnormalMatch)
+            {
+                try {
+                    state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
+                } catch (SerialConnexionException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
         }
 		//scriptedMatch();
 	}
@@ -134,28 +170,57 @@ public class Strategie implements Service
     /**
      * Permet de se dégager en cas d'échec de script
      */
-    private void disengage()
+    private void disengage(AbstractScript script)
     {
-        if(state.robot.getPosition().x + state.robot.getRobotRadius() >= 1500)
+        try
         {
-            //TODO sortie
+            if (state.robot.getPosition().x + state.robot.getRobotRadius() >= 1500)
+            {
+                //TODO sortie
+                return;
+            }
+            else if (state.robot.getPositionFast().x - state.robot.getRobotRadius() <= -1500)
+            {
+                //TODO sortie
+                return;
+            }
+            else if (state.robot.getPositionFast().y + state.robot.getRobotRadius() >= 2000)
+            {
+                //TODO sortie
+                return;
+            }
+            else if (state.robot.getPositionFast().y - state.robot.getRobotRadius() <= 0)
+            {
+                //TODO sortie
+                return;
+            }
+
+
+            if (script instanceof Castle) //Dégagement en cas de bloquage en essayant de déposer le sable (trop greedy)
+            {
+                if (state.robot.getPosition().x > 650)
+                {
+                    state.robot.moveLengthwise(-100);
+                }
+                else if (state.robot.getPositionFast().x <= 650)
+                {
+                    state.robot.moveLengthwise(100);
+                    state.robot.turn(Math.PI);
+                    state.robot.moveLengthwise(-400);
+                }
+                return;
+            }
         }
-        else if(state.robot.getPositionFast().x - state.robot.getRobotRadius() <= -1500)
+        catch (UnableToMoveException e)
         {
-            //TODO sortie
-        }
-        else if(state.robot.getPositionFast().y + state.robot.getRobotRadius() >= 2000)
-        {
-            //TODO sortie
-        }
-        else if(state.robot.getPositionFast().y - state.robot.getRobotRadius() <= 0)
-        {
-            //TODO sortie
+            log.critical("CRITICAL : On a pas réussi à se dégager, on a perdu le match");
+            e.printStackTrace();
         }
     }
 
     /**
      * Boîte décisive, sélectionne le prochain script
+     * Si un mauvais evenement est arrivé, on prends une décision adaptée et on reprends le match normalement
      */
     public AbstractScript decide()
     {
@@ -193,8 +258,17 @@ public class Strategie implements Service
         }
         else
         {
-            if(sandTaken)
+            abnormalMatch = false;
+
+            if(state.robot.getIsSandInside()) //On spam castle jusqu'à la dépose du sable
                 return scriptmanager.getScript(ScriptNames.CASTLE);
+
+            if(!sandTaken && !dangerousOpponent)
+                return scriptmanager.getScript(ScriptNames.TECH_THE_SAND);
+            else if(!sandTaken && dangerousOpponent)
+                    return scriptmanager.getScript(ScriptNames.CASTLE);
+
+
         }
         return null;
     }

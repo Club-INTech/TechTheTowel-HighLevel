@@ -524,6 +524,9 @@ public abstract class Robot implements Service
 		if(nodePath.isEmpty())
 			throw new PathNotFoundException();
 
+		if(nodePath.get(0).getPosition().equals(aim.position)) //Si on y est déjà
+			return;
+
     	// On transforme les noeuds en Vec2
     	ArrayList<Vec2> path = new ArrayList<Vec2>();
     	for(int i=0 ; i<nodePath.size() ; i++)
