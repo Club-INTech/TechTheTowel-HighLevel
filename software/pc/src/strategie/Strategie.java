@@ -155,7 +155,7 @@ public class Strategie implements Service
                 e.printStackTrace();
             }
 
-            if(state.robot.getIsSandInside() && state.robot.getPositionFast().x < 850)
+            if(state.robot.getIsSandInside() && state.robot.getPosition().x < 750)
                 sandTaken = true;
             else if(sandTaken && !state.robot.getIsSandInside())
                 castleTaken = true;
