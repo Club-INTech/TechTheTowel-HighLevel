@@ -36,10 +36,10 @@ public class JUnit_Disengage extends JUnit_Test
 		state.updateConfig();
 		state.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 		// à modifier en début de test
-		state.robot.setOrientation(Math.PI/2);
-		state.robot.setPosition(new Vec2(1070,1720));
+		state.robot.setOrientation(-Math.PI/4);
+		state.robot.setPosition(new Vec2(950,160));
 	}
-	
+	/*
 	@Test
 	public void testXNeg()
 	{	
@@ -140,7 +140,7 @@ public class JUnit_Disengage extends JUnit_Test
 			}
 		}
 	}
-	
+	*/
 	
 	@Test
 	public void testYInf()
@@ -173,7 +173,7 @@ public class JUnit_Disengage extends JUnit_Test
 			log.debug("Aucun blocage en tournant, mouvement rectiligne classique !");
 			hasTurned=false;
 			state.robot.moveLengthwise(move);
-			state.robot.turn(0);
+			state.robot.turn(Math.PI/2);
 
 		}
 		catch(UnableToMoveException e)
@@ -220,7 +220,7 @@ public class JUnit_Disengage extends JUnit_Test
 					}
 					state.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 					state.robot.moveLengthwise(d);
-					state.robot.turn(0);
+					state.robot.turn(Math.PI/2);
 				}
 				catch(UnableToMoveException ex)
 				{
