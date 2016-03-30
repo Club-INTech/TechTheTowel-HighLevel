@@ -246,7 +246,7 @@ public class Strategie implements Service
             else if(script instanceof ShellGetter) //Si on s'est pris la vitre (shit happens)
             {
                 int signe=1;
-                if(state.robot.getPositionFast().x < 0)
+                if(state.robot.getPositionFast().x > 0)
                 {
                     signe = -1;
                 }
