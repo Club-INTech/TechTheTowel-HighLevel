@@ -98,13 +98,13 @@ public class ThreadTimer extends AbstractThread
 		
 		// attends que le jumper soit retiré du robot
 		
-		/*boolean jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
+		boolean jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
 		while(jumperWasAbsent || !mSensorsCardWrapper.isJumperAbsent())
 		{
 			
 			jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
 			robot.sleep(100);
-		}*/
+		}
 
 		// maintenant que le jumper est retiré, le match a commencé
 		matchStarted = true;

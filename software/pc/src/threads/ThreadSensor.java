@@ -144,14 +144,14 @@ public class ThreadSensor extends AbstractThread
 		log.debug("Lancement du thread de capteurs");
 		updateConfig();
 		
-	/*	// boucle d'attente de début de match
+		// boucle d'attente de début de match
 		boolean jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
 		while(jumperWasAbsent || !mSensorsCardWrapper.isJumperAbsent())
 		{
 			
 			jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
 			mRobot.sleep(100);
-		}*/
+		}
 
 		// maintenant que le jumper est retiré, le match a commencé
 		ThreadTimer.matchEnded = false;

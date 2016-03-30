@@ -60,7 +60,7 @@ public class Main
 
 			container.startAllThreads();
 
-			//waitMatchBegin();
+			waitMatchBegin();
 
 			System.out.println("Le robot commence le match");
 
