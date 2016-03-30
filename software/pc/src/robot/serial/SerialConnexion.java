@@ -10,10 +10,8 @@ import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener;
 import gnu.io.UnsupportedCommOperationException;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
+import java.nio.file.Files;
 
 import utils.Log;
 import container.Service;
@@ -59,6 +57,9 @@ public class SerialConnexion implements SerialPortEventListener, Service
     private static final int TIME_OUT = 2000;
 
 
+    private BufferedWriter out;
+    private boolean debug = true;
+
     /**
      * Construit une connexion sÃ¯Â¿Â½rie
      * @param log Sortie de log a utiliser
@@ -79,6 +80,18 @@ public class SerialConnexion implements SerialPortEventListener, Service
         super();
         this.log = log;
         this.name = name;
+        if(this.debug)
+        {
+            try {
+                File file = new File("orders.txt");
+                if (file.exists())
+                    file.delete();
+                out = new BufferedWriter(new FileWriter(file));
+            } catch (IOException e) {
+                log.critical("Manque de droits pour l'output des ordres");
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -175,6 +188,10 @@ public class SerialConnexion implements SerialPortEventListener, Service
                     m += "\r";
 
                     output.write(m.getBytes());
+                    if(this.debug) {
+                        out.write(m);
+                        out.newLine();
+                    }
                     int nb_tests = 0;
                     char acquittement = ' ';
 
