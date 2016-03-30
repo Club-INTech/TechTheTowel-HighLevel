@@ -23,7 +23,7 @@ hardware/*/*.epf
 .recommenders/
 .idea
 .iml
-
+/orders.txt
 **/software/arm/projects/**/*.coproj
 
 #Fichiers python compilés
