@@ -155,8 +155,8 @@ public class CloseDoors extends AbstractScript
 	{
 		if (version == 0 || version == 1)
 		{
-			// modification possible selon l'envergure du robot
-			return new Circle(new Vec2(1135,1600));
+			// modification possible selon l'envergure du robot new Vec2(1135,1600)
+			return new Circle(robotPosition);
 		}
 		else if (version == 2)
 		{

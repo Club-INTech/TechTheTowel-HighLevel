@@ -128,7 +128,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
         // permet d'avoir un readLine non bloquant
         try
         {
-            serialPort.enableReceiveTimeout(500);
+            serialPort.enableReceiveTimeout(1000);
         }
         catch (UnsupportedCommOperationException e)
         {
@@ -204,7 +204,8 @@ public class SerialConnexion implements SerialPortEventListener, Service
             catch (Exception e)
             {
                 log.critical("Ne peut pas parler a la carte " + this.name + " lancement de "+e);
-                throw new SerialConnexionException();
+                clearInputBuffer();
+                communiquer(messages, nb_lignes_reponse);
             }
 
             try
@@ -347,6 +348,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
         }
         catch (IOException e)
         {
+            log.debug("Reconstruction de la série");
             try {
                 input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
             } catch (IOException e1) {

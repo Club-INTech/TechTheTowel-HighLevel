@@ -342,7 +342,7 @@ public class Castle extends AbstractScript
 		else if (version == 2)
 		{
 			//testé et approuvé: (1250, 1370)
-			return (new Circle(new Vec2(1150, 1370)));
+			return new Circle(robotPosition);
 		}
 		else
 		{

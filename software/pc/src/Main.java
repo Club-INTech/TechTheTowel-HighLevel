@@ -1,5 +1,6 @@
 import container.Container;
 import enums.ServiceNames;
+import enums.Speed;
 import exceptions.ContainerException;
 import exceptions.serial.SerialManagerException;
 import hook.Hook;
@@ -55,10 +56,11 @@ public class Main
 
 			realState.robot.setPosition(Table.entryPosition);
 			realState.robot.setOrientation(Math.PI);
+			realState.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 
 			container.startAllThreads();
 
-			waitMatchBegin();
+			//waitMatchBegin();
 
 			System.out.println("Le robot commence le match");
 
