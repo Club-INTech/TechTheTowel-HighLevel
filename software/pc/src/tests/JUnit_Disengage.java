@@ -36,10 +36,10 @@ public class JUnit_Disengage extends JUnit_Test
 		state.updateConfig();
 		state.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 		// à modifier en début de test
-		state.robot.setOrientation(-1.01*Math.PI/2);
-		state.robot.setPosition(Table.entryPosition);
+		state.robot.setOrientation(Math.PI/2);
+		state.robot.setPosition(new Vec2(1070,1720));
 	}
-	
+	/*
 	@Test
 	public void testXSup()
 	{	
@@ -140,8 +140,8 @@ public class JUnit_Disengage extends JUnit_Test
 			}
 		}
 	}
+	*/
 	
-	/*
 	@Test
 	public void testYSup()
 	{	
@@ -204,8 +204,12 @@ public class JUnit_Disengage extends JUnit_Test
 					
 					// déplacement selon x pour voir si la trajectoire rectiligne est intéressante
 					deltaX = (int)(Math.tan(theta)*d);
-					if(state.robot.getPositionFast().x+deltaX>1499-state.robot.getRobotRadius() || state.robot.getPositionFast().x-deltaX<-1499+state.robot.getRobotRadius())
+					if(reverse && (state.robot.getPositionFast().x-deltaX>1499-state.robot.getRobotRadius() || state.robot.getPositionFast().x-deltaX<-1499+state.robot.getRobotRadius()))
 					{
+						log.debug("Déplacement de d :" + d);
+						log.debug("Composante selon x de d :" + deltaX);
+						log.debug("Robot en " + state.robot.getPositionFast());
+						log.debug("Soit arrivée en x prévue à :" + (deltaX+state.robot.getPositionFast().x));
 						log.debug("Mouvement rectiligne non pertinent, il faut passer par des arcs !");
 						return;
 					}
@@ -231,7 +235,7 @@ public class JUnit_Disengage extends JUnit_Test
 			}
 		}
 	}
-	*/
+	
 	
 	@After
 	public void after()
