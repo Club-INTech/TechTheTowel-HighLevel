@@ -220,7 +220,7 @@ public class Strategie implements Service
             }
             else if (state.robot.getPositionFast().y - state.robot.getRobotRadius() <= 0)
             {
-                //TODO sortie
+                disengageYSea();
             	state.robot.setLocomotionSpeed(speedBeforeDisengage);
                 return;
             }
@@ -392,14 +392,14 @@ public class Strategie implements Service
 		
 		try
 		{
-			// cas où l'on est entre pi/2 et 3pi/2
+			// cas où l'on est entre pi/2 et -pi/2
 			if(state.robot.getOrientation()>Math.PI/2 || state.robot.getOrientationFast()<-Math.PI/2)
 			{
 				reverse=false;
 				hasTurned=true;
 				state.robot.turn(Math.PI, hooks, true);
 			}
-			// sinon, nous sommes entre -pi/2 et pi/2
+			
 			else
 			{
 				reverse=true;
@@ -407,7 +407,7 @@ public class Strategie implements Service
 				state.robot.turn(0,hooks,true);
 			}
 
-			// distance minimale séparant le robot des limtes de la table
+			// distance minimale séparant le robot des limites de la table
 			int move = Math.abs(zone-state.robot.getPosition().x);
 
 			if(reverse)
@@ -430,7 +430,7 @@ public class Strategie implements Service
 				log.debug(("Mur percuté avec pour orientation :" + state.robot.getOrientation()));
 				try
 				{
-					// une fois bloqué, on tente d'avancer au-delà de la zone limite #trigo
+					// on tente d'avancer au-delà de la zone limite #trigo
 					int safe = Math.abs(zone-state.robot.getPosition().x);
 					double theta;
 					int deltaY;
@@ -450,7 +450,7 @@ public class Strategie implements Service
 					// dans le cas favorable, on se déplace en ligne droite
 					int d = (int) Math.abs((safe/Math.cos(theta)));
 					
-					// déplacement selon y pour voir si la trajectoire rectiligne est intéressante
+					// composante de d selon y pour voir si la trajectoire rectiligne est intéressante
 					deltaY = (int)(Math.abs(Math.tan(theta)*safe));
 					if(state.robot.getPositionFast().y+deltaY>1999-radius || state.robot.getPositionFast().y-deltaY<radius)
 					{
@@ -480,7 +480,7 @@ public class Strategie implements Service
         return;
 	}
 	
-	/** Méthode débloquant le robot si près du bord côté sable*/
+	/** Méthode débloquant le robot près du bord côté sable*/
 	public void disengageYSand()
 	{
 		int radius = state.robot.getRobotRadius();
@@ -497,7 +497,7 @@ public class Strategie implements Service
 				hasTurned=true;
 				state.robot.turn(-Math.PI/2, hooks, true);
 			}
-			// sinon, angle positif
+
 			else
 			{
 				reverse=true;
@@ -521,13 +521,13 @@ public class Strategie implements Service
 				log.debug(("Mur percuté avec pour orientation :" + state.robot.getOrientation()));
 				try
 				{
-					// une fois bloqué, on tente d'avancer au-delà de la zone limite #trigo
+					// on tente d'avancer au-delà de la zone limite #trigo
 					int safe = Math.abs(zone-state.robot.getPosition().y);
 					double theta;
 					int deltaX;
 					double robotOrientation = state.robot.getOrientationFast();
 
-					// détermination de l'angle formé avec l'axe d'équation y constant
+					// détermination de l'angle formé avec l'axe d'équation x constant
 					if(robotOrientation<0)
 					{
 						theta=-Math.PI/2-robotOrientation;
@@ -540,7 +540,7 @@ public class Strategie implements Service
 					// dans le cas favorable, on se déplace en ligne droite
 					int d = (int) Math.abs((safe/Math.cos(theta)));
 					
-					// déplacement selon x pour voir si la trajectoire rectiligne est intéressante
+					// composante de d pingu was here selon x pour voir si la trajectoire rectiligne est intéressante
 					deltaX = (int)(Math.tan(theta)*d);
 					if(reverse && (state.robot.getPositionFast().x-deltaX>1499-radius || state.robot.getPositionFast().x-deltaX<-1499+radius))
 					{
@@ -567,5 +567,94 @@ public class Strategie implements Service
 			}
 		}
         return;
+	}
+	
+	/** Méthode débloquant le robot près de la mer*/
+	public void disengageYSea()
+	{
+		log.debug("Début de test Disengage !");
+		// axe y limite pour que le robot puisse tourner
+		int zone = state.robot.getRobotRadius();
+		int move = Math.abs(zone-state.robot.getPosition().y);
+		
+		try
+		{
+			// cas orentation négative
+			if(state.robot.getOrientation()<0)
+			{
+				reverse=true;
+				hasTurned=true;
+				move=-move;
+				state.robot.turn(-Math.PI/2, hooks, true);
+			}
+
+			else
+			{
+				reverse=false;
+				hasTurned=true;
+				state.robot.turn(Math.PI/2,hooks,true);
+			}
+			
+			// on sort des limites de la table
+			state.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+			log.debug("Aucun blocage en tournant, mouvement rectiligne classique !");
+			hasTurned=false;
+			state.robot.moveLengthwise(move);
+
+		}
+		catch(UnableToMoveException e)
+		{
+			// dans le cas où le robot s'est bloqué pendant sa rotation
+			if(hasTurned)
+			{
+				log.debug(("Mur percuté avec pour orientation :" + state.robot.getOrientation()));
+				try
+				{
+					// on tente d'avancer au-delà de la zone limite #trigo
+					int safe = Math.abs(zone-state.robot.getPosition().y);
+					double theta;
+					int deltaX;
+
+					// détermination de l'angle formé avec l'axe d'équation y constant
+					if(state.robot.getOrientationFast()<0)
+					{
+						theta=state.robot.getOrientationFast() + Math.PI/2;
+					}
+					else
+					{
+						theta=Math.PI/2-state.robot.getOrientationFast();
+					}
+
+					// dans le cas favorable, on se déplace en ligne droite
+					int d = (int) Math.abs((safe/Math.cos(theta)));
+					
+					// déplacement selon x pour voir si la trajectoire rectiligne est intéressante
+					deltaX = (int)(Math.tan(theta)*safe);
+					if(reverse && (state.robot.getPositionFast().x-deltaX>1499-state.robot.getRobotRadius() || state.robot.getPositionFast().x-deltaX<-1499+state.robot.getRobotRadius()))
+					{
+						log.debug("Ne peut pas sortir sans arcs !");
+						return;
+					}
+					
+					if(reverse)
+					{
+						d=-d;
+					}
+					state.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+					state.robot.moveLengthwise(d);
+					state.robot.turn(Math.PI/2);
+				}
+				catch(UnableToMoveException ex)
+				{
+					log.debug("Echec de sortie");
+					state.robot.immobilise();
+				}
+			}
+			// cas où le robot s'est bloqué pendant la trajectoire rectiligne
+			else
+			{
+				log.debug("Robot bloqué pendant le moveLengthwise !");
+			}
+		}
 	}
 }

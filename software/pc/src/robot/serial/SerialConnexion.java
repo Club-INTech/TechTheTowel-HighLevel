@@ -191,6 +191,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
                     if(this.debug) {
                         out.write(m);
                         out.newLine();
+                        out.flush();
                     }
                     int nb_tests = 0;
                     char acquittement = ' ';
