@@ -39,7 +39,7 @@ public class JUnit_Disengage extends JUnit_Test
 		state.robot.setOrientation(Math.PI/2);
 		state.robot.setPosition(new Vec2(1070,1720));
 	}
-	/*
+	
 	@Test
 	public void testXSup()
 	{	
@@ -140,7 +140,7 @@ public class JUnit_Disengage extends JUnit_Test
 			}
 		}
 	}
-	*/
+	
 	
 	@Test
 	public void testYSup()

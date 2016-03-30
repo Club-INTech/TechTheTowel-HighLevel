@@ -4,6 +4,7 @@ import container.Container;
 import container.Service;
 import enums.ActuatorOrder;
 import enums.ScriptNames;
+import enums.Speed;
 import enums.UnableToMoveReason;
 import exceptions.*;
 import exceptions.Locomotion.UnableToMoveException;
@@ -87,6 +88,12 @@ public class Strategie implements Service
      * Permet de sauvegarder les coquillages si l'on a dû les supprimer
      */
     private ArrayList<ObstacleCircular> shells;
+    
+    /** si le robot a besoin de faire une marche arrière pour se dégager*/
+    private boolean reverse;
+    
+    /** si le robot s'est bloqué lors de sa rotation*/
+    private boolean hasTurned;
 
 
  /**
@@ -191,26 +198,30 @@ public class Strategie implements Service
      */
     private void disengage(AbstractScript script)
     {
+    	Speed speedBeforeDisengage = state.robot.getLocomotionSpeed();
+    	
         try
         {
             if (state.robot.getPosition().x + state.robot.getRobotRadius() >= 1500)
             {
-                //TODO sortie
-                return;
+            	disengageXPositive();
+            	state.robot.setLocomotionSpeed(speedBeforeDisengage);
             }
             else if (state.robot.getPositionFast().x - state.robot.getRobotRadius() <= -1500)
             {
-                //TODO sortie
-                return;
+            	//TODO sortie
+            	state.robot.setLocomotionSpeed(speedBeforeDisengage);
+            	return;
             }
             else if (state.robot.getPositionFast().y + state.robot.getRobotRadius() >= 2000)
             {
-                //TODO sortie
-                return;
+                disengageYSand();
+                state.robot.setLocomotionSpeed(speedBeforeDisengage);
             }
             else if (state.robot.getPositionFast().y - state.robot.getRobotRadius() <= 0)
             {
                 //TODO sortie
+            	state.robot.setLocomotionSpeed(speedBeforeDisengage);
                 return;
             }
 
@@ -365,5 +376,196 @@ public class Strategie implements Service
 	private void scriptedMatch()
 	{
 		//TODO faire un match scripté à lancer si la strategie échoue -> HOW ABOUT NO ?!
+	}
+	
+	
+	/* ========================================== */
+	/* Méthodes pour se dégager des bords de table */
+	/* ========================================== */
+	
+	/** Méthode débloquant le robot si hors table x positifs*/
+	public void disengageXPositive()
+	{
+		int radius = state.robot.getRobotRadius();
+		// axe x limite pour que le robot puisse tourner
+		int zone = 1499-radius;
+		
+		try
+		{
+			// cas où l'on est entre pi/2 et 3pi/2
+			if(state.robot.getOrientation()>Math.PI/2 || state.robot.getOrientationFast()<-Math.PI/2)
+			{
+				reverse=false;
+				hasTurned=true;
+				state.robot.turn(Math.PI, hooks, true);
+			}
+			// sinon, nous sommes entre -pi/2 et pi/2
+			else
+			{
+				reverse=true;
+				hasTurned=true;
+				state.robot.turn(0,hooks,true);
+			}
+
+			// distance minimale séparant le robot des limtes de la table
+			int move = Math.abs(zone-state.robot.getPosition().x);
+
+			if(reverse)
+			{
+				move=-move;
+			}
+			
+			// on sort des limites de la table
+			state.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+			log.debug("Aucun blocage en tournant, mouvement rectiligne classique !");
+			hasTurned=false;
+			state.robot.moveLengthwise(move);
+
+		}
+		catch(UnableToMoveException e)
+		{
+			// dans le cas où le robot s'est bloqué pendant sa rotation
+			if(hasTurned)
+			{
+				log.debug(("Mur percuté avec pour orientation :" + state.robot.getOrientation()));
+				try
+				{
+					// une fois bloqué, on tente d'avancer au-delà de la zone limite #trigo
+					int safe = Math.abs(zone-state.robot.getPosition().x);
+					double theta;
+					int deltaY;
+					double robotOrientation = state.robot.getOrientationFast();
+
+					// détermination de l'angle formé avec l'axe d'équation y constant
+					if(robotOrientation>-Math.PI/2 && robotOrientation<Math.PI/2)
+					{
+						theta=robotOrientation-Math.PI;
+					}
+					else
+					{
+						theta=robotOrientation;
+					}
+
+
+					// dans le cas favorable, on se déplace en ligne droite
+					int d = (int) Math.abs((safe/Math.cos(theta)));
+					
+					// déplacement selon y pour voir si la trajectoire rectiligne est intéressante
+					deltaY = (int)(Math.abs(Math.tan(theta)*safe));
+					if(state.robot.getPositionFast().y+deltaY>1999-radius || state.robot.getPositionFast().y-deltaY<radius)
+					{
+						log.debug("Ne peut pas sortir sans arcs !");
+						return;
+					}
+					
+					if(reverse)
+					{
+						d=-d;
+					}
+					state.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+					state.robot.moveLengthwise(d);
+					state.robot.turn(Math.PI);
+				}
+				catch(UnableToMoveException ex)
+				{
+					log.debug("Echec de sortie :" + ex);
+				}
+			}
+			// cas où le robot s'est bloqué pendant la trajectoire rectiligne
+			else
+			{
+				log.debug("Robot bloqué pendant le moveLengthwise !");
+			}
+		}
+        return;
+	}
+	
+	/** Méthode débloquant le robot si près du bord côté sable*/
+	public void disengageYSand()
+	{
+		int radius = state.robot.getRobotRadius();
+		// axe y limite pour que le robot puisse tourner
+		int zone = 1999-radius;
+		int move = Math.abs(zone-state.robot.getPosition().y);
+		
+		try
+		{
+			// cas orentation négative
+			if(state.robot.getOrientation()<0)
+			{
+				reverse=false;
+				hasTurned=true;
+				state.robot.turn(-Math.PI/2, hooks, true);
+			}
+			// sinon, angle positif
+			else
+			{
+				reverse=true;
+				hasTurned=true;
+				state.robot.turn(Math.PI/2,hooks,true);
+				move=-move;
+			}
+			
+			// on sort des limites de la table
+			state.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+			log.debug("Aucun blocage en tournant, mouvement rectiligne classique !");
+			hasTurned=false;
+			state.robot.moveLengthwise(move);
+
+		}
+		catch(UnableToMoveException e)
+		{
+			// dans le cas où le robot s'est bloqué pendant sa rotation
+			if(hasTurned)
+			{
+				log.debug(("Mur percuté avec pour orientation :" + state.robot.getOrientation()));
+				try
+				{
+					// une fois bloqué, on tente d'avancer au-delà de la zone limite #trigo
+					int safe = Math.abs(zone-state.robot.getPosition().y);
+					double theta;
+					int deltaX;
+					double robotOrientation = state.robot.getOrientationFast();
+
+					// détermination de l'angle formé avec l'axe d'équation y constant
+					if(robotOrientation<0)
+					{
+						theta=-Math.PI/2-robotOrientation;
+					}
+					else
+					{
+						theta=Math.PI/2-robotOrientation;
+					}
+
+					// dans le cas favorable, on se déplace en ligne droite
+					int d = (int) Math.abs((safe/Math.cos(theta)));
+					
+					// déplacement selon x pour voir si la trajectoire rectiligne est intéressante
+					deltaX = (int)(Math.tan(theta)*d);
+					if(reverse && (state.robot.getPositionFast().x-deltaX>1499-radius || state.robot.getPositionFast().x-deltaX<-1499+radius))
+					{
+						log.debug("Ne peut pas sortir sans arcs !");
+						return;
+					}
+					
+					if(reverse)
+					{
+						d=-d;
+					}
+					state.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+					state.robot.moveLengthwise(d);
+				}
+				catch(UnableToMoveException ex)
+				{
+					log.debug("Echec de sortie : " + e);
+				}
+			}
+			// cas où le robot s'est bloqué pendant la trajectoire rectiligne
+			else
+			{
+				log.debug("Robot bloqué pendant le moveLengthwise !");
+			}
+		}
+        return;
 	}
 }
