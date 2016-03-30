@@ -41,22 +41,21 @@ public class JUnit_Disengage extends JUnit_Test
 	}
 	
 	@Test
-	public void testXSup()
+	public void testXNeg()
 	{	
 		log.debug("Début de test Disengage !");
 		// axe x limite pour que le robot puisse tourner
-		int zone = 1499-state.robot.getRobotRadius();
+		int zone = -1499+state.robot.getRobotRadius();
 		
 		try
 		{
-			// cas où l'on est entre pi/2 et 3pi/2
-			if(state.robot.getOrientation()>Math.PI/2 || state.robot.getOrientationFast()<-Math.PI/2)
+			// cas où l'on est entre pi/2 et -pi/2
+			if(state.robot.getOrientation()<Math.PI/2 && state.robot.getOrientation()>-Math.PI/2)
 			{
 				reverse=false;
 				hasTurned=true;
-				state.robot.turn(Math.PI, hooks, true);
+				state.robot.turn(0, hooks, true);
 			}
-			// sinon, nous sommes entre -pi/2 et pi/2
 			else
 			{
 				reverse=true;
@@ -92,15 +91,16 @@ public class JUnit_Disengage extends JUnit_Test
 					int safe = Math.abs(zone-state.robot.getPosition().x);
 					double theta;
 					int deltaY;
+					double robotOrientation = state.robot.getOrientationFast();
 
 					// détermination de l'angle formé avec l'axe d'équation y constant
-					if(state.robot.getOrientationFast()>-Math.PI/2 && state.robot.getOrientationFast()<Math.PI/2)
+					if(robotOrientation<Math.PI/2 && robotOrientation>-Math.PI/2)
 					{
-						theta=state.robot.getOrientationFast()-Math.PI;
+						theta=robotOrientation;
 					}
 					else
 					{
-						theta=state.robot.getOrientationFast();
+						theta=robotOrientation-Math.PI/2;
 					}
 
 
@@ -143,11 +143,11 @@ public class JUnit_Disengage extends JUnit_Test
 	
 	
 	@Test
-	public void testYSup()
+	public void testYInf()
 	{	
 		log.debug("Début de test Disengage !");
 		// axe y limite pour que le robot puisse tourner
-		int zone = 1999-state.robot.getRobotRadius();
+		int zone = state.robot.getRobotRadius();
 		int move = Math.abs(zone-state.robot.getPosition().y);
 		
 		try
@@ -155,17 +155,17 @@ public class JUnit_Disengage extends JUnit_Test
 			// cas orentation négative
 			if(state.robot.getOrientation()<0)
 			{
-				reverse=false;
+				reverse=true;
 				hasTurned=true;
+				move=-move;
 				state.robot.turn(-Math.PI/2, hooks, true);
 			}
 			// sinon, angle positif
 			else
 			{
-				reverse=true;
+				reverse=false;
 				hasTurned=true;
 				state.robot.turn(Math.PI/2,hooks,true);
-				move=-move;
 			}
 			
 			// on sort des limites de la table
@@ -192,7 +192,7 @@ public class JUnit_Disengage extends JUnit_Test
 					// détermination de l'angle formé avec l'axe d'équation y constant
 					if(state.robot.getOrientationFast()<0)
 					{
-						theta=-Math.PI/2-state.robot.getOrientationFast();
+						theta=state.robot.getOrientationFast() + Math.PI/2;
 					}
 					else
 					{
@@ -203,7 +203,7 @@ public class JUnit_Disengage extends JUnit_Test
 					int d = (int) Math.abs((safe/Math.cos(theta)));
 					
 					// déplacement selon x pour voir si la trajectoire rectiligne est intéressante
-					deltaX = (int)(Math.tan(theta)*d);
+					deltaX = (int)(Math.tan(theta)*safe);
 					if(reverse && (state.robot.getPositionFast().x-deltaX>1499-state.robot.getRobotRadius() || state.robot.getPositionFast().x-deltaX<-1499+state.robot.getRobotRadius()))
 					{
 						log.debug("Déplacement de d :" + d);
