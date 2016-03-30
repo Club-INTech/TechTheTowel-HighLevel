@@ -36,8 +36,8 @@ public class JUnit_Disengage extends JUnit_Test
 		state.updateConfig();
 		state.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 		// à modifier en début de test
-		state.robot.setOrientation(1.01*Math.PI/2);
-		state.robot.setPosition(new Vec2(1330,1000));
+		state.robot.setOrientation(-1.01*Math.PI/2);
+		state.robot.setPosition(Table.entryPosition);
 	}
 	
 	@Test
@@ -50,7 +50,7 @@ public class JUnit_Disengage extends JUnit_Test
 		try
 		{
 			// cas où l'on est entre pi/2 et 3pi/2
-			if(state.robot.getOrientation()>Math.PI/2 && state.robot.getOrientationFast()<3*Math.PI/2)
+			if(state.robot.getOrientation()>Math.PI/2 || state.robot.getOrientationFast()<-Math.PI/2)
 			{
 				reverse=false;
 				hasTurned=true;
@@ -108,9 +108,13 @@ public class JUnit_Disengage extends JUnit_Test
 					int d = (int) Math.abs((safe/Math.cos(theta)));
 					
 					// déplacement selon y pour voir si la trajectoire rectiligne est intéressante
-					deltaY = (int)(Math.abs(Math.tan(theta)*d));
+					deltaY = (int)(Math.abs(Math.tan(theta)*safe));
 					if(state.robot.getPositionFast().y+deltaY>1999-state.robot.getRobotRadius() || state.robot.getPositionFast().y-deltaY<state.robot.getRobotRadius())
 					{
+						log.debug("Déplacement de d :" + d);
+						log.debug("Composante selon y de d :" + deltaY);
+						log.debug("Robot en " + state.robot.getPositionFast());
+						log.debug("Soit arrivée en y prévue à :" + (deltaY+state.robot.getPositionFast().y));
 						log.debug("Mouvement rectiligne non pertinent, il faut passer par des arcs !");
 						return;
 					}
@@ -137,7 +141,7 @@ public class JUnit_Disengage extends JUnit_Test
 		}
 	}
 	
-	
+	/*
 	@Test
 	public void testYSup()
 	{	
@@ -227,7 +231,7 @@ public class JUnit_Disengage extends JUnit_Test
 			}
 		}
 	}
-	
+	*/
 	
 	@After
 	public void after()
