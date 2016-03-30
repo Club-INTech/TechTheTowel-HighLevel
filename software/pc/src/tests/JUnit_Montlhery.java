@@ -3,6 +3,7 @@ package tests;
 import enums.ActuatorOrder;
 import enums.ServiceNames;
 import enums.Speed;
+import enums.TurningStrategy;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.Locomotion.UnexpectedObstacleOnPathException;
 import exceptions.serial.SerialConnexionException;
@@ -50,7 +51,7 @@ public class JUnit_Montlhery extends JUnit_Test
         config.set("capteurs_on", "true");
         capteurs.updateConfig();
 
-        sensors = (ThreadSensor) container.getService(ServiceNames.THREAD_SENSOR);
+        //sensors = (ThreadSensor) container.getService(ServiceNames.THREAD_SENSOR);
         //container.getService(ServiceNames.THREAD_TIMER);
 
         //locomotion
@@ -106,8 +107,24 @@ public class JUnit_Montlhery extends JUnit_Test
 
     @Test
     public void dansTaMere() throws UnableToMoveException {
-        state.robot.setForceMovement(true);
-        state.robot.moveLengthwise(-100);
+        //state.robot.setLocomotionSpeed(Speed.FAST_ALL);
+
+        while(true)
+        {
+            try {
+                state.robot.setLocomotionSpeed(Speed.FAST_ALL);
+                state.robot.useActuator(ActuatorOrder.MAGNET_DOWN, false);
+                state.robot.setTurningStrategy(TurningStrategy.LEFT_ONLY);
+                state.robot.moveLengthwise(500);
+                state.robot.turn(0);
+                state.robot.useActuator(ActuatorOrder.MAGNET_UP, false);
+                state.robot.setTurningStrategy(TurningStrategy.RIGHT_ONLY);
+                state.robot.moveLengthwise(500);
+                state.robot.turn(Math.PI);
+            } catch (SerialConnexionException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     //@Test
