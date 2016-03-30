@@ -103,22 +103,18 @@ public class JUnit_Disengage extends JUnit_Test
 						theta=state.robot.getOrientationFast();
 					}
 
-					// détermination de la longueur parcourue selon y pour se sortir, si elle nous met hors de la table en y, c'est pas intéressant
-					if(state.robot.getOrientationFast()>-Math.PI/2 && state.robot.getOrientationFast()<Math.PI)
-					{
-						deltaY=2000-state.robot.getRobotRadius();
-					}
-					else
-					{
-						deltaY=Math.abs(state.robot.getPositionFast().y-state.robot.getRobotRadius());
-					}
-					if(safe*Math.tan(theta)>deltaY)
-					{
-						log.debug("Mouvement rectiligne non pertinent, il faut passer par des arcs !");
-					}
 
 					// dans le cas favorable, on se déplace en ligne droite
 					int d = (int) Math.abs((safe/Math.cos(theta)));
+					
+					// déplacement selon y pour voir si la trajectoire rectiligne est intéressante
+					deltaY = (int)(Math.abs(Math.tan(theta)*d));
+					if(state.robot.getPositionFast().y+deltaY>1999-state.robot.getRobotRadius() || state.robot.getPositionFast().y-deltaY<state.robot.getRobotRadius())
+					{
+						log.debug("Mouvement rectiligne non pertinent, il faut passer par des arcs !");
+						return;
+					}
+					
 					if(reverse)
 					{
 						d=-d;
@@ -141,36 +137,30 @@ public class JUnit_Disengage extends JUnit_Test
 		}
 	}
 	
-	/*
+	
 	@Test
-	public void testYInf()
+	public void testYSup()
 	{	
 		log.debug("Début de test Disengage !");
 		// axe y limite pour que le robot puisse tourner
 		int zone = 1999-state.robot.getRobotRadius();
+		int move = Math.abs(zone-state.robot.getPosition().y);
 		
 		try
 		{
-			// cas où l'on est entre pi et 2pi
-			if(state.robot.getOrientation()>Math.PI && state.robot.getOrientationFast()<2*Math.PI)
+			// cas orentation négative
+			if(state.robot.getOrientation()<0)
 			{
 				reverse=false;
 				hasTurned=true;
 				state.robot.turn(-Math.PI/2, hooks, true);
 			}
-			// sinon, nous sommes entre 0 et pi
+			// sinon, angle positif
 			else
 			{
 				reverse=true;
 				hasTurned=true;
-				state.robot.turn(0,hooks,true);
-			}
-
-
-			int move = Math.abs(zone-state.robot.getPosition().y);
-
-			if(reverse)
-			{
+				state.robot.turn(Math.PI/2,hooks,true);
 				move=-move;
 			}
 			
@@ -196,38 +186,33 @@ public class JUnit_Disengage extends JUnit_Test
 					int deltaX;
 
 					// détermination de l'angle formé avec l'axe d'équation y constant
-					if(state.robot.getOrientationFast()>-Math.PI/2 && state.robot.getOrientationFast()<Math.PI/2)
+					if(state.robot.getOrientationFast()<0)
 					{
-						theta=state.robot.getOrientationFast()-Math.PI;
+						theta=-Math.PI/2-state.robot.getOrientationFast();
 					}
 					else
 					{
-						theta=state.robot.getOrientationFast();
-					}
-
-					// détermination de la longueur parcourue selon y pour se sortir, si elle nous met hors de la table en x, c'est pas intéressant
-					if(state.robot.getOrientationFast()>-Math.PI/2 && state.robot.getOrientationFast()<Math.PI)
-					{
-						deltaX=1500-state.robot.getRobotRadius();
-					}
-					else
-					{
-						deltaX=Math.abs(state.robot.getPositionFast().y-state.robot.getRobotRadius());
-					}
-					if(safe*Math.tan(theta)>deltaX)
-					{
-						log.debug("Mouvement rectiligne non pertinent, il faut passer par des arcs !");
+						theta=Math.PI/2-state.robot.getOrientationFast();
 					}
 
 					// dans le cas favorable, on se déplace en ligne droite
 					int d = (int) Math.abs((safe/Math.cos(theta)));
+					
+					// déplacement selon x pour voir si la trajectoire rectiligne est intéressante
+					deltaX = (int)(Math.tan(theta)*d);
+					if(state.robot.getPositionFast().x+deltaX>1499-state.robot.getRobotRadius() || state.robot.getPositionFast().x-deltaX<-1499+state.robot.getRobotRadius())
+					{
+						log.debug("Mouvement rectiligne non pertinent, il faut passer par des arcs !");
+						return;
+					}
+					
 					if(reverse)
 					{
 						d=-d;
 					}
 					state.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 					state.robot.moveLengthwise(d);
-					state.robot.turn(Math.PI);
+					state.robot.turn(0);
 				}
 				catch(UnableToMoveException ex)
 				{
@@ -242,7 +227,7 @@ public class JUnit_Disengage extends JUnit_Test
 			}
 		}
 	}
-	*/
+	
 	
 	@After
 	public void after()
