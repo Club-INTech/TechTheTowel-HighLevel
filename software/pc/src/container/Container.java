@@ -19,6 +19,7 @@ import strategie.GameState;
 import strategie.Strategie;
 import table.Table;
 import threads.ThreadManager;
+import threads.ThreadTimer;
 import utils.CheckUp;
 import utils.Config;
 import utils.Log;
@@ -215,7 +216,8 @@ public class Container
 																	(Log)getService(ServiceNames.LOG),
 																	(Config)getService(ServiceNames.CONFIG),
 																	(Table)getService(ServiceNames.TABLE),
-																	(GameState<RobotReal>)getService(ServiceNames.GAME_STATE)
+																	(GameState<RobotReal>)getService(ServiceNames.GAME_STATE),
+																	(ThreadTimer)getService(ServiceNames.THREAD_TIMER)
 																);
 		
 		else if(serviceRequested == ServiceNames.CHECK_UP)

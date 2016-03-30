@@ -1,4 +1,7 @@
 import container.Container;
+import enums.ServiceNames;
+import exceptions.ContainerException;
+import exceptions.serial.SerialManagerException;
 import hook.Hook;
 import robot.Locomotion;
 import robot.Robot;
@@ -6,6 +9,7 @@ import robot.cardsWrappers.SensorsCardWrapper;
 import scripts.ScriptManager;
 import strategie.GameState;
 import strategie.Strategie;
+import table.Table;
 import threads.ThreadTimer;
 import utils.Config;
 import utils.Sleep;
@@ -27,7 +31,7 @@ public class Main
 	static Config config;
 	static Strategie strategos;
 	static GameState<Robot> realState;
-	static ArrayList<Hook> emptyHook;
+	static ArrayList<Hook> emptyHook = new ArrayList<>();
 	static ScriptManager scriptmanager;
 	static SensorsCardWrapper mSensorsCardWrapper;
 	static Locomotion mLocomotion;
@@ -37,7 +41,37 @@ public class Main
 	
 	public static void main(String[] args)
 	{
-		//TODO main
+		try
+		{
+			container = new Container();
+			container.getService(ServiceNames.LOG);
+			config = (Config) container.getService(ServiceNames.CONFIG);
+			realState = (GameState<Robot>) container.getService(ServiceNames.GAME_STATE);
+			scriptmanager = (ScriptManager) container.getService(ServiceNames.SCRIPT_MANAGER);
+			mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
+			strategos = (Strategie) container.getService(ServiceNames.STRATEGIE);
+			mLocomotion=(Locomotion) container.getService(ServiceNames.LOCOMOTION);
+			config.updateConfig();
+
+			realState.robot.setPosition(Table.entryPosition);
+			realState.robot.setOrientation(Math.PI);
+
+			container.startAllThreads();
+
+			waitMatchBegin();
+
+			System.out.println("Le robot commence le match");
+
+			strategos.updateConfig();
+			strategos.IA();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ContainerException e) {
+			e.printStackTrace();
+		} catch (SerialManagerException e) {
+			e.printStackTrace();
+		}
 	}
 
 	

@@ -46,6 +46,8 @@ public class Strategie implements Service
 
     private ArrayList<Hook> hooks = new ArrayList<>();
 
+    private ThreadTimer timer;
+
     /**
      * Si l'adversaire est de haut-niveau
      */
@@ -93,10 +95,11 @@ public class Strategie implements Service
  * @param log
  * @param state
  */
-	public Strategie(Log log, Config config, Table table, GameState<RobotReal> state)
+	public Strategie(Log log, Config config, Table table, GameState<RobotReal> state, ThreadTimer timer)
 	{
 		this.log = log;
 		this.config = config;
+        this.timer = timer;
 		this.table = table;
 		this.state = new GameState<Robot>(config, log, table, state.robot);
 		this.hookFactory = new HookFactory(config, log, state);
