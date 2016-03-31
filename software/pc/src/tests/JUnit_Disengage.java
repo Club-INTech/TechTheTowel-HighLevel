@@ -244,13 +244,44 @@ public class JUnit_Disengage extends JUnit_Test
 	{
 		try
 		{
-			Arc test = new Arc(state.robot.getRobotRadius(),200,state.robot.getRobotRadius(),false);
+			// détermination de la marche avant ou arrière
+			if(state.robot.getPosition().x<0)
+			{
+				if(state.robot.getOrientation()>-Math.PI/2 && state.robot.getOrientationFast()< Math.PI/2)
+				{
+					reverse = false;
+				}
+				else
+				{
+					reverse = true;
+				}
+			}
+			else
+			{
+				if(state.robot.getOrientation()>-Math.PI/2 && state.robot.getOrientationFast()< Math.PI/2)
+				{
+					reverse = true;
+				}
+				else
+				{
+					reverse = false;
+				}
+			}
+			
+			// longueur d'arc arbitraire
+			int length = 300;
+			if (reverse)
+			{
+				length=-length;
+			}
+			
+			// rayon arbitraire
+			Arc test = new Arc(300,length,state.robot.getOrientation(),false);
 			state.robot.moveArc(test, hooks);
 		}
 		catch(Exception e)
 		{
-			log.debug("Fail !");
-			e.printStackTrace();
+			log.debug("Fail : " + e );
 		}
 	}
 	
