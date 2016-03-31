@@ -10,6 +10,7 @@ import exceptions.serial.SerialManagerException;
 import hook.Hook;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.JUnitCore;
 import robot.RobotReal;
 import smartMath.Vec2;
 import strategie.GameState;
@@ -27,6 +28,11 @@ public class JUnit_TestBaliseClement extends JUnit_Test
 	// On utilise le log du robot au lieu de celui de JUnit pour le PDD et pour l'entraînement
 	Log log;
 	long time;
+
+	public static void main(String[] args) throws Exception
+	{
+		JUnitCore.main("tests.JUnit_TestBaliseClement");
+	}
 	
 	@SuppressWarnings("unchecked")
     @Before
@@ -39,18 +45,19 @@ public class JUnit_TestBaliseClement extends JUnit_Test
 		//position initiale du robot
 		clement.robot.setPosition(Table.entryPosition);
 		clement.robot.setOrientation(Math.PI);
-		clement.robot.setLocomotionSpeed(Speed.FAST_ALL);
+		clement.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 		
 		table = (Table)container.getService(ServiceNames.TABLE);
 		log = (Log)container.getService(ServiceNames.LOG);
+		table.deleteAllTheShells();
 		this.time = System.currentTimeMillis();
 	}	
 		
 	@Test
 	public void test() throws SerialManagerException, ContainerException, UnableToMoveException {
 		//container.getService(ServiceNames.THREAD_TIMER);
-		container.getService(ServiceNames.THREAD_INTERFACE);
-		container.startInstanciedThreads();
+		//container.getService(ServiceNames.THREAD_INTERFACE);
+		//container.startInstanciedThreads();
 		clement.robot.moveLengthwise(100, new ArrayList<Hook>(), false);
 		while(true || (System.currentTimeMillis()-time)<90000)
 		{
