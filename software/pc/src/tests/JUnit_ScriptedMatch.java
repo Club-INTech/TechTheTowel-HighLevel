@@ -13,6 +13,7 @@ import hook.Hook;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.JUnitCore;
 import robot.Robot;
 import scripts.ScriptManager;
 import smartMath.Vec2;
@@ -33,6 +34,12 @@ public class JUnit_ScriptedMatch extends JUnit_Test
     private final int fishingVersion = 3;
     private final int closeDoorsVersion = 0;
     private final int shellDepositVersion = 0;
+
+
+    public static void main(String[] args) throws Exception
+    {
+        JUnitCore.main("tests.JUnit_ScriptedMatch");
+    }
 
     @SuppressWarnings("unchecked")
     @Before
