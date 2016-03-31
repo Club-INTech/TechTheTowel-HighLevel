@@ -44,7 +44,7 @@ public class ThreadTimer extends AbstractThread
 	public static int obstacleRefreshInterval = 0;
 	
 	/** interface graphique d'affichage de la table, pour le debug */
-	public Window window;
+	//public Window window;
 	
 	/**
 	 * indique si l'interface graphique est activée ou non 
@@ -71,7 +71,7 @@ public class ThreadTimer extends AbstractThread
 		Thread.currentThread().setPriority(1);
 
 		// DEBUG: interface graphique
-		try
+		/*try
 		{
 			window = new Window(table, robot);
 		}
@@ -79,7 +79,7 @@ public class ThreadTimer extends AbstractThread
 		{
 			isGraphicalInterfaceEnabled = false;
 			log.debug("Affichage graphique non disponible");
-		}
+		}*/
 	}
 
 	/* (non-Javadoc)
@@ -138,12 +138,12 @@ public class ThreadTimer extends AbstractThread
 			table.getObstacleManager().removeOutdatedObstacles();
 			
 			//on rafraichit l'interface graphique de la table
-			if(isGraphicalInterfaceEnabled/* && window != null*/)
+			/*if(isGraphicalInterfaceEnabled/* && window != null)
 			{
 				window.getPanel().repaint();
 				
 				window.getPanel().drawArrayList(robot.cheminSuivi);
-			}
+			}*/
 			//else
 			//	System.out.println("damn");
 				
