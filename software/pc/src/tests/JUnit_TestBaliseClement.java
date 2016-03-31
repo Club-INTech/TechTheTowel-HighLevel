@@ -10,6 +10,7 @@ import exceptions.serial.SerialManagerException;
 import hook.Hook;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.JUnitCore;
 import robot.RobotReal;
 import smartMath.Vec2;
 import strategie.GameState;
@@ -27,6 +28,11 @@ public class JUnit_TestBaliseClement extends JUnit_Test
 	// On utilise le log du robot au lieu de celui de JUnit pour le PDD et pour l'entraînement
 	Log log;
 	long time;
+
+	public static void main(String[] args) throws Exception
+	{
+		JUnitCore.main("tests.JUnit_TestBaliseClement");
+	}
 	
 	@SuppressWarnings("unchecked")
     @Before
