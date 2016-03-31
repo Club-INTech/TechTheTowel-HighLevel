@@ -51,7 +51,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         initialize();
 
         // Lance le thread graphique
-        container.getService(ServiceNames.THREAD_INTERFACE);
+        //container.getService(ServiceNames.THREAD_INTERFACE);
         //container.getService(ServiceNames.THREAD_EYES);
         container.startInstanciedThreads();
     }
