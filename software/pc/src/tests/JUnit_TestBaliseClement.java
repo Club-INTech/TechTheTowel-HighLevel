@@ -55,8 +55,8 @@ public class JUnit_TestBaliseClement extends JUnit_Test
 	@Test
 	public void test() throws SerialManagerException, ContainerException, UnableToMoveException {
 		//container.getService(ServiceNames.THREAD_TIMER);
-		container.getService(ServiceNames.THREAD_INTERFACE);
-		container.startInstanciedThreads();
+		//container.getService(ServiceNames.THREAD_INTERFACE);
+		//container.startInstanciedThreads();
 		clement.robot.moveLengthwise(100, new ArrayList<Hook>(), false);
 		while(true || (System.currentTimeMillis()-time)<90000)
 		{
