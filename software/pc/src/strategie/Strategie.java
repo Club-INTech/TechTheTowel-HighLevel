@@ -139,6 +139,7 @@ public class Strategie implements Service
 
             try
             {
+                log.debug("Lancement de " + nextScript + " version " + version(nextScript));
                 nextScript.goToThenExec(version(nextScript), state, hooks);
             } catch (ExecuteException|BlockedActuatorException e) {
                 log.critical("Je sais pas comment t'as fait Billy, cette exception ne tombe jamais...");
