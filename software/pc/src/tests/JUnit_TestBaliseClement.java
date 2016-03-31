@@ -45,10 +45,11 @@ public class JUnit_TestBaliseClement extends JUnit_Test
 		//position initiale du robot
 		clement.robot.setPosition(Table.entryPosition);
 		clement.robot.setOrientation(Math.PI);
-		clement.robot.setLocomotionSpeed(Speed.FAST_ALL);
+		clement.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 		
 		table = (Table)container.getService(ServiceNames.TABLE);
 		log = (Log)container.getService(ServiceNames.LOG);
+		table.deleteAllTheShells();
 		this.time = System.currentTimeMillis();
 	}	
 		
