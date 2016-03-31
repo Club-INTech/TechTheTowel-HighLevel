@@ -11,6 +11,7 @@ import enums.Speed;
 import exceptions.Locomotion.UnableToMoveException;
 import hook.Hook;
 import robot.Robot;
+import smartMath.Arc;
 import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
@@ -36,8 +37,8 @@ public class JUnit_Disengage extends JUnit_Test
 		state.updateConfig();
 		state.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 		// à modifier en début de test
-		state.robot.setOrientation(-Math.PI/4);
-		state.robot.setPosition(new Vec2(950,160));
+		state.robot.setOrientation(Math.PI/2);
+		state.robot.setPosition(new Vec2(1310,1120));
 	}
 	/*
 	@Test
@@ -142,6 +143,7 @@ public class JUnit_Disengage extends JUnit_Test
 	}
 	*/
 	
+	/*
 	@Test
 	public void testYInf()
 	{	
@@ -235,12 +237,27 @@ public class JUnit_Disengage extends JUnit_Test
 			}
 		}
 	}
+	*/
+	
+	@Test
+	public void arcXPositive()
+	{
+		try
+		{
+			Arc test = new Arc(state.robot.getRobotRadius(),200,state.robot.getRobotRadius(),false);
+			state.robot.moveArc(test, hooks);
+		}
+		catch(Exception e)
+		{
+			log.debug("Fail !");
+			e.printStackTrace();
+		}
+	}
 	
 	
 	@After
 	public void after()
 	{
 		log.debug("Fin de test de sortie !");
-		state.robot.immobilise();
 	}
 }
