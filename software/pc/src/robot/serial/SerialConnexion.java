@@ -82,25 +82,24 @@ public class SerialConnexion implements SerialPortEventListener, Service
         this.name = name;
         if(this.debug)
         {
-            try {
+            try
+            {
                 File file = new File("orders.txt");
                 if (file.exists())
                 {
-                    out = new BufferedWriter(new FileWriter(file));
-                    out.newLine();
-                    out.write("------ NEW SERIAL -------");
-                    out.newLine();
-                    out.flush();
+                    file.delete();
+                    file.createNewFile();
                 }
-
-
-                    //file.delete();
+                out = new BufferedWriter(new FileWriter(file));
 
             } catch (IOException e) {
                 log.critical("Manque de droits pour l'output des ordres");
+                //out = null;
                 e.printStackTrace();
             }
         }
+        else
+            this.out = null;
     }
 
     /**
