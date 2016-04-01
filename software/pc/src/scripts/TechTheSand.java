@@ -69,7 +69,7 @@ public class TechTheSand extends AbstractScript
 				stateToConsider.robot.turn((Math.PI), hooksToConsider, false);
 				
 				// On déploie la vitre droite
-				stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, true);
+				/*stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, true);
 
 				if(!stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_OPENED))
                 {
@@ -77,7 +77,7 @@ public class TechTheSand extends AbstractScript
                     throw new BlockedActuatorException("Porte bloquée !");
                 } else {
                     stateToConsider.robot.setDoor(true);
-                }
+                }*/
 
 				stateToConsider.changeRobotRadius(TechTheSand.expandedRobotRadius);
                 stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
