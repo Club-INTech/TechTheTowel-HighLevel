@@ -85,9 +85,9 @@ public class SerialConnexion implements SerialPortEventListener, Service
             try
             {
                 File file = new File("orders.txt");
-                if (file.exists())
+                if (!file.exists())
                 {
-                    file.delete();
+                    //file.delete();
                     file.createNewFile();
                 }
                 out = new BufferedWriter(new FileWriter(file));
