@@ -136,7 +136,6 @@ public class Strategie implements Service
 		while(true)
         {
             AbstractScript nextScript = decide();
-
             try
             {
                 log.debug("Lancement de " + nextScript + " version " + version(nextScript));

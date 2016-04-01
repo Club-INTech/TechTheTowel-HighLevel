@@ -166,8 +166,6 @@ public class JUnit_Strategia extends JUnit_Test
 		boolean jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
 		while(jumperWasAbsent || !mSensorsCardWrapper.isJumperAbsent())
 		{
-			
-			jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
 			 real_state.robot.sleep(100);
 		}
 

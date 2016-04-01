@@ -97,7 +97,7 @@ public class SensorsCardWrapper implements Service
 		try 
 		{
 			// demande a la carte si le jumper est présent, parse sa réponse, et si on lit 1 c'est que le jumper n'est pas/plus la
-			return Integer.parseInt(sensorsCardSerial.communiquer("j", 1)[0]) != 1;
+			return Integer.parseInt(sensorsCardSerial.communiquer("j", 1)[0]) != 0;
 		} 
 		catch (NumberFormatException e)
 		{

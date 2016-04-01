@@ -101,15 +101,17 @@ public class ThreadTimer extends AbstractThread
 		boolean jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
 		while(jumperWasAbsent || !mSensorsCardWrapper.isJumperAbsent())
 		{
-			
-			jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
-			robot.sleep(100);
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 
 		// maintenant que le jumper est retiré, le match a commencé
 		matchStarted = true;
 		
-		log.debug(!mSensorsCardWrapper.isJumperAbsent() +" / "+ !matchStarted);
+		//log.debug(!mSensorsCardWrapper.isJumperAbsent() +" / "+ !matchStarted);
 
 		// Le match démarre ! On chage l'état du thread pour refléter ce changement
 		matchStartTimestamp = System.currentTimeMillis();
