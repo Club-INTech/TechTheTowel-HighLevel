@@ -249,6 +249,7 @@ public class Castle extends AbstractScript
 			}
 			else if(versionToExecute == 3)
 			{
+                
 				stateToConsider.robot.setForceMovement(true);
 
 				stateToConsider.robot.moveArc(new Arc(-500, 950, stateToConsider.robot.getOrientation(), false), hooksToConsider);
@@ -281,8 +282,8 @@ public class Castle extends AbstractScript
 				{
 					stateToConsider.robot.setLocomotionSpeed(Speed.FAST_ALL);
 					Arc arc = new Arc(-1100, -1300, stateToConsider.robot.getOrientation(), false);
-					stateToConsider.robot.moveArc(arc, hooksToConsider);
 					stateToConsider.robot.setForceMovement(false);
+					stateToConsider.robot.moveArc(arc, hooksToConsider);
 				}
 				
 				
