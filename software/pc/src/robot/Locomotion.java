@@ -109,7 +109,7 @@ public class Locomotion implements Service
     /**
      * temps d'attente entre deux boucles d'acquitement
      */
-    private int feedbackLoopDelay = 10;
+    private int feedbackLoopDelay = 50;
     /**
      * la distance dont le robot vas avancer pour se degager en cas de bloquage mecanique
      */
@@ -649,14 +649,18 @@ public class Locomotion implements Service
 	                hook.evaluate();
                         
             // le fait de faire de nombreux appels permet de corriger la trajectoire
-            if(false && !isCurve && !isForcing)
-                correctAngle(aim, isMovementForward, mustDetect);
+            //if(false && !isCurve && !isForcing)
+              //  correctAngle(aim, isMovementForward, mustDetect);
             
             //log.critical("Temps pour finir la boucle d'asservissement "+(System.currentTimeMillis()-time), this);
             //time=System.currentTimeMillis();
             
             // On sleep pour eviter le spam de la serie
-            //Sleep.sleep(feedbackLoopDelay);
+            try {
+                Thread.sleep(feedbackLoopDelay);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
         } 
         while(!isMotionEnded())
