@@ -249,10 +249,14 @@ public class Castle extends AbstractScript
 			}
 			else if(versionToExecute == 3)
 			{
-                
+                Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
+                stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+
 				stateToConsider.robot.setForceMovement(true);
 
-				stateToConsider.robot.moveArc(new Arc(-500, 950, stateToConsider.robot.getOrientation(), false), hooksToConsider);
+				stateToConsider.robot.moveArc(new Arc(-460, 950, stateToConsider.robot.getOrientation(), false), hooksToConsider);
+
+                stateToConsider.robot.turn(Math.PI);
 				
 				stateToConsider.robot.moveLengthwise(300,hooksToConsider,true);
 
@@ -280,7 +284,7 @@ public class Castle extends AbstractScript
 				// partie bloquante pour fermer les cabines sans lancer l'appel à close doors
 				try
 				{
-					stateToConsider.robot.setLocomotionSpeed(Speed.FAST_ALL);
+					stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 					stateToConsider.robot.setForceMovement(true);
 					Arc arc = new Arc(-1200, -1100, stateToConsider.robot.getOrientation(), false);
 					stateToConsider.robot.moveArc(arc, hooksToConsider);
@@ -295,7 +299,9 @@ public class Castle extends AbstractScript
 					return;
 				}
 
-			}
+                stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
+
+            }
 			
 		}
 		catch (Exception e)
