@@ -178,6 +178,10 @@ public class ShellGetter extends AbstractScript
                 // on s'éloigne de notre serviette
                 stateToConsider.robot.moveLengthwise(-500);
 
+                stateToConsider.robot.setTurningStrategy(TurningStrategy.FASTEST);
+
+                stateToConsider.robot.setDirectionStrategy(DirectionStrategy.FASTEST);
+
                 // les coquillages ne sont plus embarqués
                 stateToConsider.robot.shellsOnBoard=false;
 

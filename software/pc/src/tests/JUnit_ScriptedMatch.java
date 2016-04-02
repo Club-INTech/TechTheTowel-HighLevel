@@ -148,7 +148,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         try
         {
         	// à décommenter si a version 3 de Castle n'est pas utilisée et le close doors non utilisé
-        	theRobot.robot.moveLengthwise(200);
+        	//theRobot.robot.moveLengthwise(200);
             Vec2 sup = scriptManager.getScript(ScriptNames.SHELL_GETTER).entryPosition(-1, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
             theRobot.table.getObstacleManager().freePoint(sup);
             scriptManager.getScript(ScriptNames.SHELL_GETTER).goToThenExec(-1,theRobot, emptyHook);
