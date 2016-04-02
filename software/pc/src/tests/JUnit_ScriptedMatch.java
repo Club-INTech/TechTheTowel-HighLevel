@@ -134,7 +134,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         	log.debug("Problème d'exécution dans Castle");
             e.printStackTrace();
         }
-       /* try
+        try
         {
             Vec2 sup = scriptManager.getScript(ScriptNames.CLOSE_DOORS).entryPosition(closeDoorsVersion, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
             theRobot.table.getObstacleManager().freePoint(sup);
@@ -144,7 +144,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         {
         	log.debug("Problème d'exécution dans Close Doors");
             e.printStackTrace();
-        }*/
+        }
         try
         {
         	// à décommenter si a version 3 de Castle n'est pas utilisée et le close doors non utilisé

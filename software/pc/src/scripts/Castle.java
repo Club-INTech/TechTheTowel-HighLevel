@@ -281,10 +281,11 @@ public class Castle extends AbstractScript
 				try
 				{
 					stateToConsider.robot.setLocomotionSpeed(Speed.FAST_ALL);
-					Arc arc = new Arc(-1100, -1300, stateToConsider.robot.getOrientation(), false);
-					stateToConsider.robot.setForceMovement(false);
+					stateToConsider.robot.setForceMovement(true);
+					Arc arc = new Arc(-1100, -1100, stateToConsider.robot.getOrientation(), false);
 					stateToConsider.robot.moveArc(arc, hooksToConsider);
-				}
+                    stateToConsider.robot.setForceMovement(false);
+                }
 				
 				
 				catch(UnableToMoveException u)
