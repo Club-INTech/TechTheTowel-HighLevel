@@ -20,6 +20,7 @@ public class SymmetrizedTurningStrategy
     {
         mCorrespondenceMap.put(TurningStrategy.FASTEST, TurningStrategy.FASTEST);
         mCorrespondenceMap.put(TurningStrategy.LEFT_ONLY, TurningStrategy.RIGHT_ONLY);
+        mCorrespondenceMap.put(TurningStrategy.RIGHT_ONLY, TurningStrategy.LEFT_ONLY);
     }
 
 

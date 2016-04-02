@@ -1,7 +1,9 @@
 import container.Container;
+import enums.ActuatorOrder;
 import enums.ServiceNames;
 import enums.Speed;
 import exceptions.ContainerException;
+import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialManagerException;
 import hook.Hook;
 import robot.Locomotion;
@@ -57,6 +59,14 @@ public class Main
 			realState.robot.setPosition(Table.entryPosition);
 			realState.robot.setOrientation(Math.PI);
 			realState.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+
+			try {
+				realState.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
+				realState.robot.useActuator(ActuatorOrder.CLOSE_DOOR_LEFT, false);
+				realState.robot.useActuator(ActuatorOrder.ARM_INIT, false);
+			} catch (SerialConnexionException e) {
+				e.printStackTrace();
+			}
 
 			container.startAllThreads();
 
