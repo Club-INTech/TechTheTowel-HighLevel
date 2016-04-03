@@ -161,8 +161,11 @@ public class ShellGetter extends AbstractScript
 
                 Arc getter = new Arc(stateToConsider.robot.getPosition(), new Vec2(1150,1200), Math.PI/2, true);
 
+                stateToConsider.robot.setForceMovement(true);
                 //On la donne au robot
                 stateToConsider.robot.moveArc(getter, hooksToConsider);
+
+                stateToConsider.robot.setForceMovement(false);
 
                 stateToConsider.robot.setTurningStrategy(TurningStrategy.FASTEST);
                 //Arc deposit = new Arc(stateToConsider.robot.getPosition(), new Vec2(1150,1200), Math.PI/2, true);
