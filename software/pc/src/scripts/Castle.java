@@ -254,7 +254,7 @@ public class Castle extends AbstractScript
 
 				stateToConsider.robot.setForceMovement(true);
 
-				stateToConsider.robot.moveArc(new Arc(-490, 950, stateToConsider.robot.getOrientation(), false), hooksToConsider);
+				stateToConsider.robot.moveArc(new Arc(-500, 950, stateToConsider.robot.getOrientation(), false), hooksToConsider);
 
                 stateToConsider.robot.turn(Math.PI);
 				
