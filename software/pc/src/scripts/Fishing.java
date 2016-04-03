@@ -389,22 +389,14 @@ public class Fishing extends AbstractScript
 
 				//stateToConsider.robot.sleep(800);
 
-				// On crée le hook de position
+				// On crée le hook de position, l'action pour lever le bras et ajout à la liste
 				Hook hook = hookFactory.newXLesserHook(600);
-
-				// On y ajoute un callback qui a pour action de lever le bras
 				hook.addCallback(new Callback(new RiseArm(), true, stateToConsider));
-
-				// On ajoute le hook à la liste
 				hooksToConsider.add(hook);
 
-				// On crée le hook de position
-				Hook hook2 = hookFactory.newXLesserHook(450);
-
-				// On y ajoute un callback qui a pour action de lâcher les poissons
+				// On crée le hook de position, l'action pour lâcher les poissons et ajout à la liste
+				Hook hook2 = hookFactory.newXLesserHook(400);
 				hook2.addCallback(new Callback(new DropFish(), true, stateToConsider));
-
-				// On ajoute le hook à la liste
 				hooksToConsider.add(hook2);
 
 				// On longe le bac
@@ -438,7 +430,7 @@ public class Fishing extends AbstractScript
 				hooksToConsider.add(hook);
 				
 				// nouvelle condition pour le hook lâchant les poissons et mise à jour dans la liste
-				hook2 = hookFactory.newXLesserHook(450);
+				hook2 = hookFactory.newXLesserHook(350);
 				hook2.addCallback(new Callback(new DropFish(), true, stateToConsider));
 				hooksToConsider.add(hook2);
 				
@@ -446,7 +438,7 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.setAreFishesOnBoard(true);
 				
 				// on longe le bac
-				stateToConsider.robot.moveLengthwise(530, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(600, hooksToConsider, true);
 				
 				// On indique au robot que les poissons ne sont plus sur le bras
 				stateToConsider.robot.setAreFishesOnBoard(false);
