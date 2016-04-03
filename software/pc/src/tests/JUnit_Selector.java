@@ -36,7 +36,7 @@ public class JUnit_Selector extends JUnit_Test {
     private final int closeDoorsVersion = 0;
     private final int shellDepositVersion = 0;
 
-    private static int value;
+    private static int value = 0;
 
 
     public static void main(String[] args) throws Exception {
