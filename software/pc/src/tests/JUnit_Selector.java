@@ -27,14 +27,6 @@ import java.util.ArrayList;
  */
 public class JUnit_Selector extends JUnit_Test {
     private GameState<Robot> theRobot;
-    private ScriptManager scriptManager;
-    private ArrayList<Hook> emptyHook = new ArrayList<Hook>();
-
-    // Version des scripts à lancer
-    private final int techTheSandVersion = 2;
-    private final int fishingVersion = 3;
-    private final int closeDoorsVersion = 0;
-    private final int shellDepositVersion = 0;
 
     private static int value = 0;
 
@@ -51,7 +43,6 @@ public class JUnit_Selector extends JUnit_Test {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        scriptManager = (ScriptManager) container.getService(ServiceNames.SCRIPT_MANAGER);
         theRobot = (GameState<Robot>) container.getService(ServiceNames.GAME_STATE);
         initialize();
 
