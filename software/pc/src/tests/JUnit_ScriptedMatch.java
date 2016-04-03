@@ -115,7 +115,7 @@ public class JUnit_ScriptedMatch extends JUnit_Test
         {
             Vec2 sup = scriptManager.getScript(ScriptNames.TECH_THE_SAND).entryPosition(1, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
             theRobot.table.getObstacleManager().freePoint(sup);
-            theRobot.robot.setLocomotionSpeed(Speed.FAST_ALL);
+            //theRobot.robot.setLocomotionSpeed(Speed.FAST_ALL);
             scriptManager.getScript(ScriptNames.TECH_THE_SAND).execute(techTheSandVersion,theRobot, emptyHook);
             log.debug("Fin de Tech The Sand !");
         }
