@@ -140,7 +140,7 @@ public class Strategie implements Service
             {
                 log.debug("Lancement de " + nextScript + " version " + version(nextScript));
                 nextScript.goToThenExec(version(nextScript), state, hooks);
-            } catch (ExecuteException|BlockedActuatorException e) {
+            } catch (BlockedActuatorException e) {
                 log.critical("Je sais pas comment t'as fait Billy, cette exception ne tombe jamais...");
                 e.printStackTrace();
             } catch (SerialConnexionException | SerialFinallyException e) {
@@ -159,6 +159,10 @@ public class Strategie implements Service
             } catch (PointInObstacleException | PathNotFoundException e) {
                 disengage(nextScript);
                 this.shells = state.table.deleteAllTheShells();
+                e.printStackTrace();
+            } catch (ExecuteException e) {
+                log.critical("Echec de script, on continue");
+                abnormalMatch = true;
                 e.printStackTrace();
             }
 

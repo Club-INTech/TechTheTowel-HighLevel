@@ -168,7 +168,7 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.robot.useActuator(ActuatorOrder.START_AXIS, false);
                 
                 // Définition de l'arc à suivre, point de départ temporaire
-                Arc approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(50,2000-240), Math.PI, true);
+                Arc approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(100,2000-240), Math.PI, true);
 
 				try {
 					stateToConsider.robot.setForceMovement(false);
@@ -191,6 +191,7 @@ public class TechTheSand extends AbstractScript
 				}
 				try {
 					stateToConsider.robot.turn(Math.PI);
+					stateToConsider.robot.moveLengthwise(50);
 				} catch (Exception e)
 				{
 					e.printStackTrace();
@@ -262,10 +263,10 @@ public class TechTheSand extends AbstractScript
 							stateToConsider.robot.setIsSandInside(false);
 							stateToConsider.robot.setTurningStrategy(TurningStrategy.FASTEST);
 							stateToConsider.robot.setDirectionStrategy(DirectionStrategy.FASTEST);
-							stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 300);
+							stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 150);
 							approach.setReverse();
 							stateToConsider.robot.moveArc(approach, hooksToConsider);
-
+                            throw new ExecuteException(e3);
 						}
 					}
 				}
