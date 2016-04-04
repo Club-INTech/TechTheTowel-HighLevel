@@ -130,14 +130,7 @@ public class ShellGetter extends AbstractScript
                 Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
                 stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL); // TODO A changer quand asserv OK
 
-                stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, true);
-
-                // on vérifie si la porte n'est pas bloquée lors de son ouverture
-                if(!stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_OPENED))
-                {
-                    stateToConsider.robot.useActuator(ActuatorOrder.STOP_DOOR, false);
-                    throw new BlockedActuatorException("Porte bloquée !");
-                }
+                stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, false);
 
                 // booléen de vitre ouverte vrai
                 stateToConsider.robot.doorIsOpen = true;
@@ -181,8 +174,6 @@ public class ShellGetter extends AbstractScript
                 // on s'éloigne de notre serviette
                 stateToConsider.robot.moveLengthwise(-500);
 
-                stateToConsider.robot.setTurningStrategy(TurningStrategy.FASTEST);
-
                 stateToConsider.robot.setDirectionStrategy(DirectionStrategy.FASTEST);
 
                 // les coquillages ne sont plus embarqués
@@ -194,7 +185,9 @@ public class ShellGetter extends AbstractScript
                 // on se place pour repartir
                 stateToConsider.robot.moveLengthwise(200);*/
 
-                stateToConsider.robot.moveArc(new Arc(200, -400, stateToConsider.robot.getOrientation(), false), hooksToConsider);
+                stateToConsider.robot.moveArc(new Arc(200, -200, stateToConsider.robot.getOrientation(), false), hooksToConsider);
+
+                stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
 
                 // on reprend la vitesse pre-script
                 stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);

@@ -539,6 +539,7 @@ public class Fishing extends AbstractScript
 		catch(Exception e)
 		{
 			finalize(stateToConsider, e);
+			throw e;
 		}
 	}
 

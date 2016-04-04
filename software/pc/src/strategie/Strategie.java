@@ -138,7 +138,6 @@ public class Strategie implements Service
             AbstractScript nextScript = decide();
             try
             {
-                log.debug("Lancement de " + nextScript + " version " + version(nextScript));
                 nextScript.goToThenExec(version(nextScript), state, hooks);
             } catch (BlockedActuatorException e) {
                 log.critical("Je sais pas comment t'as fait Billy, cette exception ne tombe jamais...");
@@ -175,6 +174,7 @@ public class Strategie implements Service
 
             if(state.table.fishesFished > 0)
                 fishedOnce = true;
+
             if(!abnormalMatch && state.table.shellsObtained>0)
                 done = true;
 
@@ -324,9 +324,8 @@ public class Strategie implements Service
         }
         else
         {
-            abnormalMatch = false;
 
-            if(state.robot.getIsSandInside())
+            if(state.robot.getIsSandInside() && !castleTaken)
                 return scriptmanager.getScript(ScriptNames.CASTLE);
 
             if(state.robot.getIsSandInside() && castleTaken)
@@ -354,10 +353,16 @@ public class Strategie implements Service
      */
     private int version(AbstractScript script)
     {
-        if(script instanceof Castle)
+        boolean ab = abnormalMatch;
+        abnormalMatch = false;
+        if(script instanceof Castle && !ab)
             return 2;
-        else if(script instanceof CloseDoors)
+        else if(script instanceof Castle)
             return 0;
+        else if(script instanceof CloseDoors && !ab)
+            return 0;
+        else if(script instanceof CloseDoors)
+            return 3;
         else if(script instanceof Fishing)
             return 3;
         else if(script instanceof ShellGetter)

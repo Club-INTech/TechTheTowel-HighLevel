@@ -73,6 +73,7 @@ public abstract class AbstractScript implements Service
 	public void goToThenExec(int versionToExecute, GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, BadVersionException, SerialConnexionException, PathNotFoundException, SerialFinallyException, ExecuteException, PointInObstacleException, BlockedActuatorException
 	{
 		// va jusqu'au point d'entrée de la version demandée
+		log.debug("Lancement de " + this + " version " + versionToExecute);
 		try 
 		{
 			if(!actualState.robot.getPositionFast().equals(entryPosition(versionToExecute,actualState.robot.getRobotRadius(), actualState.robot.getPosition()).position))

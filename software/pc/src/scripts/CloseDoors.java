@@ -1,5 +1,6 @@
 package scripts;
 
+import enums.ActuatorOrder;
 import exceptions.BadVersionException;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -25,6 +26,7 @@ import enums.Speed;
  * Version 0 : Deplacement de la serviette aux portes puis fermeture en même temps ; aucune action prevue hors du deplacement ; aucun pathdingding/evitement ; si pb -> arret complet
  * Version 1 : Identique à la version 0, sauf qu'on ferme les portes en marche avant
  * Version 2 : Intégration des trajectoires courbes
+ * Version 3 : version 0 avec appel PDD
  * @author Discord, CF
  */
 public class CloseDoors extends AbstractScript
@@ -34,7 +36,7 @@ public class CloseDoors extends AbstractScript
 		/**
 		 * Versions du script
 		 */
-		versions = new Integer[]{0,1,2};
+		versions = new Integer[]{0,1,2,3};
 		
 	}
 	
@@ -52,7 +54,7 @@ public class CloseDoors extends AbstractScript
 		try
 		{
 		
-			if(versionToExecute == 0)
+			if(versionToExecute == 0 || versionToExecute == 3)
 			{
 
 				//On ralentit pour éviter de démonter les éléments de jeu "Discord-style"
@@ -69,6 +71,9 @@ public class CloseDoors extends AbstractScript
 				stateToConsider.obtainedPoints += 20;
 				stateToConsider.table.extDoorClosed = true;
 				stateToConsider.table.intDoorClosed = true;
+
+                // Si la porte était ouverte (match scripté)
+                stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
 
 				//On avance
 				stateToConsider.robot.moveLengthwise(100, hooksToConsider, false);
@@ -161,6 +166,10 @@ public class CloseDoors extends AbstractScript
 		else if (version == 2)
 		{
 			return new Circle(Table.entryPosition);
+		}
+		else if(version == 3)
+		{
+			return new Circle(new Vec2(1135,1600));
 		}
 		else
 		{

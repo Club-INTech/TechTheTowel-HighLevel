@@ -1,6 +1,7 @@
 package scripts;
 
 
+import enums.*;
 import exceptions.BadVersionException;
 // WARNING: ne pas supprimer les lignes taggées inutiles
 // car des lignes en commentaires eront intégrées dans le code
@@ -22,11 +23,6 @@ import utils.Config;
 import utils.Log;
 
 import java.util.ArrayList;
-
-import enums.ActuatorOrder;
-import enums.ContactSensors;
-import enums.Speed;
-import enums.TurningStrategy;
 
 /**
  * Script pour récupérer le tas de sable devant notre tapis
@@ -307,6 +303,7 @@ public class Castle extends AbstractScript
 		catch (Exception e)
 		{
 			finalize(stateToConsider, e);
+			throw new UnableToMoveException(stateToConsider.robot.getPositionFast(), UnableToMoveReason.PHYSICALLY_BLOCKED);
 		}
 		
 	}
