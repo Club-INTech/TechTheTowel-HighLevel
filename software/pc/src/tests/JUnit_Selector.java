@@ -26,7 +26,6 @@ import java.util.ArrayList;
  * 3 => Shells
  */
 public class JUnit_Selector extends JUnit_Test {
-    private GameState<Robot> theRobot;
 
     private static int value = 0;
 
@@ -38,59 +37,7 @@ public class JUnit_Selector extends JUnit_Test {
             JUnit_Selector.value = Integer.parseInt(args[0]);
         }
     }
-
-    @SuppressWarnings("unchecked")
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-        theRobot = (GameState<Robot>) container.getService(ServiceNames.GAME_STATE);
-        initialize();
-
-        // Lance le thread graphique
-        //container.getService(ServiceNames.THREAD_INTERFACE);
-        //container.getService(ServiceNames.THREAD_EYES);
-        container.startInstanciedThreads();
-    }
-
-    private void initialize() throws Exception {
-        theRobot.robot.setOrientation(Math.PI);
-        theRobot.robot.setPosition(Table.entryPosition);
-        theRobot.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
-        //theRobot.robot.moveLengthwise(200, emptyHook, false);
-
-        theRobot.robot.useActuator(ActuatorOrder.ARM_INIT, true);
-
-        try {
-            if (!theRobot.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED)) {
-                theRobot.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
-            }
-            if (!theRobot.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED)) {
-                theRobot.robot.useActuator(ActuatorOrder.STOP_DOOR, true);
-                throw new BlockedActuatorException("Porte droite bloquée !");
-            }
-
-            // petit temps d'attente pour éviter de faire planter les portes #LeHautNiveauDemandeDeLaMerde
-            theRobot.robot.sleep(100);
-
-        } catch (SerialConnexionException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-
-    @After
-    public void aftermath() throws Exception {
-        //on remonte les bras
-        try {
-            theRobot.robot.useActuator(ActuatorOrder.ARM_INIT, true);
-            theRobot.robot.immobilise();
-            log.debug("Fin de match !");
-        } catch (SerialConnexionException e) {
-            e.printStackTrace();
-            log.debug("Impossible de ranger les bras !");
-        }
-    }
+    
 
     @Test
     public void launch() throws Exception {
@@ -99,24 +46,28 @@ public class JUnit_Selector extends JUnit_Test {
             JUnit_ScriptedMatch junit = new JUnit_ScriptedMatch();
             junit.setUp();
             junit.match();
+            junit.aftermath();
         }
         else if(value == 1)
         {
             JUnit_Fishing junit = new JUnit_Fishing();
             junit.setUp();
             junit.fishThemWithHook();
+            junit.after();
         }
         else if(value == 2)
         {
             JUnit_TechTheSand junit = new JUnit_TechTheSand();
             junit.setUp();
             junit.TechIt();
+            junit.aftermath();
         }
         else if(value == 3)
         {
             JUnit_Shells junit = new JUnit_Shells();
             junit.setUp();
             junit.fishThem();
+            junit.aftermath();
         }
         else
         {
