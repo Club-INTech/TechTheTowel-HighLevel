@@ -33,11 +33,13 @@ public class JUnit_Selector extends JUnit_Test {
     public static void main(String[] args) throws Exception {
         JUnitCore.main("tests.JUnit_Selector");
 
+        System.out.println(args[0]);
+
         if (args.length != 0) {
             JUnit_Selector.value = Integer.parseInt(args[0]);
         }
     }
-    
+
 
     @Test
     public void launch() throws Exception {
