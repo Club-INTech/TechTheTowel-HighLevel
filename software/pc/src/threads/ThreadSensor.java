@@ -89,8 +89,8 @@ public class ThreadSensor extends AbstractThread
      * Positions relatives au centre du robot TODO A changer !
      */
 
-    private final Vec2 positionLF = new Vec2(170, -150);
-    private final Vec2 positionRFClosed = new Vec2(170, 150);
+    private final Vec2 positionLF = new Vec2(170, -140);
+    private final Vec2 positionRFClosed = new Vec2(170, 140);
     private final Vec2 positionLB = new Vec2(-120,-75);
     private final Vec2 positionRB = new Vec2(-120,75);
 
@@ -263,7 +263,7 @@ public class ThreadSensor extends AbstractThread
     private Vec2 positionRF()
     {
         //FIXME l'ajout de distance selon l'ouverture de la porte
-        return positionRFClosed.plusNewVector(new Vec2(0,mRobot.doorIsOpen ? 20 : 0));
+        return positionRFClosed.plusNewVector(new Vec2(0,mRobot.doorIsOpen ? 110 : 0));
     }
 
     /**
