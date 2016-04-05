@@ -62,8 +62,8 @@ public class JUnit_Shells extends JUnit_Test
         theRobot.changeRobotRadius(TechTheSand.expandedRobotRadius);
 
         // Lance le thread graphique
-        container.getService(ServiceNames.THREAD_INTERFACE);
-        container.startInstanciedThreads();
+        //container.getService(ServiceNames.THREAD_INTERFACE);
+        //container.startInstanciedThreads();
     }
 
     //@After

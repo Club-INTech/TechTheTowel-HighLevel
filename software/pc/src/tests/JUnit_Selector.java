@@ -36,7 +36,7 @@ public class JUnit_Selector extends JUnit_Test {
         if (args.length != 0) {
             JUnit_Selector.value = Integer.parseInt(args[0]);
         }
-        
+
         JUnitCore.main("tests.JUnit_Selector");
     }
 
@@ -70,6 +70,12 @@ public class JUnit_Selector extends JUnit_Test {
             junit.setUp();
             junit.fishThem();
             junit.aftermath();
+        }
+        else if(value == 4)
+        {
+            JUnit_Sensors junit = new JUnit_Sensors();
+            junit.setUp();
+            junit.testSensorEnnemyWithoutMovement();
         }
         else
         {
