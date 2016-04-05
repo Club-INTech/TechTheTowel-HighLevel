@@ -8,7 +8,7 @@ import java.io.ObjectOutputStream;
 /**
  * Classe statique qui gere les sauvegardes et chargements d'objets dans un fichier.
  * C'est utile si on vuet mettre des  trucs en cache et le cherger en cours de matc
- * 
+ *  NOPE, USELESS ! LA RPI A SUFFISAMENT DE RAM !
  * @author Stud, marsu
  *
  */

@@ -262,7 +262,7 @@ public class ThreadSensor extends AbstractThread
      */
     private Vec2 positionRF()
     {
-        //TODO l'ajout de distance selon l'ouverture de la porte
+        //FIXME l'ajout de distance selon l'ouverture de la porte
         return positionRFClosed.plusNewVector(new Vec2(0,mRobot.doorIsOpen ? 20 : 0));
     }
 
