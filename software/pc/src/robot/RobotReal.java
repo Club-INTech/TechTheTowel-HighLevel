@@ -75,6 +75,20 @@ public class RobotReal extends Robot
 		{
 			sleep(order.getDuration());
 		}
+
+		//=============================
+		// Gestion pourrave des portes
+		//=============================
+
+		if(waitForCompletion && door != 0 && getContactSensorValue(ContactSensors.DOOR_OPENED))
+			doorIsOpen = true;
+		else if(waitForCompletion && door != 0 && getContactSensorValue(ContactSensors.DOOR_CLOSED))
+			doorIsOpen = false;
+		else if(waitForCompletion && door != 0)
+			doorIsOpen = true; //Cas pourri où la porte s'est bloquée
+		else if(!waitForCompletion && door != 0)
+			doorIsOpen = (door == 2);
+
 	}
 	
 	@Override

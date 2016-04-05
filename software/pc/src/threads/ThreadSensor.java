@@ -90,7 +90,7 @@ public class ThreadSensor extends AbstractThread
      */
 
     private final Vec2 positionLF = new Vec2(170, -150);
-    private final Vec2 positionRF = new Vec2(170, 150);
+    private final Vec2 positionRFClosed = new Vec2(170, 150);
     private final Vec2 positionLB = new Vec2(-120,-75);
     private final Vec2 positionRB = new Vec2(-120,75);
 
@@ -226,13 +226,13 @@ public class ThreadSensor extends AbstractThread
      */
     private void addFrontObstacleBoth()
     {
-        double distanceBetweenSensors = positionLF.minusNewVector(positionRF).length();
+        double distanceBetweenSensors = positionLF.minusNewVector(positionRF()).length();
 
         if(Math.abs(USvalues.get(1) - USvalues.get(0)) <= distanceBetweenSensors) //Si on semble pointer vers le même ennemi des deux capteurs
         {
             //Position de l'ennemi
             relativePositionSaloperie_1.y = (int) (((USvalues.get(0) * USvalues.get(0)) - (USvalues.get(1) * USvalues.get(1))) / (2 * distanceBetweenSensors));
-            relativePositionSaloperie_1.x = (int) (positionRF.x + Math.sqrt((USvalues.get(1) * USvalues.get(1)) - (relativePositionSaloperie_1.y - distanceBetweenSensors / 2) * (relativePositionSaloperie_1.y - distanceBetweenSensors / 2)));
+            relativePositionSaloperie_1.x = (int) (positionRF().x + Math.sqrt((USvalues.get(1) * USvalues.get(1)) - (relativePositionSaloperie_1.y - distanceBetweenSensors / 2) * (relativePositionSaloperie_1.y - distanceBetweenSensors / 2)));
             positionSaloperie_1 = changeRef(relativePositionSaloperie_1, mRobot.getPosition(), mRobot.getOrientation());
 
             mTable.getObstacleManager().addObstacle(positionSaloperie_1);
@@ -245,7 +245,7 @@ public class ThreadSensor extends AbstractThread
             positionSaloperie_1 = changeRef(relativePositionSaloperie_1, mRobot.getPosition(), mRobot.getOrientation());
 
             //Position relative du second ennemi
-            relativePositionSaloperie_2.x = (int)(USvalues.get(1)*Math.cos(angleRF)+positionRF.x);
+            relativePositionSaloperie_2.x = (int)(USvalues.get(1)*Math.cos(angleRF)+positionRF().x);
             relativePositionSaloperie_2.y = (int)(USvalues.get(1)*Math.sin(angleRF)+distanceBetweenSensors/2);
             positionSaloperie_2 = changeRef(relativePositionSaloperie_2, mRobot.getPosition(), mRobot.getOrientation());
 
@@ -254,6 +254,16 @@ public class ThreadSensor extends AbstractThread
 
         }
 
+    }
+
+    /**
+     * Donne la position du capteur avant-droit, utile car notre année il se déplace avec la porte
+     * @return le Vec2 de position
+     */
+    private Vec2 positionRF()
+    {
+        //TODO l'ajout de distance selon l'ouverture de la porte
+        return positionRFClosed.plusNewVector(new Vec2(0,mRobot.doorIsOpen ? 20 : 0));
     }
 
     /**
@@ -267,7 +277,7 @@ public class ThreadSensor extends AbstractThread
         {
             //Position de l'ennemi
             relativePositionSaloperie_1.y = (int) ((USvalues.get(2) * USvalues.get(2) - USvalues.get(3) * USvalues.get(3)) / (2 * distanceBetweenSensors));
-            relativePositionSaloperie_1.x = (int) (positionRF.x - Math.sqrt((USvalues.get(3) * USvalues.get(3)) - (relativePositionSaloperie_1.y + distanceBetweenSensors / 2) * (relativePositionSaloperie_1.y + distanceBetweenSensors / 2)));
+            relativePositionSaloperie_1.x = (int) (positionRF().x - Math.sqrt((USvalues.get(3) * USvalues.get(3)) - (relativePositionSaloperie_1.y + distanceBetweenSensors / 2) * (relativePositionSaloperie_1.y + distanceBetweenSensors / 2)));
             positionSaloperie_1 = changeRef(relativePositionSaloperie_1, mRobot.getPosition(), mRobot.getOrientation());
 
             mTable.getObstacleManager().addObstacle(positionSaloperie_1);
@@ -297,7 +307,7 @@ public class ThreadSensor extends AbstractThread
     private void addFrontObstacleSingle(boolean isLeft)
     {
         int distance = USvalues.get(0) + USvalues.get(1); //La distance mesurée par le capteur
-        double distanceBetweenSensors = positionLF.minusNewVector(positionRF).length();
+        double distanceBetweenSensors = positionLF.minusNewVector(positionRF()).length();
 
         if(isLeft)
         {
@@ -309,7 +319,7 @@ public class ThreadSensor extends AbstractThread
         }
         else
         {
-            relativePositionSaloperie_2.x = (int)(distance*Math.cos(angleRF)+positionRF.x)-100;
+            relativePositionSaloperie_2.x = (int)(distance*Math.cos(angleRF)+positionRF().x)-100;
             relativePositionSaloperie_2.y = (int)(distance*Math.sin(angleRF)+distanceBetweenSensors/2);
             positionSaloperie_2 = changeRef(relativePositionSaloperie_2, mRobot.getPosition(), mRobot.getOrientation());
 
@@ -442,7 +452,7 @@ public class ThreadSensor extends AbstractThread
         int distanceRB = (int)(USvalues.get(3)*0.8);
 
         mTable.getObstacleManager().removeNonDetectedObstacles(positionLF, (mRobot.getOrientation()+angleLF), distanceLF, detectionAngle);
-        mTable.getObstacleManager().removeNonDetectedObstacles(positionRF, (mRobot.getOrientation()+angleRF), distanceRF, detectionAngle);
+        mTable.getObstacleManager().removeNonDetectedObstacles(positionRF(), (mRobot.getOrientation()+angleRF), distanceRF, detectionAngle);
         mTable.getObstacleManager().removeNonDetectedObstacles(positionLB, (mRobot.getOrientation()+angleLB), distanceLB, detectionAngle);
         mTable.getObstacleManager().removeNonDetectedObstacles(positionRB, (mRobot.getOrientation()+angleRB), distanceRB, detectionAngle);
 
