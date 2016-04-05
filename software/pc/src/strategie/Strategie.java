@@ -12,10 +12,13 @@ import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import hook.types.HookFactory;
+import pathDingDing.PathDingDing;
 import robot.Robot;
 import robot.RobotReal;
 import scripts.*;
+import smartMath.Vec2;
 import table.Table;
+import table.obstacles.Obstacle;
 import table.obstacles.ObstacleCircular;
 import threads.ThreadTimer;
 import utils.Config;
@@ -189,12 +192,45 @@ public class Strategie implements Service
 
             if(state.robot.getAreFishesOnBoard())
             {
-                //TODO script de dépose simple des poissons
+                PathDingDing path = new PathDingDing(table,log);
+                try
+                {
+                	path.computePath(state.robot.getPosition(), new Vec2(300,state.robot.getRobotRadius()+1), new ArrayList<Obstacle>());
+                }
+                catch (Exception e)
+                {
+                	log.debug("Problème d'appel au PathDingDing : " + e);
+                }
+                try
+                {
+                	state.robot.turn(Math.PI);
+                	freeFishes();
+                }
+                catch(Exception e)
+                {
+                	log.debug("Problème lors de la dépose des poissons : " + e);
+                }
             }
 
 
         }
 		//scriptedMatch();
+	}
+	
+	/** Suites d'ordres pour dépose des poissons */
+	public void freeFishes() throws SerialConnexionException
+	{
+		try
+		{
+			state.robot.useActuator(ActuatorOrder.MAGNET_DOWN, true);
+			state.robot.useActuator(ActuatorOrder.FINGER_DOWN, true);
+			state.robot.useActuator(ActuatorOrder.MAGNET_UP, true);
+			state.robot.useActuator(ActuatorOrder.FINGER_UP, false);
+		}
+		catch(Exception e)
+		{
+			throw e;
+		}
 	}
 
     /**
