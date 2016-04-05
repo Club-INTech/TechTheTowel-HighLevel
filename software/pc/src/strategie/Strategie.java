@@ -205,6 +205,7 @@ public class Strategie implements Service
                 {
                 	state.robot.turn(Math.PI);
                 	freeFishes();
+                    state.robot.setAreFishesOnBoard(false);
                 }
                 catch(Exception e)
                 {
