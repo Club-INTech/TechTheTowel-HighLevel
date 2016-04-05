@@ -387,6 +387,9 @@ public class Fishing extends AbstractScript
 				// On baisse le bras aimanté
 				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION, true);
 
+				//On indique ques les poissons se trouvent sur le bras
+				stateToConsider.robot.setAreFishesOnBoard(true);
+
 				//stateToConsider.robot.sleep(800);
 
 				// On crée le hook de position, l'action pour lever le bras et ajout à la liste
@@ -401,9 +404,6 @@ public class Fishing extends AbstractScript
 
 				// On longe le bac
 				stateToConsider.robot.moveLengthwise(480, hooksToConsider, true);
-				
-				//On indique ques les poissons se trouvent sur le bras
-				stateToConsider.robot.setAreFishesOnBoard(true);
 
 				// Points gagnés moyen pour ce passage
 				stateToConsider.obtainedPoints += 20;
@@ -484,11 +484,11 @@ public class Fishing extends AbstractScript
 				hook3.addCallback(new Callback(new DropFish(), true, stateToConsider));
 				hooksToConsider.add(hook3);
 
-				// On longe le bac
-				stateToConsider.robot.moveLengthwise(520, hooksToConsider, true);
-				
 				//On indique ques les poissons se trouvent sur le bras
 				stateToConsider.robot.setAreFishesOnBoard(true);
+
+				// On longe le bac
+				stateToConsider.robot.moveLengthwise(520, hooksToConsider, true);
 
 				// Points gagnés moyen pour ce passage
 				stateToConsider.obtainedPoints += 20;
