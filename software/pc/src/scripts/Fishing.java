@@ -12,6 +12,7 @@ import hook.Hook;
 import hook.methods.DropFish;
 import hook.methods.GetFish;
 import hook.methods.RiseArm;
+import hook.methods.SetFishesOnBoard;
 import hook.types.HookFactory;
 import robot.Robot;
 import smartMath.Arc;
@@ -381,14 +382,18 @@ public class Fishing extends AbstractScript
 				// reprise de vitesse medium
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 				
+				// Ajout d'un hook pour baisser le bras aimanté lors de la rotation vers pi
+				Hook turningHook = hookFactory.newOrientationCorrectHook((float)(Math.PI-0.04), (float)0.1);
+				turningHook.addCallback(new Callback(new GetFish(),true,stateToConsider));
+				hooksToConsider.add(turningHook);
+				
 				// On s'oriente vers le côté ennemi
 				stateToConsider.robot.turn((Math.PI-0.04), hooksToConsider, true);
-				
-				// On baisse le bras aimanté
-				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION, true);
 
-				//On indique ques les poissons se trouvent sur le bras
-				stateToConsider.robot.setAreFishesOnBoard(true);
+				//On indique ques les poissons se trouvent sur le bras lors du déplacement de la moitié du bac
+				Hook specialHook = hookFactory.newXLesserHook(800);
+				specialHook.addCallback(new Callback(new SetFishesOnBoard(),true,stateToConsider));
+				hooksToConsider.add(specialHook);
 
 				//stateToConsider.robot.sleep(800);
 
@@ -434,8 +439,10 @@ public class Fishing extends AbstractScript
 				hook2.addCallback(new Callback(new DropFish(), true, stateToConsider));
 				hooksToConsider.add(hook2);
 				
-				// on indique que les poissons sont sur le bras 
-				stateToConsider.robot.setAreFishesOnBoard(true);
+				//Rajout du hook pour le booléen
+				specialHook = hookFactory.newXLesserHook(800);
+				specialHook.addCallback(new Callback(new SetFishesOnBoard(),true,stateToConsider));
+				hooksToConsider.add(specialHook);
 				
 				// on longe le bac
 				stateToConsider.robot.moveLengthwise(600, hooksToConsider, true);
