@@ -139,7 +139,7 @@ public class TechTheSand extends AbstractScript
 
 				stateToConsider.robot.setForceMovement(false);
 
-                stateToConsider.robot.moveLengthwise(560);
+                stateToConsider.robot.moveLengthwise(540);
 
 
                 stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
