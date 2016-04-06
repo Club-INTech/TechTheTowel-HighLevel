@@ -16,6 +16,7 @@ import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
+import threads.ThreadSensor;
 import utils.Config;
 import utils.Log;
 
@@ -163,6 +164,7 @@ public class TechTheSand extends AbstractScript
 
                 stateToConsider.changeRobotRadius(TechTheSand.expandedRobotRadius);
                 stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
+                ThreadSensor.modeBorgne(true);
 
                 // On active la tige accrochante
                 stateToConsider.robot.useActuator(ActuatorOrder.START_AXIS, false);
@@ -277,6 +279,8 @@ public class TechTheSand extends AbstractScript
 				{
 					e.printStackTrace();
 				}
+
+                ThreadSensor.modeBorgne(false);
 
 
                 try {

@@ -48,6 +48,11 @@ public class ThreadSensor extends AbstractThread
      */
     private int radius;
 
+    /**
+     * Permet de désactiver les capteurs de la porte que récupère du sable, évite de récupérer des fausses valeurs
+     */
+    private static boolean modeBorgne = false;
+
 	/**
 	 * Distance maximale fiable pour les capteurs : au dela, valeurs abberentes
 	 * Override par la config
@@ -165,7 +170,7 @@ public class ThreadSensor extends AbstractThread
 			// on s'arrete si le ThreadManager le demande
 			if(stopThreads)
 			{
-				log.debug("Stoppage du thread capteurs");
+				log.debug("Stop du thread capteurs");
 				return;
 			}
 
@@ -403,6 +408,8 @@ public class ThreadSensor extends AbstractThread
                 {
                     USvalues.set(i, 0);
                 }
+                if(i == 1 && modeBorgne)
+                    USvalues.set(1, 0);
 
             }
 		}
@@ -458,4 +465,13 @@ public class ThreadSensor extends AbstractThread
 
 
 	}
+
+    /**
+     * Active/desactive le mode borgne
+     * @param value oui/non
+     */
+    public static void modeBorgne(boolean value)
+    {
+        ThreadSensor.modeBorgne = value;
+    }
 }

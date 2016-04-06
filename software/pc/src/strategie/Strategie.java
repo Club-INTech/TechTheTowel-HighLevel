@@ -20,6 +20,7 @@ import smartMath.Vec2;
 import table.Table;
 import table.obstacles.Obstacle;
 import table.obstacles.ObstacleCircular;
+import threads.ThreadSensor;
 import threads.ThreadTimer;
 import utils.Config;
 import utils.Log;
@@ -73,9 +74,9 @@ public class Strategie implements Service
 	private boolean castleTaken = false;
 
     /**
-     * Si on a pêché au moins une fois
+     * Si on a récup les 2 shells proches du tapis au moins une fois
      */
-	private boolean fishedOnce = false;
+	private boolean gotShells = false;
 
     /**
      * Mode match anormal, soit on a eu un blocage mécanique, soit l'adversaire est venu nous les briser
@@ -174,18 +175,23 @@ public class Strategie implements Service
             else if(sandTaken && !state.robot.getIsSandInside())
                 castleTaken = true;
             else if(abnormalMatch && state.robot.getIsSandInside()) //Si on est trop loin pour déclencher Castle
+            {
                 castleTaken = true;
+                ThreadSensor.modeBorgne(false);
+            }
 
-            if(state.table.fishesFished > 0)
-                fishedOnce = true;
+            if(state.table.shellsObtained > 0)
+                gotShells = true;
 
-            if(!abnormalMatch && state.table.shellsObtained>0)
+            if(!abnormalMatch && state.table.fishesFished>0)
                 done = true;
 
-            if(!state.robot.getIsSandInside() && !state.robot.shellsOnBoard && !abnormalMatch && state.table.extDoorClosed)
+            if(!state.robot.getIsSandInside() && !state.robot.shellsOnBoard && !abnormalMatch && gotShells)
             {
                 try {
                     state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
+                    state.changeRobotRadius(TechTheSand.retractedRobotRadius);
+                    state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
                 } catch (SerialConnexionException e) {
                     e.printStackTrace();
                 }
@@ -338,13 +344,13 @@ public class Strategie implements Service
             {
                 return scriptmanager.getScript(ScriptNames.FISHING);
             }
-            else if(fishedOnce)
+            else if(gotShells)
             {
-                return scriptmanager.getScript(ScriptNames.SHELL_GETTER);
+                return scriptmanager.getScript(ScriptNames.FISHING);
             }
             else if(state.table.extDoorClosed && state.table.intDoorClosed)
             {
-                return scriptmanager.getScript(ScriptNames.FISHING);
+                return scriptmanager.getScript(ScriptNames.SHELL_GETTER);
             }
             else if(castleTaken)
             {

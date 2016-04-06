@@ -111,7 +111,7 @@ public class ObstacleManager
 		mRectangles.add(new ObstacleRectangular(new Vec2(0, 1913), 522 + 2*mRobotRadius , 174 + 2*mRobotRadius));
 		mRectangles.add(new ObstacleRectangular(new Vec2(-620, 1942), 116 + 2*mRobotRadius, 116 + 2*mRobotRadius));
 		mRectangles.add(new ObstacleRectangular(new Vec2(620, 1942), 116 + 2*mRobotRadius, 116 + 2*mRobotRadius));
-		mRectangles.add(new ObstacleRectangular(new Vec2(850, 1100), 116 + 2*mRobotRadius, 116 + 2*mRobotRadius));
+		//mRectangles.add(new ObstacleRectangular(new Vec2(850, 1100), 116 + 2*mRobotRadius, 116 + 2*mRobotRadius));
 
 		//Portes
 		mRectangles.add(new ObstacleRectangular(new Vec2(900,1970), 100 + 2*mRobotRadius , 60 + 2*mRobotRadius));
