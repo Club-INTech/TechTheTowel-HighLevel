@@ -393,7 +393,7 @@ public class Strategie implements Service
         boolean ab = abnormalMatch;
         abnormalMatch = false;
         if(script instanceof Castle && !ab)
-            return 2;
+            return 3;
         else if(script instanceof Castle)
             return 0;
         else if(script instanceof CloseDoors && !ab)
