@@ -750,7 +750,7 @@ public class Locomotion implements Service
         {
             if(turnOnly)
             {
-                this.timeExpected = System.currentTimeMillis() + (long)(Math.PI*5*1000/this.rotSpeed);
+                this.timeExpected = System.currentTimeMillis() + (long)(Math.PI*1.5*1000/this.rotSpeed);
             }
             else if(isCurve)
             {
