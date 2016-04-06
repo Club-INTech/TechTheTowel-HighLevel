@@ -76,8 +76,8 @@ public abstract class AbstractScript implements Service
 		log.debug("Lancement de " + this + " version " + versionToExecute);
 		try 
 		{
-			if(!actualState.robot.getPositionFast().equals(entryPosition(versionToExecute,actualState.robot.getRobotRadius(), actualState.robot.getPosition()).position))
-				actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.getRobotRadius(), actualState.robot.getPosition()), hooksToConsider, actualState.table);
+			if(!actualState.robot.getPosition().equals(entryPosition(versionToExecute,actualState.robot.getRobotRadius(), actualState.robot.getPosition()).position))
+				actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.getRobotRadius(), actualState.robot.getPositionFast()), hooksToConsider, actualState.table);
 		}
 		catch (UnableToMoveException | PathNotFoundException e)
 		{
