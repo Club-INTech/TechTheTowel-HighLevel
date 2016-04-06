@@ -136,6 +136,7 @@ public class Strategie implements Service
 	 */
 	public void IA()
 	{
+        shells = state.table.deleteAllTheShells();
 		while(true)
         {
             AbstractScript nextScript = decide();
@@ -181,7 +182,7 @@ public class Strategie implements Service
             if(!abnormalMatch && state.table.shellsObtained>0)
                 done = true;
 
-            if(!state.robot.getIsSandInside() && !state.robot.shellsOnBoard && !abnormalMatch)
+            if(!state.robot.getIsSandInside() && !state.robot.shellsOnBoard && !abnormalMatch && state.table.extDoorClosed)
             {
                 try {
                     state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
