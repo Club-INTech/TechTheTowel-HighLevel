@@ -72,9 +72,6 @@ public class CloseDoors extends AbstractScript
 				stateToConsider.table.extDoorClosed = true;
 				stateToConsider.table.intDoorClosed = true;
 
-                // Si la porte était ouverte (match scripté)
-                stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
-
 				//On avance
 				stateToConsider.robot.moveLengthwise(100, hooksToConsider, false);
 
