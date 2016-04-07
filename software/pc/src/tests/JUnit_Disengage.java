@@ -281,7 +281,7 @@ public class JUnit_Disengage extends JUnit_Test
 		}
 		catch(Exception e)
 		{
-			log.debug("Fail : " + e );
+			log.debug("Fail : " + e ); // poney
 		}
 	}
 	

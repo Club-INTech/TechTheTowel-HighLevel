@@ -398,7 +398,7 @@ public class Fishing extends AbstractScript
 				//stateToConsider.robot.sleep(800);
 
 				// On crée le hook de position, l'action pour lever le bras et ajout à la liste
-				Hook hook = hookFactory.newXLesserHook(600);
+				Hook hook = hookFactory.newXLesserHook(620);
 				hook.addCallback(new Callback(new RiseArm(), true, stateToConsider));
 				hooksToConsider.add(hook);
 
@@ -430,7 +430,7 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 				
 				// nouvelle condition pour le hook levant le bras et mise à jour dans la liste
-				hook = hookFactory.newXLesserHook(570);
+				hook = hookFactory.newXLesserHook(590);
 				hook.addCallback(new Callback(new RiseArm(), true, stateToConsider));
 				hooksToConsider.add(hook);
 				
