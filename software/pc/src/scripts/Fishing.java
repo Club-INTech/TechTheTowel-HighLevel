@@ -375,7 +375,7 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.setLocomotionSpeed(Speed.FAST_ALL);
 
 				// On commence à se placer près du bord
-				stateToConsider.robot.turn(Math.PI - 0.16);
+				stateToConsider.robot.turn(Math.PI - 0.14);
 
 				stateToConsider.robot.moveLengthwise(-230, hooksToConsider, true);
 
@@ -430,7 +430,7 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 				
 				// nouvelle condition pour le hook levant le bras et mise à jour dans la liste
-				hook = hookFactory.newXLesserHook(590);
+				hook = hookFactory.newXLesserHook(600);
 				hook.addCallback(new Callback(new RiseArm(), true, stateToConsider));
 				hooksToConsider.add(hook);
 				
