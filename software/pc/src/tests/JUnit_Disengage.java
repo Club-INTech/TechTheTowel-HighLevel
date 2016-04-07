@@ -38,7 +38,9 @@ public class JUnit_Disengage extends JUnit_Test
 		state.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 		// à modifier en début de test
 		state.robot.setOrientation(Math.PI/2);
-		state.robot.setPosition(new Vec2(1310,1120));
+		log.debug(state.robot.getOrientation());
+		log.debug(Math.PI/2);
+		state.robot.setPosition(new Vec2(1330,1050));
 	}
 	/*
 	@Test
@@ -242,47 +244,89 @@ public class JUnit_Disengage extends JUnit_Test
 	@Test
 	public void arcXPositive()
 	{
-		try
+		// tant qu'on n'est pas sorti
+		while(!isInTable())
 		{
-			// détermination de la marche avant ou arrière
-			if(state.robot.getPosition().x<0)
+			try
 			{
-				if(state.robot.getOrientation()>-Math.PI/2 && state.robot.getOrientationFast()< Math.PI/2)
+				// détermination de la marche avant ou arrière
+				log.debug(state.robot.getOrientation());
+				if(state.robot.getPosition().x<0)
 				{
-					reverse = false;
+					if(state.robot.getOrientation()>-Math.PI/2 && state.robot.getOrientationFast()< Math.PI/2)
+					{
+						reverse = false;
+					}
+					else
+					{
+						reverse = true;
+					}
 				}
 				else
 				{
-					reverse = true;
+					if(state.robot.getOrientation()>-Math.PI/2 && state.robot.getOrientationFast()< Math.PI/2)
+					{
+						reverse = true;
+					}
+					else
+					{
+						reverse = false;
+					}
 				}
-			}
-			else
-			{
-				if(state.robot.getOrientation()>-Math.PI/2 && state.robot.getOrientationFast()< Math.PI/2)
+
+				// longueur d'arc arbitraire
+				int length = 100;
+				log.debug(reverse);
+				if (reverse)
 				{
-					reverse = true;
+					length=-length;
 				}
-				else
-				{
-					reverse = false;
-				}
+
+				// rayon arbitraire
+				Arc test = new Arc(600,length,state.robot.getOrientation(),false);
+				state.robot.moveArc(test, hooks);
+				log.debug(state.robot.getPosition());
 			}
-			
-			// longueur d'arc arbitraire
-			int length = 300;
-			if (reverse)
+			catch(Exception e)
 			{
-				length=-length;
+				log.debug("Fail : " + e ); // poney
+				log.debug("Tentative de déplacement");
+				try
+				{
+					if(reverse)
+					{
+						state.robot.moveLengthwise(100, hooks, true);
+					}
+					else
+					{
+						state.robot.moveLengthwise(-100,hooks,true);
+					}
+				}
+				catch(Exception ex)
+				{
+					log.debug("Fail : " + ex);
+					log.debug("Nouvelle boucle !");
+				}
 			}
-			
-			// rayon arbitraire
-			Arc test = new Arc(300,length,state.robot.getOrientation(),false);
-			state.robot.moveArc(test, hooks);
 		}
-		catch(Exception e)
+	}
+	
+	/** booléen indiquant si le robot est dans les limites habituelles de la table*/
+	public boolean isInTable()
+	{
+		int botX = state.robot.getPosition().x;
+		int botY = state.robot.getPosition().y;
+		int radius = state.robot.getRobotRadius();
+		log.debug(botX);
+		log.debug(botY);
+		if(botX <= 1499 - radius && botX >= -1499 + radius)
 		{
-			log.debug("Fail : " + e ); // poney
+			if(botY<=1999 - radius && botY>= 1+radius )
+			{
+				return true;
+			}
 		}
+		return false;
 	}
 	
 	
