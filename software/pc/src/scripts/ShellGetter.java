@@ -152,7 +152,7 @@ public class ShellGetter extends AbstractScript
                 //Arc getter = new Arc(stateToConsider.robot.getPosition(), new Vec2(1300-TechTheSand.expandedRobotRadius/2,750),
                         //new Vec2(1300-TechTheSand.expandedRobotRadius/2,1050));
 
-                Arc getter = new Arc(2483, 867, stateToConsider.robot.getOrientation(), false);
+                Arc getter = new Arc(2483, 867, Math.PI/2, true);
 
                 stateToConsider.robot.setForceMovement(true);
                 //On la donne au robot
