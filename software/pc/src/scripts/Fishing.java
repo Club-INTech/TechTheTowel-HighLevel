@@ -379,7 +379,9 @@ public class Fishing extends AbstractScript
 
 				//stateToConsider.robot.moveLengthwise(-260, hooksToConsider, true);
 
-                Arc approach = new Arc(new Vec2(1010, 190), stateToConsider.robot.getPosition(), Math.PI, false);
+                stateToConsider.robot.setForceMovement(true);
+
+                Arc approach = new Arc(new Vec2(1010, 20&0), stateToConsider.robot.getPosition(), Math.PI, false);
                 approach.setReverse();
 
                 stateToConsider.robot.moveArc(approach, hooksToConsider);
