@@ -248,6 +248,15 @@ public class LocomotionCardWrapper implements Service
 	}
 
 	/**
+	 * Désactive l'asservissement en vitesse du robot
+	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
+	 */
+	public void disableSpeedFeedbackLoop() throws SerialConnexionException
+	{
+		locomotionCardSerial.communiquer("cv0", 0);
+	}
+
+	/**
 	 * Désactive l'asservissement en rotation du robot
 	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
 	 */
