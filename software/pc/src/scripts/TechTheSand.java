@@ -34,7 +34,7 @@ public class TechTheSand extends AbstractScript
 
     // TEMPORAIRE 
     public static final int expandedRobotRadius = 330; //TODO a changer
-	public static final int retractedRobotRadius = 250; //TODO a changer
+	public static final int retractedRobotRadius = 230; //TODO a changer
 
 
     public TechTheSand(HookFactory hookFactory, Config config, Log log)
