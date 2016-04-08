@@ -2,10 +2,7 @@ package strategie;
 
 import container.Container;
 import container.Service;
-import enums.ActuatorOrder;
-import enums.ScriptNames;
-import enums.Speed;
-import enums.UnableToMoveReason;
+import enums.*;
 import exceptions.*;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
@@ -190,6 +187,7 @@ public class Strategie implements Service
             {
                 try {
                     state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
+                    state.robot.setTurningStrategy(TurningStrategy.FASTEST);
                     state.changeRobotRadius(TechTheSand.retractedRobotRadius);
                     state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
                 } catch (SerialConnexionException e) {
