@@ -372,7 +372,7 @@ public class Fishing extends AbstractScript
 			{
 				// Vitesse rapide jusqu'au début de pêche
 				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
-				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 
 				// On commence à se placer près du bord
 				//stateToConsider.robot.turn(Math.PI - 0.2);
@@ -381,11 +381,12 @@ public class Fishing extends AbstractScript
 
                 stateToConsider.robot.setForceMovement(true);
 
-                Arc approach = new Arc(new Vec2(1010, 20&0), stateToConsider.robot.getPosition(), Math.PI, false);
+                Arc approach = new Arc(new Vec2(950, 200), stateToConsider.robot.getPosition(), Math.PI, false);
                 approach.setReverse();
 
                 stateToConsider.robot.moveArc(approach, hooksToConsider);
 
+                stateToConsider.robot.setForceMovement(false);
 
 				// reprise de vitesse medium
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
