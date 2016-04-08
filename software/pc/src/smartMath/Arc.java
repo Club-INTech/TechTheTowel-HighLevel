@@ -111,6 +111,11 @@ public class Arc
         this.endAngle = ang;
     }
 
+    public Arc copy()
+    {
+        return new Arc(this.radius, this.length, this.startAngle, false);
+    }
+
     /**
      * Renvoie le point sur la courbe à une distance donnée, méthode absolue et indépendante de start et end de l'arc
      * @param startingPos le point par lequel le robot a commencé le parcours de l''arc

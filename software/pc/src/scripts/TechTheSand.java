@@ -242,8 +242,9 @@ public class TechTheSand extends AbstractScript
 				catch (Exception e)
 				{
 					e.printStackTrace();
+					stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/4, Math.PI, false), hooksToConsider);
 					stateToConsider.robot.turn(Math.PI);
-					stateToConsider.robot.moveLengthwise(-80);
+					//stateToConsider.robot.moveLengthwise(-80);
 					try
 					{
 						stateToConsider.robot.moveArc(approach2, hooksToConsider);
@@ -251,8 +252,9 @@ public class TechTheSand extends AbstractScript
 					catch (Exception e2)
 					{
 						e2.printStackTrace();
+						stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/4, Math.PI, false), hooksToConsider);
 						stateToConsider.robot.turn(Math.PI);
-						stateToConsider.robot.moveLengthwise(-80);
+						//stateToConsider.robot.moveLengthwise(-80);
 						try
 						{
 							stateToConsider.robot.moveArc(approach2, hooksToConsider);
@@ -265,9 +267,9 @@ public class TechTheSand extends AbstractScript
 							stateToConsider.robot.setTurningStrategy(TurningStrategy.FASTEST);
 							stateToConsider.robot.setDirectionStrategy(DirectionStrategy.FASTEST);
 							stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 150);
-							approach.setReverse();
-							stateToConsider.robot.moveArc(approach, hooksToConsider);
-                            throw new ExecuteException(e3);
+							stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/2, Math.PI, false), hooksToConsider);
+							stateToConsider.robot.moveLengthwise(-100);
+							throw new ExecuteException(e3);
 						}
 					}
 				}
