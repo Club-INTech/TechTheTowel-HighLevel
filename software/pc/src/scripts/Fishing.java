@@ -387,7 +387,7 @@ public class Fishing extends AbstractScript
 				turningHook.addCallback(new Callback(new GetFish(),true,stateToConsider));
 				hooksToConsider.add(turningHook);*/
 
-				stateToConsider.robot.useActuator(ActuatorOrder.MAGNET_DOWN, false);
+				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION, false);
 				
 				// On s'oriente vers le côté ennemi
 				stateToConsider.robot.turn((Math.PI-0.04), hooksToConsider, true);
