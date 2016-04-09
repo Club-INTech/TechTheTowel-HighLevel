@@ -389,6 +389,11 @@ public class Strategie implements Service
                 castleTaken = true;
                 return scriptmanager.getScript(ScriptNames.CLOSE_DOORS);
             }
+            else if(!done)
+            {
+                done = true;
+                return scriptmanager.getScript(ScriptNames.FISHING);
+            }
 
 
         }
