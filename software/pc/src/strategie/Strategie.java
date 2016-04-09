@@ -96,6 +96,11 @@ public class Strategie implements Service
     /** si le robot s'est bloqué lors de sa rotation*/
     private boolean hasTurned;
 
+    /**
+     * Un pb est survenu
+     */
+    private boolean shitHappened = false;
+
 
  /**
  * Crée la strategie, l'IA decisionnelle
@@ -149,6 +154,7 @@ public class Strategie implements Service
                 e.printStackTrace();
             } catch (UnableToMoveException e) {
                 abnormalMatch = true;
+                shitHappened = true;
                 if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED) //On a vu l'ennemi, c'est anormal
                     dangerousOpponent = true;
                 disengage(nextScript);
@@ -164,6 +170,7 @@ public class Strategie implements Service
             } catch (ExecuteException e) {
                 log.critical("Echec de script, on continue");
                 abnormalMatch = true;
+                shitHappened = true;
                 e.printStackTrace();
             }
 
@@ -395,7 +402,7 @@ public class Strategie implements Service
      */
     private int version(AbstractScript script)
     {
-        boolean ab = abnormalMatch;
+        boolean ab = shitHappened;
         abnormalMatch = false;
         if(script instanceof Castle && !ab)
             return 3;
