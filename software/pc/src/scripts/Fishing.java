@@ -375,18 +375,18 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 
 				// On commence à se placer près du bord
-				//stateToConsider.robot.turn(Math.PI - 0.2);
+				stateToConsider.robot.turn(Math.PI - 0.2);
 
-				//stateToConsider.robot.moveLengthwise(-260, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(-260, hooksToConsider, true);
 
-                stateToConsider.robot.setForceMovement(true);
+               // stateToConsider.robot.setForceMovement(true);
 
-                Arc approach = new Arc(new Vec2(950, 200), stateToConsider.robot.getPosition(), Math.PI, false);
-                approach.setReverse();
+                //Arc approach = new Arc(new Vec2(950, 200), stateToConsider.robot.getPosition(), Math.PI, false);
+                //approach.setReverse();
 
-                stateToConsider.robot.moveArc(approach, hooksToConsider);
+                //stateToConsider.robot.moveArc(approach, hooksToConsider);
 
-                stateToConsider.robot.setForceMovement(false);
+                //stateToConsider.robot.setForceMovement(false);
 
 				// reprise de vitesse medium
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
