@@ -39,17 +39,16 @@ public class JUnit_Disengage extends JUnit_Test
 		// à modifier en début de test
 	
 		state.robot.setPosition(new Vec2(1330,1050));
-		state.robot.setOrientation(3.14159);//Math.PI/2);
-		log.debug(state.robot.getOrientation());
+		state.robot.setOrientation(Math.PI/2);
 		
 	}
 	
-	@Test 
-	public void loul()
+	@Test
+	public void test()
 	{
-		while(true)
 		log.debug(state.robot.getOrientation());
 	}
+	
 	/*
 	@Test
 	public void testXNeg()
@@ -249,7 +248,7 @@ public class JUnit_Disengage extends JUnit_Test
 	}
 	*/
 	
-	//@Test
+	/*@Test
 	public void arcXPositive()
 	{
 		// tant qu'on n'est pas sorti
@@ -317,7 +316,7 @@ public class JUnit_Disengage extends JUnit_Test
 				}
 			}
 		}
-	}
+	}*/
 	
 	/** booléen indiquant si le robot est dans les limites habituelles de la table*/
 	public boolean isInTable()
