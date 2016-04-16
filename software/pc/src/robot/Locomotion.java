@@ -1005,6 +1005,7 @@ public class Locomotion implements Service
         {
             float[] infos = deplacements.getCurrentPositionAndOrientation();
 
+
             if(infos == null)
                 return;
             

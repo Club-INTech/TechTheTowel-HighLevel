@@ -37,10 +37,18 @@ public class JUnit_Disengage extends JUnit_Test
 		state.updateConfig();
 		state.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 		// à modifier en début de test
-		state.robot.setOrientation(Math.PI/2);
-		log.debug(state.robot.getOrientation());
-		log.debug(Math.PI/2);
+	
 		state.robot.setPosition(new Vec2(1330,1050));
+		state.robot.setOrientation(3.14159);//Math.PI/2);
+		log.debug(state.robot.getOrientation());
+		
+	}
+	
+	@Test 
+	public void loul()
+	{
+		while(true)
+		log.debug(state.robot.getOrientation());
 	}
 	/*
 	@Test
@@ -241,7 +249,7 @@ public class JUnit_Disengage extends JUnit_Test
 	}
 	*/
 	
-	@Test
+	//@Test
 	public void arcXPositive()
 	{
 		// tant qu'on n'est pas sorti
