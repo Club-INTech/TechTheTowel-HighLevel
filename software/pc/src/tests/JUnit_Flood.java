@@ -38,7 +38,7 @@ public class JUnit_Flood extends JUnit_Test
 		{
 			//log.debug(compt++);
 			try{
-				mLocomotion.getPosition();
+				log.debug(mLocomotion.getOrientation());
 			}
 			catch (Exception e)
 			{

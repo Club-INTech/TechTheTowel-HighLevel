@@ -215,6 +215,7 @@ public class LocomotionCardWrapper implements Service
 	 */
 	public void setOrientation(double orientation) throws SerialConnexionException
 	{
+		log.debug("setOrientation "+orientation);
 		float floatOrientation =(float) orientation; //On transtype car la serie veut des Floats (T_T)
 		String chaines[] = {"co", String.format("%.3f", floatOrientation)};
 		locomotionCardSerial.communiquer(chaines, 0);
