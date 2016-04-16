@@ -36,7 +36,7 @@ public class ThreadSensor extends AbstractThread
 	
 	/** fréquence de mise a jour des valeurs renvoyés par les capteurs. Valeurs par défaut de 5 fois par seconde s'il y a un problème de config */
 	// Overide par la config
-	private int sensorFrequency = 32;
+	private int sensorFrequency = 7;
 
     /**
      * Si l'on doit symétriser
@@ -86,8 +86,8 @@ public class ThreadSensor extends AbstractThread
      */
     private final double angleLF = -0.4;
     private final double angleRF = -0.4;
-    private final double angleLB = 0;
-    private final double angleRB = 0;
+    private final double angleLB = 0.4;
+    private final double angleRB = 0.4;
 
 
     /**
@@ -176,7 +176,7 @@ public class ThreadSensor extends AbstractThread
 
 			getDistances();
 			
-			if( !USvalues.contains(-1) || true) // si on n'a pas spammé
+			if( !USvalues.contains(-1)) // si on n'a pas spammé
 			{
 				// On enleve les obstacles qu'on sait absents de la table : si le robot ennemi a bougé,
 				// On l'enleve de notre memoire
@@ -401,7 +401,7 @@ public class ThreadSensor extends AbstractThread
                 // TODO : a passer en traitement de bas niveau ?
                 if(USvalues.get(i)==0)
                 {
-                    //log.critical("ARRETEZ DE SPAMMER LES CAPTEURS !", this);
+                    log.critical("ARRETEZ DE SPAMMER LES CAPTEURS !");
                     USvalues.set(i, -1);
                 }
                 if ( USvalues.get(i) > maxSensorRange || USvalues.get(i) < minSensorRange)
