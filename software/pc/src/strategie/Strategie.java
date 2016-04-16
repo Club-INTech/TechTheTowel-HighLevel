@@ -2,10 +2,7 @@ package strategie;
 
 import container.Container;
 import container.Service;
-import enums.ActuatorOrder;
-import enums.ScriptNames;
-import enums.Speed;
-import enums.UnableToMoveReason;
+import enums.*;
 import exceptions.*;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
@@ -99,6 +96,11 @@ public class Strategie implements Service
     /** si le robot s'est bloqué lors de sa rotation*/
     private boolean hasTurned;
 
+    /**
+     * Un pb est survenu
+     */
+    private boolean shitHappened = false;
+
 
  /**
  * Crée la strategie, l'IA decisionnelle
@@ -152,6 +154,7 @@ public class Strategie implements Service
                 e.printStackTrace();
             } catch (UnableToMoveException e) {
                 abnormalMatch = true;
+                shitHappened = true;
                 if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED) //On a vu l'ennemi, c'est anormal
                     dangerousOpponent = true;
                 disengage(nextScript);
@@ -167,6 +170,7 @@ public class Strategie implements Service
             } catch (ExecuteException e) {
                 log.critical("Echec de script, on continue");
                 abnormalMatch = true;
+                shitHappened = true;
                 e.printStackTrace();
             }
 
@@ -190,6 +194,7 @@ public class Strategie implements Service
             {
                 try {
                     state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
+                    state.robot.setTurningStrategy(TurningStrategy.FASTEST);
                     state.changeRobotRadius(TechTheSand.retractedRobotRadius);
                     state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
                 } catch (SerialConnexionException e) {
@@ -384,6 +389,11 @@ public class Strategie implements Service
                 castleTaken = true;
                 return scriptmanager.getScript(ScriptNames.CLOSE_DOORS);
             }
+            else if(!done)
+            {
+                done = true;
+                return scriptmanager.getScript(ScriptNames.FISHING);
+            }
 
 
         }
@@ -397,7 +407,7 @@ public class Strategie implements Service
      */
     private int version(AbstractScript script)
     {
-        boolean ab = abnormalMatch;
+        boolean ab = shitHappened;
         abnormalMatch = false;
         if(script instanceof Castle && !ab)
             return 3;

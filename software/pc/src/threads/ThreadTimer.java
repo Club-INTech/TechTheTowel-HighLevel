@@ -192,6 +192,7 @@ public class ThreadTimer extends AbstractThread
 		{	
 			mLocomotionCardWrapper.disableRotationnalFeedbackLoop();
 			mLocomotionCardWrapper.disableTranslationnalFeedbackLoop();
+			mLocomotionCardWrapper.disableSpeedFeedbackLoop();
 			mLocomotionCardWrapper.shutdownSTM();
 		}
 		catch (SerialConnexionException e)

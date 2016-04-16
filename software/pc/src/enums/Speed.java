@@ -21,7 +21,7 @@ public enum Speed
 	SLOW_T_MEDIUM_R(120,Math.PI/2),
 	
 	/** Vitesse standard de déplacement et rotation*/
-	MEDIUM_ALL(350,(Math.PI/2)),
+	MEDIUM_ALL(450,(Math.PI/2)),
 	
 	/** vitesse standard de déplacement, lente en rotation*/
 	MEDIUM_T_SLOW_R(350,Math.PI/4),

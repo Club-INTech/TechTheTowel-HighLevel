@@ -372,20 +372,31 @@ public class Fishing extends AbstractScript
 			{
 				// Vitesse rapide jusqu'au début de pêche
 				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
-				stateToConsider.robot.setLocomotionSpeed(Speed.FAST_ALL);
+				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 
 				// On commence à se placer près du bord
-				stateToConsider.robot.turn(Math.PI - 0.14);
+				stateToConsider.robot.turn(Math.PI - 0.24);
 
-				stateToConsider.robot.moveLengthwise(-230, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(-260, hooksToConsider, true);
+
+               // stateToConsider.robot.setForceMovement(true);
+
+                //Arc approach = new Arc(new Vec2(950, 200), stateToConsider.robot.getPosition(), Math.PI, false);
+                //approach.setReverse();
+
+                //stateToConsider.robot.moveArc(approach, hooksToConsider);
+
+                //stateToConsider.robot.setForceMovement(false);
 
 				// reprise de vitesse medium
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 				
-				// Ajout d'un hook pour baisser le bras aimanté lors de la rotation vers pi
+				/*// Ajout d'un hook pour baisser le bras aimanté lors de la rotation vers pi
 				Hook turningHook = hookFactory.newOrientationCorrectHook((float)(Math.PI-0.04), (float)0.1);
 				turningHook.addCallback(new Callback(new GetFish(),true,stateToConsider));
-				hooksToConsider.add(turningHook);
+				hooksToConsider.add(turningHook);*/
+
+				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION, false);
 				
 				// On s'oriente vers le côté ennemi
 				stateToConsider.robot.turn((Math.PI-0.04), hooksToConsider, true);
@@ -430,7 +441,7 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 				
 				// nouvelle condition pour le hook levant le bras et mise à jour dans la liste
-				hook = hookFactory.newXLesserHook(600);
+				hook = hookFactory.newXLesserHook(580);
 				hook.addCallback(new Callback(new RiseArm(), true, stateToConsider));
 				hooksToConsider.add(hook);
 				
