@@ -84,10 +84,10 @@ public class ThreadSensor extends AbstractThread
     /**
      * Angles des capteurs relatifs à l'axe avant-arrière du robot (radians) TODO A changer !
      */
-    private final double angleLF = -0.4;
-    private final double angleRF = -0.4;
-    private final double angleLB = 0.4;
-    private final double angleRB = 0.4;
+    private final double angleLF = -0.26;
+    private final double angleRF = -0.26;
+    private final double angleLB = 0.17;
+    private final double angleRB = 0.17;
 
 
     /**
