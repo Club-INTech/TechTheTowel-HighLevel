@@ -69,6 +69,7 @@ public class ThreadEyes extends AbstractThread
     public ThreadEyes(Config config, Log log) {
         super(config, log);
         this.serial = new SerialConnexion(log, "EYES");
+        System.setProperty("gnu.io.rxtx.SerialPorts", "/dev/ttyAMA0");
         serial.initialize("/dev/ttyAMA0", 38400); //TODO Baudrate à changer
         try {
             readAnimations();
