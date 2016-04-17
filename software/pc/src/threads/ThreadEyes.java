@@ -69,7 +69,7 @@ public class ThreadEyes extends AbstractThread
     public ThreadEyes(Config config, Log log) {
         super(config, log);
         this.serial = new SerialConnexion(log, "EYES");
-        serial.initialize("/dev/ttyACM", 38400); //TODO Baudrate à changer
+        serial.initialize("/dev/ttyAMA0", 38400); //TODO Baudrate à changer
         try {
             readAnimations();
         } catch (Exception e) {
