@@ -130,19 +130,13 @@ public class Arc
         Arc tempArc = new Arc(startingPos, actualPos, this.startAngle, false);
 
         //L'angle de balayage que va faire le robot, distance est la corde
-        double sweepAngle = 2 * Math.asin(distance / (2 * Math.abs(this.radius)));
-
-        //Inversion de signe d'angle selon le sens de rotation, si on tourne dans le sens anti-trigo, on doit
-        //   mettre un angle de balayage négatif
-        int signe = 1;
-        if(radius<0)
-            signe = -1;
+        double sweepAngle = 2 * Math.asin(distance / (2 * this.radius));
 
         //Ce vecteur va du centre de l'arc vers le point actuel
         Vec2 actualVect = actualPos.minusNewVector(tempArc.center);
 
         //On tourne le vecteur de l'angle de balayage et on ajoute les coordonnées du centre, on revoie le résultat
-        return actualVect.turnNewVector(signe*sweepAngle).plusNewVector(tempArc.center);
+        return actualVect.turnNewVector(sweepAngle).plusNewVector(tempArc.center);
     }
 
 
