@@ -59,7 +59,7 @@ public class ThreadEyes extends AbstractThread
     /**
      * Luminosité
      */
-    private byte luminosity = 127;
+    private byte luminosity = 10;
 
     /**
      * Constructeur du thread
