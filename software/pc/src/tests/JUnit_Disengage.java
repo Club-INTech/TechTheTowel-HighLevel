@@ -38,18 +38,12 @@ public class JUnit_Disengage extends JUnit_Test
 		state.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 		// à modifier en début de test
 	
-		state.robot.setPosition(new Vec2(1330,1050));
-		state.robot.setOrientation(3.14159);//Math.PI/2);
-		log.debug(state.robot.getOrientation());
+		state.robot.setPosition(new Vec2(-1330,1050));
+		state.robot.setOrientation(-Math.PI/2-0.1);
 		
 	}
 	
-	@Test 
-	public void loul()
-	{
-		while(true)
-		log.debug(state.robot.getOrientation());
-	}
+	
 	/*
 	@Test
 	public void testXNeg()
@@ -249,7 +243,7 @@ public class JUnit_Disengage extends JUnit_Test
 	}
 	*/
 	
-	//@Test
+	@Test
 	public void arcXPositive()
 	{
 		// tant qu'on n'est pas sorti
@@ -258,7 +252,6 @@ public class JUnit_Disengage extends JUnit_Test
 			try
 			{
 				// détermination de la marche avant ou arrière
-				log.debug(state.robot.getOrientation());
 				if(state.robot.getPosition().x<0)
 				{
 					if(state.robot.getOrientation()>-Math.PI/2 && state.robot.getOrientationFast()< Math.PI/2)
@@ -283,7 +276,7 @@ public class JUnit_Disengage extends JUnit_Test
 				}
 
 				// longueur d'arc arbitraire
-				int length = 100;
+				int length = 200;
 				log.debug(reverse);
 				if (reverse)
 				{
