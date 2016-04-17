@@ -127,7 +127,7 @@ public class ThreadEyes extends AbstractThread
         int k;
         for(String anim : animList)
         {
-            boolean[] res = new boolean[NUMBER_OF_LINES*NUMBER_OF_COLUMNS];
+            boolean[] res = new boolean[NUMBER_OF_LINES*NUMBER_OF_COLUMNS*2];
             k=0;
             BufferedReader reader = new BufferedReader(new FileReader("animations/"+anim));
             for(int i=0 ; i<NUMBER_OF_LINES ; i++)
