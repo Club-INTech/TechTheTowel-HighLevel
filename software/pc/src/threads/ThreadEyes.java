@@ -127,6 +127,8 @@ public class ThreadEyes extends AbstractThread
     private boolean[] testPanel()
     {
         boolean[] res = new boolean[NUMBER_OF_LINES*NUMBER_OF_COLUMNS];
+        for(int i=0 ; i<res.length ; i++)
+            res[i] = false;
         res[count] = true;
         count++;
         if(count == NUMBER_OF_COLUMNS*NUMBER_OF_LINES)
