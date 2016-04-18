@@ -24,7 +24,8 @@ public class JUnit_Eyes extends JUnit_Test
     public void test() throws SerialManagerException, ContainerException, InterruptedException {
         ThreadEyes eyes = (ThreadEyes) container.getService(ServiceNames.THREAD_EYES);
         container.startInstanciedThreads();
-        //eyes.forceEvent(EyesEvent.TEST);
+        Thread.sleep(5000);
+        eyes.forceEvent(EyesEvent.TEST);
         while(true)
         {
             Thread.sleep(1000);
