@@ -275,7 +275,7 @@ public class Container
 			e.printStackTrace();
 		}
 		try {
-			//getService(ServiceNames.THREAD_SENSOR);
+			getService(ServiceNames.THREAD_SENSOR);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
