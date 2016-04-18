@@ -117,7 +117,7 @@ public class ThreadEyes extends AbstractThread
             {
                 sendFrame(image);
                 frame++;
-                Thread.sleep(200);//Temps d'attente entre chaque image TODO A ajuster
+                Thread.sleep(1000);//Temps d'attente entre chaque image TODO A ajuster
             } catch (Exception e) {
                 e.printStackTrace();
             }
