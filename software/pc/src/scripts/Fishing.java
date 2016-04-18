@@ -372,7 +372,7 @@ public class Fishing extends AbstractScript
 			{
 				// Vitesse rapide jusqu'au début de pêche
 				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
-				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 
 				// On commence à se placer près du bord
 				stateToConsider.robot.turn(Math.PI - 0.24);
