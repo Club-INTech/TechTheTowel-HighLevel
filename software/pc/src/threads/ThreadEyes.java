@@ -1,6 +1,5 @@
 package threads;
 
-import com.sun.deploy.util.ArrayUtil;
 import enums.EyesEvent;
 import exceptions.ThreadException;
 import exceptions.serial.SerialConnexionException;
