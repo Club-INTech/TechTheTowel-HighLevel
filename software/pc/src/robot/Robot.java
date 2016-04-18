@@ -579,6 +579,8 @@ public abstract class Robot implements Service
      */
     public abstract void enableFeedbackLoop() throws SerialConnexionException;
 
+	public abstract void disableFeedbackLoop() throws SerialConnexionException;
+
 	/**
 	 * Active l'asservissement en rotation du robot.
 	 */

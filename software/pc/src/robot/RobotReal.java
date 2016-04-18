@@ -361,6 +361,12 @@ public class RobotReal extends Robot
 	{
 		mLocomotion.enableFeedbackLoop();		
 	}
+
+	@Override
+	public void disableFeedbackLoop() throws SerialConnexionException
+	{
+		mLocomotion.disableFeedbackLoop();
+	}
 	
 	/* 
 	 * GETTERS & SETTERS

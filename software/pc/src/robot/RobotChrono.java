@@ -347,6 +347,11 @@ public class RobotChrono extends Robot
 	}
 
 	@Override
+	public void disableFeedbackLoop() throws SerialConnexionException {
+
+	}
+
+	@Override
 	public void moveArc(Arc arc, ArrayList<Hook> hooks) throws UnableToMoveException {
 		// TODO Auto-generated method stub
 		

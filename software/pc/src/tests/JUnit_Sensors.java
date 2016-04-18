@@ -257,12 +257,13 @@ public class JUnit_Sensors extends JUnit_Test
 	}
 	
 	@Test
-	public void testSensorEnnemyWithoutMovement()
-	{
+	public void testSensorEnnemyWithoutMovement() throws InterruptedException, SerialConnexionException {
 		log.debug("Test des capteurs fixe");
+		state.robot.disableFeedbackLoop();
 		while(true)
 		{
-			;
+			state.robot.getPosition();
+			Thread.sleep(100);
 		}
 	}
 	

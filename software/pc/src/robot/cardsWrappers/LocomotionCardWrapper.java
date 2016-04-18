@@ -399,4 +399,11 @@ public class LocomotionCardWrapper implements Service
 		return parsedInfos;
 	}
 
+    /**
+     * Active l'asservissement en vitesse du robot
+     * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
+     */
+	public void enableSpeedFeedbackLoop() throws SerialConnexionException {
+		locomotionCardSerial.communiquer("cv1", 0);
+	}
 }

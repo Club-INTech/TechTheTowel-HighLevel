@@ -1183,6 +1183,14 @@ public class Locomotion implements Service
     {
         deplacements.enableRotationnalFeedbackLoop();
         deplacements.enableTranslationnalFeedbackLoop();
+        deplacements.enableSpeedFeedbackLoop();
+    }
+
+    public void disableFeedbackLoop() throws SerialConnexionException
+    {
+        deplacements.disableRotationnalFeedbackLoop();
+        deplacements.disableTranslationnalFeedbackLoop();
+        deplacements.disableSpeedFeedbackLoop();
     }
     
     public void disableRotationnalFeedbackLoop() throws SerialConnexionException
