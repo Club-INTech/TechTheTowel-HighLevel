@@ -208,7 +208,7 @@ public class ObstacleManager
      */
     public synchronized void addObstacle(final Vec2 position)
     {
-    	addObstacle(position,defaultObstacleRadius, defaultLifetime);
+    	addObstacle(position,defaultObstacleRadius+mRobotRadius, defaultLifetime);
     }
 
     
