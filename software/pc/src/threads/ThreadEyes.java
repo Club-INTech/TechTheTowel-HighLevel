@@ -30,6 +30,8 @@ public class ThreadEyes extends AbstractThread
     /** Connexion série avec les arduinos */
     private SerialConnexion serial;
 
+    private int count = 0;
+
     /**
      * Liste des fichier à charger, initilisée par une classe anonyme
      * MERCI JAVA POUR TON INCAPACITE A INITIALISER DES LISTES CORRECTEMENT!
@@ -106,16 +108,30 @@ public class ThreadEyes extends AbstractThread
                     break;
                 case END:
                     break;
+                case TEST:
+                    image = testPanel();
+                    break;
+
             }
             try
             {
                 sendFrame(image);
                 frame++;
-                Thread.sleep(1000);//Temps d'attente entre chaque image TODO A ajuster
+                Thread.sleep(200);//Temps d'attente entre chaque image TODO A ajuster
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    private boolean[] testPanel()
+    {
+        boolean[] res = new boolean[NUMBER_OF_LINES*NUMBER_OF_COLUMNS];
+        res[count] = true;
+        count++;
+        if(count == NUMBER_OF_COLUMNS*NUMBER_OF_LINES)
+            count = 0;
+        return res;
     }
 
     /**

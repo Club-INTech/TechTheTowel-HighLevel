@@ -1,10 +1,12 @@
 package tests;
 
+import enums.EyesEvent;
 import enums.ServiceNames;
 import exceptions.ContainerException;
 import exceptions.serial.SerialManagerException;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
+import threads.ThreadEyes;
 
 /**
  * JUnit classique pour tester les yeux du robot
@@ -20,8 +22,9 @@ public class JUnit_Eyes extends JUnit_Test
 
     @Test
     public void test() throws SerialManagerException, ContainerException, InterruptedException {
-        container.getService(ServiceNames.THREAD_EYES);
+        ThreadEyes eyes = (ThreadEyes) container.getService(ServiceNames.THREAD_EYES);
         container.startInstanciedThreads();
+        eyes.forceEvent(EyesEvent.TEST);
         while(true)
         {
             Thread.sleep(1000);
