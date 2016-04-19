@@ -440,10 +440,12 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.moveLengthwise(-460, hooksToConsider, true);
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 				
+				/* Version hooké pour le second passage, remplacée par les actions unitaires classiques
 				// nouvelle condition pour le hook levant le bras et mise à jour dans la liste
 				hook = hookFactory.newXLesserHook(580);
 				hook.addCallback(new Callback(new RiseArm(), true, stateToConsider));
 				hooksToConsider.add(hook);
+				*/
 				
 				// nouvelle condition pour le hook lâchant les poissons et mise à jour dans la liste
 				hook2 = hookFactory.newXLesserHook(350);
@@ -456,7 +458,11 @@ public class Fishing extends AbstractScript
 				hooksToConsider.add(specialHook);
 				
 				// on longe le bac
-				stateToConsider.robot.moveLengthwise(600, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(300, hooksToConsider, true);
+				
+				// relève du bras puis déplacement au dessus du filet
+				stateToConsider.robot.useActuator(ActuatorOrder.MAGNET_UP, true);
+				stateToConsider.robot.moveLengthwise(200,hooksToConsider,true);
 				
 				// On indique au robot que les poissons ne sont plus sur le bras
 				stateToConsider.robot.setAreFishesOnBoard(false);
@@ -490,7 +496,7 @@ public class Fishing extends AbstractScript
 				hooksToConsider.add(hook1);
 				
 				// Mouvement du robot suivant un arc pour se placer près du bac
-				stateToConsider.robot.moveArc(new Arc(new Vec2(1260,600), new Vec2(900,240), Math.PI, true),hooksToConsider);
+				stateToConsider.robot.moveArc(new Arc(300,300,Math.PI,true),hooksToConsider);
 				
 				// On crée le hook de position pour lever le bras près du filet, puis ajout à la liste de hooks
 				Hook hook2 = hookFactory.newXLesserHook(660);
@@ -501,12 +507,22 @@ public class Fishing extends AbstractScript
 				Hook hook3 = hookFactory.newXLesserHook(520);
 				hook3.addCallback(new Callback(new DropFish(), true, stateToConsider));
 				hooksToConsider.add(hook3);
+				
+				//Rajout du hook pour le booléen
+				Hook specialHook = hookFactory.newXLesserHook(800);
+				specialHook.addCallback(new Callback(new SetFishesOnBoard(),true,stateToConsider));
+				hooksToConsider.add(specialHook);
 
 				//On indique ques les poissons se trouvent sur le bras
-				stateToConsider.robot.setAreFishesOnBoard(true);
+				//stateToConsider.robot.setAreFishesOnBoard(true);
 
 				// On longe le bac
 				stateToConsider.robot.moveLengthwise(520, hooksToConsider, true);
+				
+				/*
+				 * stateToConsider.robot.moveArc(new Arc(300,200,Math.PI/2,true),hooksToConsider);
+				 * stateToConsider.robot.moveArc(new Arc(300,-200,Math.PI/2,true),hooksToonsider);
+				 */
 
 				// Points gagnés moyen pour ce passage
 				stateToConsider.obtainedPoints += 20;
@@ -535,8 +551,13 @@ public class Fishing extends AbstractScript
 				hook3.addCallback(new Callback(new DropFish(), true, stateToConsider));
 				hooksToConsider.add(hook3);
 				
+				//Rajout du hook pour le booléen
+				specialHook = hookFactory.newXLesserHook(800);
+				specialHook.addCallback(new Callback(new SetFishesOnBoard(),true,stateToConsider));
+				hooksToConsider.add(specialHook);
+				
 				// on indique que les poissons sont sur le bras 
-				stateToConsider.robot.setAreFishesOnBoard(true);
+				//stateToConsider.robot.setAreFishesOnBoard(true);
 				
 				// on longe le bac
 				stateToConsider.robot.moveLengthwise(530, hooksToConsider, true);
@@ -550,10 +571,17 @@ public class Fishing extends AbstractScript
 				// Points gagnés moyen pour ce passage
 				stateToConsider.obtainedPoints += 20;
 				
+				// arc pour sortir du bord de table
+				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+				Arc disengage = new Arc(-200,100,stateToConsider.robot.getOrientation(),false);
+				stateToConsider.robot.moveArc(disengage, hooksToConsider);
+				stateToConsider.robot.turn(Math.PI/2);
+				stateToConsider.robot.moveLengthwise(100,hooksToConsider,false);
+				
 				// reprise de vitesse d'avant script
 				stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
 			}
-		}
+		}		
 		catch(Exception e)
 		{
 			finalize(stateToConsider, e);
@@ -564,6 +592,7 @@ public class Fishing extends AbstractScript
 	@Override
 	public int remainingScoreOfVersion(int version, GameState<?> state) 
 	{
+		
 		// Score maximal possible de 40 points
 		int score=40;
 		
@@ -610,7 +639,7 @@ public class Fishing extends AbstractScript
 		}
 		catch (SerialConnexionException e) 
 		{
-			log.debug("Fishing : impossible de ranger les bras !");
+			log.debug("Fishing : impossible de ranger le bras !");
 			throw new SerialFinallyException();
 		}
 	}
