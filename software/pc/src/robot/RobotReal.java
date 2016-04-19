@@ -27,6 +27,7 @@ public class RobotReal extends Robot
 	
 	private SymmetrizedActuatorOrderMap mActuatorCorrespondenceMap = new SymmetrizedActuatorOrderMap();
 	private SymmetrizedTurningStrategy mTurningStrategyCorrespondenceMap = new SymmetrizedTurningStrategy();
+	private SymmetrizedSensorNamesMap mSensorNamesMap = new SymmetrizedSensorNamesMap();
 	/** Système de locomotion a utiliser pour déplacer le robot */
 	private Locomotion mLocomotion;
 	
@@ -116,7 +117,7 @@ public class RobotReal extends Robot
 					return mSensorsCardWrapper.getContactSensorValue(sensor);
 				else
 				{
-					//TODO symetriser le capteur gauche/droite
+					sensor = mSensorNamesMap.getSymmetrizedContactSensorName(sensor);
 					
 					/* attention si les capteurs sont en int[] il faut symétriser ce int[] */
 					
