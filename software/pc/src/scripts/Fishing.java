@@ -409,7 +409,7 @@ public class Fishing extends AbstractScript
 				//stateToConsider.robot.sleep(800);
 
 				// On crée le hook de position, l'action pour lever le bras et ajout à la liste
-				Hook hook = hookFactory.newXLesserHook(620);
+				Hook hook = hookFactory.newXLesserHook(650);
 				hook.addCallback(new Callback(new RiseArm(), true, stateToConsider));
 				hooksToConsider.add(hook);
 
@@ -496,7 +496,9 @@ public class Fishing extends AbstractScript
 				hooksToConsider.add(hook1);
 				
 				// Mouvement du robot suivant un arc pour se placer près du bac
-				stateToConsider.robot.moveArc(new Arc(-500,300,Math.PI,true),hooksToConsider);
+				stateToConsider.robot.moveArc(new Arc(-380,380,Math.PI,true),hooksToConsider);
+				
+				log.debug(stateToConsider.robot.getOrientation());
 				
 				// On crée le hook de position pour lever le bras près du filet, puis ajout à la liste de hooks
 				Hook hook2 = hookFactory.newXLesserHook(660);
@@ -619,7 +621,7 @@ public class Fishing extends AbstractScript
 		}
 		else if (version ==4)
 		{
-			return new Circle(new Vec2(1050,350));
+			return new Circle(new Vec2(1100,450));
 		}
 		else
 		{
