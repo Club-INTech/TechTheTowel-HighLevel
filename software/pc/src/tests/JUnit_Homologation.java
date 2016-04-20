@@ -42,6 +42,8 @@ public class JUnit_Homologation extends JUnit_Test
         container.getService(ServiceNames.THREAD_TIMER);
         container.getService(ServiceNames.THREAD_SENSOR);
         container.startInstanciedThreads();
+
+        waitMatchBegin();
     }
 
     private void initialize() throws Exception
@@ -67,7 +69,6 @@ public class JUnit_Homologation extends JUnit_Test
 
             // petit temps d'attente pour éviter de faire planter les portes #LeHautNiveauDemandeDeLaMerde
             theRobot.robot.sleep(100);
-            waitMatchBegin();
 
         }
         catch (SerialConnexionException e)
