@@ -78,7 +78,7 @@ public class Castle extends AbstractScript
 				}
 				
 				// on s'éloigne de la zone de construction 
-				stateToConsider.robot.moveLengthwise(-200,hooksToConsider,false);
+				stateToConsider.robot.moveLengthwise(-600,hooksToConsider,false);
 				
 				// on indique qu'on ne transporte plus de sable
 				stateToConsider.robot.setIsSandInside(false);
