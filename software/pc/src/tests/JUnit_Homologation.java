@@ -41,7 +41,7 @@ public class JUnit_Homologation extends JUnit_Test
         // Lance le thread graphique
         container.getService(ServiceNames.THREAD_TIMER);
         container.getService(ServiceNames.THREAD_SENSOR);
-        container.getService(ServiceNames.THREAD_INTERFACE);
+        //container.getService(ServiceNames.THREAD_INTERFACE);
         container.startInstanciedThreads();
 
         waitMatchBegin();
