@@ -62,8 +62,8 @@ public class ObstacleProximity extends ObstacleCircular
 		numberOfTimeDetected=1;
 		
 		
-		thresholdConfirmedOrUnconfirmed=2;
-		maxNumberOfTimeDetected=3;
+		thresholdConfirmedOrUnconfirmed=1;
+		maxNumberOfTimeDetected=2;
 	}
 	
 	/* (non-Javadoc)
