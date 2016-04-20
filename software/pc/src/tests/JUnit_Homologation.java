@@ -91,9 +91,9 @@ public class JUnit_Homologation extends JUnit_Test
             e.printStackTrace();
         }
         try {
-            Vec2 sup = scriptManager.getScript(ScriptNames.CLOSE_DOORS).entryPosition(0, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
+            Vec2 sup = scriptManager.getScript(ScriptNames.CLOSE_DOORS).entryPosition(3, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
             theRobot.table.getObstacleManager().freePoint(sup);
-            scriptManager.getScript(ScriptNames.CLOSE_DOORS).goToThenExec(0, theRobot, emptyHook);
+            scriptManager.getScript(ScriptNames.CLOSE_DOORS).goToThenExec(3, theRobot, emptyHook);
         } catch (Exception e) {
             log.debug("Problème d'exécution dans Close Doors");
             e.printStackTrace();
