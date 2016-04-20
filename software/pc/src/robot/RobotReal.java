@@ -64,13 +64,32 @@ public class RobotReal extends Robot
 
         if(waitForCompletion && door == 1)
         {
-            long time = System.currentTimeMillis();
-            while(!getContactSensorValue(ContactSensors.DOOR_CLOSED) && System.currentTimeMillis()-time < order.getDuration());
+            while(!getContactSensorValue(ContactSensors.DOOR_CLOSED) && !getContactSensorValue(ContactSensors.DOOR_BLOCKED))
+			{
+				try
+                {
+					Thread.sleep(100);
+				}
+				catch (Exception e)
+				{
+
+				}
+			}
         }
         else if(waitForCompletion && door == 2)
         {
             long time = System.currentTimeMillis();
-            while(!getContactSensorValue(ContactSensors.DOOR_OPENED) && System.currentTimeMillis()-time < order.getDuration());
+            while(!getContactSensorValue(ContactSensors.DOOR_OPENED) && !getContactSensorValue(ContactSensors.DOOR_BLOCKED))
+			{
+				try
+				{
+					Thread.sleep(100);
+				}
+				catch (Exception e)
+				{
+
+				}
+			}
         }
 		else if(waitForCompletion)
 		{

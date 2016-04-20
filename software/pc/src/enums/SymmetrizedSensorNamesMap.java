@@ -26,6 +26,8 @@ public class SymmetrizedSensorNamesMap
         mContactCorrespondenceMap.put(ContactSensors.DOOR_OPENED, ContactSensors.DOOR_OPENED_LEFT);
         mContactCorrespondenceMap.put(ContactSensors.DOOR_OPENED_LEFT, ContactSensors.DOOR_OPENED);
         mContactCorrespondenceMap.put(ContactSensors.DOOR_CLOSED_LEFT, ContactSensors.DOOR_CLOSED);
+        mContactCorrespondenceMap.put(ContactSensors.DOOR_BLOCKED, ContactSensors.DOOR_BLOCKED_LEFT);
+        mContactCorrespondenceMap.put(ContactSensors.DOOR_BLOCKED_LEFT, ContactSensors.DOOR_BLOCKED);
     }
     
     /**

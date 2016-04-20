@@ -8,7 +8,10 @@ public enum ContactSensors {
 	DOOR_CLOSED("irdc",10,true),
 
 	DOOR_OPENED_LEFT("ildo",10,true),
-	DOOR_OPENED("irdo",10,true)
+	DOOR_OPENED("irdo",10,true),
+
+	DOOR_BLOCKED("irdb",10,false),
+	DOOR_BLOCKED_LEFT("ildb",10,false)
 
 	;
 
