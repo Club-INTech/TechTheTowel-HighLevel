@@ -28,7 +28,7 @@ public class Junit_RetractDoors extends JUnit_Test
 	{
 		try
 		{
-			mRobot.robot.useActuator(ActuatorOrder.OPEN_DOOR, true);
+			mRobot.robot.useActuator(ActuatorOrder.CLOSE_DOOR_LEFT, true);
 			mRobot.robot.useActuator(ActuatorOrder.OPEN_DOOR_LEFT, true);
 			
 			if(!mRobot.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
