@@ -24,6 +24,8 @@ import java.util.ArrayList;
  * 1 => Fishing
  * 2 => TechTheSand + Castle
  * 3 => Shells
+ * 4 => sensors
+ * 5 => homologation
  */
 public class JUnit_Selector extends JUnit_Test {
 
@@ -76,6 +78,12 @@ public class JUnit_Selector extends JUnit_Test {
             JUnit_Sensors junit = new JUnit_Sensors();
             junit.setUp();
             junit.testSensorEnnemyWithoutMovement();
+        }
+        else if(value == 5)
+        {
+            JUnit_Homologation junit = new JUnit_Homologation();
+            junit.setUp();
+            junit.launch();
         }
         else
         {
