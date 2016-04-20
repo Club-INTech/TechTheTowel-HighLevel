@@ -84,7 +84,7 @@ public class JUnit_Homologation extends JUnit_Test
         try
         {
             theRobot.robot.moveLengthwise(200);
-            scriptManager.getScript(ScriptNames.CASTLE).goToThenExec(0, theRobot, emptyHook);
+            //scriptManager.getScript(ScriptNames.CASTLE).goToThenExec(0, theRobot, emptyHook);
         }
         catch(Exception e)
         {

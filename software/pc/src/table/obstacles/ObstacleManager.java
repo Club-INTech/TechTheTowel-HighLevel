@@ -224,7 +224,7 @@ public class ObstacleManager
     {
     	//vérification que l'on ne détecte pas un obstacle "normal"
     	if (position.x>-1500+mRobotRadius && position.x<1500-mRobotRadius && position.y>mRobotRadius && position.y<2000-mRobotRadius //hors de la table
-                && !( Geometry.isBetween(position.x, -40, 40) && Geometry.isBetween(position.y, 640, 1300)) //C'est la vitre
+                && !( Geometry.isBetween(position.x, -100, 100) && Geometry.isBetween(position.y, 640, 1300)) //C'est la vitre
                 && !( Geometry.isBetween(position.x, -1000, 1000) && Geometry.isBetween(position.y, 1500, 2000)) //château de sable
                 )
     	{

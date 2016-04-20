@@ -167,6 +167,7 @@ public class ThreadSensor extends AbstractThread
 		log.debug("Activation des capteurs");
 		while(!ThreadTimer.matchEnded)
 		{
+            long time = System.currentTimeMillis();
 			// on s'arrete si le ThreadManager le demande
 			if(stopThreads)
 			{
@@ -199,6 +200,7 @@ public class ThreadSensor extends AbstractThread
 			{
 				// On ne spamme pas la serie, on attend un peu avant de redemander les valeurs
 				// Et on laisse le temps aux autres Threads
+                log.debug("Temps de gogolitude du ThreadCapteurs : "+(System.currentTimeMillis()-time)+" ms");
 				Thread.sleep((long)(1000./sensorFrequency));
 			} 
 			catch (InterruptedException e)
