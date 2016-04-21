@@ -174,17 +174,18 @@ public class ThreadSensor extends AbstractThread
 				log.debug("Stop du thread capteurs");
 				return;
 			}
+            //long time = System.currentTimeMillis();
 
 			getDistances();
-			
-			if( !USvalues.contains(-1)) // si on n'a pas spammé
+            //log.debug("Temps de gogolitude du ThreadCapteurs : "+(System.currentTimeMillis()-time)+" ms");
+
+            if( !USvalues.contains(-1)) // si on n'a pas spammé
 			{
 				// On enleve les obstacles qu'on sait absents de la table : si le robot ennemi a bougé,
 				// On l'enleve de notre memoire
                 mRobot.getPosition();
-				removeObstacle();
+                removeObstacle();
 
-                long time = System.currentTimeMillis();
                 for(int i=0 ; i<USvalues.size(); i++)
                 {
                     if(USvalues.get(i) != 0)
@@ -193,7 +194,6 @@ public class ThreadSensor extends AbstractThread
 
 				//ajout d'obstacles mobiles dans l'obstacleManager
 				addObstacle();
-                log.debug("Temps de gogolitude du ThreadCapteurs : "+(System.currentTimeMillis()-time)+" ms");
 			}
 //			if (distance > 0 && distance < 70)
 //				log.debug("obstacle detecte a moins de 7 cm  !");
