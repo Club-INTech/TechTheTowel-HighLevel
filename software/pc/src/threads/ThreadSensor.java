@@ -167,7 +167,7 @@ public class ThreadSensor extends AbstractThread
 		log.debug("Activation des capteurs");
 		while(!ThreadTimer.matchEnded)
 		{
-            long time = System.currentTimeMillis();
+
 			// on s'arrete si le ThreadManager le demande
 			if(stopThreads)
 			{
@@ -184,6 +184,7 @@ public class ThreadSensor extends AbstractThread
                 mRobot.getPosition();
 				removeObstacle();
 
+                long time = System.currentTimeMillis();
                 for(int i=0 ; i<USvalues.size(); i++)
                 {
                     if(USvalues.get(i) != 0)
@@ -192,6 +193,7 @@ public class ThreadSensor extends AbstractThread
 
 				//ajout d'obstacles mobiles dans l'obstacleManager
 				addObstacle();
+                log.debug("Temps de gogolitude du ThreadCapteurs : "+(System.currentTimeMillis()-time)+" ms");
 			}
 //			if (distance > 0 && distance < 70)
 //				log.debug("obstacle detecte a moins de 7 cm  !");
@@ -201,7 +203,7 @@ public class ThreadSensor extends AbstractThread
 			{
 				// On ne spamme pas la serie, on attend un peu avant de redemander les valeurs
 				// Et on laisse le temps aux autres Threads
-                log.debug("Temps de gogolitude du ThreadCapteurs : "+(System.currentTimeMillis()-time)+" ms");
+
 				Thread.sleep((long)(1000./sensorFrequency));
 			} 
 			catch (InterruptedException e)
@@ -404,7 +406,7 @@ public class ThreadSensor extends AbstractThread
                 // TODO : a passer en traitement de bas niveau ?
                 if(USvalues.get(i)==0)
                 {
-                    log.critical("ARRETEZ DE SPAMMER LES CAPTEURS !");
+                   // log.critical("ARRETEZ DE SPAMMER LES CAPTEURS !");
                     USvalues.set(i, -1);
                 }
                 if ( USvalues.get(i) > maxSensorRange || USvalues.get(i) < minSensorRange)
@@ -461,7 +463,7 @@ public class ThreadSensor extends AbstractThread
         int distanceLB = (int)(USvalues.get(2)*0.8);
         int distanceRB = (int)(USvalues.get(3)*0.8);
 
-        mTable.getObstacleManager().removeNonDetectedObstacles(positionLF, (mRobot.getOrientation()+angleLF), distanceLF, detectionAngle);
+        mTable.getObstacleManager().removeNonDetectedObstacles(positionLF, (mRobot.getOrientationFast()+angleLF), distanceLF, detectionAngle);
         mTable.getObstacleManager().removeNonDetectedObstacles(positionRF(), (mRobot.getOrientationFast()+angleRF), distanceRF, detectionAngle);
         mTable.getObstacleManager().removeNonDetectedObstacles(positionLB, (mRobot.getOrientationFast()+angleLB), distanceLB, detectionAngle);
         mTable.getObstacleManager().removeNonDetectedObstacles(positionRB, (mRobot.getOrientationFast()+angleRB), distanceRB, detectionAngle);
