@@ -65,7 +65,7 @@ public class CloseDoors extends AbstractScript
 				stateToConsider.robot.turn(-(Math.PI / 2), hooksToConsider, false);
 
 				//On ferme les portes
-				stateToConsider.robot.moveLengthwise(-900, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwiseWithoutDetection(-900, hooksToConsider, true);
 
 				//PORTES FERMEES !
 				stateToConsider.obtainedPoints += 20;
