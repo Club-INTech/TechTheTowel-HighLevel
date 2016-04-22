@@ -102,6 +102,7 @@ public class ThreadTimer extends AbstractThread
 		while(jumperWasAbsent || !mSensorsCardWrapper.isJumperAbsent())
 		{
 			try {
+				jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				e.printStackTrace();

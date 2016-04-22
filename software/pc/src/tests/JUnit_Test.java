@@ -67,6 +67,7 @@ public abstract class JUnit_Test
 		boolean jumperWasAbsent = sensorsCard.isJumperAbsent();
 		while(jumperWasAbsent || !sensorsCard.isJumperAbsent())
 		{
+			 jumperWasAbsent = sensorsCard.isJumperAbsent();
 			 robot.sleep(100);
 		}
 

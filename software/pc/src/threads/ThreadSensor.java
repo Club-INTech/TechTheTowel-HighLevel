@@ -84,8 +84,8 @@ public class ThreadSensor extends AbstractThread
     /**
      * Angles des capteurs relatifs à l'axe avant-arrière du robot (radians) TODO A changer !
      */
-    private final double angleLF = -0.26;
-    private final double angleRF = -0.26;
+    private final double angleLF = 0;
+    private final double angleRF = 0;
     private final double angleLB = 0.17;
     private final double angleRB = 0.17;
 
@@ -153,6 +153,7 @@ public class ThreadSensor extends AbstractThread
 		while(jumperWasAbsent || !mSensorsCardWrapper.isJumperAbsent())
 		{
             try {
+                jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
                 Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -173,7 +174,7 @@ public class ThreadSensor extends AbstractThread
 				log.debug("Stop du thread capteurs");
 				return;
 			}
-            long time = System.currentTimeMillis();
+            //long time = System.currentTimeMillis();
 
 			getDistances();
 
@@ -193,7 +194,7 @@ public class ThreadSensor extends AbstractThread
 
 				//ajout d'obstacles mobiles dans l'obstacleManager
 				addObstacle();
-                log.debug("Temps de gogolitude du ThreadCapteurs : "+(System.currentTimeMillis()-time)+" ms");
+                //log.debug("Temps de gogolitude du ThreadCapteurs : "+(System.currentTimeMillis()-time)+" ms");
 			}
 //			if (distance > 0 && distance < 70)
 //				log.debug("obstacle detecte a moins de 7 cm  !");

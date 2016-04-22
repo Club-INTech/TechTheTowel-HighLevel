@@ -101,7 +101,10 @@ public class Main
 		// attends que le jumper soit retiré du robot
 		boolean jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
 		while(jumperWasAbsent || !mSensorsCardWrapper.isJumperAbsent())
-			 	Sleep.sleep(100);
+		{
+			jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
+			Sleep.sleep(100);
+		}
 		
 		// maintenant que le jumper est retiré, le match a commencé
 		ThreadTimer.matchStarted = true;
