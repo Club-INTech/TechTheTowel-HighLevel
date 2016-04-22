@@ -410,11 +410,11 @@ public class ThreadSensor extends AbstractThread
                    // log.critical("ARRETEZ DE SPAMMER LES CAPTEURS !");
                     USvalues.set(i, -1);
                 }
-                if ( USvalues.get(i) > maxSensorRange || USvalues.get(i) < minSensorRange)
+                else if ( USvalues.get(i) > maxSensorRange || USvalues.get(i) < minSensorRange)
                 {
                     USvalues.set(i, 0);
                 }
-                if(i == 1 && modeBorgne)
+                else if(i == 1 && modeBorgne)
                     USvalues.set(1, 0);
 
             }
