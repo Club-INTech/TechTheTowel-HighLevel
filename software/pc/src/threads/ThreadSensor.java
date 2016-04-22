@@ -146,7 +146,6 @@ public class ThreadSensor extends AbstractThread
 	@Override
 	public void run()
 	{
-		log.debug("Lancement du thread de capteurs");
 		updateConfig();
 		
 		// boucle d'attente de début de match
