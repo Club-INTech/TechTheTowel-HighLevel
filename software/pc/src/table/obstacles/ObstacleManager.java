@@ -107,7 +107,7 @@ public class ObstacleManager
       	mFixedObstacles.add(new ObstacleCircular(new Vec2(1500, 0), 250 + mRobotRadius));
       	mFixedObstacles.add(new ObstacleCircular(new Vec2(-1500, 0), 250 + mRobotRadius));
 
-		//Packs de sable (merci Sylvain)
+		//Packs de sable (merci Sylvaing19)
 		mRectangles.add(new ObstacleRectangular(new Vec2(0, 1913), 522 + 2*mRobotRadius , 174 + 2*mRobotRadius));
 		mRectangles.add(new ObstacleRectangular(new Vec2(-620, 1942), 116 + 2*mRobotRadius, 116 + 2*mRobotRadius));
 		mRectangles.add(new ObstacleRectangular(new Vec2(620, 1942), 116 + 2*mRobotRadius, 116 + 2*mRobotRadius));
@@ -226,7 +226,9 @@ public class ObstacleManager
     	if (position.x>-1500+mRobotRadius && position.x<1500-mRobotRadius && position.y>mRobotRadius && position.y<2000-mRobotRadius //hors de la table
                 && !( Geometry.isBetween(position.x, -100, 100) && Geometry.isBetween(position.y, 640, 1300)) //C'est la vitre
                 && !( Geometry.isBetween(position.x, -800, 800) && Geometry.isBetween(position.y, 1500, 2000)) //château de sable
-                )
+				&& !( Geometry.isBetween(position.x, 650, 1050) && Geometry.isBetween(position.y, 950, 1250)) //château de sable tapis
+				&& !( Geometry.isBetween(position.x, -1050, -650) && Geometry.isBetween(position.y, 950, 1250)) //château de sable tapis adv
+				)
     	{
     		boolean isThereAnObstacleIntersecting=false;
     		for (int i = 0; i<mUntestedMobileObstacles.size(); i++)
