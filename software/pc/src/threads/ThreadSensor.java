@@ -174,10 +174,10 @@ public class ThreadSensor extends AbstractThread
 				log.debug("Stop du thread capteurs");
 				return;
 			}
-            //long time = System.currentTimeMillis();
+            long time = System.currentTimeMillis();
 
 			getDistances();
-            //log.debug("Temps de gogolitude du ThreadCapteurs : "+(System.currentTimeMillis()-time)+" ms");
+
 
             if( !USvalues.contains(-1)) // si on n'a pas spammé
 			{
@@ -194,6 +194,7 @@ public class ThreadSensor extends AbstractThread
 
 				//ajout d'obstacles mobiles dans l'obstacleManager
 				addObstacle();
+                log.debug("Temps de gogolitude du ThreadCapteurs : "+(System.currentTimeMillis()-time)+" ms");
 			}
 //			if (distance > 0 && distance < 70)
 //				log.debug("obstacle detecte a moins de 7 cm  !");
