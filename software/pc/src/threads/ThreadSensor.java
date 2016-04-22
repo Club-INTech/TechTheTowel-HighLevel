@@ -9,6 +9,10 @@ import robot.cardsWrappers.SensorsCardWrapper;
 import smartMath.Vec2;
 import table.Table;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -64,6 +68,9 @@ public class ThreadSensor extends AbstractThread
 	 * TODO : mettre en config
 	 */
 	double minSensorRange = 20;
+
+    private BufferedWriter out;
+    private boolean debug = true;
 	
 	/**
 	 *  Angle de visibilité qu'a le capteur 
@@ -147,8 +154,20 @@ public class ThreadSensor extends AbstractThread
 	public void run()
 	{
 		updateConfig();
-		
-		// boucle d'attente de début de match
+
+        try
+        {
+            File file = new File("us.txt");
+            if (!file.exists()) {
+                //file.delete();
+                file.createNewFile();
+            }
+            out = new BufferedWriter(new FileWriter(file));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // boucle d'attente de début de match
 		boolean jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
 		while(jumperWasAbsent || !mSensorsCardWrapper.isJumperAbsent())
 		{
@@ -390,6 +409,24 @@ public class ThreadSensor extends AbstractThread
 		try 
 		{
             USvalues = mSensorsCardWrapper.getUSSensorValue(USsensors.ULTRASOUND); //On récupère une liste de valeurs
+
+            if(this.debug)
+            {
+                try {
+                    out.write(USvalues.get(0));
+                    out.newLine();
+                    out.write(USvalues.get(1));
+                    out.newLine();
+                    out.write(USvalues.get(2));
+                    out.newLine();
+                    out.write(USvalues.get(3));
+                    out.newLine();
+                    out.newLine();
+                    out.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
             if(symetry) //Inversion gauche/droite pour symétriser
             {

@@ -58,7 +58,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
 
 
     private BufferedWriter out;
-    private boolean debug = true;
+    private boolean debug = false;
 
     /**
      * Construit une connexion sÃ¯Â¿Â½rie

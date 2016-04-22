@@ -12,6 +12,7 @@ import scripts.ScriptManager;
 import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
+import threads.ThreadSensor;
 import threads.ThreadTimer;
 import utils.Sleep;
 
@@ -26,6 +27,7 @@ public class JUnit_Homologation extends JUnit_Test
     private GameState<Robot> theRobot;
     private ScriptManager scriptManager;
     private SensorsCardWrapper mSensorsCardWrapper;
+    private ThreadSensor threadSensor;
     private ArrayList<Hook> emptyHook = new ArrayList<Hook>();
 
     @SuppressWarnings("unchecked")
@@ -40,7 +42,7 @@ public class JUnit_Homologation extends JUnit_Test
 
         // Lance le thread graphique
         container.getService(ServiceNames.THREAD_TIMER);
-        container.getService(ServiceNames.THREAD_SENSOR);
+        this.threadSensor = (ThreadSensor) container.getService(ServiceNames.THREAD_SENSOR);
         //container.getService(ServiceNames.THREAD_INTERFACE);
         container.startInstanciedThreads();
 
@@ -90,6 +92,7 @@ public class JUnit_Homologation extends JUnit_Test
         catch(Exception e)
         {
             log.debug("Problème d'exécution dans Castle");
+            threadSensor.stop();
             e.printStackTrace();
         }
         try {
@@ -98,6 +101,7 @@ public class JUnit_Homologation extends JUnit_Test
             scriptManager.getScript(ScriptNames.CLOSE_DOORS).goToThenExec(3, theRobot, emptyHook);
         } catch (Exception e) {
             log.debug("Problème d'exécution dans Close Doors");
+            threadSensor.stop();
             e.printStackTrace();
         }
         try {
@@ -108,6 +112,7 @@ public class JUnit_Homologation extends JUnit_Test
             scriptManager.getScript(ScriptNames.FISHING).goToThenExec(3, theRobot, emptyHook);
         } catch (Exception e) {
             log.debug("Problème d'exécution dans Fishing");
+            threadSensor.stop();
 
         }
     }

@@ -286,7 +286,7 @@ public class ObstacleManager
     	}
     	else
     	{
-    		log.debug("Obstacle hors de la table");
+    		//log.debug("Obstacle hors de la table");
 		}
     }
 
