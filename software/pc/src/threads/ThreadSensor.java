@@ -413,13 +413,13 @@ public class ThreadSensor extends AbstractThread
             if(this.debug)
             {
                 try {
-                    out.write(USvalues.get(0));
+                    out.write(USvalues.get(0).toString());
                     out.newLine();
-                    out.write(USvalues.get(1));
+                    out.write(USvalues.get(1).toString());
                     out.newLine();
-                    out.write(USvalues.get(2));
+                    out.write(USvalues.get(2).toString());
                     out.newLine();
-                    out.write(USvalues.get(3));
+                    out.write(USvalues.get(3).toString());
                     out.newLine();
                     out.newLine();
                     out.flush();
