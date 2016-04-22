@@ -36,7 +36,7 @@ public class ThreadSensor extends AbstractThread
 	
 	/** fréquence de mise a jour des valeurs renvoyés par les capteurs. Valeurs par défaut de 5 fois par seconde s'il y a un problème de config */
 	// Overide par la config
-	private int sensorFrequency = 7;
+	private int sensorFrequency = 15;
 
     /**
      * Si l'on doit symétriser
