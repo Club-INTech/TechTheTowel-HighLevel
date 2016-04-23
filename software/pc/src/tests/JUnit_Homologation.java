@@ -85,6 +85,7 @@ public class JUnit_Homologation extends JUnit_Test
     @Test
     public void launch()
     {
+        boolean bite = true;
         try
         {
             theRobot.robot.moveLengthwise(200);
@@ -93,28 +94,34 @@ public class JUnit_Homologation extends JUnit_Test
         catch(Exception e)
         {
             log.debug("Problème d'exécution dans Castle");
-           // threadSensor.stop();
             e.printStackTrace();
         }
-        try {
-            Vec2 sup = scriptManager.getScript(ScriptNames.CLOSE_DOORS).entryPosition(3, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
-            theRobot.table.getObstacleManager().freePoint(sup);
-            scriptManager.getScript(ScriptNames.CLOSE_DOORS).goToThenExec(3, theRobot, emptyHook);
-        } catch (Exception e) {
-            log.debug("Problème d'exécution dans Close Doors");
-            //threadSensor.stop();
-            e.printStackTrace();
+        while(bite)
+        {
+            try {
+                Vec2 sup = scriptManager.getScript(ScriptNames.CLOSE_DOORS).entryPosition(3, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
+                theRobot.table.getObstacleManager().freePoint(sup);
+                scriptManager.getScript(ScriptNames.CLOSE_DOORS).goToThenExec(3, theRobot, emptyHook);
+                break;
+            } catch (Exception e) {
+                log.debug("Problème d'exécution dans Close Doors");
+                e.printStackTrace();
+            }
         }
-        try {
-            theRobot.robot.setTurningStrategy(TurningStrategy.FASTEST);
-            theRobot.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
-            Vec2 sup = scriptManager.getScript(ScriptNames.FISHING).entryPosition(3, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
-            theRobot.table.getObstacleManager().freePoint(sup);
-            scriptManager.getScript(ScriptNames.FISHING).goToThenExec(3, theRobot, emptyHook);
-        } catch (Exception e) {
-            log.debug("Problème d'exécution dans Fishing");
-           // threadSensor.stop();
+        while (bite)
+        {
+            try {
+                theRobot.robot.setTurningStrategy(TurningStrategy.FASTEST);
+                theRobot.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
+                Vec2 sup = scriptManager.getScript(ScriptNames.FISHING).entryPosition(3, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
+                theRobot.table.getObstacleManager().freePoint(sup);
+                scriptManager.getScript(ScriptNames.FISHING).goToThenExec(3, theRobot, emptyHook);
+                bite = false;
+            } catch (Exception e) {
+                log.debug("Problème d'exécution dans Fishing");
+                // threadSensor.stop();
 
+            }
         }
     }
 
