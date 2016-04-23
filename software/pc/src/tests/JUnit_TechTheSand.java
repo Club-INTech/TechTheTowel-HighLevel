@@ -64,8 +64,8 @@ public class JUnit_TechTheSand extends JUnit_Test
 			e.printStackTrace();
 		}
 		//theRobot.robot.moveLengthwise(200);
-		container.getService(ServiceNames.THREAD_INTERFACE);
-		container.startInstanciedThreads();
+		//container.getService(ServiceNames.THREAD_INTERFACE);
+		//container.startInstanciedThreads();
 
 
 
