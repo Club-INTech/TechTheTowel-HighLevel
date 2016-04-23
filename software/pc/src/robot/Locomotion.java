@@ -613,17 +613,17 @@ public class Locomotion implements Service
         	if(mustDetect)
         	{
         		//detectEnemyInFrontDisk(isMovementForward, turnOnly, aim);
-        		/*if(!isCurve)
+        		if(!isCurve)
                     detectEnemyAtDistance(85, aim);	// 85 mm est une bonne distance pour être safe.
 
                 if(isCurve)
                 {
                    detectEnemyInLocatedDisk(this.curveArc.getNextPosition(this.posStartedCurve, highLevelPosition.clone(),
                            highLevelOrientation, (this.curveArc.length<0 ? -1 :1)*detectionDistance));
-                }*/
+                }
         		
         		//si un ennemi est détecté à moins de 200, on diminue au minimum la vitesse
-            	/*
+/*
         		try
             	{
             		if(mustDetect)
@@ -857,7 +857,7 @@ public class Locomotion implements Service
                     // on attend la fin du mouvement
                     while (!isMotionEnded()) {
                         if (mustDetect)
-                            detectEnemyInDisk(true, true, highLevelPosition);
+                           // detectEnemyInDisk(true, true, highLevelPosition);
                         Sleep.sleep(feedbackLoopDelay);
                     }
 
