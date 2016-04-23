@@ -358,9 +358,17 @@ public class Castle extends AbstractScript
 	}
 
 	@Override
-	public void finalize(GameState<?> state, Exception e)
+	public void finalize(GameState<?> state, Exception e) throws SerialFinallyException
 	{
 		log.debug("Exception " + e + " dans Castle : Lancement du Finalize !");
+		try
+		{
+			state.robot.useActuator(ActuatorOrder.STOP_AXIS, false);
+		}
+		catch(Exception ex)
+		{
+			throw new SerialFinallyException();
+		}
 	}
 
 	@Override
