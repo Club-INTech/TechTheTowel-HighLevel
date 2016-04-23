@@ -216,7 +216,7 @@ public class ThreadSensor extends AbstractThread
                 for(int i=0 ; i<USvalues.size(); i++)
                 {
                     if(USvalues.get(i) != 0)
-                        USvalues.set(i, USvalues.get(i)+radius/2);
+                        USvalues.set(i, USvalues.get(i)/*+radius/2*/);
                 }
 
 				//ajout d'obstacles mobiles dans l'obstacleManager
