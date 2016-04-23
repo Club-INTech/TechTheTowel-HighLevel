@@ -454,7 +454,7 @@ public class ThreadSensor extends AbstractThread
                 if(USvalues.get(i)==0)
                 {
                    // log.critical("ARRETEZ DE SPAMMER LES CAPTEURS !");
-                    USvalues.set(i, -1);
+                    //USvalues.set(i, -1);
                 }
                 else if ( USvalues.get(i) > maxSensorRange)
                 {
