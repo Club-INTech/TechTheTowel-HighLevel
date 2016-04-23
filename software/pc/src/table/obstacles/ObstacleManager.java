@@ -223,7 +223,7 @@ public class ObstacleManager
     public synchronized void addObstacle(final Vec2 position, final int radius, final int lifetime)
     {
     	//vérification que l'on ne détecte pas un obstacle "normal"
-    	if (position.x>-1500+mRobotRadius && position.x<1500-mRobotRadius && position.y>mRobotRadius && position.y<2000-mRobotRadius //hors de la table
+    	if (position.x>-1500+mRobotRadius+100 && position.x<1500-mRobotRadius-100 && position.y>mRobotRadius+100 && position.y<2000-mRobotRadius-100 //hors de la table
                 && !( Geometry.isBetween(position.x, -100, 100) && Geometry.isBetween(position.y, 640, 1300)) //C'est la vitre
                 && !( Geometry.isBetween(position.x, -800, 800) && Geometry.isBetween(position.y, 1500, 2000)) //château de sable
 				&& !( Geometry.isBetween(position.x, 650, 1050) && Geometry.isBetween(position.y, 950, 1250)) //château de sable tapis

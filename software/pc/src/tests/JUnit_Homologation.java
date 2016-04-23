@@ -42,6 +42,7 @@ public class JUnit_Homologation extends JUnit_Test
 
         // Lance le thread graphique
         container.getService(ServiceNames.THREAD_TIMER);
+        container.getService(ServiceNames.THREAD_INTERFACE);
         this.threadSensor = (ThreadSensor) container.getService(ServiceNames.THREAD_SENSOR);
         //container.getService(ServiceNames.THREAD_INTERFACE);
         container.startInstanciedThreads();
@@ -93,7 +94,7 @@ public class JUnit_Homologation extends JUnit_Test
         catch(Exception e)
         {
             log.debug("Problème d'exécution dans Castle");
-            threadSensor.stop();
+           // threadSensor.stop();
             e.printStackTrace();
         }
         try {
@@ -102,7 +103,7 @@ public class JUnit_Homologation extends JUnit_Test
             scriptManager.getScript(ScriptNames.CLOSE_DOORS).goToThenExec(3, theRobot, emptyHook);
         } catch (Exception e) {
             log.debug("Problème d'exécution dans Close Doors");
-            threadSensor.stop();
+            //threadSensor.stop();
             e.printStackTrace();
         }
         try {
@@ -113,7 +114,7 @@ public class JUnit_Homologation extends JUnit_Test
             scriptManager.getScript(ScriptNames.FISHING).goToThenExec(3, theRobot, emptyHook);
         } catch (Exception e) {
             log.debug("Problème d'exécution dans Fishing");
-            threadSensor.stop();
+           // threadSensor.stop();
 
         }
     }
