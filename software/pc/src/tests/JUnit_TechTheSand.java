@@ -64,8 +64,8 @@ public class JUnit_TechTheSand extends JUnit_Test
 			e.printStackTrace();
 		}
 		//theRobot.robot.moveLengthwise(200);
-		container.getService(ServiceNames.THREAD_INTERFACE);
-		container.startInstanciedThreads();
+		//container.getService(ServiceNames.THREAD_INTERFACE);
+		//container.startInstanciedThreads();
 
 
 
@@ -80,7 +80,7 @@ public class JUnit_TechTheSand extends JUnit_Test
 			log.debug("Début de forage");
 			scriptManager.getScript(ScriptNames.TECH_THE_SAND).execute(2, theRobot, emptyHook);
 			log.critical("FINI DE FORER");
-			scriptManager.getScript(ScriptNames.CASTLE).execute(2, theRobot, emptyHook);
+			scriptManager.getScript(ScriptNames.CASTLE).execute(3, theRobot, emptyHook);
 		}
 		catch(Exception e)
 		{

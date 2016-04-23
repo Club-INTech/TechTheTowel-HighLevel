@@ -441,7 +441,7 @@ public class ObstacleManager
 	    	if(closestEnnemy != null)
 	    	{
 	    		//log.debug("Position de l'ennemi le plus proche, non testé, d'après distanceToClosestEnnemy: "+mUntestedMobileObstacles.get(indexOfClosestEnnemy).getPosition(), this);
-		    	return (int)Math.sqrt((double)squaredDistanceToClosestEnemy) - mRobotRadius - closestEnnemy.radius;
+		    	return (int)Math.sqrt((double)squaredDistanceToClosestEnemy) - mRobotRadius /*- closestEnnemy.radius*/;
 	    	}
 	    	else
 	    		return 10000;

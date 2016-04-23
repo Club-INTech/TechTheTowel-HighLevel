@@ -139,7 +139,7 @@ public class TechTheSand extends AbstractScript
 
 				stateToConsider.robot.setForceMovement(false);
 
-                stateToConsider.robot.moveLengthwise(550);
+                stateToConsider.robot.moveLengthwise(570);
 
 
                 stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
@@ -170,7 +170,7 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.robot.useActuator(ActuatorOrder.START_AXIS, false);
                 
                 // Définition de l'arc à suivre, point de départ temporaire
-                Arc approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(130,2000-230), Math.PI, true);
+                Arc approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(100,2000-160), Math.PI, true);
 
 				try {
 					stateToConsider.robot.setForceMovement(false);
