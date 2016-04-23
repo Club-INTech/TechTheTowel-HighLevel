@@ -112,6 +112,14 @@ public class ThreadSensor extends AbstractThread
      */
     ArrayList<Integer> USvalues = new ArrayList<>(4);
 
+    /**
+     * Valeurs de capteurs modifiées pour la suppression d'obstacle
+     * Ainsi si l'un des capteurs nous indique 4km, c'est sûrement qu'il n'y a rien devant lui
+     * On sépare ce qui sert à détecter de ce qui sert à ne pas détecter (oui c'est trop méta pour toi...)
+     * PS : Si il indique 4 km, y'a un pb hein...
+     */
+    ArrayList<Integer> USvaluesForDeletion = new ArrayList<>(4);
+
 	/**
 	 * Largeur du robot recuperée sur la config
 	 */
@@ -409,6 +417,7 @@ public class ThreadSensor extends AbstractThread
 		try 
 		{
             USvalues = mSensorsCardWrapper.getUSSensorValue(USsensors.ULTRASOUND); //On récupère une liste de valeurs
+            USvaluesForDeletion = (ArrayList<Integer>) USvalues.clone();
 
             if(this.debug)
             {
@@ -447,12 +456,21 @@ public class ThreadSensor extends AbstractThread
                    // log.critical("ARRETEZ DE SPAMMER LES CAPTEURS !");
                     USvalues.set(i, -1);
                 }
-                else if ( USvalues.get(i) > maxSensorRange || USvalues.get(i) < minSensorRange)
+                else if ( USvalues.get(i) > maxSensorRange)
                 {
                     USvalues.set(i, 0);
+                    USvaluesForDeletion.set(i, (int)maxSensorRange);
+                }
+                else if (USvalues.get(i) < minSensorRange)
+                {
+                    USvalues.set(i, 0);
+                    USvaluesForDeletion.set(i, 0);
                 }
                 else if(i == 1 && modeBorgne)
+                {
                     USvalues.set(1, 0);
+                    USvaluesForDeletion.set(i, 0);
+                }
 
             }
 		}
@@ -496,15 +514,15 @@ public class ThreadSensor extends AbstractThread
 		// enlever les obstacles qu'on devrait voir mais qu'on ne detecte plus
 
         //On limite la suppression à 80% de la distance détectée
-        int distanceLF = (int)(USvalues.get(0)*0.8);
-        int distanceRF = (int)(USvalues.get(1)*0.8);
-        int distanceLB = (int)(USvalues.get(2)*0.8);
-        int distanceRB = (int)(USvalues.get(3)*0.8);
+        int distanceLF = (int)(USvaluesForDeletion.get(0)*0.8);
+        int distanceRF = (int)(USvaluesForDeletion.get(1)*0.8);
+        int distanceLB = (int)(USvaluesForDeletion.get(2)*0.8);
+        int distanceRB = (int)(USvaluesForDeletion.get(3)*0.8);
 
         mTable.getObstacleManager().removeNonDetectedObstacles(positionLF, (mRobot.getOrientationFast()+angleLF), distanceLF, detectionAngle);
-        mTable.getObstacleManager().removeNonDetectedObstacles(positionRF(), (mRobot.getOrientationFast()+angleRF), distanceRF, detectionAngle);
+        mTable.getObstacleManager().removeNonDetectedObstacles(positionRF(), (mRobot.getOrientationFast()-angleRF), distanceRF, detectionAngle);
         mTable.getObstacleManager().removeNonDetectedObstacles(positionLB, (mRobot.getOrientationFast()+angleLB), distanceLB, detectionAngle);
-        mTable.getObstacleManager().removeNonDetectedObstacles(positionRB, (mRobot.getOrientationFast()+angleRB), distanceRB, detectionAngle);
+        mTable.getObstacleManager().removeNonDetectedObstacles(positionRB, (mRobot.getOrientationFast()-angleRB), distanceRB, detectionAngle);
 
 
 	}
