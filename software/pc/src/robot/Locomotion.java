@@ -983,7 +983,7 @@ public class Locomotion implements Service
     public void detectEnemyAtDistance(int distance, Vec2 movementDirection) throws UnexpectedObstacleOnPathException
     {
         int closest = table.getObstacleManager().distanceToClosestEnemy(highLevelPosition, movementDirection);
-        if(closest <= distance && closest > -120)
+        if(closest <= distance && closest > -50)
         {
         	log.debug("DetectEnemyAtDistance voit un ennemi trop proche pour continuer le déplacement (distance de " 
         			 + table.getObstacleManager().distanceToClosestEnemy(highLevelPosition, movementDirection) +" mm)");
