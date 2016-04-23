@@ -54,6 +54,7 @@ public class JUnit_Homologation extends JUnit_Test
         theRobot.robot.setOrientation(Math.PI);
         theRobot.robot.setPosition(Table.entryPosition);
         theRobot.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+        theRobot.table.deleteAllTheShells();
         //theRobot.robot.moveLengthwise(200, emptyHook, false);
 
         theRobot.robot.useActuator(ActuatorOrder.ARM_INIT, true);
