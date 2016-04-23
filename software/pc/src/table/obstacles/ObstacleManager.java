@@ -227,7 +227,7 @@ public class ObstacleManager
                 && !( Geometry.isBetween(position.x, -100, 100) && Geometry.isBetween(position.y, 800, 1550)) //C'est la vitre
                 && !( Geometry.isBetween(position.x, -800, 800) && Geometry.isBetween(position.y, 1500, 2000)) //château de sable
 				&& !( Geometry.isBetween(position.x, 700, 1000) && Geometry.isBetween(position.y, 950, 1250)) //château de sable tapis
-				&& !( Geometry.isBetween(position.x, 0, 700) && Geometry.isBetween(position.y, 800, 1300)) //Notre zone de depose
+				&& !( Geometry.isBetween(position.x, 0, 800) && Geometry.isBetween(position.y, 800, 1400)) //Notre zone de depose
 				&& !( Geometry.isBetween(position.x, -1000, -700) && Geometry.isBetween(position.y, 950, 1250)) //château de sable tapis adv
 				)
     	{
