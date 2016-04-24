@@ -259,11 +259,11 @@ public class Castle extends AbstractScript
 				}
 				catch (UnableToMoveException e)
 				{
-					if(!waitForEnnemy(stateToConsider, e.aim))
+					if(!waitForEnnemy(stateToConsider, stateToConsider.robot.getPosition(), true))
 						throw new UnableToMoveException(e.aim, UnableToMoveReason.OBSTACLE_DETECTED);
 					if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED)
 					{
-						double done = Math.abs(stateToConsider.robot.getOrientation()-angle)/(950./500);
+						double done = Math.abs(stateToConsider.robot.getOrientationFast()-angle)/(950./500);
 						stateToConsider.robot.moveArc(new Arc(-500,(int)(950*done), stateToConsider.robot.getOrientationFast(), false), hooksToConsider);
 					}
 				}
@@ -310,7 +310,7 @@ public class Castle extends AbstractScript
                     }
                     catch (UnableToMoveException e)
                     {
-                        if(!waitForEnnemy(stateToConsider, e.aim))
+						if(!waitForEnnemy(stateToConsider, stateToConsider.robot.getPosition(), false))
                             throw new UnableToMoveException(e.aim, UnableToMoveReason.OBSTACLE_DETECTED);
                         if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED)
                         {

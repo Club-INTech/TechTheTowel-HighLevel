@@ -138,15 +138,17 @@ public abstract class AbstractScript implements Service
 
 	/**
 	 * Fonction d'attente de débloquage du chemin, pour eviter d'abandonner un script inutilement
-	 * @param posEnnemy la position de l'ennemi
+	 * @param posRobot la position du robot
 	 * @return true si chemin dégagé, false sinon
      */
-	public boolean waitForEnnemy(GameState<Robot> actualState, Vec2 posEnnemy)
+	public boolean waitForEnnemy(GameState<Robot> actualState, Vec2 posRobot, boolean forward)
 	{
 		long time = System.currentTimeMillis();
-		while(actualState.table.getObstacleManager().isDiscObstructed(posEnnemy, 200))
+		int signe = forward ? 1 : -1;
+		Vec2 aim = posRobot.plusNewVector(new Vec2((int)(signe*300*Math.cos(actualState.robot.getOrientation())),(int)(signe*300*Math.sin(actualState.robot.getOrientation()))));
+		while(actualState.table.getObstacleManager().isDiscObstructed(aim, 200))
 		{
-			if(System.currentTimeMillis() - time > 4000)
+			if(System.currentTimeMillis() - time > 5000)
 				return false;
 			try {
 				Thread.sleep(100);
