@@ -143,12 +143,17 @@ public abstract class AbstractScript implements Service
      */
 	public boolean waitForEnnemy(GameState<Robot> actualState, Vec2 posRobot, boolean forward)
 	{
-		long time = System.currentTimeMillis();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        long time = System.currentTimeMillis();
 		int signe = forward ? 1 : -1;
 		Vec2 aim = posRobot.plusNewVector(new Vec2((int)(signe*300*Math.cos(actualState.robot.getOrientation())),(int)(signe*300*Math.sin(actualState.robot.getOrientation()))));
 		while(actualState.table.getObstacleManager().isDiscObstructed(aim, 200))
 		{
-			if(System.currentTimeMillis() - time > 5000)
+			if(System.currentTimeMillis() - time > 4000)
 				return false;
 			try {
 				Thread.sleep(100);
