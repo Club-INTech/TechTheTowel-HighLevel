@@ -52,7 +52,7 @@ public class Fishing extends AbstractScript
 	 * @param stateToConsider ensemble des informations sur le match
 	 * @throws SerialConnexionException 
 	 */
-	public void fishThem(GameState<Robot> stateToConsider) throws SerialConnexionException
+	public void freeThem(GameState<Robot> stateToConsider) throws SerialConnexionException
 	{
 		stateToConsider.robot.useActuator(ActuatorOrder.MAGNET_DOWN, true);
 		stateToConsider.robot.useActuator(ActuatorOrder.FINGER_DOWN, true);
@@ -116,7 +116,7 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.moveLengthwise(240, hooksToConsider, true);
 				
 				// On lâche les poissons
-				this.fishThem(stateToConsider);
+				this.freeThem(stateToConsider);
 				
 				// Points gagnés moyen pour ce passage
 				stateToConsider.obtainedPoints += 20;
@@ -153,7 +153,7 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.moveLengthwise(280, hooksToConsider, true);
 				
 				// On lâche les poissons
-				this.fishThem(stateToConsider);
+				this.freeThem(stateToConsider);
 				
 				// On indique au robot que les poissons ne sont plus sur le bras
 				stateToConsider.robot.setAreFishesOnBoard(false);
@@ -203,7 +203,7 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.moveLengthwise(240, hooksToConsider, true);
 
 				// On lâche les poissons
-				this.fishThem(stateToConsider);
+				this.freeThem(stateToConsider);
 
 				// Points gagnés moyen pour ce passage
 				stateToConsider.obtainedPoints += 20;
@@ -240,7 +240,7 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.moveLengthwise(280, hooksToConsider, true);
 
 				// On lâche les poissons
-				this.fishThem(stateToConsider);
+				this.freeThem(stateToConsider);
 
 				// On indique au robot que les poissons ne sont plus sur le bras
 				stateToConsider.robot.setAreFishesOnBoard(false);
@@ -300,7 +300,7 @@ public class Fishing extends AbstractScript
 
 
 				// On lâche les poissons
-				this.fishThem(stateToConsider);
+				this.freeThem(stateToConsider);
 				
 				// Points gagnés moyen pour ce passage
 				stateToConsider.obtainedPoints += 20;
@@ -350,7 +350,7 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.moveLengthwise(100);
 				
 				// On lâche les poissons
-				this.fishThem(stateToConsider);
+				this.freeThem(stateToConsider);
 				
 				// On indique au robot que les poissons ne sont plus sur le bras
 				stateToConsider.robot.setAreFishesOnBoard(false);
@@ -377,7 +377,7 @@ public class Fishing extends AbstractScript
 				// On commence à se placer près du bord
 				stateToConsider.robot.turn(Math.PI - 0.24);
 
-				stateToConsider.robot.moveLengthwise(-250, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(-260, hooksToConsider, true);
 
                // stateToConsider.robot.setForceMovement(true);
 
@@ -496,17 +496,15 @@ public class Fishing extends AbstractScript
 				hooksToConsider.add(hook1);
 				
 				// Mouvement du robot suivant un arc pour se placer près du bac
-				stateToConsider.robot.moveArc(new Arc(-380,380,Math.PI,true),hooksToConsider);
-				
-				log.debug(stateToConsider.robot.getOrientation());
+				stateToConsider.robot.moveArc(new Arc(-430,470,-Math.PI/2,false),hooksToConsider);
 				
 				// On crée le hook de position pour lever le bras près du filet, puis ajout à la liste de hooks
-				Hook hook2 = hookFactory.newXLesserHook(660);
+				Hook hook2 = hookFactory.newXLesserHook(680);
 				hook2.addCallback(new Callback(new RiseArm(), true, stateToConsider));
 				hooksToConsider.add(hook2);
 
 				// On crée le hook de position pour lâcher les poissons, puis ajout à la liste
-				Hook hook3 = hookFactory.newXLesserHook(520);
+				Hook hook3 = hookFactory.newXLesserHook(500);
 				hook3.addCallback(new Callback(new DropFish(), true, stateToConsider));
 				hooksToConsider.add(hook3);
 				
@@ -519,12 +517,14 @@ public class Fishing extends AbstractScript
 				//stateToConsider.robot.setAreFishesOnBoard(true);
 
 				// On longe le bac
-				stateToConsider.robot.moveLengthwise(520, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(500, hooksToConsider, true);
 				
-				/*
-				 * stateToConsider.robot.moveArc(new Arc(300,200,Math.PI/2,true),hooksToConsider);
-				 * stateToConsider.robot.moveArc(new Arc(300,-200,Math.PI/2,true),hooksToonsider);
-				 */
+				
+				//stateToConsider.robot.moveArc(new Arc(350,250,Math.PI-0.5,false),hooksToConsider);
+				//stateToConsider.robot.turn(Math.PI,hooksToConsider,true);
+				//freeThem(stateToConsider);
+				//stateToConsider.robot.moveArc(new Arc(300,-200,stateToConsider.robot.getOrientation(),false),hooksToConsider);
+				 
 
 				// Points gagnés moyen pour ce passage
 				stateToConsider.obtainedPoints += 20;
@@ -544,9 +544,9 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.moveLengthwise(-460, hooksToConsider, true);
 				
 				// nouvelle condition pour le hook levant le bras, même action, mise à jour dans la liste
-				hook2 = hookFactory.newXLesserHook(600);
-				hook2.addCallback(new Callback(new RiseArm(), true, stateToConsider));
-				hooksToConsider.add(hook2);
+				//hook2 = hookFactory.newXLesserHook(600);
+				//hook2.addCallback(new Callback(new RiseArm(), true, stateToConsider));
+				//hooksToConsider.add(hook2);
 				
 				// nouvelle condition pour le hook lâchant les poissons, même action, mise à jour dans la liste
 				hook3 = hookFactory.newXLesserHook(480);
@@ -562,7 +562,9 @@ public class Fishing extends AbstractScript
 				//stateToConsider.robot.setAreFishesOnBoard(true);
 				
 				// on longe le bac
-				stateToConsider.robot.moveLengthwise(530, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(300, hooksToConsider, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
+				stateToConsider.robot.moveLengthwise(300,hooksToConsider,true);
 				
 				// On indique au robot que les poissons ne sont plus sur le bras
 				stateToConsider.robot.setAreFishesOnBoard(false);
@@ -621,7 +623,7 @@ public class Fishing extends AbstractScript
 		}
 		else if (version ==4)
 		{
-			return new Circle(new Vec2(1100,450));
+			return new Circle(new Vec2(1180,450));
 		}
 		else
 		{
