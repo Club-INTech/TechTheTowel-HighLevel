@@ -139,7 +139,7 @@ public class TechTheSand extends AbstractScript
 
 				stateToConsider.robot.setForceMovement(false);
 
-                stateToConsider.robot.moveLengthwise(950);
+                stateToConsider.robot.moveLengthwise(975);
 
 				stateToConsider.robot.turn(2*Math.PI/3);
 
