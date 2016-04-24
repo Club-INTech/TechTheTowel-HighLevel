@@ -175,12 +175,17 @@ public class ThreadSensor extends AbstractThread
             e.printStackTrace();
         }
 
-        // boucle d'attente de début de match
-		boolean jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
-		while(jumperWasAbsent || !mSensorsCardWrapper.isJumperAbsent())
-		{
+        while(mSensorsCardWrapper.isJumperAbsent())
+        {
             try {
-                jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        while(!mSensorsCardWrapper.isJumperAbsent())
+        {
+            try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();

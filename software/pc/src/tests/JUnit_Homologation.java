@@ -134,12 +134,21 @@ public class JUnit_Homologation extends JUnit_Test
 
         System.out.println("Robot pret pour le match, attente du retrait du jumper");
 
-        // attends que le jumper soit retiré du robot
-        boolean jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
-        while(jumperWasAbsent || !mSensorsCardWrapper.isJumperAbsent())
+        while(mSensorsCardWrapper.isJumperAbsent())
         {
-            jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
-            Sleep.sleep(100);
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        while(!mSensorsCardWrapper.isJumperAbsent())
+        {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
         // maintenant que le jumper est retiré, le match a commencé
