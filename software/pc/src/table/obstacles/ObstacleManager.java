@@ -337,7 +337,6 @@ public class ObstacleManager
     	for(int i = 0; i < mMobileObstacles.size(); i++)
     		if(mMobileObstacles.get(i).getOutDatedTime() < System.currentTimeMillis())
     		{
-				log.debug("1");
     			mMobileObstacles.remove(i--);
     		}
     	

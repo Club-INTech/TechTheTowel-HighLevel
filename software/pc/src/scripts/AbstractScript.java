@@ -151,7 +151,7 @@ public abstract class AbstractScript implements Service
         long time = System.currentTimeMillis();
 		int signe = forward ? 1 : -1;
 		Vec2 aim = posRobot.plusNewVector(new Vec2((int)(signe*300*Math.cos(actualState.robot.getOrientation())),(int)(signe*300*Math.sin(actualState.robot.getOrientation()))));
-		while(actualState.table.getObstacleManager().isDiscObstructed(aim, 200))
+		while(actualState.table.getObstacleManager().isDiscObstructed(aim, 100))
 		{
 			if(System.currentTimeMillis() - time > 4000)
 				return false;
