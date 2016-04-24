@@ -81,6 +81,13 @@ public class Arc
             this.radius *= -1;
     }
 
+    /**
+     * Crée un arc à partir du rayon de courbure, de la longueur d'arc et d'un angle de départ ou d'arrivée
+     * @param radius le rayon
+     * @param length la longueur d'arc
+     * @param angle l'angle
+     * @param isEnd indique si l'angle est de départ ou d'arrivée
+     */
     public Arc(double radius, double length, double angle, boolean isEnd)
     {
         this.radius = radius;
