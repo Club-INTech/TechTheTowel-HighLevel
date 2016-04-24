@@ -336,6 +336,7 @@ public class Castle extends AbstractScript
 		}
 		catch (Exception e)
 		{
+			e.printStackTrace();
 			finalize(stateToConsider, e);
 			throw new UnableToMoveException(stateToConsider.robot.getPositionFast(), UnableToMoveReason.PHYSICALLY_BLOCKED);
 		}
