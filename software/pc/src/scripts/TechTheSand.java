@@ -130,7 +130,7 @@ public class TechTheSand extends AbstractScript
 
 				//Arc start = new Arc(stateToConsider.robot.getPosition(), entry.start, entry.startAngle, true);
 
-				Arc start = new Arc(-893, 400, Math.PI, false);
+				Arc start = new Arc(-200, 50, Math.PI, false);
 
 				stateToConsider.robot.setForceMovement(true);
 
@@ -139,7 +139,9 @@ public class TechTheSand extends AbstractScript
 
 				stateToConsider.robot.setForceMovement(false);
 
-                stateToConsider.robot.moveLengthwise(570);
+                stateToConsider.robot.moveLengthwise(950);
+
+				stateToConsider.robot.turn(2*Math.PI/3);
 
 
                 stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
