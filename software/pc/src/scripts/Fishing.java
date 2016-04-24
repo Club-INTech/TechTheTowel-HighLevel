@@ -496,7 +496,7 @@ public class Fishing extends AbstractScript
 				hooksToConsider.add(hook1);
 				
 				// Mouvement du robot suivant un arc pour se placer près du bac
-				stateToConsider.robot.moveArc(new Arc(-430,470,-Math.PI/2,false),hooksToConsider);
+				stateToConsider.robot.moveArc(new Arc(-430,465,-Math.PI/2,false),hooksToConsider);
 				
 				// On crée le hook de position pour lever le bras près du filet, puis ajout à la liste de hooks
 				Hook hook2 = hookFactory.newXLesserHook(680);
@@ -536,12 +536,14 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.setAreFishesOnBoard(false);
 				
 				// On modifie la condition du premier hook, même action, puis mise à jour dans la liste
-				hook1 = hookFactory.newXGreaterHook(750);
+				hook1 = hookFactory.newXGreaterHook(730);
 				hook1.addCallback(new Callback(new GetFish(), true, stateToConsider));
 				hooksToConsider.add(hook1);
 
 				// on repart chercher d'autre poissons
+				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 				stateToConsider.robot.moveLengthwise(-460, hooksToConsider, true);
+				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 				
 				// nouvelle condition pour le hook levant le bras, même action, mise à jour dans la liste
 				//hook2 = hookFactory.newXLesserHook(600);
@@ -549,7 +551,7 @@ public class Fishing extends AbstractScript
 				//hooksToConsider.add(hook2);
 				
 				// nouvelle condition pour le hook lâchant les poissons, même action, mise à jour dans la liste
-				hook3 = hookFactory.newXLesserHook(480);
+				hook3 = hookFactory.newXLesserHook(450);
 				hook3.addCallback(new Callback(new DropFish(), true, stateToConsider));
 				hooksToConsider.add(hook3);
 				
@@ -562,9 +564,9 @@ public class Fishing extends AbstractScript
 				//stateToConsider.robot.setAreFishesOnBoard(true);
 				
 				// on longe le bac
-				stateToConsider.robot.moveLengthwise(300, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(280, hooksToConsider, true);
 				stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
-				stateToConsider.robot.moveLengthwise(300,hooksToConsider,true);
+				stateToConsider.robot.moveLengthwise(280,hooksToConsider,true);
 				
 				// On indique au robot que les poissons ne sont plus sur le bras
 				stateToConsider.robot.setAreFishesOnBoard(false);
