@@ -618,11 +618,11 @@ public class Locomotion implements Service
         	{
         		//detectEnemyInFrontDisk(isMovementForward, turnOnly, aim);
         		if(!isCurve && !basicDetection)
-                    detectEnemyAtDistance(150, aim);	// 85 mm est une bonne distance pour être safe.
+                    detectEnemyAtDistance(85, aim.minusNewVector(highLevelPosition.clone()));	// 85 mm est une bonne distance pour être safe.
                 else if(!basicDetection)
                 {
-                    detectEnemyAtDistance(150, this.curveArc.getNextPosition(this.posStartedCurve, highLevelPosition.clone(),
-                          highLevelOrientation, (this.curveArc.length<0 ? -1 :1)*detectionDistance));
+                    detectEnemyAtDistance(85, this.curveArc.getNextPosition(this.posStartedCurve, highLevelPosition.clone(),
+                          highLevelOrientation, (this.curveArc.length<0 ? -1 :1)*detectionDistance).minusNewVector(highLevelPosition.clone()));
                 }
                 else
                 {
@@ -1011,6 +1011,7 @@ public class Locomotion implements Service
     public void detectEnemyAtDistance(int distance, Vec2 movementDirection) throws UnexpectedObstacleOnPathException
     {
         int closest = table.getObstacleManager().distanceToClosestEnemy(highLevelPosition, movementDirection);
+        //log.debug(closest);
         if(closest <= distance && closest > -150)
         {
         	log.debug("DetectEnemyAtDistance voit un ennemi trop proche pour continuer le déplacement (distance de " 

@@ -454,7 +454,7 @@ public class ThreadSensor extends AbstractThread
             USvaluesForDeletion.clear();
             for(int i=0 ; i<4 ; i++)
             {
-                //USvalues.set(i, USvalues.get(i)+radius);
+                USvalues.set(i, USvalues.get(i)+radius);
                 USvaluesForDeletion.add((int)(USvalues.get(i).intValue()*0.8));
             }
 
