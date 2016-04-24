@@ -41,7 +41,7 @@ public class ThreadTimer extends AbstractThread
 	public static long matchDuration = 90000;
 	
 	/** Temps en ms qui s'écoule entre deux mise a jour de la liste des obstacle périmables. Lors de chaque mise a jour, les obstacles périmés sont détruits. */
-	public static int obstacleRefreshInterval = 0;
+	public static int obstacleRefreshInterval = 100;
 	
 	/** interface graphique d'affichage de la table, pour le debug */
 	//public Window window;

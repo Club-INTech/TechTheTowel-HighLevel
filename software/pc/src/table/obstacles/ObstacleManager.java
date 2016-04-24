@@ -333,11 +333,11 @@ public class ObstacleManager
      */
     public synchronized void removeOutdatedObstacles()
     {
-    	
     	// enlève les obstacles confirmés s'ils sont périmés
     	for(int i = 0; i < mMobileObstacles.size(); i++)
     		if(mMobileObstacles.get(i).getOutDatedTime() < System.currentTimeMillis())
     		{
+				log.debug("1");
     			mMobileObstacles.remove(i--);
     		}
     	
