@@ -172,7 +172,7 @@ public class Locomotion implements Service
     /** Vitesse de rotation */
     private double rotSpeed = Speed.MEDIUM_ALL.rotationSpeed;
 
-    private ArrayList<Integer> USvalues;
+    private ArrayList<Integer> USvalues = new ArrayList<Integer>(){{for(int i=0;i<4;i++)add(0);}};
 
     private boolean basicDetection = false;
 
