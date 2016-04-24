@@ -2,6 +2,7 @@ package tests;
 
 import enums.*;
 import exceptions.BlockedActuatorException;
+import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import hook.Hook;
 import org.junit.Before;
@@ -105,6 +106,11 @@ public class JUnit_Homologation extends JUnit_Test
                 break;
             } catch (Exception e) {
                 log.debug("Problème d'exécution dans Close Doors");
+                try {
+                    theRobot.robot.moveLengthwise(-200);
+                } catch (UnableToMoveException e1) {
+                    e1.printStackTrace();
+                }
                 e.printStackTrace();
             }
         }
@@ -119,6 +125,11 @@ public class JUnit_Homologation extends JUnit_Test
                 bite = false;
             } catch (Exception e) {
                 log.debug("Problème d'exécution dans Fishing");
+                try {
+                    theRobot.robot.moveLengthwise(-200);
+                } catch (UnableToMoveException e1) {
+                    e1.printStackTrace();
+                }
                 // threadSensor.stop();
 
             }
