@@ -1246,8 +1246,11 @@ public class Locomotion implements Service
      */
     public synchronized void setForceMovement(boolean choice) throws SerialConnexionException
     {
-        deplacements.setForceMovement(choice);
-        this.isForcing = choice;
+        if(isForcing != choice)
+        {
+            deplacements.setForceMovement(choice);
+            this.isForcing = choice;
+        }
     }
 
     /**

@@ -252,7 +252,21 @@ public class Castle extends AbstractScript
 
 				stateToConsider.robot.setBasicDetection(true);
 
-				stateToConsider.robot.moveArc(new Arc(-500, 950, stateToConsider.robot.getOrientation(), false), hooksToConsider);
+				double angle = stateToConsider.robot.getOrientation();
+				try
+				{
+					stateToConsider.robot.moveArc(new Arc(-500, 950, angle, false), hooksToConsider);
+				}
+				catch (UnableToMoveException e)
+				{
+					if(!waitForEnnemy(stateToConsider, e.aim))
+						throw new UnableToMoveException(e.aim, UnableToMoveReason.OBSTACLE_DETECTED);
+					if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED)
+					{
+						double done = Math.abs(stateToConsider.robot.getOrientation()-angle)/(950./500);
+						stateToConsider.robot.moveArc(new Arc(-500,(int)(950*done), stateToConsider.robot.getOrientationFast(), false), hooksToConsider);
+					}
+				}
 
 				stateToConsider.robot.setBasicDetection(false);
 
@@ -286,18 +300,32 @@ public class Castle extends AbstractScript
 				// partie bloquante pour fermer les cabines sans lancer l'appel à close doors
 				try
 				{
-					//stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
-					stateToConsider.robot.setForceMovement(true);
-					Arc arc = new Arc(-1100, -800, stateToConsider.robot.getOrientation(), false);
-					stateToConsider.robot.moveArc(arc, hooksToConsider);
+                    //stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+                    stateToConsider.robot.setForceMovement(true);
+                    stateToConsider.robot.setBasicDetection(true);
+                    angle = stateToConsider.robot.getOrientation();
+                    try {
+                        Arc arc = new Arc(-1100, -800, angle, false);
+                        stateToConsider.robot.moveArc(arc, hooksToConsider);
+                    }
+                    catch (UnableToMoveException e)
+                    {
+                        if(!waitForEnnemy(stateToConsider, e.aim))
+                            throw new UnableToMoveException(e.aim, UnableToMoveReason.OBSTACLE_DETECTED);
+                        if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED)
+                        {
+                            double done = Math.abs(stateToConsider.robot.getOrientation()-angle)/(1100./800);
+                            stateToConsider.robot.moveArc(new Arc(-1100, (int)(-800*done), stateToConsider.robot.getOrientationFast(), false), hooksToConsider);
+                        }
+                    }
                     stateToConsider.robot.setForceMovement(false);
+                    stateToConsider.robot.setBasicDetection(false);
                 }
-				
-				
 				catch(UnableToMoveException u)
 				{
 					stateToConsider.robot.setForceMovement(false);
-					stateToConsider.robot.moveLengthwise(200);
+                    stateToConsider.robot.setBasicDetection(false);
+                    stateToConsider.robot.moveLengthwise(200);
 					return;
 				}
 
@@ -368,7 +396,9 @@ public class Castle extends AbstractScript
 		try
 		{
 			state.robot.useActuator(ActuatorOrder.STOP_AXIS, false);
-		}
+            state.robot.setBasicDetection(true);
+            state.robot.setForceMovement(false);
+        }
 		catch(Exception ex)
 		{
 			throw new SerialFinallyException();

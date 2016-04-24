@@ -135,6 +135,27 @@ public abstract class AbstractScript implements Service
 	 * @throws SerialConnexionException s'il y a un problème de communication avec une des cartes électroniques
 	 */
 	public abstract void finalize(GameState<?> state, Exception e) throws UnableToMoveException, SerialFinallyException;
+
+	/**
+	 * Fonction d'attente de débloquage du chemin, pour eviter d'abandonner un script inutilement
+	 * @param posEnnemy la position de l'ennemi
+	 * @return true si chemin dégagé, false sinon
+     */
+	public boolean waitForEnnemy(GameState<Robot> actualState, Vec2 posEnnemy)
+	{
+		long time = System.currentTimeMillis();
+		while(actualState.table.getObstacleManager().isDiscObstructed(posEnnemy, 200))
+		{
+			if(System.currentTimeMillis() - time > 4000)
+				return false;
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		return true;
+	}
 	
 	/* (non-Javadoc)
 	 * @see container.Service#updateConfig()

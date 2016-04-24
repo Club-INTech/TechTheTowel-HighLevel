@@ -227,7 +227,7 @@ public class ObstacleManager
                 && !( Geometry.isBetween(position.x, -200, 200) && Geometry.isBetween(position.y, 800, 1550)) //C'est la vitre
                 && !( Geometry.isBetween(position.x, -800, 800) && Geometry.isBetween(position.y, 1500, 2000)) //château de sable
 				&& !( Geometry.isBetween(position.x, 700, 1000) && Geometry.isBetween(position.y, 950, 1250)) //château de sable tapis
-				&& !( Geometry.isBetween(position.x, 0, 800) && Geometry.isBetween(position.y, 800, 1400)) //Notre zone de depose
+				&& !( Geometry.isBetween(position.x, 0, 600) && Geometry.isBetween(position.y, 800, 1300)) //Notre zone de depose
 				&& !( Geometry.isBetween(position.x, -1000, -700) && Geometry.isBetween(position.y, 950, 1250)) //château de sable tapis adv
 				)
     	{
@@ -358,7 +358,6 @@ public class ObstacleManager
      */
     public synchronized boolean isDiscObstructed(final Vec2 discCenter, int radius)
     {
-    	boolean isDiscObstructed = false;
     	radiusDetectionDisc=radius;
     	positionDetectionDisc=discCenter;
     	
@@ -370,11 +369,10 @@ public class ObstacleManager
     		{
     			log.debug("Disque obstructed avec l'obstacle "+mMobileObstacles.get(i).getPosition()+"de rayon"+mMobileObstacles.get(i).radius);
     			log.debug("Disque en "+discCenter+" de rayon "+radius);
-    			isDiscObstructed=true;
-    			
+    			return true;
     		}
     	}
-    	return isDiscObstructed;
+    	return false;
     }  
 
     /**
