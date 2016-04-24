@@ -54,7 +54,7 @@ public class ObstacleManager
 	private final int timeToTestObstacle = 1000;
 
 	/** Temps de vie d'un robot ennemi */
-	private final int defaultLifetime = 2000;
+	private final int defaultLifetime = 1000;
 
 	/**
      * Instancie un nouveau gestionnaire d'obstacle.
