@@ -170,7 +170,11 @@ public class Locomotion implements Service
     private double transSpeed = Speed.MEDIUM_ALL.translationSpeed;
 
     /** Vitesse de rotation */
-    private double rotSpeed = Speed.MEDIUM_ALL.rotationSpeed;;
+    private double rotSpeed = Speed.MEDIUM_ALL.rotationSpeed;
+
+    private ArrayList<Integer> USvalues;
+
+    private boolean basicDetection = false;
 
 
     
@@ -613,12 +617,16 @@ public class Locomotion implements Service
         	if(mustDetect)
         	{
         		//detectEnemyInFrontDisk(isMovementForward, turnOnly, aim);
-        		if(!isCurve)
+        		if(!isCurve && !basicDetection)
                     detectEnemyAtDistance(85, aim);	// 85 mm est une bonne distance pour être safe.
-                else
+                else if(!basicDetection)
                 {
                     detectEnemyAtDistance(85, this.curveArc.getNextPosition(this.posStartedCurve, highLevelPosition.clone(),
                           highLevelOrientation, (this.curveArc.length<0 ? -1 :1)*detectionDistance));
+                }
+                else
+                {
+                    basicDetect(isMovementForward);
                 }
         		
         		//si un ennemi est détecté à moins de 200, on diminue au minimum la vitesse
@@ -665,6 +673,26 @@ public class Locomotion implements Service
         while(!isMotionEnded())
         	;
         
+    }
+
+    private void basicDetect(boolean isMovementForward) throws UnexpectedObstacleOnPathException
+    {
+        if(isMovementForward)
+        {
+            if((USvalues.get(0) < 200 && USvalues.get(0) != 0) || ((USvalues.get(1) < 200 && USvalues.get(1) != 0)))
+            {
+                log.warning("Lancement de UnexpectedObstacleOnPathException dans detectEnemyInLocatedDisk");
+                throw new UnexpectedObstacleOnPathException();
+            }
+        }
+        else
+        {
+            if((USvalues.get(2) < 200 && USvalues.get(2) != 0) || ((USvalues.get(3) < 200 && USvalues.get(3) != 0)))
+            {
+                log.warning("Lancement de UnexpectedObstacleOnPathException dans detectEnemyInLocatedDisk");
+                throw new UnexpectedObstacleOnPathException();
+            }
+        }
     }
 
     /**
@@ -1028,6 +1056,11 @@ public class Locomotion implements Service
 			log.critical( e.logStack());
         }
     }
+
+    public void setUSvalues(ArrayList<Integer> val)
+    {
+        this.USvalues = val;
+    }
     
     
 
@@ -1225,6 +1258,11 @@ public class Locomotion implements Service
         deplacements.setSmoothAcceleration(choice);
     }
 
+    public void setBasicDetection(boolean basicDetection)
+    {
+        this.basicDetection = basicDetection;
+    }
+
 	public void close()
 	{
 		deplacements.closeLocomotion();
@@ -1309,5 +1347,6 @@ public class Locomotion implements Service
     {
     	moveToPointSerialOrder( symmetrisedAim, givenPosition, angle, distance, mustDetect, turnOnly,  isCorrection, false);
     }
+
 
 }

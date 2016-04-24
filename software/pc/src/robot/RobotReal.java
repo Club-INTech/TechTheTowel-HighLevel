@@ -184,7 +184,19 @@ public class RobotReal extends Robot
 	{
 		mLocomotion.moveArc(arc,hooks);
 	}
-	
+
+    @Override
+    public void setBasicDetection(boolean basicDetection)
+    {
+        mLocomotion.setBasicDetection(basicDetection);
+    }
+
+    @Override
+	public void setUSvalues(ArrayList<Integer> val)
+	{
+		mLocomotion.setUSvalues(val);
+	}
+
 	@Override
     public void moveLengthwiseWithoutDetection(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
 	{	

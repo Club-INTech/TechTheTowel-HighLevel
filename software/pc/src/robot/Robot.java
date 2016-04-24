@@ -386,6 +386,10 @@ public abstract class Robot implements Service
      * @throws UnableToMoveException bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
      */
     public abstract void moveArc(Arc arc, ArrayList<Hook> hooks) throws UnableToMoveException;
+
+	public abstract void setBasicDetection(boolean basicDetection);
+
+	public abstract void setUSvalues(ArrayList<Integer> val);
  
 
 	/**

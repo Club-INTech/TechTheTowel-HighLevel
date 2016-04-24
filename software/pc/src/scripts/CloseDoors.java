@@ -61,6 +61,8 @@ public class CloseDoors extends AbstractScript
 				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 
+				stateToConsider.robot.setForceMovement(false);
+
 				//On s'oriente vers les portes
 				stateToConsider.robot.turn(-(Math.PI / 2), hooksToConsider, false);
 

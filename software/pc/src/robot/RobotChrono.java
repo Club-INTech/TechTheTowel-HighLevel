@@ -357,4 +357,14 @@ public class RobotChrono extends Robot
 		
 	}
 
+	@Override
+	public void setBasicDetection(boolean basicDetection) {
+
+	}
+
+	@Override
+	public void setUSvalues(ArrayList<Integer> val) {
+
+	}
+
 }
