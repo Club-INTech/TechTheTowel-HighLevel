@@ -451,13 +451,14 @@ public class ThreadSensor extends AbstractThread
                 USvalues.set(3, temp);
             }
 
+            mRobot.setUSvalues(USvalues);
+
             USvaluesForDeletion.clear();
             for(int i=0 ; i<4 ; i++)
             {
-                USvalues.set(i, USvalues.get(i)+radius);
                 USvaluesForDeletion.add((int)(USvalues.get(i).intValue()*0.8));
             }
-
+            
             for(int i=0 ; i<USvalues.size() ; i++)
             {
                 //on met tout les capteurs qui detectent un objet DANS le robot ou à plus de maxSensorRange a 0
@@ -477,11 +478,14 @@ public class ThreadSensor extends AbstractThread
                     USvalues.set(1, 0);
                     USvaluesForDeletion.set(i, 0);
                 }
-
-                mRobot.setUSvalues(USvalues);
+                else
+                {
+                    USvalues.set(i, USvalues.get(i)+radius);
+                }
 
             }
-		}
+
+        }
 		catch(SerialConnexionException e) {
             log.critical("La carte ne répond pas !");
             log.critical(e.logStack());
