@@ -187,7 +187,7 @@ public class TechTheSand extends AbstractScript
 					try
 					{
 						stateToConsider.robot.turn(Math.PI);
-						stateToConsider.robot.moveLengthwise(100 - stateToConsider.robot.getPosition().x);
+						stateToConsider.robot.moveLengthwise(0 - stateToConsider.robot.getPosition().x);
 					}
 					catch (UnableToMoveException e2)
 					{
