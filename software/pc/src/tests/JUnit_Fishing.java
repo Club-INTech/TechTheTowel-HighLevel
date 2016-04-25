@@ -45,7 +45,7 @@ public class JUnit_Fishing extends JUnit_Test
 		theRobot.robot.useActuator(ActuatorOrder.ARM_INIT, true);
 		theRobot.robot.setOrientation(Math.PI);
 		theRobot.robot.setPosition(Table.entryPosition);
-		theRobot.robot.setLocomotionSpeed(Speed.FAST_ALL);
+		theRobot.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 		theRobot.robot.moveLengthwise(232);
 		theRobot.table.deleteAllTheShells();
         Vec2 sup1 = new Vec2(1255,725);
@@ -88,8 +88,8 @@ public class JUnit_Fishing extends JUnit_Test
 	{
         try 
         {
-			theRobot.table.getObstacleManager().freePoint(scriptManager.getScript(ScriptNames.FISHING).entryPosition(3, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position);
-            scriptManager.getScript(ScriptNames.FISHING).goToThenExec(3, theRobot, emptyHook);
+			theRobot.table.getObstacleManager().freePoint(scriptManager.getScript(ScriptNames.FISHING).entryPosition(4, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position);
+            scriptManager.getScript(ScriptNames.FISHING).goToThenExec(4, theRobot, emptyHook);
         } catch (Exception e) 
         {
             e.printStackTrace();
