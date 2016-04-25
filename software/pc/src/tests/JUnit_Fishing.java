@@ -16,6 +16,7 @@ import org.junit.Test;
 import robot.Robot;
 import scripts.ScriptManager;
 import smartMath.Arc;
+import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
@@ -87,8 +88,8 @@ public class JUnit_Fishing extends JUnit_Test
 	{
         try 
         {
-			theRobot.table.getObstacleManager().freePoint(scriptManager.getScript(ScriptNames.FISHING).entryPosition(4, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position);
-            scriptManager.getScript(ScriptNames.FISHING).goToThenExec(4, theRobot, emptyHook);
+			theRobot.table.getObstacleManager().freePoint(scriptManager.getScript(ScriptNames.FISHING).entryPosition(3, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position);
+            scriptManager.getScript(ScriptNames.FISHING).goToThenExec(3, theRobot, emptyHook);
         } catch (Exception e) 
         {
             e.printStackTrace();
@@ -98,6 +99,14 @@ public class JUnit_Fishing extends JUnit_Test
 	@After
 	public void after()
 	{
+		try
+		{
+			theRobot.robot.moveToCircle(new Circle(new Vec2(1200,1000)), emptyHook, theRobot.table);
+		}
+		catch(Exception e)
+		{
+			log.debug("Haha, fat chance !");
+		}
 		theRobot.robot.immobilise();
 	}
 }

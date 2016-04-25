@@ -377,7 +377,7 @@ public class Fishing extends AbstractScript
 				// On commence à se placer près du bord
 				stateToConsider.robot.turn(Math.PI - 0.24);
 
-				stateToConsider.robot.moveLengthwise(-260, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(-265, hooksToConsider, true);
 
                // stateToConsider.robot.setForceMovement(true);
 
@@ -399,7 +399,7 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION, false);
 				
 				// On s'oriente vers le côté ennemi
-				stateToConsider.robot.turn((Math.PI-0.04), hooksToConsider, true);
+				stateToConsider.robot.turn((Math.PI-0.03), hooksToConsider, true);
 
 				//On indique ques les poissons se trouvent sur le bras lors du déplacement de la moitié du bac
 				Hook specialHook = hookFactory.newXLesserHook(800);
@@ -431,7 +431,7 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.setAreFishesOnBoard(false);
 				
 				// On crée le hook de position pour prendre les poissons et ajout à la liste
-				Hook hook3 = hookFactory.newXGreaterHook(700);
+				Hook hook3 = hookFactory.newXGreaterHook(650);
 				hook3.addCallback(new Callback(new GetFish(), true, stateToConsider));
 				hooksToConsider.add(hook3);
 
@@ -448,7 +448,7 @@ public class Fishing extends AbstractScript
 				*/
 				
 				// nouvelle condition pour le hook lâchant les poissons et mise à jour dans la liste
-				hook2 = hookFactory.newXLesserHook(350);
+				hook2 = hookFactory.newXLesserHook(330);
 				hook2.addCallback(new Callback(new DropFish(), true, stateToConsider));
 				hooksToConsider.add(hook2);
 				
@@ -462,7 +462,7 @@ public class Fishing extends AbstractScript
 				
 				// relève du bras puis déplacement au dessus du filet
 				stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
-				stateToConsider.robot.moveLengthwise(250,hooksToConsider,true);
+				stateToConsider.robot.moveLengthwise(280,hooksToConsider,true);
 				
 				// On indique au robot que les poissons ne sont plus sur le bras
 				stateToConsider.robot.setAreFishesOnBoard(false);
