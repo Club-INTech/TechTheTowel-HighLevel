@@ -279,7 +279,7 @@ public class Castle extends AbstractScript
 
 				stateToConsider.robot.useActuator(ActuatorOrder.STOP_AXIS, false);
 
-				stateToConsider.robot.moveLengthwise(-100);
+				stateToConsider.robot.moveLengthwise(-200);
 
 
 				// on indique qu'on ne transporte plus de sable
@@ -308,7 +308,7 @@ public class Castle extends AbstractScript
                     stateToConsider.robot.setBasicDetection(true);
                     angle = stateToConsider.robot.getOrientation();
                     try {
-                        Arc arc = new Arc(-1100, -800, angle, false);
+                        Arc arc = new Arc(-900, -800, angle, false);
                         stateToConsider.robot.moveArc(arc, hooksToConsider);
                     }
                     catch (UnableToMoveException e)
@@ -318,8 +318,8 @@ public class Castle extends AbstractScript
                             log.debug("ENNEMI DETECTE : ATTENTE");
                             if(!waitForEnnemy(stateToConsider, stateToConsider.robot.getPosition(), false))
 								throw new UnableToMoveException(e.aim, UnableToMoveReason.OBSTACLE_DETECTED);
-                            double done = Math.abs(stateToConsider.robot.getOrientation()-angle)/(1100./800);
-                            stateToConsider.robot.moveArc(new Arc(-1100, (int)(-800*done), stateToConsider.robot.getOrientationFast(), false), hooksToConsider);
+                            double done = Math.abs(stateToConsider.robot.getOrientation()-angle)/(900./800);
+                            stateToConsider.robot.moveArc(new Arc(-900, (int)(-800*done), stateToConsider.robot.getOrientationFast(), false), hooksToConsider);
                         }
                     }
                     stateToConsider.robot.setForceMovement(false);
