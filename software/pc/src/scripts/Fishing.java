@@ -414,7 +414,7 @@ public class Fishing extends AbstractScript
 				hooksToConsider.add(hook);
 
 				// On crée le hook de position, l'action pour lâcher les poissons et ajout à la liste
-				Hook hook2 = hookFactory.newXLesserHook(450);
+				Hook hook2 = hookFactory.newXLesserHook(430);
 				hook2.addCallback(new Callback(new DropFish(), true, stateToConsider));
 				hooksToConsider.add(hook2);
 
@@ -504,7 +504,7 @@ public class Fishing extends AbstractScript
 				hooksToConsider.add(hook2);
 
 				// On crée le hook de position pour lâcher les poissons, puis ajout à la liste
-				Hook hook3 = hookFactory.newXLesserHook(450);
+				Hook hook3 = hookFactory.newXLesserHook(430);
 				hook3.addCallback(new Callback(new DropFish(), true, stateToConsider));
 				hooksToConsider.add(hook3);
 				
