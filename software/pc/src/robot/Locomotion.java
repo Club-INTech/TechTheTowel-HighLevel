@@ -135,7 +135,7 @@ public class Locomotion implements Service
      * L'orientation maximale pour ignorer le sens obligatoire de rotation
      * Si l'angle y est inférieur, je tourne en FASTEST
      */
-    private final double maxRotationTurningStrategyIgnore = Math.PI/6;
+    private final double maxRotationTurningStrategyIgnore = Math.PI/3;
 
     /**Booleen explicitant si le robot est pret à tourner, utile pour le cercle de detection */
 	public boolean isRobotTurning=false;	
