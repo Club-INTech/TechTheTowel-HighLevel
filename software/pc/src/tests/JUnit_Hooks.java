@@ -9,7 +9,7 @@ import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialManagerException;
 import hook.Callback;
 import hook.Hook;
-import hook.methods.SpeedDown;
+//import hook.methods.SpeedDown;
 import hook.types.HookFactory;
 import org.junit.After;
 import org.junit.Before;
@@ -52,7 +52,7 @@ public class JUnit_Hooks extends JUnit_Test
 	public void testSpeed()
 	{
 		Hook speed = hookFactory.newXLesserHook(1000);
-		speed.addCallback(new Callback(new SpeedDown(),true,theRobot));
+		//speed.addCallback(new Callback(new SpeedDown(),true,theRobot));
 		emptyHook.add(speed);
 		log.debug("Début de test !");
 		try 

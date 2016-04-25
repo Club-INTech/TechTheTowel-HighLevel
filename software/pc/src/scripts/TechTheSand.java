@@ -181,7 +181,22 @@ public class TechTheSand extends AbstractScript
 				}
 				catch (UnableToMoveException e)
 				{
-					e.printStackTrace();
+					log.debug("Impossible de rentrer dans le sable, retry en droite");
+					stateToConsider.robot.setForceMovement(true);
+					stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_T_MEDIUM_R);
+					try
+					{
+						stateToConsider.robot.turn(Math.PI);
+						stateToConsider.robot.moveLengthwise(100 - stateToConsider.robot.getPosition().x);
+					}
+					catch (UnableToMoveException e2)
+					{
+						log.critical("On peut vraiment pas obtenir le sable, on abandonne");
+						stateToConsider.robot.turn(Math.PI);
+						stateToConsider.robot.moveLengthwise(300 - stateToConsider.robot.getPosition().x);
+                        stateToConsider.robot.moveArc(new Arc(200, -200, stateToConsider.robot.getOrientation(), false), hooksToConsider);
+                        throw e2;
+                    }
 				}
 
 				try
