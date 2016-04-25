@@ -451,14 +451,14 @@ public class ThreadSensor extends AbstractThread
                 USvalues.set(3, temp);
             }
 
-            mRobot.setUSvalues(USvalues);
+            mRobot.setUSvalues((ArrayList<Integer>) USvalues.clone());
 
             USvaluesForDeletion.clear();
             for(int i=0 ; i<4 ; i++)
             {
                 USvaluesForDeletion.add((int)(USvalues.get(i).intValue()*0.8));
             }
-            
+
             for(int i=0 ; i<USvalues.size() ; i++)
             {
                 //on met tout les capteurs qui detectent un objet DANS le robot ou à plus de maxSensorRange a 0
