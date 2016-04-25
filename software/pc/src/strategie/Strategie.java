@@ -180,10 +180,12 @@ public class Strategie implements Service
             {
                 castleTaken = true;
                 state.robot.setTurningStrategy(TurningStrategy.FASTEST);
+                state.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
             }
             else if(abnormalMatch && state.robot.getIsSandInside()) //Si on est trop loin pour déclencher Castle
             {
                 castleTaken = true;
+                state.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
                 ThreadSensor.modeBorgne(false);
             }
 
