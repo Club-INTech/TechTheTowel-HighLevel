@@ -461,7 +461,7 @@ public class Fishing extends AbstractScript
 				
 				// arc pour sortir du bord de table
 				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
-				Arc disengage = new Arc(-270,140,stateToConsider.robot.getOrientation(),false);
+				Arc disengage = new Arc(-320,160,stateToConsider.robot.getOrientation(),false);
 				stateToConsider.robot.moveArc(disengage, hooksToConsider);
 
 				// reprise de vitesse inter script
@@ -573,7 +573,7 @@ public class Fishing extends AbstractScript
 				
 				// arc pour sortir du bord de table
 				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
-				Arc disengage = new Arc(-270,140,stateToConsider.robot.getOrientation(),false);
+				Arc disengage = new Arc(-320,160,stateToConsider.robot.getOrientation(),false);
 				stateToConsider.robot.moveArc(disengage, hooksToConsider);
 				
 				// reprise de vitesse d'avant script
