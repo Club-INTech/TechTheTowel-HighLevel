@@ -46,7 +46,7 @@ public class JUnit_Fishing extends JUnit_Test
 		theRobot.robot.setOrientation(Math.PI);
 		theRobot.robot.setPosition(Table.entryPosition);
 		theRobot.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
-		theRobot.robot.moveLengthwise(232);
+		theRobot.robot.moveLengthwise(200);
 		theRobot.table.deleteAllTheShells();
         Vec2 sup1 = new Vec2(1255,725);
 		Vec2 sup2 = new Vec2(1325,510);

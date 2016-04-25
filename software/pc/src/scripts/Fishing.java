@@ -461,9 +461,8 @@ public class Fishing extends AbstractScript
 				
 				// arc pour sortir du bord de table
 				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
-				Arc disengage = new Arc(-200,130,stateToConsider.robot.getOrientation(),false);
+				Arc disengage = new Arc(-270,140,stateToConsider.robot.getOrientation(),false);
 				stateToConsider.robot.moveArc(disengage, hooksToConsider);
-				stateToConsider.robot.turn(Math.PI/2);
 
 				// reprise de vitesse inter script
 				stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
@@ -476,12 +475,12 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 				
 				// Création du hook de position pour baisser le bras à l'arrivée du robot, puis ajout dans la liste de hooks
-				Hook hook1 = hookFactory.newXLesserHook(1000);
+				Hook hook1 = hookFactory.newXLesserHook(980);
 				hook1.addCallback(new Callback(new GetFish(), true, stateToConsider));
 				hooksToConsider.add(hook1);
 				
 				// Mouvement du robot suivant un arc pour se placer près du bac
-				stateToConsider.robot.moveArc(new Arc(-425,465,-Math.PI/2,false),hooksToConsider);
+				stateToConsider.robot.moveArc(new Arc(-420,467,-Math.PI/2,false),hooksToConsider);
 				stateToConsider.robot.turn(Math.PI-0.03);
 				
 				// On crée le hook de position pour lever le bras près du filet, puis ajout à la liste de hooks
@@ -510,7 +509,7 @@ public class Fishing extends AbstractScript
 					try
 					{
 						stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
-						stateToConsider.robot.moveArc(new Arc(-500, 300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
+						stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
 						throw new ExecuteException(new BlockedException());
 					}
 					catch(Exception ex)
@@ -522,11 +521,10 @@ public class Fishing extends AbstractScript
 				// vérification de positionnement correct si le robot défonce le bord de table sans s'arrêter
 				if(stateToConsider.robot.getPosition().x>560)
 				{
-					log.debug(stateToConsider.robot.getPositionFast().x);
 					log.debug("Position anormale, dégagement !");
 					freeThem(stateToConsider);
 					stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
-					stateToConsider.robot.moveArc(new Arc(-200, -200, stateToConsider.robot.getOrientation(), false), null);
+					stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false), null);
 					throw new ExecuteException(new BlockedException());
 				}
 
@@ -540,7 +538,7 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.setAreFishesOnBoard(false);
 				
 				// On modifie la condition du premier hook, même action, puis mise à jour dans la liste
-				hook1 = hookFactory.newXGreaterHook(730);
+				hook1 = hookFactory.newXGreaterHook(700);
 				hook1.addCallback(new Callback(new GetFish(), true, stateToConsider));
 				hooksToConsider.add(hook1);
 
@@ -560,7 +558,7 @@ public class Fishing extends AbstractScript
 				hooksToConsider.add(specialHook);
 				
 				// on longe le bac
-				stateToConsider.robot.moveLengthwise(290, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(300, hooksToConsider, true);
 				stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
 				stateToConsider.robot.moveLengthwise(280,hooksToConsider,true);
 				
@@ -575,9 +573,8 @@ public class Fishing extends AbstractScript
 				
 				// arc pour sortir du bord de table
 				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
-				Arc disengage = new Arc(-200,130,stateToConsider.robot.getOrientation(),false);
+				Arc disengage = new Arc(-270,140,stateToConsider.robot.getOrientation(),false);
 				stateToConsider.robot.moveArc(disengage, hooksToConsider);
-				stateToConsider.robot.turn(Math.PI/2);
 				
 				// reprise de vitesse d'avant script
 				stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
