@@ -224,8 +224,8 @@ public class ObstacleManager
     {
     	//vérification que l'on ne détecte pas un obstacle "normal"
     	if (position.x>-1500+mRobotRadius+100 && position.x<1500-mRobotRadius-100 && position.y>mRobotRadius+100 && position.y<2000-mRobotRadius-100 //hors de la table
-                && !( Geometry.isBetween(position.x, -200, 200) && Geometry.isBetween(position.y, 800, 1350)) //C'est la vitre
-                && !( Geometry.isBetween(position.x, -800, 800) && Geometry.isBetween(position.y, 1650, 2000)) //château de sable
+                && !( Geometry.isBetween(position.x, -200, 200) && Geometry.isBetween(position.y, 800, 1400)) //C'est la vitre
+                && !( Geometry.isBetween(position.x, -800, 800) && Geometry.isBetween(position.y, 1750, 2000)) //château de sable
 				&& !( Geometry.isBetween(position.x, 700, 1000) && Geometry.isBetween(position.y, 950, 1250)) //château de sable tapis
 				&& !( Geometry.isBetween(position.x, 0, 600) && Geometry.isBetween(position.y, 800, 1300)) //Notre zone de depose
 				&& !( Geometry.isBetween(position.x, -1000, -700) && Geometry.isBetween(position.y, 950, 1250)) //château de sable tapis adv
