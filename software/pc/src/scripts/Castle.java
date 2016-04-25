@@ -270,6 +270,7 @@ public class Castle extends AbstractScript
 				}
 
 				stateToConsider.robot.setBasicDetection(false);
+				stateToConsider.robot.setForceMovement(false);
 
 				stateToConsider.robot.turn(Math.PI);
 
@@ -401,7 +402,7 @@ public class Castle extends AbstractScript
 		try
 		{
 			state.robot.useActuator(ActuatorOrder.STOP_AXIS, false);
-            state.robot.setBasicDetection(true);
+            state.robot.setBasicDetection(false);
             state.robot.setForceMovement(false);
         }
 		catch(Exception ex)
