@@ -101,11 +101,8 @@ public abstract class AbstractScript implements Service
 	 * @throws SerialConnexionException s'il y a un problème de communication avec une des cartes électroniques
 	 * @throws SerialFinallyException s'il y a un problème de communication avec une des cartes électroniques lors du finallize
 	 * @throws ExecuteException 
-	 * @throws BadVersionException si la version de script demandée n'existe pas
-	 * @throws PathNotFoundException si aucun chemin n'est trouvé pour exécuter le script
-	 * @throws PointInObstacleException si l'arrivée du PDD est dans un obstacle
 	 */
-	public abstract void execute(int versionToExecute, GameState<Robot> actualState,ArrayList<Hook> hooksToConsider) throws PointInObstacleException, PathNotFoundException, BadVersionException, UnableToMoveException, SerialFinallyException, ExecuteException, SerialConnexionException, BlockedActuatorException;
+	public abstract void execute(int versionToExecute, GameState<Robot> actualState,ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialFinallyException, ExecuteException, SerialConnexionException, BlockedActuatorException;
 
 	/**
 	 * Renvoie le score que peut fournir une version d'un script.

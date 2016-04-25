@@ -7,6 +7,7 @@ import exceptions.BlockedActuatorException;
 import exceptions.ExecuteException;
 import exceptions.PathNotFoundException;
 import exceptions.PointInObstacleException;
+import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
@@ -73,7 +74,7 @@ public class Fishing extends AbstractScript
 	 * @throws BadVersionException si la version de script demandée n'existe pas
 	 */
 	@Override
-	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider) throws PointInObstacleException, PathNotFoundException, BadVersionException, SerialFinallyException, ExecuteException, SerialConnexionException, UnableToMoveException, BlockedActuatorException
+	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException, SerialConnexionException, UnableToMoveException, BlockedActuatorException
 	{
 		/*
 		 * On exécute la version 0 pour que le robot effectue un créneau depuis la vitre centrale 
@@ -510,40 +511,23 @@ public class Fishing extends AbstractScript
 					{
 						stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
 						stateToConsider.robot.moveArc(new Arc(-500, 300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
-						try
-						{
-							goToThenExec(4, stateToConsider, hooksToConsider);
-						}
-						catch(PointInObstacleException | PathNotFoundException | BadVersionException p)
-						{
-							log.debug("Echec de reprise de script : " );
-							p.printStackTrace();
-							throw p;
-						}
+						throw new ExecuteException(new BlockedException());
 					}
 					catch(Exception ex)
 					{
-						log.debug("Impossible de se désengager !");
 						throw ex;
 					}
 				}
 				
 				// vérification de positionnement correct si le robot défonce le bord de table sans s'arrêter
-				if(stateToConsider.robot.getPosition().x<560)
+				if(stateToConsider.robot.getPosition().x>560)
 				{
-					log.debug("Position anormale, dégagement et relance de Fishing !");
-					stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
+					log.debug(stateToConsider.robot.getPositionFast().x);
+					log.debug("Position anormale, dégagement !");
+					freeThem(stateToConsider);
 					stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
-					stateToConsider.robot.moveArc(new Arc(-200, 200, stateToConsider.robot.getOrientation(), false), null);
-					try
-					{
-						goToThenExec(4, stateToConsider, null);
-					}
-					catch(Exception e)
-					{
-						log.debug("Robot bloqué !");
-						finalize(stateToConsider, e);
-					}
+					stateToConsider.robot.moveArc(new Arc(-200, -200, stateToConsider.robot.getOrientation(), false), null);
+					throw new ExecuteException(new BlockedException());
 				}
 
 				// Points gagnés moyen pour ce passage
