@@ -411,8 +411,35 @@ public class Fishing extends AbstractScript
 				hook2.addCallback(new Callback(new DropFish(), true, stateToConsider));
 				hooksToConsider.add(hook2);
 
-				// On longe le bac
-				stateToConsider.robot.moveLengthwise(500, hooksToConsider, true);
+				// On longe le bac avec gestion de blocage sur le bord du filet
+				try
+				{
+					stateToConsider.robot.moveLengthwise(500, hooksToConsider, true);
+				}
+				catch(Exception e)
+				{
+					log.debug("Bord du filet touché, tentative de dégagement !");
+					try
+					{
+						stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
+						stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
+						throw new ExecuteException(new BlockedException());
+					}
+					catch(Exception ex)
+					{
+						throw ex;
+					}
+				}
+				
+				// vérification de positionnement correct si le robot défonce le bord de table sans s'arrêter
+				if(stateToConsider.robot.getPosition().x>560)
+				{
+					log.debug("Position anormale, dégagement !");
+					freeThem(stateToConsider);
+					stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+					stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false), null);
+					throw new ExecuteException(new BlockedException());
+				}
 
 				// Points gagnés moyen pour ce passage
 				stateToConsider.obtainedPoints += 20;
