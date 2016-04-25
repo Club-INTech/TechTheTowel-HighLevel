@@ -177,7 +177,10 @@ public class Strategie implements Service
             if(state.robot.getIsSandInside() && state.robot.getPosition().x < 750)
                 sandTaken = true;
             else if(sandTaken && !state.robot.getIsSandInside())
+            {
                 castleTaken = true;
+                state.robot.setTurningStrategy(TurningStrategy.FASTEST);
+            }
             else if(abnormalMatch && state.robot.getIsSandInside()) //Si on est trop loin pour déclencher Castle
             {
                 castleTaken = true;
