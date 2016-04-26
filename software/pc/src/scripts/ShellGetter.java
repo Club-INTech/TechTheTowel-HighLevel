@@ -18,6 +18,7 @@ import strategie.GameState;
 import table.Shell;
 import table.Table;
 import table.obstacles.ObstacleRectangular;
+import threads.ThreadSensor;
 import utils.Config;
 import utils.Log;
 
@@ -130,6 +131,9 @@ public class ShellGetter extends AbstractScript
                 Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
                 stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL); // TODO A changer quand asserv OK
 
+                ThreadSensor.modeBorgne(true);
+                stateToConsider.robot.setBasicDetection(true);
+
                 stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, false);
 
                 // booléen de vitre ouverte vrai
@@ -194,6 +198,9 @@ public class ShellGetter extends AbstractScript
 
                 stateToConsider.table.getObstacleManager().freePoint(new Vec2(1300,750));
                 stateToConsider.table.getObstacleManager().freePoint(new Vec2(1300,450));
+
+                ThreadSensor.modeBorgne(false);
+                stateToConsider.robot.setBasicDetection(false);
 
             }
             
@@ -348,7 +355,8 @@ public class ShellGetter extends AbstractScript
     	// on tente de ranger la porte, avec changement de rayon
     	try
     	{
-    		
+            ThreadSensor.modeBorgne(false);
+            state.robot.setBasicDetection(false);
             if (state.robot.shellsOnBoard)
             {
                 state.changeRobotRadius(TechTheSand.expandedRobotRadius);
@@ -356,20 +364,10 @@ public class ShellGetter extends AbstractScript
             }
             else
             {
-                state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
-                if(state.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED)) 
-                {
-                    state.changeRobotRadius(TechTheSand.retractedRobotRadius);
-                    state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
-                    state.robot.setDoor(false);
-                }
-                else
-                {
-                	state.robot.useActuator(ActuatorOrder.STOP_DOOR, true);
-                	state.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
-                    state.robot.setDoor(true);
-                    state.robot.shellsOnBoard = true;
-                }
+                state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
+                state.changeRobotRadius(TechTheSand.retractedRobotRadius);
+                state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
+                state.robot.setDoor(false);
             }
             
     	}
