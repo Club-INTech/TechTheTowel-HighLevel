@@ -78,11 +78,14 @@ public class CloseDoors extends AbstractScript
 
 				stateToConsider.robot.setPosition(new Vec2(stateToConsider.robot.getPosition().x,1823));
 
+                stateToConsider.robot.setBasicDetection(true);
 				//On avance
 				stateToConsider.robot.moveLengthwise(100, hooksToConsider, false);
+                stateToConsider.robot.setBasicDetection(false);
 
 
-				stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
+
+                stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
 
 			}
 
@@ -185,7 +188,8 @@ public class CloseDoors extends AbstractScript
 	public void finalize(GameState<?> state, Exception e) throws SerialFinallyException
 	{
 		log.debug("Exception " + e + "dans Close Doors : Lancement du Finalize !");
-	}
+        state.robot.setBasicDetection(false);
+    }
 
 	@Override
 	public Integer[] getVersion(GameState<?> stateToConsider) 
