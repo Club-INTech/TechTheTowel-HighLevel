@@ -308,7 +308,11 @@ public class Castle extends AbstractScript
                     //stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
                     stateToConsider.robot.setForceMovement(true);
                     stateToConsider.robot.setBasicDetection(true);
-                    angle = stateToConsider.robot.getOrientation();
+					stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, false);
+					stateToConsider.changeRobotRadius(TechTheSand.expandedRobotRadius);
+					stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
+
+					angle = stateToConsider.robot.getOrientation();
                     try {
                         Arc arc = new Arc(-900, -650, angle, false);
                         stateToConsider.robot.moveArc(arc, hooksToConsider);
