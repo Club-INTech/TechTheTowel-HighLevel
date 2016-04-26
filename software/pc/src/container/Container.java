@@ -281,7 +281,7 @@ public class Container
 		}
 		try {
 			getService(ServiceNames.THREAD_TIMER);
-			//getService(ServiceNames.THREAD_INTERFACE);
+			getService(ServiceNames.THREAD_INTERFACE);
            // getService(ServiceNames.THREAD_EYES);
 		} catch (Exception e) {
 			e.printStackTrace();

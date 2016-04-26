@@ -509,7 +509,7 @@ public class Strategie implements Service
 	{
 		int radius = state.robot.getRobotRadius();
 		// axe x limite pour que le robot puisse tourner
-		int zone = 1499-radius;
+		int zone = 1489-radius;
 		
 		try
 		{
@@ -573,7 +573,7 @@ public class Strategie implements Service
 					
 					// composante de d selon y pour voir si la trajectoire rectiligne est intéressante
 					deltaY = (int)(Math.abs(Math.tan(theta)*safe));
-					if(state.robot.getPositionFast().y+deltaY>1999-radius || state.robot.getPositionFast().y-deltaY<radius)
+					if(state.robot.getPositionFast().y+deltaY>1989-radius || state.robot.getPositionFast().y-deltaY<radius)
 					{
 						log.debug("Ne peut pas sortir sans arcs !");
 						return;
@@ -606,7 +606,7 @@ public class Strategie implements Service
 	{
 		int radius = state.robot.getRobotRadius();
 		// axe y limite pour que le robot puisse tourner
-		int zone = 1999-radius;
+		int zone = 1989-radius;
 		int move = Math.abs(zone-state.robot.getPosition().y);
 		
 		try
@@ -663,7 +663,7 @@ public class Strategie implements Service
 					
 					// composante de d pingu was here selon x pour voir si la trajectoire rectiligne est intéressante
 					deltaX = (int)(Math.tan(theta)*d);
-					if(reverse && (state.robot.getPositionFast().x-deltaX>1499-radius || state.robot.getPositionFast().x-deltaX<-1499+radius))
+					if(reverse && (state.robot.getPositionFast().x-deltaX>1489-radius || state.robot.getPositionFast().x-deltaX<-1489+radius))
 					{
 						log.debug("Ne peut pas sortir sans arcs !");
 						return;
@@ -751,7 +751,7 @@ public class Strategie implements Service
 					
 					// déplacement selon x pour voir si la trajectoire rectiligne est intéressante
 					deltaX = (int)(Math.tan(theta)*safe);
-					if(reverse && (state.robot.getPositionFast().x-deltaX>1499-state.robot.getRobotRadius() || state.robot.getPositionFast().x-deltaX<-1499+state.robot.getRobotRadius()))
+					if(reverse && (state.robot.getPositionFast().x-deltaX>1489-state.robot.getRobotRadius() || state.robot.getPositionFast().x-deltaX<-1489+state.robot.getRobotRadius()))
 					{
 						log.debug("Ne peut pas sortir sans arcs !");
 						return;
@@ -787,9 +787,9 @@ public class Strategie implements Service
 		int radius = state.robot.getRobotRadius();
 		log.debug(botX);
 		log.debug(botY);
-		if(botX <= 1499 - radius && botX >= -1499 + radius)
+		if(botX <= 1489 - radius && botX >= -1489 + radius)
 		{
-			if(botY<=1999 - radius && botY>= 1+radius )
+			if(botY<=1989 - radius && botY>= 1+radius )
 			{
 				return true;
 			}
