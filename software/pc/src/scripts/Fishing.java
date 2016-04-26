@@ -727,11 +727,13 @@ public class Fishing extends AbstractScript
 		log.debug("Exception " + ex + "dans Fishing : Lancement du Finalize !");
 		try
 		{
+			log.debug("Poissons à bord ? :" + stateToConsider.robot.getAreFishesOnBoard());
 			// Si on possède un poisson lors du finalize, on garde le bras à mi-hauteur
 			if(stateToConsider.robot.getAreFishesOnBoard())
 			{
 				try
 				{
+					log.debug("Arrêt de Fishing avec des poissons à bord !");
 					stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
 				}
 				catch(Exception e)
@@ -739,9 +741,9 @@ public class Fishing extends AbstractScript
 					throw e;
 				}
 			}
-			
 			else
 			{
+				log.debug("Pas de poissons à bord, lancement de ARM_INIT !");
 				// On remonte le bras en fin de script, puis arrêt du robot
 				stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
 			}

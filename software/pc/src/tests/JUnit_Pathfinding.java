@@ -80,7 +80,7 @@ public class JUnit_Pathfinding extends JUnit_Test
 
 
         pf = (PathDingDing)container.getService(ServiceNames.PATHDINGDING);
-        table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
+        table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
        // game.robot.moveLengthwise(250);
     }
 
