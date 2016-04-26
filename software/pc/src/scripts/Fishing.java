@@ -441,6 +441,9 @@ public class Fishing extends AbstractScript
 						}
 						else
 						{
+							log.debug(xBefore);
+							log.debug(stateToConsider.robot.getPosition().x);
+							log.debug("Déplacement demandé de : " + (500-(xBefore-stateToConsider.robot.getPositionFast().x)));
 							stateToConsider.robot.moveLengthwise(500-(xBefore-stateToConsider.robot.getPosition().x));
 						}
 					}
@@ -609,7 +612,10 @@ public class Fishing extends AbstractScript
 						}
 						else
 						{
-							stateToConsider.robot.moveLengthwise(530-(xBefore-stateToConsider.robot.getPosition().x));
+							log.debug(xBefore);
+							log.debug(stateToConsider.robot.getPosition().x);
+							log.debug("Déplacement demandé de : " + (530-(xBefore-stateToConsider.robot.getPositionFast().x)));
+							stateToConsider.robot.moveLengthwise(530-(xBefore-stateToConsider.robot.getPositionFast().x));
 						}
 					}
 					else
