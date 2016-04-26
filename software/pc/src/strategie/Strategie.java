@@ -418,6 +418,7 @@ public class Strategie implements Service
             if(!sandTaken && state.robot.getPositionFast().x < 850)
             {
                 sandTaken = true;
+                state.robot.setBasicDetection(true);
                 return scriptmanager.getScript(ScriptNames.CASTLE);
             }
             else if(!sandTaken)
