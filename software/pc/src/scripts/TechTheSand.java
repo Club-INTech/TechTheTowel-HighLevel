@@ -138,6 +138,8 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.robot.moveArc(start, hooksToConsider);
 
 				stateToConsider.robot.setForceMovement(false);
+                stateToConsider.robot.setBasicDetection(true);
+
 
                 stateToConsider.robot.moveLengthwise(975);
 
@@ -171,7 +173,6 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.changeRobotRadius(TechTheSand.expandedRobotRadius);
                 stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
                 ThreadSensor.modeBorgne(true);
-                stateToConsider.robot.setBasicDetection(true);
 
                 // On active la tige accrochante
                 stateToConsider.robot.useActuator(ActuatorOrder.START_AXIS, false);
