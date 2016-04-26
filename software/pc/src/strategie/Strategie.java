@@ -140,7 +140,7 @@ public class Strategie implements Service
 	public void IA()
 	{
         shells = state.table.deleteAllTheShells();
-		while(true)
+		while(!ThreadTimer.matchEnded)
         {
             AbstractScript nextScript = decide();
             try
