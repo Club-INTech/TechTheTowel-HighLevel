@@ -444,7 +444,7 @@ public class Fishing extends AbstractScript
 							log.debug(xBefore);
 							log.debug(stateToConsider.robot.getPosition().x);
 							log.debug("Déplacement demandé de : " + (500-(xBefore-stateToConsider.robot.getPositionFast().x)));
-							stateToConsider.robot.moveLengthwise(500-(xBefore-stateToConsider.robot.getPosition().x));
+							stateToConsider.robot.moveLengthwise(500-(xBefore-stateToConsider.robot.getPosition().x),hooksToConsider,true);
 						}
 					}
 					else
@@ -615,7 +615,7 @@ public class Fishing extends AbstractScript
 							log.debug(xBefore);
 							log.debug(stateToConsider.robot.getPosition().x);
 							log.debug("Déplacement demandé de : " + (530-(xBefore-stateToConsider.robot.getPositionFast().x)));
-							stateToConsider.robot.moveLengthwise(530-(xBefore-stateToConsider.robot.getPositionFast().x));
+							stateToConsider.robot.moveLengthwise(530-(xBefore-stateToConsider.robot.getPositionFast().x),hooksToConsider,true);
 						}
 					}
 					else
