@@ -277,6 +277,7 @@ public class Strategie implements Service
     	
         try
         {
+            state.robot.setBasicDetection(true);
             if (state.robot.getPosition().x + state.robot.getRobotRadius() >= 1500)
             {
             	disengageXPositive();
@@ -347,6 +348,7 @@ public class Strategie implements Service
                     state.robot.moveLengthwise(signe*200);
                 }
             }
+            state.robot.setBasicDetection(false);
         }
         catch (UnableToMoveException e)
         {
