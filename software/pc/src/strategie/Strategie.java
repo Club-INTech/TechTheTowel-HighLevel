@@ -785,11 +785,9 @@ public class Strategie implements Service
 		int botX = state.robot.getPosition().x;
 		int botY = state.robot.getPosition().y;
 		int radius = state.robot.getRobotRadius();
-		log.debug(botX);
-		log.debug(botY);
 		if(botX <= 1489 - radius && botX >= -1489 + radius)
 		{
-			if(botY<=1989 - radius && botY>= 1+radius )
+			if(botY<=1989 - radius && botY>= 10+radius )
 			{
 				return true;
 			}
