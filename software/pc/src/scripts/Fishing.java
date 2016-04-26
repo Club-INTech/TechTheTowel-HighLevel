@@ -478,12 +478,37 @@ public class Fishing extends AbstractScript
 				specialHook.addCallback(new Callback(new SetFishesOnBoard(),true,stateToConsider));
 				hooksToConsider.add(specialHook);
 				
-				// on longe le bac
-				stateToConsider.robot.moveLengthwise(300, hooksToConsider, true);
+				// on longe le bac avec gestion de blocage
+				try
+				{
+					// hook gérant le blocage non sétecté par le bas niveau
+					Hook blocked = hookFactory.newOrientationCorrectHook((float)(-2*Math.PI/3),(float)(0.05));
+					blocked.addCallback(new Callback(new Immobilise(),true,stateToConsider));
+					hooksToConsider.add(blocked);
+					
+					stateToConsider.robot.moveLengthwise(300, hooksToConsider, true);
+					
+					// relève du bras puis déplacement au dessus du filet
+					stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
+					stateToConsider.robot.moveLengthwise(280,hooksToConsider,true);
+				}
+				catch(Exception e)
+				{
+					log.debug("Bord du filet touché, tentative de dégagement !");
+					try
+					{
+						stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
+						stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
+						throw new ExecuteException(new BlockedException());
+					}
+					catch(Exception ex)
+					{
+						throw ex;
+					}
+				}
 				
-				// relève du bras puis déplacement au dessus du filet
-				stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
-				stateToConsider.robot.moveLengthwise(280,hooksToConsider,true);
+				// si le hook d'orientation n'est pas déclenché, on le supprime 
+				hooksToConsider.remove(hooksToConsider.size()-1);
 				
 				// On indique au robot que les poissons ne sont plus sur le bras
 				stateToConsider.robot.setAreFishesOnBoard(false);
@@ -536,6 +561,10 @@ public class Fishing extends AbstractScript
 				// On longe le bac avec gestion de blocage sur le bord du filet
 				try
 				{
+					// hook gérant le blocage non sétecté par le bas niveau
+					Hook blocked = hookFactory.newOrientationCorrectHook((float)(-2*Math.PI/3),(float)(0.05));
+					blocked.addCallback(new Callback(new Immobilise(),true,stateToConsider));
+					hooksToConsider.add(blocked);
 					stateToConsider.robot.moveLengthwise(500, hooksToConsider, true);
 				}
 				catch(Exception e)
@@ -552,6 +581,9 @@ public class Fishing extends AbstractScript
 						throw ex;
 					}
 				}
+				
+				// si le hook d'orientation n'est pas déclenché, on le supprime 
+				hooksToConsider.remove(hooksToConsider.size()-1);
 				
 				// vérification de positionnement correct si le robot défonce le bord de table sans s'arrêter
 				if(stateToConsider.robot.getPosition().x>560)
@@ -592,10 +624,35 @@ public class Fishing extends AbstractScript
 				specialHook.addCallback(new Callback(new SetFishesOnBoard(),true,stateToConsider));
 				hooksToConsider.add(specialHook);
 				
-				// on longe le bac
-				stateToConsider.robot.moveLengthwise(300, hooksToConsider, true);
-				stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
-				stateToConsider.robot.moveLengthwise(280,hooksToConsider,true);
+				// on longe le bac avec gestion de blocage
+				try
+				{
+					// hook gérant le blocage non sétecté par le bas niveau
+					Hook blocked = hookFactory.newOrientationCorrectHook((float)(-2*Math.PI/3),(float)(0.05));
+					blocked.addCallback(new Callback(new Immobilise(),true,stateToConsider));
+					hooksToConsider.add(blocked);
+					
+					stateToConsider.robot.moveLengthwise(300, hooksToConsider, true);
+					stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
+					stateToConsider.robot.moveLengthwise(280,hooksToConsider,true);
+				}
+				catch(Exception e)
+				{
+					log.debug("Bord du filet touché, tentative de dégagement !");
+					try
+					{
+						stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
+						stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
+						throw new ExecuteException(new BlockedException());
+					}
+					catch(Exception ex)
+					{
+						throw ex;
+					}
+				}
+				
+				// si le hook d'orientation n'est pas déclenché, on le supprime 
+				hooksToConsider.remove(hooksToConsider.size()-1);
 				
 				// On indique au robot que les poissons ne sont plus sur le bras
 				stateToConsider.robot.setAreFishesOnBoard(false);
