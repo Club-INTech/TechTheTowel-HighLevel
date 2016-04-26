@@ -175,6 +175,7 @@ public class Strategie implements Service
             }
 
             state.robot.setBasicDetection(false);
+            state.robot.setForceMovement(false);
 
             if(state.robot.getIsSandInside() && state.robot.getPosition().x < 750)
                 sandTaken = true;
