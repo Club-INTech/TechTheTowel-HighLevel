@@ -5,8 +5,11 @@ import exceptions.BadVersionException;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialFinallyException;
+import hook.Callback;
 import hook.Hook;
+import hook.methods.SpeedDown;
 import hook.types.HookFactory;
+import hook.types.HookYGreater;
 import robot.Robot;
 import smartMath.Arc;
 import smartMath.Circle;
@@ -61,15 +64,17 @@ public class CloseDoors extends AbstractScript
 				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
 
 				stateToConsider.robot.setForceMovement(false);
+                stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 
-				//On s'oriente vers les portes
+                //On s'oriente vers les portes
 				stateToConsider.robot.turn(-(Math.PI / 2), hooksToConsider, false);
 
-				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
-
+                Hook hook = hookFactory.newYGreaterHook(1700);
+                hook.addCallback(new Callback(new SpeedDown(), true, stateToConsider));
+                hooksToConsider.add(hook);
 
 				//On ferme les portes
-				stateToConsider.robot.moveLengthwiseWithoutDetection(-900, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwiseWithoutDetection(-1000, hooksToConsider, true);
 
 				//PORTES FERMEES !
 				stateToConsider.obtainedPoints += 20;
