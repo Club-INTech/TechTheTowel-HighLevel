@@ -375,7 +375,7 @@ public class Strategie implements Service
                     state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
                     state.changeRobotRadius(TechTheSand.retractedRobotRadius);
                     state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
-                    log.debug("bite");
+                    log.debug(state.robot.getRobotRadius());
                     state.robot.setDoor(false);
                 } catch (SerialConnexionException e) {
                     e.printStackTrace();
@@ -388,7 +388,7 @@ public class Strategie implements Service
                     state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
                     state.changeRobotRadius(TechTheSand.retractedRobotRadius);
                     state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
-                    log.debug("bite");
+                    log.debug(state.robot.getRobotRadius());
                     state.robot.setDoor(false);
                 } catch (SerialConnexionException e) {
                     e.printStackTrace();
