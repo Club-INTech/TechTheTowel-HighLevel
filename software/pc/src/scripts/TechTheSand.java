@@ -318,7 +318,6 @@ public class TechTheSand extends AbstractScript
 
                 ThreadSensor.modeBorgne(false);
 
-                stateToConsider.robot.setBasicDetection(false);
 
                 try {
 					stateToConsider.robot.moveLengthwise(-1600 + stateToConsider.robot.getPosition().y);
@@ -342,6 +341,8 @@ public class TechTheSand extends AbstractScript
 
                 stateToConsider.robot.setForceMovement(false);
 				stateToConsider.robot.setSmoothAcceleration(true);
+                stateToConsider.robot.setBasicDetection(false);
+
 
                 try 
                 {
