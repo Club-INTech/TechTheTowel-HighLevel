@@ -15,6 +15,7 @@ import strategie.Strategie;
 import table.Table;
 import threads.ThreadTimer;
 import utils.Config;
+import utils.Log;
 import utils.Sleep;
 
 import java.io.BufferedReader;
@@ -77,6 +78,7 @@ public class Main
 
 			strategos.updateConfig();
 			strategos.IA();
+			Log.stop();
 
 		} catch (IOException e) {
 			e.printStackTrace();

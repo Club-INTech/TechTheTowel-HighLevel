@@ -40,7 +40,9 @@ public class Log implements Service
 	private boolean printLogs = true;
 	
 	/** Vrai s'il faut sauvegarder les logs dans un fichier. */
-	private boolean saveLogs = false;
+	private boolean saveLogs = true;
+
+	private static boolean stop = false;
 
 	
 	/**
@@ -159,12 +161,12 @@ public class Log implements Service
 		String heure = calendar.get(Calendar.HOUR_OF_DAY)+"h"+calendar.get(Calendar.MINUTE)+":"+calendar.get(Calendar.SECOND)+","+calendar.get(Calendar.MILLISECOND);
 		
 		
-		if(prefix != debugPrefix || printLogs)
+		if((prefix != debugPrefix || printLogs) && !stop)
 		{
 			StackTraceElement elem = Thread.currentThread().getStackTrace()[3];
 			logPrinter.println(heure+" "+elem.getClassName()+"."+elem.getMethodName()+":"+elem.getLineNumber()+" > "+message+resetColor);
 		}
-		if(saveLogs)
+		if(saveLogs && !stop)
 			writeToFile(prefix+heure+" "+message+resetColor); // suffixe en \u001B[0m pour que la prochiane ligne soit blanche si on ne spécifie rien
 	}
 	
@@ -234,5 +236,13 @@ public class Log implements Service
 			critical(e);
 		}
 	}
+
+    /**
+     * Arrête les logs
+     */
+    public static void stop()
+    {
+        stop = true;
+    }
 
 }
