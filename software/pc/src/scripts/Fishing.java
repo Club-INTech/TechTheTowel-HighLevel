@@ -383,6 +383,8 @@ public class Fishing extends AbstractScript
 				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
 				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 
+				stateToConsider.robot.setBasicDetection(true);
+
 				// On commence à s'orienter pour le créneau près du bord
 				stateToConsider.robot.turn(Math.PI - 0.24);
 				
@@ -536,7 +538,9 @@ public class Fishing extends AbstractScript
 				// On prend une vitesse lente pour que les aimants puissent récupérer les poissons
 				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
-				
+				stateToConsider.robot.setBasicDetection(true);
+
+
 				// Création du hook de position pour baisser le bras à l'arrivée du robot, puis ajout dans la liste de hooks
 				Hook hook1 = hookFactory.newXLesserHook(980);
 				hook1.addCallback(new Callback(new GetFish(), true, stateToConsider));
@@ -727,6 +731,7 @@ public class Fishing extends AbstractScript
 		log.debug("Exception " + ex + "dans Fishing : Lancement du Finalize !");
 		try
 		{
+			stateToConsider.robot.setBasicDetection(false);
 			// Si on possède un poisson lors du finalize, on garde le bras à mi-hauteur
 			if(stateToConsider.robot.getAreFishesOnBoard())
 			{
