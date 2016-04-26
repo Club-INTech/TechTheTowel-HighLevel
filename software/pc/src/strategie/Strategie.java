@@ -372,18 +372,26 @@ public class Strategie implements Service
             {
                 try {
                     state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
+                    state.changeRobotRadius(TechTheSand.retractedRobotRadius);
+                    state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
+                    state.robot.setDoor(false);
                 } catch (SerialConnexionException e) {
                     e.printStackTrace();
                 }
+                state.robot.setBasicDetection(true);
                 return scriptmanager.getScript(ScriptNames.FISHING);
             }
             else if(gotShells)
             {
                 try {
                     state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
+                    state.changeRobotRadius(TechTheSand.retractedRobotRadius);
+                    state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
+                    state.robot.setDoor(false);
                 } catch (SerialConnexionException e) {
                     e.printStackTrace();
                 }
+                state.robot.setBasicDetection(true);
                 return scriptmanager.getScript(ScriptNames.FISHING);
             }
             else if(state.table.extDoorClosed && state.table.intDoorClosed)
@@ -429,6 +437,15 @@ public class Strategie implements Service
             else if(!done)
             {
                 done = true;
+                try {
+                    state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
+                    state.changeRobotRadius(TechTheSand.retractedRobotRadius);
+                    state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
+                    state.robot.setDoor(false);
+                } catch (SerialConnexionException e) {
+                    e.printStackTrace();
+                }
+                state.robot.setBasicDetection(true);
                 return scriptmanager.getScript(ScriptNames.FISHING);
             }
 
