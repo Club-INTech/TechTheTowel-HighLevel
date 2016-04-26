@@ -172,7 +172,7 @@ public class CloseDoors extends AbstractScript
 		}
 		else if(version == 3)
 		{
-			return new Circle(new Vec2(1080,1600));
+			return new Circle(new Vec2(1050,1600));
 		}
 		else
 		{
