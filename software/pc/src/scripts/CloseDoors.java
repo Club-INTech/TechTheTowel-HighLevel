@@ -80,7 +80,7 @@ public class CloseDoors extends AbstractScript
 
                 stateToConsider.robot.setBasicDetection(true);
 				//On avance
-				stateToConsider.robot.moveLengthwise(100, hooksToConsider, false);
+				stateToConsider.robot.moveLengthwise(200, hooksToConsider, false);
                 stateToConsider.robot.setBasicDetection(false);
 
 
