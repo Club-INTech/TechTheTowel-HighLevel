@@ -467,6 +467,9 @@ public class ThreadSensor extends AbstractThread
                 USvalues.set(3, temp);
             }
 
+            if(modeBorgne)
+                USvalues.set(1, 0);
+
             mRobot.setUSvalues((ArrayList<Integer>) USvalues.clone());
 
             USvaluesForDeletion.clear();
@@ -491,7 +494,6 @@ public class ThreadSensor extends AbstractThread
                 }
                 else if(i == 1 && modeBorgne)
                 {
-                    USvalues.set(1, 0);
                     USvaluesForDeletion.set(i, 0);
                 }
                 else
