@@ -66,6 +66,8 @@ public class ShellGetter extends AbstractScript
                 // on étend le rayon du robot avec la vitre ouverte
                 stateToConsider.changeRobotRadius(TechTheSand.expandedRobotRadius);
                 stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
+                stateToConsider.robot.setDoor(true);
+
 
                 //stateToConsider.robot.moveLengthwise(100);
                 stateToConsider.robot.turn(-1*Math.PI/2);
@@ -142,6 +144,8 @@ public class ShellGetter extends AbstractScript
                 // on étend le rayon du robot avec la vitre ouverte
                 stateToConsider.changeRobotRadius(TechTheSand.expandedRobotRadius);
                 stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
+                stateToConsider.robot.setDoor(true);
+
 
                 stateToConsider.robot.turn(-1*Math.PI/2);
                 stateToConsider.robot.moveLengthwise(700);
@@ -233,6 +237,8 @@ public class ShellGetter extends AbstractScript
                 // on étend le rayon du robot avec la vitre ouverte
                 stateToConsider.changeRobotRadius(TechTheSand.expandedRobotRadius);
                 stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
+                stateToConsider.robot.setDoor(true);
+
 
                 // on oblige le robot à tourner vers la gauche pour ne pas lâcher les coquillages
                 stateToConsider.robot.setTurningStrategy(TurningStrategy.LEFT_ONLY);
@@ -274,6 +280,7 @@ public class ShellGetter extends AbstractScript
                 // on étend le rayon du robot avec la vitre ouverte
                 stateToConsider.changeRobotRadius(TechTheSand.expandedRobotRadius);
                 stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
+                stateToConsider.robot.setDoor(true);
 
 
                 // on oblige le robot à tourner vers la gauche pour ne pas lâcher les coquillages

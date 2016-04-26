@@ -210,6 +210,7 @@ public class Strategie implements Service
                     state.robot.setTurningStrategy(TurningStrategy.FASTEST);
                     state.changeRobotRadius(TechTheSand.retractedRobotRadius);
                     state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
+                    state.robot.setDoor(false);
                 } catch (SerialConnexionException e) {
                     e.printStackTrace();
                 }

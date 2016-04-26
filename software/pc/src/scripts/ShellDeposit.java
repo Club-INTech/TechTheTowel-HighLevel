@@ -85,7 +85,9 @@ public class ShellDeposit extends AbstractScript
                 // on réduit nle rayon du rbot à celui initial
                 actualState.changeRobotRadius(TechTheSand.retractedRobotRadius);
                 actualState.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
-        	}
+                actualState.robot.setDoor(true);
+
+            }
         }
         catch (Exception e) 
         {

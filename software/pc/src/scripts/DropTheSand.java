@@ -75,6 +75,7 @@ public class DropTheSand extends AbstractScript
 
                 actualState.changeRobotRadius(TechTheSand.retractedRobotRadius);
                 actualState.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
+                actualState.robot.setDoor(false);
 
                 //On indique au robot qu'il ne transporte plus de sable
         		actualState.robot.setIsSandInside(false);
