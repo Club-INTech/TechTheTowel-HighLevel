@@ -189,6 +189,7 @@ public class ShellGetter extends AbstractScript
                 // on se place pour repartir
                 stateToConsider.robot.moveLengthwise(200);*/
 
+                stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
                 stateToConsider.changeRobotRadius(TechTheSand.retractedRobotRadius);
                 stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
                 log.debug(stateToConsider.robot.getRobotRadius());
