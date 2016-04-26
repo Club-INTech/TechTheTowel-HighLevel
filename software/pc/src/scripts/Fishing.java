@@ -506,7 +506,7 @@ public class Fishing extends AbstractScript
 				try
 				{
 					// hook gérant le blocage non sétecté par le bas niveau
-					Hook blocked = hookFactory.newOrientationCorrectHook((float)(-2*Math.PI/3),(float)(0.05));
+					Hook blocked = hookFactory.newOrientationCorrectHook((float)(5*Math.PI/4),(float)(0.1));
 					blocked.addCallback(new Callback(new Immobilise(),true,stateToConsider));
 					hooksToConsider.add(blocked);
 					
@@ -674,7 +674,7 @@ public class Fishing extends AbstractScript
 				try
 				{
 					// hook gérant le blocage non sétecté par le bas niveau
-					Hook blocked = hookFactory.newOrientationCorrectHook((float)(-2*Math.PI/3),(float)(0.05));
+					Hook blocked = hookFactory.newOrientationCorrectHook((float)(5*Math.PI/4),(float)(0.1));
 					blocked.addCallback(new Callback(new Immobilise(),true,stateToConsider));
 					hooksToConsider.add(blocked);
 					
