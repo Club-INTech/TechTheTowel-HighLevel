@@ -191,26 +191,40 @@ public class TechTheSand extends AbstractScript
                         throw new UnableToMoveException(new Vec2(0, 1600), UnableToMoveReason.OBSTACLE_DETECTED);
 
                     log.debug("Impossible de rentrer dans le sable, retry en droite");
-					stateToConsider.robot.setForceMovement(true);
-					stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_T_MEDIUM_R);
-					try
-					{
-						stateToConsider.robot.turn(Math.PI);
-						stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 100);
-					}
-					catch (UnableToMoveException e2)
-					{
-                        if(e2.reason == UnableToMoveReason.OBSTACLE_DETECTED)
-                            throw new UnableToMoveException(new Vec2(0, 1600), UnableToMoveReason.OBSTACLE_DETECTED);
-						log.critical("On peut vraiment pas obtenir le sable, on abandonne");
-						stateToConsider.robot.turn(Math.PI);
-						stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 300);
-                        stateToConsider.robot.moveArc(new Arc(200, -200, stateToConsider.robot.getOrientation(), false), hooksToConsider);
-                        throw e2;
+                    stateToConsider.robot.setForceMovement(true);
+                    stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_T_MEDIUM_R);
+                    try
+                    {
+                        stateToConsider.robot.turn(Math.PI);
+                        stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 100);
                     }
-				}
+                    catch (UnableToMoveException e2)
+                    {
+                        if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED)
+                            throw new UnableToMoveException(new Vec2(0, 1600), UnableToMoveReason.OBSTACLE_DETECTED);
 
-				try
+                        log.debug("Impossible de rentrer dans le sable, retry en droite");
+                        stateToConsider.robot.setForceMovement(true);
+                        stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_T_MEDIUM_R);
+                        try
+                        {
+                            stateToConsider.robot.turn(Math.PI);
+                            stateToConsider.robot.moveLengthwise(-30);
+                            stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 100);
+                        }
+                        catch (UnableToMoveException e3) {
+                            if (e3.reason == UnableToMoveReason.OBSTACLE_DETECTED)
+                                throw new UnableToMoveException(new Vec2(0, 1600), UnableToMoveReason.OBSTACLE_DETECTED);
+                            log.critical("On peut vraiment pas obtenir le sable, on abandonne");
+                            stateToConsider.robot.turn(Math.PI);
+                            stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 300);
+                            stateToConsider.robot.moveArc(new Arc(200, -200, stateToConsider.robot.getOrientation(), false), hooksToConsider);
+                            throw e3;
+                        }
+                    }
+                }
+
+                try
 				{
 					stateToConsider.robot.setForceMovement(true);
 					stateToConsider.robot.moveLengthwise(-30);
