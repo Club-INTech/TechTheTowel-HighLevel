@@ -389,9 +389,9 @@ public class Strategie implements Service
             if(state.robot.getIsSandInside() && castleTaken)
                 return scriptmanager.getScript(ScriptNames.DROP_THE_SAND);
 
-            if(!sandTaken && !dangerousOpponent)
-                return scriptmanager.getScript(ScriptNames.TECH_THE_SAND);
-            else if(!sandTaken && state.robot.getPositionFast().x < 850)
+           // if(!sandTaken && !dangerousOpponent)
+               // return scriptmanager.getScript(ScriptNames.TECH_THE_SAND);
+            if(!sandTaken && state.robot.getPositionFast().x < 850)
                 return scriptmanager.getScript(ScriptNames.CASTLE);
             else if(!sandTaken)
             {
@@ -421,7 +421,7 @@ public class Strategie implements Service
         if(script instanceof Castle && !ab)
             return 3;
         else if(script instanceof Castle)
-            return 0;
+            return 4;
         else if(script instanceof CloseDoors && !ab)
             return 0;
         else if(script instanceof CloseDoors)
