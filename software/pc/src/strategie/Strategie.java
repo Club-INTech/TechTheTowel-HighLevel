@@ -351,7 +351,9 @@ public class Strategie implements Service
         }
         catch (UnableToMoveException e)
         {
-            log.critical("CRITICAL : On a pas réussi à se dégager, on a perdu le match");
+            log.critical("CRITICAL : On a pas réussi à se dégager");
+            shitHappened = true;
+            abnormalMatch = true;
             e.printStackTrace();
         }
     }
