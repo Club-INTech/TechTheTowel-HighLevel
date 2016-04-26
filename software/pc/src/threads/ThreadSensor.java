@@ -106,6 +106,12 @@ public class ThreadSensor extends AbstractThread
     private final Vec2 positionLB = new Vec2(-120,-75);
     private final Vec2 positionRB = new Vec2(-120,75);
 
+    /**
+     * Delai d'attente avant de lancer le thread
+     * Pour éviter de détecter la main du lanceur
+     */
+    private static boolean delay = true;
+
 
     /**
      * Valeurs des capteurs US {avant-gauche, avant-droit, arrière gauche, arrière-droit}
@@ -194,6 +200,16 @@ public class ThreadSensor extends AbstractThread
 
 		// maintenant que le jumper est retiré, le match a commencé
 		ThreadTimer.matchEnded = false;
+
+        if(ThreadSensor.delay)
+        {
+            try
+            {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 		
 		// boucle principale, celle qui dure tout le match
 		log.debug("Activation des capteurs");
@@ -539,5 +555,10 @@ public class ThreadSensor extends AbstractThread
     public static void modeBorgne(boolean value)
     {
         ThreadSensor.modeBorgne = value;
+    }
+
+    public static void noDelay()
+    {
+        ThreadSensor.delay = false;
     }
 }

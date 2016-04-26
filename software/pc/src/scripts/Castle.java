@@ -63,7 +63,7 @@ public class Castle extends AbstractScript
 				stateToConsider.robot.setIsSandInside(true);
 				
 				// on pousse le tas de sable dans la zone de contruction
-				stateToConsider.robot.moveLengthwise(700,hooksToConsider,false);
+				stateToConsider.robot.moveLengthwiseWithoutDetection(700,hooksToConsider,true);
 				
 				// on liste les obstacles rectangulaires 
 				ArrayList<ObstacleRectangular> mRectangles = stateToConsider.table.getObstacleManager().getRectangles();
@@ -78,7 +78,7 @@ public class Castle extends AbstractScript
 				}
 				
 				// on s'éloigne de la zone de construction 
-				stateToConsider.robot.moveLengthwise(-600,hooksToConsider,false);
+				stateToConsider.robot.moveLengthwiseWithoutDetection(-600,hooksToConsider,false);
 				
 				// on indique qu'on ne transporte plus de sable
 				stateToConsider.robot.setIsSandInside(false);

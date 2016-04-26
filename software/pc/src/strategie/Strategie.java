@@ -176,7 +176,8 @@ public class Strategie implements Service
 
             if(state.robot.getIsSandInside() && state.robot.getPosition().x < 750)
                 sandTaken = true;
-            else if(sandTaken && !state.robot.getIsSandInside())
+
+            if(sandTaken && !state.robot.getIsSandInside())
             {
                 castleTaken = true;
                 state.robot.setTurningStrategy(TurningStrategy.FASTEST);
@@ -188,6 +189,9 @@ public class Strategie implements Service
                 state.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
                 ThreadSensor.modeBorgne(false);
             }
+
+            if(castleTaken)
+                state.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 
             if(state.table.shellsObtained > 0)
                 gotShells = true;
