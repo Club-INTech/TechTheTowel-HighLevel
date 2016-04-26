@@ -159,7 +159,7 @@ public class ThreadSensor extends AbstractThread
 	{
 		super(config, log);
 		this.mSensorsCardWrapper = sensorsCardWrapper;
-		Thread.currentThread().setPriority(2);
+		Thread.currentThread().setPriority(6);
 		mRobot = robot;
         mTable = table;
 	}

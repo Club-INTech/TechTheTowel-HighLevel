@@ -58,6 +58,8 @@ public class Main
 			mLocomotion=(Locomotion) container.getService(ServiceNames.LOCOMOTION);
 			config.updateConfig();
 
+            Thread.currentThread().setPriority(5);
+
 			realState.robot.setPosition(Table.entryPosition);
 			realState.robot.setOrientation(Math.PI);
 			realState.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
