@@ -1,12 +1,11 @@
 package scripts;
 
 import enums.ActuatorOrder;
+import enums.ContactSensors;
 import enums.Speed;
 import exceptions.BadVersionException;
 import exceptions.BlockedActuatorException;
 import exceptions.ExecuteException;
-import exceptions.PathNotFoundException;
-import exceptions.PointInObstacleException;
 import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
@@ -25,8 +24,6 @@ import smartMath.Arc;
 import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
-import table.Table;
-import threads.ThreadTimer;
 import utils.Config;
 import utils.Log;
 
@@ -84,6 +81,12 @@ public class Fishing extends AbstractScript
 		
 		try
 		{
+			
+			if(stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_BLOCKED))
+			{
+				log.debug("Porte bloquée, interruption de Fishing !");
+				throw new BlockedActuatorException();
+			}
 			if (versionToExecute == 0)
 			{
 				// On prend une vitesse lente pour que les aimants puissent récupérer les poissons
