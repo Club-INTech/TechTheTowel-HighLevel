@@ -172,6 +172,7 @@ public class TechTheSand extends AbstractScript
 
                 stateToConsider.changeRobotRadius(TechTheSand.expandedRobotRadius);
                 stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
+                
                 ThreadSensor.modeBorgne(true);
 
                 // On active la tige accrochante
