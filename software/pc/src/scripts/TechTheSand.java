@@ -82,8 +82,9 @@ public class TechTheSand extends AbstractScript
 
 				stateToConsider.changeRobotRadius(TechTheSand.expandedRobotRadius);
                 stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
+                stateToConsider.robot.setDoor(true);
 
-				// On active la tige accrochante
+                // On active la tige accrochante
 				stateToConsider.robot.useActuator(ActuatorOrder.START_AXIS, false);
 				
 				// On avance pour récupérer le sable
@@ -125,6 +126,7 @@ public class TechTheSand extends AbstractScript
 
 				stateToConsider.changeRobotRadius(TechTheSand.expandedRobotRadius);
 				stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
+                stateToConsider.robot.setDoor(true);
 
                 //Arc entry = new Arc(entryPosition(1, 0, stateToConsider.robot.getPositionFast()).position, new Vec2(100,2000-220), Math.PI, true);
 
@@ -172,7 +174,7 @@ public class TechTheSand extends AbstractScript
 
                 stateToConsider.changeRobotRadius(TechTheSand.expandedRobotRadius);
                 stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
-
+                stateToConsider.robot.setDoor(true);
                 ThreadSensor.modeBorgne(true);
 
                 // On active la tige accrochante

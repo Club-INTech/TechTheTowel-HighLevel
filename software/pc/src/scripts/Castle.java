@@ -311,6 +311,7 @@ public class Castle extends AbstractScript
 					stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, false);
 					stateToConsider.changeRobotRadius(TechTheSand.expandedRobotRadius);
 					stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
+					stateToConsider.robot.setDoor(true);
 
 					angle = stateToConsider.robot.getOrientation();
                     try {
