@@ -140,7 +140,7 @@ public class Strategie implements Service
 	public void IA()
 	{
         shells = state.table.deleteAllTheShells();
-		while(true)
+		while(!ThreadTimer.matchEnded)
         {
             AbstractScript nextScript = decide();
             try
@@ -354,7 +354,7 @@ public class Strategie implements Service
             {
                 return scriptmanager.getScript(ScriptNames.TECH_THE_SAND);
             }
-            else if(done)
+            else if(done || ThreadTimer.remainingTime() <= 30000)
             {
                 return scriptmanager.getScript(ScriptNames.FISHING);
             }
