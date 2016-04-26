@@ -41,6 +41,9 @@ public class SerialConnexion implements SerialPortEventListener, Service
      */
     String name;
 
+    String port_name;
+    int baudrate;
+
     /**
      * Flux d'entÃ¯Â¿Â½e du port
      */
@@ -155,6 +158,9 @@ public class SerialConnexion implements SerialPortEventListener, Service
         {
             log.critical("Catch de "+e+" dans initialize");
         }
+
+        this.port_name = port_name;
+        this.baudrate = baudrate;
     }
 
     /**
@@ -376,6 +382,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
         {
             log.debug("Reconstruction de la série");
             try {
+                this.initialize(this.port_name, this.baudrate);
                 input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
             } catch (IOException e1) {
                 e1.printStackTrace();

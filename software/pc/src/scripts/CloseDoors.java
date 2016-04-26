@@ -59,12 +59,14 @@ public class CloseDoors extends AbstractScript
 
 				//On ralentit pour éviter de démonter les éléments de jeu "Discord-style"
 				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
-				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 
 				stateToConsider.robot.setForceMovement(false);
 
 				//On s'oriente vers les portes
 				stateToConsider.robot.turn(-(Math.PI / 2), hooksToConsider, false);
+
+				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+
 
 				//On ferme les portes
 				stateToConsider.robot.moveLengthwiseWithoutDetection(-900, hooksToConsider, true);

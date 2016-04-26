@@ -301,7 +301,6 @@ public class Strategie implements Service
                 return;
             }
 
-
             if (script instanceof Castle) //Dégagement en cas de bloquage en essayant de déposer le sable (trop greedy)
             {
                 state.robot.setForceMovement(true);
@@ -378,7 +377,6 @@ public class Strategie implements Service
                 } catch (SerialConnexionException e) {
                     e.printStackTrace();
                 }
-                state.robot.setBasicDetection(true);
                 return scriptmanager.getScript(ScriptNames.FISHING);
             }
             else if(gotShells)
@@ -391,7 +389,6 @@ public class Strategie implements Service
                 } catch (SerialConnexionException e) {
                     e.printStackTrace();
                 }
-                state.robot.setBasicDetection(true);
                 return scriptmanager.getScript(ScriptNames.FISHING);
             }
             else if(state.table.extDoorClosed && state.table.intDoorClosed)
@@ -461,13 +458,14 @@ public class Strategie implements Service
      */
     private int version(AbstractScript script)
     {
+        boolean an = abnormalMatch;
         boolean ab = shitHappened;
         abnormalMatch = false;
         if(script instanceof Castle && !ab)
             return 3;
         else if(script instanceof Castle)
             return 4;
-        else if(script instanceof CloseDoors && !ab)
+        else if(script instanceof CloseDoors && !an)
             return 0;
         else if(script instanceof CloseDoors)
             return 3;

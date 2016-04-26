@@ -430,20 +430,10 @@ public class TechTheSand extends AbstractScript
             }
             else
             {
-                state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
-                if(state.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED)) 
-                {
-                    state.changeRobotRadius(TechTheSand.retractedRobotRadius);
-                    state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
-                    state.robot.setDoor(false);
-                }
-                else
-                {
-                	state.robot.useActuator(ActuatorOrder.STOP_AXIS, true);
-                	state.table.getObstacleManager().updateObstacles(expandedRobotRadius);
-                    state.robot.setIsSandInside(true);
-                    state.robot.setDoor(true);
-                }
+                state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
+                state.changeRobotRadius(TechTheSand.retractedRobotRadius);
+                state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
+                state.robot.setDoor(false);
             }
             
 		}
