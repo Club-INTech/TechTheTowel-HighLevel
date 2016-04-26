@@ -53,7 +53,7 @@ public class ThreadTimer extends AbstractThread
 	
 	
 	/**
-	 * Crée le thread timer.
+	 * Crée le thread timer.-
 	 *
 	 * @param table La table sur laquelle le thread doit croire évoluer
 	 * @param sensorsCardWrapper La carte capteurs avec laquelle on doit communiquer
@@ -68,7 +68,7 @@ public class ThreadTimer extends AbstractThread
 		this.robot=robot;
 		
 		updateConfig();
-		Thread.currentThread().setPriority(1);
+		Thread.currentThread().setPriority(10);
 
 		// DEBUG: interface graphique
 		/*try
