@@ -401,7 +401,7 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.turn((Math.PI-0.03), hooksToConsider, true);
 
 				//On indique ques les poissons se trouvent sur le bras lors du déplacement de la moitié du bac
-				Hook specialHook = hookFactory.newXLesserHook(800);
+				Hook specialHook = hookFactory.newXLesserHook(900);
 				specialHook.addCallback(new Callback(new SetFishesOnBoard(),true,stateToConsider));
 				hooksToConsider.add(specialHook);
 
@@ -477,7 +477,7 @@ public class Fishing extends AbstractScript
 				hooksToConsider.add(hook2);
 				
 				//Rajout du hook pour le booléen
-				specialHook = hookFactory.newXLesserHook(800);
+				specialHook = hookFactory.newXLesserHook(900);
 				specialHook.addCallback(new Callback(new SetFishesOnBoard(),true,stateToConsider));
 				hooksToConsider.add(specialHook);
 				
@@ -557,7 +557,7 @@ public class Fishing extends AbstractScript
 				hooksToConsider.add(hook3);
 				
 				//Rajout du hook pour le booléen
-				Hook specialHook = hookFactory.newXLesserHook(800);
+				Hook specialHook = hookFactory.newXLesserHook(900);
 				specialHook.addCallback(new Callback(new SetFishesOnBoard(),true,stateToConsider));
 				hooksToConsider.add(specialHook);
 
@@ -623,7 +623,7 @@ public class Fishing extends AbstractScript
 				hooksToConsider.add(hook3);
 				
 				//Rajout du hook pour le booléen
-				specialHook = hookFactory.newXLesserHook(800);
+				specialHook = hookFactory.newXLesserHook(900);
 				specialHook.addCallback(new Callback(new SetFishesOnBoard(),true,stateToConsider));
 				hooksToConsider.add(specialHook);
 				
