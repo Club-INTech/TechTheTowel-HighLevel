@@ -16,6 +16,7 @@ import hook.Executable;
 import hook.Hook;
 import hook.methods.DropFish;
 import hook.methods.GetFish;
+import hook.methods.Immobilise;
 import hook.methods.RiseArm;
 import hook.methods.SetFishesOnBoard;
 import hook.types.HookFactory;
@@ -414,6 +415,10 @@ public class Fishing extends AbstractScript
 				// On longe le bac avec gestion de blocage sur le bord du filet
 				try
 				{
+					// hook gérant le blocage non sétecté par le bas niveau
+					Hook blocked = hookFactory.newOrientationCorrectHook((float)(-2*Math.PI/3),(float)(0.05));
+					blocked.addCallback(new Callback(new Immobilise(),true,stateToConsider));
+					hooksToConsider.add(blocked);
 					stateToConsider.robot.moveLengthwise(500, hooksToConsider, true);
 				}
 				catch(Exception e)
@@ -430,6 +435,9 @@ public class Fishing extends AbstractScript
 						throw ex;
 					}
 				}
+				
+				// si le hook d'orientation n'est pas déclenché, on le supprime 
+				hooksToConsider.remove(hooksToConsider.size()-1);
 				
 				// vérification de positionnement correct si le robot défonce le bord de table sans s'arrêter
 				if(stateToConsider.robot.getPosition().x>560)

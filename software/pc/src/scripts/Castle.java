@@ -375,7 +375,7 @@ public class Castle extends AbstractScript
 	@Override
 	public Circle entryPosition(int version, int ray, Vec2 robotPosition) throws BadVersionException
 	{
-		if (version == 0 | version == 4)
+		if (version == 0)
 		{
 			return (new Circle(new Vec2(1050,900)));
 		}
@@ -388,6 +388,10 @@ public class Castle extends AbstractScript
 		{
 			//testé et approuvé: (1250, 1370)
 			return new Circle(robotPosition);
+		}
+		else if (version == 4)
+		{
+			return new Circle(new Vec2(600,1500));
 		}
 		else
 		{
