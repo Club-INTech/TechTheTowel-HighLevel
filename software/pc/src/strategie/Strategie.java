@@ -213,10 +213,20 @@ public class Strategie implements Service
 
             if(state.robot.getAreFishesOnBoard())
             {
+            	log.debug("Poisson à bord, appel au PDD pour dépose !");
                 PathDingDing path = new PathDingDing(table,log);
                 try
                 {
-                	path.computePath(state.robot.getPosition(), new Vec2(300,state.robot.getRobotRadius()+1), new ArrayList<Obstacle>());
+                	if(isInTable())
+                	{
+                		path.computePath(state.robot.getPosition(), new Vec2(300,state.robot.getRobotRadius()+1), new ArrayList<Obstacle>());
+                	}
+                	else
+                	{
+                		log.debug("Robot trop proche pour l'appel au PDD, tentative de dégagement !");
+                		disengage(nextScript);
+                		path.computePath(state.robot.getPosition(), new Vec2(300,state.robot.getRobotRadius()+1), new ArrayList<Obstacle>());
+                	}
                 }
                 catch (Exception e)
                 {
@@ -730,5 +740,23 @@ public class Strategie implements Service
 				log.debug("Robot bloqué pendant le moveLengthwise !");
 			}
 		}
+	}
+	
+	/** booléen indiquant si le robot est dans les limites habituelles de la table*/
+	public boolean isInTable()
+	{
+		int botX = state.robot.getPosition().x;
+		int botY = state.robot.getPosition().y;
+		int radius = state.robot.getRobotRadius();
+		log.debug(botX);
+		log.debug(botY);
+		if(botX <= 1499 - radius && botX >= -1499 + radius)
+		{
+			if(botY<=1999 - radius && botY>= 1+radius )
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 }

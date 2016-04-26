@@ -57,7 +57,7 @@ public class Fishing extends AbstractScript
 	 * @param stateToConsider ensemble des informations sur le match
 	 * @throws SerialConnexionException 
 	 */
-	public void freeThem(GameState<Robot> stateToConsider) throws SerialConnexionException
+	public void freeThem(GameState<?> stateToConsider) throws SerialConnexionException
 	{
 		stateToConsider.robot.useActuator(ActuatorOrder.MAGNET_DOWN, true);
 		stateToConsider.robot.useActuator(ActuatorOrder.FINGER_DOWN, true);
@@ -724,8 +724,24 @@ public class Fishing extends AbstractScript
 		log.debug("Exception " + ex + "dans Fishing : Lancement du Finalize !");
 		try
 		{
-			// On remonte le bras en fin de script, puis arrêt du robot
-			stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
+			// Si on possède un poisson lors du finalize, on garde le bras à mi-hauteur
+			if(stateToConsider.robot.getAreFishesOnBoard())
+			{
+				try
+				{
+					stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
+				}
+				catch(Exception e)
+				{
+					throw e;
+				}
+			}
+			
+			else
+			{
+				// On remonte le bras en fin de script, puis arrêt du robot
+				stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
+			}
 		}
 		catch (SerialConnexionException e) 
 		{
