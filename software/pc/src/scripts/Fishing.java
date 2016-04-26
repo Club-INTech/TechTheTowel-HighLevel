@@ -515,22 +515,78 @@ public class Fishing extends AbstractScript
 					
 					stateToConsider.robot.moveLengthwise(300, hooksToConsider, true);
 					
+				}
+				catch(UnableToMoveException e)
+				{
+					if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED)
+					{
+						log.debug("Ennemi détecté ! Attente avant de progresser !");
+						if(!waitForEnnemy(stateToConsider, stateToConsider.robot.getPosition(), true))
+						{
+							log.debug("Le salaud ne bouge pas : abort !");
+							throw new UnableToMoveException(e.aim, UnableToMoveReason.OBSTACLE_DETECTED);
+						}
+						else
+						{
+							log.debug(xBefore);
+							log.debug(stateToConsider.robot.getPosition().x);
+							log.debug("Déplacement demandé de : " + (300-(xBefore-stateToConsider.robot.getPositionFast().x)));
+							stateToConsider.robot.moveLengthwise(300-(xBefore-stateToConsider.robot.getPosition().x),hooksToConsider,true);
+						}
+					}
+					else
+					{
+						log.debug("Bord du filet touché, tentative de dégagement !");
+						try
+						{
+							stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
+							stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
+							throw new ExecuteException(new BlockedException());
+						}
+						catch(Exception ex)
+						{
+							throw ex;
+						}
+					}
+				}
+				
+				try
+				{
 					// relève du bras puis déplacement au dessus du filet
 					stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
 					stateToConsider.robot.moveLengthwise(280,hooksToConsider,true);
 				}
-				catch(Exception e)
+				catch(UnableToMoveException e)
 				{
-					log.debug("Bord du filet touché, tentative de dégagement !");
-					try
+					if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED)
 					{
-						stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
-						stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
-						throw new ExecuteException(new BlockedException());
+						log.debug("Ennemi détecté ! Attente avant de progresser !");
+						if(!waitForEnnemy(stateToConsider, stateToConsider.robot.getPosition(), true))
+						{
+							log.debug("Le salaud ne bouge pas : abort !");
+							throw new UnableToMoveException(e.aim, UnableToMoveReason.OBSTACLE_DETECTED);
+						}
+						else
+						{
+							log.debug(xBefore);
+							log.debug(stateToConsider.robot.getPosition().x);
+							log.debug("Déplacement demandé de : " + (280-(xBefore-stateToConsider.robot.getPositionFast().x)));
+							stateToConsider.robot.moveLengthwise(280-(xBefore-stateToConsider.robot.getPosition().x),hooksToConsider,true);
+						}
 					}
-					catch(Exception ex)
+					else
 					{
-						throw ex;
+						log.debug("Bord du filet touché, tentative de dégagement !");
+						try
+						{
+							stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
+							stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
+							throw new ExecuteException(new BlockedException());
+						}
+						catch(Exception ex)
+						{
+							throw ex;
+						}
 					}
 				}
 				
@@ -612,9 +668,6 @@ public class Fishing extends AbstractScript
 						}
 						else
 						{
-							log.debug(xBefore);
-							log.debug(stateToConsider.robot.getPosition().x);
-							log.debug("Déplacement demandé de : " + (530-(xBefore-stateToConsider.robot.getPositionFast().x)));
 							stateToConsider.robot.moveLengthwise(530-(xBefore-stateToConsider.robot.getPositionFast().x),hooksToConsider,true);
 						}
 					}
@@ -683,23 +736,75 @@ public class Fishing extends AbstractScript
 					Hook blocked = hookFactory.newOrientationCorrectHook((float)(5*Math.PI/4),(float)(0.1));
 					blocked.addCallback(new Callback(new Immobilise(),true,stateToConsider));
 					hooksToConsider.add(blocked);
+					xBefore=stateToConsider.robot.getPosition().x;
 					
 					stateToConsider.robot.moveLengthwise(300, hooksToConsider, true);
+				}
+				catch(UnableToMoveException e)
+				{
+					if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED)
+					{
+						log.debug("Ennemi détecté ! Attente avant de progresser !");
+						if(!waitForEnnemy(stateToConsider, stateToConsider.robot.getPosition(), true))
+						{
+							log.debug("Le salaud ne bouge pas : abort !");
+							throw new UnableToMoveException(e.aim, UnableToMoveReason.OBSTACLE_DETECTED);
+						}
+						else
+						{
+							stateToConsider.robot.moveLengthwise(300-(xBefore-stateToConsider.robot.getPosition().x),hooksToConsider,true);
+						}
+					}
+					else
+					{
+						log.debug("Bord du filet touché, tentative de dégagement !");
+						try
+						{
+							stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
+							stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
+							throw new ExecuteException(new BlockedException());
+						}
+						catch(Exception ex)
+						{
+							throw ex;
+						}
+					}
+				}
+				
+				try
+				{
+					xBefore=stateToConsider.robot.getPosition().x;
 					stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
 					stateToConsider.robot.moveLengthwise(310,hooksToConsider,true);
 				}
-				catch(Exception e)
+				catch(UnableToMoveException e)
 				{
-					log.debug("Bord du filet touché, tentative de dégagement !");
-					try
+					if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED)
 					{
-						stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
-						stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
-						throw new ExecuteException(new BlockedException());
+						log.debug("Ennemi détecté ! Attente avant de progresser !");
+						if(!waitForEnnemy(stateToConsider, stateToConsider.robot.getPosition(), true))
+						{
+							log.debug("Le salaud ne bouge pas : abort !");
+							throw new UnableToMoveException(e.aim, UnableToMoveReason.OBSTACLE_DETECTED);
+						}
+						else
+						{
+							stateToConsider.robot.moveLengthwise(310-(xBefore-stateToConsider.robot.getPosition().x),hooksToConsider,true);
+						}
 					}
-					catch(Exception ex)
+					else
 					{
-						throw ex;
+						log.debug("Bord du filet touché, tentative de dégagement !");
+						try
+						{
+							stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
+							stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
+							throw new ExecuteException(new BlockedException());
+						}
+						catch(Exception ex)
+						{
+							throw ex;
+						}
 					}
 				}
 				
