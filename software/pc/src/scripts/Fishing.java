@@ -731,11 +731,8 @@ public class Fishing extends AbstractScript
 		log.debug("Exception " + ex + "dans Fishing : Lancement du Finalize !");
 		try
 		{
-<<<<<<< HEAD
 			log.debug("Poissons à bord ? :" + stateToConsider.robot.getAreFishesOnBoard());
-=======
 			stateToConsider.robot.setBasicDetection(false);
->>>>>>> c2abc2aed69769a5c1ccab57bd8f6b491517c7e2
 			// Si on possède un poisson lors du finalize, on garde le bras à mi-hauteur
 			if(stateToConsider.robot.getAreFishesOnBoard())
 			{
