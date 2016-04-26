@@ -427,6 +427,8 @@ public class Fishing extends AbstractScript
 					Hook blocked = hookFactory.newOrientationCorrectHook((float)(-2*Math.PI/3),(float)(0.05));
 					blocked.addCallback(new Callback(new Immobilise(),true,stateToConsider));
 					hooksToConsider.add(blocked);
+					
+					xBefore=stateToConsider.robot.getPosition().x;
 					stateToConsider.robot.moveLengthwise(500, hooksToConsider, true);
 				}
 				catch(UnableToMoveException e)
@@ -441,9 +443,6 @@ public class Fishing extends AbstractScript
 						}
 						else
 						{
-							log.debug(xBefore);
-							log.debug(stateToConsider.robot.getPosition().x);
-							log.debug("Déplacement demandé de : " + (500-(xBefore-stateToConsider.robot.getPositionFast().x)));
 							stateToConsider.robot.moveLengthwise(500-(xBefore-stateToConsider.robot.getPosition().x),hooksToConsider,true);
 						}
 					}
@@ -513,6 +512,7 @@ public class Fishing extends AbstractScript
 					blocked.addCallback(new Callback(new Immobilise(),true,stateToConsider));
 					hooksToConsider.add(blocked);
 					
+					xBefore=stateToConsider.robot.getPosition().x;
 					stateToConsider.robot.moveLengthwise(300, hooksToConsider, true);
 					
 				}
@@ -528,9 +528,6 @@ public class Fishing extends AbstractScript
 						}
 						else
 						{
-							log.debug(xBefore);
-							log.debug(stateToConsider.robot.getPosition().x);
-							log.debug("Déplacement demandé de : " + (300-(xBefore-stateToConsider.robot.getPositionFast().x)));
 							stateToConsider.robot.moveLengthwise(300-(xBefore-stateToConsider.robot.getPosition().x),hooksToConsider,true);
 						}
 					}
@@ -554,6 +551,7 @@ public class Fishing extends AbstractScript
 				{
 					// relève du bras puis déplacement au dessus du filet
 					stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
+					xBefore=stateToConsider.robot.getPosition().x;
 					stateToConsider.robot.moveLengthwise(280,hooksToConsider,true);
 				}
 				catch(UnableToMoveException e)
@@ -568,9 +566,6 @@ public class Fishing extends AbstractScript
 						}
 						else
 						{
-							log.debug(xBefore);
-							log.debug(stateToConsider.robot.getPosition().x);
-							log.debug("Déplacement demandé de : " + (280-(xBefore-stateToConsider.robot.getPositionFast().x)));
 							stateToConsider.robot.moveLengthwise(280-(xBefore-stateToConsider.robot.getPosition().x),hooksToConsider,true);
 						}
 					}
@@ -736,6 +731,7 @@ public class Fishing extends AbstractScript
 					Hook blocked = hookFactory.newOrientationCorrectHook((float)(5*Math.PI/4),(float)(0.1));
 					blocked.addCallback(new Callback(new Immobilise(),true,stateToConsider));
 					hooksToConsider.add(blocked);
+					
 					xBefore=stateToConsider.robot.getPosition().x;
 					
 					stateToConsider.robot.moveLengthwise(300, hooksToConsider, true);
