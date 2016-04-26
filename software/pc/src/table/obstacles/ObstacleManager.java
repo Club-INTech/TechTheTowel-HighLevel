@@ -229,6 +229,7 @@ public class ObstacleManager
 				&& !( Geometry.isBetween(position.x, 700, 1000) && Geometry.isBetween(position.y, 950, 1250)) //château de sable tapis
 				&& !( Geometry.isBetween(position.x, 0, 600) && Geometry.isBetween(position.y, 800, 1300)) //Notre zone de depose
 				&& !( Geometry.isBetween(position.x, -1000, -700) && Geometry.isBetween(position.y, 950, 1250)) //château de sable tapis adv
+				&& !( Geometry.isBetween(position.x, 1100, 1500) && Geometry.isBetween(position.y, 800, 1500)) //tapis
 				)
     	{
     		boolean isThereAnObstacleIntersecting=false;
