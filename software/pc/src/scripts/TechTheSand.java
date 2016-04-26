@@ -157,7 +157,7 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 
 				// Si l'on voit l'ennemi dans le sable avant de commencer (#RCVA)
-				if(stateToConsider.table.getObstacleManager().isDiscObstructed(new Vec2(0, 1500), 100))
+				if(stateToConsider.table.getObstacleManager().isDiscObstructed(new Vec2(0, 1550), 100))
 					throw new UnableToMoveException(new Vec2(0, 1600), UnableToMoveReason.OBSTACLE_DETECTED);
 
                 // On déploie la vitre droite

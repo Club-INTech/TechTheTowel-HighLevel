@@ -150,7 +150,7 @@ public class Strategie implements Service
                 log.critical("Je sais pas comment t'as fait Billy, cette exception ne tombe jamais...");
                 e.printStackTrace();
             } catch (SerialConnexionException | SerialFinallyException e) {
-                log.critical("It was at this moment that the robot knew, that he fucked up.");
+                log.critical("It was at this moment that Billy knew, that he fucked up.");
                 e.printStackTrace();
             } catch (UnableToMoveException e) {
                 abnormalMatch = true;
@@ -174,8 +174,11 @@ public class Strategie implements Service
                 e.printStackTrace();
             }
 
+            state.robot.setBasicDetection(false);
+
             if(state.robot.getIsSandInside() && state.robot.getPosition().x < 750)
                 sandTaken = true;
+            else if(sandTaken)
 
             if(sandTaken && !state.robot.getIsSandInside())
             {
@@ -274,6 +277,7 @@ public class Strategie implements Service
     	
         try
         {
+            state.robot.setBasicDetection(true);
             if (state.robot.getPosition().x + state.robot.getRobotRadius() >= 1500)
             {
             	disengageXPositive();
@@ -344,6 +348,7 @@ public class Strategie implements Service
                     state.robot.moveLengthwise(signe*200);
                 }
             }
+            state.robot.setBasicDetection(false);
         }
         catch (UnableToMoveException e)
         {
@@ -356,8 +361,7 @@ public class Strategie implements Service
      * Boîte décisive, sélectionne le prochain script
      * Si un mauvais evenement est arrivé, on prends une décision adaptée et on reprends le match normalement
      */
-    public AbstractScript decide()
-    {
+    public AbstractScript decide(){
         if(!abnormalMatch)
         {
             if(start)
@@ -366,10 +370,28 @@ public class Strategie implements Service
             }
             else if(done || ThreadTimer.remainingTime() <= 30000)
             {
+                try {
+                    state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
+                    state.changeRobotRadius(TechTheSand.retractedRobotRadius);
+                    state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
+                    state.robot.setDoor(false);
+                } catch (SerialConnexionException e) {
+                    e.printStackTrace();
+                }
+                state.robot.setBasicDetection(true);
                 return scriptmanager.getScript(ScriptNames.FISHING);
             }
             else if(gotShells)
             {
+                try {
+                    state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
+                    state.changeRobotRadius(TechTheSand.retractedRobotRadius);
+                    state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
+                    state.robot.setDoor(false);
+                } catch (SerialConnexionException e) {
+                    e.printStackTrace();
+                }
+                state.robot.setBasicDetection(true);
                 return scriptmanager.getScript(ScriptNames.FISHING);
             }
             else if(state.table.extDoorClosed && state.table.intDoorClosed)
@@ -402,7 +424,11 @@ public class Strategie implements Service
            // if(!sandTaken && !dangerousOpponent)
                // return scriptmanager.getScript(ScriptNames.TECH_THE_SAND);
             if(!sandTaken && state.robot.getPositionFast().x < 850)
+            {
+                sandTaken = true;
+                state.robot.setBasicDetection(true);
                 return scriptmanager.getScript(ScriptNames.CASTLE);
+            }
             else if(!sandTaken)
             {
                 castleTaken = true;
@@ -411,6 +437,15 @@ public class Strategie implements Service
             else if(!done)
             {
                 done = true;
+                try {
+                    state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
+                    state.changeRobotRadius(TechTheSand.retractedRobotRadius);
+                    state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
+                    state.robot.setDoor(false);
+                } catch (SerialConnexionException e) {
+                    e.printStackTrace();
+                }
+                state.robot.setBasicDetection(true);
                 return scriptmanager.getScript(ScriptNames.FISHING);
             }
 
