@@ -30,6 +30,7 @@ import java.util.ArrayList;
  * Version 1 : lorsque le robot vient de la mer, tourne pour choper le château puis le déplace dans la zone de construction
  * Version 2 : chope le château alors que le robot revient de la dune et en contient déjà une partie
  * Version 3 : équivalent de la version 0 avec une trajectoire courbe
+ * Version 4 : identique à la version 3 mais avec appel au PDD
  * @author CF, Cérézas
  */
 public class Castle extends AbstractScript
@@ -46,7 +47,7 @@ public class Castle extends AbstractScript
 		/**
 		 * Versions du script
 		 */
-		versions = new Integer[]{0,1,2,3};
+		versions = new Integer[]{0,1,2,3,4};
 	}
 
 	@Override
@@ -243,7 +244,7 @@ public class Castle extends AbstractScript
 				// la version 1 force la rotation dans le sens trigo, ce qu'il faut changer
 				stateToConsider.robot.setTurningStrategy(TurningStrategy.FASTEST);
 			}
-			else if(versionToExecute == 3)
+			else if(versionToExecute == 3 || versionToExecute == 4)
 			{
                 Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
                 stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
@@ -358,7 +359,7 @@ public class Castle extends AbstractScript
 			return 16;
 		}
 		
-		else if (version == 2 | version==3)
+		else if (version == 2 | version==3 | version == 4 )
 		{
 			//TODO changer selon le caractère destructif de la version ou les pertes constatées
 			return 12;
@@ -374,7 +375,7 @@ public class Castle extends AbstractScript
 	@Override
 	public Circle entryPosition(int version, int ray, Vec2 robotPosition) throws BadVersionException
 	{
-		if (version == 0)
+		if (version == 0 | version == 4)
 		{
 			return (new Circle(new Vec2(1050,900)));
 		}
