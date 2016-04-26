@@ -25,7 +25,6 @@ import smartMath.Arc;
 import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
-import sun.awt.X11.XErrorHandler.XBaseErrorHandler;
 import utils.Config;
 import utils.Log;
 
