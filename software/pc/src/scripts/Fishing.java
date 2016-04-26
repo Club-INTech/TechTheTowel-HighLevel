@@ -575,7 +575,7 @@ public class Fishing extends AbstractScript
 				hooksToConsider.add(hook2);
 
 				// On crée le hook de position pour lâcher les poissons, puis ajout à la liste
-				Hook hook3 = hookFactory.newXLesserHook(410);
+				Hook hook3 = hookFactory.newXLesserHook(380);
 				hook3.addCallback(new Callback(new DropFish(), true, stateToConsider));
 				hooksToConsider.add(hook3);
 				
@@ -595,7 +595,7 @@ public class Fishing extends AbstractScript
 					//On retient la coordonnée x d'avant mouvement en cas d'obstacle
 					xBefore = stateToConsider.robot.getPosition().x;
 					
-					stateToConsider.robot.moveLengthwise(500, hooksToConsider, true);
+					stateToConsider.robot.moveLengthwise(530, hooksToConsider, true);
 				}
 				catch(UnableToMoveException e)
 				{
@@ -609,7 +609,7 @@ public class Fishing extends AbstractScript
 						}
 						else
 						{
-							stateToConsider.robot.moveLengthwise(500-(xBefore-stateToConsider.robot.getPosition().x));
+							stateToConsider.robot.moveLengthwise(530-(xBefore-stateToConsider.robot.getPosition().x));
 						}
 					}
 					else
@@ -657,11 +657,11 @@ public class Fishing extends AbstractScript
 
 				// on repart chercher d'autre poissons
 				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
-				stateToConsider.robot.moveLengthwise(-470, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(-500, hooksToConsider, true);
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 
 				// nouvelle condition pour le hook lâchant les poissons, même action, mise à jour dans la liste
-				hook3 = hookFactory.newXLesserHook(400);
+				hook3 = hookFactory.newXLesserHook(350);
 				hook3.addCallback(new Callback(new DropFish(), true, stateToConsider));
 				hooksToConsider.add(hook3);
 				
@@ -680,7 +680,7 @@ public class Fishing extends AbstractScript
 					
 					stateToConsider.robot.moveLengthwise(300, hooksToConsider, true);
 					stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
-					stateToConsider.robot.moveLengthwise(280,hooksToConsider,true);
+					stateToConsider.robot.moveLengthwise(310,hooksToConsider,true);
 				}
 				catch(Exception e)
 				{
