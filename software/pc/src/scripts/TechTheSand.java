@@ -425,15 +425,16 @@ public class TechTheSand extends AbstractScript
 		// on tente d'arrêter la tige et de ranger la porte
 		try 
 		{
+            state.robot.setForceMovement(false);
             if(state.robot.getPosition().x <= 300)
             {
                 try {
+                    state.robot.turn(Math.PI);
                     state.robot.moveLengthwise(-100);
                 } catch (UnableToMoveException e1) {
                     e1.printStackTrace();
                 }
             }
-            state.robot.setForceMovement(false);
 			state.robot.setBasicDetection(false);
 			state.robot.useActuator(ActuatorOrder.STOP_AXIS, true);
             if (state.robot.getIsSandInside())
