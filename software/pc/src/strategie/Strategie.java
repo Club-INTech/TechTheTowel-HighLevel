@@ -25,6 +25,8 @@ import utils.Log;
 
 import java.util.ArrayList;
 
+import org.hamcrest.core.IsInstanceOf;
+
 
 /**
  * IA
@@ -281,7 +283,7 @@ public class Strategie implements Service
         try
         {
             state.robot.setBasicDetection(true);
-            arcDisengage();
+            arcDisengage(script);
             state.robot.setLocomotionSpeed(speedBeforeDisengage);
 
             if (script instanceof Castle) //Dégagement en cas de bloquage en essayant de déposer le sable (trop greedy)
@@ -487,7 +489,8 @@ public class Strategie implements Service
 	/* Méthodes pour se dégager des bords de table */
 	/* ========================================== */
 	
-	public void arcDisengage()
+	/** Méthode de désengagement du bord de table par arc*/
+	public void arcDisengage(AbstractScript script)
 	{
 		// tant qu'on n'est pas sorti
 		while(!isInTable())
@@ -536,11 +539,17 @@ public class Strategie implements Service
 					length=-length;
 				}
 				
-				// distinction seon la symétrie
+				// distinction selon la symétrie
 				if(config.getProperty("couleur").equals("violet"))
 				{
-					log.debug("anormal");
 					radius=-radius;
+				}
+				
+				// Cas spécifique pour les poissons
+				if(script instanceof Fishing)
+				{
+					radius=-radius;
+					length=-length;
 				}
 
 				log.debug("Rayon : " + radius);
