@@ -64,6 +64,11 @@ public class SerialConnexion implements SerialPortEventListener, Service
     private boolean debug = true;
 
     /**
+     * Permet de couper la communication, oui c'est dégueulasse
+     */
+    public static boolean shutdown = false;
+
+    /**
      * Construit une connexion sÃ¯Â¿Â½rie
      * @param log Sortie de log a utiliser
      * @param name nom de la connexion sÃƒÂ©rie
@@ -189,6 +194,8 @@ public class SerialConnexion implements SerialPortEventListener, Service
      */
     public String[] communiquer(String[] messages, int nb_lignes_reponse) throws SerialConnexionException
     {
+        if(shutdown)
+            throw new SerialConnexionException();
         synchronized(output)
         {
             String inputLines[] = new String[nb_lignes_reponse];

@@ -5,6 +5,7 @@ import graphics.Window;
 import robot.RobotReal;
 import robot.cardsWrappers.LocomotionCardWrapper;
 import robot.cardsWrappers.SensorsCardWrapper;
+import robot.serial.SerialConnexion;
 import table.Table;
 
 /**
@@ -200,7 +201,8 @@ public class ThreadTimer extends AbstractThread
 			mLocomotionCardWrapper.disableRotationnalFeedbackLoop();
 			mLocomotionCardWrapper.disableTranslationnalFeedbackLoop();
 			mLocomotionCardWrapper.disableSpeedFeedbackLoop();
-			mLocomotionCardWrapper.shutdownSTM();
+			//mLocomotionCardWrapper.shutdownSTM();
+			SerialConnexion.shutdown = true;
 		}
 		catch (SerialConnexionException e)
 		{
