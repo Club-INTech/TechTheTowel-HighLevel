@@ -496,8 +496,8 @@ public class Strategie implements Service
 			int radius=600;
 			try
 			{
-				log.debug("Orientation du robot : " + state.robot.getOrientation());
 				double rOrient = state.robot.getOrientationFast();
+				
 				// détermination de la marche avant ou arrière
 				if(state.robot.getPosition().x<0)
 				{
@@ -535,13 +535,19 @@ public class Strategie implements Service
 				{
 					length=-length;
 				}
+				
+				// distinction seon la symétrie
+				if(config.getProperty("couleur").equals("violet"))
+				{
+					log.debug("anormal");
+					radius=-radius;
+				}
 
 				log.debug("Rayon : " + radius);
 				log.debug("Longueur : " + length);
 
 				Arc test = new Arc(radius,length,state.robot.getOrientation(),false);
 				state.robot.moveArc(test, hooks);
-
 			}
 			catch(Exception e)
 			{
@@ -566,6 +572,7 @@ public class Strategie implements Service
 			}
 		}
 	}
+
 	
 	/** booléen indiquant si le robot est dans les limites habituelles de la table*/
 	public boolean isInTable()
@@ -573,13 +580,41 @@ public class Strategie implements Service
 		int botX = state.robot.getPosition().x;
 		int botY = state.robot.getPosition().y;
 		int radius = state.robot.getRobotRadius();
-		if(botX <= 1489 - radius && botX >= -1489 + radius)
+		try
 		{
-			if(botY<=1989 - radius && botY>= 10+radius )
+			if(botX <= 1489 - radius && botX >= -1489 + radius)
 			{
-				log.debug("Robot replacé dans la table !");
-				return true;
+				if(botY<=1989 - radius && botY>= 10+radius)
+				{
+					if(config.getProperty("couleur").equals("vert"))
+					{
+						log.debug("Robot replacé dans la table !");
+						return true;
+					}
+					else if(config.getProperty("couleur").equals("violet"))
+					{
+						log.debug("Robot encore hors de table !");
+						return false;
+					}
+				}
 			}
+			else
+			{
+				if(config.getProperty("couleur").equals("violet"))
+				{
+					log.debug("Robot replacé dans la table !");
+					return true;
+				}
+				else if(config.getProperty("couleur").equals("vert"))
+				{
+					log.debug("Robot encore hors de table !");
+					return false;
+				}
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
 		}
 		log.debug("Robot encore hors de table !");
 		return false;

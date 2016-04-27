@@ -39,7 +39,94 @@ public class JUnit_Disengage extends JUnit_Test
 		// à modifier en début de test
 	
 		state.robot.setPosition(new Vec2(1380,1120));
-		state.robot.setOrientation(0.1);
+		state.robot.setOrientation(-Math.PI/2+0.1);
+	}
+	
+	@Test
+	public void arcXPositive()
+	{
+		// tant qu'on n'est pas sorti
+		while(!isInTable())
+		{
+			// rayon arbitraire
+			int radius=600;
+			try
+			{
+				log.debug("Orientation du robot : " + state.robot.getOrientation());
+				double rOrient = state.robot.getOrientationFast();
+				// détermination de la marche avant ou arrière
+				if(state.robot.getPosition().x<0)
+				{
+					if(rOrient>=-Math.PI/2 && rOrient< Math.PI/2)
+					{
+						reverse = false;
+					}
+					else
+					{
+						reverse = true;
+					}
+				}
+				else
+				{
+					if(rOrient >=-Math.PI/2 && rOrient< Math.PI/2)
+					{
+						reverse = true;
+					}
+					else
+					{
+						reverse = false;
+					}
+					if((rOrient>=-Math.PI && rOrient<=-Math.PI/2) || (rOrient>=-Math.PI/2 && rOrient<=0))
+					{
+						radius=-radius;
+					}
+				}
+				
+				log.debug("Marche arrière ? : " + reverse);
+				log.debug("Tentative de dégagement par arc !");
+
+				// longueur d'arc arbitraire
+				int length = 200;
+				if (reverse)
+				{
+					length=-length;
+				}
+				if(config.getProperty("couleur").equals("violet"))
+				{
+					log.debug("anormal");
+					radius=-radius;
+				}
+
+				log.debug("Rayon : " + radius);
+				log.debug("Longueur : " + length);
+
+				Arc test = new Arc(radius,length,state.robot.getOrientation(),false);
+				state.robot.moveArc(test, hooks);
+				log.debug("Position du robot : " + state.robot.getPosition());
+
+			}
+			catch(Exception e)
+			{
+				log.debug("Fail : " + e ); // poney
+				log.debug("Tentative de déplacement rectiligne !");
+				try
+				{
+					if(reverse)
+					{
+						state.robot.moveLengthwise(100, hooks, true);
+					}
+					else
+					{
+						state.robot.moveLengthwise(-100,hooks,true);
+					}
+				}
+				catch(Exception ex)
+				{
+					log.debug("Fail : " + ex);
+					log.debug("Nouvelle boucle de dégagement !");
+				}
+			}
+		}
 	}
 	
 //
@@ -517,100 +604,47 @@ public class JUnit_Disengage extends JUnit_Test
 	}
 	*/
 	
-	@Test
-	public void arcXPositive()
-	{
-		// tant qu'on n'est pas sorti
-		while(!isInTable())
-		{
-			// rayon arbitraire
-			int radius=600;
-			try
-			{
-				log.debug("Orientation du robot : " + state.robot.getOrientation());
-				double rOrient = state.robot.getOrientationFast();
-				// détermination de la marche avant ou arrière
-				if(state.robot.getPosition().x<0)
-				{
-					if(rOrient>=-Math.PI/2 && rOrient< Math.PI/2)
-					{
-						reverse = false;
-					}
-					else
-					{
-						reverse = true;
-					}
-				}
-				else
-				{
-					if(rOrient >=-Math.PI/2 && rOrient< Math.PI/2)
-					{
-						reverse = true;
-					}
-					else
-					{
-						reverse = false;
-					}
-					if((rOrient>=-Math.PI && rOrient<=-Math.PI/2) || (rOrient>=-Math.PI/2 && rOrient<=0))
-					{
-						radius=-radius;
-					}
-				}
-				
-				log.debug("Marche arrière ? : " + reverse);
-				log.debug("Tentative de dégagement par arc !");
-
-				// longueur d'arc arbitraire
-				int length = 200;
-				if (reverse)
-				{
-					length=-length;
-				}
-
-				log.debug("Rayon : " + radius);
-				log.debug("Longueur : " + length);
-
-				Arc test = new Arc(radius,length,state.robot.getOrientation(),false);
-				state.robot.moveArc(test, hooks);
-
-			}
-			catch(Exception e)
-			{
-				log.debug("Fail : " + e ); // poney
-				log.debug("Tentative de déplacement rectiligne !");
-				try
-				{
-					if(reverse)
-					{
-						state.robot.moveLengthwise(100, hooks, true);
-					}
-					else
-					{
-						state.robot.moveLengthwise(-100,hooks,true);
-					}
-				}
-				catch(Exception ex)
-				{
-					log.debug("Fail : " + ex);
-					log.debug("Nouvelle boucle de dégagement !");
-				}
-			}
-		}
-	}
-	
 	/** booléen indiquant si le robot est dans les limites habituelles de la table*/
 	public boolean isInTable()
 	{
 		int botX = state.robot.getPosition().x;
 		int botY = state.robot.getPosition().y;
 		int radius = state.robot.getRobotRadius();
-		if(botX <= 1489 - radius && botX >= -1489 + radius)
+		try
 		{
-			if(botY<=1989 - radius && botY>= 10+radius )
+			if(botX <= 1489 - radius && botX >= -1489 + radius)
 			{
-				log.debug("Robot replacé dans la table !");
-				return true;
+				if(botY<=1989 - radius && botY>= 10+radius)
+				{
+					if(config.getProperty("couleur").equals("vert"))
+					{
+						log.debug("Robot replacé dans la table !");
+						return true;
+					}
+					else if(config.getProperty("couleur").equals("violet"))
+					{
+						log.debug("Robot encore hors de table !");
+						return false;
+					}
+				}
 			}
+			else
+			{
+				if(config.getProperty("couleur").equals("violet"))
+				{
+					log.debug("Robot replacé dans la table !");
+					return true;
+				}
+				else if(config.getProperty("couleur").equals("vert"))
+				{
+					log.debug("Robot encore hors de table !");
+					return false;
+				}
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
 		}
 		log.debug("Robot encore hors de table !");
 		return false;
