@@ -366,8 +366,6 @@ public class TechTheSand extends AbstractScript
 
                 stateToConsider.robot.setForceMovement(false);
 				stateToConsider.robot.setSmoothAcceleration(true);
-                stateToConsider.robot.setBasicDetection(false);
-
 
                 try 
                 {
@@ -380,8 +378,10 @@ public class TechTheSand extends AbstractScript
                 }
 
 				stateToConsider.robot.setSmoothAcceleration(false);
+                stateToConsider.robot.setBasicDetection(false);
 
-				// On reprend notre vitesse habituelle
+
+                // On reprend notre vitesse habituelle
                 stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
                 stateToConsider.table.getObstacleManager().freePoint(stateToConsider.robot.getPosition());
             }
