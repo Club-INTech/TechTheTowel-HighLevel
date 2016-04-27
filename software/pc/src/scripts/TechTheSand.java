@@ -287,37 +287,36 @@ public class TechTheSand extends AbstractScript
 				}
 				catch (UnableToMoveException e)
 				{
-                    if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED)
-                        throw new UnableToMoveException(new Vec2(0, 1600), UnableToMoveReason.OBSTACLE_DETECTED);
-					e.printStackTrace();
-					stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/4, Math.PI, false), hooksToConsider);
-					stateToConsider.robot.turn(Math.PI);
-					//stateToConsider.robot.moveLengthwise(-80);
 					try
 					{
+						if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED)
+							throw new UnableToMoveException(new Vec2(0, 1600), UnableToMoveReason.OBSTACLE_DETECTED);
+						e.printStackTrace();
+						stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/4, Math.PI, false), hooksToConsider);
+						stateToConsider.robot.turn(Math.PI);
+						//stateToConsider.robot.moveLengthwise(-80);
 						stateToConsider.robot.moveArc(approach2, hooksToConsider);
 					}
 					catch (UnableToMoveException e2)
 					{
-                        if(e2.reason == UnableToMoveReason.OBSTACLE_DETECTED)
-                            throw new UnableToMoveException(new Vec2(0, 1600), UnableToMoveReason.OBSTACLE_DETECTED);
-						e2.printStackTrace();
-						stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/4, Math.PI, false), hooksToConsider);
-						stateToConsider.robot.turn(Math.PI);
-						//stateToConsider.robot.moveLengthwise(-80);
 						try
 						{
+							if(e2.reason == UnableToMoveReason.OBSTACLE_DETECTED)
+								throw new UnableToMoveException(new Vec2(0, 1600), UnableToMoveReason.OBSTACLE_DETECTED);
+							e2.printStackTrace();
+							stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/4, Math.PI, false), hooksToConsider);
+							stateToConsider.robot.turn(Math.PI);
+							//stateToConsider.robot.moveLengthwise(-80);
 							stateToConsider.robot.moveArc(approach2, hooksToConsider);
 						}
 						catch (UnableToMoveException e3)
 						{
-                            if(e3.reason == UnableToMoveReason.OBSTACLE_DETECTED)
-                                throw new UnableToMoveException(new Vec2(0, 1600), UnableToMoveReason.OBSTACLE_DETECTED);
 							e3.printStackTrace();
 							log.critical("Impossible de se dégager, abandon du sable");
 							stateToConsider.robot.setIsSandInside(false);
 							stateToConsider.robot.setTurningStrategy(TurningStrategy.FASTEST);
 							stateToConsider.robot.setDirectionStrategy(DirectionStrategy.FASTEST);
+							stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
 							stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 150);
 							stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/2, Math.PI, false), hooksToConsider);
 							stateToConsider.robot.moveLengthwise(-100);
@@ -426,7 +425,7 @@ public class TechTheSand extends AbstractScript
 		try 
 		{
             state.robot.setForceMovement(false);
-            if(state.robot.getPosition().x <= 300)
+         /*   if(state.robot.getPosition().x <= 300)
             {
                 try {
                     state.robot.turn(Math.PI);
@@ -434,7 +433,7 @@ public class TechTheSand extends AbstractScript
                 } catch (UnableToMoveException e1) {
                     e1.printStackTrace();
                 }
-            }
+            }*/
 			state.robot.setBasicDetection(false);
 			state.robot.useActuator(ActuatorOrder.STOP_AXIS, true);
             if (state.robot.getIsSandInside())
