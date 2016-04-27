@@ -711,7 +711,24 @@ public class Fishing extends AbstractScript
 
 				// on repart chercher d'autre poissons
 				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
-				stateToConsider.robot.moveLengthwise(-500, hooksToConsider, true);
+				try
+				{
+					stateToConsider.robot.moveLengthwise(-500, hooksToConsider, true);
+				}
+				catch(Exception e)
+				{
+					log.debug("Filet percuté en allant chercher d'autre poissons, tentative de dégagement !");
+					hooksToConsider.clear();
+					try
+					{
+						stateToConsider.robot.moveArc(new Arc(-600,200,stateToConsider.robot.getOrientation(),false),null);
+					}
+					catch(Exception ex)
+					{
+						log.debug("Impossible de sortir du bord de table !");
+						throw ex;
+					}
+				}
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 
 				// nouvelle condition pour le hook lâchant les poissons, même action, mise à jour dans la liste
@@ -823,7 +840,24 @@ public class Fishing extends AbstractScript
 
 				// on repart chercher d'autre poissons
 				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
-				stateToConsider.robot.moveLengthwise(-520, hooksToConsider, true);
+				try
+				{
+					stateToConsider.robot.moveLengthwise(-520, hooksToConsider, true);
+				}
+				catch(Exception e)
+				{
+					log.debug("Filet percuté en allant chercher d'autre poissons, tentative de dégagement !");
+					hooksToConsider.clear();
+					try
+					{
+						stateToConsider.robot.moveArc(new Arc(-600,200,stateToConsider.robot.getOrientation(),false),null);
+					}
+					catch(Exception ex)
+					{
+						log.debug("Impossible de sortir du bord de table !");
+						throw ex;
+					}
+				}
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 
 				// nouvelle condition pour le hook lâchant les poissons, même action, mise à jour dans la liste
