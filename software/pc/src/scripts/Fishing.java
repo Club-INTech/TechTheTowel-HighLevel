@@ -696,10 +696,10 @@ public class Fishing extends AbstractScript
 				}
 
 				// Points gagnés moyen pour ce passage
-				stateToConsider.obtainedPoints += 20;
+				stateToConsider.obtainedPoints += 10;
 
-				// On indique que deux poissons en moyenne ont été pris
-				stateToConsider.table.fishesFished+=2;
+				// On indique qu'un poisson en moyenne a été pris
+				stateToConsider.table.fishesFished+=1;
 				
 				// On indique au robot que les poissons ne sont plus sur le bras
 				stateToConsider.robot.setAreFishesOnBoard(false);
@@ -815,6 +815,118 @@ public class Fishing extends AbstractScript
 
 				// Points gagnés moyen pour ce passage
 				stateToConsider.obtainedPoints += 20;
+				
+				// On modifie la condition du premier hook, même action, puis mise à jour dans la liste
+				hook1 = hookFactory.newXGreaterHook(700);
+				hook1.addCallback(new Callback(new GetFish(), true, stateToConsider));
+				hooksToConsider.add(hook1);
+
+				// on repart chercher d'autre poissons
+				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+				stateToConsider.robot.moveLengthwise(-500, hooksToConsider, true);
+				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+
+				// nouvelle condition pour le hook lâchant les poissons, même action, mise à jour dans la liste
+				hook3 = hookFactory.newXLesserHook(350);
+				hook3.addCallback(new Callback(new DropFish(), true, stateToConsider));
+				hooksToConsider.add(hook3);
+				
+				//Rajout du hook pour le booléen
+				specialHook = hookFactory.newXLesserHook(900);
+				specialHook.addCallback(new Callback(new SetFishesOnBoard(),true,stateToConsider));
+				hooksToConsider.add(specialHook);
+				
+				// on longe le bac avec gestion de blocage
+				try
+				{
+					// hook gérant le blocage non sétecté par le bas niveau
+					Hook blocked = hookFactory.newOrientationCorrectHook((float)(5*Math.PI/4),(float)(0.1));
+					blocked.addCallback(new Callback(new Immobilise(),true,stateToConsider));
+					hooksToConsider.add(blocked);
+					
+					xBefore=stateToConsider.robot.getPosition().x;
+					
+					stateToConsider.robot.moveLengthwise(300, hooksToConsider, true);
+				}
+				catch(UnableToMoveException e)
+				{
+					if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED)
+					{
+						log.debug("Ennemi détecté ! Attente avant de progresser !");
+						if(!waitForEnnemy(stateToConsider, stateToConsider.robot.getPosition(), true))
+						{
+							log.debug("Le salaud ne bouge pas : abort !");
+							throw new UnableToMoveException(e.aim, UnableToMoveReason.OBSTACLE_DETECTED);
+						}
+						else
+						{
+							stateToConsider.robot.moveLengthwise(300-(xBefore-stateToConsider.robot.getPosition().x),hooksToConsider,true);
+						}
+					}
+					else
+					{
+						log.debug("Bord du filet touché, tentative de dégagement !");
+						try
+						{
+							stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
+							stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
+							throw new ExecuteException(new BlockedException());
+						}
+						catch(Exception ex)
+						{
+							throw ex;
+						}
+					}
+				}
+				
+				try
+				{
+					xBefore=stateToConsider.robot.getPosition().x;
+					stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
+					stateToConsider.robot.moveLengthwise(310,hooksToConsider,true);
+				}
+				catch(UnableToMoveException e)
+				{
+					if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED)
+					{
+						log.debug("Ennemi détecté ! Attente avant de progresser !");
+						if(!waitForEnnemy(stateToConsider, stateToConsider.robot.getPosition(), true))
+						{
+							log.debug("Le salaud ne bouge pas : abort !");
+							throw new UnableToMoveException(e.aim, UnableToMoveReason.OBSTACLE_DETECTED);
+						}
+						else
+						{
+							stateToConsider.robot.moveLengthwise(310-(xBefore-stateToConsider.robot.getPosition().x),hooksToConsider,true);
+						}
+					}
+					else
+					{
+						log.debug("Bord du filet touché, tentative de dégagement !");
+						try
+						{
+							stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
+							stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
+							throw new ExecuteException(new BlockedException());
+						}
+						catch(Exception ex)
+						{
+							throw ex;
+						}
+					}
+				}
+				
+				// si le hook d'orientation n'est pas déclenché, on le supprime 
+				hooksToConsider.remove(hooksToConsider.size()-1);
+				
+				// On indique au robot que les poissons ne sont plus sur le bras
+				stateToConsider.robot.setAreFishesOnBoard(false);
+
+				// On indique qu'un poisson en moyenne a été pris
+				stateToConsider.table.fishesFished+=1;
+
+				// Points gagnés moyen pour ce passage
+				stateToConsider.obtainedPoints += 10;
 				
 				// arc pour sortir du bord de table
 				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
