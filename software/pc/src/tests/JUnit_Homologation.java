@@ -130,10 +130,10 @@ public class JUnit_Homologation extends JUnit_Test
             } catch (Exception e) {
                 log.debug("Problème d'exécution dans Fishing");
                 try {
-                    if(e instanceof UnableToMoveException
-                            && Math.abs(((UnableToMoveException) e).aim.minusNewVector(theRobot.robot.getPosition()).angle()-theRobot.robot.getOrientation()) > Math.PI)
+                    if(e instanceof UnableToMoveException && ((UnableToMoveException)e).reason == UnableToMoveReason.OBSTACLE_DETECTED
+                            && ((UnableToMoveException) e).aim.minusNewVector(theRobot.robot.getPosition()).dot(theRobot.robot.getPosition().minusNewVector(theRobot.robot.getPosition().plusNewVector(new Vec2((int)(100*Math.cos(theRobot.robot.getOrientation())),(int)(100*Math.sin(theRobot.robot.getOrientation())))))) > 0)
                         theRobot.robot.moveLengthwise(200);
-                    else
+                    else if(e instanceof UnableToMoveException && ((UnableToMoveException)e).reason == UnableToMoveReason.OBSTACLE_DETECTED)
                         theRobot.robot.moveLengthwise(-200);
                 } catch (UnableToMoveException e1) {
                     e1.printStackTrace();
