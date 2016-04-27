@@ -27,7 +27,6 @@ import smartMath.Vec2;
 import strategie.GameState;
 import utils.Config;
 import utils.Log;
-
 import java.util.ArrayList;
 /**
  * Script pour récuperer les poissons
@@ -671,7 +670,15 @@ public class Fishing extends AbstractScript
 						log.debug("Bord du filet touché, tentative de dégagement !");
 						try
 						{
-							stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
+							if(stateToConsider.robot.getAreFishesOnBoard())
+							{
+								log.debug("Poisson à bord, on les garde !");
+								stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
+							}
+							else
+							{
+								stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
+							}
 							stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
 							throw new ExecuteException(new BlockedException());
 						}
@@ -773,7 +780,15 @@ public class Fishing extends AbstractScript
 						log.debug("Bord du filet touché, tentative de dégagement !");
 						try
 						{
-							stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
+							if(stateToConsider.robot.getAreFishesOnBoard())
+							{
+								log.debug("Poisson à bord, on les garde !");
+								stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
+							}
+							else
+							{
+								stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
+							}
 							stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
 							throw new ExecuteException(new BlockedException());
 						}
@@ -810,7 +825,15 @@ public class Fishing extends AbstractScript
 						log.debug("Bord du filet touché, tentative de dégagement !");
 						try
 						{
-							stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
+							if(stateToConsider.robot.getAreFishesOnBoard())
+							{
+								log.debug("Poisson à bord, on les garde !");
+								stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
+							}
+							else
+							{
+								stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
+							}
 							stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
 							throw new ExecuteException(new BlockedException());
 						}
@@ -902,7 +925,15 @@ public class Fishing extends AbstractScript
 						log.debug("Bord du filet touché, tentative de dégagement !");
 						try
 						{
-							stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
+							if(stateToConsider.robot.getAreFishesOnBoard())
+							{
+								log.debug("Poisson à bord, on les garde !");
+								stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
+							}
+							else
+							{
+								stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
+							}
 							stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
 							throw new ExecuteException(new BlockedException());
 						}
@@ -939,7 +970,15 @@ public class Fishing extends AbstractScript
 						log.debug("Bord du filet touché, tentative de dégagement !");
 						try
 						{
-							stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
+							if(stateToConsider.robot.getAreFishesOnBoard())
+							{
+								log.debug("Poisson à bord, on les garde !");
+								stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
+							}
+							else
+							{
+								stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
+							}
 							stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
 							throw new ExecuteException(new BlockedException());
 						}
