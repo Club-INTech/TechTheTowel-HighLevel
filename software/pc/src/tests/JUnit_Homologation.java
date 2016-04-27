@@ -101,6 +101,7 @@ public class JUnit_Homologation extends JUnit_Test
         while(bite)
         {
             try {
+                theRobot.robot.setBasicDetection(true);
                 Vec2 sup = scriptManager.getScript(ScriptNames.CLOSE_DOORS).entryPosition(3, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
                 theRobot.table.getObstacleManager().freePoint(sup);
                 scriptManager.getScript(ScriptNames.CLOSE_DOORS).goToThenExec(3, theRobot, emptyHook);
@@ -118,6 +119,8 @@ public class JUnit_Homologation extends JUnit_Test
         while (bite)
         {
             try {
+                theRobot.robot.setBasicDetection(true);
+
                 theRobot.robot.setTurningStrategy(TurningStrategy.FASTEST);
                 theRobot.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
                 Vec2 sup = scriptManager.getScript(ScriptNames.FISHING).entryPosition(3, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
