@@ -109,7 +109,11 @@ public class JUnit_Homologation extends JUnit_Test
             } catch (Exception e) {
                 log.debug("Problème d'exécution dans Close Doors");
                 try {
-                    theRobot.robot.moveLengthwise(-200);
+                    if(e instanceof UnableToMoveException && ((UnableToMoveException)e).reason == UnableToMoveReason.OBSTACLE_DETECTED
+                            && ((UnableToMoveException) e).aim.minusNewVector(theRobot.robot.getPosition()).dot(theRobot.robot.getPosition().minusNewVector(theRobot.robot.getPosition().plusNewVector(new Vec2((int)(100*Math.cos(theRobot.robot.getOrientation())),(int)(100*Math.sin(theRobot.robot.getOrientation())))))) > 0)
+                        theRobot.robot.moveLengthwise(200);
+                    else if(e instanceof UnableToMoveException && ((UnableToMoveException)e).reason == UnableToMoveReason.OBSTACLE_DETECTED)
+                        theRobot.robot.moveLengthwise(-200);
                 } catch (UnableToMoveException e1) {
                     e1.printStackTrace();
                 }
