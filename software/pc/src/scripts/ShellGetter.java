@@ -8,7 +8,9 @@ import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
+import hook.Callback;
 import hook.Hook;
+import hook.methods.SpeedDown;
 import hook.types.HookFactory;
 import robot.Robot;
 import smartMath.Arc;
@@ -156,6 +158,10 @@ public class ShellGetter extends AbstractScript
                 // on déclare les coquillages comme étant dans le robot
                 stateToConsider.robot.shellsOnBoard=true;
 
+                Hook hook = hookFactory.newYGreaterHook(700);
+                hook.addCallback(new Callback(new SpeedDown(), true, stateToConsider));
+                hooksToConsider.add(hook);
+
                 // On créé l'arc de récupération
                 //Arc getter = new Arc(stateToConsider.robot.getPosition(), new Vec2(1300-TechTheSand.expandedRobotRadius/2,750),
                         //new Vec2(1300-TechTheSand.expandedRobotRadius/2,1050));
@@ -167,6 +173,7 @@ public class ShellGetter extends AbstractScript
                 stateToConsider.robot.moveArc(getter, hooksToConsider);
 
                 stateToConsider.robot.setForceMovement(false);
+                stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 
                 stateToConsider.robot.setTurningStrategy(TurningStrategy.FASTEST);
                 //Arc deposit = new Arc(stateToConsider.robot.getPosition(), new Vec2(1150,1200), Math.PI/2, true);
