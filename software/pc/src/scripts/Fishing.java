@@ -823,7 +823,7 @@ public class Fishing extends AbstractScript
 
 				// on repart chercher d'autre poissons
 				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
-				stateToConsider.robot.moveLengthwise(-500, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(-520, hooksToConsider, true);
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 
 				// nouvelle condition pour le hook lâchant les poissons, même action, mise à jour dans la liste
