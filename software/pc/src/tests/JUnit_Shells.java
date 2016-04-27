@@ -60,6 +60,7 @@ public class JUnit_Shells extends JUnit_Test
         }
         theRobot.robot.moveLengthwise(200, emptyHook, false);
         theRobot.changeRobotRadius(TechTheSand.expandedRobotRadius);
+        theRobot.robot.useActuator(ActuatorOrder.OPEN_DOOR, true);
 
         // Lance le thread graphique
         //container.getService(ServiceNames.THREAD_INTERFACE);
