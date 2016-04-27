@@ -284,7 +284,9 @@ public class TechTheSand extends AbstractScript
 				Arc approach2 = new Arc(distanceCod, distanceCod*Math.PI/4, Math.PI, false);
                 stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 
-				//=============================================================================================
+                stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/4, Math.PI, false), hooksToConsider);
+
+                //=============================================================================================
 				// Bouclage récursif de sortie
 				// On tente de sortir 3x en reculant un peu à chaque tentative, si on échoue les 3 tentatives,
 				//   on abandonne le sable
