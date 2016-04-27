@@ -22,10 +22,7 @@ import threads.ThreadSensor;
 import threads.ThreadTimer;
 import utils.Config;
 import utils.Log;
-
 import java.util.ArrayList;
-
-import org.hamcrest.core.IsInstanceOf;
 
 
 /**
@@ -550,6 +547,11 @@ public class Strategie implements Service
 				{
 					radius=-radius;
 					length=-length;
+				}
+				else if(script instanceof CloseDoors)
+				{
+					length= Math.abs(length);
+					radius=-Math.abs(radius);
 				}
 
 				log.debug("Rayon : " + radius);
