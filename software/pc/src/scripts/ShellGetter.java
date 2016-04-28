@@ -150,7 +150,7 @@ public class ShellGetter extends AbstractScript
 
 
                 stateToConsider.robot.turn(-1*Math.PI/2);
-                stateToConsider.robot.moveLengthwise(680);
+                stateToConsider.robot.moveLengthwise(650);
 
                 stateToConsider.robot.setTurningStrategy(TurningStrategy.LEFT_ONLY);
 

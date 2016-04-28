@@ -432,9 +432,10 @@ public class Strategie implements Service
                 return scriptmanager.getScript(ScriptNames.FISHING);
             }
 
+            return scriptmanager.getScript(ScriptNames.FISHING);
+
 
         }
-        return null;
     }
 
     /**
