@@ -1,5 +1,6 @@
 package threads;
 
+import enums.EyesEvent;
 import exceptions.serial.SerialConnexionException;
 import graphics.Window;
 import robot.RobotReal;
@@ -114,6 +115,8 @@ public class ThreadTimer extends AbstractThread
             e.printStackTrace();
         }
 
+		ThreadEyes.setEvent(EyesEvent.POWERON);
+
 
         // Attente du démarrage du match
 		
@@ -127,6 +130,9 @@ public class ThreadTimer extends AbstractThread
 				e.printStackTrace();
 			}
 		}
+
+		ThreadEyes.setEvent(EyesEvent.BEGIN);
+
 		while(!mSensorsCardWrapper.isJumperAbsent())
 		{
 			try {
@@ -153,7 +159,9 @@ public class ThreadTimer extends AbstractThread
 		log.debug("LE MATCH COMMENCE !");
         long ddm = System.currentTimeMillis();
 
-		// boucle principale, celle qui dure tout le match
+        ThreadEyes.setEvent(EyesEvent.IDLE);
+
+        // boucle principale, celle qui dure tout le match
 		while(System.currentTimeMillis() - matchStartTimestamp < matchDuration)
 		{
 
@@ -237,6 +245,7 @@ public class ThreadTimer extends AbstractThread
 			mLocomotionCardWrapper.disableRotationnalFeedbackLoop();
 			mLocomotionCardWrapper.disableTranslationnalFeedbackLoop();
 			mLocomotionCardWrapper.disableSpeedFeedbackLoop();
+			ThreadEyes.forceEvent(EyesEvent.END);
 			//mLocomotionCardWrapper.shutdownSTM();
 			SerialConnexion.shutdown = true;
 		}

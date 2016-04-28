@@ -12,5 +12,7 @@ public enum EyesEvent
     ENNEMY,
     SUCCESS,
     TEST,
+    POWERON,
+    BEGIN,
     END;
 }
