@@ -42,6 +42,8 @@ public class JUnit_Fishing extends JUnit_Test
 		super.setUp();
 		scriptManager = (ScriptManager)container.getService(ServiceNames.SCRIPT_MANAGER);
 		theRobot = (GameState<Robot>)container.getService(ServiceNames.GAME_STATE);
+        container.getService(ServiceNames.THREAD_TIMER);
+        container.startInstanciedThreads();
 		theRobot.robot.useActuator(ActuatorOrder.ARM_INIT, true);
 		theRobot.robot.setOrientation(Math.PI);
 		theRobot.robot.setPosition(Table.entryPosition);
@@ -56,8 +58,6 @@ public class JUnit_Fishing extends JUnit_Test
 		theRobot.table.getObstacleManager().freePoint(sup3);
 		// Lance le thread graphique
 		//container.getService(ServiceNames.THREAD_INTERFACE);
-        container.getService(ServiceNames.THREAD_TIMER);
-		container.startInstanciedThreads();
 
 	}
 
