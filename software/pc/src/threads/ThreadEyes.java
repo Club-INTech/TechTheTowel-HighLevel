@@ -213,15 +213,15 @@ public class ThreadEyes extends AbstractThread
             {
                 buffer = reader.readLine();
                 if(buffer.isEmpty())
-                    throw new ThreadException(anim+" : BAD ANIM FILE !!");
+                    throw new ThreadException(anim+" : BAD ANIM FILE !! Buffer empty");
                 for(char j : buffer.toCharArray())
                 {
                     if(j=='X')
                         res[k]=false;
-                    else if(j=='O')
+                    else if(j=='O' || j=='0')
                         res[k]=true;
                     else
-                        throw new ThreadException(anim+" : BAD ANIM FILE !!");
+                        throw new ThreadException(anim+" : BAD ANIM FILE !! erreur conversion");
                     k++;
 
                 }
