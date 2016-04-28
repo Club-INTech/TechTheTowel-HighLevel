@@ -658,6 +658,7 @@ public class Fishing extends AbstractScript
 						if(!waitForEnnemy(stateToConsider, stateToConsider.robot.getPosition(), true))
 						{
 							log.debug("Le salaud ne bouge pas : abort !");
+							hooksToConsider.clear();
 							throw new UnableToMoveException(e.aim, UnableToMoveReason.OBSTACLE_DETECTED);
 						}
 						else
@@ -668,6 +669,7 @@ public class Fishing extends AbstractScript
 					else
 					{
 						log.debug("Bord du filet touché, tentative de dégagement !");
+						hooksToConsider.clear();
 						try
 						{
 							if(stateToConsider.robot.getAreFishesOnBoard())
@@ -696,6 +698,7 @@ public class Fishing extends AbstractScript
 				if(stateToConsider.robot.getPosition().x>560)
 				{
 					log.debug("Position anormale, dégagement !");
+					hooksToConsider.clear();
 					freeThem(stateToConsider);
 					stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 					stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false), null);
@@ -768,6 +771,7 @@ public class Fishing extends AbstractScript
 						if(!waitForEnnemy(stateToConsider, stateToConsider.robot.getPosition(), true))
 						{
 							log.debug("Le salaud ne bouge pas : abort !");
+							hooksToConsider.clear();
 							throw new UnableToMoveException(e.aim, UnableToMoveReason.OBSTACLE_DETECTED);
 						}
 						else
@@ -780,6 +784,7 @@ public class Fishing extends AbstractScript
 						log.debug("Bord du filet touché, tentative de dégagement !");
 						try
 						{
+							hooksToConsider.clear();
 							if(stateToConsider.robot.getAreFishesOnBoard())
 							{
 								log.debug("Poisson à bord, on les garde !");
@@ -813,6 +818,7 @@ public class Fishing extends AbstractScript
 						if(!waitForEnnemy(stateToConsider, stateToConsider.robot.getPosition(), true))
 						{
 							log.debug("Le salaud ne bouge pas : abort !");
+							hooksToConsider.clear();
 							throw new UnableToMoveException(e.aim, UnableToMoveReason.OBSTACLE_DETECTED);
 						}
 						else
@@ -825,6 +831,7 @@ public class Fishing extends AbstractScript
 						log.debug("Bord du filet touché, tentative de dégagement !");
 						try
 						{
+							hooksToConsider.clear();
 							if(stateToConsider.robot.getAreFishesOnBoard())
 							{
 								log.debug("Poisson à bord, on les garde !");
@@ -913,6 +920,7 @@ public class Fishing extends AbstractScript
 						if(!waitForEnnemy(stateToConsider, stateToConsider.robot.getPosition(), true))
 						{
 							log.debug("Le salaud ne bouge pas : abort !");
+							hooksToConsider.clear();
 							throw new UnableToMoveException(e.aim, UnableToMoveReason.OBSTACLE_DETECTED);
 						}
 						else
@@ -925,6 +933,7 @@ public class Fishing extends AbstractScript
 						log.debug("Bord du filet touché, tentative de dégagement !");
 						try
 						{
+							hooksToConsider.clear();
 							if(stateToConsider.robot.getAreFishesOnBoard())
 							{
 								log.debug("Poisson à bord, on les garde !");
@@ -958,6 +967,7 @@ public class Fishing extends AbstractScript
 						if(!waitForEnnemy(stateToConsider, stateToConsider.robot.getPosition(), true))
 						{
 							log.debug("Le salaud ne bouge pas : abort !");
+							hooksToConsider.clear();
 							throw new UnableToMoveException(e.aim, UnableToMoveReason.OBSTACLE_DETECTED);
 						}
 						else
@@ -970,6 +980,7 @@ public class Fishing extends AbstractScript
 						log.debug("Bord du filet touché, tentative de dégagement !");
 						try
 						{
+							hooksToConsider.clear();
 							if(stateToConsider.robot.getAreFishesOnBoard())
 							{
 								log.debug("Poisson à bord, on les garde !");
@@ -1012,6 +1023,7 @@ public class Fishing extends AbstractScript
 		}		
 		catch(Exception e)
 		{
+			hooksToConsider.clear();
 			finalize(stateToConsider, e);
 			throw e;
 		}
