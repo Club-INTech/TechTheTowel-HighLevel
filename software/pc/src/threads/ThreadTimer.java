@@ -171,6 +171,7 @@ public class ThreadTimer extends AbstractThread
                     out.write("\t");
                     out.write(Integer.toString(robot.getPosition().y));
                     out.newLine();
+                    out.flush();
                     ddm = System.currentTimeMillis();
                 } catch (IOException e) {
                     e.printStackTrace();
