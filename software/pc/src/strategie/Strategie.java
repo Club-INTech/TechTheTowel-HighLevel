@@ -18,6 +18,7 @@ import smartMath.Vec2;
 import table.Table;
 import table.obstacles.Obstacle;
 import table.obstacles.ObstacleCircular;
+import threads.ThreadEyes;
 import threads.ThreadSensor;
 import threads.ThreadTimer;
 import utils.Config;
@@ -146,6 +147,7 @@ public class Strategie implements Service
             try
             {
                 nextScript.goToThenExec(version(nextScript), state, hooks);
+                ThreadEyes.forceEvent(EyesEvent.SUCCESS);
             } catch (BlockedActuatorException e) {
                 log.critical("Je sais pas comment t'as fait Billy, cette exception ne tombe jamais...");
                 e.printStackTrace();
@@ -156,7 +158,12 @@ public class Strategie implements Service
                 abnormalMatch = true;
                 shitHappened = true;
                 if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED) //On a vu l'ennemi, c'est anormal
+                {
                     dangerousOpponent = true;
+                    ThreadEyes.forceEvent(EyesEvent.ENNEMY);
+                }
+                else
+                    ThreadEyes.forceEvent(EyesEvent.BLOCKED);
                 disengage(nextScript);
                 e.printStackTrace();
             } catch (BadVersionException e) {

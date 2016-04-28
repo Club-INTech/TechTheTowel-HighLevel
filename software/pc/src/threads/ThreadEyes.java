@@ -12,6 +12,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 /**
  * Thread pour le pilotage des yeux ; A faire compléter par Aline
@@ -32,6 +33,8 @@ public class ThreadEyes extends AbstractThread
 
     private int count = 0;
 
+    private final Random rand = new Random();
+
     /**
      * Liste des fichier à charger, initilisée par une classe anonyme
      * MERCI JAVA POUR TON INCAPACITE A INITIALISER DES LISTES CORRECTEMENT!
@@ -39,23 +42,33 @@ public class ThreadEyes extends AbstractThread
      **/
     private final ArrayList<String> animList = new ArrayList<String>()
     {{
-        add("test.txt");
+        add("coeur.txt"); //1
+        add("content.txt"); //2
+        add("croix.txt"); //3
+        add("FOCUS.txt"); //4
+        add("genee.txt"); //5
+        add("INI.txt"); //6
+        add("INI2.txt"); //7
+        add("Noob.txt"); //8
+        add("poweron.txt"); //9
+        add("sourirebasique.txt"); //10
+        add("visagesouriant.txt"); //11
     }};
 
     /**
      * Cet enum sert d'indicateur s'il y a une action spéciale à effectuer
      */
-    private EyesEvent event = EyesEvent.IDLE;
+    private static EyesEvent event = EyesEvent.IDLE;
 
     /**
      * Animation suivante à effectuer
      */
-    private EyesEvent next = EyesEvent.IDLE;
+    private static EyesEvent next = EyesEvent.IDLE;
 
     /**
      * Nombre de frames déjà affichées durant l'animation actuelle
      */
-    private int frame=0;
+    private static int frame=0;
 
     /**
      * Luminosité
@@ -93,23 +106,71 @@ public class ThreadEyes extends AbstractThread
             {
                 case IDLE:
                     if(frame==0)
-                        image = frames.get(0);
+                        image = frames.get(5);
                     else if(frame==1)
+                        image = frames.get(6);
+                    else if(frame==2)
                     {
-                        frame = 0;
-                        this.event = this.next;
+                        frame = -1;
+                        event = next;
                     }
                     break;
                 case BLOCKED:
+                    if(frame==0)
+                        image = rand.nextBoolean() ? frames.get(4) : frames.get(7);
+                    else if(frame==1)
+                    {
+                        frame = -1;
+                        event = next;
+                    }
                     break;
                 case ENNEMY:
+                    if(frame==0)
+                        image = frames.get(6);
+                    else if(frame==1)
+                    {
+                        frame = -1;
+                        event = next;
+                    }
                     break;
                 case SUCCESS:
+                    if(frame==0)
+                        image = frames.get(0);
+                    else if(frame==1)
+                    {
+                        frame = -1;
+                        event = next;
+                    }
                     break;
                 case END:
+                    if(frame==0)
+                        image = frames.get(10);
+                    else if(frame==1)
+                    {
+                        frame = -1;
+                        event = next;
+                    }
                     break;
                 case TEST:
                     image = testPanel();
+                    break;
+                case BEGIN:
+                    if(frame==0)
+                        image = frames.get(3);
+                    else if(frame==1)
+                    {
+                        frame = -1;
+                        event = next;
+                    }
+                    break;
+                case POWERON:
+                    if(frame==0)
+                        image = frames.get(8);
+                    else if(frame==1)
+                    {
+                        frame = -1;
+                        event = next;
+                    }
                     break;
 
             }
@@ -117,7 +178,7 @@ public class ThreadEyes extends AbstractThread
             {
                 sendFrame(image);
                 frame++;
-                Thread.sleep(1000);//Temps d'attente entre chaque image TODO A ajuster
+                Thread.sleep(1500);//Temps d'attente entre chaque image TODO A ajuster
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -216,19 +277,19 @@ public class ThreadEyes extends AbstractThread
      * Active un event
      * @param event l'event à activer
      */
-    public void setEvent(EyesEvent event)
+    public synchronized static void setEvent(EyesEvent event)
     {
-        this.next = event;
+        next = event;
     }
 
     /**
-     * Force l'activation immédiate d'une animation, un fois effectuée, il sera en IDLE
+     * Force l'activation immédiate d'une animation, une fois effectuée, il sera en IDLE
      * @param event l''event à forcer
      */
-    public void forceEvent(EyesEvent event)
+    public synchronized static void forceEvent(EyesEvent event)
     {
-        this.event = event;
-        this.next = EyesEvent.IDLE;
+        ThreadEyes.event = event;
+        next = EyesEvent.IDLE;
         frame = 0;
     }
 }
