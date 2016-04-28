@@ -53,6 +53,7 @@ public class ThreadEyes extends AbstractThread
         add("poweron.txt"); //9
         add("sourirebasique.txt"); //10
         add("visagesouriant.txt"); //11
+        add("CHOQUE.txt"); //12
     }};
 
     /**
@@ -126,7 +127,7 @@ public class ThreadEyes extends AbstractThread
                     break;
                 case ENNEMY:
                     if(frame==0)
-                        image = frames.get(6);
+                        image = frames.get(11);
                     else if(frame==1)
                     {
                         frame = -1;
