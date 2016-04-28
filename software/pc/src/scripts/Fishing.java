@@ -649,6 +649,7 @@ public class Fishing extends AbstractScript
 					//On retient la coordonnée x d'avant mouvement en cas d'obstacle
 					xBefore = stateToConsider.robot.getPosition().x;
 					
+					log.debug("Premier passage !");
 					stateToConsider.robot.moveLengthwise(530, hooksToConsider, true);
 				}
 				catch(UnableToMoveException e)
@@ -664,12 +665,13 @@ public class Fishing extends AbstractScript
 						}
 						else
 						{
+							log.debug("Voie dégagée, reprise de mouvement !");
 							stateToConsider.robot.moveLengthwise(530-(xBefore-stateToConsider.robot.getPositionFast().x),hooksToConsider,true);
 						}
 					}
 					else
 					{
-						log.debug("Bord du filet touché, tentative de dégagement !");
+						log.debug("Bord du filet touché !");
 						hooksToConsider.clear();
 						try
 						{
@@ -680,28 +682,27 @@ public class Fishing extends AbstractScript
 							}
 							else
 							{
+								log.debug("Aucun poisson à bord, rangement des bras !");
 								stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
 							}
+							log.debug("Tentative de dégagement !");
 							stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
 							throw new ExecuteException(new BlockedException());
 						}
 						catch(Exception ex)
 						{
+							log.debug("Problème lors du dégagement !");
 							throw ex;
 						}
 					}
 				}
-
-				// si le hook d'orientation n'est pas déclenché, on le supprime 
-				hooksToConsider.remove(hooksToConsider.size()-1);
 				
 				// vérification de positionnement correct si le robot défonce le bord de table sans s'arrêter
-				if(stateToConsider.robot.getPosition().x>560)
+				if(stateToConsider.robot.getPosition().x>500 | stateToConsider.robot.getOrientation()>Math.PI+0.1)
 				{
 					log.debug("Position anormale, dégagement !");
 					hooksToConsider.clear();
-					freeThem(stateToConsider);
-					stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+					stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 					stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false), null);
 					throw new ExecuteException(new BlockedException());
 				}
@@ -724,11 +725,12 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 				try
 				{
+					log.debug("On part chercher d'autres poissons !");
 					stateToConsider.robot.moveLengthwise(-500, hooksToConsider, true);
 				}
 				catch(Exception e)
 				{
-					log.debug("Filet percuté en allant chercher d'autre poissons, tentative de dégagement !");
+					log.debug("Filet percuté !");
 					hooksToConsider.clear();
 					try
 					{
@@ -761,7 +763,7 @@ public class Fishing extends AbstractScript
 					hooksToConsider.add(blocked);
 					
 					xBefore=stateToConsider.robot.getPosition().x;
-					
+					log.debug("Second passage !");
 					stateToConsider.robot.moveLengthwise(300, hooksToConsider, true);
 				}
 				catch(UnableToMoveException e)
@@ -777,12 +779,13 @@ public class Fishing extends AbstractScript
 						}
 						else
 						{
+							log.debug("Voie dégagée, reprise de script !");
 							stateToConsider.robot.moveLengthwise(300-(xBefore-stateToConsider.robot.getPosition().x),hooksToConsider,true);
 						}
 					}
 					else
 					{
-						log.debug("Bord du filet touché, tentative de dégagement !");
+						log.debug("Bord du filet touché !");
 						try
 						{
 							hooksToConsider.clear();
@@ -795,6 +798,7 @@ public class Fishing extends AbstractScript
 							{
 								stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
 							}
+							log.debug("Dégagement !");
 							stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
 							throw new ExecuteException(new BlockedException());
 						}
@@ -809,6 +813,7 @@ public class Fishing extends AbstractScript
 				{
 					xBefore=stateToConsider.robot.getPosition().x;
 					stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
+					log.debug("Dépose de poisson !");
 					stateToConsider.robot.moveLengthwise(310,hooksToConsider,true);
 				}
 				catch(UnableToMoveException e)
@@ -824,12 +829,13 @@ public class Fishing extends AbstractScript
 						}
 						else
 						{
+							log.debug("Voie dégagée, reprise de script !");
 							stateToConsider.robot.moveLengthwise(310-(xBefore-stateToConsider.robot.getPosition().x),hooksToConsider,true);
 						}
 					}
 					else
 					{
-						log.debug("Bord du filet touché, tentative de dégagement !");
+						log.debug("Bord du filet touché !");
 						try
 						{
 							hooksToConsider.clear();
@@ -840,8 +846,10 @@ public class Fishing extends AbstractScript
 							}
 							else
 							{
+								log.debug("Pas de poissons à bord !");
 								stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
 							}
+							log.debug("Dégagement !");
 							stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
 							throw new ExecuteException(new BlockedException());
 						}
@@ -851,9 +859,6 @@ public class Fishing extends AbstractScript
 						}
 					}
 				}
-				
-				// si le hook d'orientation n'est pas déclenché, on le supprime 
-				hooksToConsider.remove(hooksToConsider.size()-1);
 				
 				// On indique au robot que les poissons ne sont plus sur le bras
 				stateToConsider.robot.setAreFishesOnBoard(false);
@@ -873,14 +878,16 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 				try
 				{
+					log.debug("On repart chercher des poissons !");
 					stateToConsider.robot.moveLengthwise(-520, hooksToConsider, true);
 				}
 				catch(Exception e)
 				{
-					log.debug("Filet percuté en allant chercher d'autre poissons, tentative de dégagement !");
+					log.debug("Filet percuté en allant chercher d'autre poissons !");
 					hooksToConsider.clear();
 					try
 					{
+						log.debug("Dégagement !");
 						stateToConsider.robot.moveArc(new Arc(-600,200,stateToConsider.robot.getOrientation(),false),null);
 					}
 					catch(Exception ex)
@@ -911,6 +918,7 @@ public class Fishing extends AbstractScript
 					
 					xBefore=stateToConsider.robot.getPosition().x;
 					
+					log.debug("Troisième passage !");
 					stateToConsider.robot.moveLengthwise(300, hooksToConsider, true);
 				}
 				catch(UnableToMoveException e)
@@ -926,12 +934,13 @@ public class Fishing extends AbstractScript
 						}
 						else
 						{
+							log.debug("Voie dégagée, reprise de script !");
 							stateToConsider.robot.moveLengthwise(300-(xBefore-stateToConsider.robot.getPosition().x),hooksToConsider,true);
 						}
 					}
 					else
 					{
-						log.debug("Bord du filet touché, tentative de dégagement !");
+						log.debug("Bord du filet touché !");
 						try
 						{
 							hooksToConsider.clear();
@@ -942,8 +951,10 @@ public class Fishing extends AbstractScript
 							}
 							else
 							{
+								log.debug("Pas de poissons à bord !");
 								stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
 							}
+							log.debug("Dégagement !");
 							stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
 							throw new ExecuteException(new BlockedException());
 						}
@@ -958,6 +969,7 @@ public class Fishing extends AbstractScript
 				{
 					xBefore=stateToConsider.robot.getPosition().x;
 					stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
+					log.debug("Dépose de poissons !");
 					stateToConsider.robot.moveLengthwise(310,hooksToConsider,true);
 				}
 				catch(UnableToMoveException e)
@@ -973,12 +985,13 @@ public class Fishing extends AbstractScript
 						}
 						else
 						{
+							log.debug("Voie dégagée, reprise de script !");
 							stateToConsider.robot.moveLengthwise(310-(xBefore-stateToConsider.robot.getPosition().x),hooksToConsider,true);
 						}
 					}
 					else
 					{
-						log.debug("Bord du filet touché, tentative de dégagement !");
+						log.debug("Bord du filet touché !");
 						try
 						{
 							hooksToConsider.clear();
@@ -989,8 +1002,10 @@ public class Fishing extends AbstractScript
 							}
 							else
 							{
+								log.debug("Pas de poissons à bord !");
 								stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
 							}
+							log.debug("Dégagement !");
 							stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
 							throw new ExecuteException(new BlockedException());
 						}
@@ -1015,6 +1030,7 @@ public class Fishing extends AbstractScript
 				
 				// arc pour sortir du bord de table
 				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+				log.debug("Script OK !");
 				Arc disengage = new Arc(-320,160,stateToConsider.robot.getOrientation(),false);
 				stateToConsider.robot.moveArc(disengage, hooksToConsider);
 				
