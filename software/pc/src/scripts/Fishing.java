@@ -919,7 +919,7 @@ public class Fishing extends AbstractScript
 					xBefore=stateToConsider.robot.getPosition().x;
 					
 					log.debug("Troisième passage !");
-					stateToConsider.robot.moveLengthwise(300, hooksToConsider, true);
+					stateToConsider.robot.moveLengthwise(290, hooksToConsider, true);
 				}
 				catch(UnableToMoveException e)
 				{
@@ -935,7 +935,7 @@ public class Fishing extends AbstractScript
 						else
 						{
 							log.debug("Voie dégagée, reprise de script !");
-							stateToConsider.robot.moveLengthwise(300-(xBefore-stateToConsider.robot.getPosition().x),hooksToConsider,true);
+							stateToConsider.robot.moveLengthwise(290-(xBefore-stateToConsider.robot.getPosition().x),hooksToConsider,true);
 						}
 					}
 					else
