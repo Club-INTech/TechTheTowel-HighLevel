@@ -56,7 +56,8 @@ public class JUnit_Fishing extends JUnit_Test
 		theRobot.table.getObstacleManager().freePoint(sup3);
 		// Lance le thread graphique
 		//container.getService(ServiceNames.THREAD_INTERFACE);
-		//container.startInstanciedThreads();
+        container.getService(ServiceNames.THREAD_TIMER);
+		container.startInstanciedThreads();
 
 	}
 
