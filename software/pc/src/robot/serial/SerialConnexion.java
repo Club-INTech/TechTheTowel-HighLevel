@@ -12,6 +12,7 @@ import gnu.io.UnsupportedCommOperationException;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.util.TooManyListenersException;
 
 import utils.Config;
 import utils.Log;
@@ -145,10 +146,17 @@ public class SerialConnexion implements SerialPortEventListener, Service
                     SerialPort.DATABITS_8,
                     SerialPort.STOPBITS_1,
                     SerialPort.PARITY_NONE);
+            serialPort.notifyOnDataAvailable(false);
 
             // ouverture des flux Input/Output
             input = serialPort.getInputStream();
             output = serialPort.getOutputStream();
+
+            try {
+                serialPort.addEventListener(this);
+            } catch (TooManyListenersException e) {
+                e.printStackTrace();
+            }
 
         }
         catch (Exception e)
@@ -301,6 +309,14 @@ public class SerialConnexion implements SerialPortEventListener, Service
      */
     public synchronized void serialEvent(SerialPortEvent oEvent)
     {
+        try {
+            if(input.available() > 0)
+                notify();
+//			else
+//				log.debug("Fausse alerte");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -328,6 +344,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
         synchronized(output) {
             try
             {
+                serialPort.notifyOnDataAvailable(false);
 
                 //Evacuation de l'eventuel buffer indÃƒÂ©sirable
                 output.flush();
@@ -346,6 +363,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
                         return "OK";
                     }
                 }
+                serialPort.notifyOnDataAvailable(true);
 
             }
             catch (Exception e)
