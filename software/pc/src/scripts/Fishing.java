@@ -469,6 +469,7 @@ public class Fishing extends AbstractScript
 				{
 					log.debug("Position anormale, dégagement !");
 					freeThem(stateToConsider);
+					stateToConsider.robot.setAreFishesOnBoard(false);
 					stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 					stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false), null);
 					throw new ExecuteException(new BlockedException());
