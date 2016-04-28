@@ -81,7 +81,7 @@ public class CloseDoors extends AbstractScript
 				stateToConsider.table.extDoorClosed = true;
 				stateToConsider.table.intDoorClosed = true;
 
-				stateToConsider.robot.setPosition(new Vec2(stateToConsider.robot.getPosition().x,1823));
+				stateToConsider.robot.setPosition(new Vec2(stateToConsider.robot.getPosition().x,1840));
 
                 stateToConsider.robot.setBasicDetection(true);
 				//On avance
