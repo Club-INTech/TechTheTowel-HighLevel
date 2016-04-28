@@ -271,7 +271,7 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.robot.setIsSandInside(true);
                 try
                 {
-				    stateToConsider.robot.moveLengthwise(-60);
+				   // stateToConsider.robot.moveLengthwise(-60);
                 }
                 catch(Exception e)
                 {
