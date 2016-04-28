@@ -8,6 +8,11 @@ import robot.cardsWrappers.SensorsCardWrapper;
 import robot.serial.SerialConnexion;
 import table.Table;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 /**
  * Thread qui s'occupe de la gestion du temps: début du match et immobilisation du robot en fin de match
  * demande aussi périodiquement a la table qu'on lui fournit de retirer les obstacles périmés
@@ -51,6 +56,8 @@ public class ThreadTimer extends AbstractThread
 	 * indique si l'interface graphique est activée ou non 
 	 */
 	private boolean isGraphicalInterfaceEnabled = false;
+
+    private BufferedWriter out;
 	
 	
 	/**
@@ -93,9 +100,22 @@ public class ThreadTimer extends AbstractThread
 
 		// on eteind les capteursgetObstacleManager
 		config.set("capteurs_on", "true");
-		mSensorsCardWrapper.updateConfig();	
-		
-		// Attente du démarrage du match
+		mSensorsCardWrapper.updateConfig();
+
+        try
+        {
+            File file = new File("pos.txt");
+            if (!file.exists()) {
+                //file.delete();
+                file.createNewFile();
+            }
+            out = new BufferedWriter(new FileWriter(file));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        // Attente du démarrage du match
 		
 		// attends que le jumper soit retiré du robot
 
@@ -131,6 +151,7 @@ public class ThreadTimer extends AbstractThread
 		mSensorsCardWrapper.updateConfig();
 
 		log.debug("LE MATCH COMMENCE !");
+        long ddm = System.currentTimeMillis();
 
 		// boucle principale, celle qui dure tout le match
 		while(System.currentTimeMillis() - matchStartTimestamp < matchDuration)
@@ -142,6 +163,19 @@ public class ThreadTimer extends AbstractThread
 				log.debug("Arrêt du thread timer demandé durant le match");
 				return;
 			}
+
+            if((System.currentTimeMillis()-ddm) >=20)
+            {
+                try {
+                    out.write(Integer.toString(robot.getPosition().x));
+                    out.write("\t");
+                    out.write(Integer.toString(robot.getPosition().y));
+                    out.newLine();
+                    ddm = System.currentTimeMillis();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 			
 
 			// On retire périodiquement les obstacles périmés
