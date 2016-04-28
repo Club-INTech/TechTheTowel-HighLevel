@@ -164,7 +164,7 @@ public class ThreadTimer extends AbstractThread
 				return;
 			}
 
-            if((System.currentTimeMillis()-ddm) >=20)
+         /*   if((System.currentTimeMillis()-ddm) >=20)
             {
                 log.debug("lol, i'm noob");
                 try {
@@ -177,7 +177,7 @@ public class ThreadTimer extends AbstractThread
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }
+            }*/
 			
 
 			// On retire périodiquement les obstacles périmés
