@@ -51,7 +51,10 @@ public class ObstacleManager
 	private Vec2 positionDetectionDisc=new Vec2(0,0);
 
 	/**	le temps donné aux obstacles pour qu'ils soit vérifiés */
-	private int timeToTestObstacle = 1000;
+	private final int timeToTestObstacle = 1000;
+
+	/** Temps de vie d'un robot ennemi */
+	private final int defaultLifetime = 1000;
 
 	/**
      * Instancie un nouveau gestionnaire d'obstacle.
@@ -104,11 +107,11 @@ public class ObstacleManager
       	mFixedObstacles.add(new ObstacleCircular(new Vec2(1500, 0), 250 + mRobotRadius));
       	mFixedObstacles.add(new ObstacleCircular(new Vec2(-1500, 0), 250 + mRobotRadius));
 
-		//Packs de sable (merci Sylvain)
+		//Packs de sable (merci Sylvaing19)
 		mRectangles.add(new ObstacleRectangular(new Vec2(0, 1913), 522 + 2*mRobotRadius , 174 + 2*mRobotRadius));
 		mRectangles.add(new ObstacleRectangular(new Vec2(-620, 1942), 116 + 2*mRobotRadius, 116 + 2*mRobotRadius));
 		mRectangles.add(new ObstacleRectangular(new Vec2(620, 1942), 116 + 2*mRobotRadius, 116 + 2*mRobotRadius));
-		mRectangles.add(new ObstacleRectangular(new Vec2(850, 1100), 116 + 2*mRobotRadius, 116 + 2*mRobotRadius));
+		//mRectangles.add(new ObstacleRectangular(new Vec2(850, 1100), 116 + 2*mRobotRadius, 116 + 2*mRobotRadius));
 
 		//Portes
 		mRectangles.add(new ObstacleRectangular(new Vec2(900,1970), 100 + 2*mRobotRadius , 60 + 2*mRobotRadius));
@@ -205,7 +208,7 @@ public class ObstacleManager
      */
     public synchronized void addObstacle(final Vec2 position)
     {
-    	addObstacle(position,defaultObstacleRadius, 5000);
+    	addObstacle(position,defaultObstacleRadius, defaultLifetime);
     }
 
     
@@ -215,15 +218,19 @@ public class ObstacleManager
      * @param position position ou ajouter l'obstacle
      * @param radius rayon de l'obstacle a ajouter    
      * @param lifetime durée de vie (en ms) de l'obstace a ajouter
+     * TODO A réadapter à l'année en cours
       */
     public synchronized void addObstacle(final Vec2 position, final int radius, final int lifetime)
     {
-    	//si la position est dans la table on continue les tests 
-    	// si la position est dans notre zone de depart, ca ne peut etre qu'une main 
-    	if (position.x>-1500 && position.x<1500 && position.y>0 && position.y<2000 //la table
-    		&& !(position.x > 1200 && position.y<1200 && position.y>800) //notre position de depart
-    		&& !(position.y > 1420 && position.x < 533 && position.x > -533) // les marches
-    		&& !(position.y > 1800 ) ) // les distributeurs de pop corn
+    	//vérification que l'on ne détecte pas un obstacle "normal"
+    	if (position.x>-1500+mRobotRadius+100 && position.x<1500-mRobotRadius-100 && position.y>mRobotRadius+100 && position.y<2000-mRobotRadius-100 //hors de la table
+                && !( Geometry.isBetween(position.x, -250, 250) && Geometry.isBetween(position.y, 800, 1500)) //C'est la vitre
+                && !( Geometry.isBetween(position.x, -800, 800) && Geometry.isBetween(position.y, 1650, 2000)) //château de sable
+				&& !( Geometry.isBetween(position.x, 700, 1000) && Geometry.isBetween(position.y, 950, 1250)) //château de sable tapis
+				&& !( Geometry.isBetween(position.x, 0, 600) && Geometry.isBetween(position.y, 800, 1300)) //Notre zone de depose
+				&& !( Geometry.isBetween(position.x, -1000, -700) && Geometry.isBetween(position.y, 950, 1250)) //château de sable tapis adv
+				&& !( Geometry.isBetween(position.x, 900, 1500) && Geometry.isBetween(position.y, 500, 1700)) //tapis
+				)
     	{
     		boolean isThereAnObstacleIntersecting=false;
     		for (int i = 0; i<mUntestedMobileObstacles.size(); i++)
@@ -281,7 +288,7 @@ public class ObstacleManager
     	}
     	else
     	{
-    		log.debug("Obstacle hors de la table");
+    		//log.debug("Obstacle hors de la table");
 		}
     }
 
@@ -327,7 +334,6 @@ public class ObstacleManager
      */
     public synchronized void removeOutdatedObstacles()
     {
-    	
     	// enlève les obstacles confirmés s'ils sont périmés
     	for(int i = 0; i < mMobileObstacles.size(); i++)
     		if(mMobileObstacles.get(i).getOutDatedTime() < System.currentTimeMillis())
@@ -352,7 +358,6 @@ public class ObstacleManager
      */
     public synchronized boolean isDiscObstructed(final Vec2 discCenter, int radius)
     {
-    	boolean isDiscObstructed = false;
     	radiusDetectionDisc=radius;
     	positionDetectionDisc=discCenter;
     	
@@ -364,11 +369,10 @@ public class ObstacleManager
     		{
     			log.debug("Disque obstructed avec l'obstacle "+mMobileObstacles.get(i).getPosition()+"de rayon"+mMobileObstacles.get(i).radius);
     			log.debug("Disque en "+discCenter+" de rayon "+radius);
-    			isDiscObstructed=true;
-    			
+    			return true;
     		}
     	}
-    	return isDiscObstructed;
+    	return false;
     }  
 
     /**
@@ -581,7 +585,7 @@ public class ObstacleManager
     			
     				if(mMobileObstacles.get(i).numberOfTimeDetected < mMobileObstacles.get(i).getThresholdConfirmedOrUnconfirmed())
     				{
-    					mMobileObstacles.get(i).setLifeTime(5000);
+    					mMobileObstacles.get(i).setLifeTime(2000);
         				mUntestedMobileObstacles.add(mMobileObstacles.get(i));
 	    				mMobileObstacles.remove(i--);
 	    				
@@ -687,5 +691,80 @@ public class ObstacleManager
     {
     	return mUntestedMobileObstacles;
     }
+
+	/**
+	 * Permet de update les obstacles avec un nouveau rayon de robot
+	 * @param newRobotRadius le nouveau rayon
+     */
+	public void updateObstacles(int newRobotRadius)
+	{
+		if(this.mRobotRadius == newRobotRadius)
+			return;
+
+		for(ObstacleRectangular i : mRectangles)
+		{
+			i.changeDim(i.getSizeX()-2*mRobotRadius+2*newRobotRadius, i.getSizeY()-2*mRobotRadius+2*newRobotRadius);
+		}
+
+		for(ObstacleCircular i : mFixedObstacles)
+		{
+			i.setRadius(i.getRadius()-mRobotRadius+newRobotRadius);
+		}
+
+		for(ObstacleProximity i : mUntestedMobileObstacles)
+		{
+			i.setRadius(i.getRadius()-mRobotRadius+newRobotRadius);
+		}
+
+		for(ObstacleProximity i : mMobileObstacles)
+		{
+			i.setRadius(i.getRadius()-mRobotRadius+newRobotRadius);
+		}
+
+		this.mRobotRadius = newRobotRadius;
+	}
+
+    /**
+     * Supprime tous les obstacles fixes qui superposent le point donné
+     * Utile pour forcer le passage si les obstacles vont subir un changement
+     * @param point le point à dégager
+     * @return les obstacles supprimés
+     */
+	public ArrayList<Obstacle> freePoint(Vec2 point)
+    {
+        ArrayList<Obstacle> deleted = new ArrayList<>();
+
+        for (int i=0;i< mFixedObstacles.size();i++)
+        {
+            if(mFixedObstacles.get(i).isInObstacle(point))
+            {
+                deleted.add(mFixedObstacles.get(i));
+                removeObstacle(mFixedObstacles.get(i));
+            }
+        }
+
+        for (int i=0;i< mRectangles.size();i++)
+        {
+            if(mRectangles.get(i).isInObstacle(point))
+            {
+                deleted.add(mRectangles.get(i));
+                removeObstacle(mRectangles.get(i));
+            }
+        }
+        return deleted;
+    }
+
+	/**
+	 * Supprime TOUS les obstacles fixes de la table
+     * http://cdn.meme.am/instances/500x/21541512.jpg
+	 */
+	public void destroyEverything()
+	{
+		mRectangles.clear();
+		mLines.clear();
+		mFixedObstacles.clear();
+		mMobileObstacles.clear();
+		mUntestedMobileObstacles.clear();
+	}
 
 }

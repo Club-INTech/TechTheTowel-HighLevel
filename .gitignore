@@ -1,4 +1,4 @@
-*~
+﻿*~
 *.o
 *.so
 *.user
@@ -9,6 +9,8 @@ software/arm/build
 software/bin/
 /software/pc/logs/
 /software/pc/config/local.ini
+software/pc/orders.txt
+software/pc/src/META-INF/
 .classpath
 .cproject
 .settings
@@ -21,8 +23,11 @@ hardware/*/*.epf
 /Debug/
 .metadata/
 .recommenders/
+.idea
+.iml
 
 **/software/arm/projects/**/*.coproj
 
 #Fichiers python compilés
 *.pyc
+pc.iml

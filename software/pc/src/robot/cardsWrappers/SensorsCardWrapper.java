@@ -9,6 +9,8 @@ import robot.serial.SerialConnexion;
 import utils.Config;
 import utils.Log;
 
+import java.util.ArrayList;
+
 /**
  * Classe simplifiant le dialogue avec les capteurs
  * @author PF, marsu, paul
@@ -94,7 +96,7 @@ public class SensorsCardWrapper implements Service
     {
 		try 
 		{
-			// demande a la carte si le jumper est présent, parse sa réponse, et si on lit 0 c'est que le jumper n'est pas/plus la
+			// demande a la carte si le jumper est présent, parse sa réponse, et si on lit 1 c'est que le jumper n'est pas/plus la
 			return Integer.parseInt(sensorsCardSerial.communiquer("j", 1)[0]) != 0;
 		} 
 		catch (NumberFormatException e)
@@ -129,9 +131,12 @@ public class SensorsCardWrapper implements Service
      * @return la valeur du capteur
      * @throws SerialConnexionException si erreur de connexion avec le capteur
      */
-    public int getUSSensorValue(USsensors sensor) throws SerialConnexionException
+    public ArrayList<Integer> getUSSensorValue(USsensors sensor) throws SerialConnexionException
     {
-    	String[] sensorAnswer = sensorsCardSerial.communiquer(sensor.getSerialCommunication(),1);
-    	return Integer.parseInt(sensorAnswer[0]);
+		ArrayList<Integer> res = new ArrayList<>();
+    	String[] sensorAnswer = sensorsCardSerial.communiquer(sensor.getSerialCommunication(),4);
+		for(String s : sensorAnswer)
+			res.add(Integer.parseInt(s));
+    	return res;
     }
 }

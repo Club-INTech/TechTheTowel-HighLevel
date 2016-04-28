@@ -3,7 +3,7 @@ package enums;
 /**
  * Définition des vitesses possibles de déplacement du robot.
  * Les deux arguments passés dans les vitesses correspondent à des valeurs en mm/s pour la translation puis en rad/s pour la rotation
- * @author pf, marsu
+ * @author pf, marsu, CF, Discord
  *
  */
 
@@ -11,26 +11,25 @@ public enum Speed
 {
 	//TODO régler les valeurs de vitesse en translations et rotations avec des phases de test, décider des combinaisons de vitesses inutiles
 	
-	/** Vitesse ultra lente de translation, lente en rotation */
-	ULTRA_SLOW_ALL(50,Math.PI/4),
-	
+	/** Vitesse ultra lente de translation, ultra lente en rotation */
+	ULTRA_SLOW_ALL(85,Math.PI/8),
+
 	/** vitesse lente en translation, lente en rotation*/
-	SLOW_ALL(120, Math.PI/4),
+	SLOW_ALL(200, Math.PI/4),
 	
 	/** vitesse lente en translation, normale en rotation*/
-	SLOW_T_MEDIUM_R(120,Math.PI),
-	
-	/** vitesse standard en translation, lente en rotation*/
-	MEDIUMT_T_SLOW_R(400,Math.PI/2),
+	SLOW_T_MEDIUM_R(200,Math.PI/2),
 	
 	/** Vitesse standard de déplacement et rotation*/
-	MEDIUM_ALL(400,2*(Math.PI)),
+	MEDIUM_ALL(380,(Math.PI/2)),
 	
 	/** vitesse standard de déplacement, lente en rotation*/
-	MEDIUM_T_SLOW_R(400,Math.PI/2),
-	
+	MEDIUM_T_SLOW_R(350,Math.PI/4),
+
+	FAST_T_SLOW_R(500, Math.PI/4),
+
 	/** vitesse rapide en translation et rotation*/
-	FAST_ALL(1000,(Math.PI));
+	FAST_ALL(500,(Math.PI));
 	
 	///** vitesse en temps normal (pour des distances de 200mm à 1000 mm) */
 		//BETWEEN_SCRIPTS_SLOW(10, 10),
@@ -55,8 +54,8 @@ public enum Speed
         
     /**
      * Constructeur d'une vitesse.
-     * @param PWM_translation la vitesse (entre 0 et 255) translationnel
-     * @param PWM_rotation la vitesse (entre 0 et 255) en rotation
+     * @param translationSpeed la vitesse (entre 0 et 255) translationnel
+     * @param rotationSpeed la vitesse (entre 0 et 255) en rotation
      */
     private Speed(int translationSpeed, double rotationSpeed)
     {

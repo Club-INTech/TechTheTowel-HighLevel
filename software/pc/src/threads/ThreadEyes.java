@@ -6,10 +6,12 @@ import exceptions.serial.SerialConnexionException;
 import robot.serial.SerialConnexion;
 import utils.Config;
 import utils.Log;
-import utils.Sleep;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Thread pour le pilotage des yeux ; A faire compléter par Aline
@@ -18,9 +20,9 @@ import java.util.ArrayList;
 public class ThreadEyes extends AbstractThread
 {
 
-    private final int NUMBER_OF_COLUMNS = 14;
+    private final int NUMBER_OF_COLUMNS = 11;//TODO A changer
 
-    private final int NUMBER_OF_LINES = 7;
+    private final int NUMBER_OF_LINES = 7; //TODO A changer
 
     /** Liste des tableaux de booléens représentant l'image à envoyer aux arduinos */
     private ArrayList<boolean[]> frames = new ArrayList<>();
@@ -28,9 +30,12 @@ public class ThreadEyes extends AbstractThread
     /** Connexion série avec les arduinos */
     private SerialConnexion serial;
 
+    private int count = 0;
+
     /**
      * Liste des fichier à charger, initilisée par une classe anonyme
      * MERCI JAVA POUR TON INCAPACITE A INITIALISER DES LISTES CORRECTEMENT!
+     * TODO A remplir
      **/
     private final ArrayList<String> animList = new ArrayList<String>()
     {{
@@ -43,9 +48,19 @@ public class ThreadEyes extends AbstractThread
     private EyesEvent event = EyesEvent.IDLE;
 
     /**
-     * Permet d'indiquer si une animation est en cours ou non
+     * Animation suivante à effectuer
      */
-    private boolean eventEnded = true;
+    private EyesEvent next = EyesEvent.IDLE;
+
+    /**
+     * Nombre de frames déjà affichées durant l'animation actuelle
+     */
+    private int frame=0;
+
+    /**
+     * Luminosité
+     */
+    private byte luminosity = 10;
 
     /**
      * Constructeur du thread
@@ -55,7 +70,8 @@ public class ThreadEyes extends AbstractThread
     public ThreadEyes(Config config, Log log) {
         super(config, log);
         this.serial = new SerialConnexion(log, "EYES");
-        //serial.initialize("/dev/ttyACM", 115200); //TODO Baudrate à changer
+        System.setProperty("gnu.io.rxtx.SerialPorts", "/dev/ttyAMA0");
+        serial.initialize("/dev/ttyAMA0", 38400); //TODO Baudrate à changer
         try {
             readAnimations();
         } catch (Exception e) {
@@ -70,10 +86,19 @@ public class ThreadEyes extends AbstractThread
         while(true)
         {
             //TODO Traitement
+            /** On affiche une image à la fois, si l'on arrive à la fin on reset frame à 0 et on met l'évènement
+             *   suivant dans event
+             **/
             switch (event)
             {
                 case IDLE:
-                    image = frames.get(0);
+                    if(frame==0)
+                        image = frames.get(0);
+                    else if(frame==1)
+                    {
+                        frame = 0;
+                        this.event = this.next;
+                    }
                     break;
                 case BLOCKED:
                     break;
@@ -83,15 +108,32 @@ public class ThreadEyes extends AbstractThread
                     break;
                 case END:
                     break;
+                case TEST:
+                    image = testPanel();
+                    break;
+
             }
             try
             {
                 sendFrame(image);
-                Thread.sleep(100);
+                frame++;
+                Thread.sleep(1000);//Temps d'attente entre chaque image TODO A ajuster
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    private boolean[] testPanel()
+    {
+        boolean[] res = new boolean[NUMBER_OF_LINES*NUMBER_OF_COLUMNS];
+        for(int i=0 ; i<res.length ; i++)
+            res[i] = false;
+        res[count] = true;
+        count++;
+        if(count == NUMBER_OF_COLUMNS*NUMBER_OF_LINES)
+            count = 0;
+        return res;
     }
 
     /**
@@ -102,7 +144,7 @@ public class ThreadEyes extends AbstractThread
         int k;
         for(String anim : animList)
         {
-            boolean[] res = new boolean[NUMBER_OF_LINES*NUMBER_OF_COLUMNS];
+            boolean[] res = new boolean[NUMBER_OF_LINES*NUMBER_OF_COLUMNS*2];
             k=0;
             BufferedReader reader = new BufferedReader(new FileReader("animations/"+anim));
             for(int i=0 ; i<NUMBER_OF_LINES ; i++)
@@ -131,17 +173,40 @@ public class ThreadEyes extends AbstractThread
      * Envoie l'image aux arduinos, ils feront la différence entre ce qui est à eux ou non
      * @param frame l'image
      */
-    private void sendFrame(boolean[] frame) throws SerialConnexionException {
-        String buffer = "";
-        for(Boolean i : frame)
+    private synchronized void sendFrame(boolean[] frame) throws SerialConnexionException {
+        byte[] buffer1 = new byte[NUMBER_OF_COLUMNS*NUMBER_OF_LINES + 2];
+        byte[] buffer2 = new byte[NUMBER_OF_COLUMNS*NUMBER_OF_LINES + 3];
+        buffer1[0] = (byte)128;
+        buffer1[NUMBER_OF_COLUMNS*NUMBER_OF_LINES +1] = luminosity;
+        buffer2[NUMBER_OF_COLUMNS*NUMBER_OF_LINES +1] = luminosity;
+        buffer2[0] = (byte)129;
+        buffer2[NUMBER_OF_COLUMNS*NUMBER_OF_LINES +2] = (byte)255;
+        short count = 0;
+        short c1 = 0;
+        short c2 = 0;
+        boolean side = true;
+        for(int i=0 ; i<frame.length ; i++)
         {
-            if(i)
-                buffer+="T";
+            if(side)
+                buffer1[(i%NUMBER_OF_COLUMNS + NUMBER_OF_COLUMNS*c1)+1] = (byte)(frame[i] ? 1 : 0);
             else
-                buffer+="F";
+                buffer2[(i%NUMBER_OF_COLUMNS + NUMBER_OF_COLUMNS*c2)+1] = (byte)(frame[i] ? 1 : 0);
+
+            count+=1;
+            if(count == NUMBER_OF_COLUMNS)
+            {
+                if(side)
+                    c1+=1;
+                else
+                    c2+=1;
+                side = !side;
+                count = 0;
+            }
         }
         try {
-            serial.sendRaw(buffer);
+            byte[] result = Arrays.copyOf(buffer1, buffer1.length + buffer2.length);
+            System.arraycopy(buffer2, 0, result, buffer1.length, buffer2.length);
+            serial.sendRaw(result);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -153,7 +218,17 @@ public class ThreadEyes extends AbstractThread
      */
     public void setEvent(EyesEvent event)
     {
+        this.next = event;
+    }
+
+    /**
+     * Force l'activation immédiate d'une animation, un fois effectuée, il sera en IDLE
+     * @param event l''event à forcer
+     */
+    public void forceEvent(EyesEvent event)
+    {
         this.event = event;
-        eventEnded = false;
+        this.next = EyesEvent.IDLE;
+        frame = 0;
     }
 }

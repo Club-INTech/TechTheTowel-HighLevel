@@ -5,7 +5,13 @@ import graphics.Window;
 import robot.RobotReal;
 import robot.cardsWrappers.LocomotionCardWrapper;
 import robot.cardsWrappers.SensorsCardWrapper;
+import robot.serial.SerialConnexion;
 import table.Table;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 /**
  * Thread qui s'occupe de la gestion du temps: début du match et immobilisation du robot en fin de match
@@ -41,19 +47,21 @@ public class ThreadTimer extends AbstractThread
 	public static long matchDuration = 90000;
 	
 	/** Temps en ms qui s'écoule entre deux mise a jour de la liste des obstacle périmables. Lors de chaque mise a jour, les obstacles périmés sont détruits. */
-	public static int obstacleRefreshInterval = 0;
+	public static int obstacleRefreshInterval = 100;
 	
 	/** interface graphique d'affichage de la table, pour le debug */
-	public Window window;
+	//public Window window;
 	
 	/**
 	 * indique si l'interface graphique est activée ou non 
 	 */
-	private boolean isGraphicalInterfaceEnabled = true; 
+	private boolean isGraphicalInterfaceEnabled = false;
+
+    private BufferedWriter out;
 	
 	
 	/**
-	 * Crée le thread timer.
+	 * Crée le thread timer.-
 	 *
 	 * @param table La table sur laquelle le thread doit croire évoluer
 	 * @param sensorsCardWrapper La carte capteurs avec laquelle on doit communiquer
@@ -68,10 +76,10 @@ public class ThreadTimer extends AbstractThread
 		this.robot=robot;
 		
 		updateConfig();
-		Thread.currentThread().setPriority(1);
+		Thread.currentThread().setPriority(10);
 
 		// DEBUG: interface graphique
-		try
+		/*try
 		{
 			window = new Window(table, robot);
 		}
@@ -79,7 +87,7 @@ public class ThreadTimer extends AbstractThread
 		{
 			isGraphicalInterfaceEnabled = false;
 			log.debug("Affichage graphique non disponible");
-		}
+		}*/
 	}
 
 	/* (non-Javadoc)
@@ -92,24 +100,46 @@ public class ThreadTimer extends AbstractThread
 
 		// on eteind les capteursgetObstacleManager
 		config.set("capteurs_on", "true");
-		mSensorsCardWrapper.updateConfig();	
-		
-		// Attente du démarrage du match
+		mSensorsCardWrapper.updateConfig();
+
+        try
+        {
+            File file = new File("pos.txt");
+            if (!file.exists()) {
+                //file.delete();
+                file.createNewFile();
+            }
+            out = new BufferedWriter(new FileWriter(file));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        // Attente du démarrage du match
 		
 		// attends que le jumper soit retiré du robot
-		
-		boolean jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
-		while(jumperWasAbsent || !mSensorsCardWrapper.isJumperAbsent())
+
+		while(mSensorsCardWrapper.isJumperAbsent())
 		{
-			
-			jumperWasAbsent = mSensorsCardWrapper.isJumperAbsent();
-			robot.sleep(100);
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		while(!mSensorsCardWrapper.isJumperAbsent())
+		{
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 
 		// maintenant que le jumper est retiré, le match a commencé
 		matchStarted = true;
 		
-		log.debug(!mSensorsCardWrapper.isJumperAbsent() +" / "+ !matchStarted);
+		//log.debug(!mSensorsCardWrapper.isJumperAbsent() +" / "+ !matchStarted);
 
 		// Le match démarre ! On chage l'état du thread pour refléter ce changement
 		matchStartTimestamp = System.currentTimeMillis();
@@ -121,6 +151,7 @@ public class ThreadTimer extends AbstractThread
 		mSensorsCardWrapper.updateConfig();
 
 		log.debug("LE MATCH COMMENCE !");
+        long ddm = System.currentTimeMillis();
 
 		// boucle principale, celle qui dure tout le match
 		while(System.currentTimeMillis() - matchStartTimestamp < matchDuration)
@@ -132,20 +163,35 @@ public class ThreadTimer extends AbstractThread
 				log.debug("Arrêt du thread timer demandé durant le match");
 				return;
 			}
+
+         /*   if((System.currentTimeMillis()-ddm) >=20)
+            {
+                log.debug("lol, i'm noob");
+                try {
+                    out.write(Integer.toString(robot.getPosition().x));
+                    out.write("\t");
+                    out.write(Integer.toString(robot.getPosition().y));
+                    out.newLine();
+                    out.flush();
+                    ddm = System.currentTimeMillis();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }*/
 			
 
 			// On retire périodiquement les obstacles périmés
 			table.getObstacleManager().removeOutdatedObstacles();
 			
 			//on rafraichit l'interface graphique de la table
-			if(isGraphicalInterfaceEnabled/* && window != null*/)
+			/*if(isGraphicalInterfaceEnabled/* && window != null)
 			{
 				window.getPanel().repaint();
 				
 				window.getPanel().drawArrayList(robot.cheminSuivi);
-			}
-			else
-				System.out.println("damn");
+			}*/
+			//else
+			//	System.out.println("damn");
 				
 			
 			try
@@ -190,7 +236,9 @@ public class ThreadTimer extends AbstractThread
 		{	
 			mLocomotionCardWrapper.disableRotationnalFeedbackLoop();
 			mLocomotionCardWrapper.disableTranslationnalFeedbackLoop();
-			mLocomotionCardWrapper.shutdownSTM();
+			mLocomotionCardWrapper.disableSpeedFeedbackLoop();
+			//mLocomotionCardWrapper.shutdownSTM();
+			SerialConnexion.shutdown = true;
 		}
 		catch (SerialConnexionException e)
 		{

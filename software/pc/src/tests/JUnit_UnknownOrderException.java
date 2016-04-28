@@ -5,7 +5,6 @@ import exceptions.serial.SerialConnexionException;
 import org.junit.Before;
 import org.junit.Test;
 import robot.serial.SerialConnexion;
-import utils.Log;
 
 
 /**
@@ -21,8 +20,6 @@ import utils.Log;
  */
 public class JUnit_UnknownOrderException extends JUnit_Test
 {
-	private int baudrate = 115200;
-	private Log uoeLog;
 	private SerialConnexion serialTest;
 	
 	@Test
@@ -32,7 +29,7 @@ public class JUnit_UnknownOrderException extends JUnit_Test
 		{
 			//ordre "uoe" géré dans le bas-niveau qui dans le cadre du teste renvoie "Une fraise"
 			//(en plus de l'acquittement "_" non comptabilisé dans le nombre de réponses attendues)
-			serialTest.communiquer("uoe", 1);
+			serialTest.communiquer("uof", 1);
 		}
 		catch(SerialConnexionException e)
 		{
@@ -46,9 +43,7 @@ public class JUnit_UnknownOrderException extends JUnit_Test
 	{
 		try
 		{
-			this.log = (Log)container.getService(ServiceNames.LOG);
-			serialTest = new SerialConnexion(uoeLog, "test_UOE");
-			serialTest.initialize("/dev/ttyUSB0", baudrate);
+			serialTest = (SerialConnexion) container.getService(ServiceNames.STM_CARD);
 		}
 		catch(Exception e)
 		{

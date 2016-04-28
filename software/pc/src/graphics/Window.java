@@ -36,25 +36,23 @@ public class Window extends JFrame
 	    mMouse = new Mouse(mPanel);
 	    addMouseListener(mMouse);
 	    
-	    mKeyboard = new Keyboard();
+	    mKeyboard = new Keyboard(robot);
 	    addKeyListener(mKeyboard);
 	}
-	
+
 	public Window(Table table)
 	{
 		this.setVisible(true);
 		this.setTitle("table");
-	    this.setSize(600, 400);
-	    this.setLocationRelativeTo(null);
-	    
-	    mPanel = new TablePanel(table);
-	    this.setContentPane(mPanel);
-	    
-	    mMouse = new Mouse(mPanel);
-	    addMouseListener(mMouse);
-	    
-	    mKeyboard = new Keyboard();
-		addKeyListener(mKeyboard);
+		this.setSize(600, 400);
+		this.setLocationRelativeTo(null);
+
+		mPanel = new TablePanel(table);
+		this.setContentPane(mPanel);
+
+		mMouse = new Mouse(mPanel);
+		addMouseListener(mMouse);
+
 	}
 	
 	public Window()

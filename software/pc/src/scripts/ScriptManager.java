@@ -41,14 +41,13 @@ public class ScriptManager implements Service
 		//instanciedScripts[ScriptNames.CLOSE_CLAP.ordinal()] = new CloseClap(factory, config, log);
 		instanciedScripts[ScriptNames.DROP_CARPET.ordinal()] = new DropCarpet(factory, config, log);
 		instanciedScripts[ScriptNames.CLOSE_DOORS.ordinal()] = new CloseDoors(factory, config, log);
-		instanciedScripts[ScriptNames.PARASOL.ordinal()] = new Parasol(factory, config, log);
 		instanciedScripts[ScriptNames.FISHING.ordinal()] = new Fishing(factory, config, log);
 		instanciedScripts[ScriptNames.PREQUEL.ordinal()] = new Prequel(factory, config, log);
 		instanciedScripts[ScriptNames.TECH_THE_SAND.ordinal()] = new TechTheSand(factory, config, log);
 		instanciedScripts[ScriptNames.DROP_THE_SAND.ordinal()] = new DropTheSand(factory, config, log);
 		instanciedScripts[ScriptNames.SHELL_GETTER.ordinal()] = new ShellGetter(factory, config, log);
 		instanciedScripts[ScriptNames.SHELL_DEPOSIT.ordinal()] = new ShellDeposit(factory, config, log);
-		instanciedScripts[ScriptNames.CASTLE.ordinal()] = new ShellDeposit(factory, config, log);
+		instanciedScripts[ScriptNames.CASTLE.ordinal()] = new Castle(factory, config, log);
 
 
 		//TODO instancier les scripts

@@ -20,6 +20,7 @@ import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
+import threads.ThreadInterface;
 import utils.Sleep;
 
 import java.util.ArrayList;
@@ -57,16 +58,17 @@ public class JUnit_Sensors extends JUnit_Test
 		capteurs.updateConfig();
 		
 		container.getService(ServiceNames.THREAD_SENSOR);
-		container.getService(ServiceNames.THREAD_TIMER);
+		//container.getService(ServiceNames.THREAD_TIMER);
 		
 		//locomotion
 		mLocomotion = (Locomotion)container.getService(ServiceNames.LOCOMOTION);
 		mLocomotion.updateConfig();
 
 		//mLocomotion.setPosition(new Vec2 (1500-320-77,1000));
-		mLocomotion.setPosition(new Vec2 (300,1000));// milieu de table
+		mLocomotion.setPosition(Table.entryPosition);// milieu de table
 		mLocomotion.setOrientation(Math.PI);
-		
+		container.getService(ServiceNames.THREAD_INTERFACE);
+		container.getService(ServiceNames.THREAD_TIMER);
 		container.startInstanciedThreads();
 
 	}
@@ -77,31 +79,31 @@ public class JUnit_Sensors extends JUnit_Test
 	 *
 	 * @throws Exception the exception
 	 */
-//	@Test
+/*	@Test
 	public void desactivation_capteur() throws Exception
 	{
 		log.debug("JUnit_CapteursTest.desactivation_capteur()");
 
 		// Avec capteurs
-		log.debug((capteurs.getUSSensorValue(USsensors.ULTRASOUND)));
+		log.debug((capteurs.getUSSensorValue(USsensors.ULTRASOUND_LEFT_BACK)));
 	//	Assert.assertTrue(capteurs.mesurer_infrarouge() != 3000);
-		Assert.assertTrue(((int)capteurs.getUSSensorValue(USsensors.ULTRASOUND)) != 3000);
+		Assert.assertTrue(((int)capteurs.getUSSensorValue(USsensors.ULTRASOUND_LEFT_BACK)) != 3000);
 
 		// Sans capteurs
 		config.set("capteurs_on", "false");
 		capteurs.updateConfig();
-		log.debug(((int)capteurs.getUSSensorValue(USsensors.ULTRASOUND)));
+		log.debug(((int)capteurs.getUSSensorValue(USsensors.ULTRASOUND_LEFT_BACK)));
 	//	Assert.assertTrue(capteurs.mesurer_infrarouge() == 3000);
-		Assert.assertTrue(((int)capteurs.getUSSensorValue(USsensors.ULTRASOUND)) == 3000);
+		Assert.assertTrue(((int)capteurs.getUSSensorValue(USsensors.ULTRASOUND_LEFT_BACK)) == 3000);
 
 		// Et re avec
 		config.set("capteurs_on", "true");
 		capteurs.updateConfig();
-		Assert.assertTrue(((int)capteurs.getUSSensorValue(USsensors.ULTRASOUND)) != 3000);
+		Assert.assertTrue(((int)capteurs.getUSSensorValue(USsensors.ULTRASOUND_LEFT_BACK)) != 3000);
 	//	Assert.assertTrue(capteurs.mesurer_infrarouge() != 3000);
-		Assert.assertTrue(((int)capteurs.getUSSensorValue(USsensors.ULTRASOUND)) != 3000);
+		Assert.assertTrue(((int)capteurs.getUSSensorValue(USsensors.ULTRASOUND_LEFT_BACK)) != 3000);
 
-	}
+	}*/
 	
 //	@Test
 	public void testEvitement() throws PointInObstacleException
@@ -223,7 +225,7 @@ public class JUnit_Sensors extends JUnit_Test
 		}
 	}
 	
-	@Test
+	//@Test
 	public void testSensorEnnemyInDiscWithoutMovement()
 	{
 		log.debug("Test d'évitement fixe");
@@ -255,13 +257,14 @@ public class JUnit_Sensors extends JUnit_Test
 		}
 	}
 	
-	//@Test
-	public void testSensorEnnemyWithoutMovement()
-	{
+	@Test
+	public void testSensorEnnemyWithoutMovement() throws InterruptedException, SerialConnexionException {
 		log.debug("Test des capteurs fixe");
+		state.robot.disableFeedbackLoop();
 		while(true)
 		{
-			;	
+			state.robot.getPosition();
+			Thread.sleep(100);
 		}
 	}
 	

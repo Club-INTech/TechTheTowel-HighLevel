@@ -61,38 +61,41 @@ public class JUnit_Cordees extends JUnit_Test
     }
 
     @Test
-    public void test() throws SerialManagerException, BadVersionException, ContainerException, UnableToMoveException, PointInObstacleException, SerialConnexionException, ExecuteException, PathNotFoundException, SerialFinallyException {
+    public void test() throws SerialManagerException, BadVersionException, ContainerException, UnableToMoveException, PointInObstacleException, SerialConnexionException, ExecuteException, PathNotFoundException, SerialFinallyException, BlockedActuatorException 
+    {
         //container.getService(ServiceNames.THREAD_TIMER);
         container.getService(ServiceNames.THREAD_INTERFACE);
         container.startInstanciedThreads();
         game.robot.useActuator(ActuatorOrder.ARM_INIT,true);
         game.robot.moveLengthwise(100, new ArrayList<Hook>(), false);
+        scriptManager.getScript(ScriptNames.CASTLE).goToThenExec(0, game, new ArrayList<Hook>());
         scriptManager.getScript(ScriptNames.CLOSE_DOORS).goToThenExec(0, game, new ArrayList<Hook>());
-        //scriptManager.getScript(ScriptNames.FISHING).goToThenExec(1, game, new ArrayList<Hook>());
-        game.robot.useActuator(ActuatorOrder.FISHING_POSITION, true);
-        game.robot.useActuator(ActuatorOrder.FISHING_POSITION_RIGHT, true);
+        scriptManager.getScript(ScriptNames.FISHING).goToThenExec(3, game, new ArrayList<Hook>());
+//        game.robot.useActuator(ActuatorOrder.FISHING_POSITION, true);
+//        game.robot.useActuator(ActuatorOrder.FISHING_POSITION_RIGHT, true);
         game.robot.useActuator(ActuatorOrder.ARM_INIT, true);
-        while((System.currentTimeMillis()-time)<30000)
-        {
-            Vec2 point = nextPoint();
-            try
-            {
-                game.robot.moveToLocation(point, new ArrayList<Hook>(), table);
-            }
-            catch (PathNotFoundException e)
-            {
-                log.debug("pas de chemin entre : "+ game.robot.getPosition()+" et : "+point);
-            }
-            catch (UnableToMoveException e)
-            {
-                log.debug("robot bloque");
-                return;//on arrete le test pour preserver la mecanique du robot
-            }
-            catch (PointInObstacleException e)
-            {
-                log.debug("le point : "+point+" est dans un obtacle (normal)");
-            }
-        }
+        log.debug("Temps d'excétution : " + (System.currentTimeMillis() - this.time));
+//        while((System.currentTimeMillis()-time)<30000)
+//        {
+//            Vec2 point = nextPoint();
+//            try
+//            {
+//                game.robot.moveToLocation(point, new ArrayList<Hook>(), table);
+//            }
+//            catch (PathNotFoundException e)
+//            {
+//                log.debug("pas de chemin entre : "+ game.robot.getPosition()+" et : "+point);
+//            }
+//            catch (UnableToMoveException e)
+//            {
+//                log.debug("robot bloque");
+//                return;//on arrete le test pour preserver la mecanique du robot
+//            }
+//            catch (PointInObstacleException e)
+//            {
+//                log.debug("le point : "+point+" est dans un obtacle (normal)");
+//            }
+//        }
     }
 
     /**
@@ -106,4 +109,4 @@ public class JUnit_Cordees extends JUnit_Test
         log.debug(point);
         return(point);
     }
-}
+} 

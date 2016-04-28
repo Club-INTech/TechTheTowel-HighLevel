@@ -18,15 +18,17 @@ public enum ActuatorOrder
 	MOVE_BACKWARD("rc"),
 	TURN_RIGHT("td"),
 	TURN_LEFT("tg"),
+	SSTOP("sstop"),
+	MONTLHERY("montlhery"),
 	
 	//========================================================
 	// Consignes pour les bras chargés de prendre les poissons
 	//========================================================
 	
 	//!\ Remarque : il n'y a pas de "left" pour les actuators du bras gauche, on se contente d'appeler une des consignes neutres /!\
-	//!\ La symétrie du jeu se chargera de déterminer si l'actuator concernée est le gauche ou le droit /!\
+	//!\ La symétrie du jeu se chargera de déterminer si l'actuator concerné est le gauche ou le droit /!\
 	
-	/** Bras aimanté gauche baissé pour récupérer les poissons */
+	/** Bras aimanté baissé pour récupérer les poissons */
 	FISHING_POSITION("fpl"),
 	
 	/** Bras aimanté en position medium */
@@ -55,13 +57,14 @@ public enum ActuatorOrder
 	ARM_INIT("aif"),
 
 	/** Ouverture des portes */
-	OPEN_DOOR("odr",3000),
-	OPEN_DOOR_LEFT("odl",3000),
+	OPEN_DOOR("odr",6000),
+	OPEN_DOOR_LEFT("odl",6000),
 
 	/** Fermeture des portes */
-	CLOSE_DOOR("cdl",3000),
-	CLOSE_DOOR_RIGHT("cdr",3000),
-
+	CLOSE_DOOR("cdr",6000),
+	CLOSE_DOOR_LEFT("cdl",6000),
+	
+	/** Arrêt des portes */
 	STOP_DOOR_LEFT("sdl"),
 	STOP_DOOR("sdr"),
 

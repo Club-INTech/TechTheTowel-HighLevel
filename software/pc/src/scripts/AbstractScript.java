@@ -4,6 +4,7 @@ import container.Service;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.BadVersionException;
+import exceptions.BlockedActuatorException;
 import exceptions.PathNotFoundException;
 import exceptions.PointInObstacleException;
 import exceptions.serial.SerialConnexionException;
@@ -51,13 +52,13 @@ public abstract class AbstractScript implements Service
 		AbstractScript.hookFactory = hookFactory;
 		AbstractScript.config = config;
 		AbstractScript.log = log;
-	}	
+	}
 		
 	/**
 	 * Va au point d'entrée du script (en utilisant le Pathfinding), puis l'exécute
 	 * En fournissant un GameState<RobotChrono>, il est possible de chronométrer le temps que l'on metterait a exécuter ce script sans réellement l'exécuter
 	 *
-	 * @param versionToExecute la version du
+	 * @param versionToExecute la version du script
 	 * @param actualState l'état courrant du match.
 	 * @param hooksToConsider les hooks a considérer lors des déplacements vers ces scripts
 	 * @param enumObstacle les obstacles qu'on ne veut pas prendre ne compte dans le pathDingDing
@@ -69,12 +70,14 @@ public abstract class AbstractScript implements Service
 	 * @throws ExecuteException 
 	 * @throws PointInObstacleException 
 	 */
-	public void goToThenExec(int versionToExecute,GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, BadVersionException, SerialConnexionException, PathNotFoundException, SerialFinallyException, ExecuteException, PointInObstacleException
+	public void goToThenExec(int versionToExecute, GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, BadVersionException, SerialConnexionException, PathNotFoundException, SerialFinallyException, ExecuteException, PointInObstacleException, BlockedActuatorException
 	{
 		// va jusqu'au point d'entrée de la version demandée
+		log.debug("Lancement de " + this + " version " + versionToExecute);
 		try 
 		{
-			actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.getRobotRadius(), actualState.robot.getPosition()), hooksToConsider, actualState.table);
+			if(!actualState.robot.getPosition().equals(entryPosition(versionToExecute,actualState.robot.getRobotRadius(), actualState.robot.getPosition()).position))
+				actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.getRobotRadius(), actualState.robot.getPositionFast()), hooksToConsider, actualState.table);
 		}
 		catch (UnableToMoveException | PathNotFoundException e)
 		{
@@ -86,7 +89,6 @@ public abstract class AbstractScript implements Service
 		// exécute la version demandée
 		execute(versionToExecute, actualState, hooksToConsider);
 	}
-	
 
 	   
 	/**
@@ -99,7 +101,7 @@ public abstract class AbstractScript implements Service
 	 * @throws SerialFinallyException s'il y a un problème de communication avec une des cartes électroniques lors du finallize
 	 * @throws ExecuteException 
 	 */
-	public abstract void execute(int versionToExecute, GameState<Robot> actualState,ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException;
+	public abstract void execute(int versionToExecute, GameState<Robot> actualState,ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialFinallyException, ExecuteException, SerialConnexionException, BlockedActuatorException;
 
 	/**
 	 * Renvoie le score que peut fournir une version d'un script.
@@ -115,7 +117,7 @@ public abstract class AbstractScript implements Service
 	 * Retourne la position d'entrée associée à la version.
 	 *
 	 * @param version version dont on veut le point d'entrée
-	 * @param ray 
+	 * @param ray : rayon du robot
 	 * @param robotPosition la position du robot actuelle
 	 * @param la taille du robot
 	 * @return la position du point d'entrée
@@ -123,16 +125,44 @@ public abstract class AbstractScript implements Service
 	public abstract Circle entryPosition(int version, int ray, Vec2 robotPosition) throws BadVersionException;
 	
 	/**
-	 * Méthode toujours appelée à la fin du script via un finally. On des donc certain  que son exécution aura lieu.
-	 * Le repli des actionneurs lors de la fin du script a sa place ici et pas ailleurs: si un bras reste déployé en cours de match, il risque de se faire arracher !  
-	 * Ainsi, les exceptions lancés par cette méthodes sont les plus critiques que l'on peut imaginer: elles préviennent qu'on peut casser la méca si on ne réagit pas bien !
-	 *
-	 * @param state Etat du jeu au sein duquel il faut finaliser le script
+	 * Méthode appelée à la fin du script si une exception a lieu.
+	 * Le repli des actionneurs est impératif à demander au sein de cette méthode : si un bras reste déployé en cours de match, il risque de se faire arracher !  
+	 * Ainsi, les exceptions lancées par cette méthode sont les plus critiques que l'on puisse imaginer : elles préviennent qu'on peut casser la méca si on ne réagit pas bien !
+	 * @param state : état du jeu au sein duquel il faut finaliser le script
+	 * @param e : l'exception qui a déclenché le finalize 
 	 * @throws UnableToMoveException losrque le robot veut se déplacer et que quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
 	 * @throws SerialFinallyException 
 	 * @throws SerialConnexionException s'il y a un problème de communication avec une des cartes électroniques
 	 */
-	public abstract void finalize(GameState<?> state) throws UnableToMoveException, SerialFinallyException;
+	public abstract void finalize(GameState<?> state, Exception e) throws UnableToMoveException, SerialFinallyException;
+
+	/**
+	 * Fonction d'attente de débloquage du chemin, pour eviter d'abandonner un script inutilement
+	 * @param posRobot la position du robot
+	 * @return true si chemin dégagé, false sinon
+     */
+	public boolean waitForEnnemy(GameState<Robot> actualState, Vec2 posRobot, boolean forward)
+	{
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        long time = System.currentTimeMillis();
+		int signe = forward ? 1 : -1;
+		Vec2 aim = posRobot.plusNewVector(new Vec2((int)(signe*300*Math.cos(actualState.robot.getOrientation())),(int)(signe*300*Math.sin(actualState.robot.getOrientation()))));
+		while(actualState.table.getObstacleManager().isDiscObstructed(aim, 100))
+		{
+			if(System.currentTimeMillis() - time > 4000)
+				return false;
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		return true;
+	}
 	
 	/* (non-Javadoc)
 	 * @see container.Service#updateConfig()

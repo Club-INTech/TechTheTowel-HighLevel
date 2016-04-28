@@ -29,7 +29,7 @@ public class HookIsPositionAndOrientationCorrect extends Hook
 	// attention à comparer miliradians avec miliradians
 	private float mTolerancyOrientation;
 	
-	public HookIsPositionAndOrientationCorrect(Config config, Log log,GameState<RobotReal> realState, 
+	public HookIsPositionAndOrientationCorrect(Config config, Log log,GameState<RobotReal> realState,
 												Vec2 point, float orientation, float tolerancyPoint, float tolerancyOrientation) 
 	{
 		super(config, log, realState);
@@ -41,15 +41,15 @@ public class HookIsPositionAndOrientationCorrect extends Hook
 		
 	}
 
+
 	@Override
 	public boolean evaluate()
 	{
-		if(  Math.pow( (mPoint.x-mState.robot.getPosition().x ) , 2 ) +
-			 Math.pow( (mPoint.y-mState.robot.getPosition().y ) , 2 ) < Math.pow(mTolerancyPoint,2) ) //verification de la distance au point
+		if(  mState.robot.getPosition().distance(mPoint) < mTolerancyPoint ) //verification de la distance au point
 		{
 			if(Math.abs(mState.robot.getOrientation()-mOrientation) < mTolerancyOrientation)// verification de l'orientation 
 			{
-				System.out.println("en position ("+mState.robot.getPosition().x+", "+mState.robot.getPosition().y+") et orientation "+mState.robot.getOrientation()+" au trigger du Hook de position et d'orientation");
+				log.debug("en position ("+mState.robot.getPosition().x+", "+mState.robot.getPosition().y+") et orientation "+mState.robot.getOrientation()+" au trigger du Hook de position et d'orientation");
 				return trigger();
 			}
 		}

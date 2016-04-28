@@ -1,12 +1,8 @@
 package tests;
 
 import enums.ServiceNames;
-import enums.TurningStrategy;
-import exceptions.Locomotion.UnableToMoveException;
 import exceptions.PathNotFoundException;
 import exceptions.PointInObstacleException;
-import graphics.Window;
-import hook.Hook;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
@@ -15,6 +11,7 @@ import pathDingDing.PathDingDing;
 import robot.RobotReal;
 import smartMath.Vec2;
 import table.Table;
+import table.obstacles.Obstacle;
 import utils.Log;
 
 import java.util.ArrayList;
@@ -52,7 +49,7 @@ public class JUnit_TextualPDDTest extends JUnit_Test
     {
     	ArrayList<Node> path;
 		try {
-			path = pf.computePath(new Vec2(300, 1000), new Vec2(300, 500));
+			path = pf.computePath(new Vec2(300, 1000), new Vec2(300, 500), new ArrayList<Obstacle>());
 
     		ArrayList<Vec2> pathVec = new ArrayList<Vec2>();
     		for(int i=0 ; i<path.size() ; i++)
@@ -88,7 +85,7 @@ public class JUnit_TextualPDDTest extends JUnit_Test
 	    	ArrayList<Node> path;
 			try 
 			{
-				path = pf.computePath(new Vec2(300, 1000), new Vec2(-350, 1000));
+				path = pf.computePath(new Vec2(300, 1000), new Vec2(-350, 1000), new ArrayList<Obstacle>());
 				
 	    		ArrayList<Vec2> pathVec = new ArrayList<Vec2>();
 	    		for(int i=0 ; i<path.size() ; i++)

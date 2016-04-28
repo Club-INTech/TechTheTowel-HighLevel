@@ -10,9 +10,11 @@ import exceptions.serial.SerialConnexionException;
 import hook.Hook;
 import pathDingDing.Node;
 import pathDingDing.PathDingDing;
+import smartMath.Arc;
 import smartMath.Circle;
 import smartMath.Vec2;
 import table.Table;
+import table.obstacles.Obstacle;
 import utils.Config;
 import utils.Log;
 
@@ -84,6 +86,11 @@ public abstract class Robot implements Service
 	 * #MUTEX
 	 */
 	public boolean doorIsOpen=false;
+
+	/**
+	 * Si le robot force dans ses mouvements
+	 */
+	protected boolean isForcing = false;
 
 	
 	
@@ -187,6 +194,11 @@ public abstract class Robot implements Service
 	{
 		return IsSandInside;
 	}
+
+	public void setDoor(boolean state)
+	{
+		this.doorIsOpen = state;
+	}
 	
 	/**
 	 * Immobilise le robot.
@@ -216,7 +228,7 @@ public abstract class Robot implements Service
     public abstract void turn(double angle, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException;
     
 	/**
-	 * Fait avancer le robot de la distanted PathDingDing pathDingDing;ce spécifiée. Le robot garde son orientation actuelle et va simplement avancer.
+	 * Fait avancer le robot de la distance spécifiée. Le robot garde son orientation actuelle et va simplement avancer.
 	 * C'est la méthode que les utilisateurs (externes au développement du système de locomotion) vont utiliser
 	 * Cette méthode est bloquante: son exécution ne se termine que lorsque le robot a atteint le point d'arrivée
 	 * @param distance en mm que le robot doit franchir. Si cette distance est négative, le robot va reculer. Attention, en cas de distance négative, cette méthode ne vérifie pas s'il y a un système d'évitement a l'arrère du robot
@@ -366,6 +378,19 @@ public abstract class Robot implements Service
         else
             turn(angle, null, false, false);
     }
+    
+    /**
+     * Ordonne le déplacement selon un arc
+     * @param arc l'arc à suivre
+     * @param hooks les hooks à gérer
+     * @throws UnableToMoveException bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
+     */
+    public abstract void moveArc(Arc arc, ArrayList<Hook> hooks) throws UnableToMoveException;
+
+	public abstract void setBasicDetection(boolean basicDetection);
+
+	public abstract void setUSvalues(ArrayList<Integer> val);
+ 
 
 	/**
 	 * Fait avancer le robot de la distance spécifiée. Le robot garde son orientation actuelle et va simplement avancer.
@@ -498,8 +523,14 @@ public abstract class Robot implements Service
 
     	PathDingDing pdd = new PathDingDing(table, log);
     	// On lance le calcul
-    	ArrayList<Node> nodePath = pdd.computePath(position, aim.position);
-    	
+    	ArrayList<Node> nodePath = pdd.computePath(position, aim.position, new ArrayList<Obstacle>());
+
+		if(nodePath.isEmpty())
+			throw new PathNotFoundException();
+
+		if(nodePath.get(0).getPosition().equals(aim.position)) //Si on y est déjà
+			return;
+
     	// On transforme les noeuds en Vec2
     	ArrayList<Vec2> path = new ArrayList<Vec2>();
     	for(int i=0 ; i<nodePath.size() ; i++)
@@ -552,6 +583,8 @@ public abstract class Robot implements Service
      */
     public abstract void enableFeedbackLoop() throws SerialConnexionException;
 
+	public abstract void disableFeedbackLoop() throws SerialConnexionException;
+
 	/**
 	 * Active l'asservissement en rotation du robot.
 	 */
@@ -568,7 +601,7 @@ public abstract class Robot implements Service
 	 * @return la valeur du capteur
 	 * @throws SerialConnexionException si la connexion avec le capteur est interrompue
 	 */
-	public abstract int getUSSensorValue(USsensors captor) throws SerialConnexionException;
+	public abstract ArrayList<Integer> getUSSensorValue(USsensors captor) throws SerialConnexionException;
 
 	/**
 	 * le robot demande l'etat de ses capteurs de contact
@@ -587,8 +620,10 @@ public abstract class Robot implements Service
 
 	public void setRobotRadius(int radius)
 	{
-		if(!doorIsOpen || (doorIsOpen && radius<this.robotRay))
+		if(!doorIsOpen || radius >= this.robotRay)
+		{
 			this.robotRay = radius;
+		}
 		else
 			log.critical("Réduction du rayon tentée mais booléen porte ouverte est à true !");
 	}
@@ -597,5 +632,8 @@ public abstract class Robot implements Service
 	{
 		return this.robotRay;
 	}
+
+	public abstract void setForceMovement(boolean state);
+	public abstract void setSmoothAcceleration(boolean state) throws SerialConnexionException;
 
 }

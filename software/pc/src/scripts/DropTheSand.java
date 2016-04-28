@@ -5,6 +5,7 @@ import enums.ActuatorOrder;
 import enums.ContactSensors;
 import enums.DirectionStrategy;
 import enums.TurningStrategy;
+import exceptions.BadVersionException;
 import exceptions.BlockedActuatorException;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
 
 /**
  * Script de rapatriement du sable ; utilise le PDD
- * Version 0 et 1: se déplace de la montagne à la zone de construction, choisit une stratégie d'orientation lors du chemin déterminé par le PDD pour ne pas perdre le sable
+ * Version 0 se déplace de la montagne à la zone de construction, choisit une stratégie d'orientation lors du chemin déterminé par le PDD pour ne pas perdre le sable
  * @author CF, discord
  */
 public class DropTheSand extends AbstractScript
@@ -43,19 +44,23 @@ public class DropTheSand extends AbstractScript
      * @throws SerialConnexionException
      */
     @Override
-    public void execute(int versionToExecute, GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException
+    public void execute(int versionToExecute, GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException, UnableToMoveException, SerialConnexionException, BlockedActuatorException
     {
 
-        if(versionToExecute == 0)
+        try
         {
-        	try
+        	if(versionToExecute == 0)
         	{
         		// On autorise la marche arrière au robot
         		actualState.robot.setDirectionStrategy(DirectionStrategy.FASTEST);
+
+                actualState.robot.turn(Math.PI);
+
+                actualState.robot.moveLengthwiseWithoutDetection(400);
         		
         		// On recule pour 'déposer' le sable
         		// TODO la distance est arbitraire, à modifier avec les phases de test
-        		actualState.robot.moveLengthwise(-200, hooksToConsider, false);
+        		actualState.robot.moveLengthwise(-400, hooksToConsider, false);
         		
                 actualState.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
                 
@@ -64,9 +69,13 @@ public class DropTheSand extends AbstractScript
                 {
                     actualState.robot.useActuator(ActuatorOrder.STOP_DOOR, false);
                     throw new BlockedActuatorException("Porte bloquée !");
+                } else {
+                    actualState.robot.setDoor(false);
                 }
 
-                actualState.robot.setRobotRadius(TechTheSand.retractedRobotRadius);
+                actualState.changeRobotRadius(TechTheSand.retractedRobotRadius);
+                actualState.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
+                actualState.robot.setDoor(false);
 
                 //On indique au robot qu'il ne transporte plus de sable
         		actualState.robot.setIsSandInside(false);
@@ -75,11 +84,11 @@ public class DropTheSand extends AbstractScript
         		actualState.robot.setTurningStrategy(TurningStrategy.FASTEST);
         	}
         	
-        	catch(Exception e)
-            {
-				finalize(actualState);
-				throw new ExecuteException(e);
-			}
+        }
+        catch(Exception e)
+        {
+        	finalize(actualState,e);
+        	throw e;
         }
 
     }
@@ -92,39 +101,56 @@ public class DropTheSand extends AbstractScript
 
    /* Renvoie la position d'entree du script suivant la version en argument*/
     @Override
-    public Circle entryPosition(int version, int ray, Vec2 robotPosition)
+    public Circle entryPosition(int version, int ray, Vec2 robotPosition) throws BadVersionException
     {
         if(version == 0)
         {
-            return new Circle(1000, 400, 0);
+            return new Circle(359+400, 869, 0);
         }
         else
         {
-			//TODO jetter une exception
 			log.debug("erreur : mauvaise version de script");
-			return new Circle(0,0,0);
+			throw new BadVersionException();
 		}
     }
 
     @Override
-    public void finalize(GameState<?> state) throws SerialFinallyException 
+    public void finalize(GameState<?> state, Exception ex) throws SerialFinallyException 
     {
+    	
+    	log.debug("Exception " + ex + "dans Drop The Sand : Lancement du Finalize !");
     	// on tente de fermer la vitre avec changement de rayon
     	try
     	{
-    		state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
-    		if (state.robot.getIsSandInside() == true)
+    		
+    		if (state.robot.getIsSandInside())
     		{
-    			state.robot.setRobotRadius(TechTheSand.middleRobotRadius);
-    		}
+                state.changeRobotRadius(TechTheSand.expandedRobotRadius);
+                state.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
+            }
     		else
     		{
-    			state.robot.setRobotRadius(TechTheSand.retractedRobotRadius);
+    			state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
+                if(state.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED)) 
+                {
+                    state.changeRobotRadius(TechTheSand.retractedRobotRadius);
+                    state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
+                    state.robot.setDoor(false);
+                }
+                else
+                {
+                	state.robot.useActuator(ActuatorOrder.STOP_DOOR, true);
+                    state.robot.setIsSandInside(true);
+                    state.robot.setDoor(true);
+                    state.changeRobotRadius(TechTheSand.expandedRobotRadius);
+                    state.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
+                }
     		}
+    		
     	}
-    	catch (Exception e)
+    	catch (SerialConnexionException e)
     	{
-    		log.debug("DropTheSand : Impossible de ranger la vitre !");
+    		log.debug("TechTheSand : impossible de fermer la porte !");
     		throw new SerialFinallyException();
     	}
     }

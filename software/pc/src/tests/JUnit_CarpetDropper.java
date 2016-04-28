@@ -5,6 +5,7 @@ import enums.ActuatorOrder;
 import enums.ScriptNames;
 import enums.ServiceNames;
 import exceptions.BadVersionException;
+import exceptions.BlockedActuatorException;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.PathNotFoundException;
@@ -59,7 +60,7 @@ public class JUnit_CarpetDropper extends JUnit_Test
 	}
 
 	@Test
-	public void test() throws PointInObstacleException 
+	public void test() throws PointInObstacleException, BlockedActuatorException
 	{
 		log.debug("debut du depose tapis");
 		try 
@@ -72,7 +73,6 @@ public class JUnit_CarpetDropper extends JUnit_Test
 			try {
 				returnToEntryPosition(game);
 			} catch (PathNotFoundException | UnableToMoveException e) {
-				// TODO
 				e.printStackTrace();
 			}
 	}

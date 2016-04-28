@@ -4,8 +4,8 @@ public enum USsensors {
 	// Syntaxe: NOM_METHODE("protocole_serie", duree_action, valeur_par_default, nombre_de_ligne_reponse)
 	// exemple : ULTRASOUND_BACK_SENSOR("us_ar",10,new int[]{0,0})
 
-	/** les capteur ultrason exemple a modifier*/
-	ULTRASOUND("us",10,0),
+	/**TODO les capteur ultrason exemple a modifier*/
+	ULTRASOUND("us",10,0)
 
 	;
 

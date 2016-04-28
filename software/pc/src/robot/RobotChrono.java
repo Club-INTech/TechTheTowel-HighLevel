@@ -5,6 +5,7 @@ import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import hook.Hook;
 import pathDingDing.PathDingDing;
+import smartMath.Arc;
 import smartMath.Vec2;
 import table.Table;
 import utils.Config;
@@ -293,11 +294,14 @@ public class RobotChrono extends Robot
 	}
 
 	@Override
-	public int getUSSensorValue(USsensors sensor) 
+	public ArrayList<Integer> getUSSensorValue(USsensors sensor)
 	{
 		this.chrono += approximateSerialLatency;
 		this.chrono += sensor.getAverageDuration();
-		return sensor.getDefaultValue();
+		ArrayList<Integer> res = new ArrayList<>();
+		for(int i=0; i<4 ;i++)
+			res.add(sensor.getDefaultValue());
+		return res;
 	}
 	
 	@Override
@@ -321,6 +325,16 @@ public class RobotChrono extends Robot
 	}
 
 	@Override
+	public synchronized void setForceMovement(boolean state) {
+		this.isForcing = state;
+	}
+
+	@Override
+	public void setSmoothAcceleration(boolean state) {
+
+	}
+
+	@Override
 	public Speed getLocomotionSpeed() {
 
 		return speed;
@@ -330,6 +344,27 @@ public class RobotChrono extends Robot
 	public void enableFeedbackLoop() throws SerialConnexionException 
 	{
 		// TODO 
+	}
+
+	@Override
+	public void disableFeedbackLoop() throws SerialConnexionException {
+
+	}
+
+	@Override
+	public void moveArc(Arc arc, ArrayList<Hook> hooks) throws UnableToMoveException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setBasicDetection(boolean basicDetection) {
+
+	}
+
+	@Override
+	public void setUSvalues(ArrayList<Integer> val) {
+
 	}
 
 }

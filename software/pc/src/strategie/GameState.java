@@ -76,5 +76,17 @@ public class GameState<R extends Robot> implements Service
 		timeEllapsed = ThreadTimer.ellapsedTimeSinceMatchStarted();
 		return timeEllapsed;
 	}
+
+    /**
+     * Change le rayon du robot et fait toutes les modifs necesssaires
+     * A utiliser dans les scripts et la stratégie
+     * @param newRad le nouveau rayon
+     */
+    public void changeRobotRadius(int newRad)
+    {
+        this.robot.setRobotRadius(newRad);
+        this.table.getObstacleManager().updateObstacles(newRad);
+        this.robot.getPDD().recomputeGraph();
+    }
 	
 }

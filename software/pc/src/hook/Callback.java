@@ -20,7 +20,7 @@ public class Callback
 	/** le code à éxecuter lors de l'évènement */
 	public Executable mExecutable;
 	
-	GameState<Robot> stateToConsider = null;
+	private GameState<Robot> stateToConsider = null;
 
 	/**
 	 * Constructeur d'un callback avec 2 paramètres: la méthode et si elle doit être exécutée une seule fois

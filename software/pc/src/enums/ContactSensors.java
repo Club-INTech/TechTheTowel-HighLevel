@@ -4,11 +4,14 @@ public enum ContactSensors {
 	// Syntaxe: NOM_METHODE("protocole_serie", duree_action, valeur_par_default, nombre_de_ligne_reponse)
 	// exemple : JAW_SENSOR("ccm",10,true)
 
-	DOOR_CLOSED_LEFT("ccm",10,true),
-	DOOR_CLOSED("vez",10,true),
+	DOOR_CLOSED_LEFT("ildc",10,true),
+	DOOR_CLOSED("irdc",10,true),
 
-	DOOR_OPENED_LEFT("fzfe",10,true),
-	DOOR_OPENED("ddzf",10,true)
+	DOOR_OPENED_LEFT("ildo",10,true),
+	DOOR_OPENED("irdo",10,true),
+
+	DOOR_BLOCKED("irdb",10,false),
+	DOOR_BLOCKED_LEFT("ildb",10,false)
 
 	;
 

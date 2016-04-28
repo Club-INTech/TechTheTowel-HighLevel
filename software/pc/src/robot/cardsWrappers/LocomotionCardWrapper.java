@@ -1,6 +1,8 @@
 package robot.cardsWrappers;
 
 
+import java.util.Locale;
+
 import container.Service;
 import enums.TurningStrategy;
 import exceptions.ConfigPropertyNotFoundException;
@@ -9,6 +11,8 @@ import robot.serial.SerialConnexion;
 import utils.Config;
 import utils.Log;
 import utils.Sleep;
+
+import java.util.Locale;
 
 /**
  *  Dialogue avec la carte d'asservissement en position du robot.
@@ -42,10 +46,15 @@ public class LocomotionCardWrapper implements Service
 	/**
 	 * Temps d'attente entre deux envois à la serie en ms
 	 */
-	
 	private int delayBetweenSend = 100; 
 	
 	public int compteur=1;
+	
+	/**
+	 * Permet de gérer le nombre de tentatives de communication
+	 * dans la méthode éponyme
+	 */
+	public int counterGetCurrentPositionAndOrientation=-1;
 
 	/**
 	 * Construit la surchouche de la carte d'asservissement
@@ -103,8 +112,20 @@ public class LocomotionCardWrapper implements Service
 	public void moveLengthwise(double distance) throws SerialConnexionException
 	{
 		float distanceTruncated = (float)distance;
-		String chaines[] = {"d", Float.toString(distanceTruncated)};
+		String chaines[] = {"d", String.format(Locale.US, "%.3f", distanceTruncated)};
 		locomotionCardSerial.communiquer(chaines, 0);
+	}
+
+    /**
+     * Fait suivre un arc au robot. Méthode non bloquante
+     * @param length la longueur de l'arc à suivre
+     * @param radius le rayon de courbure
+     * @throws SerialConnexionException pb de comm
+     */
+	public void moveArc(double length, double radius) throws SerialConnexionException
+    {
+        String chaines[] = {"dc", Integer.toString((int)length), Integer.toString((int)radius)};
+        locomotionCardSerial.communiquer(chaines, 0);
 	}
 
 	/**
@@ -127,17 +148,17 @@ public class LocomotionCardWrapper implements Service
 		// tronque l'angle que l'on envoit a la série pour éviter les overflows
 		float angleTruncated = (float)angle;
 		if(turning == TurningStrategy.FASTEST) {
-			String chaines[] = {"t", Float.toString(angleTruncated)};
+			String chaines[] = {"t", String.format(Locale.US, "%.3f", angleTruncated)};
 			locomotionCardSerial.communiquer(chaines, 0);
 		}
 		else if(turning == TurningStrategy.RIGHT_ONLY)
 		{
-			String chaines[] = {"tor", Float.toString(angleTruncated)};
+			String chaines[] = {"tor", String.format(Locale.US, "%.3f", angleTruncated)};
 			locomotionCardSerial.communiquer(chaines, 0);
 		}
 		else if(turning == TurningStrategy.LEFT_ONLY)
 		{
-			String chaines[] = {"tol", Float.toString(angleTruncated)};
+			String chaines[] = {"tol", String.format(Locale.US, "%.3f", angleTruncated)};
 			locomotionCardSerial.communiquer(chaines, 0);
 		}
 	}
@@ -145,7 +166,7 @@ public class LocomotionCardWrapper implements Service
 	{
 		// tronque l'angle que l'on envoit a la série pour éviter les overflows
 		float angleTruncated = (float)angle;
-		String chaines[] = {"t3", Float.toString(angleTruncated)};
+		String chaines[] = {"t3", String.format(Locale.US, "%.3f", angleTruncated)};
 		locomotionCardSerial.communiquer(chaines, 0);
 	}
 	
@@ -174,7 +195,7 @@ public class LocomotionCardWrapper implements Service
 	public void setX(int x) throws SerialConnexionException
 	{
 		float floatX=(float)x; //On transtype car la serie veut des Floats <3
-		String chaines[] = {"cx", Float.toString(floatX)};
+		String chaines[] = {"cx", String.format(Locale.US, "%.3f", floatX)};
 		locomotionCardSerial.communiquer(chaines, 0);
 	}
 
@@ -186,7 +207,7 @@ public class LocomotionCardWrapper implements Service
 	public void setY(int y) throws SerialConnexionException
 	{
 		float floatY=(float)y;//On transtype car la serie veut des Floats 
-		String chaines[] = {"cy", Float.toString(floatY)};
+		String chaines[] = {"cy", String.format(Locale.US, "%.3f", floatY)};
 		locomotionCardSerial.communiquer(chaines, 0);	
 	}
 	
@@ -198,8 +219,9 @@ public class LocomotionCardWrapper implements Service
 	 */
 	public void setOrientation(double orientation) throws SerialConnexionException
 	{
+		//log.debug("setOrientation "+orientation);
 		float floatOrientation =(float) orientation; //On transtype car la serie veut des Floats (T_T)
-		String chaines[] = {"co", Float.toString(floatOrientation)};
+		String chaines[] = {"co", String.format(Locale.US, "%.3f", floatOrientation)};
 		locomotionCardSerial.communiquer(chaines, 0);
 	}
 	
@@ -231,6 +253,15 @@ public class LocomotionCardWrapper implements Service
 	}
 
 	/**
+	 * Désactive l'asservissement en vitesse du robot
+	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
+	 */
+	public void disableSpeedFeedbackLoop() throws SerialConnexionException
+	{
+		locomotionCardSerial.communiquer("cv0", 0);
+	}
+
+	/**
 	 * Désactive l'asservissement en rotation du robot
 	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
 	 */
@@ -247,7 +278,7 @@ public class LocomotionCardWrapper implements Service
 	public void setTranslationnalSpeed(float speed) throws SerialConnexionException
 	{
 		// envoie a la carte d'asservissement le nouveau maximum du pwm
-		String chaines[] = {"ctv", Float.toString(speed)};
+		String chaines[] = {"ctv", String.format(Locale.US, "%.3f", speed)};
 		locomotionCardSerial.communiquer(chaines, 0);			
 	}
 
@@ -259,34 +290,45 @@ public class LocomotionCardWrapper implements Service
 	public void setRotationnalSpeed(double rotationSpeed) throws SerialConnexionException
 	{
 		// envoie a la carte d'asservissement le nouveau maximum du pwm
-		String chaines[] = {"crv", Double.toString(rotationSpeed)};
+		String chaines[] = {"crv", String.format(Locale.US, "%.3f", (float)rotationSpeed)};
 		locomotionCardSerial.communiquer(chaines, 0);
 	}
 	
-	/**
-	 * envois a la carte d'asservissement de nouvelles valeurs pour les correcteurs et un nouveau maximum pour les pwm lors d'une translation
-	 * @param kp nouvelle valeur du correcteur proportionnel
-	 * @param kd nouvelle valeur du correcteur dérivé 
-	 * @param pwm_max a nouvelle valeur maximum que peut prenvent prendre les pwm des moteurs lors d'une translation
-	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
-	 */
-	public void changeTranslationnalFeedbackParameters(double kp, double kd, int pwm_max) throws SerialConnexionException
+
+
+    /**
+     * Change le type de mouvement forcé/normal
+     * @param choice true pour forcer les mouvements
+     */
+	public synchronized void setForceMovement(boolean choice) throws SerialConnexionException
 	{
-		String chaines[] = {"ctv", Float.toString((float)kp), Float.toString((float)kd), Float.toString((float)pwm_max)};
-		locomotionCardSerial.communiquer(chaines, 0);
+		if(choice)
+		{
+			String chaines[] = {"efm"};
+			locomotionCardSerial.communiquer(chaines, 0);
+		}
+		else
+		{
+			String chaines[] = {"dfm"};
+			locomotionCardSerial.communiquer(chaines, 0);
+		}
 	}
 
 	/**
-	 * envoie a la carte d'asservissement de nouvelles valeurs pour les correcteurs et un nouveau maximum pour les pwm lors d'une rotation
-	 * @param kp nouvelle valeur du correcteur proportionnel
-	 * @param kd nouvelle valeur du correcteur dérivé 
-	 * @param pwm_max a nouvelle valeur maximum que peut prenvent prendre les pwm des moteurs lors d'une rotation
-	 * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
-	 */
-	public void changeRotationnalFeedbackParameters(double kp, double kd, int pwm_max) throws SerialConnexionException
+	 * Change l'accélération en plus fluide mais plus lente
+     */
+	public synchronized void setSmoothAcceleration(boolean choice) throws SerialConnexionException
 	{
-		String chaines[] = {"crv", Float.toString((float)kp), Float.toString((float)kd), Integer.toString(pwm_max)};
-		locomotionCardSerial.communiquer(chaines, 0);
+		if(choice)
+		{
+			String chaines[] = {"ssa"};
+			locomotionCardSerial.communiquer(chaines, 0);
+		}
+		else
+		{
+			String chaines[] = {"sva"};
+			locomotionCardSerial.communiquer(chaines, 0);
+		}
 	}
 
 
@@ -303,8 +345,14 @@ public class LocomotionCardWrapper implements Service
 		String[] infosBuffer = locomotionCardSerial.communiquer("?xyo", 3);
 		float[] parsedInfos = new float[3];
 		for(int i = 0; i < 3; i++)
-		    parsedInfos[i] = Float.parseFloat(infosBuffer[i]);
-
+		{
+			try{
+			parsedInfos[i] = Float.parseFloat(infosBuffer[i]);
+			} catch (NumberFormatException e)
+			{
+				return null;
+			}
+		}
 		return parsedInfos;
 	}
 
@@ -351,4 +399,11 @@ public class LocomotionCardWrapper implements Service
 		return parsedInfos;
 	}
 
+    /**
+     * Active l'asservissement en vitesse du robot
+     * @throws SerialConnexionException en cas de problème de communication avec la carte d'asservissement
+     */
+	public void enableSpeedFeedbackLoop() throws SerialConnexionException {
+		locomotionCardSerial.communiquer("cv1", 0);
+	}
 }

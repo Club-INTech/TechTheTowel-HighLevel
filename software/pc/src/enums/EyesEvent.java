@@ -11,5 +11,6 @@ public enum EyesEvent
     BLOCKED,
     ENNEMY,
     SUCCESS,
+    TEST,
     END;
 }

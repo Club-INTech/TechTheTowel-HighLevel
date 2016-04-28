@@ -19,6 +19,7 @@ import strategie.GameState;
 import strategie.Strategie;
 import table.Table;
 import threads.ThreadManager;
+import threads.ThreadTimer;
 import utils.CheckUp;
 import utils.Config;
 import utils.Log;
@@ -212,6 +213,11 @@ public class Container
 																);
 		else if(serviceRequested == ServiceNames.STRATEGIE)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new Strategie(
+																	(Log)getService(ServiceNames.LOG),
+																	(Config)getService(ServiceNames.CONFIG),
+																	(Table)getService(ServiceNames.TABLE),
+																	(GameState<RobotReal>)getService(ServiceNames.GAME_STATE),
+																	(ThreadTimer)getService(ServiceNames.THREAD_TIMER)
 																);
 		
 		else if(serviceRequested == ServiceNames.CHECK_UP)
@@ -233,9 +239,9 @@ public class Container
 																	);
 		else if(serviceRequested == ServiceNames.THREAD_EYES)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)threadManager.getThreadEyes(
-					(Config)getService(ServiceNames.CONFIG),
-					(Log)getService(ServiceNames.LOG)
-			);
+																	(Config)getService(ServiceNames.CONFIG),
+																	(Log)getService(ServiceNames.LOG)
+																	);
 		
 		// si le service demandé n'est pas connu, alors on log une erreur.
 		else
@@ -275,6 +281,7 @@ public class Container
 		}
 		try {
 			getService(ServiceNames.THREAD_TIMER);
+			//getService(ServiceNames.THREAD_INTERFACE);
            // getService(ServiceNames.THREAD_EYES);
 		} catch (Exception e) {
 			e.printStackTrace();

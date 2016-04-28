@@ -5,6 +5,7 @@ import exceptions.PathNotFoundException;
 import exceptions.PointInObstacleException;
 import smartMath.Vec2;
 import table.Table;
+import table.obstacles.Obstacle;
 import table.obstacles.ObstacleCircular;
 import table.obstacles.ObstacleRectangular;
 import utils.Log;
@@ -91,11 +92,20 @@ public class PathDingDing implements Service
 	 * @param end noeud d'arrivée
 	 * @return Liste de noeuds (Node) à parcourir ; exception si échec
 	 */
-	public ArrayList<Node> computePath(Vec2 start, Vec2 end) throws PointInObstacleException, PathNotFoundException
+	public ArrayList<Node> computePath(Vec2 start, Vec2 end, ArrayList<Obstacle> toIgnore) throws PointInObstacleException, PathNotFoundException
 	{
 		long time = System.currentTimeMillis();
 		log.debug("Appel au PDD vers : "+end);
 
+		for(Obstacle i : toIgnore)
+		{
+			if(i instanceof ObstacleCircular)
+				table.getObstacleManager().removeObstacle((ObstacleCircular)i);
+			else if(i instanceof ObstacleRectangular)
+				table.getObstacleManager().removeObstacle((ObstacleRectangular)i);
+		}
+
+		this.graph = new Graph(table, log); //On recréé le graphe, pas si overkill que cela à cause des changements de rayon
 
 		//On vide les listes de nodes pour un nouveau calcul
 		this.initialise();
@@ -111,7 +121,9 @@ public class PathDingDing implements Service
 		if(end.equals(start))
         {
 			log.critical("Appel pathDingDing avec arrivée=départ !");
-			return new ArrayList<Node>();
+			ArrayList<Node> res = new ArrayList<>();
+			res.add(new Node(end));
+			return res;
 		}
 
         if(!graph.isObstructed(end, start))
@@ -145,6 +157,13 @@ public class PathDingDing implements Service
 		if(graph.isInObstacle(end))
 		{
 			log.critical("PDD : noeud d'arrivée isolé (obstacle ?)");
+            for(Obstacle i : toIgnore)
+            {
+                if(i instanceof ObstacleCircular)
+                    table.getObstacleManager().addObstacle((ObstacleCircular)i);
+                else if(i instanceof ObstacleRectangular)
+                    table.getObstacleManager().addObstacle((ObstacleRectangular)i);
+            }
 			throw new PointInObstacleException(endNode, graph.getObstacleManager());
 		}
 		
@@ -175,7 +194,7 @@ public class PathDingDing implements Service
 					graph.getObstacleManager().removeObstacle(prob);
 					
 					// Relance de l'A* sans l'obstacle problématique
-					ArrayList<Node> path = this.computePath(start, end);
+					ArrayList<Node> path = this.computePath(start, end, toIgnore);
 					
 					// Rajout de l'obstacle en fin de calcul
 					graph.getObstacleManager().addObstacle(prob);
@@ -198,7 +217,7 @@ public class PathDingDing implements Service
 					graph.getObstacleManager().removeObstacle(prob);
 					
 					// Relance de l'A* sans l'obstacle problématique
-					ArrayList<Node> path = this.computePath(start, end);
+					ArrayList<Node> path = this.computePath(start, end,toIgnore);
 					
 					// Rajout de l'obstacle en fin de calcul
 					graph.getObstacleManager().addObstacle(prob);
@@ -318,6 +337,13 @@ public class PathDingDing implements Service
 			if(openNodes.isEmpty())
 			{
 				log.critical("pathDingDing : Le noeud demandé ("+endNode.getPosition().toString()+") est inacessible.");
+                for(Obstacle i : toIgnore)
+                {
+                    if(i instanceof ObstacleCircular)
+                        table.getObstacleManager().addObstacle((ObstacleCircular)i);
+                    else if(i instanceof ObstacleRectangular)
+                        table.getObstacleManager().addObstacle((ObstacleRectangular)i);
+                }
 				throw new PathNotFoundException();
 			}
 
@@ -370,8 +396,14 @@ public class PathDingDing implements Service
 			}
 		}
 
-
         // ET C'EST FUCKING TERMINE !!!!
+        for(Obstacle i : toIgnore)
+        {
+            if(i instanceof ObstacleCircular)
+                table.getObstacleManager().addObstacle((ObstacleCircular)i);
+            else if(i instanceof ObstacleRectangular)
+                table.getObstacleManager().addObstacle((ObstacleRectangular)i);
+        }
 		return result;
 	}
 	
@@ -456,8 +488,8 @@ public class PathDingDing implements Service
      * @param end noeud d'arrivée
      * @return Liste de noeuds à parcourir (Vec2) ; exception si échec
      */
-    public ArrayList<Vec2> computePathVec2(Vec2 start, Vec2 end) throws PointInObstacleException, PathNotFoundException {
-        ArrayList<Node> path = computePath(start, end);
+    public ArrayList<Vec2> computePathVec2(Vec2 start, Vec2 end, ArrayList<Obstacle> toIgnore) throws PointInObstacleException, PathNotFoundException {
+        ArrayList<Node> path = computePath(start, end, toIgnore);
         ArrayList<Vec2> res = new ArrayList<Vec2>();
 
         for(int i=0; i<path.size() ; i++)
@@ -479,6 +511,14 @@ public class PathDingDing implements Service
 	public void updateConfig() 
 	{
 		// TODO update the config
+	}
+
+	/**
+	 * Recréé le graphe à zéro
+	 */
+	public void recomputeGraph()
+	{
+		this.graph = new Graph(table, log);
 	}
 }
 

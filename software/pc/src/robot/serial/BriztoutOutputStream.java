@@ -47,5 +47,6 @@ public class BriztoutOutputStream extends BufferedOutputStream
         // Dans la doc, count est la taille "exploitable" en octets du buffer, à chaque fois qu'il envoie un octet,
         // count est décrémenté, jusqu'à ce qu'il vale 0. Puis on arrête d'envoyer, même si le buffer n'est pas vide.
         this.count = 0;
+        this.buf = new byte[bufferSize];
     }
 }

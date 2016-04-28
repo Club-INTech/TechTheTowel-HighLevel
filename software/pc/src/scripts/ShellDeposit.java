@@ -9,6 +9,7 @@ import exceptions.BadVersionException;
 import exceptions.BlockedActuatorException;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
+import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import hook.types.HookFactory;
@@ -16,15 +17,12 @@ import robot.Robot;
 import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
-import table.Shell;
 import table.Table;
-import table.obstacles.ObstacleManager;
 import table.obstacles.ObstacleRectangular;
 import utils.Config;
 import utils.Log;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 public class ShellDeposit extends AbstractScript
 {
@@ -45,10 +43,11 @@ public class ShellDeposit extends AbstractScript
     }
 
     @Override
-    public void execute(int versionToExecute, GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException {
-        if(versionToExecute == 0)
+    public void execute(int versionToExecute, GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException,UnableToMoveException, BlockedActuatorException, SerialConnexionException
+    {
+        try
         {
-            try {
+        	if(versionToExecute == 0) {
             	
             	// une fois à l'entrée du script, on a lâché les coquillages
                 actualState.robot.shellsOnBoard = false;
@@ -57,7 +56,7 @@ public class ShellDeposit extends AbstractScript
                 actualState.table.shellsObtained+=1;
                 
                 // on rajoute le tapis en tant qu'obstacle pour na pas passer dessus par la suite
-                actualState.table.getObstacleManager().addObstacle(new ObstacleRectangular(new Vec2(1350,850), 300 + 2*actualState.robot.getRobotRadius(), 500 + 2*actualState.robot.getRobotRadius()));
+               // actualState.table.getObstacleManager().addObstacle(new ObstacleRectangular(new Vec2(1350,850), 300 + 2*actualState.robot.getRobotRadius(), 500 + 2*actualState.robot.getRobotRadius()));
                 
                 // on s'oriente vers pi/2
                 actualState.robot.turn(Math.PI/2);
@@ -84,13 +83,17 @@ public class ShellDeposit extends AbstractScript
                 actualState.robot.doorIsOpen = false;
                 
                 // on réduit nle rayon du rbot à celui initial
-                actualState.robot.setRobotRadius(TechTheSand.retractedRobotRadius);
-            } catch (Exception e) {
-                e.printStackTrace();
+                actualState.changeRobotRadius(TechTheSand.retractedRobotRadius);
+                actualState.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
+                actualState.robot.setDoor(true);
+
             }
         }
-
-    }
+        catch (Exception e) 
+        {
+            finalize(actualState,e);
+        }
+    } 
 
     @Override
     public int remainingScoreOfVersion(int version, GameState<?> state) {
@@ -109,36 +112,52 @@ public class ShellDeposit extends AbstractScript
     }
 
     @Override
-    public Circle entryPosition(int version, int ray, Vec2 robotPosition) throws BadVersionException {
+    public Circle entryPosition(int version, int ray, Vec2 robotPosition) throws BadVersionException 
+    {
         if (version == 0 )
         {
             return new Circle(new Vec2(Table.entryPosition.x-100, Table.entryPosition.y));
         }
         else
         {
-            //TODO jetter une exception
             log.debug("erreur : mauvaise version de script");
             throw new BadVersionException();
         }
     }
 
     @Override
-    public void finalize(GameState<?> state) throws UnableToMoveException, SerialFinallyException {
-    	
+    public void finalize(GameState<?> state, Exception e) throws SerialFinallyException 
+    {
+    	log.debug("Exception " + e + " dans Shell Deposit : Lancement du Finalize !");
     	// on tente de ranger la porte avec changement de rayon
     	try
     	{
-    		state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
-    		if (state.robot.shellsOnBoard == true)
-    		{
-    			state.robot.setRobotRadius(TechTheSand.middleRobotRadius);
-    		}
-    		else
-    		{
-    			state.robot.setRobotRadius(TechTheSand.retractedRobotRadius);
-    		}
+    		
+            if (state.robot.shellsOnBoard)
+            {
+                state.changeRobotRadius(TechTheSand.expandedRobotRadius);
+                state.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
+            }
+            else
+            {
+                state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
+                if(state.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED)) 
+                {
+                    state.changeRobotRadius(TechTheSand.retractedRobotRadius);
+                    state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
+                    state.robot.setDoor(false);
+                }
+                else
+                {
+                	state.robot.useActuator(ActuatorOrder.STOP_DOOR, true);
+                	state.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
+                    state.robot.shellsOnBoard = true;
+                    state.robot.setDoor(true);
+                }
+            }
+            
     	}
-    	catch (Exception e)
+    	catch (SerialConnexionException ex)
     	{
     		log.debug("ShellDeposit : Impossible de ranger la porte !");
     		throw new SerialFinallyException();

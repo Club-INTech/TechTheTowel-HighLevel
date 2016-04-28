@@ -171,5 +171,11 @@ public class ObstacleRectangular extends Obstacle
 		// Sinon, on est dans l'obstacle
 		return 0f;
 	}
+
+	public void changeDim(int sizeX, int sizeY)
+	{
+		this.sizeX=sizeX;
+		this.sizeY=sizeY;
+	}
 	
 }

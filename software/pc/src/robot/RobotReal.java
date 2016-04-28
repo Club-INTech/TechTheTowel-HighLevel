@@ -7,6 +7,7 @@ import hook.Hook;
 import pathDingDing.PathDingDing;
 import robot.cardsWrappers.ActuatorCardWrapper;
 import robot.cardsWrappers.SensorsCardWrapper;
+import smartMath.Arc;
 import smartMath.Vec2;
 import utils.Config;
 import utils.Log;
@@ -26,6 +27,7 @@ public class RobotReal extends Robot
 	
 	private SymmetrizedActuatorOrderMap mActuatorCorrespondenceMap = new SymmetrizedActuatorOrderMap();
 	private SymmetrizedTurningStrategy mTurningStrategyCorrespondenceMap = new SymmetrizedTurningStrategy();
+	private SymmetrizedSensorNamesMap mSensorNamesMap = new SymmetrizedSensorNamesMap();
 	/** Système de locomotion a utiliser pour déplacer le robot */
 	private Locomotion mLocomotion;
 	
@@ -55,18 +57,62 @@ public class RobotReal extends Robot
 	{
 		//redondance avec useActuator qui log.debug deja
 		//log.debug("appel de RobotReal.useActuator(" + order + "," + waitForCompletion + ")", this);
+        int door = (order == ActuatorOrder.OPEN_DOOR ? 2 : 0) + (order == ActuatorOrder.CLOSE_DOOR ? 1 : 0);
 		if(symmetry)
 			order = mActuatorCorrespondenceMap.getSymmetrizedActuatorOrder(order);
 		mActuatorCardWrapper.useActuator(order);
-		
-		if(waitForCompletion)
+
+        if(waitForCompletion && door == 1)
+        {
+            while(!getContactSensorValue(ContactSensors.DOOR_CLOSED) && !getContactSensorValue(ContactSensors.DOOR_BLOCKED))
+			{
+				try
+                {
+					Thread.sleep(100);
+				}
+				catch (Exception e)
+				{
+
+				}
+			}
+        }
+        else if(waitForCompletion && door == 2)
+        {
+            long time = System.currentTimeMillis();
+            while(!getContactSensorValue(ContactSensors.DOOR_OPENED) && !getContactSensorValue(ContactSensors.DOOR_BLOCKED))
+			{
+				try
+				{
+					Thread.sleep(100);
+				}
+				catch (Exception e)
+				{
+
+				}
+			}
+        }
+		else if(waitForCompletion)
 		{
 			sleep(order.getDuration());
 		}
+
+		//=============================
+		// Gestion pourrave des portes
+		//=============================
+
+		if(waitForCompletion && door != 0 && getContactSensorValue(ContactSensors.DOOR_OPENED))
+			doorIsOpen = true;
+		else if(waitForCompletion && door != 0 && getContactSensorValue(ContactSensors.DOOR_CLOSED))
+			doorIsOpen = false;
+		else if(waitForCompletion && door != 0)
+			doorIsOpen = true; //Cas pourri où la porte s'est bloquée
+		else if(!waitForCompletion && door != 0)
+			doorIsOpen = (door == 2);
+
 	}
 	
 	@Override
-	public int getUSSensorValue (USsensors sensor) throws SerialConnexionException
+	public ArrayList<Integer> getUSSensorValue (USsensors sensor) throws SerialConnexionException
 	{
 
 		// si il n'y a pas de symétrie, on renvoie la valeur brute du bas niveau
@@ -90,7 +136,7 @@ public class RobotReal extends Robot
 					return mSensorsCardWrapper.getContactSensorValue(sensor);
 				else
 				{
-					//TODO symetriser le capteur gauche/droite
+					sensor = mSensorNamesMap.getSymmetrizedContactSensorName(sensor);
 					
 					/* attention si les capteurs sont en int[] il faut symétriser ce int[] */
 					
@@ -127,8 +173,30 @@ public class RobotReal extends Robot
 	{	
 		log.debug("appel de RobotReal.moveLengthwise(" + distance + "," + hooksToConsider + "," + expectsWallImpact + ")");
 		moveLengthwise(distance, hooksToConsider, expectsWallImpact, true);
-	}	
-	
+	}
+
+    /**
+     * Ordonne le déplacement selon un arc
+     * @param arc l'arc
+     * @param hooks les hooks à gérer
+     */
+	public void moveArc(Arc arc, ArrayList<Hook> hooks) throws UnableToMoveException
+	{
+		mLocomotion.moveArc(arc,hooks);
+	}
+
+    @Override
+    public void setBasicDetection(boolean basicDetection)
+    {
+        mLocomotion.setBasicDetection(basicDetection);
+    }
+
+    @Override
+	public void setUSvalues(ArrayList<Integer> val)
+	{
+		mLocomotion.setUSvalues(val);
+	}
+
 	@Override
     public void moveLengthwiseWithoutDetection(int distance, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
 	{	
@@ -218,8 +286,27 @@ public class RobotReal extends Robot
     		throw e;
     	}
     }
-    
-    @Override
+
+	@Override
+	public void setForceMovement(boolean state)
+	{
+		try {
+			mLocomotion.setForceMovement(state);
+		} catch (SerialConnexionException e) {
+			e.printStackTrace();
+			log.critical("Erreur critique série : Forcing non changé !");
+			return;
+		}
+		this.isForcing = true;
+	}
+
+	@Override
+	public void setSmoothAcceleration(boolean state) throws SerialConnexionException
+	{
+		this.mLocomotion.setSmoothAcceleration(state);
+	}
+
+	@Override
     public void turn(double angle, ArrayList<Hook> hooksToConsider, boolean expectsWallImpact) throws UnableToMoveException
     {
 		log.debug("appel de RobotReal.turn(" + angle + "," + hooksToConsider + "," + expectsWallImpact + ")");
@@ -305,6 +392,12 @@ public class RobotReal extends Robot
 	public void enableFeedbackLoop() throws SerialConnexionException
 	{
 		mLocomotion.enableFeedbackLoop();		
+	}
+
+	@Override
+	public void disableFeedbackLoop() throws SerialConnexionException
+	{
+		mLocomotion.disableFeedbackLoop();
 	}
 	
 	/* 
@@ -400,5 +493,6 @@ public class RobotReal extends Robot
 	{
 		return mLocomotion.isRobotMovingBackward;
 	}
+
 
 }
