@@ -152,11 +152,11 @@ public class SerialConnexion implements SerialPortEventListener, Service
             input = serialPort.getInputStream();
             output = serialPort.getOutputStream();
 
-            try {
+           /* try {
                 serialPort.addEventListener(this);
             } catch (TooManyListenersException e) {
                 e.printStackTrace();
-            }
+            }*/
 
         }
         catch (Exception e)
@@ -346,6 +346,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
             {
                 serialPort.notifyOnDataAvailable(false);
 
+
                 //Evacuation de l'eventuel buffer indÃƒÂ©sirable
                 output.flush();
 
@@ -354,16 +355,16 @@ public class SerialConnexion implements SerialPortEventListener, Service
                 ping[1] = (byte)'\r';
                 output.write(ping);
 
-                Sleep.sleep(100);
+                Sleep.sleep(1000);
 
                 while(input.available() != 0)
                 {
-                    if(input.read() == 0)
+                    if(input.read() == 48)
                     {
-                        return "OK";
+                       // serialPort.notifyOnDataAvailable(true);
+                        return "0";
                     }
                 }
-                serialPort.notifyOnDataAvailable(true);
 
             }
             catch (Exception e)
