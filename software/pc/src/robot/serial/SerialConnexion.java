@@ -165,14 +165,14 @@ public class SerialConnexion implements SerialPortEventListener, Service
         }
 
         // permet d'avoir un readLine non bloquant
-        try
+   /*     try
         {
             serialPort.enableReceiveTimeout(1000);
         }
         catch (UnsupportedCommOperationException e)
         {
             log.critical("Catch de "+e+" dans initialize");
-        }
+        }*/
 
         this.port_name = port_name;
         this.baudrate = baudrate;
@@ -455,7 +455,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
                     if(System.currentTimeMillis() - time > TIME_OUT)
                     {
                         log.critical("TRO CON !!");
-                        return " ";
+                        return (res+(char)260);
                     }
                 }
 
@@ -473,7 +473,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
                         if(System.currentTimeMillis() - time > TIME_OUT)
                         {
                             log.critical("TRO CON !!");
-                            return " ";
+                            return (res+(char)260);
                         }
                     }
                 }
@@ -484,7 +484,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
                     if(System.currentTimeMillis() - time > TIME_OUT)
                     {
                         log.critical("TRO CON !!");
-                        return " ";
+                        return (res+(char)260);
                     }
                 }
 
@@ -498,7 +498,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
                         if(System.currentTimeMillis() - time > TIME_OUT)
                         {
                             log.critical("TRO CON !!");
-                            return " ";
+                            return (res+(char)260);
                         }
                     }
                 }
@@ -508,6 +508,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
                 while (ping() == null) {
                     Sleep.sleep(100);
                 }
+                res+=(char)260;
             }
             return res;
         }

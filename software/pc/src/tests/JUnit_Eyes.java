@@ -33,7 +33,7 @@ public class JUnit_Eyes extends JUnit_Test
         log.debug("BLOCKED");
         Thread.sleep(3000);
         eyes.setEvent(EyesEvent.END);
-        log.debug("END")
+        log.debug("END");
         Thread.sleep(3000);
         eyes.setEvent(EyesEvent.ENNEMY);
         log.debug("ENNEMY");
