@@ -358,7 +358,6 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.table.getObstacleManager().freePoint(new Vec2(0, 1990));
                 stateToConsider.table.getObstacleManager().freePoint(new Vec2(860+300, 1100-300));
 
-				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 
                 try {
                     stateToConsider.robot.turn(0);
@@ -380,7 +379,9 @@ public class TechTheSand extends AbstractScript
                     e.printStackTrace();
                 }
 
-				stateToConsider.robot.setSmoothAcceleration(false);
+                stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+
+                stateToConsider.robot.setSmoothAcceleration(false);
                 stateToConsider.robot.setBasicDetection(false);
 
 
