@@ -13,6 +13,7 @@ import hook.types.HookYGreater;
 import robot.Robot;
 import smartMath.Arc;
 import smartMath.Circle;
+import smartMath.Geometry;
 import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
@@ -81,7 +82,10 @@ public class CloseDoors extends AbstractScript
 				stateToConsider.table.extDoorClosed = true;
 				stateToConsider.table.intDoorClosed = true;
 
-				stateToConsider.robot.setPosition(new Vec2(stateToConsider.robot.getPosition().x,1840));
+				if(Geometry.isBetween(stateToConsider.robot.getPosition().y, 1800, 1880))
+					stateToConsider.robot.setPosition(new Vec2(stateToConsider.robot.getPosition().x,1840));
+				else
+					log.debug("Position trop éloignée pour se recaler en y (cylindre ?)");
 
                 stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 
@@ -97,7 +101,10 @@ public class CloseDoors extends AbstractScript
 
 				stateToConsider.robot.moveLengthwiseWithoutDetection(-900, hooksToConsider, true);
 
-				stateToConsider.robot.setPosition(new Vec2(1350, stateToConsider.robot.getPosition().y));
+                if(Geometry.isBetween(stateToConsider.robot.getPosition().x, 1310, 1390))
+				    stateToConsider.robot.setPosition(new Vec2(1350, stateToConsider.robot.getPosition().y));
+                else
+                    log.debug("Position trop éloignée pour se recaler en x (cylindre ?)");
 
 				stateToConsider.robot.moveLengthwise(300, hooksToConsider, false);
 

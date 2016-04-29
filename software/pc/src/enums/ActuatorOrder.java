@@ -35,7 +35,7 @@ public enum ActuatorOrder
 	MIDDLE_POSITION("mpl"),
 	
 	/**Bras aimanté pour lâcher les poissons*/
-	MAGNET_DOWN("lmd"),
+	MAGNET_DOWN("lmd", 1500),
 	
 	/**Bras aimanté rangé*/
 	MAGNET_UP("lmu"),
