@@ -368,6 +368,7 @@ public class TechTheSand extends AbstractScript
 
                 stateToConsider.robot.setForceMovement(false);
 				stateToConsider.robot.setSmoothAcceleration(true);
+                stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 
                 try 
                 {
