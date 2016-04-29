@@ -282,8 +282,8 @@ public class SerialConnexion implements SerialPortEventListener, Service
                         communiquer(messages, nb_lignes_reponse); // On retente
                     }
                 }
-                while(available())
-                    read();
+               // while(available())
+                   // read();
             }
             catch (Exception e)
             {
@@ -449,7 +449,15 @@ public class SerialConnexion implements SerialPortEventListener, Service
             try {
                 int lastReceived;
 
-                while (!available()) ;
+                long time = System.currentTimeMillis();
+                while (!available())
+                {
+                    if(System.currentTimeMillis() - time > TIME_OUT)
+                    {
+                        log.critical("TRO CON !!");
+                        return " ";
+                    }
+                }
 
                 while (available()) {
 
@@ -459,16 +467,40 @@ public class SerialConnexion implements SerialPortEventListener, Service
 
                     res += (char) lastReceived;
 
-                    while (!available()) ;
+                    time = System.currentTimeMillis();
+                    while (!available())
+                    {
+                        if(System.currentTimeMillis() - time > TIME_OUT)
+                        {
+                            log.critical("TRO CON !!");
+                            return " ";
+                        }
+                    }
                 }
 
-                while(!available());
+                time = System.currentTimeMillis();
+                while (!available())
+                {
+                    if(System.currentTimeMillis() - time > TIME_OUT)
+                    {
+                        log.critical("TRO CON !!");
+                        return " ";
+                    }
+                }
 
                 while(available()) {
 
                     if (read() == 10)
                         break;
-                    while (!available()) ;
+                    time = System.currentTimeMillis();
+                    while (!available())
+                    {
+                        if(System.currentTimeMillis() - time > TIME_OUT)
+                        {
+                            log.critical("TRO CON !!");
+                            return " ";
+                        }
+                    }
                 }
 
             } catch (IOException e) {

@@ -8,6 +8,7 @@ import robot.cardsWrappers.LocomotionCardWrapper;
 import robot.cardsWrappers.SensorsCardWrapper;
 import robot.serial.SerialConnexion;
 import table.Table;
+import utils.Log;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -247,6 +248,7 @@ public class ThreadTimer extends AbstractThread
 			mLocomotionCardWrapper.disableSpeedFeedbackLoop();
 			ThreadEyes.forceEvent(EyesEvent.END);
 			//mLocomotionCardWrapper.shutdownSTM();
+			Log.stop();
 			SerialConnexion.shutdown = true;
 		}
 		catch (SerialConnexionException e)
