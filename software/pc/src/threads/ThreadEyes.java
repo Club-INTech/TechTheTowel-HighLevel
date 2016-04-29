@@ -219,7 +219,10 @@ public class ThreadEyes extends AbstractThread
                     if(j=='X')
                         res[k]=false;
                     else if(j=='O' || j=='0')
-                        res[k]=true;
+                        try {
+                            res[k] = true;
+                        }
+                        catch(IndexOutOfBoundsException e){log.debug("Bite de Franckfort : le fichier " + anim + "est naze.");}
                     else
                         throw new ThreadException(anim+" : BAD ANIM FILE !! erreur conversion : " + j );
                     k++;
