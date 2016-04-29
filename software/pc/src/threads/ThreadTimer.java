@@ -1,5 +1,6 @@
 package threads;
 
+import enums.ActuatorOrder;
 import enums.EyesEvent;
 import exceptions.serial.SerialConnexionException;
 import graphics.Window;
@@ -242,8 +243,9 @@ public class ThreadTimer extends AbstractThread
 
 		// fin du match : on eteint la STM
 		try 
-		{	
-			mLocomotionCardWrapper.disableRotationnalFeedbackLoop();
+		{
+            robot.useActuator(ActuatorOrder.MIDDLE_POSITION, false);
+            mLocomotionCardWrapper.disableRotationnalFeedbackLoop();
 			mLocomotionCardWrapper.disableTranslationnalFeedbackLoop();
 			mLocomotionCardWrapper.disableSpeedFeedbackLoop();
 			ThreadEyes.forceEvent(EyesEvent.END);

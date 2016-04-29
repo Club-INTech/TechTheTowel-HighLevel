@@ -386,7 +386,17 @@ public class Strategie implements Service
             }
             else if(state.table.extDoorClosed && state.table.intDoorClosed)
             {
-                return scriptmanager.getScript(ScriptNames.SHELL_GETTER);
+                //return scriptmanager.getScript(ScriptNames.SHELL_GETTER);
+                try {
+                    state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
+                    state.changeRobotRadius(TechTheSand.retractedRobotRadius);
+                    state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
+                    log.debug(state.robot.getRobotRadius());
+                    state.robot.setDoor(false);
+                } catch (SerialConnexionException e) {
+                    e.printStackTrace();
+                }
+                return scriptmanager.getScript(ScriptNames.FISHING);
             }
             else if(castleTaken)
             {
