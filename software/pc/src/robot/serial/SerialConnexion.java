@@ -12,9 +12,12 @@ import gnu.io.UnsupportedCommOperationException;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.util.TooManyListenersException;
 
+import utils.Config;
 import utils.Log;
 import container.Service;
+import utils.Sleep;
 
 /**
  * Classe implÃƒÂ©mentant le concept d'une connexion sÃƒÂ©rie.
@@ -47,7 +50,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
     /**
      * Flux d'entÃ¯Â¿Â½e du port
      */
-    private BufferedReader input;
+    private InputStream input;
 
     /**
      * Flux de sortie du port
@@ -143,10 +146,17 @@ public class SerialConnexion implements SerialPortEventListener, Service
                     SerialPort.DATABITS_8,
                     SerialPort.STOPBITS_1,
                     SerialPort.PARITY_NONE);
+            serialPort.notifyOnDataAvailable(false);
 
             // ouverture des flux Input/Output
-            input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
+            input = serialPort.getInputStream();
             output = serialPort.getOutputStream();
+
+           /* try {
+                serialPort.addEventListener(this);
+            } catch (TooManyListenersException e) {
+                e.printStackTrace();
+            }*/
 
         }
         catch (Exception e)
@@ -192,7 +202,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
      * @return Un tableau contenant le message
      * @throws SerialConnexionException
      */
-    public String[] communiquer(String[] messages, int nb_lignes_reponse) throws SerialConnexionException
+    public synchronized String[] communiquer(String[] messages, int nb_lignes_reponse) throws SerialConnexionException
     {
         if(shutdown)
             throw new SerialConnexionException();
@@ -205,8 +215,10 @@ public class SerialConnexion implements SerialPortEventListener, Service
                 {
                     // affiche dans la console ce qu'on envois sur la sÃƒÂ©rie -> On cache ca, pour eviter le xy0? en permanence, mais ca peux etre interessant de le garder.
                     // ne jamais push un code avec cette ligne decommentee
-					//log.debug("Envoi serie : '" + m  + "'");
+					log.debug("Envoi serie : '" + m  + "'");
                     m += "\r";
+
+                    output.flush();
 
                     output.write(m.getBytes());
                     if(this.debug) 
@@ -223,15 +235,15 @@ public class SerialConnexion implements SerialPortEventListener, Service
                         nb_tests++;
 
                         // affiche dans la console ce qu'on lit sur la sÃƒÂ©rie
-                        String resposeFromCard = input.readLine();
+                        String resposeFromCard = readLine();
                         //TODO commenter.
-						//log.debug("Reception acquitement : '" + resposeFromCard  + "'");
+						log.debug("Reception acquitement : '" + resposeFromCard  + "'");
 
                         acquittement = resposeFromCard.charAt(0);
                         if (acquittement != '_')
                         {
-                            clearInputBuffer();
-                            output.write(m.getBytes());
+                           // clearInputBuffer();
+                            //output.write(m.getBytes());
                         }
                         if (nb_tests > 10)
                         {
@@ -244,7 +256,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
             catch (Exception e)
             {
                 log.critical("Ne peut pas parler a la carte " + this.name + " lancement de "+e);
-                clearInputBuffer();
+             //   clearInputBuffer();
                 communiquer(messages, nb_lignes_reponse);
             }
 
@@ -252,29 +264,31 @@ public class SerialConnexion implements SerialPortEventListener, Service
             {
                 for (int i = 0 ; i < nb_lignes_reponse; i++)
                 {
-                    inputLines[i] = input.readLine();
+                    inputLines[i] = readLine();
 
                     //TODO commenter.
-					//log.debug("Ligne "+i+": '"+inputLines[i]+"'");
+					log.debug("Ligne "+i+": '"+inputLines[i]+"'");
                     if(inputLines[i].equals(null) || inputLines[i].replaceAll(" ", "").equals("")|| inputLines[i].replaceAll(" ", "").equals("-"))
                     {
                         log.critical("='( , envoi de "+inputLines[i]+" envoi du message a nouveau");
-                        clearInputBuffer();
+                  //      clearInputBuffer();
                         communiquer(messages, nb_lignes_reponse);
                     }
 
                     if(!isAsciiExtended(inputLines[i]))
                     {
                         log.critical("='( , envoi de "+inputLines[i]+" envoi du message a nouveau");
-                        clearInputBuffer();
+                     //   clearInputBuffer();
                         communiquer(messages, nb_lignes_reponse); // On retente
                     }
                 }
+                while(available())
+                    read();
             }
             catch (Exception e)
             {
                 log.critical("Ne peut pas parler a la carte " + this.name + " lancement de "+e);
-                clearInputBuffer();
+            //    clearInputBuffer();
                 communiquer(messages, nb_lignes_reponse);
             }
             return inputLines;
@@ -299,6 +313,14 @@ public class SerialConnexion implements SerialPortEventListener, Service
      */
     public synchronized void serialEvent(SerialPortEvent oEvent)
     {
+     /*   try {
+            if(input.available() > 0)
+                notify();
+//			else
+//				log.debug("Fausse alerte");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
     }
 
     /**
@@ -324,31 +346,36 @@ public class SerialConnexion implements SerialPortEventListener, Service
     public synchronized String ping()
     {
         synchronized(output) {
-            String ping = null;
             try
             {
+                serialPort.notifyOnDataAvailable(false);
+
 
                 //Evacuation de l'eventuel buffer indÃƒÂ©sirable
-                output.write("CeciNestPasUnOrdre\r".getBytes());
-                //evacuation de l'acquittement "_"
-                input.readLine();
-                //evacuation de reponse "Ordre inonnu"
-                input.readLine();
+                output.flush();
 
-                //ping
-                output.write("?\r".getBytes());
-                //evacuation de l'acquittement
-                input.readLine();
+                byte[] ping = new byte[2];
+                ping[0] = (byte)'?';
+                ping[1] = (byte)'\r';
+                output.write(ping);
 
-                //recuperation de l'id de la carte
-                ping = input.readLine();
+                Sleep.sleep(1000);
+
+                while(input.available() != 0)
+                {
+                    if(input.read() == 48)
+                    {
+                        // serialPort.notifyOnDataAvailable(true);
+                        return "0";
+                    }
+                }
 
             }
             catch (Exception e)
             {
                 log.critical("Catch de "+e+" dans ping");
             }
-            return ping;
+            return null;
         }
     }
 
@@ -378,7 +405,85 @@ public class SerialConnexion implements SerialPortEventListener, Service
         return true;
     }
 
-    public synchronized void clearInputBuffer()
+    public boolean available() throws IOException
+    {
+        // tant qu'on est occupé, on dit qu'on ne reçoit rien
+       /* if(busy)
+            return false;*/
+        return input.available() != 0;
+    }
+
+    /**
+     * Lit un byte. On sait qu'il doit y en a avoir un.
+     * @return
+     * @throws IOException
+     */
+    public int read() throws IOException
+    {
+        synchronized (output) {
+            if (input.available() == 0)
+                Sleep.sleep(5); // On attend un tout petit peu, au cas où
+
+            if (input.available() == 0)
+                throw new IOException(); // visiblement on ne recevra rien de plus
+
+            byte out = (byte) input.read();
+
+       /* if(Config.debugSerieTrame)
+        {
+            String s = Integer.toHexString(out).toUpperCase();
+            if(s.length() == 1)
+                log.debug("Reçu : "+"0"+s);
+            else
+                log.debug("Reçu : "+s.substring(s.length()-2, s.length()));
+        }*/
+
+            return out & 0xFF;
+        }
+    }
+
+    public String readLine()
+    {
+        String res = "";
+        synchronized (output) {
+            try {
+                int lastReceived;
+
+                while (!available()) ;
+
+                while (available()) {
+
+                    if ((lastReceived = read()) == 13)
+                     //   if ((lastReceived = read()) == 10)
+                            break;
+
+                    res += (char) lastReceived;
+
+                    while (!available()) ;
+                }
+
+                while(!available());
+
+                while(available()) {
+
+                    if (read() == 10)
+                        break;
+                    while (!available()) ;
+                }
+
+            } catch (IOException e) {
+                log.debug("On a perdu la série !!");
+                while (ping() == null) {
+                    Sleep.sleep(100);
+                }
+            }
+            return res;
+        }
+    }
+
+
+
+  /*  public synchronized void clearInputBuffer()
     {
         log.debug("SerialConnexion : Tentative de clean du buffer d'input");
         try
@@ -395,5 +500,5 @@ public class SerialConnexion implements SerialPortEventListener, Service
                 e1.printStackTrace();
             }
         }
-    }
+    }*/
 }
