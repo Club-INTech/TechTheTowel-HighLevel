@@ -1045,7 +1045,7 @@ public class Fishing extends AbstractScript
 	public Circle entryPosition(int version, int ray, Vec2 robotPosition) throws BadVersionException
 	{
 		// Modifiable avec les phases de test
-		if (version == 0 || version == 4)
+		if (version == 0 || version == 3)
 		{
 			return new Circle(new Vec2(620,255));
 		}
@@ -1053,7 +1053,7 @@ public class Fishing extends AbstractScript
 		{
 			return new Circle(new Vec2(1030,355));
 		}
-		else if (version ==3)
+		else if (version ==4)
 		{
 			return new Circle(new Vec2(1180,450));
 		}
