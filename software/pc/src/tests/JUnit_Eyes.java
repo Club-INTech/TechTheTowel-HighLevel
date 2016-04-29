@@ -25,7 +25,15 @@ public class JUnit_Eyes extends JUnit_Test
         ThreadEyes eyes = (ThreadEyes) container.getService(ServiceNames.THREAD_EYES);
         container.startInstanciedThreads();
         Thread.sleep(5000);
-        eyes.forceEvent(EyesEvent.TEST);
+        eyes.forceEvent(EyesEvent.BEGIN);
+        Thread.sleep(3000);
+        eyes.forceEvent(EyesEvent.BLOCKED);
+        Thread.sleep(3000);
+        eyes.forceEvent(EyesEvent.END);
+        Thread.sleep(3000);
+        eyes.forceEvent(EyesEvent.ENNEMY);
+        Thread.sleep(3000);
+        eyes.forceEvent(EyesEvent.POWERON);
         while(true)
         {
             Thread.sleep(1000);
