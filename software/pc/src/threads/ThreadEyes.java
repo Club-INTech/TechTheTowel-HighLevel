@@ -222,7 +222,7 @@ public class ThreadEyes extends AbstractThread
                         try {
                             res[k] = true;
                         }
-                        catch(IndexOutOfBoundsException e){log.debug("Bite de Franckfort : le fichier " + anim + "est naze.");}
+                        catch(IndexOutOfBoundsException e){log.debug("Bite de Franckfort : le fichier " + anim + " est naze.");}
                     else
                         throw new ThreadException(anim+" : BAD ANIM FILE !! erreur conversion : " + j );
                     k++;
