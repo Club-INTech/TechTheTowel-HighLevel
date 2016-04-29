@@ -32,8 +32,8 @@ import java.util.ArrayList;
  * Script pour récuperer les poissons
  * Version 0 et 1: déplacement le long du bac pour récupérer les poissons, puis déplacement près du filet pour les lâcher. On suppose deux allers suffisant.
  * Version 2 : idem version 0 ou 1 avec déplacements supplémentaires au franchissement du filet pour éviter les blocages avec les vitres
- * Version 3 : intégration des hooks pour gagner en vitesse pour les mouvements des bras
- * Version 4 : intégration des trajectroires courbes pour gagner en vitesse sur le placement près du bac + hooks
+ * Version 4 : intégration des hooks pour gagner en vitesse pour les mouvements des bras
+ * Version 3 : intégration des trajectroires courbes pour gagner en vitesse sur le placement près du bac + hooks
  * @author CF, Discord
  */
 
