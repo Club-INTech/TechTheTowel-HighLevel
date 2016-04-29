@@ -620,12 +620,14 @@ public class Fishing extends AbstractScript
 				Hook hook1 = hookFactory.newXLesserHook(980);
 				hook1.addCallback(new Callback(new GetFish(), true, stateToConsider));
 				hooksToConsider.add(hook1);
-				
+
+				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+
 				// marche arrière pour se placer près du bac
 				stateToConsider.robot.moveLengthwise(-250, hooksToConsider, false);
 
 				// reprise de vitesse medium
-				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+				//stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 
 				// On s'oriente vers le côté ennemi
 				stateToConsider.robot.turn((Math.PI-0.03), hooksToConsider, false);
