@@ -24,16 +24,22 @@ public class JUnit_Eyes extends JUnit_Test
     public void test() throws SerialManagerException, ContainerException, InterruptedException {
         ThreadEyes eyes = (ThreadEyes) container.getService(ServiceNames.THREAD_EYES);
         container.startInstanciedThreads();
+        log.debug("Bite armée");
         Thread.sleep(5000);
-        eyes.forceEvent(EyesEvent.BEGIN);
+        eyes.setEvent(EyesEvent.BEGIN);
+        log.debug("BEGIN");
         Thread.sleep(3000);
-        eyes.forceEvent(EyesEvent.BLOCKED);
+        eyes.setEvent(EyesEvent.BLOCKED);
+        log.debug("BLOCKED");
         Thread.sleep(3000);
-        eyes.forceEvent(EyesEvent.END);
+        eyes.setEvent(EyesEvent.END);
+        log.debug("END")
         Thread.sleep(3000);
-        eyes.forceEvent(EyesEvent.ENNEMY);
+        eyes.setEvent(EyesEvent.ENNEMY);
+        log.debug("ENNEMY");
         Thread.sleep(3000);
-        eyes.forceEvent(EyesEvent.POWERON);
+        eyes.setEvent(EyesEvent.POWERON);
+        log.debug("POWER ON BIATCH");
         while(true)
         {
             Thread.sleep(1000);
