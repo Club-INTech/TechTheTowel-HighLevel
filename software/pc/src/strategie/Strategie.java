@@ -463,8 +463,8 @@ public class Strategie implements Service
             return 0;
         else if(script instanceof CloseDoors)
             return 3;
-        else if(script instanceof Fishing && state.robot.getPosition().x < 800)
-            return 3;
+      //  else if(script instanceof Fishing && state.robot.getPosition().x < 800)
+     //       return 3;
         else if(script instanceof Fishing)
             return 4;
         else if(script instanceof ShellGetter)
