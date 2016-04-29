@@ -150,7 +150,7 @@ public class ShellGetter extends AbstractScript
 
 
                 stateToConsider.robot.turn(-1*Math.PI/2);
-                stateToConsider.robot.moveLengthwise(650);
+                stateToConsider.robot.moveLengthwise(700);
 
                 stateToConsider.robot.setTurningStrategy(TurningStrategy.LEFT_ONLY);
 
@@ -343,7 +343,7 @@ public class ShellGetter extends AbstractScript
         // pour la version 0, on connait précisément l'endroit de départ du script
     	if (version == 0 || version ==-1 )
         {
-            return new Circle(new Vec2(1050,1050));
+            return new Circle(new Vec2(1000,1050));
         }
         
         // pour les autres version, on fait appel à une méthode déterminant l'entrée du scrpit
