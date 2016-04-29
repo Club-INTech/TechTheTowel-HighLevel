@@ -175,7 +175,7 @@ public class ThreadTimer extends AbstractThread
 
             if((System.currentTimeMillis()-ddm) >=12)
             {
-                log.debug("lol, i'm noob");
+               // log.debug("lol, i'm noob");
                 try {
                     out.write(Integer.toString(robot.getPosition().x));
                     out.write("\t");
