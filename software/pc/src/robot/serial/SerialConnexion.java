@@ -449,7 +449,12 @@ public class SerialConnexion implements SerialPortEventListener, Service
             try {
                 int lastReceived;
 
-                while (!available()) ;
+                long time = System.currentTimeMillis();
+                while (!available())
+                {
+                    if(System.currentTimeMillis() - time > TIME_OUT)
+                        return " ";
+                }
 
                 while (available()) {
 
@@ -459,16 +464,31 @@ public class SerialConnexion implements SerialPortEventListener, Service
 
                     res += (char) lastReceived;
 
-                    while (!available()) ;
+                    time = System.currentTimeMillis();
+                    while (!available())
+                    {
+                        if(System.currentTimeMillis() - time > TIME_OUT)
+                            return " ";
+                    }
                 }
 
-                while(!available());
+                time = System.currentTimeMillis();
+                while (!available())
+                {
+                    if(System.currentTimeMillis() - time > TIME_OUT)
+                        return " ";
+                }
 
                 while(available()) {
 
                     if (read() == 10)
                         break;
-                    while (!available()) ;
+                    time = System.currentTimeMillis();
+                    while (!available())
+                    {
+                        if(System.currentTimeMillis() - time > TIME_OUT)
+                            return " ";
+                    }
                 }
 
             } catch (IOException e) {
