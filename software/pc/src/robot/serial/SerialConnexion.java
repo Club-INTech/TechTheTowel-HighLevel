@@ -202,7 +202,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
      * @return Un tableau contenant le message
      * @throws SerialConnexionException
      */
-    public String[] communiquer(String[] messages, int nb_lignes_reponse) throws SerialConnexionException
+    public synchronized String[] communiquer(String[] messages, int nb_lignes_reponse) throws SerialConnexionException
     {
         if(shutdown)
             throw new SerialConnexionException();
@@ -215,8 +215,10 @@ public class SerialConnexion implements SerialPortEventListener, Service
                 {
                     // affiche dans la console ce qu'on envois sur la sÃƒÂ©rie -> On cache ca, pour eviter le xy0? en permanence, mais ca peux etre interessant de le garder.
                     // ne jamais push un code avec cette ligne decommentee
-					//log.debug("Envoi serie : '" + m  + "'");
+					log.debug("Envoi serie : '" + m  + "'");
                     m += "\r";
+
+                    output.flush();
 
                     output.write(m.getBytes());
                     if(this.debug) 
@@ -235,13 +237,13 @@ public class SerialConnexion implements SerialPortEventListener, Service
                         // affiche dans la console ce qu'on lit sur la sÃƒÂ©rie
                         String resposeFromCard = readLine();
                         //TODO commenter.
-						//log.debug("Reception acquitement : '" + resposeFromCard  + "'");
+						log.debug("Reception acquitement : '" + resposeFromCard  + "'");
 
                         acquittement = resposeFromCard.charAt(0);
                         if (acquittement != '_')
                         {
                            // clearInputBuffer();
-                            output.write(m.getBytes());
+                            //output.write(m.getBytes());
                         }
                         if (nb_tests > 10)
                         {
@@ -265,7 +267,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
                     inputLines[i] = readLine();
 
                     //TODO commenter.
-					//log.debug("Ligne "+i+": '"+inputLines[i]+"'");
+					log.debug("Ligne "+i+": '"+inputLines[i]+"'");
                     if(inputLines[i].equals(null) || inputLines[i].replaceAll(" ", "").equals("")|| inputLines[i].replaceAll(" ", "").equals("-"))
                     {
                         log.critical("='( , envoi de "+inputLines[i]+" envoi du message a nouveau");
@@ -280,6 +282,8 @@ public class SerialConnexion implements SerialPortEventListener, Service
                         communiquer(messages, nb_lignes_reponse); // On retente
                     }
                 }
+                while(available())
+                    read();
             }
             catch (Exception e)
             {
@@ -309,14 +313,14 @@ public class SerialConnexion implements SerialPortEventListener, Service
      */
     public synchronized void serialEvent(SerialPortEvent oEvent)
     {
-        try {
+     /*   try {
             if(input.available() > 0)
                 notify();
 //			else
 //				log.debug("Fausse alerte");
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     /**
@@ -361,7 +365,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
                 {
                     if(input.read() == 48)
                     {
-                       // serialPort.notifyOnDataAvailable(true);
+                        // serialPort.notifyOnDataAvailable(true);
                         return "0";
                     }
                 }
@@ -416,13 +420,14 @@ public class SerialConnexion implements SerialPortEventListener, Service
      */
     public int read() throws IOException
     {
-        if(input.available() == 0)
-            Sleep.sleep(5); // On attend un tout petit peu, au cas où
+        synchronized (output) {
+            if (input.available() == 0)
+                Sleep.sleep(5); // On attend un tout petit peu, au cas où
 
-        if(input.available() == 0)
-            throw new IOException(); // visiblement on ne recevra rien de plus
+            if (input.available() == 0)
+                throw new IOException(); // visiblement on ne recevra rien de plus
 
-        byte out = (byte) input.read();
+            byte out = (byte) input.read();
 
        /* if(Config.debugSerieTrame)
         {
@@ -433,34 +438,47 @@ public class SerialConnexion implements SerialPortEventListener, Service
                 log.debug("Reçu : "+s.substring(s.length()-2, s.length()));
         }*/
 
-        return out & 0xFF;
+            return out & 0xFF;
+        }
     }
 
     public String readLine()
     {
         String res = "";
-        try
-        {
-            int lastReceived;
+        synchronized (output) {
+            try {
+                int lastReceived;
 
-            while(available())
-            {
+                while (!available()) ;
 
-                if((lastReceived = read()) == 13)
-                    break;
+                while (available()) {
 
-                res += (char)lastReceived;
+                    if ((lastReceived = read()) == 13)
+                     //   if ((lastReceived = read()) == 10)
+                            break;
 
+                    res += (char) lastReceived;
+
+                    while (!available()) ;
+                }
+
+                while(!available());
+
+                while(available()) {
+
+                    if (read() == 10)
+                        break;
+                    while (!available()) ;
+                }
+
+            } catch (IOException e) {
+                log.debug("On a perdu la série !!");
+                while (ping() == null) {
+                    Sleep.sleep(100);
+                }
             }
-
-        } catch (IOException e) {
-            log.debug("On a perdu la série !!");
-            while(ping() == null)
-            {
-                Sleep.sleep(100);
-            }
+            return res;
         }
-        return res;
     }
 
 
