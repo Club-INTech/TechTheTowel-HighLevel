@@ -218,7 +218,7 @@ public class ThreadEyes extends AbstractThread
                 {
                     if(j=='X')
                         res[k]=false;
-                    else if(j=='O')
+                    else if(j=='O' || j=='0')
                         res[k]=true;
                     else
                         throw new ThreadException(anim+" : BAD ANIM FILE !!");
