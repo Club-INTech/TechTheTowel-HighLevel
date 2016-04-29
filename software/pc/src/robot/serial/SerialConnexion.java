@@ -282,8 +282,8 @@ public class SerialConnexion implements SerialPortEventListener, Service
                         communiquer(messages, nb_lignes_reponse); // On retente
                     }
                 }
-                while(available())
-                    read();
+               // while(available())
+                   // read();
             }
             catch (Exception e)
             {
@@ -453,7 +453,10 @@ public class SerialConnexion implements SerialPortEventListener, Service
                 while (!available())
                 {
                     if(System.currentTimeMillis() - time > TIME_OUT)
+                    {
+                        log.critical("TRO CON !!");
                         return " ";
+                    }
                 }
 
                 while (available()) {
@@ -468,7 +471,10 @@ public class SerialConnexion implements SerialPortEventListener, Service
                     while (!available())
                     {
                         if(System.currentTimeMillis() - time > TIME_OUT)
+                        {
+                            log.critical("TRO CON !!");
                             return " ";
+                        }
                     }
                 }
 
@@ -476,7 +482,10 @@ public class SerialConnexion implements SerialPortEventListener, Service
                 while (!available())
                 {
                     if(System.currentTimeMillis() - time > TIME_OUT)
+                    {
+                        log.critical("TRO CON !!");
                         return " ";
+                    }
                 }
 
                 while(available()) {
@@ -487,7 +496,10 @@ public class SerialConnexion implements SerialPortEventListener, Service
                     while (!available())
                     {
                         if(System.currentTimeMillis() - time > TIME_OUT)
+                        {
+                            log.critical("TRO CON !!");
                             return " ";
+                        }
                     }
                 }
 
