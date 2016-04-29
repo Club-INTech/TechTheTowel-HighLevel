@@ -379,7 +379,7 @@ public class Fishing extends AbstractScript
 				
 			}
 
-			else if(versionToExecute == 3)
+			else if(versionToExecute == 4)
 			{
 				// Vitesse rapide jusqu'au début de pêche
 				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
@@ -606,22 +606,29 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
 			}
 
-			else if (versionToExecute == 4)
+			else if (versionToExecute == 3)
 			{
 				// On prend une vitesse lente pour que les aimants puissent récupérer les poissons
 				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
-				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 				stateToConsider.robot.setBasicDetection(true);
-
-
+				
+				// On commence à s'orienter pour le créneau près du bord
+				stateToConsider.robot.turn(Math.PI - 0.24);
+				
 				// Création du hook de position pour baisser le bras à l'arrivée du robot, puis ajout dans la liste de hooks
 				Hook hook1 = hookFactory.newXLesserHook(980);
 				hook1.addCallback(new Callback(new GetFish(), true, stateToConsider));
 				hooksToConsider.add(hook1);
 				
-				// Mouvement du robot suivant un arc pour se placer près du bac
-				stateToConsider.robot.moveArc(new Arc(-420,467,-Math.PI/2,false),hooksToConsider);
-				stateToConsider.robot.turn(Math.PI-0.03);
+				// marche arrière pour se placer près du bac
+				stateToConsider.robot.moveLengthwise(-260, hooksToConsider, false);
+
+				// reprise de vitesse medium
+				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+
+				// On s'oriente vers le côté ennemi
+				stateToConsider.robot.turn((Math.PI-0.03), hooksToConsider, false);
 				
 				// On crée le hook de position pour lever le bras près du filet, puis ajout à la liste de hooks
 				Hook hook2 = hookFactory.newXLesserHook(680);
@@ -1038,7 +1045,7 @@ public class Fishing extends AbstractScript
 	public Circle entryPosition(int version, int ray, Vec2 robotPosition) throws BadVersionException
 	{
 		// Modifiable avec les phases de test
-		if (version == 0 || version == 3)
+		if (version == 0 || version == 4)
 		{
 			return new Circle(new Vec2(620,255));
 		}
@@ -1046,7 +1053,7 @@ public class Fishing extends AbstractScript
 		{
 			return new Circle(new Vec2(1030,355));
 		}
-		else if (version ==4)
+		else if (version ==3)
 		{
 			return new Circle(new Vec2(1180,450));
 		}
