@@ -226,18 +226,18 @@ public class Strategie implements Service
             if(state.robot.getAreFishesOnBoard())
             {
             	log.debug("Poisson à bord, appel au PDD pour dépose !");
-                PathDingDing path = new PathDingDing(table,log);
                 try
                 {
                 	if(isInTable())
                 	{
-                		path.computePath(state.robot.getPosition(), new Vec2(300,state.robot.getRobotRadius()+1), new ArrayList<Obstacle>());
+                		state.robot.moveToLocation(new Vec2(300,state.robot.getRobotRadius()+1), hooks, table);
                 	}
                 	else
                 	{
                 		log.debug("Robot trop proche pour l'appel au PDD, tentative de dégagement !");
                 		disengage(nextScript);
-                		path.computePath(state.robot.getPosition(), new Vec2(300,state.robot.getRobotRadius()+1), new ArrayList<Obstacle>());
+                		state.robot.moveToLocation(new Vec2(300,state.robot.getRobotRadius()+1), hooks, table);
+                		
                 	}
                 }
                 catch (Exception e)
