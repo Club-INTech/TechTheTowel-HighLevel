@@ -1010,7 +1010,7 @@ public class Fishing extends AbstractScript
 				stateToConsider.obtainedPoints += 10;
 				
 				// On modifie la condition du premier hook, même action, puis mise à jour dans la liste
-				hook1 = hookFactory.newXGreaterHook(700);
+				hook1 = hookFactory.newXGreaterHook(600);
 				hook1.addCallback(new Callback(new GetFish(), true, stateToConsider));
 				hooksToConsider.add(hook1);
 
