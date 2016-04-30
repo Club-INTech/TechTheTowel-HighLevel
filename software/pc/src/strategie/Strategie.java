@@ -358,7 +358,7 @@ public class Strategie implements Service
             {
                 return scriptmanager.getScript(ScriptNames.TECH_THE_SAND);
             }
-            else if(done || ThreadTimer.remainingTime() <= 30000)
+            else if((done || ThreadTimer.remainingTime() <= 30000) && !state.robot.getIsSandInside())
             {
                 try {
                     state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
@@ -371,7 +371,7 @@ public class Strategie implements Service
                 }
                 return scriptmanager.getScript(ScriptNames.FISHING);
             }
-            else if(gotShells)
+            else if(gotShells && !state.robot.getIsSandInside())
             {
                 try {
                     state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
@@ -384,7 +384,7 @@ public class Strategie implements Service
                 }
                 return scriptmanager.getScript(ScriptNames.FISHING);
             }
-            else if(state.table.extDoorClosed && state.table.intDoorClosed)
+            else if(state.table.extDoorClosed && state.table.intDoorClosed && !state.robot.getIsSandInside())
             {
                 //return scriptmanager.getScript(ScriptNames.SHELL_GETTER);
                 try {
