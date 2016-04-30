@@ -249,6 +249,8 @@ public class Castle extends AbstractScript
                 Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
                 stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 
+				stateToConsider.robot.useActuator(ActuatorOrder.START_AXIS_LEFT, false);
+
 				stateToConsider.robot.setForceMovement(true);
 
 				stateToConsider.robot.setBasicDetection(true);
@@ -281,6 +283,7 @@ public class Castle extends AbstractScript
                 stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 
 				stateToConsider.robot.useActuator(ActuatorOrder.STOP_AXIS, false);
+				stateToConsider.robot.useActuator(ActuatorOrder.STOP_AXIS_LEFT, false);
 
 				stateToConsider.robot.moveLengthwiseWithoutDetection(-300);
 
@@ -413,6 +416,7 @@ public class Castle extends AbstractScript
 		try
 		{
 			state.robot.useActuator(ActuatorOrder.STOP_AXIS, false);
+			state.robot.useActuator(ActuatorOrder.STOP_AXIS_LEFT, false);
             state.robot.setBasicDetection(false);
             state.robot.setForceMovement(false);
         }
