@@ -270,12 +270,13 @@ public class Castle extends AbstractScript
 					}
 				}
 
-				stateToConsider.robot.setBasicDetection(false);
 				stateToConsider.robot.setForceMovement(false);
 
 				stateToConsider.robot.turn(Math.PI);
+				stateToConsider.robot.setBasicDetection(false);
 
-                stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+
+				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 				stateToConsider.robot.moveLengthwiseWithoutDetection(600);
                 stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 

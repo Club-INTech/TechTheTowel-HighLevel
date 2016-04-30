@@ -53,6 +53,7 @@ public class DropTheSand extends AbstractScript
         	{
         		// On autorise la marche arrière au robot
         		actualState.robot.setDirectionStrategy(DirectionStrategy.FASTEST);
+                actualState.robot.setBasicDetection(true);
 
                 actualState.robot.turn(Math.PI);
 
@@ -61,7 +62,9 @@ public class DropTheSand extends AbstractScript
         		// On recule pour 'déposer' le sable
         		// TODO la distance est arbitraire, à modifier avec les phases de test
         		actualState.robot.moveLengthwise(-400, hooksToConsider, false);
-        		
+
+                actualState.robot.setBasicDetection(true);
+
                 actualState.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
                 
                 // on vérifie si la porte n'est pas bloquée lors de sa fermeture
