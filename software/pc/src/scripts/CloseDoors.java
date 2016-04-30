@@ -82,10 +82,10 @@ public class CloseDoors extends AbstractScript
 				stateToConsider.table.extDoorClosed = true;
 				stateToConsider.table.intDoorClosed = true;
 
-				if(Geometry.isBetween(stateToConsider.robot.getPosition().y, 1790, 1890))
+				//if(Geometry.isBetween(stateToConsider.robot.getPosition().y, 1790, 1890))
 					stateToConsider.robot.setPosition(new Vec2(stateToConsider.robot.getPosition().x,1840));
-				else
-					log.debug("Position trop éloignée pour se recaler en y (cylindre ?)");
+				//else
+				//	log.debug("Position trop éloignée pour se recaler en y (cylindre ?)");
 
                 stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 

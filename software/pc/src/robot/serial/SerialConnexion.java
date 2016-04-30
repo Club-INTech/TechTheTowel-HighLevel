@@ -228,22 +228,35 @@ public class SerialConnexion implements SerialPortEventListener, Service
                         out.flush();
                     }
                     int nb_tests = 0;
-                    char acquittement = ' ';
+                  //  char acquittement = ' ';
+                    boolean acquitte = false;
 
-                    while (acquittement != '_')
+                    while (!acquitte)
                     {
                         nb_tests++;
 
                         // affiche dans la console ce qu'on lit sur la sÃƒÂ©rie
                         String resposeFromCard = readLine();
+
                         //TODO commenter.
 						//log.debug("Reception acquitement : '" + resposeFromCard  + "'");
 
-                        acquittement = resposeFromCard.charAt(resposeFromCard.length()-1);
-                        if (acquittement != '_')
+                        for(int i=0 ; i < resposeFromCard.length() ; i++)
+                            acquitte = acquitte || (resposeFromCard.charAt(i) == '_');
+
+                       // acquittement = resposeFromCard.charAt(resposeFromCard.length()-1);
+                        if (!acquitte)
                         {
-                           // clearInputBuffer();
-                            //output.write(m.getBytes());
+                            // clearInputBuffer();
+                            output.flush();
+                            output.write('\r');
+
+                            Sleep.sleep(500);
+
+                            while(available())
+                                read();
+
+                            output.write(m.getBytes());
                         }
                         if (nb_tests > 10)
                         {
