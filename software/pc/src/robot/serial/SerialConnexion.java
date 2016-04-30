@@ -454,7 +454,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
                 {
                     if(System.currentTimeMillis() - time > TIME_OUT)
                     {
-                        log.critical("TRO CON !!");
+                        log.critical("Il ne daigne même pas répondre !");
                         return (res+(char)260);
                     }
                 }
@@ -472,7 +472,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
                     {
                         if(System.currentTimeMillis() - time > TIME_OUT)
                         {
-                            log.critical("TRO CON !!");
+                            log.critical("blocaqe attente nouveau char (pas de /r ?) dernier : "+(int)lastReceived);
                             return (res+(char)260);
                         }
                     }
@@ -483,7 +483,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
                 {
                     if(System.currentTimeMillis() - time > TIME_OUT)
                     {
-                        log.critical("TRO CON !!");
+                        log.critical("bloquage attente newChar (normalement newLine)");
                         return (res+(char)260);
                     }
                 }
@@ -497,7 +497,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
                     {
                         if(System.currentTimeMillis() - time > TIME_OUT)
                         {
-                            log.critical("TRO CON !!");
+                            log.critical("Bloquage attente newLine");
                             return (res+(char)260);
                         }
                     }
