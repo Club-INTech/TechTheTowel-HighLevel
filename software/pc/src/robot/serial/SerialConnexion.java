@@ -248,6 +248,14 @@ public class SerialConnexion implements SerialPortEventListener, Service
                         if (!acquitte)
                         {
                             // clearInputBuffer();
+                            output.flush();
+                            output.write('\r');
+
+                            Sleep.sleep(500);
+
+                            while(available())
+                                read();
+
                             output.write(m.getBytes());
                         }
                         if (nb_tests > 10)
