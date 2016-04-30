@@ -60,7 +60,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
     /**
      * TIME_OUT d'attente de rÃ¯Â¿Â½ception d'un message
      */
-    private static final int TIME_OUT = 2000;
+    private static final int TIME_OUT = 1000;
 
 
     private BufferedWriter out;
@@ -239,7 +239,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
                         //TODO commenter.
 						//log.debug("Reception acquitement : '" + resposeFromCard  + "'");
 
-                        acquittement = resposeFromCard.charAt(0);
+                        acquittement = resposeFromCard.charAt(resposeFromCard.length()-1);
                         if (acquittement != '_')
                         {
                            // clearInputBuffer();
