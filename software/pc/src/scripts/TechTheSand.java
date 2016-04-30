@@ -363,6 +363,7 @@ public class TechTheSand extends AbstractScript
 
 
                 try {
+                    stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
                     stateToConsider.robot.turn(0);
                 } catch (Exception e)
                 {
@@ -371,7 +372,7 @@ public class TechTheSand extends AbstractScript
 
                 stateToConsider.robot.setForceMovement(false);
 				stateToConsider.robot.setSmoothAcceleration(true);
-                stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+
 
                 try 
                 {
