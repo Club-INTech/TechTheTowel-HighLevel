@@ -206,11 +206,12 @@ public class TechTheSand extends AbstractScript
 
                         log.debug("Impossible de rentrer dans le sable, retry en droite");
                         stateToConsider.robot.setForceMovement(true);
-                        stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_T_MEDIUM_R);
+                        stateToConsider.robot.setLocomotionSpeed(Speed.ULTRA_SLOW_ALL);
 
                         stateToConsider.robot.turn(Math.PI);
                         stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 100);
-                    }
+						stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+					}
                     catch (UnableToMoveException e2)
                     {
                         try
@@ -220,14 +221,16 @@ public class TechTheSand extends AbstractScript
 
                             log.debug("Impossible de rentrer dans le sable, retry en droite");
                             stateToConsider.robot.setForceMovement(true);
-                            stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_T_MEDIUM_R);
+                            stateToConsider.robot.setLocomotionSpeed(Speed.ULTRA_SLOW_ALL);
                             stateToConsider.robot.turn(Math.PI);
                             stateToConsider.robot.moveLengthwise(-30);
                             stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 100, hooksToConsider);
-                        }
+							stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+						}
                         catch (UnableToMoveException e3) {
                             log.critical("On peut vraiment pas obtenir le sable, on abandonne");
-                            stateToConsider.robot.turn(Math.PI);
+							stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+							stateToConsider.robot.turn(Math.PI);
                             stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 300, hooksToConsider);
                             stateToConsider.robot.moveArc(new Arc(200, -200, stateToConsider.robot.getOrientation(), false), hooksToConsider);
                             stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
