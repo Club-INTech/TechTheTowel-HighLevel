@@ -401,7 +401,7 @@ public class Fishing extends AbstractScript
 				// marche arrière pour se placer près du bac
 				//stateToConsider.robot.moveLengthwise(-260, hooksToConsider, true);
 				
-				stateToConsider.robot.moveArc(new Arc(-430,467,-Math.PI/2,false),hooksToConsider);
+				stateToConsider.robot.moveArc(new Arc(-450,467,-Math.PI/2,false),hooksToConsider);
 				
 				// reprise de vitesse medium
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
