@@ -1270,7 +1270,7 @@ public class Fishing extends AbstractScript
 		if (version == 0 || version == 3)
 		{
 		//	return new Circle(new Vec2(620,255));
-			return new Circle(new Vec2(1150,490));
+			return new Circle(new Vec2(1150,492));
 		}
 		else if (version == 1 || version == 2)
 		{
