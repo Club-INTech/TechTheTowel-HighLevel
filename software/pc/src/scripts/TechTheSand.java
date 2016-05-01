@@ -137,12 +137,12 @@ public class TechTheSand extends AbstractScript
 
 				Arc start = new Arc(-200, 60, Math.PI, false);
 
-				stateToConsider.robot.setForceMovement(true);
+				//stateToConsider.robot.setForceMovement(true);
 
                 //On se déplace en courbe pour se placer en face du château
                 stateToConsider.robot.moveArc(start, hooksToConsider);
 
-				stateToConsider.robot.setForceMovement(false);
+				//stateToConsider.robot.setForceMovement(false);
                 stateToConsider.robot.setBasicDetection(true);
 
 
