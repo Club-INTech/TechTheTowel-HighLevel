@@ -337,6 +337,7 @@ public class Locomotion implements Service
      */
     public void followPath(ArrayList<Vec2> path, ArrayList<Hook> hooks, DirectionStrategy directionstrategy) throws UnableToMoveException
     {
+        log.debug("pas un gogol");
         followPath(path, hooks, directionstrategy, true);// par defaut, on detecte
     }
     
