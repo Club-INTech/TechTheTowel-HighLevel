@@ -42,6 +42,9 @@ public class Fishing extends AbstractScript
 	/** Coordonnée en x pour le cas d'obstacle sur le chemin*/
 	private int xBefore;
 	
+	/** Position idéale pour s'arrêter avant le bord du filet*/
+	private int netPosX = 560;
+	
 	public Fishing(HookFactory hookFactory, Config config, Log log) 
 	{
 		super(hookFactory, config, log);
@@ -767,7 +770,7 @@ public class Fishing extends AbstractScript
 				{
 					xBefore=stateToConsider.robot.getPosition().x;
 					log.debug("Second passage !");
-					stateToConsider.robot.moveLengthwise(300, hooksToConsider, false);
+					stateToConsider.robot.moveLengthwise(xBefore-netPosX, hooksToConsider, false);
 				}
 				catch(UnableToMoveException e)
 				{
@@ -938,7 +941,7 @@ public class Fishing extends AbstractScript
 				{	
 					xBefore=stateToConsider.robot.getPosition().x;
 					log.debug("Troisième passage !");
-					stateToConsider.robot.moveLengthwise(290, hooksToConsider, false);
+					stateToConsider.robot.moveLengthwise(xBefore-netPosX, hooksToConsider, false);
 				}
 				catch(UnableToMoveException e)
 				{
@@ -1109,7 +1112,7 @@ public class Fishing extends AbstractScript
 				{	
 					xBefore=stateToConsider.robot.getPosition().x;
 					log.debug("Quatrième passage !");
-					stateToConsider.robot.moveLengthwise(270, hooksToConsider, false);
+					stateToConsider.robot.moveLengthwise(xBefore-netPosX, hooksToConsider, false);
 				}
 				catch(UnableToMoveException e)
 				{
