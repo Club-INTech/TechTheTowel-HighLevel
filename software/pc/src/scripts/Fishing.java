@@ -636,7 +636,7 @@ public class Fishing extends AbstractScript
 				//stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 
 				// On s'oriente vers le côté ennemi
-				stateToConsider.robot.turn((Math.PI-0.03), hooksToConsider, false);
+				stateToConsider.robot.turn((Math.PI-0.06), hooksToConsider, false);
 				
 				// On crée le hook de position pour lever le bras près du filet, puis ajout à la liste de hooks
 				Hook hook2 = hookFactory.newXLesserHook(680);
