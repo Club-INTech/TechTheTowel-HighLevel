@@ -305,7 +305,7 @@ public class Locomotion implements Service
      * @param hooks les hooks à prendre en compte
      * @throws UnableToMoveException si le robot est bloqué
      */
-    public void moveArc(Arc arc, ArrayList<Hook> hooks) throws UnableToMoveException
+    public void moveArc(Arc arc, ArrayList<Hook> hooks, boolean mustDetectTurning) throws UnableToMoveException
     {
         updateCurrentPositionAndOrientation();
 
@@ -315,7 +315,7 @@ public class Locomotion implements Service
         if(Math.abs(highLevelOrientation - arc.startAngle) > maxRotationCorrectionThreeshold)
         {
             log.debug("Mauvaise orientation pour mouvement courbe, on tourne !");
-            turn(arc.startAngle, hooks);
+            turn(arc.startAngle, hooks, mustDetectTurning);
         }
 
         if(arc.length>=0)

@@ -195,7 +195,7 @@ public class TechTheSand extends AbstractScript
 				try {
 					stateToConsider.robot.setForceMovement(false);
 					//On se déplace en courbe pour se placer en face du château
-                    stateToConsider.robot.moveArc(approach, hooksToConsider);
+                    stateToConsider.robot.moveArcNoDetectionWhileTurning(approach, hooksToConsider);
                 }
                 catch (UnableToMoveException e)
                 {
