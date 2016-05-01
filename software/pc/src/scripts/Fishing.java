@@ -43,7 +43,7 @@ public class Fishing extends AbstractScript
 	private int xBefore;
 	
 	/** Position idéale pour s'arrêter avant le bord du filet*/
-	private int netPosX = 515;
+	private int netPosX = 525;
 	
 	public Fishing(HookFactory hookFactory, Config config, Log log) 
 	{
