@@ -630,13 +630,13 @@ public class Fishing extends AbstractScript
 				// marche arrière pour se placer près du bac
 				//stateToConsider.robot.moveLengthwise(-248, hooksToConsider, true);
 
-				stateToConsider.robot.moveArc(new Arc(-420,467,-Math.PI/2,false),hooksToConsider);
+				stateToConsider.robot.moveArc(new Arc(-430,467,-Math.PI/2,false),hooksToConsider);
 
 				// reprise de vitesse medium
 				//stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 
 				// On s'oriente vers le côté ennemi
-				stateToConsider.robot.turn((Math.PI-0.06), hooksToConsider, false);
+				stateToConsider.robot.turn((Math.PI-0.04), hooksToConsider, false);
 				
 				// On crée le hook de position pour lever le bras près du filet, puis ajout à la liste de hooks
 				Hook hook2 = hookFactory.newXLesserHook(680);
