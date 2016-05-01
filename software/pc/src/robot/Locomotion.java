@@ -614,8 +614,6 @@ public class Locomotion implements Service
             
 //            log.debug("position actuelle = " + lowLevelPosition.toString() + "   --   orientation actuelle : " + lowLevelOrientation,this);
 
-                log.debug(isRobotTurning+" "+mustDetect);
-
         	// en cas de détection d'ennemi, une exception est levée
         	if(mustDetect)
         	{
@@ -680,8 +678,6 @@ public class Locomotion implements Service
 
     private void basicDetect(boolean isMovementForward) throws UnexpectedObstacleOnPathException
     {
-        if(isRobotTurning)
-            log.debug("Je detecte putain !");
         if(isMovementForward || isRobotTurning)
         {
             if((USvalues.get(0) < 200 && USvalues.get(0) != 0) || ((USvalues.get(1) < 200 && USvalues.get(1) != 0)))
