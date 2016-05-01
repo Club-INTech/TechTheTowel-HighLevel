@@ -614,6 +614,8 @@ public class Locomotion implements Service
             
 //            log.debug("position actuelle = " + lowLevelPosition.toString() + "   --   orientation actuelle : " + lowLevelOrientation,this);
 
+            if(mustDetect && isRobotTurning)
+                log.debug("OK");
         	// en cas de détection d'ennemi, une exception est levée
         	if(mustDetect)
         	{
