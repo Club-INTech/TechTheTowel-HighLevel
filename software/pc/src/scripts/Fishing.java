@@ -588,7 +588,124 @@ public class Fishing extends AbstractScript
 
 				// Points gagnés moyen pour ce passage
 				stateToConsider.obtainedPoints += 20;
-				
+
+				// On crée le hook de position pour prendre les poissons et ajout à la liste
+                hook3 = hookFactory.newXGreaterHook(600);
+				hook3.addCallback(new Callback(new GetFish(), true, stateToConsider));
+				hooksToConsider.add(hook3);
+
+				// on repart chercher d'autre poissons rapidement
+				stateToConsider.robot.setLocomotionSpeed(Speed.FAST_ALL);
+				stateToConsider.robot.moveLengthwise(-460, hooksToConsider, false);
+				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+
+				// nouvelle condition pour le hook lâchant les poissons et mise à jour dans la liste
+				hook2 = hookFactory.newXLesserHook(330);
+				hook2.addCallback(new Callback(new DropFish(), true, stateToConsider));
+				hooksToConsider.add(hook2);
+
+				//Rajout du hook pour le booléen
+				specialHook = hookFactory.newXLesserHook(900);
+				specialHook.addCallback(new Callback(new SetFishesOnBoard(),true,stateToConsider));
+				hooksToConsider.add(specialHook);
+
+				// on longe le bac avec gestion de blocage
+				try
+				{
+					xBefore=stateToConsider.robot.getPosition().x;
+					stateToConsider.robot.moveLengthwise(xBefore-netPosX, hooksToConsider, false);
+				}
+				catch(UnableToMoveException e)
+				{
+					if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED)
+					{
+						log.debug("Ennemi détecté ! Attente avant de progresser !");
+						if(!waitForEnnemy(stateToConsider, stateToConsider.robot.getPosition(), true))
+						{
+							log.debug("Le salaud ne bouge pas : abort !");
+							throw new UnableToMoveException(e.aim, UnableToMoveReason.OBSTACLE_DETECTED);
+						}
+						else
+						{
+							stateToConsider.robot.moveLengthwise(netPosX-(xBefore-stateToConsider.robot.getPosition().x),hooksToConsider,false);
+						}
+					}
+					else
+					{
+						log.debug("Bord du filet touché, tentative de dégagement !");
+						try
+						{
+							if(stateToConsider.robot.getAreFishesOnBoard())
+							{
+								stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
+							}
+							else
+							{
+								stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
+								throw new ExecuteException(new BlockedException());
+							}
+						}
+						catch(Exception ex)
+						{
+							throw ex;
+						}
+					}
+				}
+
+				try
+				{
+					// relève du bras puis déplacement au dessus du filet
+					stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
+					xBefore=stateToConsider.robot.getPosition().x;
+					stateToConsider.robot.moveLengthwise(300,hooksToConsider,false);
+				}
+				catch(UnableToMoveException e)
+				{
+					if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED)
+					{
+						log.debug("Ennemi détecté ! Attente avant de progresser !");
+						if(!waitForEnnemy(stateToConsider, stateToConsider.robot.getPosition(), true))
+						{
+							log.debug("Le salaud ne bouge pas : abort !");
+							throw new UnableToMoveException(e.aim, UnableToMoveReason.OBSTACLE_DETECTED);
+						}
+						else
+						{
+							stateToConsider.robot.moveLengthwise(300-(xBefore-stateToConsider.robot.getPosition().x),hooksToConsider,true);
+						}
+					}
+					else
+					{
+						log.debug("Bord du filet touché, tentative de dégagement !");
+						try
+						{
+							if(stateToConsider.robot.getAreFishesOnBoard())
+							{
+								stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
+							}
+							else
+							{
+								stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
+							}
+							stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
+							throw new ExecuteException(new BlockedException());
+						}
+						catch(Exception ex)
+						{
+							throw ex;
+						}
+					}
+				}
+
+				// On indique au robot que les poissons ne sont plus sur le bras
+				stateToConsider.robot.setAreFishesOnBoard(false);
+
+				// On indique que deux poissons en moyenne ont été pris
+				stateToConsider.table.fishesFished+=2;
+
+				// Points gagnés moyen pour ce passage
+				stateToConsider.obtainedPoints += 20;
+
 				// arc pour sortir du bord de table
 				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 				Arc disengage = new Arc(-320,160,stateToConsider.robot.getOrientation(),false);
