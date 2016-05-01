@@ -624,7 +624,7 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 
 				// marche arrière pour se placer près du bac
-				stateToConsider.robot.moveLengthwise(-246, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(-248, hooksToConsider, true);
 
 				// reprise de vitesse medium
 				//stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
