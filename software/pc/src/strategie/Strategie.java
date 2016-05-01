@@ -230,13 +230,13 @@ public class Strategie implements Service
                 {
                 	if(isInTable())
                 	{
-                		state.robot.moveToLocation(new Vec2(300,state.robot.getRobotRadius()+1), hooks, table);
+                		state.robot.moveToLocation(new Vec2(250,state.robot.getRobotRadius()+10), hooks, table);
                 	}
                 	else
                 	{
                 		log.debug("Robot trop proche pour l'appel au PDD, tentative de dégagement !");
                 		disengage(nextScript);
-                		state.robot.moveToLocation(new Vec2(300,state.robot.getRobotRadius()+1), hooks, table);
+                		state.robot.moveToLocation(new Vec2(250,state.robot.getRobotRadius()+10), hooks, table);
                 		
                 	}
                 }

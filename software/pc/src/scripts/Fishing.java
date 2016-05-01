@@ -690,7 +690,14 @@ public class Fishing extends AbstractScript
 								stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
 							}
 							log.debug("Tentative de dégagement !");
-							stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
+							if(stateToConsider.robot.getOrientation()<=Math.PI && stateToConsider.robot.getOrientationFast()>=0)
+							{
+								stateToConsider.robot.moveArc(new Arc(-400,300,stateToConsider.robot.getOrientationFast(),false),hooksToConsider);
+							}
+							else
+							{
+								stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientationFast(), false),hooksToConsider);
+							}
 						}
 						catch(Exception ex)
 						{
@@ -728,7 +735,14 @@ public class Fishing extends AbstractScript
 					try
 					{
 						log.debug("Tentative de dégagement !");
-						stateToConsider.robot.moveArc(new Arc(-600,200,stateToConsider.robot.getOrientation(),false),null);
+						if(stateToConsider.robot.getOrientation()<=Math.PI && stateToConsider.robot.getOrientationFast()>=0)
+						{
+							stateToConsider.robot.moveArc(new Arc(-600,200,stateToConsider.robot.getOrientationFast(),false),hooksToConsider);
+						}
+						else
+						{
+							stateToConsider.robot.moveArc(new Arc(-600, 200, stateToConsider.robot.getOrientation(), false),hooksToConsider);
+						}
 					}
 					catch(Exception ex)
 					{
@@ -789,7 +803,14 @@ public class Fishing extends AbstractScript
 								stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
 							}
 							log.debug("Dégagement !");
-							stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
+							if(stateToConsider.robot.getOrientation()<=Math.PI && stateToConsider.robot.getOrientationFast()>=0)
+							{
+								stateToConsider.robot.moveArc(new Arc(-400,300,stateToConsider.robot.getOrientationFast(),false),hooksToConsider);
+							}
+							else
+							{
+								stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientationFast(), false),hooksToConsider);
+							}
 						}
 						catch(Exception ex)
 						{
@@ -840,7 +861,14 @@ public class Fishing extends AbstractScript
 								stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
 							}
 							log.debug("Dégagement !");
-							stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
+							if(stateToConsider.robot.getOrientation()<=Math.PI && stateToConsider.robot.getOrientationFast()>=0)
+							{
+								stateToConsider.robot.moveArc(new Arc(-400,300,stateToConsider.robot.getOrientationFast(),false),hooksToConsider);
+							}
+							else
+							{
+								stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientationFast(), false),hooksToConsider);
+							}
 						}
 						catch(Exception ex)
 						{
@@ -878,7 +906,14 @@ public class Fishing extends AbstractScript
 					try
 					{
 						log.debug("Tentative de dégagement !");
-						stateToConsider.robot.moveArc(new Arc(-600,200,stateToConsider.robot.getOrientation(),false),null);
+						if(stateToConsider.robot.getOrientation()<=Math.PI && stateToConsider.robot.getOrientationFast()>=0)
+						{
+							stateToConsider.robot.moveArc(new Arc(-600,200,stateToConsider.robot.getOrientationFast(),false),hooksToConsider);
+						}
+						else
+						{
+							stateToConsider.robot.moveArc(new Arc(-600, -200, stateToConsider.robot.getOrientation(), false),hooksToConsider);
+						}
 					}
 					catch(Exception ex)
 					{
@@ -939,7 +974,14 @@ public class Fishing extends AbstractScript
 								stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
 							}
 							log.debug("Dégagement !");
-							stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
+							if(stateToConsider.robot.getOrientation()<=Math.PI && stateToConsider.robot.getOrientationFast()>=0)
+							{
+								stateToConsider.robot.moveArc(new Arc(-400,300,stateToConsider.robot.getOrientationFast(),false),hooksToConsider);
+							}
+							else
+							{
+								stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientationFast(), false),hooksToConsider);
+							}
 						}
 						catch(Exception ex)
 						{
@@ -990,7 +1032,14 @@ public class Fishing extends AbstractScript
 								stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
 							}
 							log.debug("Tentative de dégagement !");
-							stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
+							if(stateToConsider.robot.getOrientation()<=Math.PI && stateToConsider.robot.getOrientationFast()>=0)
+							{
+								stateToConsider.robot.moveArc(new Arc(-400,300,stateToConsider.robot.getOrientationFast(),false),hooksToConsider);
+							}
+							else
+							{
+								stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientationFast(), false),hooksToConsider);
+							}
 						}
 						catch(Exception ex)
 						{
@@ -1028,7 +1077,14 @@ public class Fishing extends AbstractScript
 					try
 					{
 						log.debug("Tentative de dégagement !");
-						stateToConsider.robot.moveArc(new Arc(-600,200,stateToConsider.robot.getOrientation(),false),null);
+						if(stateToConsider.robot.getOrientation()<=Math.PI && stateToConsider.robot.getOrientationFast()>=0)
+						{
+							stateToConsider.robot.moveArc(new Arc(-600,200,stateToConsider.robot.getOrientationFast(),false),hooksToConsider);
+						}
+						else
+						{
+							stateToConsider.robot.moveArc(new Arc(-600, -200, stateToConsider.robot.getOrientation(), false),hooksToConsider);
+						}
 					}
 					catch(Exception ex)
 					{
@@ -1089,7 +1145,14 @@ public class Fishing extends AbstractScript
 								stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
 							}
 							log.debug("Dégagement !");
-							stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
+							if(stateToConsider.robot.getOrientation()<=Math.PI && stateToConsider.robot.getOrientationFast()>=0)
+							{
+								stateToConsider.robot.moveArc(new Arc(-400,300,stateToConsider.robot.getOrientationFast(),false),hooksToConsider);
+							}
+							else
+							{
+								stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientationFast(), false),hooksToConsider);
+							}
 						}
 						catch(Exception ex)
 						{
@@ -1140,7 +1203,14 @@ public class Fishing extends AbstractScript
 								stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
 							}
 							log.debug("Tentative de dégagement !");
-							stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
+							if(stateToConsider.robot.getOrientation()<=Math.PI && stateToConsider.robot.getOrientationFast()>=0)
+							{
+								stateToConsider.robot.moveArc(new Arc(-400,300,stateToConsider.robot.getOrientationFast(),false),hooksToConsider);
+							}
+							else
+							{
+								stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientationFast(), false),hooksToConsider);
+							}
 						}
 						catch(Exception ex)
 						{
