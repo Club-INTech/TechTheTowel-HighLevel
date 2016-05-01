@@ -453,7 +453,7 @@ public class Fishing extends AbstractScript
 						{
 							stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
                             stateToConsider.robot.setForceMovement(true);
-							stateToConsider.robot.moveArc(new Arc(-400, -200, stateToConsider.robot.getOrientation(), false),hooksToConsider);
+							stateToConsider.robot.moveArc(new Arc(-400, -150, stateToConsider.robot.getOrientation(), false),hooksToConsider);
 							stateToConsider.robot.turn(Math.PI-0.06,hooksToConsider,false);
                             stateToConsider.robot.setForceMovement(false);
                             stateToConsider.robot.moveLengthwise(500,hooksToConsider,false);
@@ -480,7 +480,7 @@ public class Fishing extends AbstractScript
 				hooksToConsider.add(hook3);
 
 				// on repart chercher d'autre poissons rapidement 
-				stateToConsider.robot.setLocomotionSpeed(Speed.FAST_ALL);
+				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 				stateToConsider.robot.moveLengthwise(-460, hooksToConsider, false);
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 				
@@ -597,7 +597,7 @@ public class Fishing extends AbstractScript
 				hooksToConsider.add(hook3);
 
 				// on repart chercher d'autre poissons rapidement
-				stateToConsider.robot.setLocomotionSpeed(Speed.FAST_ALL);
+				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 				stateToConsider.robot.moveLengthwise(-460, hooksToConsider, false);
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 
