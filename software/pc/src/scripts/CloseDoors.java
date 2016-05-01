@@ -84,6 +84,8 @@ public class CloseDoors extends AbstractScript
 
 				//if(Geometry.isBetween(stateToConsider.robot.getPosition().y, 1790, 1890))
 					stateToConsider.robot.setPosition(new Vec2(stateToConsider.robot.getPosition().x,1840));
+					stateToConsider.robot.setOrientation(-Math.PI/2);
+
 				//else
 				//	log.debug("Position trop éloignée pour se recaler en y (cylindre ?)");
 
@@ -101,13 +103,13 @@ public class CloseDoors extends AbstractScript
 
 				stateToConsider.robot.moveLengthwiseWithoutDetection(-900, hooksToConsider, true);
 
-                if(Geometry.isBetween(stateToConsider.robot.getPosition().x, 1300, 1400))
-				{
+              //  if(Geometry.isBetween(stateToConsider.robot.getPosition().x, 1300, 1400))
+			//	{
 				    stateToConsider.robot.setPosition(new Vec2(1350, stateToConsider.robot.getPosition().y));
 					stateToConsider.robot.setOrientation(Math.PI);
-				}
-                else
-                    log.debug("Position trop éloignée pour se recaler en x (cylindre ?)");
+			//	}
+            //    else
+            //        log.debug("Position trop éloignée pour se recaler en x (cylindre ?)");
 
 				stateToConsider.robot.moveLengthwise(300, hooksToConsider, false);
 
