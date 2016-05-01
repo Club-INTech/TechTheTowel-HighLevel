@@ -613,7 +613,9 @@ public class Locomotion implements Service
             updateCurrentPositionAndOrientation();
             
 //            log.debug("position actuelle = " + lowLevelPosition.toString() + "   --   orientation actuelle : " + lowLevelOrientation,this);
-            
+
+                log.debug(isRobotTurning+" "+mustDetect);
+
         	// en cas de détection d'ennemi, une exception est levée
         	if(mustDetect)
         	{
@@ -678,7 +680,9 @@ public class Locomotion implements Service
 
     private void basicDetect(boolean isMovementForward) throws UnexpectedObstacleOnPathException
     {
-        if(isMovementForward)
+        if(isRobotTurning)
+            log.debug("Je detecte putain !");
+        if(isMovementForward || isRobotTurning)
         {
             if((USvalues.get(0) < 200 && USvalues.get(0) != 0) || ((USvalues.get(1) < 200 && USvalues.get(1) != 0)))
             {
@@ -686,7 +690,7 @@ public class Locomotion implements Service
                 throw new UnexpectedObstacleOnPathException();
             }
         }
-        else
+        if(!isMovementForward || isRobotTurning)
         {
             if((USvalues.get(2) < 200 && USvalues.get(2) != 0) || ((USvalues.get(3) < 200 && USvalues.get(3) != 0)))
             {
@@ -782,11 +786,11 @@ public class Locomotion implements Service
             }
             else if(isCurve)
             {
-                this.timeExpected = System.currentTimeMillis() + (long)(5*1000*Math.abs(this.curveArc.length)/this.transSpeed);
+                this.timeExpected = System.currentTimeMillis() + (long)(3*1000*Math.abs(this.curveArc.length)/this.transSpeed);
             }
             else
             {
-                this.timeExpected = System.currentTimeMillis() + (long)(5*1000*Math.abs(distance)/this.transSpeed);
+                this.timeExpected = System.currentTimeMillis() + (long)(2*1000*Math.abs(distance)/this.transSpeed);
             }
         }
 
@@ -885,7 +889,10 @@ public class Locomotion implements Service
                     // on attend la fin du mouvement
                     while (!isMotionEnded()) {
                         if (mustDetect)
-                           // detectEnemyInDisk(true, true, highLevelPosition);
+                        {
+                            if(basicDetection)
+                                basicDetect(false);
+                        }
                         Sleep.sleep(feedbackLoopDelay);
                     }
 

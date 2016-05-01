@@ -137,12 +137,12 @@ public class TechTheSand extends AbstractScript
 
 				Arc start = new Arc(-200, 60, Math.PI, false);
 
-				stateToConsider.robot.setForceMovement(true);
+				//stateToConsider.robot.setForceMovement(true);
 
                 //On se déplace en courbe pour se placer en face du château
                 stateToConsider.robot.moveArc(start, hooksToConsider);
 
-				stateToConsider.robot.setForceMovement(false);
+				//stateToConsider.robot.setForceMovement(false);
                 stateToConsider.robot.setBasicDetection(true);
 
 
@@ -180,7 +180,7 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.robot.setDoor(true);
                 ThreadSensor.modeBorgne(true);
 
-                Hook hook = hookFactory.newXLesserHook(150);
+                Hook hook = hookFactory.newXLesserHook(220);
 
                 hook.addCallback(new Callback(new SetSand(), true, stateToConsider));
 
@@ -223,7 +223,9 @@ public class TechTheSand extends AbstractScript
                             stateToConsider.robot.setForceMovement(true);
                             stateToConsider.robot.setLocomotionSpeed(Speed.ULTRA_SLOW_ALL);
                             stateToConsider.robot.turn(Math.PI);
+                            stateToConsider.robot.setForceMovement(false);
                             stateToConsider.robot.moveLengthwise(-30);
+                            stateToConsider.robot.setForceMovement(true);
                             stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 100, hooksToConsider);
 							stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 						}
@@ -231,6 +233,7 @@ public class TechTheSand extends AbstractScript
                             log.critical("On peut vraiment pas obtenir le sable, on abandonne");
 							stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 							stateToConsider.robot.turn(Math.PI);
+                            stateToConsider.robot.setForceMovement(false);
                             stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 300, hooksToConsider);
                             stateToConsider.robot.moveArc(new Arc(200, -200, stateToConsider.robot.getOrientation(), false), hooksToConsider);
                             stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
@@ -241,10 +244,11 @@ public class TechTheSand extends AbstractScript
 
                 try
 				{
-					stateToConsider.robot.setForceMovement(true);
-					stateToConsider.robot.moveLengthwise(-30);
+                    stateToConsider.robot.setForceMovement(false);
+                    stateToConsider.robot.moveLengthwise(-30);
+                    stateToConsider.robot.setForceMovement(true);
 
-				} catch(Exception e)
+                } catch(Exception e)
 				{
 					e.printStackTrace();
 				}
@@ -327,6 +331,7 @@ public class TechTheSand extends AbstractScript
 							e3.printStackTrace();
 							log.critical("Impossible de se dégager, abandon du sable");
 							stateToConsider.robot.setIsSandInside(false);
+                            stateToConsider.robot.setForceMovement(false);
 							stateToConsider.robot.setTurningStrategy(TurningStrategy.FASTEST);
 							stateToConsider.robot.setDirectionStrategy(DirectionStrategy.FASTEST);
 							stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
@@ -345,6 +350,8 @@ public class TechTheSand extends AbstractScript
 				} catch (Exception e)
 				{
 					e.printStackTrace();
+					stateToConsider.robot.moveLengthwiseWithoutDetection(-30);
+					stateToConsider.robot.turn(-Math.PI/2);
 				}
 
                 ThreadSensor.modeBorgne(false);
@@ -352,9 +359,14 @@ public class TechTheSand extends AbstractScript
 
                 try {
 					stateToConsider.robot.moveLengthwise(-1600 + stateToConsider.robot.getPosition().y);
+
 				} catch (Exception e)
 				{
 					e.printStackTrace();
+                    stateToConsider.robot.setForceMovement(false);;
+					stateToConsider.robot.moveLengthwiseWithoutDetection(-30);
+                    stateToConsider.robot.setForceMovement(true);
+                    stateToConsider.robot.moveLengthwise(-1600 + stateToConsider.robot.getPosition().y);
 				}
 
                 //Delete du château
