@@ -141,7 +141,7 @@ public class Locomotion implements Service
 	public boolean isRobotTurning=false;	
 	
 	/** nombre d'essais maximum après une BlockedException*/
-    private int maxRetriesIfBlocked=-1;
+    private int maxRetriesIfBlocked=1;
     private int actualRetriesIfBlocked=0;
     
     /** Utile pour l'activation dees capteurs*/
