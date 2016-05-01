@@ -678,7 +678,6 @@ public class Locomotion implements Service
 
     private void basicDetect(boolean isMovementForward) throws UnexpectedObstacleOnPathException
     {
-        log.debug("mvt forward : "+isMovementForward);
         if(isMovementForward)
         {
             if((USvalues.get(0) < 200 && USvalues.get(0) != 0) || ((USvalues.get(1) < 200 && USvalues.get(1) != 0)))
