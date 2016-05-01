@@ -354,8 +354,6 @@ public class TechTheSand extends AbstractScript
 					stateToConsider.robot.turnWithoutDetection(-Math.PI/2, hooksToConsider);
 				}
 
-                ThreadSensor.modeBorgne(false);
-
 
                 try {
                     stateToConsider.robot.setForceMovement(false);
@@ -384,6 +382,7 @@ public class TechTheSand extends AbstractScript
 
                 stateToConsider.robot.setForceMovement(false);
 				stateToConsider.robot.setSmoothAcceleration(true);
+                ThreadSensor.modeBorgne(false);
 
 
                 try 
