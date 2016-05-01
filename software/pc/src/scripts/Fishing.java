@@ -394,7 +394,7 @@ public class Fishing extends AbstractScript
 				//stateToConsider.robot.turn(Math.PI - 0.24);
 				
 				// Ajout d'un hook pour baisser le bras
-				Hook arm = hookFactory.newXGreaterHook(600);
+				Hook arm = hookFactory.newXLesserHook(950);
 				arm.addCallback(new Callback(new GetFish(),true,stateToConsider));
 				hooksToConsider.add(arm);
 				
