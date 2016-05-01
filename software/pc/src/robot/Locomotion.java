@@ -889,7 +889,10 @@ public class Locomotion implements Service
                     // on attend la fin du mouvement
                     while (!isMotionEnded()) {
                         if (mustDetect)
-                           // detectEnemyInDisk(true, true, highLevelPosition);
+                        {
+                            if(basicDetection)
+                                basicDetect(false);
+                        }
                         Sleep.sleep(feedbackLoopDelay);
                     }
 
