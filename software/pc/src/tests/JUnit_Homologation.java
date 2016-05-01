@@ -90,6 +90,7 @@ public class JUnit_Homologation extends JUnit_Test
         boolean bite = true;
         try
         {
+            theRobot.robot.setBasicDetection(true);
             theRobot.robot.moveLengthwise(200);
             //scriptManager.getScript(ScriptNames.CASTLE).goToThenExec(0, theRobot, emptyHook);
         }
@@ -101,7 +102,6 @@ public class JUnit_Homologation extends JUnit_Test
         while(bite)
         {
             try {
-                theRobot.robot.setBasicDetection(true);
                 Vec2 sup = scriptManager.getScript(ScriptNames.CLOSE_DOORS).entryPosition(3, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
                 theRobot.table.getObstacleManager().freePoint(sup);
                 scriptManager.getScript(ScriptNames.CLOSE_DOORS).goToThenExec(3, theRobot, emptyHook);
