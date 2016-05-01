@@ -337,7 +337,6 @@ public class Locomotion implements Service
      */
     public void followPath(ArrayList<Vec2> path, ArrayList<Hook> hooks, DirectionStrategy directionstrategy) throws UnableToMoveException
     {
-        log.debug("pas un gogol");
         followPath(path, hooks, directionstrategy, true);// par defaut, on detecte
     }
     
@@ -873,6 +872,7 @@ public class Locomotion implements Service
                 else if(!isCorrection && Math.abs(delta) < maxRotationTurningStrategyIgnore)//Si ce n'est pas une correction
                 {
                     if (Math.abs(delta) > maxRotationCorrectionThreeshold) {// on ne tourne vraiment que si l'angle souhaité est vraiment different.
+                        log.debug("help");
                         isRobotTurning = true;// prochain ordre : on tourne
                     }
                     deplacements.turn(angle, TurningStrategy.FASTEST);
@@ -881,6 +881,8 @@ public class Locomotion implements Service
                 {
                     if (Math.abs(delta) > maxRotationCorrectionThreeshold) {// on ne tourne vraiment que si l'angle souhaité est vraiment different.
                         isRobotTurning = true;// prochain ordre : on tourne
+                        log.debug("help");
+
                     }
                     deplacements.turn(angle, cTurningStrategy);
                 }
