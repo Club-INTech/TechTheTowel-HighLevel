@@ -141,7 +141,7 @@ public class Locomotion implements Service
 	public boolean isRobotTurning=false;	
 	
 	/** nombre d'essais maximum après une BlockedException*/
-    private int maxRetriesIfBlocked=0;
+    private int maxRetriesIfBlocked=-1;
     private int actualRetriesIfBlocked=0;
     
     /** Utile pour l'activation dees capteurs*/
@@ -470,7 +470,7 @@ public class Locomotion implements Service
                 
                 if (!headingToWall && !isForcing) //ici on ne s'y attendait pas donc on reagit
                 {
-	                if(maxRetriesIfBlocked!=0)
+	                if(maxRetriesIfBlocked>0)
 	                {
 		                if(maxRetriesIfBlocked > actualRetriesIfBlocked)
 		                {
@@ -491,7 +491,7 @@ public class Locomotion implements Service
 		                }
 
 	                }
-	                else //if (maxRetriesIfBlocked==0)
+	                else if (maxRetriesIfBlocked==0)
 	                {
 		                unexpectedWallImpactCounter--;
 		                immobilise();
