@@ -420,7 +420,7 @@ public class Fishing extends AbstractScript
 				hooksToConsider.add(hook);
 
 				// On crée le hook de position, l'action pour lâcher les poissons et ajout à la liste
-				Hook hook2 = hookFactory.newXLesserHook(410);
+				Hook hook2 = hookFactory.newXLesserHook(400);
 				hook2.addCallback(new Callback(new DropFish(), true, stateToConsider));
 				hooksToConsider.add(hook2);
 
@@ -454,7 +454,7 @@ public class Fishing extends AbstractScript
 							stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
 							stateToConsider.robot.moveArc(new Arc(-400, -200, stateToConsider.robot.getOrientation(), false),hooksToConsider);
 							stateToConsider.robot.turn(Math.PI,hooksToConsider,false);
-							stateToConsider.robot.moveLengthwise(400,hooksToConsider,false);
+							stateToConsider.robot.moveLengthwise(500,hooksToConsider,false);
 						}
 						catch(Exception ex)
 						{
