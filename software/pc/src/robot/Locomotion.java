@@ -782,7 +782,7 @@ public class Locomotion implements Service
             }
             else if(isCurve)
             {
-                this.timeExpected = System.currentTimeMillis() + (long)(3*1000*Math.abs(this.curveArc.length)/this.transSpeed);
+                this.timeExpected = System.currentTimeMillis() + (long)(4*1000*Math.abs(this.curveArc.length)/this.transSpeed);
             }
             else
             {

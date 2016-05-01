@@ -452,9 +452,11 @@ public class Fishing extends AbstractScript
 						try
 						{
 							stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
+                            stateToConsider.robot.setForceMovement(true);
 							stateToConsider.robot.moveArc(new Arc(-400, -100, stateToConsider.robot.getOrientation(), false),hooksToConsider);
 							stateToConsider.robot.turn(Math.PI,hooksToConsider,false);
-							stateToConsider.robot.moveLengthwise(500,hooksToConsider,false);
+                            stateToConsider.robot.setForceMovement(false);
+                            stateToConsider.robot.moveLengthwise(500,hooksToConsider,false);
 						}
 						catch(Exception ex)
 						{
