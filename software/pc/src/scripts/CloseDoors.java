@@ -101,9 +101,13 @@ public class CloseDoors extends AbstractScript
                 hook.addCallback(new Callback(new SpeedDown(), true, stateToConsider));
                 hooksToConsider.add(hook);
 
+				stateToConsider.robot.setForceMovement(true);
+
 				stateToConsider.robot.moveLengthwiseWithoutDetection(-900, hooksToConsider, true);
 
-              //  if(Geometry.isBetween(stateToConsider.robot.getPosition().x, 1300, 1400))
+				stateToConsider.robot.setForceMovement(false);
+
+				//  if(Geometry.isBetween(stateToConsider.robot.getPosition().x, 1300, 1400))
 			//	{
 				    stateToConsider.robot.setPosition(new Vec2(1350, stateToConsider.robot.getPosition().y));
 					stateToConsider.robot.setOrientation(Math.PI);

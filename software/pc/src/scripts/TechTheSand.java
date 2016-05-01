@@ -345,6 +345,8 @@ public class TechTheSand extends AbstractScript
 				} catch (Exception e)
 				{
 					e.printStackTrace();
+					stateToConsider.robot.moveLengthwiseWithoutDetection(-30);
+					stateToConsider.robot.turn(-Math.PI/2);
 				}
 
                 ThreadSensor.modeBorgne(false);
@@ -352,9 +354,12 @@ public class TechTheSand extends AbstractScript
 
                 try {
 					stateToConsider.robot.moveLengthwise(-1600 + stateToConsider.robot.getPosition().y);
+
 				} catch (Exception e)
 				{
 					e.printStackTrace();
+					stateToConsider.robot.moveLengthwiseWithoutDetection(-30);
+					stateToConsider.robot.moveLengthwise(-1600 + stateToConsider.robot.getPosition().y);
 				}
 
                 //Delete du château
