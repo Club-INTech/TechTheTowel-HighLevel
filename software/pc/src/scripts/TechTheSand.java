@@ -148,7 +148,7 @@ public class TechTheSand extends AbstractScript
 
                 stateToConsider.robot.moveLengthwise(995);
 
-				stateToConsider.robot.turn(2*Math.PI/3);
+				stateToConsider.robot.turnWithoutDetection(2*Math.PI/3, hooksToConsider);
 
 
                 stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
