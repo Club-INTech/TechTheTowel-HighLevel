@@ -358,12 +358,12 @@ public class TechTheSand extends AbstractScript
 
 
                 try {
-					stateToConsider.robot.moveLengthwise(-1600 + stateToConsider.robot.getPosition().y);
-
+                    stateToConsider.robot.setForceMovement(false);
+					stateToConsider.robot.moveLengthwiseWithoutDetection(-1600 + stateToConsider.robot.getPosition().y);
+                    stateToConsider.robot.setForceMovement(true);
 				} catch (Exception e)
 				{
 					e.printStackTrace();
-                    stateToConsider.robot.setForceMovement(false);;
 					stateToConsider.robot.moveLengthwiseWithoutDetection(-30);
                     stateToConsider.robot.setForceMovement(true);
                     stateToConsider.robot.moveLengthwise(-1600 + stateToConsider.robot.getPosition().y);
