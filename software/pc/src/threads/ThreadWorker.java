@@ -30,7 +30,10 @@ public class ThreadWorker extends AbstractThread
     public void run()
     {
         if(!graphOK)
-            pdd.recomputeGraph();
+        {
+             pdd.recomputeGraph();
+             ThreadWorker.graphOK = true;
+        }
 
         try {
             Thread.sleep(500);
