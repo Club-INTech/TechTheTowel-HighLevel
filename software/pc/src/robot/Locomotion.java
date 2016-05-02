@@ -175,10 +175,9 @@ public class Locomotion implements Service
     private ArrayList<Integer> USvalues;
 
     private boolean basicDetection = false;
+    private boolean symetrised = false;
 
 
-    
-    
     public Locomotion(Log log, Config config, Table table, LocomotionCardWrapper deplacements)
     {
         this.log = log;
@@ -323,6 +322,7 @@ public class Locomotion implements Service
         else
             isRobotMovingBackward=true;
         moveToPointException(arc.end, hooks, arc.length>=0, wall, false, true, true);
+        this.symetrised = false;
         isRobotMovingForward=false;
         isRobotMovingBackward=false;
 
@@ -768,9 +768,10 @@ public class Locomotion implements Service
         {
             distance=0;
             angle=0;
-            if(symetry)
+            if(symetry && !symetrised)
             {
                 this.curveArc.radius *= -1;
+                this.symetrised = true;
             }
         }
 
