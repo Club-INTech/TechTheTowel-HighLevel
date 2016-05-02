@@ -6,6 +6,7 @@ import exceptions.BlockedActuatorException;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
+import exceptions.Locomotion.UnexpectedObstacleOnPathException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import hook.Callback;
@@ -209,7 +210,7 @@ public class TechTheSand extends AbstractScript
                         stateToConsider.robot.setForceMovement(true);
                         stateToConsider.robot.setLocomotionSpeed(Speed.ULTRA_SLOW_ALL);
 
-                        stateToConsider.robot.turn(Math.PI);
+                        stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
                         stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 100);
 						stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 					}
@@ -223,9 +224,9 @@ public class TechTheSand extends AbstractScript
                             log.debug("Impossible de rentrer dans le sable, retry en droite");
                             stateToConsider.robot.setForceMovement(true);
                             stateToConsider.robot.setLocomotionSpeed(Speed.ULTRA_SLOW_ALL);
-                            stateToConsider.robot.turn(Math.PI);
+                            stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
                             stateToConsider.robot.setForceMovement(false);
-                            stateToConsider.robot.moveLengthwise(-30);
+                            stateToConsider.robot.moveLengthwiseWithoutDetection(-30);
                             stateToConsider.robot.setForceMovement(true);
                             stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 100, hooksToConsider);
 							stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
@@ -233,7 +234,7 @@ public class TechTheSand extends AbstractScript
                         catch (UnableToMoveException e3) {
                             log.critical("On peut vraiment pas obtenir le sable, on abandonne");
 							stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
-							stateToConsider.robot.turn(Math.PI);
+							stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
                             stateToConsider.robot.setForceMovement(false);
                             stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 300, hooksToConsider);
                             stateToConsider.robot.moveArc(new Arc(200, -200, stateToConsider.robot.getOrientation(), false), hooksToConsider);
@@ -246,16 +247,16 @@ public class TechTheSand extends AbstractScript
                 try
 				{
                     stateToConsider.robot.setForceMovement(false);
-                    stateToConsider.robot.moveLengthwise(-30);
+                    stateToConsider.robot.moveLengthwiseWithoutDetection(-30);
                     stateToConsider.robot.setForceMovement(true);
 
-                } catch(Exception e)
+                } catch(UnableToMoveException e)
 				{
 					e.printStackTrace();
 				}
 				try {
-					stateToConsider.robot.turn(Math.PI);
-                } catch (Exception e)
+					stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
+                } catch (UnableToMoveException e)
 				{
 					e.printStackTrace();
 				}
@@ -277,14 +278,7 @@ public class TechTheSand extends AbstractScript
 
                 // On indique au robot qu'il transporte du sable
                 stateToConsider.robot.setIsSandInside(true);
-                try
-                {
-				   // stateToConsider.robot.moveLengthwise(-60);
-                }
-                catch(Exception e)
-                {
-                     e.printStackTrace();
-                }
+
 
 
 				double distanceCod = 150;
@@ -313,7 +307,7 @@ public class TechTheSand extends AbstractScript
 							throw new UnableToMoveException(new Vec2(0, 1600), UnableToMoveReason.OBSTACLE_DETECTED);
 						e.printStackTrace();
 						stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/5, Math.PI, false), hooksToConsider);
-						stateToConsider.robot.turn(Math.PI);
+						stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
 						//stateToConsider.robot.moveLengthwise(-80);
                         stateToConsider.robot.setLocomotionSpeed(Speed.ULTRA_SLOW_ALL);
                         stateToConsider.robot.moveArc(approach2, hooksToConsider);
@@ -327,7 +321,7 @@ public class TechTheSand extends AbstractScript
 								throw new UnableToMoveException(new Vec2(0, 1600), UnableToMoveReason.OBSTACLE_DETECTED);
 							e2.printStackTrace();
 							stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/5, Math.PI, false), hooksToConsider);
-							stateToConsider.robot.turn(Math.PI);
+							stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
 							//stateToConsider.robot.moveLengthwise(-80);
                             stateToConsider.robot.setLocomotionSpeed(Speed.ULTRA_SLOW_ALL);
                             stateToConsider.robot.moveArc(approach2, hooksToConsider);
@@ -416,6 +410,15 @@ public class TechTheSand extends AbstractScript
 		catch(Exception e)
 		{
 			finalize(stateToConsider,e);
+            if(e instanceof UnableToMoveException && ((UnableToMoveException)e).reason == UnableToMoveReason.OBSTACLE_DETECTED)
+            {
+                stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+                stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
+                stateToConsider.robot.setForceMovement(false);
+                stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 300, hooksToConsider);
+                stateToConsider.robot.moveArc(new Arc(200, -200, stateToConsider.robot.getOrientation(), false), hooksToConsider);
+                stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+            }
             stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
             throw e;
 		}
