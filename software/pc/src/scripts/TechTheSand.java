@@ -3,6 +3,7 @@ package scripts;
 import enums.*;
 import exceptions.BadVersionException;
 import exceptions.BlockedActuatorException;
+import exceptions.ConfigPropertyNotFoundException;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -61,6 +62,13 @@ public class TechTheSand extends AbstractScript
 	@Override
 	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException, UnableToMoveException, SerialConnexionException, BlockedActuatorException
 	{
+		boolean symetry = false;
+
+		try {
+			symetry = config.getProperty("couleur").replaceAll(" ","").equals("violet");
+		} catch (ConfigPropertyNotFoundException e) {
+			e.printStackTrace();
+		}
 
 		try
 		{
@@ -136,7 +144,7 @@ public class TechTheSand extends AbstractScript
 
 				//Arc start = new Arc(stateToConsider.robot.getPosition(), entry.start, entry.startAngle, true);
 
-				Arc start = new Arc(-200, 55, Math.PI, false);
+				Arc start = new Arc(-200, symetry ? 55 : 60, Math.PI, false);
 
 				//stateToConsider.robot.setForceMovement(true);
 
@@ -192,7 +200,7 @@ public class TechTheSand extends AbstractScript
                 
                 // Définition de l'arc à suivre, point de départ temporaire
                 // 150
-                Arc approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(100,2000-170), Math.PI, true);
+                Arc approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(100,2000-(symetry ? 170 : 150)), Math.PI, true);
 
 				try {
 					stateToConsider.robot.setForceMovement(false);
