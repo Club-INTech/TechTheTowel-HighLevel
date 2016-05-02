@@ -314,8 +314,10 @@ public class TechTheSand extends AbstractScript
 						stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/5, Math.PI, false), hooksToConsider);
 						stateToConsider.robot.turn(Math.PI);
 						//stateToConsider.robot.moveLengthwise(-80);
-						stateToConsider.robot.moveArc(approach2, hooksToConsider);
-					}
+                        stateToConsider.robot.setLocomotionSpeed(Speed.ULTRA_SLOW_ALL);
+                        stateToConsider.robot.moveArc(approach2, hooksToConsider);
+                        stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+                    }
 					catch (UnableToMoveException e2)
 					{
 						try
@@ -326,8 +328,10 @@ public class TechTheSand extends AbstractScript
 							stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/5, Math.PI, false), hooksToConsider);
 							stateToConsider.robot.turn(Math.PI);
 							//stateToConsider.robot.moveLengthwise(-80);
-							stateToConsider.robot.moveArc(approach2, hooksToConsider);
-						}
+                            stateToConsider.robot.setLocomotionSpeed(Speed.ULTRA_SLOW_ALL);
+                            stateToConsider.robot.moveArc(approach2, hooksToConsider);
+                            stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+                        }
 						catch (UnableToMoveException e3)
 						{
 							e3.printStackTrace();
