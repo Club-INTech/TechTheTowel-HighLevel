@@ -129,7 +129,7 @@ public class Locomotion implements Service
      * 	L'orientation maximale pour une correction rotationelle 
      * 	La correction ne sera effectuée que si le robot est assez eloigné de son orientation souhaitée.
      */
-    private final double maxRotationCorrectionThreeshold = 0.05;
+    private final double maxRotationCorrectionThreeshold = 0.03;
 
     /**
      * L'orientation maximale pour ignorer le sens obligatoire de rotation
@@ -682,7 +682,7 @@ public class Locomotion implements Service
         {
             if((USvalues.get(0) < 200 && USvalues.get(0) != 0) || ((USvalues.get(1) < 200 && USvalues.get(1) != 0)))
             {
-                log.warning("Lancement de UnexpectedObstacleOnPathException dans detectEnemyInLocatedDisk");
+                log.warning("Lancement de UnexpectedObstacleOnPathException dans basicDetect : Capteurs avant");
                 throw new UnexpectedObstacleOnPathException();
             }
         }
@@ -690,7 +690,7 @@ public class Locomotion implements Service
         {
             if((USvalues.get(2) < 200 && USvalues.get(2) != 0) || ((USvalues.get(3) < 200 && USvalues.get(3) != 0)))
             {
-                log.warning("Lancement de UnexpectedObstacleOnPathException dans detectEnemyInLocatedDisk");
+                log.warning("Lancement de UnexpectedObstacleOnPathException dans basicDetect : Capteurs arrière");
                 throw new UnexpectedObstacleOnPathException();
             }
         }
