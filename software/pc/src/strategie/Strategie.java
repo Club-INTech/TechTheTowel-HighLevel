@@ -366,6 +366,7 @@ public class Strategie implements Service
                     state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
                     log.debug(state.robot.getRobotRadius());
                     state.robot.setDoor(false);
+                    state.robot.setLocomotionSpeed(Speed.FAST_ALL);
                 } catch (SerialConnexionException e) {
                     e.printStackTrace();
                 }
@@ -379,6 +380,7 @@ public class Strategie implements Service
                     state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
                     log.debug(state.robot.getRobotRadius());
                     state.robot.setDoor(false);
+                    state.robot.setLocomotionSpeed(Speed.FAST_ALL);
                 } catch (SerialConnexionException e) {
                     e.printStackTrace();
                 }
@@ -393,6 +395,7 @@ public class Strategie implements Service
                     state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
                     log.debug(state.robot.getRobotRadius());
                     state.robot.setDoor(false);
+                    state.robot.setLocomotionSpeed(Speed.FAST_ALL);
                 } catch (SerialConnexionException e) {
                     e.printStackTrace();
                 }
