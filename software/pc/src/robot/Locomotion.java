@@ -308,6 +308,8 @@ public class Locomotion implements Service
     {
         updateCurrentPositionAndOrientation();
 
+        this.symetrised = false;
+
         this.curveArc = arc;
         this.posStartedCurve = highLevelPosition.clone();
 
@@ -322,7 +324,6 @@ public class Locomotion implements Service
         else
             isRobotMovingBackward=true;
         moveToPointException(arc.end, hooks, arc.length>=0, wall, false, true, true);
-        this.symetrised = false;
         isRobotMovingForward=false;
         isRobotMovingBackward=false;
 
