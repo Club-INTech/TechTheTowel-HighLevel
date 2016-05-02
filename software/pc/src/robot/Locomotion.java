@@ -627,7 +627,7 @@ public class Locomotion implements Service
                 }
                 else
                 {
-                    basicDetect(isMovementForward);
+                    basicDetect(isMovementForward, false);
                 }
         		
         		//si un ennemi est détecté à moins de 200, on diminue au minimum la vitesse
@@ -676,9 +676,9 @@ public class Locomotion implements Service
         
     }
 
-    private void basicDetect(boolean isMovementForward) throws UnexpectedObstacleOnPathException
+    private void basicDetect(boolean isMovementForward, boolean turning) throws UnexpectedObstacleOnPathException
     {
-        if(isMovementForward || isRobotTurning)
+        if(isMovementForward || turning)
         {
             if((USvalues.get(0) < 200 && USvalues.get(0) != 0) || ((USvalues.get(1) < 200 && USvalues.get(1) != 0)))
             {
@@ -686,7 +686,7 @@ public class Locomotion implements Service
                 throw new UnexpectedObstacleOnPathException();
             }
         }
-        if(!isMovementForward || isRobotTurning)
+        if(!isMovementForward || turning)
         {
             if((USvalues.get(2) < 200 && USvalues.get(2) != 0) || ((USvalues.get(3) < 200 && USvalues.get(3) != 0)))
             {
@@ -887,7 +887,7 @@ public class Locomotion implements Service
                         if (mustDetect)
                         {
                             if(basicDetection)
-                                basicDetect(false);
+                                basicDetect(false, true);
                         }
                         Sleep.sleep(feedbackLoopDelay);
                     }
