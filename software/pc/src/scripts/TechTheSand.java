@@ -380,7 +380,7 @@ public class TechTheSand extends AbstractScript
 
                 try {
                     stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
-                    stateToConsider.robot.turn(0);
+                    stateToConsider.robot.turnWithoutDetection(0, hooksToConsider);
                 } catch (Exception e)
                 {
                     e.printStackTrace();
