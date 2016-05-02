@@ -613,43 +613,14 @@ public class Strategie implements Service
 		int botX = state.robot.getPosition().x;
 		int botY = state.robot.getPosition().y;
 		int radius = state.robot.getRobotRadius();
-		try
+		if(botX <= 1489 - radius && botX >= -1489 + radius)
 		{
-			if(botX <= 1489 - radius && botX >= -1489 + radius)
+			if(botY<=1989 - radius && botY>= 10+radius)
 			{
-				if(botY<=1989 - radius && botY>= 10+radius)
-				{
-					if(config.getProperty("couleur").equals("vert"))
-					{
-						log.debug("Robot replacé dans la table !");
-						return true;
-					}
-					else if(config.getProperty("couleur").equals("violet"))
-					{
-						log.debug("Robot encore hors de table !");
-						return false;
-					}
-				}
-			}
-			else
-			{
-				if(config.getProperty("couleur").equals("violet"))
-				{
-					log.debug("Robot replacé dans la table !");
-					return true;
-				}
-				else if(config.getProperty("couleur").equals("vert"))
-				{
-					log.debug("Robot encore hors de table !");
-					return false;
-				}
+				return true;
 			}
 		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		log.debug("Robot encore hors de table !");
 		return false;
 	}
+	
 }
