@@ -300,7 +300,7 @@ public class TechTheSand extends AbstractScript
 				//=============================================================================================
 				try
 				{
-					stateToConsider.robot.moveArc(approach2, hooksToConsider);
+					stateToConsider.robot.moveArc(approach2, hooksToConsider, true);
 				}
 				catch (UnableToMoveException e)
 				{
@@ -312,7 +312,7 @@ public class TechTheSand extends AbstractScript
 						stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/5, Math.PI, false), hooksToConsider);
 						stateToConsider.robot.turn(Math.PI);
 						//stateToConsider.robot.moveLengthwise(-80);
-						stateToConsider.robot.moveArc(approach2, hooksToConsider);
+						stateToConsider.robot.moveArc(approach2, hooksToConsider, true);
 					}
 					catch (UnableToMoveException e2)
 					{
@@ -324,7 +324,7 @@ public class TechTheSand extends AbstractScript
 							stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/5, Math.PI, false), hooksToConsider);
 							stateToConsider.robot.turn(Math.PI);
 							//stateToConsider.robot.moveLengthwise(-80);
-							stateToConsider.robot.moveArc(approach2, hooksToConsider);
+							stateToConsider.robot.moveArc(approach2, hooksToConsider, true);
 						}
 						catch (UnableToMoveException e3)
 						{
