@@ -242,6 +242,12 @@ public class Container
 																	(Config)getService(ServiceNames.CONFIG),
 																	(Log)getService(ServiceNames.LOG)
 																	);
+		else if(serviceRequested == ServiceNames.THREAD_WORKER)
+			instanciedServices[serviceRequested.ordinal()] = 	(Service)threadManager.getThreadWorker(
+					(Config)getService(ServiceNames.CONFIG),
+					(Log)getService(ServiceNames.LOG),
+					(PathDingDing)getService(ServiceNames.PATHDINGDING)
+			);
 		
 		// si le service demandé n'est pas connu, alors on log une erreur.
 		else
@@ -281,6 +287,7 @@ public class Container
 		}
 		try {
 			getService(ServiceNames.THREAD_TIMER);
+            getService(ServiceNames.THREAD_WORKER);
 			//getService(ServiceNames.THREAD_INTERFACE);
            // getService(ServiceNames.THREAD_EYES);
 		} catch (Exception e) {

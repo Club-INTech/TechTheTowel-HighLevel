@@ -470,6 +470,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
                         log.critical("Il ne daigne même pas répondre !");
                         return (res+(char)260);
                     }
+                    Thread.sleep(5);
                 }
 
                 while (available()) {
@@ -488,6 +489,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
                             log.critical("blocaqe attente nouveau char (pas de /r ?) dernier : "+(int)lastReceived);
                             return (res+(char)260);
                         }
+                        Thread.sleep(5);
                     }
                 }
 
@@ -499,6 +501,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
                         log.critical("bloquage attente newChar (normalement newLine)");
                         return (res+(char)260);
                     }
+                    Thread.sleep(5);
                 }
 
                 while(available()) {
@@ -513,6 +516,7 @@ public class SerialConnexion implements SerialPortEventListener, Service
                             log.critical("Bloquage attente newLine");
                             return (res+(char)260);
                         }
+                        Thread.sleep(5);
                     }
                 }
 
@@ -522,6 +526,8 @@ public class SerialConnexion implements SerialPortEventListener, Service
                     Sleep.sleep(100);
                 }
                 res+=(char)260;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
             return res;
         }
