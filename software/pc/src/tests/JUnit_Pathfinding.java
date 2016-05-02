@@ -62,6 +62,9 @@ public class JUnit_Pathfinding extends JUnit_Test
         //game = (GameState<RobotReal>) container.getService(ServiceNames.GAME_STATE);
         log = (Log)container.getService(ServiceNames.LOG);
         win = new Window(table);
+
+        container.getService(ServiceNames.THREAD_WORKER);
+        container.startInstanciedThreads();
         
 
         //game.robot.setPosition(Table.entryPosition);
@@ -80,7 +83,7 @@ public class JUnit_Pathfinding extends JUnit_Test
 
 
         pf = (PathDingDing)container.getService(ServiceNames.PATHDINGDING);
-        table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
+        table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
        // game.robot.moveLengthwise(250);
     }
 
