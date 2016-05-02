@@ -680,7 +680,7 @@ public class Locomotion implements Service
     {
         if(isMovementForward || turning)
         {
-            if((USvalues.get(0) < 200 && USvalues.get(0) != 0) || ((USvalues.get(1) < 200 && USvalues.get(1) != 0)))
+            if((USvalues.get(0) < 150 && USvalues.get(0) != 0) || ((USvalues.get(1) < 150 && USvalues.get(1) != 0)))
             {
                 log.warning("Lancement de UnexpectedObstacleOnPathException dans basicDetect : Capteurs avant");
                 throw new UnexpectedObstacleOnPathException();
@@ -688,7 +688,7 @@ public class Locomotion implements Service
         }
         if(!isMovementForward || turning)
         {
-            if((USvalues.get(2) < 200 && USvalues.get(2) != 0) || ((USvalues.get(3) < 200 && USvalues.get(3) != 0)))
+            if((USvalues.get(2) < 150 && USvalues.get(2) != 0) || ((USvalues.get(3) < 150 && USvalues.get(3) != 0)))
             {
                 log.warning("Lancement de UnexpectedObstacleOnPathException dans basicDetect : Capteurs arrière");
                 throw new UnexpectedObstacleOnPathException();
