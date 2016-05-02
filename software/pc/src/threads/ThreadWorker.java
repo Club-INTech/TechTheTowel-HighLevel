@@ -23,22 +23,26 @@ public class ThreadWorker extends AbstractThread
     {
         super(config, log);
         this.pdd = pdd;
-        Thread.currentThread().setPriority(1);
     }
 
     @Override
     public void run()
     {
-        if(!graphOK)
+        log.debug("ThreadWorker lancé");
+        while(true)
         {
-             pdd.recomputeGraph();
-             ThreadWorker.graphOK = true;
-        }
+            if (!graphOK) {
+                log.debug("recalcul du graphe");
+                pdd.recomputeGraph();
+                ThreadWorker.graphOK = true;
+                log.debug("recalcul du graphe terminé");
+            }
 
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
