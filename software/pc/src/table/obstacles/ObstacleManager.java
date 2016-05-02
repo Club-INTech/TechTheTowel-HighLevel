@@ -723,15 +723,15 @@ public class ObstacleManager
 		}
 
 		this.mRobotRadius = newRobotRadius;
-      /*  while (!ThreadWorker.isGraphReady())
+        while (!ThreadWorker.isGraphReady())
         {
             try {
                 Thread.sleep(200);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }*/
-		//ThreadWorker.recalculateGraph();
+        }
+		ThreadWorker.recalculateGraph();
 	}
 
     /**
