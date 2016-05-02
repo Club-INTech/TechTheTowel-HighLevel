@@ -126,7 +126,7 @@ public class SensorsCardWrapper implements Service
     }
     
     /**
-     * recupere la valeur des capteurs ultrason
+     * recupere la valeur d'un capteur ultrason
      * @param sensor le capteur dont on veut recuperer la valeur
      * @return la valeur du capteur
      * @throws SerialConnexionException si erreur de connexion avec le capteur
