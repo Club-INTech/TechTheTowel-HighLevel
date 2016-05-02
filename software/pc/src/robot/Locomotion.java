@@ -305,7 +305,7 @@ public class Locomotion implements Service
      * @param hooks les hooks à prendre en compte
      * @throws UnableToMoveException si le robot est bloqué
      */
-    public void moveArc(Arc arc, ArrayList<Hook> hooks, boolean mustDetectTurning) throws UnableToMoveException
+    public void moveArc(Arc arc, ArrayList<Hook> hooks, boolean mustDetectTurning, boolean wall) throws UnableToMoveException
     {
         updateCurrentPositionAndOrientation();
 
@@ -322,7 +322,7 @@ public class Locomotion implements Service
             isRobotMovingForward=true;
         else
             isRobotMovingBackward=true;
-        moveToPointException(arc.end, hooks, arc.length>=0, false, false, true, true);
+        moveToPointException(arc.end, hooks, arc.length>=0, wall, false, true, true);
         isRobotMovingForward=false;
         isRobotMovingBackward=false;
 

@@ -363,6 +363,16 @@ public class RobotChrono extends Robot
 	}
 
 	@Override
+	public void moveArc(Arc arc, ArrayList<Hook> hooks, boolean expectedWallImpact) throws UnableToMoveException {
+
+	}
+
+	@Override
+	public void moveArcNoDetectionWhileTurning(Arc arc, ArrayList<Hook> hooks, boolean expectedWallImpact) throws UnableToMoveException {
+
+	}
+
+	@Override
 	public void setBasicDetection(boolean basicDetection) {
 
 	}

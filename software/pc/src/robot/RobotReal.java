@@ -182,12 +182,23 @@ public class RobotReal extends Robot
      */
 	public void moveArc(Arc arc, ArrayList<Hook> hooks) throws UnableToMoveException
 	{
-		mLocomotion.moveArc(arc,hooks, true);
+		mLocomotion.moveArc(arc,hooks, true, false);
 	}
 
 	@Override
 	public void moveArcNoDetectionWhileTurning(Arc arc, ArrayList<Hook> hooks) throws UnableToMoveException {
-		mLocomotion.moveArc(arc,hooks, false);
+		mLocomotion.moveArc(arc, hooks, false, false);
+	}
+
+	@Override
+	public void moveArc(Arc arc, ArrayList<Hook> hooks, boolean expectedWallImpact) throws UnableToMoveException {
+		mLocomotion.moveArc(arc,hooks, false, expectedWallImpact);
+
+	}
+
+	@Override
+	public void moveArcNoDetectionWhileTurning(Arc arc, ArrayList<Hook> hooks, boolean expectedWallImpact) throws UnableToMoveException {
+		mLocomotion.moveArc(arc,hooks, false, expectedWallImpact);
 	}
 
 	@Override

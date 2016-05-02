@@ -389,6 +389,10 @@ public abstract class Robot implements Service
 
 	public abstract void moveArcNoDetectionWhileTurning(Arc arc, ArrayList<Hook> hooks) throws UnableToMoveException;
 
+	public abstract void moveArc(Arc arc, ArrayList<Hook> hooks, boolean expectedWallImpact) throws UnableToMoveException;
+
+	public abstract void moveArcNoDetectionWhileTurning(Arc arc, ArrayList<Hook> hooks, boolean expectedWallImpact) throws UnableToMoveException;
+
 	public abstract void setBasicDetection(boolean basicDetection);
 
 	public abstract void setUSvalues(ArrayList<Integer> val);
