@@ -191,7 +191,7 @@ public class TechTheSand extends AbstractScript
                 
                 // Définition de l'arc à suivre, point de départ temporaire
                 // 150
-                Arc approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(100,2000-250), Math.PI, true);
+                Arc approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(100,2000-210), Math.PI, true);
 
 				try {
 					stateToConsider.robot.setForceMovement(false);
