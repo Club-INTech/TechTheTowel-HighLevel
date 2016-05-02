@@ -319,7 +319,7 @@ public class Castle extends AbstractScript
 
 					angle = stateToConsider.robot.getOrientation();
                     try {
-                        Arc arc = new Arc(-900, -500, angle, false);
+                        Arc arc = new Arc(-900, -550, angle, false);
                         stateToConsider.robot.moveArc(arc, hooksToConsider);
                     }
                     catch (UnableToMoveException e)

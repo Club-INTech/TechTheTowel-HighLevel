@@ -254,9 +254,7 @@ public class TechTheSand extends AbstractScript
 				}
 				try {
 					stateToConsider.robot.turn(Math.PI);
-
-					stateToConsider.robot.moveLengthwise(50);
-				} catch (Exception e)
+                } catch (Exception e)
 				{
 					e.printStackTrace();
 				}
@@ -302,7 +300,9 @@ public class TechTheSand extends AbstractScript
 				//=============================================================================================
 				try
 				{
-					stateToConsider.robot.moveArc(approach2, hooksToConsider);
+                    stateToConsider.robot.setLocomotionSpeed(Speed.ULTRA_SLOW_ALL);
+                    stateToConsider.robot.moveArc(approach2, hooksToConsider);
+                    stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 				}
 				catch (UnableToMoveException e)
 				{
