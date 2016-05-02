@@ -33,22 +33,13 @@ public class RobotReal extends Robot
 	
 	
 	// Constructeur
-	public RobotReal( Locomotion deplacements, ActuatorCardWrapper mActuatorCardWrapper, Config config, Log log, PathDingDing pathDingDing, SensorsCardWrapper mSensorsCardWrapper)
- 	{
-		super(config, log, pathDingDing);
-		this.mSensorsCardWrapper = mSensorsCardWrapper;
-		this.mActuatorCardWrapper = mActuatorCardWrapper;
-		this.mLocomotion = deplacements;
-		updateConfig();
-		speed = Speed.SLOW_ALL;		
-	}
-	
-    public void copy(RobotChrono rc)
-    {
-    	// TODO: vérifier que la copie est faite sur tout ce qu'il y a besoin
-        getPosition().copy(rc.position);
-        rc.speed=speed;
-        rc.orientation = getOrientation();
+	public RobotReal( Locomotion deplacements, ActuatorCardWrapper mActuatorCardWrapper, Config config, Log log, PathDingDing pathDingDing, SensorsCardWrapper mSensorsCardWrapper) {
+        super(config, log, pathDingDing);
+        this.mSensorsCardWrapper = mSensorsCardWrapper;
+        this.mActuatorCardWrapper = mActuatorCardWrapper;
+        this.mLocomotion = deplacements;
+        updateConfig();
+        speed = Speed.SLOW_ALL;
     }
 
 
