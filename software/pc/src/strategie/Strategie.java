@@ -514,6 +514,7 @@ public class Strategie implements Service
 			int radius=600;
 			try
 			{
+				state.robot.getOrientation();
 				double rOrient = state.robot.getOrientationFast();
 				
 				// détermination de la marche avant ou arrière
@@ -561,7 +562,7 @@ public class Strategie implements Service
 				}
 				
 				// Cas spécifique pour les poissons
-				if(script instanceof Fishing)
+				if(script instanceof Fishing && state.robot.getPosition().y<1000)
 				{
 					radius=-radius;
 					length=-length;

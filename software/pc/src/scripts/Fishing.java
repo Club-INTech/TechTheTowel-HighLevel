@@ -426,6 +426,7 @@ public class Fishing extends AbstractScript
 
 				// On longe le bac avec gestion de blocage sur le bord du filet
 				try
+				
 				{
 					xBefore=stateToConsider.robot.getPosition().x;
 					log.debug("Premier passage !");
