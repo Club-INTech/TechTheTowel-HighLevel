@@ -428,27 +428,29 @@ public class Fishing extends AbstractScript
 				try
 				{
 					xBefore=stateToConsider.robot.getPosition().x;
+					log.debug("Premier passage !");
 					stateToConsider.robot.moveLengthwise(500, hooksToConsider, false);
 				}
 				catch(UnableToMoveException e)
 				{
 					if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED)
 					{
-						log.debug("Ennemi détecté ! Attente avant de progresser !");
+						log.debug("Ennemi détecté au premier passage ! Attente avant de progresser !");
 						if(!waitForEnnemy(stateToConsider, stateToConsider.robot.getPosition(), true))
 						{
-							log.debug("Le salaud ne bouge pas : abort !");
+							log.debug("Le salaud ne bouge pas : abort du premier passage !");
 							hooksToConsider.clear();
 							throw new UnableToMoveException(e.aim, UnableToMoveReason.OBSTACLE_DETECTED);
 						}
 						else
 						{
+							log.debug("Voie dégagée, on reprend le premier passage !");
 							stateToConsider.robot.moveLengthwise(500-(xBefore-stateToConsider.robot.getPosition().x),hooksToConsider,false);
 						}
 					}
 					else
 					{
-						log.debug("Bord du filet touché ! Retrait puis dépose !");
+						log.debug("Bord du filet touché au premier passage ! Retrait puis dépose !");
 						try
 						{
 							stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
@@ -460,6 +462,8 @@ public class Fishing extends AbstractScript
 						}
 						catch(Exception ex)
 						{
+							log.debug("Problème lors de la première dépose : \n" );
+							ex.printStackTrace();
 							throw ex;
 						}
 					}
@@ -481,6 +485,7 @@ public class Fishing extends AbstractScript
 
 				// on repart chercher d'autre poissons rapidement 
 				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+				log.debug("On part pour un second passage !");
 				stateToConsider.robot.moveLengthwise(-460, hooksToConsider, false);
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 				
@@ -498,42 +503,51 @@ public class Fishing extends AbstractScript
 				try
 				{
 					xBefore=stateToConsider.robot.getPosition().x;
+					log.debug("Second passage !");
 					stateToConsider.robot.moveLengthwise(xBefore-netPosX, hooksToConsider, false);	
 				}
 				catch(UnableToMoveException e)
 				{
 					if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED)
 					{
-						log.debug("Ennemi détecté ! Attente avant de progresser !");
+						log.debug("Ennemi détecté au second passage ! Attente avant de progresser !");
 						if(!waitForEnnemy(stateToConsider, stateToConsider.robot.getPosition(), true))
 						{
-							log.debug("Le salaud ne bouge pas : abort !");
+							log.debug("Le salaud ne bouge pas : abort du second passage !");
 							throw new UnableToMoveException(e.aim, UnableToMoveReason.OBSTACLE_DETECTED);
 						}
 						else
 						{
+							log.debug("Voie dégagée, on reprend le second passage !");
 							stateToConsider.robot.moveLengthwise(netPosX-(xBefore-stateToConsider.robot.getPosition().x),hooksToConsider,false);
 						}
 					}
 					else
 					{
-						log.debug("Bord du filet touché, tentative de dégagement !");
+						log.debug("Bord du filet touché au second passage, tentative de dégagement !");
 						try
 						{
 							if(stateToConsider.robot.getAreFishesOnBoard())
 							{
+								log.debug("Poissons à bord au second passage, on les garde !");
 								stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
 							}
 							else
 							{
-								stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
-								throw new ExecuteException(new BlockedException());
+								log.debug("Pas de poissons à bord au second passage, on sort !");
+								stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
 							}
+							hooksToConsider.clear();
+							stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
 						}
 						catch(Exception ex)
 						{
+							log.debug("Problème lors du second passage :");
+							ex.printStackTrace();
 							throw ex;
 						}
+						log.debug("Lancement d'une exception pour remonter à l'IA !");
+						throw new ExecuteException(new BlockedException());
 					}
 				}
 				
@@ -548,37 +562,41 @@ public class Fishing extends AbstractScript
 				{
 					if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED)
 					{
-						log.debug("Ennemi détecté ! Attente avant de progresser !");
+						log.debug("Ennemi détecté au second passage ! Attente avant de progresser !");
 						if(!waitForEnnemy(stateToConsider, stateToConsider.robot.getPosition(), true))
 						{
-							log.debug("Le salaud ne bouge pas : abort !");
+							log.debug("Le salaud ne bouge pas : abort du second passage !");
 							throw new UnableToMoveException(e.aim, UnableToMoveReason.OBSTACLE_DETECTED);
 						}
 						else
 						{
+							log.debug("Voie dégagée, reprise du second passage !");
 							stateToConsider.robot.moveLengthwise(300-(xBefore-stateToConsider.robot.getPosition().x),hooksToConsider,true);
 						}
 					}
 					else
 					{
-						log.debug("Bord du filet touché, tentative de dégagement !");
+						log.debug("Bord du filet touché au second passage, tentative de dégagement !");
 						try
 						{
 							if(stateToConsider.robot.getAreFishesOnBoard())
 							{
+								log.debug("Poissons à bord au second passage, on les garde !");
 								stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
 							}
 							else
 							{
 								stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
 							}
+							hooksToConsider.clear();
 							stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
-							throw new ExecuteException(new BlockedException());
 						}
 						catch(Exception ex)
 						{
 							throw ex;
 						}
+						log.debug("Lancement d'une exception pour remonter à l'IA !");
+						throw new ExecuteException(new BlockedException());
 					}
 				}
 				
@@ -598,6 +616,7 @@ public class Fishing extends AbstractScript
 
 				// on repart chercher d'autre poissons rapidement
 				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+				log.debug("On part faire la troisième tentative !");
 				stateToConsider.robot.moveLengthwise(-460, hooksToConsider, false);
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 
@@ -607,7 +626,7 @@ public class Fishing extends AbstractScript
 				hooksToConsider.add(hook2);
 
 				//Rajout du hook pour le booléen
-				specialHook = hookFactory.newXLesserHook(900);
+				specialHook = hookFactory.newXLesserHook(850);
 				specialHook.addCallback(new Callback(new SetFishesOnBoard(),true,stateToConsider));
 				hooksToConsider.add(specialHook);
 
@@ -615,42 +634,51 @@ public class Fishing extends AbstractScript
 				try
 				{
 					xBefore=stateToConsider.robot.getPosition().x;
+					log.debug("Troisième tentative !");
 					stateToConsider.robot.moveLengthwise(xBefore-netPosX, hooksToConsider, false);
 				}
 				catch(UnableToMoveException e)
 				{
 					if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED)
 					{
-						log.debug("Ennemi détecté ! Attente avant de progresser !");
+						log.debug("Ennemi détecté au troisième passage ! Attente avant de progresser !");
 						if(!waitForEnnemy(stateToConsider, stateToConsider.robot.getPosition(), true))
 						{
-							log.debug("Le salaud ne bouge pas : abort !");
+							log.debug("Le salaud ne bouge pas : abort du troisième passage !");
 							throw new UnableToMoveException(e.aim, UnableToMoveReason.OBSTACLE_DETECTED);
 						}
 						else
 						{
+							log.debug("Voie dégagée, reprise du troisième passage !");
 							stateToConsider.robot.moveLengthwise(netPosX-(xBefore-stateToConsider.robot.getPosition().x),hooksToConsider,false);
 						}
 					}
 					else
 					{
-						log.debug("Bord du filet touché, tentative de dégagement !");
+						log.debug("Bord du filet touché au troisième passage, tentative de dégagement !");
 						try
 						{
 							if(stateToConsider.robot.getAreFishesOnBoard())
 							{
+								log.debug("Poissons à bord au troisime passage, on les garde !");
 								stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
 							}
 							else
 							{
-								stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
-								throw new ExecuteException(new BlockedException());
+								log.debug("Pas de poissons au troisème passage, on sort !");
+								stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
 							}
+							hooksToConsider.clear();
+							stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
 						}
 						catch(Exception ex)
 						{
+							log.debug("Problème lord du troisième passage :");
+							e.printStackTrace();
 							throw ex;
 						}
+						log.debug("Lancement d'une exception pour remonter à l'IA !");
+						throw new ExecuteException(new BlockedException());
 					}
 				}
 
@@ -665,37 +693,178 @@ public class Fishing extends AbstractScript
 				{
 					if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED)
 					{
-						log.debug("Ennemi détecté ! Attente avant de progresser !");
+						log.debug("Ennemi détecté au troisième passage ! Attente avant de progresser !");
 						if(!waitForEnnemy(stateToConsider, stateToConsider.robot.getPosition(), true))
 						{
-							log.debug("Le salaud ne bouge pas : abort !");
+							log.debug("Le salaud ne bouge pas : abort du troisième passage !");
 							throw new UnableToMoveException(e.aim, UnableToMoveReason.OBSTACLE_DETECTED);
 						}
 						else
 						{
+							log.debug("Voie dégagée, reprise du troisième passage !");
 							stateToConsider.robot.moveLengthwise(300-(xBefore-stateToConsider.robot.getPosition().x),hooksToConsider,true);
 						}
 					}
 					else
 					{
-						log.debug("Bord du filet touché, tentative de dégagement !");
+						log.debug("Bord du filet touché au troisième passage, tentative de dégagement !");
 						try
 						{
 							if(stateToConsider.robot.getAreFishesOnBoard())
 							{
+								log.debug("Poissons à bord au troisième passage, on les garde !");
 								stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
 							}
 							else
 							{
+								log.debug("Pas de poissons au troisième passage, on sort !");
 								stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
 							}
+							hooksToConsider.clear();
 							stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
-							throw new ExecuteException(new BlockedException());
 						}
 						catch(Exception ex)
 						{
+							log.debug("Problème lors du troisième passage :");
+							ex.printStackTrace();
 							throw ex;
 						}
+						log.debug("Lancement d'une exception pour remonter à l'IA !");
+						throw new ExecuteException(new BlockedException());
+					}
+				}
+
+				// On indique au robot que les poissons ne sont plus sur le bras
+				stateToConsider.robot.setAreFishesOnBoard(false);
+
+				// On indique que deux poissons en moyenne ont été pris
+				stateToConsider.table.fishesFished+=2;
+
+				// Points gagnés moyen pour ce passage
+				stateToConsider.obtainedPoints += 20;
+				
+				// On crée le hook de position pour prendre les poissons et ajout à la liste
+                hook3 = hookFactory.newXGreaterHook(600);
+				hook3.addCallback(new Callback(new GetFish(), true, stateToConsider));
+				hooksToConsider.add(hook3);
+
+				// on repart chercher d'autre poissons rapidement
+				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+				log.debug("On part faire la quatrième tentative !");
+				stateToConsider.robot.moveLengthwise(-460, hooksToConsider, false);
+				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+
+				// nouvelle condition pour le hook lâchant les poissons et mise à jour dans la liste
+				hook2 = hookFactory.newXLesserHook(330);
+				hook2.addCallback(new Callback(new DropFish(), true, stateToConsider));
+				hooksToConsider.add(hook2);
+
+				//Rajout du hook pour le booléen
+				specialHook = hookFactory.newXLesserHook(850);
+				specialHook.addCallback(new Callback(new SetFishesOnBoard(),true,stateToConsider));
+				hooksToConsider.add(specialHook);
+
+				// on longe le bac avec gestion de blocage
+				try
+				{
+					xBefore=stateToConsider.robot.getPosition().x;
+					log.debug("Quatrième tentative !");
+					stateToConsider.robot.moveLengthwise(xBefore-netPosX, hooksToConsider, false);
+				}
+				catch(UnableToMoveException e)
+				{
+					if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED)
+					{
+						log.debug("Ennemi détecté au quatrième passage ! Attente avant de progresser !");
+						if(!waitForEnnemy(stateToConsider, stateToConsider.robot.getPosition(), true))
+						{
+							log.debug("Le salaud ne bouge pas : abort du quatrième passage !");
+							throw new UnableToMoveException(e.aim, UnableToMoveReason.OBSTACLE_DETECTED);
+						}
+						else
+						{
+							log.debug("Voie dégagée, reprise du quatrième passage !");
+							stateToConsider.robot.moveLengthwise(netPosX-(xBefore-stateToConsider.robot.getPosition().x),hooksToConsider,false);
+						}
+					}
+					else
+					{
+						log.debug("Bord du filet touché au quatrième passage, tentative de dégagement !");
+						try
+						{
+							if(stateToConsider.robot.getAreFishesOnBoard())
+							{
+								log.debug("Poissons à bord au quatrième passage, on les garde !");
+								stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
+							}
+							else
+							{
+								log.debug("Pas de poissons au quatrième passage, on sort !");
+								stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
+							}
+							hooksToConsider.clear();
+							stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
+						}
+						catch(Exception ex)
+						{
+							log.debug("Problème lors du quatrième passage :");
+							e.printStackTrace();
+							throw ex;
+						}
+						log.debug("Lancement d'une exception pour remonter à l'IA !");
+						throw new ExecuteException(new BlockedException());
+					}
+				}
+
+				try
+				{
+					// relève du bras puis déplacement au dessus du filet
+					stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
+					xBefore=stateToConsider.robot.getPosition().x;
+					stateToConsider.robot.moveLengthwise(300,hooksToConsider,false);
+				}
+				catch(UnableToMoveException e)
+				{
+					if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED)
+					{
+						log.debug("Ennemi détecté au quatrième passage ! Attente avant de progresser !");
+						if(!waitForEnnemy(stateToConsider, stateToConsider.robot.getPosition(), true))
+						{
+							log.debug("Le salaud ne bouge pas : abort du quatrième passage !");
+							throw new UnableToMoveException(e.aim, UnableToMoveReason.OBSTACLE_DETECTED);
+						}
+						else
+						{
+							log.debug("Voie dégagée, reprise du quatrième passage !");
+							stateToConsider.robot.moveLengthwise(300-(xBefore-stateToConsider.robot.getPosition().x),hooksToConsider,true);
+						}
+					}
+					else
+					{
+						log.debug("Bord du filet touché au quatrième passage, tentative de dégagement !");
+						try
+						{
+							if(stateToConsider.robot.getAreFishesOnBoard())
+							{
+								log.debug("Poissons à bord au quatrième passage, on les garde !");
+								stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
+							}
+							else
+							{
+								log.debug("Pas de poissons au quatrième passage, on sort !");
+								stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
+							}
+							hooksToConsider.clear();
+							stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientation(), false),hooksToConsider);
+						}
+						catch(Exception ex)
+						{
+							log.debug("Problème lors du troisième passage :");
+							ex.printStackTrace();
+							throw ex;
+						}
+						log.debug("Lancement d'une exception pour remonter à l'IA !");
+						throw new ExecuteException(new BlockedException());
 					}
 				}
 
@@ -709,9 +878,11 @@ public class Fishing extends AbstractScript
 				stateToConsider.obtainedPoints += 20;
 
 				// arc pour sortir du bord de table
+				log.debug("Fishing terminé sans encombres, dégagement !");
 				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 				Arc disengage = new Arc(-320,160,stateToConsider.robot.getOrientation(),false);
 				stateToConsider.robot.moveArc(disengage, hooksToConsider);
+				hooksToConsider.clear();
 
 				// reprise de vitesse inter script
 				stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
@@ -1398,7 +1569,9 @@ public class Fishing extends AbstractScript
 	@Override
 	public void finalize(GameState<?> stateToConsider, Exception ex) throws SerialFinallyException 
 	{
-		log.debug("Exception " + ex + "dans Fishing : Lancement du Finalize !");
+		log.debug("Exception " + ex + "dans Fishing :");
+		ex.printStackTrace();
+		log.debug("Lancement du Finalize !");
 		try
 		{
 			log.debug("Poissons à bord ? :" + stateToConsider.robot.getAreFishesOnBoard());
@@ -1406,15 +1579,8 @@ public class Fishing extends AbstractScript
 			// Si on possède un poisson lors du finalize, on garde le bras à mi-hauteur
 			if(stateToConsider.robot.getAreFishesOnBoard())
 			{
-				try
-				{
-					log.debug("Arrêt de Fishing avec des poissons à bord !");
-					stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
-				}
-				catch(Exception e)
-				{
-					throw e;
-				}
+				log.debug("Arrêt de Fishing avec des poissons à bord !");
+				stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
 			}
 			else
 			{
@@ -1425,7 +1591,7 @@ public class Fishing extends AbstractScript
 		}
 		catch (SerialConnexionException e) 
 		{
-			log.debug("Fishing : impossible de ranger le bras !");
+			log.debug("Fishing : impossible d'utiliser le bras !");
 			throw new SerialFinallyException();
 		}
 	}

@@ -417,7 +417,6 @@ public class TechTheSand extends AbstractScript
 	@Override
 	public int remainingScoreOfVersion(int version, GameState<?> state) 
 	{
-		// TODO comment établir le nombre de points rendus par cette action ?
 		return 0;
 	}
 
@@ -430,7 +429,6 @@ public class TechTheSand extends AbstractScript
 		}
         else if(version == 1)
         {
-            //TODO
             return new Circle(460,2000-390);
         }
         else if(version == 2)

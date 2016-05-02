@@ -282,7 +282,7 @@ public class RobotChrono extends Robot
 
 	@Override
 	public boolean setTurningStrategy(TurningStrategy turning) {
-		//TODO do that TODO
+		//TODO
 		return true;
 	}
 	

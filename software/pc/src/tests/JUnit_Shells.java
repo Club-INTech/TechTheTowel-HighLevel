@@ -78,7 +78,6 @@ public class JUnit_Shells extends JUnit_Test
 //        }
 //        catch (UnableToMoveException | PathNotFoundException | PointInObstacleException e)
 //        {
-//            // TODO
 //            e.printStackTrace();
 //        }
     }
