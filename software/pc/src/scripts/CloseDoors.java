@@ -77,7 +77,7 @@ public class CloseDoors extends AbstractScript
                 stateToConsider.robot.setForceMovement(true);
 
                 //On ferme les portes
-				stateToConsider.robot.moveLengthwiseWithoutDetection(-900, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwiseWithoutDetection(-1000, hooksToConsider, true);
 
                 stateToConsider.robot.setForceMovement(false);
 
