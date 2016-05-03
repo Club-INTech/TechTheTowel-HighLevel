@@ -184,7 +184,7 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.robot.setDoor(true);
                 ThreadSensor.modeBorgne(true);
 
-                Hook hook = hookFactory.newXLesserHook(220);
+                Hook hook = hookFactory.newXLesserHook(260);
 
                 hook.addCallback(new Callback(new SetSand(), true, stateToConsider));
 
