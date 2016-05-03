@@ -278,7 +278,12 @@ public class Castle extends AbstractScript
 				stateToConsider.robot.setBasicDetection(false);
 
 
-				stateToConsider.robot.moveLengthwiseWithoutDetection(500);
+				try {
+					stateToConsider.robot.moveLengthwiseWithoutDetection(500);
+				} catch (UnableToMoveException e)
+				{
+					e.printStackTrace();
+				}
                 stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 
 				stateToConsider.robot.useActuator(ActuatorOrder.STOP_AXIS, false);
@@ -412,6 +417,17 @@ public class Castle extends AbstractScript
 	public void finalize(GameState<?> state, Exception e) throws SerialFinallyException
 	{
 		log.debug("Exception " + e + " dans Castle : Lancement du Finalize !");
+
+		if(state.robot.getPosition().x < 600)
+		{
+			try {
+				state.robot.turnWithoutDetection(Math.PI, new ArrayList<>());
+				state.robot.moveLengthwiseWithoutDetection(-700 + state.robot.getPositionFast().x);
+			} catch (UnableToMoveException e1) {
+				e1.printStackTrace();
+			}
+		}
+
 		try
 		{
 			state.robot.useActuator(ActuatorOrder.STOP_AXIS, false);
