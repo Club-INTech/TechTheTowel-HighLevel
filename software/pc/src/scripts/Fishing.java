@@ -631,7 +631,7 @@ public class Fishing extends AbstractScript
 				// on repart chercher d'autre poissons rapidement
 				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 				log.debug("On part faire la troisième tentative !");
-				stateToConsider.robot.moveLengthwise(-460, hooksToConsider, false);
+				stateToConsider.robot.moveLengthwise(-510, hooksToConsider, false);
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 
 				// nouvelle condition pour le hook lâchant les poissons et mise à jour dans la liste
@@ -701,7 +701,7 @@ public class Fishing extends AbstractScript
 					// relève du bras puis déplacement au dessus du filet
 					stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
 					xBefore=stateToConsider.robot.getPosition().x;
-					stateToConsider.robot.moveLengthwise(300,hooksToConsider,false);
+					stateToConsider.robot.moveLengthwise(350,hooksToConsider,false);
 				}
 				catch(UnableToMoveException e)
 				{
@@ -716,7 +716,7 @@ public class Fishing extends AbstractScript
 						else
 						{
 							log.debug("Voie dégagée, reprise du troisième passage !");
-							stateToConsider.robot.moveLengthwise(300-(xBefore-stateToConsider.robot.getPosition().x),hooksToConsider,true);
+							stateToConsider.robot.moveLengthwise(350-(xBefore-stateToConsider.robot.getPosition().x),hooksToConsider,true);
 						}
 					}
 					else
