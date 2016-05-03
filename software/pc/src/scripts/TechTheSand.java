@@ -393,7 +393,7 @@ public class TechTheSand extends AbstractScript
                 {
                 	// version à décommenter pour la version 2 de Castle
                 	// stateToConsider.robot.moveLengthwise(1150-stateToConsider.robot.getPosition().x);
-                    stateToConsider.robot.moveLengthwise(650 - stateToConsider.robot.getPosition().x);
+                    stateToConsider.robot.moveLengthwiseWithoutDetection(650 - stateToConsider.robot.getPosition().x);
                 } catch (Exception e)
                 {
                     e.printStackTrace();
