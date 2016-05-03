@@ -637,10 +637,10 @@ public class Locomotion implements Service
         	{
         		//detectEnemyInFrontDisk(isMovementForward, turnOnly, aim);
         		if(!isCurve && !basicDetection)
-                    detectEnemyAtDistance(85, aim.minusNewVector(highLevelPosition.clone()));	// 85 mm est une bonne distance pour être safe.
+                    detectEnemyAtDistance(150, aim.minusNewVector(highLevelPosition.clone()));	// 85 mm est une bonne distance pour être safe.
                 else if(!basicDetection)
                 {
-                    detectEnemyAtDistance(85, this.curveArc.getNextPosition(this.posStartedCurve, highLevelPosition.clone(),
+                    detectEnemyAtDistance(150, this.curveArc.getNextPosition(this.posStartedCurve, highLevelPosition.clone(),
                           highLevelOrientation, (this.curveArc.length<0 ? -1 :1)*detectionDistance).minusNewVector(highLevelPosition.clone()));
                 }
                 else
