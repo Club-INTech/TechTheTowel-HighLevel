@@ -76,7 +76,7 @@ public class Strategie implements Service
     /**
      * Mode match anormal, soit on a eu un blocage mécanique, soit l'adversaire est venu nous les briser
      */
-    private boolean abnormalMatch = false;
+    private boolean badLastScript = false;
 
     /**
      * Utile en mode match parfait, permet d'indiquer que l'on a terminé les actions principale, on spam Fishing
@@ -97,7 +97,7 @@ public class Strategie implements Service
     /**
      * Un pb est survenu
      */
-    private boolean shitHappened = false;
+    private boolean shitHappenedDuringMatch = false;
 
 
  /**
@@ -152,8 +152,8 @@ public class Strategie implements Service
                 log.critical("It was at this moment that Billy knew, that he fucked up.");
                 e.printStackTrace();
             } catch (UnableToMoveException e) {
-                abnormalMatch = true;
-                shitHappened = true;
+                badLastScript = true;
+                shitHappenedDuringMatch = true;
                 if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED) //On a vu l'ennemi, c'est anormal
                 {
                     dangerousOpponent = true;
@@ -173,8 +173,8 @@ public class Strategie implements Service
                 e.printStackTrace();
             } catch (ExecuteException e) {
                 log.critical("Echec de script, on continue");
-                abnormalMatch = true;
-                shitHappened = true;
+                badLastScript = true;
+                shitHappenedDuringMatch = true;
                 e.printStackTrace();
             }
 
@@ -191,7 +191,7 @@ public class Strategie implements Service
                 state.robot.setTurningStrategy(TurningStrategy.FASTEST);
                 state.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
             }
-            else if(abnormalMatch && state.robot.getIsSandInside()) //Si on est trop loin pour déclencher Castle
+            else if(badLastScript && state.robot.getIsSandInside()) //Si on est trop loin pour déclencher Castle
             {
                 castleTaken = true;
                 state.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
@@ -204,10 +204,10 @@ public class Strategie implements Service
             if(state.table.shellsObtained > 0)
                 gotShells = true;
 
-            if(!abnormalMatch && state.table.fishesFished>0)
+            if(!badLastScript && state.table.fishesFished>0)
                 done = true;
 
-            if(!state.robot.getIsSandInside() && !state.robot.shellsOnBoard && !abnormalMatch && gotShells)
+            if(!state.robot.getIsSandInside() && !state.robot.shellsOnBoard && !badLastScript && gotShells)
             {
                 try {
                     state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
@@ -338,8 +338,8 @@ public class Strategie implements Service
         catch (UnableToMoveException e)
         {
             log.critical("CRITICAL : On a pas réussi à se dégager");
-            shitHappened = true;
-            abnormalMatch = true;
+            shitHappenedDuringMatch = true;
+            badLastScript = true;
             e.printStackTrace();
         }
     }
@@ -349,7 +349,7 @@ public class Strategie implements Service
      * Si un mauvais evenement est arrivé, on prends une décision adaptée et on reprends le match normalement
      */
     public AbstractScript decide(){
-        if(!abnormalMatch)
+        if(!badLastScript)
         {
             if(start)
             {
@@ -408,7 +408,7 @@ public class Strategie implements Service
             }
             else
             {
-                abnormalMatch = true;
+                badLastScript = true;
                 return decide();
             }
         }
@@ -462,9 +462,9 @@ public class Strategie implements Service
      */
     private int version(AbstractScript script)
     {
-        boolean an = abnormalMatch;
-        boolean ab = shitHappened;
-        abnormalMatch = false;
+        boolean an = badLastScript;
+        boolean ab = shitHappenedDuringMatch;
+        badLastScript = false;
         if(script instanceof Castle && !ab)
             return 3;
         else if(script instanceof Castle)
