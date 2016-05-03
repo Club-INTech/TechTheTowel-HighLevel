@@ -143,6 +143,8 @@ public class Strategie implements Service
             AbstractScript nextScript = decide();
             try
             {
+                if(nextScript instanceof Fishing)
+                    state.robot.setBasicDetection(true);
                 nextScript.goToThenExec(version(nextScript), state, hooks);
                 ThreadEyes.forceEvent(EyesEvent.SUCCESS);
             } catch (BlockedActuatorException e) {
