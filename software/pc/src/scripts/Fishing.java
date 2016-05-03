@@ -399,7 +399,7 @@ public class Fishing extends AbstractScript
 
                 // Vitesse rapide jusqu'au début de pêche
 				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
-				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_MEDIUM);
 
 				stateToConsider.robot.setBasicDetection(true);
 
@@ -410,6 +410,11 @@ public class Fishing extends AbstractScript
 				Hook arm = hookFactory.newXLesserHook(950);
 				arm.addCallback(new Callback(new GetFish(),true,stateToConsider));
 				hooksToConsider.add(arm);
+
+                //On indique ques les poissons se trouvent sur le bras lors du déplacement de la moitié du bac
+                Hook specialHook = hookFactory.newXLesserHook(900);
+                specialHook.addCallback(new Callback(new SetFishesOnBoard(),true,stateToConsider));
+                hooksToConsider.add(specialHook);
 				
 				// marche arrière pour se placer près du bac
 				//stateToConsider.robot.moveLengthwise(-260, hooksToConsider, true);
@@ -421,11 +426,6 @@ public class Fishing extends AbstractScript
 
 				// On s'oriente vers le côté ennemi
 				stateToConsider.robot.turn((Math.PI), hooksToConsider, true);
-
-				//On indique ques les poissons se trouvent sur le bras lors du déplacement de la moitié du bac
-				Hook specialHook = hookFactory.newXLesserHook(900);
-				specialHook.addCallback(new Callback(new SetFishesOnBoard(),true,stateToConsider));
-				hooksToConsider.add(specialHook);
 
 				// On crée le hook de position, l'action pour lever le bras et ajout à la liste
 				Hook hook = hookFactory.newXLesserHook(650);
