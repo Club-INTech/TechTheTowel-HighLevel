@@ -414,11 +414,12 @@ public class TechTheSand extends AbstractScript
 		{
             if(e instanceof UnableToMoveException && ((UnableToMoveException)e).reason == UnableToMoveReason.OBSTACLE_DETECTED)
             {
+                stateToConsider.robot.setBasicDetection(true);
                 stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
                 stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
                 stateToConsider.robot.setForceMovement(false);
                 stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 200, hooksToConsider);
-                stateToConsider.robot.moveArc(new Arc(200, -300, stateToConsider.robot.getOrientation(), false), hooksToConsider);
+                stateToConsider.robot.moveArc(new Arc(200, -320, stateToConsider.robot.getOrientation(), false), hooksToConsider);
 				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
 				stateToConsider.robot.turnWithoutDetection(0, hooksToConsider);
 				stateToConsider.robot.moveLengthwise(800 - stateToConsider.robot.getPosition().x);
