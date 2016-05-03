@@ -235,6 +235,8 @@ public class TechTheSand extends AbstractScript
 							stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 						}
                         catch (UnableToMoveException e3) {
+                            if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED)
+                                throw new UnableToMoveException(new Vec2(0, 1600), UnableToMoveReason.OBSTACLE_DETECTED);
                             log.critical("On peut vraiment pas obtenir le sable, on abandonne");
 							stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 							stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
