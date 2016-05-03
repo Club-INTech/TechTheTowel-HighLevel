@@ -235,7 +235,7 @@ public class TechTheSand extends AbstractScript
 							stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 						}
                         catch (UnableToMoveException e3) {
-                            if(e3.reason == UnableToMoveReason.OBSTACLE_DETECTED)
+                       /*     if(e3.reason == UnableToMoveReason.OBSTACLE_DETECTED)
                                 throw new UnableToMoveException(new Vec2(0, 1600), UnableToMoveReason.OBSTACLE_DETECTED);
                             log.critical("On peut vraiment pas obtenir le sable, on abandonne");
 							stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
@@ -243,7 +243,7 @@ public class TechTheSand extends AbstractScript
                             stateToConsider.robot.setForceMovement(false);
                             stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 200, hooksToConsider);
                             stateToConsider.robot.moveArc(new Arc(200, -200, stateToConsider.robot.getOrientation(), false), hooksToConsider);
-                            stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+                            stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);*/
                             throw e3;
                         }
                     }
@@ -414,7 +414,7 @@ public class TechTheSand extends AbstractScript
 		}
 		catch(Exception e)
 		{
-            if(e instanceof UnableToMoveException && ((UnableToMoveException)e).reason == UnableToMoveReason.OBSTACLE_DETECTED)
+            if(e instanceof UnableToMoveException)
             {
                 stateToConsider.robot.setBasicDetection(true);
                 stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
@@ -422,9 +422,9 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.robot.setForceMovement(false);
                 stateToConsider.robot.moveLengthwiseWithoutDetection(stateToConsider.robot.getPosition().x - 200);
                 stateToConsider.robot.moveArc(new Arc(200, -260, stateToConsider.robot.getOrientation(), false), hooksToConsider);
+				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
                 stateToConsider.changeRobotRadius(TechTheSand.retractedRobotRadius);
                 stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
-				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
                 stateToConsider.robot.setIsSandInside(false);
 				stateToConsider.robot.turnWithoutDetection(0, hooksToConsider);
 				stateToConsider.robot.moveLengthwiseWithoutDetection(600 - stateToConsider.robot.getPosition().x);

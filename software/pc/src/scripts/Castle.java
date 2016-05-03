@@ -291,7 +291,7 @@ public class Castle extends AbstractScript
 				stateToConsider.robot.useActuator(ActuatorOrder.STOP_AXIS, false);
 				stateToConsider.robot.useActuator(ActuatorOrder.STOP_AXIS_LEFT, false);
 
-				stateToConsider.robot.moveLengthwiseWithoutDetection(-300);
+				stateToConsider.robot.moveLengthwiseWithoutDetection(-520 + stateToConsider.robot.getPosition().x);
 
 
 				// on indique qu'on ne transporte plus de sable
