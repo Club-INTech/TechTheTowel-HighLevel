@@ -423,6 +423,7 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.changeRobotRadius(TechTheSand.retractedRobotRadius);
                 stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
 				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
+                stateToConsider.robot.setIsSandInside(false);
 				stateToConsider.robot.turnWithoutDetection(0, hooksToConsider);
 				stateToConsider.robot.moveLengthwiseWithoutDetection(800 - stateToConsider.robot.getPosition().x);
                 stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);

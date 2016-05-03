@@ -106,16 +106,16 @@ public class PathDingDing implements Service
 				table.getObstacleManager().removeObstacle((ObstacleRectangular)i);
 		}
 
-		//this.graph = new Graph(table, log); //On recréé le graphe, pas si overkill que cela à cause des changements de rayon
+		this.graph = new Graph(table, log); //On recréé le graphe, pas si overkill que cela à cause des changements de rayon
 
-		while(!ThreadWorker.isGraphReady())
+	/*	while(!ThreadWorker.isGraphReady())
         {
             try {
                 Thread.sleep(200);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
 
 		//On vide les listes de nodes pour un nouveau calcul
 		this.initialise();
