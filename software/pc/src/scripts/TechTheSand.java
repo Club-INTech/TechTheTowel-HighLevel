@@ -412,7 +412,6 @@ public class TechTheSand extends AbstractScript
 		}
 		catch(Exception e)
 		{
-			finalize(stateToConsider,e);
             if(e instanceof UnableToMoveException && ((UnableToMoveException)e).reason == UnableToMoveReason.OBSTACLE_DETECTED)
             {
                 stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
@@ -426,6 +425,7 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
             }
             stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+            finalize(stateToConsider,e);
             throw e;
 		}
 	}
