@@ -418,11 +418,11 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
                 stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
                 stateToConsider.robot.setForceMovement(false);
-                stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 200, hooksToConsider);
+                stateToConsider.robot.moveLengthwiseWithoutDetection(stateToConsider.robot.getPosition().x - 200);
                 stateToConsider.robot.moveArc(new Arc(200, -320, stateToConsider.robot.getOrientation(), false), hooksToConsider);
 				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
 				stateToConsider.robot.turnWithoutDetection(0, hooksToConsider);
-				stateToConsider.robot.moveLengthwise(800 - stateToConsider.robot.getPosition().x);
+				stateToConsider.robot.moveLengthwiseWithoutDetection(800 - stateToConsider.robot.getPosition().x);
                 stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
             }
             stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
