@@ -161,7 +161,8 @@ public class Strategie implements Service
                 }
                 else
                     ThreadEyes.forceEvent(EyesEvent.BLOCKED);
-                disengage(nextScript);
+                if(!(nextScript instanceof TechTheSand))
+                    disengage(nextScript);
                 e.printStackTrace();
             } catch (BadVersionException e) {
                 if(!(nextScript instanceof ShellGetter))
