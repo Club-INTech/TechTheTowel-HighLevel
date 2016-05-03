@@ -254,6 +254,8 @@ public class Castle extends AbstractScript
 
 				stateToConsider.robot.setBasicDetection(true);
 
+                stateToConsider.robot.turnWithoutDetection(0, hooksToConsider);
+
 				double angle = stateToConsider.robot.getOrientation();
 				try
 				{
