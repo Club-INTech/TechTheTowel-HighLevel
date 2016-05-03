@@ -1,6 +1,5 @@
 package threads;
 
-import exceptions.ThreadException;
 import pathDingDing.PathDingDing;
 import robot.RobotReal;
 import robot.cardsWrappers.ActuatorCardWrapper;
@@ -10,7 +9,6 @@ import table.Table;
 import utils.Config;
 import utils.Log;
 
-import java.io.IOException;
 import java.util.Hashtable;
 
 /**

@@ -4,23 +4,16 @@ import enums.ActuatorOrder;
 import enums.ScriptNames;
 import enums.ServiceNames;
 import enums.Speed;
-import exceptions.ExecuteException;
-import exceptions.Locomotion.UnableToMoveException;
-import exceptions.PathNotFoundException;
-import exceptions.PointInObstacleException;
-import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import robot.Robot;
 import scripts.ScriptManager;
-import smartMath.Arc;
 import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
-import threads.ThreadManager;
 
 import java.util.ArrayList;
 

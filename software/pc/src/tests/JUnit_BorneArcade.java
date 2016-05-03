@@ -12,7 +12,6 @@ import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
 import enums.ServiceNames;
-import exceptions.serial.SerialConnexionException;
 import graphics.Window;
 
 public class JUnit_BorneArcade extends JUnit_Test 

@@ -1,7 +1,6 @@
 package tests;
 
 import enums.ServiceNames;
-import enums.USsensors;
 import exceptions.ContainerException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.Locomotion.UnexpectedObstacleOnPathException;
@@ -10,7 +9,6 @@ import exceptions.PointInObstacleException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialManagerException;
 import hook.Hook;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import robot.Locomotion;
@@ -20,7 +18,6 @@ import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
-import threads.ThreadInterface;
 import utils.Sleep;
 
 import java.util.ArrayList;

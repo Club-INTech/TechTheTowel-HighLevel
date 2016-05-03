@@ -8,14 +8,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import pathDingDing.PathDingDing;
-import robot.Robot;
 import robot.RobotReal;
 import scripts.TechTheSand;
-import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
 import table.obstacles.Obstacle;
-import table.obstacles.ObstacleRectangular;
 import utils.Log;
 
 import java.util.ArrayList;

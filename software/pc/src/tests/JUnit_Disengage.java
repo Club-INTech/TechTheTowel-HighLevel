@@ -8,13 +8,11 @@ import org.junit.Test;
 
 import enums.ServiceNames;
 import enums.Speed;
-import exceptions.Locomotion.UnableToMoveException;
 import hook.Hook;
 import robot.Robot;
 import smartMath.Arc;
 import smartMath.Vec2;
 import strategie.GameState;
-import table.Table;
 
 public class JUnit_Disengage extends JUnit_Test
 {
@@ -57,25 +55,11 @@ public class JUnit_Disengage extends JUnit_Test
 				// détermination de la marche avant ou arrière
 				if(state.robot.getPosition().x<0)
 				{
-					if(rOrient>=-Math.PI/2 && rOrient< Math.PI/2)
-					{
-						reverse = false;
-					}
-					else
-					{
-						reverse = true;
-					}
+					reverse = !(rOrient >= -Math.PI / 2 && rOrient < Math.PI / 2);
 				}
 				else
 				{
-					if(rOrient >=-Math.PI/2 && rOrient< Math.PI/2)
-					{
-						reverse = true;
-					}
-					else
-					{
-						reverse = false;
-					}
+					reverse = rOrient >= -Math.PI / 2 && rOrient < Math.PI / 2;
 					if((rOrient>=-Math.PI && rOrient<=-Math.PI/2) || (rOrient>=-Math.PI/2 && rOrient<=0))
 					{
 						radius=-radius;

@@ -89,14 +89,10 @@ public class ObstacleRectangular extends Obstacle
 	 */
 	public boolean isInObstacle(Vec2 point)
 	{
-		if(point.x <= position.x+(sizeX/2)
-				&& point.x >= position.x-(sizeX/2)
-				&& point.y <= position.y+(sizeY/2)
-				&& point.y >= position.y-(sizeY/2))
-		{
-			return true;
-		}
-		return false;
+		return point.x <= position.x + (sizeX / 2)
+				&& point.x >= position.x - (sizeX / 2)
+				&& point.y <= position.y + (sizeY / 2)
+				&& point.y >= position.y - (sizeY / 2);
 	}
 	
 	/**

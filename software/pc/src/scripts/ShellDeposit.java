@@ -18,7 +18,6 @@ import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
-import table.obstacles.ObstacleRectangular;
 import utils.Config;
 import utils.Log;
 

@@ -5,7 +5,6 @@ import enums.ServiceNames;
 import enums.Speed;
 import enums.TurningStrategy;
 import exceptions.Locomotion.UnableToMoveException;
-import exceptions.Locomotion.UnexpectedObstacleOnPathException;
 import exceptions.serial.SerialConnexionException;
 import hook.Hook;
 import org.junit.Before;

@@ -9,11 +9,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import exceptions.ExecuteException;
-import exceptions.PathNotFoundException;
-import exceptions.PointInObstacleException;
-import exceptions.Locomotion.UnableToMoveException;
-import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import robot.Robot;
 import scripts.ScriptManager;

@@ -2,12 +2,7 @@ package tests;
 
 import enums.*;
 import exceptions.BlockedActuatorException;
-import exceptions.ExecuteException;
-import exceptions.Locomotion.UnableToMoveException;
-import exceptions.PathNotFoundException;
-import exceptions.PointInObstacleException;
 import exceptions.serial.SerialConnexionException;
-import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import org.junit.Before;
 import org.junit.Test;

@@ -122,7 +122,7 @@ public class SensorsCardWrapper implements Service
     public boolean getContactSensorValue(ContactSensors sensor) throws SerialConnexionException
     {
     	String[] sensorAnswer = sensorsCardSerial.communiquer(sensor.getSerialCommunication(),1);
-		return (!sensorAnswer[0].toString().equals("0"));
+		return (!sensorAnswer[0].equals("0"));
     }
     
     /**

@@ -1,14 +1,8 @@
 package tests;
 
 import enums.*;
-import exceptions.BadVersionException;
 import exceptions.BlockedActuatorException;
-import exceptions.ExecuteException;
-import exceptions.Locomotion.UnableToMoveException;
-import exceptions.PathNotFoundException;
-import exceptions.PointInObstacleException;
 import exceptions.serial.SerialConnexionException;
-import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import org.junit.After;
 import org.junit.Before;
@@ -19,7 +13,6 @@ import scripts.ScriptManager;
 import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
-import utils.Sleep;
 
 import java.util.ArrayList;
 

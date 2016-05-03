@@ -5,22 +5,18 @@ import exceptions.BadVersionException;
 import exceptions.BlockedActuatorException;
 import exceptions.ConfigPropertyNotFoundException;
 import exceptions.ExecuteException;
-import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
-import exceptions.Locomotion.UnexpectedObstacleOnPathException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import hook.Callback;
 import hook.Hook;
 import hook.methods.SetSand;
 import hook.types.HookFactory;
-import hook.types.HookXLesser;
 import robot.Robot;
 import smartMath.Arc;
 import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
-import table.Table;
 import threads.ThreadSensor;
 import utils.Config;
 import utils.Log;
@@ -158,7 +154,6 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.robot.moveLengthwise(995);
 
 				stateToConsider.robot.turnWithoutDetection(2*Math.PI/3, hooksToConsider);
-
 
                 stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
 

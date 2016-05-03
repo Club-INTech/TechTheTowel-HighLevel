@@ -144,8 +144,6 @@ public class Geometry
 			a=temp;
 		}
 
-		if(val >= a && val <= b)
-			return true;
-		return false;
+		return val >= a && val <= b;
 	}
 }

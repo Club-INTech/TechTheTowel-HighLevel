@@ -161,7 +161,7 @@ public class Log implements Service
 		String heure = calendar.get(Calendar.HOUR_OF_DAY)+"h"+calendar.get(Calendar.MINUTE)+":"+calendar.get(Calendar.SECOND)+","+calendar.get(Calendar.MILLISECOND);
 		
 		
-		if((prefix != debugPrefix || printLogs) && !Log.stop)
+		if((prefix.equals(debugPrefix) || printLogs) && !Log.stop)
 		{
 			StackTraceElement elem = Thread.currentThread().getStackTrace()[3];
 			logPrinter.println(heure+" "+elem.getClassName()+"."+elem.getMethodName()+":"+elem.getLineNumber()+" > "+message+resetColor);

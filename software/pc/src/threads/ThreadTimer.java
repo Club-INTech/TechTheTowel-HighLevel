@@ -3,7 +3,6 @@ package threads;
 import enums.ActuatorOrder;
 import enums.EyesEvent;
 import exceptions.serial.SerialConnexionException;
-import graphics.Window;
 import robot.RobotReal;
 import robot.cardsWrappers.LocomotionCardWrapper;
 import robot.cardsWrappers.SensorsCardWrapper;

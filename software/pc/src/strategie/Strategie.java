@@ -1,6 +1,5 @@
 package strategie;
 
-import container.Container;
 import container.Service;
 import enums.*;
 import exceptions.*;
@@ -9,14 +8,12 @@ import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import hook.types.HookFactory;
-import pathDingDing.PathDingDing;
 import robot.Robot;
 import robot.RobotReal;
 import scripts.*;
 import smartMath.Arc;
 import smartMath.Vec2;
 import table.Table;
-import table.obstacles.Obstacle;
 import table.obstacles.ObstacleCircular;
 import threads.ThreadEyes;
 import threads.ThreadSensor;
@@ -523,25 +520,11 @@ public class Strategie implements Service
 				// détermination de la marche avant ou arrière
 				if(state.robot.getPosition().x<0)
 				{
-					if(rOrient>=-Math.PI/2 && rOrient< Math.PI/2)
-					{
-						reverse = false;
-					}
-					else
-					{
-						reverse = true;
-					}
+                    reverse = !(rOrient >= -Math.PI / 2 && rOrient < Math.PI / 2);
 				}
 				else
 				{
-					if(rOrient >=-Math.PI/2 && rOrient< Math.PI/2)
-					{
-						reverse = true;
-					}
-					else
-					{
-						reverse = false;
-					}
+                    reverse = rOrient >= -Math.PI / 2 && rOrient < Math.PI / 2;
 					if((rOrient>=-Math.PI && rOrient<=-Math.PI/2) || (rOrient>=-Math.PI/2 && rOrient<=0))
 					{
 						radius=-radius;

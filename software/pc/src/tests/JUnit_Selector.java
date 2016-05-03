@@ -1,22 +1,7 @@
 package tests;
 
-import enums.ActuatorOrder;
-import enums.ContactSensors;
-import enums.ServiceNames;
-import enums.Speed;
-import exceptions.BlockedActuatorException;
-import exceptions.serial.SerialConnexionException;
-import hook.Hook;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
-import robot.Robot;
-import scripts.ScriptManager;
-import strategie.GameState;
-import table.Table;
-
-import java.util.ArrayList;
 
 /**
  * Sélecteur de script pour la RPI

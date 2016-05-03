@@ -6,7 +6,6 @@ import exceptions.BadVersionException;
 // WARNING: ne pas supprimer les lignes taggées inutiles
 // car des lignes en commentaires eront intégrées dans le code
 // lorsque le bas niveau sera opérationnel
-import exceptions.BlockedActuatorException;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;

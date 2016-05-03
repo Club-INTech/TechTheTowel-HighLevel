@@ -3,8 +3,6 @@ package pathDingDing;
 import smartMath.Segment;
 import smartMath.Vec2;
 
-import javax.lang.model.type.NullType;
-
 /**
  *  Noeud d'un graphe de pathDingDing
  * @author julian

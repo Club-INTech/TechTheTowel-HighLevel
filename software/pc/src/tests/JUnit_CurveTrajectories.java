@@ -1,13 +1,11 @@
 package tests;
 
 import enums.ServiceNames;
-import enums.Speed;
 import exceptions.Locomotion.UnableToMoveException;
 import hook.Hook;
 import org.junit.Before;
 import org.junit.Test;
 import robot.RobotReal;
-import scripts.TechTheSand;
 import smartMath.Arc;
 import smartMath.Vec2;
 import strategie.GameState;

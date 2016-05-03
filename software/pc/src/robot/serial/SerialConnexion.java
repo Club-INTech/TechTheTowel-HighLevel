@@ -8,13 +8,9 @@ import gnu.io.PortInUseException;
 import gnu.io.SerialPort;
 import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener;
-import gnu.io.UnsupportedCommOperationException;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.util.TooManyListenersException;
 
-import utils.Config;
 import utils.Log;
 import container.Service;
 import utils.Sleep;

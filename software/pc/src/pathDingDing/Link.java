@@ -1,7 +1,5 @@
 package pathDingDing;
 
-import smartMath.Segment;
-
 /**
  * Liens reliant les nodes du pathDingDing
  * @author julian

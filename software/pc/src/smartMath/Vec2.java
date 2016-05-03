@@ -9,8 +9,6 @@
 
 package smartMath;
 
-import exceptions.MatrixException;
-
 /**
  * Classe de calcul de vecteurs de dimension 2.
  *

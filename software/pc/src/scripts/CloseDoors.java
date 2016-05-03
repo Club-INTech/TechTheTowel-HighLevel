@@ -1,6 +1,5 @@
 package scripts;
 
-import enums.ActuatorOrder;
 import exceptions.BadVersionException;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -9,11 +8,9 @@ import hook.Callback;
 import hook.Hook;
 import hook.methods.SpeedDown;
 import hook.types.HookFactory;
-import hook.types.HookYGreater;
 import robot.Robot;
 import smartMath.Arc;
 import smartMath.Circle;
-import smartMath.Geometry;
 import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;

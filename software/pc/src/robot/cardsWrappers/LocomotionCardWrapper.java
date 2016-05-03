@@ -1,8 +1,6 @@
 package robot.cardsWrappers;
 
 
-import java.util.Locale;
-
 import container.Service;
 import enums.TurningStrategy;
 import exceptions.ConfigPropertyNotFoundException;
