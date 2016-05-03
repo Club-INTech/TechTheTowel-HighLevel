@@ -170,6 +170,7 @@ public class Strategie implements Service
                 e.printStackTrace();
             } catch (PointInObstacleException | PathNotFoundException e) {
                 disengage(nextScript);
+                this.badLastScript = true;
                 this.shells = state.table.deleteAllTheShells();
                 e.printStackTrace();
             } catch (ExecuteException e) {
