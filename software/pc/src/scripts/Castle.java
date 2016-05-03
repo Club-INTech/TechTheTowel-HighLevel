@@ -318,7 +318,7 @@ public class Castle extends AbstractScript
 
 					angle = stateToConsider.robot.getOrientation();
                     try {
-                        Arc arc = new Arc(-900, -550, angle, false);
+                        Arc arc = new Arc(-900, -580, angle, false);
                         stateToConsider.robot.moveArc(arc, hooksToConsider);
                     }
                     catch (UnableToMoveException e)
@@ -328,8 +328,8 @@ public class Castle extends AbstractScript
                             log.debug("ENNEMI DETECTE : ATTENTE");
                             if(!waitForEnnemy(stateToConsider, stateToConsider.robot.getPosition(), false))
 								throw new UnableToMoveException(e.aim, UnableToMoveReason.OBSTACLE_DETECTED);
-                            double done = Math.abs(stateToConsider.robot.getOrientation()-angle)/(650./900);
-                            stateToConsider.robot.moveArc(new Arc(-900, (int)(-650*done), stateToConsider.robot.getOrientationFast(), false), hooksToConsider);
+                            double done = Math.abs(stateToConsider.robot.getOrientation()-angle)/(580./900);
+                            stateToConsider.robot.moveArc(new Arc(-900, (int)(-580*done), stateToConsider.robot.getOrientationFast(), false), hooksToConsider);
                         }
                     }
                     stateToConsider.robot.setForceMovement(false);
