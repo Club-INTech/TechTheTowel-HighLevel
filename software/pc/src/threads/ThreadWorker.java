@@ -23,6 +23,7 @@ public class ThreadWorker extends AbstractThread
     {
         super(config, log);
         this.pdd = pdd;
+        Thread.currentThread().setPriority(1);
     }
 
     @Override

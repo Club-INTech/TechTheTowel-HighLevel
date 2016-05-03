@@ -172,10 +172,27 @@ public class Locomotion implements Service
     /** Vitesse de rotation */
     private double rotSpeed = Speed.MEDIUM_ALL.rotationSpeed;
 
+    /**
+     * Valeurs des ultrasons filtrés par le LL pour la détection basique
+     */
     private ArrayList<Integer> USvalues;
 
+    /**
+     * Valeur limite de détection pour le mode basique
+     * OVERRIDE PAR CONFIG
+     */
+    private int basicDetectDistance = 200;
+
+    /**
+     * Si la détection basique est activée ou non
+     */
     private boolean basicDetection = false;
+
+    /**
+     * Seulement pour les arcs, empêche de symétriser deux fois
+     */
     private boolean symetrised = false;
+
 
 
     public Locomotion(Log log, Config config, Table table, LocomotionCardWrapper deplacements)
@@ -681,7 +698,7 @@ public class Locomotion implements Service
     {
         if(isMovementForward || turning)
         {
-            if((USvalues.get(0) < 150 && USvalues.get(0) != 0) || ((USvalues.get(1) < 150 && USvalues.get(1) != 0)))
+            if((USvalues.get(0) < basicDetectDistance && USvalues.get(0) != 0) || ((USvalues.get(1) < basicDetectDistance && USvalues.get(1) != 0)))
             {
                 log.warning("Lancement de UnexpectedObstacleOnPathException dans basicDetect : Capteurs avant");
                 throw new UnexpectedObstacleOnPathException();
@@ -689,7 +706,7 @@ public class Locomotion implements Service
         }
         if(!isMovementForward || turning)
         {
-            if((USvalues.get(2) < 150 && USvalues.get(2) != 0) || ((USvalues.get(3) < 150 && USvalues.get(3) != 0)))
+            if((USvalues.get(2) < basicDetectDistance && USvalues.get(2) != 0) || ((USvalues.get(3) < basicDetectDistance && USvalues.get(3) != 0)))
             {
                 log.warning("Lancement de UnexpectedObstacleOnPathException dans basicDetect : Capteurs arrière");
                 throw new UnexpectedObstacleOnPathException();
@@ -1083,6 +1100,7 @@ public class Locomotion implements Service
 	        angleToDisengage = Double.parseDouble(config.getProperty("angle_degagement_robot"));
 			symetry = config.getProperty("couleur").replaceAll(" ","").equals("violet");
 			robotLength = Integer.parseInt(config.getProperty("longueur_robot").replaceAll(" ",""));
+            basicDetectDistance = Integer.parseInt(config.getProperty("basic_distance").replaceAll(" ",""));
     	}
     	catch (ConfigPropertyNotFoundException e)
     	{
