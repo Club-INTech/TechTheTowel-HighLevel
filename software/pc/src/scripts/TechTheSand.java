@@ -427,7 +427,7 @@ public class TechTheSand extends AbstractScript
 				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
                 stateToConsider.robot.setIsSandInside(false);
 				stateToConsider.robot.turnWithoutDetection(0, hooksToConsider);
-				stateToConsider.robot.moveLengthwiseWithoutDetection(800 - stateToConsider.robot.getPosition().x);
+				stateToConsider.robot.moveLengthwiseWithoutDetection(600 - stateToConsider.robot.getPosition().x);
                 stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
             }
             stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);

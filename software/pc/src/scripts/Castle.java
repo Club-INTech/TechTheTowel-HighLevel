@@ -406,7 +406,7 @@ public class Castle extends AbstractScript
 		}
 		else if (version == 4)
 		{
-			return new Circle(new Vec2(650,1550));
+			return new Circle(new Vec2(650,1560));
 		}
 		else
 		{
