@@ -10,6 +10,7 @@ import robot.Locomotion;
 import robot.Robot;
 import robot.cardsWrappers.SensorsCardWrapper;
 import scripts.ScriptManager;
+import scripts.TechTheSand;
 import strategie.GameState;
 import strategie.Strategie;
 import table.Table;
@@ -72,6 +73,9 @@ public class Main
 			}
 
 			container.startAllThreads();
+
+			realState.changeRobotRadius(TechTheSand.expandedRobotRadius);
+			realState.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
 
 			waitMatchBegin();
 
