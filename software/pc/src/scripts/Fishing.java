@@ -382,7 +382,22 @@ public class Fishing extends AbstractScript
 
 			else if(versionToExecute == 4)
 			{
-				// Vitesse rapide jusqu'au début de pêche
+
+				if(stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_BLOCKED))
+                {
+                    if(!stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_OPENED))
+                        throw new ExecuteException(new BlockedActuatorException());
+
+                    stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
+
+                    if(stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_BLOCKED))
+                        throw new ExecuteException(new BlockedActuatorException());
+                }
+
+                if(!stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
+                    throw new ExecuteException(new BlockedActuatorException());
+
+                // Vitesse rapide jusqu'au début de pêche
 				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
 				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 
@@ -1506,6 +1521,171 @@ public class Fishing extends AbstractScript
 				
 				// On indique au robot que les poissons ne sont plus sur le bras
 				stateToConsider.robot.setAreFishesOnBoard(false);
+
+                // On modifie la condition du premier hook, même action, puis mise à jour dans la liste
+                hook1 = hookFactory.newXGreaterHook(600);
+                hook1.addCallback(new Callback(new GetFish(), true, stateToConsider));
+                hooksToConsider.add(hook1);
+
+                // on repart chercher d'autre poissons
+                stateToConsider.robot.setLocomotionSpeed(Speed.FAST_ALL);
+                try
+                {
+                    log.debug("On repart chercher des poissons !");
+                    stateToConsider.robot.moveLengthwise(-520, hooksToConsider, false);
+                }
+                catch(Exception e)
+                {
+                    log.debug("Filet percuté en allant chercher d'autre poissons !");
+                    hooksToConsider.clear();
+                    try
+                    {
+                        log.debug("Tentative de dégagement !");
+                        if(stateToConsider.robot.getOrientation()<=Math.PI && stateToConsider.robot.getOrientationFast()>=0)
+                        {
+                            stateToConsider.robot.moveArc(new Arc(-600,200,stateToConsider.robot.getOrientationFast(),false),hooksToConsider);
+                        }
+                        else
+                        {
+                            stateToConsider.robot.moveArc(new Arc(-600, -200, stateToConsider.robot.getOrientation(), false),hooksToConsider);
+                        }
+                    }
+                    catch(Exception ex)
+                    {
+                        log.debug("Impossible de sortir du bord de table : " +ex);
+                    }
+                    throw e;
+                }
+                stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+
+                // nouvelle condition pour le hook lâchant les poissons, même action, mise à jour dans la liste
+                hook3 = hookFactory.newXLesserHook(350);
+                hook3.addCallback(new Callback(new DropFish(), true, stateToConsider));
+                hooksToConsider.add(hook3);
+
+                //Rajout du hook pour le booléen
+                specialHook = hookFactory.newXLesserHook(900);
+                specialHook.addCallback(new Callback(new SetFishesOnBoard(),true,stateToConsider));
+                hooksToConsider.add(specialHook);
+
+                // on longe le bac avec gestion de blocage
+                try
+                {
+                    xBefore=stateToConsider.robot.getPosition().x;
+                    log.debug("Quatrième passage !");
+                    stateToConsider.robot.moveLengthwise(xBefore-netPosX, hooksToConsider, false);
+                }
+                catch(UnableToMoveException e)
+                {
+                    if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED)
+                    {
+                        log.debug("Ennemi détecté ! Attente avant de progresser !");
+                        if(!waitForEnnemy(stateToConsider, stateToConsider.robot.getPosition(), true))
+                        {
+                            log.debug("Le salaud ne bouge pas : abort !");
+                            hooksToConsider.clear();
+                            throw e;
+                        }
+                        else
+                        {
+                            log.debug("Voie dégagée, reprise de script !");
+                            stateToConsider.robot.moveLengthwise(270-(xBefore-stateToConsider.robot.getPosition().x),hooksToConsider,false);
+                        }
+                    }
+                    else
+                    {
+                        log.debug("Bord du filet touché !");
+                        try
+                        {
+                            hooksToConsider.clear();
+                            if(stateToConsider.robot.getAreFishesOnBoard())
+                            {
+                                log.debug("Poisson à bord, on les garde !");
+                                stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
+                            }
+                            else
+                            {
+                                log.debug("Pas de poissons à bord !");
+                                stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
+                            }
+                            log.debug("Dégagement !");
+                            if(stateToConsider.robot.getOrientation()<=Math.PI && stateToConsider.robot.getOrientationFast()>=0)
+                            {
+                                stateToConsider.robot.moveArc(new Arc(-400,300,stateToConsider.robot.getOrientationFast(),false),hooksToConsider);
+                            }
+                            else
+                            {
+                                stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientationFast(), false),hooksToConsider);
+                            }
+                        }
+                        catch(Exception ex)
+                        {
+                            log.debug("Problème lors du dégagement : " + ex);
+                        }
+                        throw e;
+                    }
+                }
+
+                try
+                {
+                    xBefore=stateToConsider.robot.getPosition().x;
+                    stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
+                    log.debug("Dépose de poissons !");
+                    stateToConsider.robot.moveLengthwise(310,hooksToConsider,false);
+                }
+                catch(UnableToMoveException e)
+                {
+                    if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED)
+                    {
+                        log.debug("Ennemi détecté ! Attente avant de progresser !");
+                        if(!waitForEnnemy(stateToConsider, stateToConsider.robot.getPosition(), true))
+                        {
+                            log.debug("Le salaud ne bouge pas : abort !");
+                            hooksToConsider.clear();
+                            throw e;
+                        }
+                        else
+                        {
+                            log.debug("Voie dégagée, reprise de script !");
+                            stateToConsider.robot.moveLengthwise(310-(xBefore-stateToConsider.robot.getPosition().x),hooksToConsider,false);
+                        }
+                    }
+                    else
+                    {
+                        log.debug("Bord du filet touché !");
+                        try
+                        {
+                            hooksToConsider.clear();
+                            if(stateToConsider.robot.getAreFishesOnBoard())
+                            {
+                                log.debug("Poisson à bord, on les garde !");
+                                stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
+                            }
+                            else
+                            {
+                                log.debug("Pas de poissons à bord !");
+                                stateToConsider.robot.useActuator(ActuatorOrder.ARM_INIT, true);
+                            }
+                            log.debug("Tentative de dégagement !");
+                            if(stateToConsider.robot.getOrientation()<=Math.PI && stateToConsider.robot.getOrientationFast()>=0)
+                            {
+                                stateToConsider.robot.moveArc(new Arc(-400,300,stateToConsider.robot.getOrientationFast(),false),hooksToConsider);
+                            }
+                            else
+                            {
+                                stateToConsider.robot.moveArc(new Arc(-400, -300, stateToConsider.robot.getOrientationFast(), false),hooksToConsider);
+                            }
+                        }
+                        catch(Exception ex)
+                        {
+                            log.debug("Problème lors du dégagement : " + ex);
+                        }
+                        throw e;
+                    }
+                }
+
+                // On indique au robot que les poissons ne sont plus sur le bras
+                stateToConsider.robot.setAreFishesOnBoard(false);
 				
 				// arc pour sortir du bord de table
 				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
