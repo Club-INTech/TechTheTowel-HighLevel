@@ -421,7 +421,7 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
                 stateToConsider.robot.setForceMovement(false);
                 stateToConsider.robot.moveLengthwiseWithoutDetection(stateToConsider.robot.getPosition().x - 200);
-                stateToConsider.robot.moveArc(new Arc(200, -260, stateToConsider.robot.getOrientation(), false), hooksToConsider);
+                stateToConsider.robot.moveArc(new Arc(200, symetry ? -190 : -260, stateToConsider.robot.getOrientation(), false), hooksToConsider);
 				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
                 stateToConsider.changeRobotRadius(TechTheSand.retractedRobotRadius);
                 stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
