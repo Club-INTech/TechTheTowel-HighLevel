@@ -221,7 +221,7 @@ public class TechTheSand extends AbstractScript
                     {
                         try
                         {
-                            if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED)
+                            if(e2.reason == UnableToMoveReason.OBSTACLE_DETECTED)
                                 throw new UnableToMoveException(new Vec2(0, 1600), UnableToMoveReason.OBSTACLE_DETECTED);
 
                             log.debug("Impossible de rentrer dans le sable, retry en droite");
@@ -235,7 +235,7 @@ public class TechTheSand extends AbstractScript
 							stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 						}
                         catch (UnableToMoveException e3) {
-                            if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED)
+                            if(e3.reason == UnableToMoveReason.OBSTACLE_DETECTED)
                                 throw new UnableToMoveException(new Vec2(0, 1600), UnableToMoveReason.OBSTACLE_DETECTED);
                             log.critical("On peut vraiment pas obtenir le sable, on abandonne");
 							stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
