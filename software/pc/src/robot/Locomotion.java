@@ -327,7 +327,7 @@ public class Locomotion implements Service
 
         this.symetrised = false;
 
-        this.curveArc = arc;
+        this.curveArc = arc.copy();
         this.posStartedCurve = highLevelPosition.clone();
 
         if(Math.abs(highLevelOrientation - arc.startAngle) > maxRotationCorrectionThreeshold)
