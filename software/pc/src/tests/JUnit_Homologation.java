@@ -111,9 +111,9 @@ public class JUnit_Homologation extends JUnit_Test
 
                 theRobot.robot.setTurningStrategy(TurningStrategy.FASTEST);
                 theRobot.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
-                Vec2 sup = scriptManager.getScript(ScriptNames.FISHING).entryPosition(3, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
+                Vec2 sup = scriptManager.getScript(ScriptNames.FISHING).entryPosition(4, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
                 theRobot.table.getObstacleManager().freePoint(sup);
-                scriptManager.getScript(ScriptNames.FISHING).goToThenExec(3, theRobot, emptyHook);
+                scriptManager.getScript(ScriptNames.FISHING).goToThenExec(4, theRobot, emptyHook);
                 theRobot.robot.turnWithoutDetection(0, emptyHook);
                 bite = false;
             } catch (Exception e) {
