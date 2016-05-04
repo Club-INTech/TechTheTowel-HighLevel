@@ -67,6 +67,8 @@ public class CloseDoors extends AbstractScript
                 //On s'oriente vers les portes
 				stateToConsider.robot.turn(-(Math.PI / 2), hooksToConsider, false);
 
+                stateToConsider.robot.setBasicDetection(true);
+
                 Hook hook = hookFactory.newYGreaterHook(1700);
                 hook.addCallback(new Callback(new SpeedDown(), true, stateToConsider));
                 hooksToConsider.add(hook);
@@ -103,7 +105,7 @@ public class CloseDoors extends AbstractScript
                 hook.addCallback(new Callback(new SpeedDown(), true, stateToConsider));
                 hooksToConsider.add(hook);
 
-				stateToConsider.robot.moveLengthwiseWithoutDetection(-500, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(-500, hooksToConsider, true);
 
 				stateToConsider.robot.setForceMovement(false);
 

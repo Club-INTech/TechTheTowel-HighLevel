@@ -4,7 +4,11 @@ import enums.*;
 import exceptions.BlockedActuatorException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
+import hook.Callback;
 import hook.Hook;
+import hook.methods.StopDetect;
+import hook.types.HookFactory;
+import hook.types.HookYGreater;
 import org.junit.Before;
 import org.junit.Test;
 import robot.Robot;
@@ -28,6 +32,7 @@ public class JUnit_Homologation extends JUnit_Test
     private ScriptManager scriptManager;
     private SensorsCardWrapper mSensorsCardWrapper;
     private ThreadSensor threadSensor;
+    private HookFactory factory;
     private ArrayList<Hook> emptyHook = new ArrayList<Hook>();
 
     @SuppressWarnings("unchecked")
@@ -38,6 +43,7 @@ public class JUnit_Homologation extends JUnit_Test
         scriptManager = (ScriptManager)container.getService(ServiceNames.SCRIPT_MANAGER);
         theRobot = (GameState<Robot>)container.getService(ServiceNames.GAME_STATE);
         mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
+        factory = (HookFactory) container.getService(ServiceNames.HOOK_FACTORY);
         initialize();
 
         // Lance le thread graphique
@@ -98,27 +104,6 @@ public class JUnit_Homologation extends JUnit_Test
             log.debug("Problème d'exécution dans Castle");
             e.printStackTrace();
         }
-        while(bite)
-        {
-            try {
-                Vec2 sup = scriptManager.getScript(ScriptNames.CLOSE_DOORS).entryPosition(3, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
-                theRobot.table.getObstacleManager().freePoint(sup);
-                scriptManager.getScript(ScriptNames.CLOSE_DOORS).goToThenExec(3, theRobot, emptyHook);
-                break;
-            } catch (Exception e) {
-                log.debug("Problème d'exécution dans Close Doors");
-                try {
-                    if(e instanceof UnableToMoveException && ((UnableToMoveException)e).reason == UnableToMoveReason.OBSTACLE_DETECTED
-                            && ((UnableToMoveException) e).aim.minusNewVector(theRobot.robot.getPosition()).dot(theRobot.robot.getPosition().minusNewVector(theRobot.robot.getPosition().plusNewVector(new Vec2((int)(100*Math.cos(theRobot.robot.getOrientation())),(int)(100*Math.sin(theRobot.robot.getOrientation())))))) > 0)
-                        theRobot.robot.moveLengthwise(200);
-                    else if(e instanceof UnableToMoveException && ((UnableToMoveException)e).reason == UnableToMoveReason.OBSTACLE_DETECTED)
-                        theRobot.robot.moveLengthwise(-200);
-                } catch (UnableToMoveException e1) {
-                    e1.printStackTrace();
-                }
-                e.printStackTrace();
-            }
-        }
         while (bite)
         {
             try {
@@ -129,6 +114,7 @@ public class JUnit_Homologation extends JUnit_Test
                 Vec2 sup = scriptManager.getScript(ScriptNames.FISHING).entryPosition(3, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
                 theRobot.table.getObstacleManager().freePoint(sup);
                 scriptManager.getScript(ScriptNames.FISHING).goToThenExec(3, theRobot, emptyHook);
+                theRobot.robot.turnWithoutDetection(0, emptyHook);
                 bite = false;
             } catch (Exception e) {
                 log.debug("Problème d'exécution dans Fishing");
@@ -143,6 +129,32 @@ public class JUnit_Homologation extends JUnit_Test
                 }
                 // threadSensor.stop();
 
+            }
+        }
+        while(!bite)
+        {
+            try {
+                if(theRobot.robot.getPosition().y < 1100)
+                    theRobot.robot.moveToLocation(new Vec2(1100,1000), emptyHook, theRobot.table);
+                Vec2 sup = scriptManager.getScript(ScriptNames.CLOSE_DOORS).entryPosition(3, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
+                theRobot.table.getObstacleManager().freePoint(sup);
+                Hook hook = factory.newYGreaterHook(1600);
+                hook.addCallback(new Callback(new StopDetect(), false, theRobot));
+                emptyHook.add(hook);
+                scriptManager.getScript(ScriptNames.CLOSE_DOORS).goToThenExec(3, theRobot, emptyHook);
+                break;
+            } catch (Exception e) {
+                log.debug("Problème d'exécution dans Close Doors");
+                try {
+                    if(e instanceof UnableToMoveException && ((UnableToMoveException)e).reason == UnableToMoveReason.OBSTACLE_DETECTED
+                            && ((UnableToMoveException) e).aim.minusNewVector(theRobot.robot.getPosition()).dot(theRobot.robot.getPosition().minusNewVector(theRobot.robot.getPosition().plusNewVector(new Vec2((int)(100*Math.cos(theRobot.robot.getOrientation())),(int)(100*Math.sin(theRobot.robot.getOrientation())))))) > 0)
+                        theRobot.robot.moveLengthwise(200);
+                    else if(e instanceof UnableToMoveException && ((UnableToMoveException)e).reason == UnableToMoveReason.OBSTACLE_DETECTED)
+                        theRobot.robot.moveLengthwise(-200);
+                } catch (UnableToMoveException e1) {
+                    e1.printStackTrace();
+                }
+                e.printStackTrace();
             }
         }
     }

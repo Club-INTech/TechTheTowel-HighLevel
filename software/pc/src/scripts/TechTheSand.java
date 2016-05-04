@@ -151,7 +151,7 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.robot.setBasicDetection(true);
 
 
-                stateToConsider.robot.moveLengthwise(995);
+                stateToConsider.robot.moveLengthwise(975);
 
 				stateToConsider.robot.turnWithoutDetection(2*Math.PI/3, hooksToConsider);
 
@@ -195,7 +195,7 @@ public class TechTheSand extends AbstractScript
                 
                 // Définition de l'arc à suivre, point de départ temporaire
                 // 150
-                Arc approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(100,2000-(symetry ? 200 : 150)), Math.PI, true);
+                Arc approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(100,2000-(symetry ? 230 : 200)), Math.PI, true);
 
 				try {
 					stateToConsider.robot.setForceMovement(false);
