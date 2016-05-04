@@ -212,6 +212,7 @@ public class TechTheSand extends AbstractScript
                         log.debug("Impossible de rentrer dans le sable, retry en droite");
                         stateToConsider.robot.setForceMovement(true);
                         stateToConsider.robot.setLocomotionSpeed(Speed.ULTRA_SLOW_ALL);
+						stateToConsider.robot.moveLengthwiseWithoutDetection(-30);
 
                         stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
                         stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 100);
@@ -227,7 +228,8 @@ public class TechTheSand extends AbstractScript
                             log.debug("Impossible de rentrer dans le sable, retry en droite");
                             stateToConsider.robot.setForceMovement(true);
                             stateToConsider.robot.setLocomotionSpeed(Speed.ULTRA_SLOW_ALL);
-                            stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
+							stateToConsider.robot.moveLengthwiseWithoutDetection(-30);
+							stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
                             stateToConsider.robot.setForceMovement(false);
                             stateToConsider.robot.moveLengthwiseWithoutDetection(-30);
                             stateToConsider.robot.setForceMovement(true);
