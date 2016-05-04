@@ -415,7 +415,20 @@ public class Fishing extends AbstractScript
                 Hook specialHook = hookFactory.newXLesserHook(900);
                 specialHook.addCallback(new Callback(new SetFishesOnBoard(),true,stateToConsider));
                 hooksToConsider.add(specialHook);
-				
+
+                // On crée le hook de position, l'action pour lever le bras et ajout à la liste
+                Hook hook = hookFactory.newXLesserHook(650);
+                hook.addCallback(new Callback(new RiseArm(), true, stateToConsider));
+                hooksToConsider.add(hook);
+
+                // On crée le hook de position, l'action pour lâcher les poissons et ajout à la liste
+                Hook hook2 = hookFactory.newXLesserHook(400);
+                hook2.addCallback(new Callback(new DropFish(), true, stateToConsider));
+                hooksToConsider.add(hook2);
+
+				try
+
+				{
 				// marche arrière pour se placer près du bac
 				//stateToConsider.robot.moveLengthwise(-260, hooksToConsider, true);
 				
@@ -427,20 +440,8 @@ public class Fishing extends AbstractScript
 				// On s'oriente vers le côté ennemi
 				stateToConsider.robot.turn((Math.PI), hooksToConsider, true);
 
-				// On crée le hook de position, l'action pour lever le bras et ajout à la liste
-				Hook hook = hookFactory.newXLesserHook(650);
-				hook.addCallback(new Callback(new RiseArm(), true, stateToConsider));
-				hooksToConsider.add(hook);
-
-				// On crée le hook de position, l'action pour lâcher les poissons et ajout à la liste
-				Hook hook2 = hookFactory.newXLesserHook(400);
-				hook2.addCallback(new Callback(new DropFish(), true, stateToConsider));
-				hooksToConsider.add(hook2);
-
 				// On longe le bac avec gestion de blocage sur le bord du filet
-				try
-				
-				{
+
 					xBefore=stateToConsider.robot.getPosition().x;
 					log.debug("Premier passage !");
 					stateToConsider.robot.moveLengthwise(500, hooksToConsider, false);
