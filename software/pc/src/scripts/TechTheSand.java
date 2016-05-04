@@ -132,8 +132,10 @@ public class TechTheSand extends AbstractScript
 			{
 				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
 				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+                stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, false);
 
-				stateToConsider.changeRobotRadius(TechTheSand.expandedRobotRadius);
+
+                stateToConsider.changeRobotRadius(TechTheSand.expandedRobotRadius);
 				stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
                 stateToConsider.robot.setDoor(true);
 
