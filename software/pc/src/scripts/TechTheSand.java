@@ -236,7 +236,7 @@ public class TechTheSand extends AbstractScript
                                 throw new UnableToMoveException(new Vec2(0, 1600), UnableToMoveReason.OBSTACLE_DETECTED);
 
                             stateToConsider.robot.setForceMovement(false);
-                            BOURRRRIIIIINNN(stateToConsider, hooksToConsider);
+                            BOURRRRIIIIINNNdroit(stateToConsider, hooksToConsider);
 
                             log.debug("Impossible de rentrer dans le sable, retry en droite");
                             stateToConsider.robot.setForceMovement(true);
@@ -531,10 +531,38 @@ public class TechTheSand extends AbstractScript
         {
             try
             {
-                Arc backDown = new Arc(-distanceCod, -30, stateToConsider.robot.getOrientation(), false);
+                Arc backDown = new Arc(-distanceCod, -50, stateToConsider.robot.getOrientation(), false);
                 stateToConsider.robot.moveArc(backDown, hooksToConsider);
-                Arc smallAttack = new Arc(-distanceCod, 70, stateToConsider.robot.getOrientation(), false);
+                Arc smallAttack = new Arc(-distanceCod, 100, stateToConsider.robot.getOrientation(), false);
                 stateToConsider.robot.moveArc(smallAttack, hooksToConsider);
+                ok = true;
+            }
+            catch(UnableToMoveException a)
+            {
+                if(a.reason == UnableToMoveReason.OBSTACLE_DETECTED)
+                    throw new UnableToMoveException(new Vec2(0, 1600), UnableToMoveReason.OBSTACLE_DETECTED);
+                log.debug("BAM !");
+            }
+            tries++;
+        }
+
+    }
+
+    private void BOURRRRIIIIINNNdroit(GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider) throws UnableToMoveException
+    {
+        boolean ok = false;
+        int tries = 0;
+
+        stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+        stateToConsider.robot.moveLengthwiseWithoutDetection(-10);
+
+        while(!ok && tries < 4)
+        {
+            try
+            {
+                safeTurn(Math.PI, stateToConsider, hooksToConsider);
+                stateToConsider.robot.moveLengthwiseWithoutDetection(-50);
+                stateToConsider.robot.moveLengthwise(100);
                 ok = true;
             }
             catch(UnableToMoveException a)
