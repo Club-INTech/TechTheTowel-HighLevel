@@ -221,7 +221,7 @@ public class TechTheSand extends AbstractScript
                         log.debug("Impossible de rentrer dans le sable, retry en droite");
                         stateToConsider.robot.setForceMovement(true);
                         stateToConsider.robot.setLocomotionSpeed(Speed.ULTRA_SLOW_ALL);
-						stateToConsider.robot.moveLengthwiseWithoutDetection(-30);
+						stateToConsider.robot.moveLengthwiseWithoutDetection(-50);
 
                         safeTurn(Math.PI, stateToConsider, hooksToConsider);
 
@@ -259,7 +259,7 @@ public class TechTheSand extends AbstractScript
                             stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 200, hooksToConsider);
                             stateToConsider.robot.moveArc(new Arc(200, -200, stateToConsider.robot.getOrientation(), false), hooksToConsider);
                             stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);*/
-                            throw e3;
+                            //throw e3;
                         }
                     }
                 }
