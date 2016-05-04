@@ -202,7 +202,7 @@ public class TechTheSand extends AbstractScript
                 
                 // Définition de l'arc à suivre, point de départ temporaire
                 // 150
-                Arc approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(100,2000-(symetry ? 200 : 180)), Math.PI, true);
+                Arc approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(100,2000-(symetry ? 200 : 150)), Math.PI, true);
 
 
 				try {
@@ -218,7 +218,7 @@ public class TechTheSand extends AbstractScript
                             throw new UnableToMoveException(new Vec2(0, 1600), UnableToMoveReason.OBSTACLE_DETECTED);
 
                         stateToConsider.robot.setForceMovement(false);
-                        BOURRRRIIIIINNN(stateToConsider, hooksToConsider);
+                        //BOURRRRIIIIINNN(stateToConsider, hooksToConsider);
 
                         log.debug("Impossible de rentrer dans le sable, retry en droite");
                         stateToConsider.robot.setForceMovement(true);
