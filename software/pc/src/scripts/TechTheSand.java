@@ -223,7 +223,8 @@ public class TechTheSand extends AbstractScript
                         stateToConsider.robot.setLocomotionSpeed(Speed.ULTRA_SLOW_ALL);
 						stateToConsider.robot.moveLengthwiseWithoutDetection(-30);
 
-                        stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
+                        safeTurn(Math.PI, stateToConsider, hooksToConsider);
+
                         stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 100);
 						stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 					}
@@ -241,7 +242,7 @@ public class TechTheSand extends AbstractScript
                             stateToConsider.robot.setForceMovement(true);
                             stateToConsider.robot.setLocomotionSpeed(Speed.ULTRA_SLOW_ALL);
 							stateToConsider.robot.moveLengthwiseWithoutDetection(-30);
-							stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
+                            safeTurn(Math.PI, stateToConsider, hooksToConsider);
                             stateToConsider.robot.setForceMovement(false);
                             stateToConsider.robot.moveLengthwiseWithoutDetection(-30);
                             stateToConsider.robot.setForceMovement(true);
@@ -274,7 +275,7 @@ public class TechTheSand extends AbstractScript
 					e.printStackTrace();
 				}
 				try {
-					stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
+                    safeTurn(Math.PI, stateToConsider, hooksToConsider);
                 } catch (UnableToMoveException e)
 				{
 					e.printStackTrace();
@@ -545,6 +546,17 @@ public class TechTheSand extends AbstractScript
             tries++;
         }
 
+    }
+
+    private void safeTurn(double angle, GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider) throws UnableToMoveException
+    {
+        try {
+            stateToConsider.robot.turnWithoutDetection(angle, hooksToConsider);
+        } catch (UnableToMoveException e)
+        {
+            stateToConsider.robot.moveLengthwise(-25);
+            safeTurn(angle, stateToConsider, hooksToConsider);
+        }
     }
 
 	@Override
