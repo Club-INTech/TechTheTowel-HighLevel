@@ -524,7 +524,7 @@ public class TechTheSand extends AbstractScript
         int tries = 0;
 
         stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
-        stateToConsider.robot.moveLengthwiseWithoutDetection(-30);
+        stateToConsider.robot.moveLengthwiseWithoutDetection(-10);
 
         while(!ok && tries < 4)
         {
