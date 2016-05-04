@@ -36,6 +36,8 @@ public class TechTheSand extends AbstractScript
     // TEMPORAIRE 
     public static final int expandedRobotRadius = 330; //TODO a changer
 	public static final int retractedRobotRadius = 230; //TODO a changer
+    double distanceCod = 150;
+
 
 
     public TechTheSand(HookFactory hookFactory, Config config, Log log)
@@ -192,10 +194,14 @@ public class TechTheSand extends AbstractScript
 
                 // On active la tige accrochante
                 stateToConsider.robot.useActuator(ActuatorOrder.START_AXIS, false);
+
+                // #BOURRRRRRIIIIIIIIINNNNNNN
+                stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
                 
                 // Définition de l'arc à suivre, point de départ temporaire
                 // 150
                 Arc approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(100,2000-(symetry ? 200 : 180)), Math.PI, true);
+
 
 				try {
 					stateToConsider.robot.setForceMovement(false);
@@ -208,6 +214,9 @@ public class TechTheSand extends AbstractScript
                     {
                         if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED)
                             throw new UnableToMoveException(new Vec2(0, 1600), UnableToMoveReason.OBSTACLE_DETECTED);
+
+                        stateToConsider.robot.setForceMovement(false);
+                        BOURRRRIIIIINNN(stateToConsider, hooksToConsider);
 
                         log.debug("Impossible de rentrer dans le sable, retry en droite");
                         stateToConsider.robot.setForceMovement(true);
@@ -224,6 +233,9 @@ public class TechTheSand extends AbstractScript
                         {
                             if(e2.reason == UnableToMoveReason.OBSTACLE_DETECTED)
                                 throw new UnableToMoveException(new Vec2(0, 1600), UnableToMoveReason.OBSTACLE_DETECTED);
+
+                            stateToConsider.robot.setForceMovement(false);
+                            BOURRRRIIIIINNN(stateToConsider, hooksToConsider);
 
                             log.debug("Impossible de rentrer dans le sable, retry en droite");
                             stateToConsider.robot.setForceMovement(true);
@@ -287,9 +299,7 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.robot.setIsSandInside(true);
 
 
-
-				double distanceCod = 150;
-				// Définition de l'arc à suivre, point de départ temporaire
+                // Définition de l'arc à suivre, point de départ temporaire
 				Arc approach2 = new Arc(distanceCod, distanceCod*Math.PI/4, Math.PI, false);
                 stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 
@@ -507,6 +517,32 @@ public class TechTheSand extends AbstractScript
 		}
 		
 	}
+
+    private void BOURRRRIIIIINNN(GameState<Robot> stateToConsider, ArrayList<Hook> hooksToConsider) throws UnableToMoveException
+    {
+        boolean ok = false;
+        int tries = 0;
+
+        while(!ok && tries < 4)
+        {
+            try
+            {
+                Arc backDown = new Arc(-distanceCod, -20, stateToConsider.robot.getOrientation(), false);
+                stateToConsider.robot.moveArc(backDown, hooksToConsider);
+                Arc smallAttack = new Arc(-distanceCod, 40, stateToConsider.robot.getOrientation(), false);
+                stateToConsider.robot.moveArc(smallAttack, hooksToConsider);
+                ok = true;
+            }
+            catch(UnableToMoveException a)
+            {
+                if(a.reason == UnableToMoveReason.OBSTACLE_DETECTED)
+                    throw new UnableToMoveException(new Vec2(0, 1600), UnableToMoveReason.OBSTACLE_DETECTED);
+                log.debug("BAM !");
+            }
+            tries++;
+        }
+
+    }
 
 	@Override
 	public Integer[] getVersion(GameState<?> stateToConsider) 
