@@ -527,9 +527,9 @@ public class TechTheSand extends AbstractScript
         {
             try
             {
-                Arc backDown = new Arc(-distanceCod, -20, stateToConsider.robot.getOrientation(), false);
+                Arc backDown = new Arc(-distanceCod, -30, stateToConsider.robot.getOrientation(), false);
                 stateToConsider.robot.moveArc(backDown, hooksToConsider);
-                Arc smallAttack = new Arc(-distanceCod, 40, stateToConsider.robot.getOrientation(), false);
+                Arc smallAttack = new Arc(-distanceCod, 70, stateToConsider.robot.getOrientation(), false);
                 stateToConsider.robot.moveArc(smallAttack, hooksToConsider);
                 ok = true;
             }
