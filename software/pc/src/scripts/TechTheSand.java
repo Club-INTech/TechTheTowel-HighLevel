@@ -198,7 +198,7 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.robot.useActuator(ActuatorOrder.START_AXIS, false);
 
                 // #BOURRRRRRIIIIIIIIINNNNNNN
-                stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+                stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
                 
                 // Définition de l'arc à suivre, point de départ temporaire
                 // 150
