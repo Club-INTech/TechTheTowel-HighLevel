@@ -32,7 +32,7 @@ public enum Speed
 	FAST_T_SLOW_R(500, Math.PI/4),
 
 	/** vitesse rapide en translation et rotation*/
-	FAST_ALL(500,(Math.PI));
+	FAST_ALL(600,(Math.PI));
 	
 	///** vitesse en temps normal (pour des distances de 200mm à 1000 mm) */
 		//BETWEEN_SCRIPTS_SLOW(10, 10),

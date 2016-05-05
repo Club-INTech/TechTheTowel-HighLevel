@@ -519,7 +519,8 @@ public class TechTheSand extends AbstractScript
 		}
         else if(version == 1)
         {
-            return new Circle(460,2000-390);
+            return new Circle(410,1540);
+            //(410, 1540)
         }
         else if(version == 2)
         {
