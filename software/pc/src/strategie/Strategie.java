@@ -411,6 +411,11 @@ public class Strategie implements Service
             }
             else if(castleTaken)
             {
+                try {
+                    state.robot.useActuator(ActuatorOrder.OPEN_DOOR, false);
+                } catch (SerialConnexionException e) {
+                    e.printStackTrace();
+                }
                 return scriptmanager.getScript(ScriptNames.CLOSE_DOORS);
             }
             else if(sandTaken)
