@@ -242,6 +242,11 @@ public class CloseDoors extends AbstractScript
                 stateToConsider.robot.moveLengthwiseWithoutDetection(300, hooksToConsider, false);
 
                 stateToConsider.robot.setForceMovement(false);
+
+                stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
+
+                stateToConsider.changeRobotRadius(TechTheSand.retractedRobotRadius);
+                stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
             }
 		}
 		catch(Exception e)
@@ -256,7 +261,7 @@ public class CloseDoors extends AbstractScript
 		
 		// Score maximal possible de 20 points
 		int score = 20;
-		
+
 		// Score de 10 points fournis par porte fermée
 		if (version == 0 || version == 1)
 		{

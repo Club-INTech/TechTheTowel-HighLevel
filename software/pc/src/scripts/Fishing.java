@@ -1026,6 +1026,7 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 				Arc disengage = new Arc(-320,160,stateToConsider.robot.getOrientation(),false);
 				stateToConsider.robot.moveArc(disengage, hooksToConsider);
+                stateToConsider.robot.moveLengthwiseWithoutDetection(50);
 				hooksToConsider.clear();
 
 				// reprise de vitesse inter script
