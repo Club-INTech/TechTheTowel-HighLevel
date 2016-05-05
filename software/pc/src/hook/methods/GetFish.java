@@ -16,9 +16,9 @@ public class GetFish implements Executable
             if(stateToConsider.robot.fishing == 0)
                 stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION_LOW, false);
             else if(stateToConsider.robot.fishing == 1)
-                stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION_LOW, false);
+                stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION_MID, false);
             else
-                stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION_LOW, false);
+                stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION_HI, false);
 
         } catch (SerialConnexionException e) {
             e.printStackTrace();

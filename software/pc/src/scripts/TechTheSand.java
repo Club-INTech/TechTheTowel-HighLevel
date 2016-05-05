@@ -16,6 +16,7 @@ import smartMath.Arc;
 import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
+import table.Table;
 import threads.ThreadSensor;
 import utils.Config;
 import utils.Log;
@@ -46,7 +47,7 @@ public class TechTheSand extends AbstractScript
 		/**
 		 * Versions du script
 		 */
-		versions = new Integer[]{0,1,2};
+		versions = new Integer[]{0,1,2,3};
 	}
 	
 	
@@ -171,15 +172,34 @@ public class TechTheSand extends AbstractScript
 		
 			if(versionToExecute == 1 || versionToExecute == 2)
             {
-                stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, false);
-
-                if(versionToExecute == 1) {
-                    try {
-                        stateToConsider.robot.moveToLocation(new Vec2(410, 1540), hooksToConsider, stateToConsider.table);
-                    } catch (PathNotFoundException|PointInObstacleException e)
+                if(versionToExecute == 1)
+                {
+                    if(stateToConsider.table.configShell != 1 && stateToConsider.table.configShell != 5)
                     {
-                        e.printStackTrace();
-                        throw new ExecuteException(e);
+                        try {
+                            stateToConsider.robot.moveToLocation(stateToConsider.table.entryPosition.plusNewVector(new Vec2(-180,0)), hooksToConsider, stateToConsider.table);
+                            stateToConsider.robot.turnWithoutDetection(0,hooksToConsider);
+                            stateToConsider.robot.moveLengthwiseWithoutDetection(100);
+                            stateToConsider.robot.moveLengthwise(-100);
+                            stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, false);
+                            stateToConsider.robot.moveToLocation(new Vec2(410, 1540), hooksToConsider, stateToConsider.table);
+                        } catch (PathNotFoundException | PointInObstacleException e) {
+                            e.printStackTrace();
+                            throw new ExecuteException(e);
+                        }
+                    }
+                    else
+                    {
+                        try {
+                            stateToConsider.robot.moveToLocation(new Vec2(1150,1500), hooksToConsider, stateToConsider.table);
+                            stateToConsider.robot.turnWithoutDetection(0,hooksToConsider);
+                            stateToConsider.robot.moveLengthwise(-100);
+                            stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, false);
+                            stateToConsider.robot.moveToLocation(new Vec2(410, 1540), hooksToConsider, stateToConsider.table);
+                        } catch (PathNotFoundException | PointInObstacleException e) {
+                            e.printStackTrace();
+                            throw new ExecuteException(e);
+                        }
                     }
                 }
 
@@ -441,6 +461,150 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
                 stateToConsider.table.getObstacleManager().freePoint(stateToConsider.robot.getPosition());
             }
+            else if(versionToExecute == 3)
+            {
+                if(stateToConsider.table.configShell != 1 && stateToConsider.table.configShell != 5)
+                {
+                    try {
+                        stateToConsider.robot.moveToLocation(Table.entryPosition.plusNewVector(new Vec2(-180,0)), hooksToConsider, stateToConsider.table);
+                        stateToConsider.robot.turnWithoutDetection(0,hooksToConsider);
+                        stateToConsider.robot.moveLengthwiseWithoutDetection(100);
+                        stateToConsider.robot.moveLengthwise(-100);
+                        //stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, false);
+                        stateToConsider.robot.moveToLocation(new Vec2(410, 1540), hooksToConsider, stateToConsider.table);
+                    } catch (PathNotFoundException | PointInObstacleException e) {
+                        e.printStackTrace();
+                        throw new ExecuteException(e);
+                    }
+                }
+                else
+                {
+                    try {
+                        stateToConsider.robot.moveToLocation(new Vec2(1150,1500), hooksToConsider, stateToConsider.table);
+                        stateToConsider.robot.turnWithoutDetection(0,hooksToConsider);
+                        stateToConsider.robot.moveLengthwise(-100);
+                        //stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, false);
+                        stateToConsider.robot.moveToLocation(new Vec2(400, 1590), hooksToConsider, stateToConsider.table);
+                    } catch (PathNotFoundException | PointInObstacleException e) {
+                        e.printStackTrace();
+                        throw new ExecuteException(e);
+                    }
+                }
+
+                ThreadSensor.modeBorgne(true);
+                stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
+                stateToConsider.robot.setBasicDetection(true);
+                stateToConsider.robot.setForceMovement(true);
+                stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_MEDIUM);
+                stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, true);
+
+                try
+                {
+                    stateToConsider.robot.moveLengthwise(600, hooksToConsider);
+                }
+                catch (UnableToMoveException e)
+                {
+                    if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED)
+                        stop();
+                }
+
+                stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/4, Math.PI, false), hooksToConsider);
+                Arc approach2 = new Arc(distanceCod, distanceCod*Math.PI/4, Math.PI, false);
+
+                //=============================================================================================
+                // Bouclage récursif de sortie
+                // On tente de sortir 3x en reculant un peu à chaque tentative, si on échoue les 3 tentatives,
+                //   on abandonne le sable
+                //=============================================================================================
+                try
+                {
+                    //stateToConsider.robot.moveLengthwiseWithoutDetection(-50);
+                    stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_MEDIUM);
+                    stateToConsider.robot.moveArc(approach2, hooksToConsider);
+                    stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+                }
+                catch (UnableToMoveException e)
+                {
+                    try
+                    {
+                        if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED)
+                            stop();
+                        e.printStackTrace();
+                        stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/4, Math.PI, false), hooksToConsider);
+                        stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
+                        //stateToConsider.robot.moveLengthwise(-80);
+                        stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_MEDIUM);
+                        stateToConsider.robot.moveArc(approach2, hooksToConsider);
+                        stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+                    }
+                    catch (UnableToMoveException e2)
+                    {
+                        try
+                        {
+                            if(e2.reason == UnableToMoveReason.OBSTACLE_DETECTED)
+                                stop();
+                            e2.printStackTrace();
+                            stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/4, Math.PI, false), hooksToConsider);
+                            stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
+                            //stateToConsider.robot.moveLengthwise(-80);
+                            stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_MEDIUM);
+                            stateToConsider.robot.moveArc(approach2, hooksToConsider);
+                            stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+                        }
+                        catch (UnableToMoveException e3)
+                        {
+                            e3.printStackTrace();
+                            log.critical("Impossible de se dégager, abandon du sable");
+                            stateToConsider.robot.setIsSandInside(false);
+                            stateToConsider.robot.setForceMovement(false);
+                            stateToConsider.robot.setTurningStrategy(TurningStrategy.FASTEST);
+                            stateToConsider.robot.setDirectionStrategy(DirectionStrategy.FASTEST);
+                            stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
+                            stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 200);
+                            stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/3, Math.PI, false), hooksToConsider);
+                            stateToConsider.robot.moveLengthwise(-100);
+                            throw new ExecuteException(e3);
+                        }
+                    }
+                }
+                //==============================================================================================
+
+                stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_MEDIUM);
+                safeTurn(-Math.PI/2, stateToConsider, hooksToConsider);
+
+
+
+                try {
+                    stateToConsider.robot.setForceMovement(false);
+                    stateToConsider.robot.moveLengthwiseWithoutDetection(-1600 + stateToConsider.robot.getPosition().y);
+                    stateToConsider.robot.setForceMovement(true);
+                } catch (Exception e)
+                {
+                    e.printStackTrace();
+                    stateToConsider.robot.moveLengthwiseWithoutDetection(-30);
+                    stateToConsider.robot.setForceMovement(true);
+                    stateToConsider.robot.moveLengthwise(-1600 + stateToConsider.robot.getPosition().y);
+                }
+
+                //Delete du château
+                stateToConsider.table.getObstacleManager().freePoint(new Vec2(0, 1990));
+                stateToConsider.table.getObstacleManager().freePoint(new Vec2(860+300, 1100-300));
+
+
+                try {
+                    stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+                    stateToConsider.robot.setForceMovement(false);
+                    stateToConsider.robot.turnWithoutDetection(0, hooksToConsider);
+                } catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+
+                stateToConsider.robot.setForceMovement(false);
+                stateToConsider.robot.setSmoothAcceleration(true);
+                ThreadSensor.modeBorgne(false);
+
+            }
 		}
 		catch(Exception e)
 		{
@@ -465,7 +629,7 @@ public class TechTheSand extends AbstractScript
             throw e;
 		}
 
-        if(versionToExecute == 1)
+        if(versionToExecute == 1 || versionToExecute == 3)
         {
             // DEPOS + STOP GENERAL
 
@@ -502,15 +666,7 @@ public class TechTheSand extends AbstractScript
                 e.printStackTrace();
             }
 
-            log.debug("C'est fini, Billy !");
-            while(true)
-            {
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
+            stop();
         }
 	}
 
@@ -529,11 +685,12 @@ public class TechTheSand extends AbstractScript
 		}
         else if(version == 1)
         {
-            return new Circle(1150,1500);
+            return new Circle(robotPosition,0);
+            //return new Circle(1150,1500);
             //return new Circle(410,1540);
             //(410, 1540)
         }
-        else if(version == 2)
+        else if(version == 2 || version ==3)
         {
             return new Circle(robotPosition,0);
         }
@@ -654,6 +811,19 @@ public class TechTheSand extends AbstractScript
         {
             stateToConsider.robot.moveLengthwise(-25);
             safeTurn(angle, stateToConsider, hooksToConsider);
+        }
+    }
+
+    public void stop()
+    {
+        log.debug("C'est fini, Billy !");
+        while(true)
+        {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 

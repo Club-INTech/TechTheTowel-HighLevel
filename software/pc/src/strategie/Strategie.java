@@ -141,6 +141,7 @@ public class Strategie implements Service
 		while(!ThreadTimer.matchEnded)
         {
             AbstractScript nextScript = decide();
+            state.robot.setLocomotionSpeed(Speed.FAST_ALL);
             try
             {
                 if(nextScript instanceof Fishing)
@@ -519,9 +520,9 @@ public class Strategie implements Service
             return 3;
         else if(script instanceof Castle)
             return 4;
-        else if(script instanceof CloseDoors && !an)
+        else if(script instanceof CloseDoors && !an && dangerousOpponent)
             return 0;
-        else if(script instanceof CloseDoors && dangerousOpponent)
+        else if(script instanceof CloseDoors && an)
             return 3;
         else if(script instanceof CloseDoors)
             return 4;
@@ -539,7 +540,7 @@ public class Strategie implements Service
             return 2;
         }
         else if(script instanceof TechTheSand)
-            return 1;
+            return 3;
         return 0;
     }
 

@@ -1,11 +1,13 @@
 package scripts;
 
+import enums.ActuatorOrder;
 import exceptions.BadVersionException;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialFinallyException;
 import hook.Callback;
 import hook.Hook;
+import hook.methods.OpenDoor;
 import hook.methods.SpeedDown;
 import hook.methods.StopDetect;
 import hook.types.HookFactory;
@@ -192,6 +194,8 @@ public class CloseDoors extends AbstractScript
                 stateToConsider.robot.setForceMovement(false);
                 stateToConsider.robot.setLocomotionSpeed(Speed.FAST_ALL);
 
+                stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, false);
+
                 //On s'oriente vers les portes
                 stateToConsider.robot.turn(-(Math.PI / 2), hooksToConsider, false);
 
@@ -203,6 +207,10 @@ public class CloseDoors extends AbstractScript
 
                 hook = hookFactory.newYGreaterHook(1600);
                 hook.addCallback(new Callback(new StopDetect(), true, stateToConsider));
+                hooksToConsider.add(hook);
+
+                hook = hookFactory.newYGreaterHook(1500);
+                hook.addCallback(new Callback(new OpenDoor(), true, stateToConsider));
                 hooksToConsider.add(hook);
 
                 stateToConsider.robot.setForceMovement(true);
