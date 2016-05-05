@@ -330,6 +330,8 @@ public class Locomotion implements Service
         this.curveArc = arc.copy();
         this.posStartedCurve = highLevelPosition.clone();
 
+        log.debug("Lancement d'un arc de rayon "+arc.radius+" et de longueur "+arc.length);
+
         if(Math.abs(highLevelOrientation - arc.startAngle) > maxRotationCorrectionThreeshold)
         {
             log.debug("Mauvaise orientation pour mouvement courbe, on tourne !");

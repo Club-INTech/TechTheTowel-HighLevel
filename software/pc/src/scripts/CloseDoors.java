@@ -275,12 +275,12 @@ public class CloseDoors extends AbstractScript
 	@Override
 	public Circle entryPosition(int version, int ray, Vec2 robotPosition) throws BadVersionException
 	{
-		if (version == 0 || version == 1)
+		if (version == 0 || version == 1 || version == 4)
 		{
 			// modification possible selon l'envergure du robot new Vec2(1135,1600)
 			return new Circle(robotPosition);
 		}
-		else if (version == 2 || version == 4)
+		else if (version == 2)
 		{
 			return new Circle(Table.entryPosition);
 		}
