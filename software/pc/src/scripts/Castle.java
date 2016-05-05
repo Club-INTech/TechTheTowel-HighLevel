@@ -60,9 +60,11 @@ public class Castle extends AbstractScript
 				stateToConsider.robot.moveLengthwise(200);
                // stateToConsider.robot.moveToLocation(new Vec2(1050,950), hooksToConsider, stateToConsider.table);
                 stateToConsider.robot.moveArc(new Arc(-1000, 800, Math.PI, true), hooksToConsider);
-			}
+                stateToConsider.robot.moveLengthwise(-500,hooksToConsider,false);
 
-			if (versionToExecute == 0 || versionToExecute == 5)
+            }
+
+			if (versionToExecute == 0)
 			{
 				// on se tourne vers pi
 				stateToConsider.robot.turn(Math.PI);
