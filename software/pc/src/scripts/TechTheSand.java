@@ -235,7 +235,7 @@ public class TechTheSand extends AbstractScript
 
                         safeTurn(Math.PI, stateToConsider, hooksToConsider);
 
-                        stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 190);
+                        stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 200);
 						stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 					}
                     catch (UnableToMoveException e2)
@@ -256,7 +256,7 @@ public class TechTheSand extends AbstractScript
                             stateToConsider.robot.setForceMovement(false);
                             stateToConsider.robot.moveLengthwiseWithoutDetection(-30);
                             stateToConsider.robot.setForceMovement(true);
-                            stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 190, hooksToConsider);
+                            stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 200, hooksToConsider);
 							stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 						}
                         catch (UnableToMoveException e3) {
@@ -314,7 +314,7 @@ public class TechTheSand extends AbstractScript
 				Arc approach2 = new Arc(distanceCod, distanceCod*Math.PI/4, Math.PI, false);
                 stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_MEDIUM);
 
-                stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/4.5, Math.PI, false), hooksToConsider);
+                stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/4, Math.PI, false), hooksToConsider);
 
                 //=============================================================================================
 				// Bouclage récursif de sortie
@@ -335,7 +335,7 @@ public class TechTheSand extends AbstractScript
 						if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED)
 							throw new UnableToMoveException(new Vec2(0, 1600), UnableToMoveReason.OBSTACLE_DETECTED);
 						e.printStackTrace();
-						stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/4.5, Math.PI, false), hooksToConsider);
+						stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/4, Math.PI, false), hooksToConsider);
 						stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
 						//stateToConsider.robot.moveLengthwise(-80);
                         stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_MEDIUM);
@@ -349,7 +349,7 @@ public class TechTheSand extends AbstractScript
 							if(e2.reason == UnableToMoveReason.OBSTACLE_DETECTED)
 								throw new UnableToMoveException(new Vec2(0, 1600), UnableToMoveReason.OBSTACLE_DETECTED);
 							e2.printStackTrace();
-							stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/4.5, Math.PI, false), hooksToConsider);
+							stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/4, Math.PI, false), hooksToConsider);
 							stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
 							//stateToConsider.robot.moveLengthwise(-80);
                             stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_MEDIUM);
@@ -366,7 +366,7 @@ public class TechTheSand extends AbstractScript
 							stateToConsider.robot.setDirectionStrategy(DirectionStrategy.FASTEST);
 							stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
 							stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 150);
-							stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/3.5, Math.PI, false), hooksToConsider);
+							stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/3, Math.PI, false), hooksToConsider);
 							stateToConsider.robot.moveLengthwise(-100);
 							throw new ExecuteException(e3);
 						}
@@ -563,7 +563,7 @@ public class TechTheSand extends AbstractScript
         stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
         stateToConsider.robot.moveLengthwiseWithoutDetection(-10);
 
-        if(stateToConsider.robot.getPosition().x <= 190)
+        if(stateToConsider.robot.getPosition().x <= 200)
             return;
 
         while(!ok && tries < 4)
