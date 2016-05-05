@@ -376,6 +376,31 @@ public class Strategie implements Service
                 }
                 return scriptmanager.getScript(ScriptNames.FISHING);
             }
+            else if(state.table.extDoorClosed && !dangerousOpponent)
+            {
+                try {
+                    state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
+                    state.changeRobotRadius(TechTheSand.retractedRobotRadius);
+                    state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
+                    log.debug(state.robot.getRobotRadius());
+                    state.robot.setDoor(false);
+                    state.robot.setLocomotionSpeed(Speed.FAST_ALL);
+                } catch (SerialConnexionException e) {
+                    e.printStackTrace();
+                }
+                return scriptmanager.getScript(ScriptNames.FISHING);
+            }
+            else if(!dangerousOpponent && done)
+            {
+                state.robot.setLocomotionSpeed(Speed.FAST_ALL);
+                try {
+                    state.robot.useActuator(ActuatorOrder.OPEN_DOOR, false);
+                } catch (SerialConnexionException e) {
+                    e.printStackTrace();
+                }
+                state.robot.setBasicDetection(true);
+                return scriptmanager.getScript(ScriptNames.TECH_THE_SAND);
+            }
             else if(gotShells && !state.robot.getIsSandInside())
             {
                 try {
@@ -405,8 +430,6 @@ public class Strategie implements Service
                         e.printStackTrace();
                     }
                     return scriptmanager.getScript(ScriptNames.FISHING);
-                } else {
-                    return scriptmanager.getScript(ScriptNames.TECH_THE_SAND);
                 }
             }
             else if(castleTaken)
@@ -422,11 +445,9 @@ public class Strategie implements Service
             {
                 return scriptmanager.getScript(ScriptNames.CASTLE);
             }
-            else
-            {
+            
                 badLastScript = true;
                 return decide();
-            }
         }
         else
         {
@@ -452,7 +473,7 @@ public class Strategie implements Service
             }
             else if(!done)
             {
-                done = true;
+                //done = true;
                 try {
                     state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
                     state.changeRobotRadius(TechTheSand.retractedRobotRadius);
@@ -473,6 +494,12 @@ public class Strategie implements Service
             if(!dangerousOpponent && done)
             {
                 state.robot.setLocomotionSpeed(Speed.FAST_ALL);
+                try {
+                    state.robot.useActuator(ActuatorOrder.OPEN_DOOR, false);
+                } catch (SerialConnexionException e) {
+                    e.printStackTrace();
+                }
+                state.robot.setBasicDetection(true);
                 return scriptmanager.getScript(ScriptNames.TECH_THE_SAND);
             }
 
