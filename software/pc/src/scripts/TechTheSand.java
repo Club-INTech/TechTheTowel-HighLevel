@@ -496,7 +496,7 @@ public class TechTheSand extends AbstractScript
                 ThreadSensor.modeBorgne(true);
               //  stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, true);
                 stateToConsider.robot.turnWithoutDetection(Math.PI/2, hooksToConsider);
-                stateToConsider.robot.moveLengthwiseWithoutDetection((2000-350) - stateToConsider.robot.getPosition().y);
+                stateToConsider.robot.moveLengthwiseWithoutDetection((2000-360) - stateToConsider.robot.getPosition().y);
 
                 stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
                 stateToConsider.robot.setBasicDetection(true);
@@ -649,6 +649,7 @@ public class TechTheSand extends AbstractScript
             // DEPOS + STOP GENERAL
 
             stateToConsider.robot.turnWithoutDetection(0, hooksToConsider);
+            stateToConsider.robot.setLocomotionSpeed(Speed.FAST_ALL);
 
             double angle = stateToConsider.robot.getOrientation();
             try
@@ -675,7 +676,7 @@ public class TechTheSand extends AbstractScript
 
 
             try {
-                stateToConsider.robot.moveLengthwiseWithoutDetection(500);
+                stateToConsider.robot.moveLengthwiseWithoutDetection(400);
             } catch (UnableToMoveException e)
             {
                 e.printStackTrace();
