@@ -476,13 +476,13 @@ public class Strategie implements Service
         boolean an = badLastScript;
         boolean ab = shitHappenedDuringMatch;
         badLastScript = false;
-        if(script instanceof Castle && !ab)
-            return 3;
-        else if(script instanceof Castle && start)
+        if(script instanceof Castle && start)
         {
             start = false;
             return 5;
         }
+        else if(script instanceof Castle && !ab)
+            return 3;
         else if(script instanceof Castle)
             return 4;
         else if(script instanceof CloseDoors && !an)
