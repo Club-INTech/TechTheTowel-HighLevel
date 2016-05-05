@@ -502,6 +502,7 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.robot.setBasicDetection(true);
                 stateToConsider.robot.setForceMovement(false);
                 stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_MEDIUM);
+                stateToConsider.robot.useActuator(ActuatorOrder.START_AXIS, false);
 
                 try
                 {
