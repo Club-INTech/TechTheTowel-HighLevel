@@ -306,7 +306,7 @@ public class TechTheSand extends AbstractScript
 				Arc approach2 = new Arc(distanceCod, distanceCod*Math.PI/4, Math.PI, false);
                 stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 
-                stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/5, Math.PI, false), hooksToConsider);
+                stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/7, Math.PI, false), hooksToConsider);
 
                 //=============================================================================================
 				// Bouclage récursif de sortie
@@ -327,7 +327,7 @@ public class TechTheSand extends AbstractScript
 						if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED)
 							throw new UnableToMoveException(new Vec2(0, 1600), UnableToMoveReason.OBSTACLE_DETECTED);
 						e.printStackTrace();
-						stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/5, Math.PI, false), hooksToConsider);
+						stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/7, Math.PI, false), hooksToConsider);
 						stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
 						//stateToConsider.robot.moveLengthwise(-80);
                         stateToConsider.robot.setLocomotionSpeed(Speed.ULTRA_SLOW_ALL);
@@ -341,7 +341,7 @@ public class TechTheSand extends AbstractScript
 							if(e2.reason == UnableToMoveReason.OBSTACLE_DETECTED)
 								throw new UnableToMoveException(new Vec2(0, 1600), UnableToMoveReason.OBSTACLE_DETECTED);
 							e2.printStackTrace();
-							stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/5, Math.PI, false), hooksToConsider);
+							stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/7, Math.PI, false), hooksToConsider);
 							stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
 							//stateToConsider.robot.moveLengthwise(-80);
                             stateToConsider.robot.setLocomotionSpeed(Speed.ULTRA_SLOW_ALL);
