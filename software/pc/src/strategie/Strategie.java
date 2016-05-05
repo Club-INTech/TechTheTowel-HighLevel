@@ -617,10 +617,10 @@ public class Strategie implements Service
 				}
 				
 				// distinction selon la symétrie
-				if(config.getProperty("couleur").equals("violet"))
+			/*	if(config.getProperty("couleur").equals("violet"))
 				{
 					radius=-radius;
-				}
+				}*/
 				
 				// Cas spécifique pour les poissons
 				if(script instanceof Fishing && state.robot.getPosition().y<1000)
