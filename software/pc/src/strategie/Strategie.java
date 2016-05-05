@@ -158,7 +158,7 @@ public class Strategie implements Service
                 shitHappenedDuringMatch = true;
                 if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED) //On a vu l'ennemi, c'est anormal
                 {
-                    dangerousOpponent = true;
+                   // dangerousOpponent = true;
                     ThreadEyes.forceEvent(EyesEvent.ENNEMY);
                 }
                 else
@@ -211,7 +211,7 @@ public class Strategie implements Service
             if(!badLastScript && state.table.fishesFished>0)
                 done = true;
 
-            if(!state.robot.getIsSandInside() && !state.robot.shellsOnBoard && !badLastScript && gotShells)
+            if(dangerousOpponent && !state.robot.getIsSandInside() && !state.robot.shellsOnBoard && !badLastScript && gotShells)
             {
                 try {
                     state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
@@ -357,9 +357,12 @@ public class Strategie implements Service
         {
             if(start)
             {
-                return scriptmanager.getScript(ScriptNames.TECH_THE_SAND);
+                if(dangerousOpponent)
+                    return scriptmanager.getScript(ScriptNames.TECH_THE_SAND);
+                sandTaken = true;
+                return scriptmanager.getScript(ScriptNames.CASTLE);
             }
-            else if((done || ThreadTimer.remainingTime() <= 30000) && !state.robot.getIsSandInside())
+            else if(dangerousOpponent && (done || ThreadTimer.remainingTime() <= 30000) && !state.robot.getIsSandInside())
             {
                 try {
                     state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
@@ -389,18 +392,22 @@ public class Strategie implements Service
             }
             else if(state.table.extDoorClosed && state.table.intDoorClosed && !state.robot.getIsSandInside())
             {
-                //return scriptmanager.getScript(ScriptNames.SHELL_GETTER);
-                try {
-                    state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
-                    state.changeRobotRadius(TechTheSand.retractedRobotRadius);
-                    state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
-                    log.debug(state.robot.getRobotRadius());
-                    state.robot.setDoor(false);
-                    state.robot.setLocomotionSpeed(Speed.FAST_ALL);
-                } catch (SerialConnexionException e) {
-                    e.printStackTrace();
+                if(dangerousOpponent) {
+                    //return scriptmanager.getScript(ScriptNames.SHELL_GETTER);
+                    try {
+                        state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
+                        state.changeRobotRadius(TechTheSand.retractedRobotRadius);
+                        state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
+                        log.debug(state.robot.getRobotRadius());
+                        state.robot.setDoor(false);
+                        state.robot.setLocomotionSpeed(Speed.FAST_ALL);
+                    } catch (SerialConnexionException e) {
+                        e.printStackTrace();
+                    }
+                    return scriptmanager.getScript(ScriptNames.FISHING);
+                } else {
+                    return scriptmanager.getScript(ScriptNames.TECH_THE_SAND);
                 }
-                return scriptmanager.getScript(ScriptNames.FISHING);
             }
             else if(castleTaken)
             {
@@ -471,6 +478,11 @@ public class Strategie implements Service
         badLastScript = false;
         if(script instanceof Castle && !ab)
             return 3;
+        else if(script instanceof Castle && start)
+        {
+            start = false;
+            return 5;
+        }
         else if(script instanceof Castle)
             return 4;
         else if(script instanceof CloseDoors && !an)

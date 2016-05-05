@@ -365,7 +365,7 @@ public class TechTheSand extends AbstractScript
 							stateToConsider.robot.setTurningStrategy(TurningStrategy.FASTEST);
 							stateToConsider.robot.setDirectionStrategy(DirectionStrategy.FASTEST);
 							stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
-							stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 150);
+							stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 200);
 							stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/3, Math.PI, false), hooksToConsider);
 							stateToConsider.robot.moveLengthwise(-100);
 							throw new ExecuteException(e3);
@@ -454,6 +454,54 @@ public class TechTheSand extends AbstractScript
             finalize(stateToConsider,e);
             throw e;
 		}
+
+        if(versionToExecute == 1)
+        {
+            // DEPOS + STOP GENERAL
+
+            stateToConsider.robot.turnWithoutDetection(0, hooksToConsider);
+
+            double angle = stateToConsider.robot.getOrientation();
+            try
+            {
+                stateToConsider.robot.moveArc(new Arc(-500, 950, angle, false), hooksToConsider);
+            }
+            catch (UnableToMoveException e)
+            {
+                if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED)
+                {
+                    log.debug("ENNEMI DETECTE : ATTENTE");
+                    if(!waitForEnnemy(stateToConsider, stateToConsider.robot.getPosition(), true))
+                        throw new UnableToMoveException(e.aim, UnableToMoveReason.OBSTACLE_DETECTED);
+                    double done = Math.abs(stateToConsider.robot.getOrientationFast()-angle)/(950./500);
+                    stateToConsider.robot.moveArc(new Arc(-500,(int)(950*done), stateToConsider.robot.getOrientationFast(), false), hooksToConsider);
+                }
+            }
+
+            stateToConsider.robot.setForceMovement(false);
+
+            stateToConsider.robot.setLocomotionSpeed(Speed.FAST_ALL);
+            stateToConsider.robot.turn(Math.PI);
+            stateToConsider.robot.setBasicDetection(false);
+
+
+            try {
+                stateToConsider.robot.moveLengthwiseWithoutDetection(500);
+            } catch (UnableToMoveException e)
+            {
+                e.printStackTrace();
+            }
+
+            while(true)
+            {
+                log.debug("C'est fini, Billy !");
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 	}
 
 	@Override

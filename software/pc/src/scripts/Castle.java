@@ -54,7 +54,14 @@ public class Castle extends AbstractScript
 	{
 		try
 		{
-			if (versionToExecute == 0)
+			if(versionToExecute == 5)
+			{
+                stateToConsider.robot.setLocomotionSpeed(Speed.FAST_ALL);
+				stateToConsider.robot.moveLengthwise(200);
+                stateToConsider.robot.moveToLocation(new Vec2(1050,900), hooksToConsider, stateToConsider.table);
+			}
+
+			if (versionToExecute == 0 || versionToExecute == 5)
 			{
 				// on se tourne vers pi
 				stateToConsider.robot.turn(Math.PI);
@@ -66,16 +73,16 @@ public class Castle extends AbstractScript
 				stateToConsider.robot.moveLengthwiseWithoutDetection(700,hooksToConsider,true);
 				
 				// on liste les obstacles rectangulaires 
-				ArrayList<ObstacleRectangular> mRectangles = stateToConsider.table.getObstacleManager().getRectangles();
+				//ArrayList<ObstacleRectangular> mRectangles = stateToConsider.table.getObstacleManager().getRectangles();
 				
-				// et on supprime le tas de sable
+				/*// et on supprime le tas de sable
 				for (int i=0;i< mRectangles.size();i++)
 				{
 					if (mRectangles.get(i).isInObstacle(new Vec2(580,1100)))
 					{
 						mRectangles.remove(i);
 					}
-				}
+				}*/
 				
 				// on s'éloigne de la zone de construction 
 				stateToConsider.robot.moveLengthwiseWithoutDetection(-600,hooksToConsider,false);
@@ -353,7 +360,7 @@ public class Castle extends AbstractScript
                 stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
 
             }
-			
+
 		}
 		catch (Exception e)
 		{
@@ -399,7 +406,7 @@ public class Castle extends AbstractScript
 			//TODO tester
 			return (new Circle(new Vec2(800, 800)));
 		}
-		else if (version == 2 || version == 3)
+		else if (version == 2 || version == 3 || version == 5)
 		{
 			//testé et approuvé: (1250, 1370)
 			return new Circle(robotPosition);
