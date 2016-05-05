@@ -235,7 +235,7 @@ public class TechTheSand extends AbstractScript
 
                         safeTurn(Math.PI, stateToConsider, hooksToConsider);
 
-                        stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 150);
+                        stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 170);
 						stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 					}
                     catch (UnableToMoveException e2)
@@ -256,7 +256,7 @@ public class TechTheSand extends AbstractScript
                             stateToConsider.robot.setForceMovement(false);
                             stateToConsider.robot.moveLengthwiseWithoutDetection(-30);
                             stateToConsider.robot.setForceMovement(true);
-                            stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 150, hooksToConsider);
+                            stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 170, hooksToConsider);
 							stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 						}
                         catch (UnableToMoveException e3) {
@@ -562,7 +562,7 @@ public class TechTheSand extends AbstractScript
         stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
         stateToConsider.robot.moveLengthwiseWithoutDetection(-10);
 
-        if(stateToConsider.robot.getPosition().x <= 150)
+        if(stateToConsider.robot.getPosition().x <= 170)
             return;
 
         while(!ok && tries < 4)
