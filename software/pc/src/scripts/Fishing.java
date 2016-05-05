@@ -517,7 +517,7 @@ public class Fishing extends AbstractScript
 				// on repart chercher d'autre poissons rapidement 
 				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 				log.debug("On part pour un second passage !");
-				stateToConsider.robot.moveLengthwise(-500, hooksToConsider, false);
+				stateToConsider.robot.moveLengthwiseWithoutDetection(-500, hooksToConsider, false);
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 				
 				// nouvelle condition pour le hook lâchant les poissons et mise à jour dans la liste
@@ -648,7 +648,7 @@ public class Fishing extends AbstractScript
 				// on repart chercher d'autre poissons rapidement
 				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 				log.debug("On part faire la troisième tentative !");
-				stateToConsider.robot.moveLengthwise(-610, hooksToConsider, false);
+				stateToConsider.robot.moveLengthwiseWithoutDetection(-610, hooksToConsider, false);
 				stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 
 				// nouvelle condition pour le hook lâchant les poissons et mise à jour dans la liste
