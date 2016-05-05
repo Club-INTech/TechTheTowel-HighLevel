@@ -469,7 +469,9 @@ public class TechTheSand extends AbstractScript
                         stateToConsider.robot.moveToLocation(Table.entryPosition.plusNewVector(new Vec2(-180,0)), hooksToConsider, stateToConsider.table);
                         stateToConsider.robot.turnWithoutDetection(0,hooksToConsider);
                         stateToConsider.robot.moveLengthwiseWithoutDetection(100);
-                        stateToConsider.robot.moveLengthwise(-100);
+                        stateToConsider.robot.setBasicDetection(false);
+                        stateToConsider.robot.moveLengthwise(-200);
+                        stateToConsider.robot.setBasicDetection(true);
                         stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, false);
                         stateToConsider.robot.moveToLocation(new Vec2(300, 1590), hooksToConsider, stateToConsider.table);
                     } catch (PathNotFoundException | PointInObstacleException e) {
