@@ -511,7 +511,7 @@ public class TechTheSand extends AbstractScript
                         stop();
                 }
 
-                stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/4, Math.PI, false), hooksToConsider);
+                stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/6, Math.PI, false), hooksToConsider);
                 Arc approach2 = new Arc(distanceCod, distanceCod*Math.PI/4, Math.PI, false);
 
                 //=============================================================================================
@@ -533,7 +533,7 @@ public class TechTheSand extends AbstractScript
                         if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED)
                             stop();
                         e.printStackTrace();
-                        stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/4, Math.PI, false), hooksToConsider);
+                        stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/6, Math.PI, false), hooksToConsider);
                         stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
                         //stateToConsider.robot.moveLengthwise(-80);
                         stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_MEDIUM);
@@ -547,7 +547,7 @@ public class TechTheSand extends AbstractScript
                             if(e2.reason == UnableToMoveReason.OBSTACLE_DETECTED)
                                 stop();
                             e2.printStackTrace();
-                            stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/4, Math.PI, false), hooksToConsider);
+                            stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/6, Math.PI, false), hooksToConsider);
                             stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
                             //stateToConsider.robot.moveLengthwise(-80);
                             stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_MEDIUM);
@@ -564,7 +564,7 @@ public class TechTheSand extends AbstractScript
                             stateToConsider.robot.setDirectionStrategy(DirectionStrategy.FASTEST);
                             stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
                             stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 200);
-                            stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/3, Math.PI, false), hooksToConsider);
+                            stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/4, Math.PI, false), hooksToConsider);
                             stateToConsider.robot.moveLengthwise(-100);
                             throw new ExecuteException(e3);
                         }
@@ -598,6 +598,16 @@ public class TechTheSand extends AbstractScript
                     stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
                     stateToConsider.robot.setForceMovement(false);
                     stateToConsider.robot.turnWithoutDetection(0, hooksToConsider);
+                } catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+
+                try
+                {
+                    // version à décommenter pour la version 2 de Castle
+                    // stateToConsider.robot.moveLengthwise(1150-stateToConsider.robot.getPosition().x);
+                    stateToConsider.robot.moveLengthwiseWithoutDetection(650 - stateToConsider.robot.getPosition().x);
                 } catch (Exception e)
                 {
                     e.printStackTrace();

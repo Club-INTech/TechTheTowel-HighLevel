@@ -486,6 +486,15 @@ public class Strategie implements Service
 
             if(state.table.extDoorClosed && !dangerousOpponent && !done)
             {
+                try {
+                    state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
+                    state.changeRobotRadius(TechTheSand.retractedRobotRadius);
+                    state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
+                    state.robot.setDoor(false);
+                } catch (SerialConnexionException e) {
+                    e.printStackTrace();
+                }
+                state.robot.setBasicDetection(true);
                 return scriptmanager.getScript(ScriptNames.FISHING);
             }
 
