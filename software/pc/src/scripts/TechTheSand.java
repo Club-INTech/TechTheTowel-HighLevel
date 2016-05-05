@@ -202,7 +202,7 @@ public class TechTheSand extends AbstractScript
                 
                 // Définition de l'arc à suivre, point de départ temporaire
                 // 150
-                Arc approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(100,2000-(symetry ? 200 : 150)), Math.PI, true);
+                Arc approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(100,2000-(symetry ? 190 : 150)), Math.PI, true);
 
 
 				try {
@@ -227,7 +227,7 @@ public class TechTheSand extends AbstractScript
 
                         safeTurn(Math.PI, stateToConsider, hooksToConsider);
 
-                        stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 100);
+                        stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 200);
 						stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 					}
                     catch (UnableToMoveException e2)
@@ -248,7 +248,7 @@ public class TechTheSand extends AbstractScript
                             stateToConsider.robot.setForceMovement(false);
                             stateToConsider.robot.moveLengthwiseWithoutDetection(-30);
                             stateToConsider.robot.setForceMovement(true);
-                            stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 100, hooksToConsider);
+                            stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 200, hooksToConsider);
 							stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 						}
                         catch (UnableToMoveException e3) {
@@ -261,7 +261,7 @@ public class TechTheSand extends AbstractScript
                             stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 200, hooksToConsider);
                             stateToConsider.robot.moveArc(new Arc(200, -200, stateToConsider.robot.getOrientation(), false), hooksToConsider);
                             stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);*/
-                            //throw e3;
+                            throw e3;
                         }
                     }
                 }
@@ -315,6 +315,7 @@ public class TechTheSand extends AbstractScript
 				//=============================================================================================
 				try
 				{
+                    stateToConsider.robot.moveLengthwiseWithoutDetection(-50);
                     stateToConsider.robot.setLocomotionSpeed(Speed.ULTRA_SLOW_ALL);
                     stateToConsider.robot.moveArc(approach2, hooksToConsider);
                     stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
@@ -435,7 +436,7 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
                 stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
                 stateToConsider.robot.setForceMovement(false);
-                stateToConsider.robot.moveLengthwiseWithoutDetection(stateToConsider.robot.getPosition().x - 200);
+                stateToConsider.robot.moveLengthwiseWithoutDetection(stateToConsider.robot.getPosition().x - 250);
                 stateToConsider.robot.moveArc(new Arc(200, symetry ? -220: -260, stateToConsider.robot.getOrientation(), false), hooksToConsider);
 				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
                 stateToConsider.changeRobotRadius(TechTheSand.retractedRobotRadius);
@@ -557,6 +558,9 @@ public class TechTheSand extends AbstractScript
 
         stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
         stateToConsider.robot.moveLengthwiseWithoutDetection(-10);
+
+        if(stateToConsider.robot.getPosition().x <= 210)
+            return;
 
         while(!ok && tries < 4)
         {
