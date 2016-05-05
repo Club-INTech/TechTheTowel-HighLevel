@@ -60,7 +60,23 @@ public class Castle extends AbstractScript
 				stateToConsider.robot.moveLengthwise(200);
                // stateToConsider.robot.moveToLocation(new Vec2(1050,950), hooksToConsider, stateToConsider.table);
                 stateToConsider.robot.moveArc(new Arc(-1000, 800, Math.PI, true), hooksToConsider);
-                stateToConsider.robot.moveLengthwise(-680,hooksToConsider,false);
+                stateToConsider.robot.moveLengthwise(-400);
+                double angle = stateToConsider.robot.getOrientation();
+                try {
+                    Arc arc = new Arc(-900, -580, angle, false);
+                    stateToConsider.robot.moveArc(arc, hooksToConsider);
+                }
+                catch (UnableToMoveException e)
+                {
+                    if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED)
+                    {
+                        log.debug("ENNEMI DETECTE : ATTENTE");
+                        if(!waitForEnnemy(stateToConsider, stateToConsider.robot.getPosition(), false))
+                            throw new UnableToMoveException(e.aim, UnableToMoveReason.OBSTACLE_DETECTED);
+                        double done = Math.abs(stateToConsider.robot.getOrientation()-angle)/(580./900);
+                        stateToConsider.robot.moveArc(new Arc(-900, (int)(-580*done), stateToConsider.robot.getOrientationFast(), false), hooksToConsider);
+                    }
+                }
 
             }
 
