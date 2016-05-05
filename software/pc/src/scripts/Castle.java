@@ -62,7 +62,7 @@ public class Castle extends AbstractScript
                // stateToConsider.robot.moveToLocation(new Vec2(1050,950), hooksToConsider, stateToConsider.table);
                 stateToConsider.robot.moveArc(new Arc(-1000, 800, Math.PI, true), hooksToConsider);
                 stateToConsider.robot.turn(Math.PI);
-                stateToConsider.robot.moveLengthwise(-120);
+                stateToConsider.robot.moveLengthwiseWithoutDetection(-150);
 
                 stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, false);
                 double angle = stateToConsider.robot.getOrientation();
