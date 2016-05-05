@@ -494,7 +494,7 @@ public class TechTheSand extends AbstractScript
                 ThreadSensor.modeBorgne(true);
               //  stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, true);
                 stateToConsider.robot.turnWithoutDetection(Math.PI/2, hooksToConsider);
-                stateToConsider.robot.moveLengthwiseWithoutDetection((2000-330) - stateToConsider.robot.getPosition().y);
+                stateToConsider.robot.moveLengthwiseWithoutDetection((2000-350) - stateToConsider.robot.getPosition().y);
 
                 stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
                 stateToConsider.robot.setBasicDetection(true);
