@@ -7,6 +7,7 @@ import exceptions.serial.SerialFinallyException;
 import hook.Callback;
 import hook.Hook;
 import hook.methods.SpeedDown;
+import hook.methods.StopDetect;
 import hook.types.HookFactory;
 import robot.Robot;
 import smartMath.Arc;
@@ -61,6 +62,7 @@ public class CloseDoors extends AbstractScript
 				//On ralentit pour éviter de démonter les éléments de jeu "Discord-style"
 				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
 
+                stateToConsider.robot.setBasicDetection(true);
 				stateToConsider.robot.setForceMovement(false);
                 stateToConsider.robot.setLocomotionSpeed(Speed.FAST_ALL);
 
@@ -73,10 +75,16 @@ public class CloseDoors extends AbstractScript
                 hook.addCallback(new Callback(new SpeedDown(), true, stateToConsider));
                 hooksToConsider.add(hook);
 
+                hook = hookFactory.newYGreaterHook(1600);
+                hook.addCallback(new Callback(new StopDetect(), true, stateToConsider));
+                hooksToConsider.add(hook);
+
                 stateToConsider.robot.setForceMovement(true);
 
                 //On ferme les portes
-				stateToConsider.robot.moveLengthwiseWithoutDetection(-1000, hooksToConsider, true);
+				stateToConsider.robot.moveLengthwise(-1000, hooksToConsider, true);
+
+                stateToConsider.robot.setBasicDetection(true);
 
                // stateToConsider.robot.setForceMovement(false);
 

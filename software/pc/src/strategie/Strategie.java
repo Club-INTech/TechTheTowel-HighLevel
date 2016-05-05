@@ -376,7 +376,7 @@ public class Strategie implements Service
                 }
                 return scriptmanager.getScript(ScriptNames.FISHING);
             }
-            else if(state.table.extDoorClosed && !dangerousOpponent)
+            else if(state.table.extDoorClosed && !dangerousOpponent && !done)
             {
                 try {
                     state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
@@ -445,7 +445,7 @@ public class Strategie implements Service
             {
                 return scriptmanager.getScript(ScriptNames.CASTLE);
             }
-            
+
                 badLastScript = true;
                 return decide();
         }
