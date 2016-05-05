@@ -366,15 +366,10 @@ public class TechTheSand extends AbstractScript
 				}
 				//==============================================================================================
 
-				try {
+				
 					stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
-					stateToConsider.robot.turnWithoutDetection(-Math.PI/2, hooksToConsider);
-				} catch (Exception e)
-				{
-					e.printStackTrace();
-					stateToConsider.robot.moveLengthwiseWithoutDetection(-30);
-					stateToConsider.robot.turnWithoutDetection(-Math.PI/2, hooksToConsider);
-				}
+					safeTurn(-Math.PI/2, stateToConsider, hooksToConsider);
+
 
 
                 try {
