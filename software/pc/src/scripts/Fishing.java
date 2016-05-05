@@ -1024,9 +1024,9 @@ public class Fishing extends AbstractScript
 				// arc pour sortir du bord de table
 				log.debug("Fishing terminé sans encombres, dégagement !");
 				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
-				Arc disengage = new Arc(-320,160,stateToConsider.robot.getOrientation(),false);
+				Arc disengage = new Arc(-320,200,stateToConsider.robot.getOrientation(),false);
 				stateToConsider.robot.moveArc(disengage, hooksToConsider);
-                stateToConsider.robot.moveLengthwiseWithoutDetection(50);
+               // stateToConsider.robot.moveLengthwiseWithoutDetection(50);
 				hooksToConsider.clear();
 
 				// reprise de vitesse inter script

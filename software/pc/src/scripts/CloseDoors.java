@@ -247,6 +247,39 @@ public class CloseDoors extends AbstractScript
 
                 stateToConsider.changeRobotRadius(TechTheSand.retractedRobotRadius);
                 stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
+
+                stateToConsider.robot.setLocomotionSpeed(Speed.FAST_ALL);
+
+                stateToConsider.robot.setBasicDetection(true);
+                //On avance
+                stateToConsider.robot.moveLengthwiseWithoutDetection(300, hooksToConsider, false);
+
+                stateToConsider.robot.setForceMovement(false);
+
+                stateToConsider.robot.turn(Math.PI);
+                stateToConsider.robot.setForceMovement(true);
+
+
+                hook = hookFactory.newXGreaterHook(1200);
+                hook.addCallback(new Callback(new SpeedDown(), true, stateToConsider));
+                hooksToConsider.add(hook);
+
+                stateToConsider.robot.moveLengthwise(-500, hooksToConsider, true);
+
+                stateToConsider.robot.setForceMovement(false);
+
+                //  if(Geometry.isBetween(stateToConsider.robot.getPosition().x, 1300, 1400))
+                //	{
+                stateToConsider.robot.setPosition(new Vec2(1350, stateToConsider.robot.getPosition().y));
+                stateToConsider.robot.setOrientation(Math.PI);
+                //	}
+                //    else
+                //        log.debug("Position trop éloignée pour se recaler en x (cylindre ?)");
+
+                stateToConsider.robot.moveLengthwise(300, hooksToConsider, false);
+
+
+                stateToConsider.robot.setBasicDetection(false);
             }
 		}
 		catch(Exception e)
