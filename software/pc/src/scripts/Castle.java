@@ -60,7 +60,8 @@ public class Castle extends AbstractScript
 				stateToConsider.robot.moveLengthwise(200);
                // stateToConsider.robot.moveToLocation(new Vec2(1050,950), hooksToConsider, stateToConsider.table);
                 stateToConsider.robot.moveArc(new Arc(-1000, 800, Math.PI, true), hooksToConsider);
-                stateToConsider.robot.moveLengthwise(-400);
+                stateToConsider.robot.moveLengthwise(-100);
+                stateToConsider.robot.turn(Math.PI);
                 double angle = stateToConsider.robot.getOrientation();
                 try {
                     Arc arc = new Arc(-900, -580, angle, false);
