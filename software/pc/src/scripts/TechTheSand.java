@@ -10,6 +10,8 @@ import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import hook.Callback;
 import hook.Hook;
+import hook.methods.CloseDoor;
+import hook.methods.OpenDoor;
 import hook.methods.SetSand;
 import hook.types.HookFactory;
 import robot.Robot;
@@ -155,7 +157,13 @@ public class TechTheSand extends AbstractScript
 
                 stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, false);
 
-                stateToConsider.robot.moveLengthwise(975);
+                Hook hook = hookFactory.newXLesserHook(1100);
+
+                hook.addCallback(new Callback(new OpenDoor(), true, stateToConsider));
+
+                hooksToConsider.add(hook);
+
+                stateToConsider.robot.moveLengthwise(975, hooksToConsider);
 
 				stateToConsider.robot.turnWithoutDetection(2*Math.PI/3, hooksToConsider);
 
@@ -242,7 +250,7 @@ public class TechTheSand extends AbstractScript
 
                             log.debug("Impossible de rentrer dans le sable, retry en droite");
                             stateToConsider.robot.setForceMovement(true);
-                            stateToConsider.robot.setLocomotionSpeed(Speed.ULTRA_SLOW_ALL);
+                            stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 							stateToConsider.robot.moveLengthwiseWithoutDetection(-30);
                             safeTurn(Math.PI, stateToConsider, hooksToConsider);
                             stateToConsider.robot.setForceMovement(false);
@@ -304,7 +312,7 @@ public class TechTheSand extends AbstractScript
 
                 // Définition de l'arc à suivre, point de départ temporaire
 				Arc approach2 = new Arc(distanceCod, distanceCod*Math.PI/4, Math.PI, false);
-                stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+                stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_MEDIUM);
 
                 stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/6, Math.PI, false), hooksToConsider);
 
@@ -316,7 +324,7 @@ public class TechTheSand extends AbstractScript
 				try
 				{
                     //stateToConsider.robot.moveLengthwiseWithoutDetection(-50);
-                    stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+                    stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_MEDIUM);
                     stateToConsider.robot.moveArc(approach2, hooksToConsider);
                     stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 				}
@@ -330,7 +338,7 @@ public class TechTheSand extends AbstractScript
 						stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/6, Math.PI, false), hooksToConsider);
 						stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
 						//stateToConsider.robot.moveLengthwise(-80);
-                        stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+                        stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_MEDIUM);
                         stateToConsider.robot.moveArc(approach2, hooksToConsider);
                         stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
                     }
@@ -344,7 +352,7 @@ public class TechTheSand extends AbstractScript
 							stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/6, Math.PI, false), hooksToConsider);
 							stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
 							//stateToConsider.robot.moveLengthwise(-80);
-                            stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+                            stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_MEDIUM);
                             stateToConsider.robot.moveArc(approach2, hooksToConsider);
                             stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
                         }
@@ -366,8 +374,8 @@ public class TechTheSand extends AbstractScript
 				}
 				//==============================================================================================
 
-				
-					stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+
+					stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_MEDIUM);
 					safeTurn(-Math.PI/2, stateToConsider, hooksToConsider);
 
 

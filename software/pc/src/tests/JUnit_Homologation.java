@@ -139,7 +139,7 @@ public class JUnit_Homologation extends JUnit_Test
                 Vec2 sup = scriptManager.getScript(ScriptNames.CLOSE_DOORS).entryPosition(3, theRobot.robot.getRobotRadius(), theRobot.robot.getPosition()).position;
                 theRobot.table.getObstacleManager().freePoint(sup);
                 Hook hook = factory.newYGreaterHook(1600);
-                hook.addCallback(new Callback(new StopDetect(), false, theRobot));
+                hook.addCallback(new Callback(new StopDetect(), true, theRobot));
                 emptyHook.add(hook);
                 scriptManager.getScript(ScriptNames.CLOSE_DOORS).goToThenExec(3, theRobot, emptyHook);
                 break;
