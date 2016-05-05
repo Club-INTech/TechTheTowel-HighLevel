@@ -38,7 +38,7 @@ public class CloseDoors extends AbstractScript
 		/**
 		 * Versions du script
 		 */
-		versions = new Integer[]{0,1,2,3};
+		versions = new Integer[]{0,1,2,3,4};
 		
 	}
 	
@@ -272,7 +272,7 @@ public class CloseDoors extends AbstractScript
 			// modification possible selon l'envergure du robot new Vec2(1135,1600)
 			return new Circle(robotPosition);
 		}
-		else if (version == 2)
+		else if (version == 2 || version == 4)
 		{
 			return new Circle(Table.entryPosition);
 		}
