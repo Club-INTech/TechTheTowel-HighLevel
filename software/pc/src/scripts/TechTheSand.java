@@ -315,7 +315,7 @@ public class TechTheSand extends AbstractScript
 				//=============================================================================================
 				try
 				{
-                    stateToConsider.robot.moveLengthwiseWithoutDetection(-50);
+                    //stateToConsider.robot.moveLengthwiseWithoutDetection(-50);
                     stateToConsider.robot.setLocomotionSpeed(Speed.ULTRA_SLOW_ALL);
                     stateToConsider.robot.moveArc(approach2, hooksToConsider);
                     stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
