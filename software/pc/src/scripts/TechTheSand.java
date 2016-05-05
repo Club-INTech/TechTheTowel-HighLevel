@@ -227,7 +227,7 @@ public class TechTheSand extends AbstractScript
 
                         safeTurn(Math.PI, stateToConsider, hooksToConsider);
 
-                        stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 200);
+                        stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 150);
 						stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 					}
                     catch (UnableToMoveException e2)
@@ -248,7 +248,7 @@ public class TechTheSand extends AbstractScript
                             stateToConsider.robot.setForceMovement(false);
                             stateToConsider.robot.moveLengthwiseWithoutDetection(-30);
                             stateToConsider.robot.setForceMovement(true);
-                            stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 200, hooksToConsider);
+                            stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 150, hooksToConsider);
 							stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 						}
                         catch (UnableToMoveException e3) {
@@ -436,7 +436,7 @@ public class TechTheSand extends AbstractScript
                 stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
                 stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
                 stateToConsider.robot.setForceMovement(false);
-                stateToConsider.robot.moveLengthwiseWithoutDetection(stateToConsider.robot.getPosition().x - 250);
+                stateToConsider.robot.moveLengthwiseWithoutDetection(stateToConsider.robot.getPosition().x - 200);
                 stateToConsider.robot.moveArc(new Arc(200, symetry ? -220: -260, stateToConsider.robot.getOrientation(), false), hooksToConsider);
 				stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
                 stateToConsider.changeRobotRadius(TechTheSand.retractedRobotRadius);
@@ -559,7 +559,7 @@ public class TechTheSand extends AbstractScript
         stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
         stateToConsider.robot.moveLengthwiseWithoutDetection(-10);
 
-        if(stateToConsider.robot.getPosition().x <= 210)
+        if(stateToConsider.robot.getPosition().x <= 150)
             return;
 
         while(!ok && tries < 4)
