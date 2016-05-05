@@ -276,6 +276,8 @@ public class CloseDoors extends AbstractScript
                 //    else
                 //        log.debug("Position trop éloignée pour se recaler en x (cylindre ?)");
 
+                stateToConsider.robot.setLocomotionSpeed(Speed.FAST_ALL);
+
                 stateToConsider.robot.moveLengthwise(300, hooksToConsider, false);
 
 
