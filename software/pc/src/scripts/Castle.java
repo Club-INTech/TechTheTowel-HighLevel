@@ -58,7 +58,7 @@ public class Castle extends AbstractScript
 			{
                 stateToConsider.robot.setLocomotionSpeed(Speed.FAST_ALL);
 				stateToConsider.robot.moveLengthwise(200);
-                stateToConsider.robot.moveToLocation(new Vec2(1050,900), hooksToConsider, stateToConsider.table);
+                stateToConsider.robot.moveToLocation(new Vec2(1050,950), hooksToConsider, stateToConsider.table);
 			}
 
 			if (versionToExecute == 0 || versionToExecute == 5)
@@ -399,7 +399,7 @@ public class Castle extends AbstractScript
 	{
 		if (version == 0)
 		{
-			return (new Circle(new Vec2(1050,900)));
+			return (new Circle(new Vec2(1050,950)));
 		}
 		else if (version == 1)
 		{
