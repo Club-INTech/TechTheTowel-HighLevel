@@ -470,7 +470,7 @@ public class TechTheSand extends AbstractScript
                         stateToConsider.robot.turnWithoutDetection(0,hooksToConsider);
                         stateToConsider.robot.moveLengthwiseWithoutDetection(100);
                         stateToConsider.robot.moveLengthwise(-100);
-                        //stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, false);
+                        stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, false);
                         stateToConsider.robot.moveToLocation(new Vec2(410, 1540), hooksToConsider, stateToConsider.table);
                     } catch (PathNotFoundException | PointInObstacleException e) {
                         e.printStackTrace();
@@ -483,8 +483,8 @@ public class TechTheSand extends AbstractScript
                         stateToConsider.robot.moveToLocation(new Vec2(1150,1500), hooksToConsider, stateToConsider.table);
                         stateToConsider.robot.turnWithoutDetection(0,hooksToConsider);
                         stateToConsider.robot.moveLengthwise(-100);
-                        //stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, false);
-                        stateToConsider.robot.moveToLocation(new Vec2(400, 1590), hooksToConsider, stateToConsider.table);
+                        stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, false);
+                        stateToConsider.robot.moveToLocation(new Vec2(350, 1590), hooksToConsider, stateToConsider.table);
                     } catch (PathNotFoundException | PointInObstacleException e) {
                         e.printStackTrace();
                         throw new ExecuteException(e);
@@ -492,9 +492,9 @@ public class TechTheSand extends AbstractScript
                 }
 
                 ThreadSensor.modeBorgne(true);
-                stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, false);
+              //  stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, true);
                 stateToConsider.robot.turnWithoutDetection(Math.PI/2, hooksToConsider);
-                stateToConsider.robot.moveLengthwiseWithoutDetection((2000-325) - stateToConsider.robot.getPosition().y);
+                stateToConsider.robot.moveLengthwiseWithoutDetection((2000-375) - stateToConsider.robot.getPosition().y);
 
                 stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
                 stateToConsider.robot.setBasicDetection(true);

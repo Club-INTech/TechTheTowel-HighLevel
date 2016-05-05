@@ -807,7 +807,7 @@ public class Locomotion implements Service
             }
             else
             {
-                this.timeExpected = System.currentTimeMillis() + (long)(2*1000*Math.abs(distance)/this.transSpeed);
+                this.timeExpected = System.currentTimeMillis() + (long)(1.5*1000*Math.abs(distance)/this.transSpeed);
             }
         }
 
