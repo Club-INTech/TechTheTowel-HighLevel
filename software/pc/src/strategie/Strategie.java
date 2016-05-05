@@ -161,6 +161,7 @@ public class Strategie implements Service
                 if(e.reason == UnableToMoveReason.OBSTACLE_DETECTED) //On a vu l'ennemi, c'est anormal
                 {
                    // dangerousOpponent = true;
+                    state.robot.setBasicDetection(true);
                     ThreadEyes.forceEvent(EyesEvent.ENNEMY);
                 }
                 else
