@@ -183,6 +183,58 @@ public class CloseDoors extends AbstractScript
 				stateToConsider.table.intDoorClosed = true;
 
 			}
+            else if(versionToExecute == 4)
+            {
+                //On ralentit pour éviter de démonter les éléments de jeu "Discord-style"
+                Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
+
+                stateToConsider.robot.setBasicDetection(true);
+                stateToConsider.robot.setForceMovement(false);
+                stateToConsider.robot.setLocomotionSpeed(Speed.FAST_ALL);
+
+                //On s'oriente vers les portes
+                stateToConsider.robot.turn(-(Math.PI / 2), hooksToConsider, false);
+
+                stateToConsider.robot.setBasicDetection(true);
+
+                Hook hook = hookFactory.newYGreaterHook(1700);
+                hook.addCallback(new Callback(new SpeedDown(), true, stateToConsider));
+                hooksToConsider.add(hook);
+
+                hook = hookFactory.newYGreaterHook(1600);
+                hook.addCallback(new Callback(new StopDetect(), true, stateToConsider));
+                hooksToConsider.add(hook);
+
+                stateToConsider.robot.setForceMovement(true);
+
+                //On ferme les portes
+                stateToConsider.robot.moveLengthwise(-900, hooksToConsider, true);
+
+                stateToConsider.robot.setBasicDetection(true);
+
+                // stateToConsider.robot.setForceMovement(false);
+
+
+                //PORTES FERMEES !
+                stateToConsider.obtainedPoints += 20;
+                stateToConsider.table.extDoorClosed = true;
+                stateToConsider.table.intDoorClosed = true;
+
+                //if(Geometry.isBetween(stateToConsider.robot.getPosition().y, 1790, 1890))
+                stateToConsider.robot.setPosition(new Vec2(stateToConsider.robot.getPosition().x,1840));
+                stateToConsider.robot.setOrientation(-Math.PI/2);
+
+                //else
+                //	log.debug("Position trop éloignée pour se recaler en y (cylindre ?)");
+
+                stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+
+                stateToConsider.robot.setBasicDetection(true);
+                //On avance
+                stateToConsider.robot.moveLengthwiseWithoutDetection(300, hooksToConsider, false);
+
+                stateToConsider.robot.setForceMovement(false);
+            }
 		}
 		catch(Exception e)
 		{

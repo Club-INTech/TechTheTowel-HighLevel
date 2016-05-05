@@ -1,10 +1,7 @@
 package scripts;
 
 import enums.*;
-import exceptions.BadVersionException;
-import exceptions.BlockedActuatorException;
-import exceptions.ConfigPropertyNotFoundException;
-import exceptions.ExecuteException;
+import exceptions.*;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
@@ -24,6 +21,7 @@ import utils.Config;
 import utils.Log;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Script pour récupérer le tas de sable central, ne s'occupe pas de le ramener dans notre zone de construction
@@ -173,6 +171,18 @@ public class TechTheSand extends AbstractScript
 		
 			if(versionToExecute == 1 || versionToExecute == 2)
             {
+                stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, false);
+
+                if(versionToExecute == 1) {
+                    try {
+                        stateToConsider.robot.moveToLocation(new Vec2(410, 1540), hooksToConsider, stateToConsider.table);
+                    } catch (PathNotFoundException|PointInObstacleException e)
+                    {
+                        e.printStackTrace();
+                        throw new ExecuteException(e);
+                    }
+                }
+
                 // On prend une vitesse lente pour que le robot récupère efficacement le sable
                 Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
                 stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
@@ -253,9 +263,9 @@ public class TechTheSand extends AbstractScript
                             stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 							stateToConsider.robot.moveLengthwiseWithoutDetection(-30);
                             safeTurn(Math.PI, stateToConsider, hooksToConsider);
-                            stateToConsider.robot.setForceMovement(false);
+                           /* stateToConsider.robot.setForceMovement(false);
                             stateToConsider.robot.moveLengthwiseWithoutDetection(-30);
-                            stateToConsider.robot.setForceMovement(true);
+                            stateToConsider.robot.setForceMovement(true);*/
                             stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 200, hooksToConsider);
 							stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 						}
@@ -492,9 +502,9 @@ public class TechTheSand extends AbstractScript
                 e.printStackTrace();
             }
 
+            log.debug("C'est fini, Billy !");
             while(true)
             {
-                log.debug("C'est fini, Billy !");
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
@@ -519,7 +529,8 @@ public class TechTheSand extends AbstractScript
 		}
         else if(version == 1)
         {
-            return new Circle(410,1540);
+            return new Circle(1150,1500);
+            //return new Circle(410,1540);
             //(410, 1540)
         }
         else if(version == 2)

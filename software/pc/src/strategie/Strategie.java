@@ -393,11 +393,6 @@ public class Strategie implements Service
             else if(!dangerousOpponent && done)
             {
                 state.robot.setLocomotionSpeed(Speed.FAST_ALL);
-                try {
-                    state.robot.useActuator(ActuatorOrder.OPEN_DOOR, false);
-                } catch (SerialConnexionException e) {
-                    e.printStackTrace();
-                }
                 state.robot.setBasicDetection(true);
                 return scriptmanager.getScript(ScriptNames.TECH_THE_SAND);
             }
@@ -494,11 +489,7 @@ public class Strategie implements Service
             if(!dangerousOpponent && done)
             {
                 state.robot.setLocomotionSpeed(Speed.FAST_ALL);
-                try {
-                    state.robot.useActuator(ActuatorOrder.OPEN_DOOR, false);
-                } catch (SerialConnexionException e) {
-                    e.printStackTrace();
-                }
+
                 state.robot.setBasicDetection(true);
                 return scriptmanager.getScript(ScriptNames.TECH_THE_SAND);
             }
