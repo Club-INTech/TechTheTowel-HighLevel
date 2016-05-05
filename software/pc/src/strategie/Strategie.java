@@ -465,6 +465,11 @@ public class Strategie implements Service
                 return scriptmanager.getScript(ScriptNames.FISHING);
             }
 
+            if(state.table.extDoorClosed && !dangerousOpponent && !done)
+            {
+                return scriptmanager.getScript(ScriptNames.FISHING);
+            }
+
             if(!dangerousOpponent && done)
             {
                 state.robot.setLocomotionSpeed(Speed.FAST_ALL);
