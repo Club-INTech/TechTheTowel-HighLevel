@@ -99,7 +99,11 @@ public class CloseDoors extends AbstractScript
 				//On avance
 				stateToConsider.robot.moveLengthwise(300, hooksToConsider, false);
 
-				stateToConsider.robot.turn(Math.PI);
+                stateToConsider.robot.setForceMovement(false);
+
+                stateToConsider.robot.turn(Math.PI);
+                stateToConsider.robot.setForceMovement(true);
+
 
                 hook = hookFactory.newXGreaterHook(1200);
                 hook.addCallback(new Callback(new SpeedDown(), true, stateToConsider));

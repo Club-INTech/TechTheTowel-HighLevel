@@ -385,13 +385,15 @@ public class Fishing extends AbstractScript
 
 				if(stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_BLOCKED))
                 {
-                    if(!stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_OPENED))
+                    //if(!stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_OPENED))
+                       // throw new ExecuteException(new BlockedActuatorException());
+
+
+                    if(stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_BLOCKED))
                         throw new ExecuteException(new BlockedActuatorException());
 
                     stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, true);
 
-                    if(stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_BLOCKED))
-                        throw new ExecuteException(new BlockedActuatorException());
                 }
 
                 if(!stateToConsider.robot.getContactSensorValue(ContactSensors.DOOR_CLOSED))
