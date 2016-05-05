@@ -481,7 +481,21 @@ public class Fishing extends AbstractScript
 						{
 							log.debug("Problème lors de la première dépose : \n" );
 							ex.printStackTrace();
-							throw ex;
+                            try
+                            {
+                                stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
+                                stateToConsider.robot.setForceMovement(true);
+                                stateToConsider.robot.moveArc(new Arc(-400, -80, stateToConsider.robot.getOrientation(), false),hooksToConsider);
+                                stateToConsider.robot.turn(Math.PI-0.06,hooksToConsider,false);
+                                stateToConsider.robot.setForceMovement(false);
+                                stateToConsider.robot.moveLengthwise(500,hooksToConsider,false);
+                            }
+                            catch(Exception ex2)
+                            {
+                                log.debug("Problème lors du second dépose : \n" );
+                                ex2.printStackTrace();
+                                throw ex2;
+                            }
 						}
 					}
 				}

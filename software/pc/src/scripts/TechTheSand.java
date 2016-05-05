@@ -471,7 +471,7 @@ public class TechTheSand extends AbstractScript
                         stateToConsider.robot.moveLengthwiseWithoutDetection(100);
                         stateToConsider.robot.moveLengthwise(-100);
                         stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, false);
-                        stateToConsider.robot.moveToLocation(new Vec2(410, 1540), hooksToConsider, stateToConsider.table);
+                        stateToConsider.robot.moveToLocation(new Vec2(350, 1590), hooksToConsider, stateToConsider.table);
                     } catch (PathNotFoundException | PointInObstacleException e) {
                         e.printStackTrace();
                         throw new ExecuteException(e);
@@ -498,7 +498,7 @@ public class TechTheSand extends AbstractScript
 
                 stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
                 stateToConsider.robot.setBasicDetection(true);
-                stateToConsider.robot.setForceMovement(true);
+                stateToConsider.robot.setForceMovement(false);
                 stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_MEDIUM);
 
                 try
