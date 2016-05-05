@@ -30,13 +30,13 @@ public class JUnit_TrollTruche extends JUnit_Test
 	@Test
     public void go() throws SerialConnexionException 
 	{
-		theRobot.robot.useActuator(ActuatorOrder.FISHING_POSITION, true);
+		theRobot.robot.useActuator(ActuatorOrder.FISHING_POSITION_LOW, true);
 		theRobot.robot.sleep(200);
 		theRobot.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
-		theRobot.robot.useActuator(ActuatorOrder.FISHING_POSITION, true);
+		theRobot.robot.useActuator(ActuatorOrder.FISHING_POSITION_LOW, true);
 		theRobot.robot.sleep(200);
 		theRobot.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
-		theRobot.robot.useActuator(ActuatorOrder.FISHING_POSITION, true);
+		theRobot.robot.useActuator(ActuatorOrder.FISHING_POSITION_LOW, true);
 		theRobot.robot.sleep(200);
 		theRobot.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
 		theRobot.robot.useActuator(ActuatorOrder.ARM_INIT, true);

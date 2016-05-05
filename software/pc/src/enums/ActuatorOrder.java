@@ -29,7 +29,9 @@ public enum ActuatorOrder
 	//!\ La symétrie du jeu se chargera de déterminer si l'actuator concerné est le gauche ou le droit /!\
 	
 	/** Bras aimanté baissé pour récupérer les poissons */
-	FISHING_POSITION("fpl"),
+	FISHING_POSITION_LOW("fpll"),
+	FISHING_POSITION_MID("fplm"),
+	FISHING_POSITION_HI("fplh"),
 	
 	/** Bras aimanté en position medium */
 	MIDDLE_POSITION("mpl"),
@@ -46,8 +48,10 @@ public enum ActuatorOrder
 	/**Doigt rangé*/
 	FINGER_UP("lfu"),
 	
-	FISHING_POSITION_RIGHT("fpr"),	// bras aimanté droit baissé pour récupérer les poissons
-	MIDDLE_POSITION_RIGHT("mpr"),	// bras aimanté droit en position medium
+	FISHING_POSITION_RIGHT_LOW("fprl"),	// bras aimanté droit baissé pour récupérer les poissons
+    FISHING_POSITION_RIGHT_MID("fprm"),	// bras aimanté droit baissé pour récupérer les poissons
+    FISHING_POSITION_RIGHT_HI("fprh"),	// bras aimanté droit baissé pour récupérer les poissons
+    MIDDLE_POSITION_RIGHT("mpr"),	// bras aimanté droit en position medium
 	RIGHT_MAGNET_DOWN("rmd"),		// bras aimanté droit pour lâcher les poissons
 	RIGHT_MAGNET_UP("rmu"),			// bras aimanté droit rangé
 	RIGHT_FINGER_DOWN("rfd"),		// doigt droit en position basse

@@ -28,8 +28,8 @@ public class JUnit_ActuatorTest extends JUnit_Test
 
     @Test
     public void go() throws SerialConnexionException {
-        mRobot.robot.useActuator(ActuatorOrder.FISHING_POSITION, true);
-        mRobot.robot.useActuator(ActuatorOrder.FISHING_POSITION_RIGHT, true);
+        mRobot.robot.useActuator(ActuatorOrder.FISHING_POSITION_LOW, true);
+        mRobot.robot.useActuator(ActuatorOrder.FISHING_POSITION_RIGHT_LOW, true);
         mRobot.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
         mRobot.robot.useActuator(ActuatorOrder.MIDDLE_POSITION_RIGHT, true);
         

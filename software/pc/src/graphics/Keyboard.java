@@ -30,7 +30,7 @@ public class Keyboard implements KeyListener
 		if(e.getKeyCode() == KeyEvent.VK_Z)
 		{
 			try {
-				mRobot.useActuator(ActuatorOrder.FISHING_POSITION, false);
+				mRobot.useActuator(ActuatorOrder.FISHING_POSITION_LOW, false);
 			} catch (SerialConnexionException e1) {
 				e1.printStackTrace();
 			}

@@ -18,13 +18,17 @@ public class SymmetrizedActuatorOrderMap
      */
     public SymmetrizedActuatorOrderMap()
     {
-    	mCorrespondenceMap.put(ActuatorOrder.FISHING_POSITION, ActuatorOrder.FISHING_POSITION_RIGHT);
+    	mCorrespondenceMap.put(ActuatorOrder.FISHING_POSITION_LOW, ActuatorOrder.FISHING_POSITION_RIGHT_LOW);
+        mCorrespondenceMap.put(ActuatorOrder.FISHING_POSITION_MID, ActuatorOrder.FISHING_POSITION_RIGHT_MID);
+        mCorrespondenceMap.put(ActuatorOrder.FISHING_POSITION_HI, ActuatorOrder.FISHING_POSITION_RIGHT_HI);
         mCorrespondenceMap.put(ActuatorOrder.MIDDLE_POSITION, ActuatorOrder.MIDDLE_POSITION_RIGHT);
         mCorrespondenceMap.put(ActuatorOrder.MAGNET_DOWN, ActuatorOrder.RIGHT_MAGNET_DOWN);
         mCorrespondenceMap.put(ActuatorOrder.MAGNET_UP, ActuatorOrder.RIGHT_MAGNET_UP);
         mCorrespondenceMap.put(ActuatorOrder.FINGER_DOWN, ActuatorOrder.RIGHT_FINGER_DOWN);
         mCorrespondenceMap.put(ActuatorOrder.FINGER_UP, ActuatorOrder.RIGHT_FINGER_UP);
-        mCorrespondenceMap.put(ActuatorOrder.FISHING_POSITION_RIGHT, ActuatorOrder.FISHING_POSITION);
+        mCorrespondenceMap.put(ActuatorOrder.FISHING_POSITION_RIGHT_LOW, ActuatorOrder.FISHING_POSITION_LOW);
+        mCorrespondenceMap.put(ActuatorOrder.FISHING_POSITION_RIGHT_MID, ActuatorOrder.FISHING_POSITION_MID);
+        mCorrespondenceMap.put(ActuatorOrder.FISHING_POSITION_RIGHT_HI, ActuatorOrder.FISHING_POSITION_HI);
         mCorrespondenceMap.put(ActuatorOrder.MIDDLE_POSITION_RIGHT, ActuatorOrder.MIDDLE_POSITION);
         mCorrespondenceMap.put(ActuatorOrder.RIGHT_MAGNET_DOWN, ActuatorOrder.MAGNET_DOWN);
         mCorrespondenceMap.put(ActuatorOrder.RIGHT_MAGNET_UP, ActuatorOrder.MAGNET_UP);

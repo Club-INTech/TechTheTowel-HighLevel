@@ -92,8 +92,10 @@ public abstract class Robot implements Service
 	 */
 	protected boolean isForcing = false;
 
-	
-	
+
+	public int fishing;
+
+
 	/**
 	 * Instancie le robot.
 	 * Appell� par le container
@@ -121,6 +123,7 @@ public abstract class Robot implements Service
 			symmetry = config.getProperty("couleur").replaceAll(" ","").equals("violet");
 	        robotRay = Integer.parseInt(config.getProperty("rayon_robot"));
 	        position = Table.entryPosition;
+			fishing = Integer.parseInt(config.getProperty("profondeur"));
 	        orientation = Math.PI;
 		}
 	    catch (ConfigPropertyNotFoundException e)

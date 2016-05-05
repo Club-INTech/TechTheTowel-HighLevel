@@ -13,7 +13,12 @@ public class GetFish implements Executable
     @Override
     public boolean execute(GameState<Robot> stateToConsider) {
         try {
-            stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION, false);
+            if(stateToConsider.robot.fishing == 0)
+                stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION_LOW, false);
+            else if(stateToConsider.robot.fishing == 1)
+                stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION_LOW, false);
+            else
+                stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION_LOW, false);
 
         } catch (SerialConnexionException e) {
             e.printStackTrace();

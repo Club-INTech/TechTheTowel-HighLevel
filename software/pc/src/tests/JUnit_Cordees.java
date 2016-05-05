@@ -71,8 +71,8 @@ public class JUnit_Cordees extends JUnit_Test
         scriptManager.getScript(ScriptNames.CASTLE).goToThenExec(0, game, new ArrayList<Hook>());
         scriptManager.getScript(ScriptNames.CLOSE_DOORS).goToThenExec(0, game, new ArrayList<Hook>());
         scriptManager.getScript(ScriptNames.FISHING).goToThenExec(3, game, new ArrayList<Hook>());
-//        game.robot.useActuator(ActuatorOrder.FISHING_POSITION, true);
-//        game.robot.useActuator(ActuatorOrder.FISHING_POSITION_RIGHT, true);
+//        game.robot.useActuator(ActuatorOrder.FISHING_POSITION_LOW, true);
+//        game.robot.useActuator(ActuatorOrder.FISHING_POSITION_RIGHT_LOW, true);
         game.robot.useActuator(ActuatorOrder.ARM_INIT, true);
         log.debug("Temps d'excétution : " + (System.currentTimeMillis() - this.time));
 //        while((System.currentTimeMillis()-time)<30000)

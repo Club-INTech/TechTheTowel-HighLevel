@@ -76,7 +76,7 @@ public class JUnit_Montlhery extends JUnit_Test
             e.printStackTrace();
         }
         try {
-            state.robot.useActuator(ActuatorOrder.FISHING_POSITION, false);
+            state.robot.useActuator(ActuatorOrder.FISHING_POSITION_LOW, false);
         } catch (SerialConnexionException e) {
             e.printStackTrace();
         }
@@ -89,7 +89,7 @@ public class JUnit_Montlhery extends JUnit_Test
         sensors.stop();
         state.table.getObstacleManager().destroyEverything();
         try {
-            state.robot.useActuator(ActuatorOrder.FISHING_POSITION, true);
+            state.robot.useActuator(ActuatorOrder.FISHING_POSITION_LOW, true);
             state.robot.setLocomotionSpeed(Speed.SLOW_ALL);
             state.robot.moveLengthwise(400);
             state.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, false);

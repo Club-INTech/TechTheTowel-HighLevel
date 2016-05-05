@@ -108,7 +108,7 @@ public class Fishing extends AbstractScript
 				//stateToConsider.robot.moveLengthwise(30, hooksToConsider, false);
 			
 				// On baisse le bras aimanté
-				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION_LOW, true);
 				
 				//stateToConsider.robot.sleep(800);
 
@@ -143,7 +143,7 @@ public class Fishing extends AbstractScript
 				
 				stateToConsider.robot.moveLengthwise(-460, hooksToConsider, false);
 				
-				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION_LOW, true);
 				
 				stateToConsider.robot.sleep(300);
 				
@@ -195,7 +195,7 @@ public class Fishing extends AbstractScript
 				stateToConsider.robot.turn((Math.PI), hooksToConsider, true);
 
 				// On baisse le bras aimanté
-				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION_LOW, true);
 
 				stateToConsider.robot.sleep(800);
 
@@ -230,7 +230,7 @@ public class Fishing extends AbstractScript
 
 				stateToConsider.robot.moveLengthwise(-440, hooksToConsider, false);
 
-				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION_LOW, true);
 
 				stateToConsider.robot.sleep(300);
 
@@ -285,7 +285,7 @@ public class Fishing extends AbstractScript
                 //stateToConsider.robot.moveLengthwise(-0,hooksToConsider,false);
 
                 // On baisse le bras aimanté
-				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION_LOW, true);
 				
 				stateToConsider.robot.sleep(800);
 
@@ -335,7 +335,7 @@ public class Fishing extends AbstractScript
 
 				stateToConsider.robot.moveLengthwise(-250, hooksToConsider, false);
 				
-				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION, true);
+				stateToConsider.robot.useActuator(ActuatorOrder.FISHING_POSITION_LOW, true);
 
 				stateToConsider.robot.turn(Math.PI);
 				
