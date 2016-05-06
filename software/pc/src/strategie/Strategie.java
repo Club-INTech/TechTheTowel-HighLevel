@@ -378,6 +378,7 @@ public class Strategie implements Service
             {
                 try {
                     state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
+                    shells = state.table.deleteAllTheShells();
                     state.changeRobotRadius(TechTheSand.retractedRobotRadius);
                     state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
                     log.debug(state.robot.getRobotRadius());
@@ -392,6 +393,7 @@ public class Strategie implements Service
             {
                 try {
                     state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
+                    shells = state.table.deleteAllTheShells();
                     state.changeRobotRadius(TechTheSand.retractedRobotRadius);
                     state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
                     log.debug(state.robot.getRobotRadius());
@@ -412,6 +414,7 @@ public class Strategie implements Service
             {
                 try {
                     state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
+                    shells = state.table.deleteAllTheShells();
                     state.changeRobotRadius(TechTheSand.retractedRobotRadius);
                     state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
                     log.debug(state.robot.getRobotRadius());
@@ -428,6 +431,7 @@ public class Strategie implements Service
                     //return scriptmanager.getScript(ScriptNames.SHELL_GETTER);
                     try {
                         state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
+                        shells = state.table.deleteAllTheShells();
                         state.changeRobotRadius(TechTheSand.retractedRobotRadius);
                         state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
                         log.debug(state.robot.getRobotRadius());
@@ -485,6 +489,7 @@ public class Strategie implements Service
                 //done = true;
                 try {
                     state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
+                    shells = state.table.deleteAllTheShells();
                     state.changeRobotRadius(TechTheSand.retractedRobotRadius);
                     state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
                     state.robot.setDoor(false);
@@ -499,6 +504,7 @@ public class Strategie implements Service
             {
                 try {
                     state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
+                    shells = state.table.deleteAllTheShells();
                     state.changeRobotRadius(TechTheSand.retractedRobotRadius);
                     state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
                     state.robot.setDoor(false);
@@ -519,6 +525,7 @@ public class Strategie implements Service
 
             try {
                 state.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
+                shells = state.table.deleteAllTheShells();
                 state.changeRobotRadius(TechTheSand.retractedRobotRadius);
                 state.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
                 state.robot.setDoor(false);
