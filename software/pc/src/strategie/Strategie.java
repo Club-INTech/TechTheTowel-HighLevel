@@ -205,6 +205,9 @@ public class Strategie implements Service
                 ThreadSensor.modeBorgne(false);
             }
 
+            if(state.robot.passages >= 4)
+                done = true;
+
             if(castleTaken)
                 state.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 

@@ -6,6 +6,7 @@ import enums.Speed;
 import enums.UnableToMoveReason;
 import exceptions.BadVersionException;
 import exceptions.BlockedActuatorException;
+import exceptions.ConfigPropertyNotFoundException;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.BlockedException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -405,6 +406,16 @@ public class Fishing extends AbstractScript
 
 				stateToConsider.robot.setBasicDetection(true);
 
+                try
+                {
+                    stateToConsider.robot.fishing = Integer.parseInt(config.getProperty("profondeur"));
+                }
+                catch (ConfigPropertyNotFoundException e)
+                {
+                    e.printStackTrace();
+                    stateToConsider.robot.fishing = 2;
+                }
+
 				// On commence à s'orienter pour le créneau près du bord
 				//stateToConsider.robot.turn(Math.PI - 0.24);
 				
@@ -473,6 +484,7 @@ public class Fishing extends AbstractScript
 							stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
                             stateToConsider.robot.setForceMovement(true);
 							stateToConsider.robot.moveArc(new Arc(-400, -140, stateToConsider.robot.getOrientation(), false),hooksToConsider);
+                            stateToConsider.robot.passages += 1;
 							stateToConsider.robot.turn(Math.PI-0.06,hooksToConsider,false);
                             stateToConsider.robot.setForceMovement(false);
                             stateToConsider.robot.moveLengthwise(500,hooksToConsider,false);
@@ -586,7 +598,8 @@ public class Fishing extends AbstractScript
 				{
 					// relève du bras puis déplacement au dessus du filet
 					stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
-					xBefore=stateToConsider.robot.getPosition().x;
+                    stateToConsider.robot.passages += 1;
+                    xBefore=stateToConsider.robot.getPosition().x;
 					stateToConsider.robot.moveLengthwise(340,hooksToConsider,false);
 				}
 				catch(UnableToMoveException e)
@@ -717,7 +730,8 @@ public class Fishing extends AbstractScript
 				{
 					// relève du bras puis déplacement au dessus du filet
 					stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
-					xBefore=stateToConsider.robot.getPosition().x;
+                    stateToConsider.robot.passages += 1;
+                    xBefore=stateToConsider.robot.getPosition().x;
 					stateToConsider.robot.moveLengthwise(350,hooksToConsider,false);
 				}
 				catch(UnableToMoveException e)
@@ -773,6 +787,8 @@ public class Fishing extends AbstractScript
 
 				// Points gagnés moyen pour ce passage
 				stateToConsider.obtainedPoints += 20;
+
+                stateToConsider.robot.fishing = 1;
 				
 				// On crée le hook de position pour prendre les poissons et ajout à la liste
                 hook3 = hookFactory.newXGreaterHook(600);
@@ -851,7 +867,8 @@ public class Fishing extends AbstractScript
 				{
 					// relève du bras puis déplacement au dessus du filet
 					stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
-					xBefore=stateToConsider.robot.getPosition().x;
+                    stateToConsider.robot.passages += 1;
+                    xBefore=stateToConsider.robot.getPosition().x;
 					stateToConsider.robot.moveLengthwise(300,hooksToConsider,false);
 				}
 				catch(UnableToMoveException e)
@@ -907,6 +924,8 @@ public class Fishing extends AbstractScript
 
 				// Points gagnés moyen pour ce passage
 				stateToConsider.obtainedPoints += 20;
+
+                stateToConsider.robot.fishing = 0;
 
                 hook3 = hookFactory.newXGreaterHook(600);
                 hook3.addCallback(new Callback(new GetFish(), true, stateToConsider));
@@ -984,6 +1003,7 @@ public class Fishing extends AbstractScript
                 {
                     // relève du bras puis déplacement au dessus du filet
                     stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, true);
+                    stateToConsider.robot.passages += 1;
                     xBefore=stateToConsider.robot.getPosition().x;
                     stateToConsider.robot.moveLengthwise(300,hooksToConsider,false);
                 }
@@ -1039,8 +1059,10 @@ public class Fishing extends AbstractScript
 				log.debug("Fishing terminé sans encombres, dégagement !");
 				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
                // stateToConsider.robot.setBasicDetection(false);
+                stateToConsider.robot.setForceMovement(true);
 				Arc disengage = new Arc(-320,200,stateToConsider.robot.getOrientation(),false);
 				stateToConsider.robot.moveArc(disengage, hooksToConsider);
+                stateToConsider.robot.setForceMovement(false);
                // stateToConsider.robot.moveLengthwiseWithoutDetection(50);
 				hooksToConsider.clear();
 

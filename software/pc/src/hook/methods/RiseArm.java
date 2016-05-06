@@ -16,6 +16,7 @@ public class RiseArm implements Executable
     {
         try {
             stateToConsider.robot.useActuator(ActuatorOrder.MIDDLE_POSITION, false);
+            stateToConsider.robot.passages += 1;
         } catch (SerialConnexionException e) {
             e.printStackTrace();
         }

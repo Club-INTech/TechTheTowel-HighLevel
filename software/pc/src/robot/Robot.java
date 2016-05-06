@@ -95,6 +95,8 @@ public abstract class Robot implements Service
 
 	public int fishing;
 
+    public int passages = 0;
+
 
 	/**
 	 * Instancie le robot.
@@ -644,5 +646,6 @@ public abstract class Robot implements Service
 
 	public abstract void setForceMovement(boolean state);
 	public abstract void setSmoothAcceleration(boolean state) throws SerialConnexionException;
+
 
 }
