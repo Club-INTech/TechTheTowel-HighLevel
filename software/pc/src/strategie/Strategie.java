@@ -601,9 +601,19 @@ public class Strategie implements Service
 	/** Méthode de désengagement du bord de table par arc*/
 	public void arcDisengage(AbstractScript script)
 	{
+
+        boolean badWay = false;
+
 		// tant qu'on n'est pas sorti
 		while(!isInTable())
 		{
+            int signe = 1;
+
+            if(badWay)
+            {
+                signe = -1;
+            }
+
 			// rayon arbitraire
 			int radius=600;
 			try
@@ -623,6 +633,7 @@ public class Strategie implements Service
 					{
 						radius=-radius;
 					}
+
 				}
 
 				log.debug("Marche arrière ? : " + reverse);
@@ -656,22 +667,26 @@ public class Strategie implements Service
 				log.debug("Rayon : " + radius);
 				log.debug("Longueur : " + length);
 
-				Arc test = new Arc(radius,length,state.robot.getOrientation(),false);
+				Arc test = new Arc(radius,signe*length,state.robot.getOrientation(),false);
 				state.robot.moveArc(test, hooks);
 			}
 			catch(Exception e)
 			{
 				log.debug("Fail : " + e ); // poney
 				log.debug("Tentative de déplacement rectiligne !");
+
+                if(e instanceof UnableToMoveException)
+                    badWay = !badWay;
+
 				try
 				{
 					if(reverse)
 					{
-						state.robot.moveLengthwise(100, hooks, true);
+						state.robot.moveLengthwise(signe*100, hooks, true);
 					}
 					else
 					{
-						state.robot.moveLengthwise(-100,hooks,true);
+						state.robot.moveLengthwise(-100*signe,hooks,true);
 					}
 				}
 				catch(Exception ex)
