@@ -774,7 +774,7 @@ public class Fishing extends AbstractScript
 				// Points gagnés moyen pour ce passage
 				stateToConsider.obtainedPoints += 20;
 				
-			/*	// On crée le hook de position pour prendre les poissons et ajout à la liste
+				// On crée le hook de position pour prendre les poissons et ajout à la liste
                 hook3 = hookFactory.newXGreaterHook(600);
 				hook3.addCallback(new Callback(new GetFish(), true, stateToConsider));
 				hooksToConsider.add(hook3);
@@ -915,7 +915,7 @@ public class Fishing extends AbstractScript
                 // on repart chercher d'autre poissons rapidement
                 stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
                 log.debug("On part faire la cinquième tentative !");
-                stateToConsider.robot.moveLengthwise(-460, hooksToConsider, false);
+                stateToConsider.robot.moveLengthwise(-610, hooksToConsider, false);
                 stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 
                 // nouvelle condition pour le hook lâchant les poissons et mise à jour dans la liste
@@ -1034,7 +1034,7 @@ public class Fishing extends AbstractScript
 
                 // On indique au robot que les poissons ne sont plus sur le bras
                 stateToConsider.robot.setAreFishesOnBoard(false);
-*/
+
 				// arc pour sortir du bord de table
 				log.debug("Fishing terminé sans encombres, dégagement !");
 				stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);

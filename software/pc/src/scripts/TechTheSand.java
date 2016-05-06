@@ -47,7 +47,7 @@ public class TechTheSand extends AbstractScript
 		/**
 		 * Versions du script
 		 */
-		versions = new Integer[]{0,1,2,3};
+		versions = new Integer[]{0,1,2,3,4};
 	}
 	
 	
@@ -645,6 +645,44 @@ public class TechTheSand extends AbstractScript
             throw e;
 		}
 
+        if(versionToExecute == 4)
+        {
+            stateToConsider.robot.setLocomotionSpeed(Speed.FAST_ALL);
+            // VERSION DEPOS DE COQUILLAGES SIMPLE
+            if(stateToConsider.table.configShell != 1)
+            {
+                try {
+                    stateToConsider.robot.moveToLocation(Table.entryPosition.plusNewVector(new Vec2(-180,-10)), hooksToConsider, stateToConsider.table);
+                    stateToConsider.robot.turnWithoutDetection(0,hooksToConsider);
+                    stateToConsider.robot.moveLengthwiseWithoutDetection(100);
+                    stop();
+                } catch (PathNotFoundException | PointInObstacleException e) {
+                    e.printStackTrace();
+                    stop();
+                    throw new ExecuteException(e);
+                }
+            }
+            else
+            {
+                try {
+                    //Dégagement du coquillage ennemi
+                    stateToConsider.robot.turnWithoutDetection(0,hooksToConsider);
+                    stateToConsider.robot.moveLengthwise(300 - stateToConsider.robot.getPosition().x);
+                    stateToConsider.robot.turnWithoutDetection(Math.PI,hooksToConsider);
+                    stateToConsider.robot.moveLengthwise(-100);
+
+                    stateToConsider.robot.moveToLocation(Table.entryPosition.plusNewVector(new Vec2(-180,-10)), hooksToConsider, stateToConsider.table);
+                    stateToConsider.robot.turnWithoutDetection(0,hooksToConsider);
+                    stateToConsider.robot.moveLengthwiseWithoutDetection(100);
+                    stop();
+                } catch (PathNotFoundException | PointInObstacleException e) {
+                    e.printStackTrace();
+                    stop();
+                    throw new ExecuteException(e);
+                }
+            }
+        }
+
         if(versionToExecute == 1 || versionToExecute == 3)
         {
             // DEPOS + STOP GENERAL
@@ -707,7 +745,7 @@ public class TechTheSand extends AbstractScript
             //return new Circle(410,1540);
             //(410, 1540)
         }
-        else if(version == 2 || version ==3)
+        else if(version == 2 || version ==3 || version == 4)
         {
             return new Circle(robotPosition,0);
         }

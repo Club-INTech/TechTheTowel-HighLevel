@@ -571,7 +571,7 @@ public class Strategie implements Service
             return 2;
         }
         else if(script instanceof TechTheSand)
-            return 3;
+            return 4;
         return 0;
     }
 
