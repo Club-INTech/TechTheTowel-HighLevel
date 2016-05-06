@@ -212,7 +212,11 @@ public class Strategie implements Service
                 gotShells = true;
 
             if(!badLastScript && state.table.fishesFished>0)
+            {
                 done = true;
+                if(!state.table.extDoorClosed)
+                    badLastScript = true;
+            }
 
             if(dangerousOpponent && !state.robot.getIsSandInside() && !state.robot.shellsOnBoard && !badLastScript && gotShells)
             {
@@ -226,6 +230,9 @@ public class Strategie implements Service
                     e.printStackTrace();
                 }
             }
+
+            if(!dangerousOpponent && nextScript instanceof TechTheSand)
+                stop();
 
             if(state.robot.getAreFishesOnBoard())
             {
@@ -451,6 +458,8 @@ public class Strategie implements Service
         }
         else
         {
+            if(!state.table.extDoorClosed && done)
+                return scriptmanager.getScript(ScriptNames.CLOSE_DOORS);
 
             if(state.robot.getIsSandInside() && !castleTaken)
                 return scriptmanager.getScript(ScriptNames.CASTLE);
@@ -680,5 +689,17 @@ public class Strategie implements Service
 		}
 		return false;
 	}
-	
+
+    public void stop()
+    {
+        log.debug("C'est fini, Billy !");
+        while(true)
+        {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
