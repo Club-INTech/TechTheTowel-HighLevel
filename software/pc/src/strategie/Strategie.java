@@ -243,7 +243,7 @@ public class Strategie implements Service
                 		state.robot.moveToLocation(new Vec2(250,state.robot.getRobotRadius()+10), hooks, table);
                 		
                 	}
-                    state.robot.moveArc(new Arc(150, 100, Math.PI, true), hooks);
+                    state.robot.moveArc(new Arc(-150, 100, Math.PI, true), hooks);
                 }
                 catch (Exception e)
                 {
@@ -254,7 +254,7 @@ public class Strategie implements Service
                 	state.robot.turn(Math.PI);
                 	freeFishes();
                     state.robot.setAreFishesOnBoard(false);
-                    state.robot.moveArc(new Arc(150, -100, Math.PI, false), hooks);
+                    state.robot.moveArc(new Arc(-150, -200, Math.PI, false), hooks);
                 }
                 catch(Exception e)
                 {
