@@ -240,7 +240,7 @@ public class TechTheSand extends AbstractScript
                 
                 // Définition de l'arc à suivre, point de départ temporaire
                 // 150
-                Arc approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(100,2000-(symetry ? 160 : 150)), Math.PI, true);
+                Arc approach = new Arc(stateToConsider.robot.getPosition(), new Vec2(100,2000-(symetry ? 160 : 160)), Math.PI, true);
 
 
 				try {
@@ -355,6 +355,7 @@ public class TechTheSand extends AbstractScript
 				{
                     //stateToConsider.robot.moveLengthwiseWithoutDetection(-50);
                     stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_MEDIUM);
+                    stateToConsider.robot.setForceMovement(true);
                     stateToConsider.robot.moveArc(approach2, hooksToConsider);
                     stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
 				}
@@ -372,35 +373,43 @@ public class TechTheSand extends AbstractScript
                         stateToConsider.robot.moveArc(approach2, hooksToConsider);
                         stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
                     }
-					catch (UnableToMoveException e2)
-					{
-						try
-						{
-							if(e2.reason == UnableToMoveReason.OBSTACLE_DETECTED)
-								throw new UnableToMoveException(new Vec2(0, 1600), UnableToMoveReason.OBSTACLE_DETECTED);
-							e2.printStackTrace();
-							stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/4, Math.PI, false), hooksToConsider);
-							stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
-							//stateToConsider.robot.moveLengthwise(-80);
+					catch (UnableToMoveException e2) {
+                        try {
+                            if (e2.reason == UnableToMoveReason.OBSTACLE_DETECTED)
+                                throw new UnableToMoveException(new Vec2(0, 1600), UnableToMoveReason.OBSTACLE_DETECTED);
+                            e2.printStackTrace();
+                            stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod * Math.PI / 4, Math.PI, false), hooksToConsider);
+                            stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
+                            //stateToConsider.robot.moveLengthwise(-80);
                             stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_MEDIUM);
                             stateToConsider.robot.moveArc(approach2, hooksToConsider);
                             stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+                        } catch (UnableToMoveException e3) {
+                            try {
+                                if (e3.reason == UnableToMoveReason.OBSTACLE_DETECTED)
+                                    throw new UnableToMoveException(new Vec2(0, 1600), UnableToMoveReason.OBSTACLE_DETECTED);
+                                e2.printStackTrace();
+                                stateToConsider.robot.setForceMovement(false);
+                                stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_MEDIUM);
+                                stateToConsider.robot.turnWithoutDetection(-Math.PI / 2, hooksToConsider);
+                                //stateToConsider.robot.moveLengthwise(-80);
+                                stateToConsider.robot.setLocomotionSpeed(Speed.SLOW_ALL);
+                            } catch (UnableToMoveException e4) {
+                                e4.printStackTrace();
+                                log.critical("Impossible de se dégager, abandon du sable");
+                                stateToConsider.robot.setIsSandInside(false);
+                                stateToConsider.robot.setForceMovement(false);
+                                stateToConsider.robot.setTurningStrategy(TurningStrategy.FASTEST);
+                                stateToConsider.robot.setDirectionStrategy(DirectionStrategy.FASTEST);
+                                stateToConsider.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
+                                stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
+                                stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 200);
+                                stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod * Math.PI / 3, Math.PI, false), hooksToConsider);
+                                stateToConsider.robot.moveLengthwise(-100);
+                                throw new ExecuteException(e3);
+                            }
                         }
-						catch (UnableToMoveException e3)
-						{
-							e3.printStackTrace();
-							log.critical("Impossible de se dégager, abandon du sable");
-							stateToConsider.robot.setIsSandInside(false);
-                            stateToConsider.robot.setForceMovement(false);
-							stateToConsider.robot.setTurningStrategy(TurningStrategy.FASTEST);
-							stateToConsider.robot.setDirectionStrategy(DirectionStrategy.FASTEST);
-							stateToConsider.robot.turnWithoutDetection(Math.PI, hooksToConsider);
-							stateToConsider.robot.moveLengthwise(stateToConsider.robot.getPosition().x - 200);
-							stateToConsider.robot.moveArc(new Arc(distanceCod, -distanceCod*Math.PI/3, Math.PI, false), hooksToConsider);
-							stateToConsider.robot.moveLengthwise(-100);
-							throw new ExecuteException(e3);
-						}
-					}
+                    }
 				}
 				//==============================================================================================
 
