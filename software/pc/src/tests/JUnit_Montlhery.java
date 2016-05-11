@@ -50,7 +50,7 @@ public class JUnit_Montlhery extends JUnit_Test
         config.set("capteurs_on", "true");
         capteurs.updateConfig();
 
-        //sensors = (ThreadSensor) container.getService(ServiceNames.THREAD_SENSOR);
+        sensors = (ThreadSensor) container.getService(ServiceNames.THREAD_SENSOR);
         //container.getService(ServiceNames.THREAD_TIMER);
 
         //locomotion
@@ -62,15 +62,16 @@ public class JUnit_Montlhery extends JUnit_Test
         mLocomotion.setOrientation(Math.PI);
         state.robot.setLocomotionSpeed(Speed.SLOW_ALL);
         state.table.getObstacleManager().destroyEverything();
-        container.getService(ServiceNames.THREAD_INTERFACE);
+       // container.getService(ServiceNames.THREAD_INTERFACE);
         container.startInstanciedThreads();
 
     }
 
-    //@Test
+    @Test
     public void dansLeTas()
     {
         try {
+            state.robot.setBasicDetection(true);
             state.robot.moveLengthwise(4000);
         } catch (UnableToMoveException e) {
             e.printStackTrace();
@@ -104,7 +105,7 @@ public class JUnit_Montlhery extends JUnit_Test
         }
     }
 
-    @Test
+    //@Test
     public void dansTaMere() throws UnableToMoveException {
         //state.robot.setLocomotionSpeed(Speed.FAST_ALL);
 
