@@ -27,7 +27,7 @@ public class Keyboard implements KeyListener
 		{
 			turningStr = TurningStrategy.LEFT_ONLY;
 		}
-		if(e.getKeyCode() == KeyEvent.VK_W)
+		if(e.getKeyCode() == KeyEvent.VK_X)
 		{
 			try {
 				mRobot.useActuator(ActuatorOrder.FISHING_POSITION_LOW, false);
@@ -35,7 +35,7 @@ public class Keyboard implements KeyListener
 				e1.printStackTrace();
 			}
 		}
-		if(e.getKeyCode() == KeyEvent.VK_X)
+		if(e.getKeyCode() == KeyEvent.VK_W)
 		{
 			try {
 				mRobot.useActuator(ActuatorOrder.MAGNET_DOWN, true);
