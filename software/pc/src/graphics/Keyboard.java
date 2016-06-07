@@ -27,7 +27,7 @@ public class Keyboard implements KeyListener
 		{
 			turningStr = TurningStrategy.LEFT_ONLY;
 		}
-		if(e.getKeyCode() == KeyEvent.VK_Z)
+		if(e.getKeyCode() == KeyEvent.VK_W)
 		{
 			try {
 				mRobot.useActuator(ActuatorOrder.FISHING_POSITION_LOW, false);
@@ -35,15 +35,18 @@ public class Keyboard implements KeyListener
 				e1.printStackTrace();
 			}
 		}
-		if(e.getKeyCode() == KeyEvent.VK_S)
+		if(e.getKeyCode() == KeyEvent.VK_X)
 		{
 			try {
-				mRobot.useActuator(ActuatorOrder.MAGNET_UP, false);
+				mRobot.useActuator(ActuatorOrder.MAGNET_DOWN, true);
+				mRobot.useActuator(ActuatorOrder.FINGER_DOWN, true);
+				mRobot.useActuator(ActuatorOrder.MAGNET_UP, true);
+				mRobot.useActuator(ActuatorOrder.FINGER_UP, false);
 			} catch (SerialConnexionException e1) {
 				e1.printStackTrace();
 			}
 		}
-		if(e.getKeyCode() == KeyEvent.VK_I)
+		if(e.getKeyCode() == KeyEvent.VK_V)
 		{
 			try {
 				mRobot.useActuator(ActuatorOrder.OPEN_DOOR, false);
@@ -55,7 +58,7 @@ public class Keyboard implements KeyListener
 		{
             turningStr = TurningStrategy.RIGHT_ONLY;
 		}
-		if(e.getKeyCode() == KeyEvent.VK_K)
+		if(e.getKeyCode() == KeyEvent.VK_C)
 		{
 			try {
 				mRobot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
