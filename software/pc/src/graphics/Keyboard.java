@@ -50,6 +50,7 @@ public class Keyboard implements KeyListener
 		{
 			try {
 				mRobot.useActuator(ActuatorOrder.OPEN_DOOR, false);
+                mRobot.useActuator(ActuatorOrder.START_AXIS, false);
 			} catch (SerialConnexionException e1) {
 				e1.printStackTrace();
 			}
@@ -62,6 +63,7 @@ public class Keyboard implements KeyListener
 		{
 			try {
 				mRobot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
+                mRobot.useActuator(ActuatorOrder.STOP_AXIS, false);
 			} catch (SerialConnexionException e1) {
 				e1.printStackTrace();
 			}
