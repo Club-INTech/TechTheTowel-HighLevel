@@ -38,7 +38,7 @@ public class JUnit_BorneArcade extends JUnit_Test
 		container.startInstanciedThreads();
         
 		//FIXME : bug pour la position en y :(
-		real_state.robot.setPosition(new Vec2(0, 500));
+		real_state.robot.setPosition(new Vec2(1300, 1700));
 		real_state.robot.setOrientation(-0.5*Math.PI);
 		real_state.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 		

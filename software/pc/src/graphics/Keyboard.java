@@ -66,6 +66,15 @@ public class Keyboard implements KeyListener
 				e1.printStackTrace();
 			}
 		}
+		if(e.getKeyCode() == KeyEvent.VK_SPACE)
+		{
+			try {
+				mRobot.useActuator(ActuatorOrder.MIDDLE_POSITION, false);
+			} catch (SerialConnexionException e1) {
+				e1.printStackTrace();
+			}
+		}
+
 		if(e.getKeyCode() == KeyEvent.VK_R || e.getKeyCode() == KeyEvent.VK_UP)
 		{
 			try
