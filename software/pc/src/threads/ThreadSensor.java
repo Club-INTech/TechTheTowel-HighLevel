@@ -501,7 +501,10 @@ public class ThreadSensor extends AbstractThread
                     USvalues.set(i, USvalues.get(i)+radius);
                 }
 
+
             }
+
+            USvalues.set(2,0); USvalues.set(3,0); //POUR LA BORNE D'ARCADE
 
         }
 		catch(SerialConnexionException e) {

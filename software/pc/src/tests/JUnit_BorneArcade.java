@@ -34,11 +34,12 @@ public class JUnit_BorneArcade extends JUnit_Test
 		win = new Window((Table)container.getService(ServiceNames.TABLE), (RobotReal)real_state.robot);
 		
 		container.getService(ServiceNames.THREAD_INTERFACE);
+		container.getService(ServiceNames.THREAD_SENSOR);
 		container.startInstanciedThreads();
         
 		//FIXME : bug pour la position en y :(
 		real_state.robot.setPosition(new Vec2(0, 500));
-		real_state.robot.setOrientation(Math.PI/2);
+		real_state.robot.setOrientation(-0.5*Math.PI);
 		real_state.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 		
 		real_state.robot.updateConfig();
