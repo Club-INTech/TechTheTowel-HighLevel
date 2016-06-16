@@ -2,7 +2,6 @@
 
 package graphics;
 
-import pathDingDing.Graph;
 import robot.Robot;
 import robot.RobotReal;
 import smartMath.Segment;
@@ -11,7 +10,6 @@ import table.Table;
 import table.obstacles.ObstacleCircular;
 import table.obstacles.ObstacleProximity;
 import table.obstacles.ObstacleRectangular;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -30,8 +28,6 @@ public class TablePanel extends JPanel
 	private Table mTable;
 	private Robot mRobot;
 	private boolean isRobotPresent = true;
-	private boolean showGraph;
-	private Graph mGraph;
 
 	public TablePanel(Table table, RobotReal robot)
 	{
@@ -163,13 +159,6 @@ public class TablePanel extends JPanel
 	{
 		mPath = path;
 		repaint();
-	}
-
-	//permet d'afficher le graphe du pathdingding
-	public void drawGraph(Graph graph)
-	{
-		mGraph = graph;
-		showGraph = true;
 	}
 	
 	public Table getTable()

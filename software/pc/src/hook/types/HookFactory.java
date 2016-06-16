@@ -11,7 +11,7 @@ import utils.Log;
 
 /**
  * Service fabriquant des hooks à la demande.
- * @author pf, marsu, théo
+ * @author pf, marsu, Pingu
  *
  */
 public class HookFactory implements Service
@@ -77,7 +77,15 @@ public class HookFactory implements Service
 	 * ======================================================================
 	 */
 	
-	//TODO Hooks
+	//TODO Ajouter les nouveaux hooks
+	/**
+	 * Hook déclenché pour une position et orientation données
+	 * @param position : la position
+	 * @param orientation : l'orientation
+	 * @param tolerancyPos : la tolérance sur la position
+	 * @param tolerancyOr : la tolérance sur l'orientation
+	 * @return le hook souhaité
+	 */
     public Hook newPositionHook(Vec2 position, float orientation, float tolerancyPos, float tolerancyOr)
 	{
 		return new HookIsPositionAndOrientationCorrect(config, log, realState, position, orientation, tolerancyPos, tolerancyOr);
@@ -88,41 +96,11 @@ public class HookFactory implements Service
 	 * ======================================================================
 	 */
 
-    /** Hook déclenché pour un position en abscisse inférieure à celle donnée en argument
-     * @param XValue argument */
-	public Hook newXLesserHook(int XValue)
-	{
-		return new HookXLesser(config, log, realState, XValue);
-	}
-	
-	/** Hook déclenché pour une position en abscisse supérieure à celle donnée en argument
-	 * @param XValue argument en mm */
-	public Hook newXGreaterHook(int XValue)
-	{
-		return new HookXGreater(config, log, realState, XValue);
-	}
-    
-    
-
 	/* ======================================================================
 	 * 							Hook d'ordonnée (sur Y)
 	 * ======================================================================
 	 */
     
-	/** Hook déclenché pour une position en ordonnée inférieure à celle donnée en argument
-	 * @param Yvalue argument en mm */
-	public Hook newYLesserHook(int Yvalue)
-	{
-		return new HookYLesser(config, log, realState, Yvalue);
-	}
-	
-	/** Hook déclenché pour une position en ordonnée supérieure à celle donnée en argument
-	 * @param Yvalue argument en mm */
-	public Hook newYGreaterHook(int Yvalue)
-	{
-		return new HookYGreater(config, log, realState, Yvalue);
-	}
-
     /* ======================================================================
    	 * 							Hooks de position et orientation
    	 * ======================================================================
@@ -141,33 +119,4 @@ public class HookFactory implements Service
     	return new HookIsPositionAndOrientationCorrect(config, log, realState, point, orientation , tolerancyPoint, tolerancyOrientation);
     }
     
-    /** Hook déclenché pour une position donnée, avec une tolérance donnée
-     * @param pos argument
-     * @param tolerancy argument en mm*/
-    public Hook newPositionCorrectHook(Vec2 pos, float tolerancy)
-    {
-    	return new HookPositionCorrect(config, log, realState, pos, tolerancy);
-    }
-    
-    /** Hook déclenché pour une orientation donnée, avec une tolérance donnée
-     * @param orientation argument en radians
-     * @param tolerancy argument en radians*/
-    public Hook newOrientationCorrectHook(float orientation, float tolerancy)
-    {
-    	return new HookOrientationCorrect(config, log, realState, orientation, tolerancy);
-    }
-    
-    /** Hook déclenché pour une orientation inférieure à celle donnée en argument
-     * @param orientation argument en radians*/
-    public Hook newOrientationLesserHook(float orientation)
-    {
-    	return new HookOrientationLesser(config, log, realState, orientation);
-    }
-    
-    /** Hook déclenché pour une orientation supérieure à celle donnée en argument
-     * @param orientation argument en radians*/
-    public Hook newOrientationGreaterHook(float orientation)
-    {
-    	return new HookOrientationGreater(config, log, realState, orientation);
-    }
 }

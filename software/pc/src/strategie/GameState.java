@@ -86,7 +86,6 @@ public class GameState<R extends Robot> implements Service
     {
         this.robot.setRobotRadius(newRad);
         this.table.getObstacleManager().updateObstacles(newRad);
-        this.robot.getPDD().recomputeGraph();
     }
 	
 }

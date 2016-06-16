@@ -46,9 +46,9 @@ public class JUnit_Hooks extends JUnit_Test
 	@Test
 	public void testSpeed()
 	{
-		Hook speed = hookFactory.newXLesserHook(1000);
+		//Hook speed = hookFactory.newXLesserHook(1000);
 		//speed.addCallback(new Callback(new SpeedDown(),true,theRobot));
-		emptyHook.add(speed);
+		//emptyHook.add(speed);
 		log.debug("Début de test !");
 		try 
 		{

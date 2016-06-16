@@ -5,7 +5,6 @@ import smartMath.Circle;
 import smartMath.Geometry;
 import smartMath.Segment;
 import smartMath.Vec2;
-import threads.ThreadWorker;
 import utils.Config;
 import utils.Log;
 

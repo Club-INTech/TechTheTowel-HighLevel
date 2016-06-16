@@ -6,7 +6,6 @@ import exceptions.ContainerException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialManagerException;
 import hook.types.HookFactory;
-import pathDingDing.PathDingDing;
 import robot.Locomotion;
 import robot.RobotReal;
 import robot.cardsWrappers.ActuatorCardWrapper;
@@ -16,10 +15,8 @@ import robot.serial.SerialConnexion;
 import robot.serial.SerialManager;
 import scripts.ScriptManager;
 import strategie.GameState;
-import strategie.Strategie;
 import table.Table;
 import threads.ThreadManager;
-import threads.ThreadTimer;
 import utils.CheckUp;
 import utils.Config;
 import utils.Log;
@@ -174,7 +171,6 @@ public class Container
 																	(ActuatorCardWrapper)getService(ServiceNames.ACTUATOR_CARD_WRAPPER),
 																	(Config)getService(ServiceNames.CONFIG),
 																	(Log)getService(ServiceNames.LOG),
-																	(PathDingDing)getService(ServiceNames.PATHDINGDING),
 																	(SensorsCardWrapper)getService(ServiceNames.SENSORS_CARD_WRAPPER)
 																);		
         else if(serviceRequested == ServiceNames.LOCOMOTION)
@@ -211,43 +207,21 @@ public class Container
 																	(RobotReal)getService(ServiceNames.ROBOT_REAL),
 																	(SensorsCardWrapper)getService(ServiceNames.SENSORS_CARD_WRAPPER)
 																);
-		else if(serviceRequested == ServiceNames.STRATEGIE)
-			instanciedServices[serviceRequested.ordinal()] = 	(Service)new Strategie(
-																	(Log)getService(ServiceNames.LOG),
-																	(Config)getService(ServiceNames.CONFIG),
-																	(Table)getService(ServiceNames.TABLE),
-																	(GameState<RobotReal>)getService(ServiceNames.GAME_STATE),
-																	(ThreadTimer)getService(ServiceNames.THREAD_TIMER)
-																);
+
 		
 		else if(serviceRequested == ServiceNames.CHECK_UP)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new CheckUp(
 																	(Log)getService(ServiceNames.LOG),
 																	(RobotReal)getService(ServiceNames.ROBOT_REAL)
 																);
-		else if(serviceRequested == ServiceNames.PATHDINGDING)
-			instanciedServices[serviceRequested.ordinal()] = 	(Service)new PathDingDing(
-																	(Table)getService(ServiceNames.TABLE),
-																	(Log)getService(ServiceNames.LOG)
-																);
+
 		else if(serviceRequested == ServiceNames.THREAD_INTERFACE)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)threadManager.getThreadInterface(
 																	(Config)getService(ServiceNames.CONFIG),
 																	(Log)getService(ServiceNames.LOG),
 																	(Table)getService(ServiceNames.TABLE),
-					     											(RobotReal)getService(ServiceNames.ROBOT_REAL)
-																	);
-		else if(serviceRequested == ServiceNames.THREAD_EYES)
-			instanciedServices[serviceRequested.ordinal()] = 	(Service)threadManager.getThreadEyes(
-																	(Config)getService(ServiceNames.CONFIG),
-																	(Log)getService(ServiceNames.LOG)
-																	);
-		else if(serviceRequested == ServiceNames.THREAD_WORKER)
-			instanciedServices[serviceRequested.ordinal()] = 	(Service)threadManager.getThreadWorker(
-					(Config)getService(ServiceNames.CONFIG),
-					(Log)getService(ServiceNames.LOG),
-					(PathDingDing)getService(ServiceNames.PATHDINGDING)
-			);
+					     											(RobotReal)getService(ServiceNames.ROBOT_REAL));
+
 		
 		// si le service demandé n'est pas connu, alors on log une erreur.
 		else

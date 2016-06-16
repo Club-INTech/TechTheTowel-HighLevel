@@ -1,20 +1,12 @@
 package enums;
 
 /**
- * Differents elements de jeu, differentie les differents blocs de sable et coquillages
+ * Differents elements de jeu
  * @author discord
  */
 
 public enum Elements 
 {
-	// Partie morceaux de sable
-	SAND_CUBE,
-	SAND_CYLINDER,
-	SAND_CONE,
-	
-	// Poissons
-	FISH,
-	
-	// Coquillages
-	SHELL;
+	// exemple : SHELL;
+	// TODO : rajouter les éléments de jeu 
 }

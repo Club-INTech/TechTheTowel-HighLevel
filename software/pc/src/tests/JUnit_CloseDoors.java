@@ -1,6 +1,5 @@
 package tests;
 
-import enums.ScriptNames;
 import enums.ServiceNames;
 import enums.Speed;
 import hook.Hook;
@@ -50,7 +49,7 @@ public class JUnit_CloseDoors extends JUnit_Test
 		{
 			//On execute le script
 			log.debug("Fermeture des portes.");
-			scriptManager.getScript(ScriptNames.CLOSE_DOORS).goToThenExec(0, mRobot, emptyList);
+			//scriptManager.getScript(ScriptNames.CLOSE_DOORS).goToThenExec(0, mRobot, emptyList);
 		}
 		catch(Exception e)
 		{
