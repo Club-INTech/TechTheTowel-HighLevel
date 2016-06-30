@@ -24,10 +24,10 @@ public class Arc
     private Vec2 maxPos;
 
     /** Angle (direction) au départ modulo 2PI */
-    public double startAngle;
+    public double startAngle = 0;
 
     /** Angle (direction) à la fin modulo 2PI */
-    public double endAngle;
+    public double endAngle = 0;
 
     /** Centre du cercle dont l'arc provient */
     private Vec2 center;
@@ -66,13 +66,15 @@ public class Arc
 
         if(isEnd)
         {
-            this.endAngle = angle;
-            computeFromEndAngle();
+            this.endAngle = angle + Math.PI;
+            //computeFromEndAngle();
+            computeLengthRadius(false);
         }
         else
         {
-            this.startAngle = angle;
-            computeFromStartAngle();
+            this.startAngle = angle + Math.PI;
+            //computeFromStartAngle();
+            computeLengthRadius(true);
         }
 
         computeCenter(true);
@@ -216,5 +218,25 @@ public class Arc
             signe1=-1;
         this.startAngle = Geometry.modulo((start.minusNewVector(center).angle() + signe1*Math.PI/2), Math.PI);
         this.endAngle = Geometry.modulo((end.minusNewVector(center).angle() + signe2*Math.PI/2), Math.PI);
+    }
+
+    private void computeLengthRadius(boolean isStart)
+    {
+        Vec2 corde = end.minusNewVector(start);
+
+        if(isStart)
+        {
+            boolean goRight = corde.angle() - startAngle > 0;
+            endAngle = corde.angle() + (goRight ? Math.abs(corde.angle() - startAngle) : -Math.abs(corde.angle() - startAngle));
+        }
+        else
+        {
+            boolean goLeft = corde.angle() - endAngle > 0;
+            startAngle = corde.angle() + (goLeft ? Math.abs(corde.angle() - endAngle) : -Math.abs(corde.angle() - endAngle));
+        }
+
+        radius = corde.length() / (2*Math.sin(Math.abs(startAngle-endAngle)/2));
+        length = Math.abs(startAngle-endAngle)*radius;
+
     }
 }

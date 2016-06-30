@@ -290,7 +290,7 @@ public class Vec2
 	public double angle()
 	{
 		int signe=0;
-		if(this.length() == 0)
+		if(this.squaredLength() == 0)
 			return 0;
 
 		if(this.y<0)
