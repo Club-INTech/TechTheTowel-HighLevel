@@ -3,9 +3,8 @@ package threads;
 import enums.ActuatorOrder;
 import exceptions.serial.SerialConnexionException;
 import robot.RobotReal;
-import robot.cardsWrappers.LocomotionCardWrapper;
-import robot.cardsWrappers.SensorsCardWrapper;
 import robot.serial.SerialConnexion;
+import robot.serial.SerialWrapper;
 import table.Table;
 import utils.Log;
 
@@ -29,11 +28,8 @@ public class ThreadTimer extends AbstractThread
 	
 	private RobotReal robot;
 
-	/** La carte capteurs avec laquelle on doit communiquer */
-	private SensorsCardWrapper mSensorsCardWrapper;
-
-	/** La carte d'asservissement avec laquelle on doit communiquer */
-	private LocomotionCardWrapper mLocomotionCardWrapper;
+	/** La carte avec laquelle on doit communiquer */
+	private SerialWrapper serialWrapper;
 	
 	/** vrai si le match a effectivment démarré, faux sinon */
 	public static boolean matchStarted = false;
@@ -65,15 +61,13 @@ public class ThreadTimer extends AbstractThread
 	 * Crée le thread timer.-
 	 *
 	 * @param table La table sur laquelle le thread doit croire évoluer
-	 * @param sensorsCardWrapper La carte capteurs avec laquelle on doit communiquer
 	 * @param locomotionCardWrapper La carte d'asservissement avec laquelle on doit communiquer
 	 */
 	
-	ThreadTimer(Table table, RobotReal robot, SensorsCardWrapper sensorsCardWrapper, LocomotionCardWrapper locomotionCardWrapper)
+	ThreadTimer(Table table, RobotReal robot, SerialWrapper locomotionCardWrapper)
 	{
 		this.table = table;
-		this.mSensorsCardWrapper = sensorsCardWrapper;
-		this.mLocomotionCardWrapper = locomotionCardWrapper;
+		this.serialWrapper = locomotionCardWrapper;
 		this.robot=robot;
 		
 		updateConfig();
@@ -101,7 +95,7 @@ public class ThreadTimer extends AbstractThread
 
 		// on eteind les capteursgetObstacleManager
 		config.set("capteurs_on", "true");
-		mSensorsCardWrapper.updateConfig();
+		serialWrapper.updateConfig();
 
         try
         {
@@ -119,7 +113,7 @@ public class ThreadTimer extends AbstractThread
 		
 		// attends que le jumper soit retiré du robot
 
-		while(mSensorsCardWrapper.isJumperAbsent())
+		while(serialWrapper.isJumperAbsent())
 		{
 			try {
 				Thread.sleep(100);
@@ -129,7 +123,7 @@ public class ThreadTimer extends AbstractThread
 		}
 
 
-		while(!mSensorsCardWrapper.isJumperAbsent())
+		while(!serialWrapper.isJumperAbsent())
 		{
 			try {
 				Thread.sleep(100);
@@ -141,7 +135,7 @@ public class ThreadTimer extends AbstractThread
 		// maintenant que le jumper est retiré, le match a commencé
 		matchStarted = true;
 		
-		//log.debug(!mSensorsCardWrapper.isJumperAbsent() +" / "+ !matchStarted);
+		//log.debug(!serialWrapper.isJumperAbsent() +" / "+ !matchStarted);
 
 		// Le match démarre ! On chage l'état du thread pour refléter ce changement
 		matchStartTimestamp = System.currentTimeMillis();
@@ -150,7 +144,7 @@ public class ThreadTimer extends AbstractThread
 		matchStarted = true;
 
 		config.set("capteurs_on", "true");
-		mSensorsCardWrapper.updateConfig();
+		serialWrapper.updateConfig();
 
 		log.debug("LE MATCH COMMENCE !");
         long ddm = System.currentTimeMillis();
@@ -228,7 +222,7 @@ public class ThreadTimer extends AbstractThread
 
 		try
 		{
-			mLocomotionCardWrapper.immobilise();
+            serialWrapper.immobilise();
 		} catch (SerialConnexionException e) {
 			log.debug( e.logStack());
 		}
@@ -237,9 +231,9 @@ public class ThreadTimer extends AbstractThread
 		try 
 		{
             robot.useActuator(ActuatorOrder.MIDDLE_POSITION, false);
-            mLocomotionCardWrapper.disableRotationnalFeedbackLoop();
-			mLocomotionCardWrapper.disableTranslationnalFeedbackLoop();
-			mLocomotionCardWrapper.disableSpeedFeedbackLoop();
+            serialWrapper.disableRotationnalFeedbackLoop();
+            serialWrapper.disableTranslationnalFeedbackLoop();
+            serialWrapper.disableSpeedFeedbackLoop();
 
 			//mLocomotionCardWrapper.shutdownSTM();
 			Log.stop();
@@ -251,7 +245,7 @@ public class ThreadTimer extends AbstractThread
 		}
 		
 		// et on coupe la connexion avec la carte d'asser comme ca on est sur qu'aucune partie du code ne peut faire quoi que ce soit pour faire bouger le robot
-		mLocomotionCardWrapper.closeLocomotion();
+        serialWrapper.closeLocomotion();
 	}
 	
 	

@@ -5,7 +5,7 @@ import hook.Hook;
 import org.junit.Before;
 import org.junit.Test;
 import robot.Robot;
-import robot.cardsWrappers.SensorsCardWrapper;
+import robot.serial.SerialWrapper;
 import scripts.ScriptManager;
 import smartMath.Vec2;
 import strategie.GameState;
@@ -18,7 +18,7 @@ public class JUnit_Symetry extends JUnit_Test
 	ArrayList<Hook> emptyHook;
 	GameState<Robot> real_state;
 	ScriptManager scriptmanager;
-	SensorsCardWrapper  mSensorsCardWrapper;
+	SerialWrapper serialWrapper;
 	
 	@SuppressWarnings("unchecked")
 	@Before
@@ -27,7 +27,7 @@ public class JUnit_Symetry extends JUnit_Test
 		super.setUp();
 		real_state = (GameState<Robot>) container.getService(ServiceNames.GAME_STATE);
 		scriptmanager = (ScriptManager) container.getService(ServiceNames.SCRIPT_MANAGER);
-		mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
+		serialWrapper = (SerialWrapper) container.getService(ServiceNames.SERIAL_WRAPPER);
 		emptyHook = new ArrayList<Hook> ();  
 
 		// La position est setée qu'on soit jaune ou vert

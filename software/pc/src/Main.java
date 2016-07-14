@@ -6,13 +6,14 @@ import exceptions.serial.SerialManagerException;
 import hook.Hook;
 import robot.Locomotion;
 import robot.Robot;
-import robot.cardsWrappers.SensorsCardWrapper;
+import robot.serial.SerialWrapper;
 import scripts.ScriptManager;
 import strategie.GameState;
 import table.Table;
 import threads.ThreadTimer;
 import utils.Config;
 import utils.Log;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -30,7 +31,7 @@ public class Main
 	static GameState<Robot> realState;
 	static ArrayList<Hook> emptyHook = new ArrayList<>();
 	static ScriptManager scriptmanager;
-	static SensorsCardWrapper mSensorsCardWrapper;
+	static SerialWrapper mSerialWrapper;
 	static Locomotion mLocomotion;
 	
 	
@@ -47,7 +48,7 @@ public class Main
 			config = (Config) container.getService(ServiceNames.CONFIG);
 			realState = (GameState<Robot>) container.getService(ServiceNames.GAME_STATE);
 			scriptmanager = (ScriptManager) container.getService(ServiceNames.SCRIPT_MANAGER);
-			mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
+			mSerialWrapper = (SerialWrapper) container.getService(ServiceNames.SERIAL_WRAPPER);
 			mLocomotion=(Locomotion) container.getService(ServiceNames.LOCOMOTION);
 			config.updateConfig();
 
@@ -87,7 +88,7 @@ public class Main
 
 		System.out.println("Robot pret pour le match, attente du retrait du jumper");
 
-		while(mSensorsCardWrapper.isJumperAbsent())
+		while(mSerialWrapper.isJumperAbsent())
 		{
 			try {
 				Thread.sleep(100);
@@ -95,7 +96,7 @@ public class Main
 				e.printStackTrace();
 			}
 		}
-		while(!mSensorsCardWrapper.isJumperAbsent())
+		while(!mSerialWrapper.isJumperAbsent())
 		{
 			try {
 				Thread.sleep(100);

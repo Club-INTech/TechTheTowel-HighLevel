@@ -1,9 +1,7 @@
 package threads;
 
 import robot.RobotReal;
-import robot.cardsWrappers.ActuatorCardWrapper;
-import robot.cardsWrappers.LocomotionCardWrapper;
-import robot.cardsWrappers.SensorsCardWrapper;
+import robot.serial.SerialWrapper;
 import table.Table;
 import utils.Config;
 import utils.Log;
@@ -52,15 +50,13 @@ public class ThreadManager
 	 * @param table La table a l'intérieure de laquelle le thread doit croire évoluer
 	 * @param robot 
 	 * @param sensorsCardWrapper La carte capteurs avec laquelle le thread va parler
-	 * @param locomotionCardWrapper La carte d'asservissements avec laquelle le thread va parler
-	 * @param actuatorCardWrapper La carte actionneurs avec laquelle le thread va parler
 	 * @return le thread timer
 	 */
-	public AbstractThread getThreadTimer(Table table, RobotReal robot, SensorsCardWrapper sensorsCardWrapper, LocomotionCardWrapper locomotionCardWrapper, ActuatorCardWrapper actuatorCardWrapper)
+	public AbstractThread getThreadTimer(Table table, RobotReal robot, SerialWrapper sensorsCardWrapper)
 	{
 		AbstractThread thread = instanciedThreads.get("threadTimer");
 		if(thread == null)
-			instanciedThreads.put("threadTimer", new ThreadTimer(table, robot, sensorsCardWrapper, locomotionCardWrapper));
+			instanciedThreads.put("threadTimer", new ThreadTimer(table, robot, sensorsCardWrapper));
 		return instanciedThreads.get("threadTimer");
 	}
 
@@ -73,7 +69,7 @@ public class ThreadManager
 	 * @param sensorsCardWrapper La carte capteurs avec laquelle le thread va parler
 	 * @return le thread capteurs
 	 */
-	public AbstractThread getThreadSensors( Table table, RobotReal robot, SensorsCardWrapper sensorsCardWrapper)
+	public AbstractThread getThreadSensors( Table table, RobotReal robot, SerialWrapper sensorsCardWrapper)
 	{
 		AbstractThread thread = instanciedThreads.get("threadCapteurs");
 		if(thread == null)

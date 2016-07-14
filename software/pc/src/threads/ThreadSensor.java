@@ -3,7 +3,7 @@ package threads;
 import exceptions.ConfigPropertyNotFoundException;
 import graphics.Window;
 import robot.RobotReal;
-import robot.cardsWrappers.SensorsCardWrapper;
+import robot.serial.SerialWrapper;
 import smartMath.Vec2;
 import table.Table;
 import java.io.BufferedWriter;
@@ -28,7 +28,7 @@ public class ThreadSensor extends AbstractThread
     private Table mTable;
 
 	/** La carte capteurs avec laquelle on doit communiquer */
-	private SensorsCardWrapper mSensorsCardWrapper;
+	private SerialWrapper serialWrapper;
 	
 	/** interface graphique */
 	public Window window;
@@ -152,10 +152,10 @@ public class ThreadSensor extends AbstractThread
 	 * @param table La table a l'intérieure de laquelle le thread doit croire évoluer
 	 * @param sensorsCardWrapper La carte capteurs avec laquelle le thread va parler
 	 */
-	ThreadSensor (Table table, RobotReal robot, SensorsCardWrapper sensorsCardWrapper)
+	ThreadSensor (Table table, RobotReal robot, SerialWrapper sensorsCardWrapper)
 	{
 		super(config, log);
-		this.mSensorsCardWrapper = sensorsCardWrapper;
+		this.serialWrapper = sensorsCardWrapper;
 		Thread.currentThread().setPriority(6);
 		mRobot = robot;
         mTable = table;
@@ -178,7 +178,7 @@ public class ThreadSensor extends AbstractThread
             e.printStackTrace();
         }
 
-        while(mSensorsCardWrapper.isJumperAbsent())
+        while(serialWrapper.isJumperAbsent())
         {
             try {
                 Thread.sleep(100);
@@ -186,7 +186,7 @@ public class ThreadSensor extends AbstractThread
                 e.printStackTrace();
             }
         }
-        while(!mSensorsCardWrapper.isJumperAbsent())
+        while(!serialWrapper.isJumperAbsent())
         {
             try {
                 Thread.sleep(100);
@@ -426,7 +426,7 @@ public class ThreadSensor extends AbstractThread
 	{
 		try 
 		{
-            //USvalues = mSensorsCardWrapper.getUSSensorValue(USsensors.ULTRASOUND); //On récupère une liste de valeurs
+            //USvalues = serialWrapper.getUSSensorValue(USsensors.ULTRASOUND); //On récupère une liste de valeurs
 
             if(this.debug)
             {

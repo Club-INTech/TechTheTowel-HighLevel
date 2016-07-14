@@ -67,7 +67,7 @@ public class JUnit_Container extends JUnit_Test {
 	public void test_deplacements() throws Exception
 	{
 		log.debug("JUnit_ContainerTest.test_deplacements()");
-		container.getService(ServiceNames.LOCOMOTION_CARD_WRAPPER);
+		container.getService(ServiceNames.SERIAL_WRAPPER);
 	}
 
 	/**
@@ -79,7 +79,7 @@ public class JUnit_Container extends JUnit_Test {
 	public void test_capteurs() throws Exception
 	{
 		log.debug("JUnit_ContainerTest.test_capteurs()");
-		container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
+		container.getService(ServiceNames.SERIAL_WRAPPER);
 	}
 
 	/**
@@ -91,7 +91,7 @@ public class JUnit_Container extends JUnit_Test {
 	public void test_actionneurs() throws Exception
 	{
 		log.debug("JUnit_ContainerTest.test_actionneurs()");
-		container.getService(ServiceNames.ACTUATOR_CARD_WRAPPER);
+		container.getService(ServiceNames.SERIAL_WRAPPER);
 	}
 
 	/**

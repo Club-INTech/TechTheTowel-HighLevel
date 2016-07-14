@@ -4,7 +4,7 @@ import enums.ServiceNames;
 import org.junit.Assert;
 import org.junit.Test;
 import robot.RobotReal;
-import robot.cardsWrappers.LocomotionCardWrapper;
+import robot.serial.SerialWrapper;
 import smartMath.Vec2;
 import table.Table;
 import threads.ThreadTimer;
@@ -25,7 +25,7 @@ public class JUnit_Threads extends JUnit_Test {
 	@Test
 	public void test_arret() throws Exception
 	{
-		LocomotionCardWrapper deplacements = (LocomotionCardWrapper)container.getService(ServiceNames.LOCOMOTION_CARD_WRAPPER);
+		SerialWrapper deplacements = (SerialWrapper) container.getService(ServiceNames.SERIAL_WRAPPER);
 		deplacements.setX(0);
 		deplacements.setY(1500);
 		deplacements.setOrientation(0);

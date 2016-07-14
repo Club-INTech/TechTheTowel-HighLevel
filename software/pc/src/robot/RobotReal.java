@@ -4,8 +4,7 @@ import enums.*;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import hook.Hook;
-import robot.cardsWrappers.ActuatorCardWrapper;
-import robot.cardsWrappers.SensorsCardWrapper;
+import robot.serial.SerialWrapper;
 import smartMath.Arc;
 import smartMath.Vec2;
 import utils.Config;
@@ -21,9 +20,8 @@ import java.util.ArrayList;
  */
 public class RobotReal extends Robot
 {
-	private ActuatorCardWrapper mActuatorCardWrapper;
-	private SensorsCardWrapper mSensorsCardWrapper;
-	
+	private SerialWrapper serialWrapper;
+
 	private SymmetrizedActuatorOrderMap mActuatorCorrespondenceMap = new SymmetrizedActuatorOrderMap();
 	private SymmetrizedTurningStrategy mTurningStrategyCorrespondenceMap = new SymmetrizedTurningStrategy();
 	private SymmetrizedSensorNamesMap mSensorNamesMap = new SymmetrizedSensorNamesMap();
@@ -33,14 +31,13 @@ public class RobotReal extends Robot
 	
 	
 	/** Constructeur*/
-	public RobotReal( Locomotion deplacements, ActuatorCardWrapper mActuatorCardWrapper, Config config, Log log, SensorsCardWrapper mSensorsCardWrapper)
+	public RobotReal(Locomotion deplacements, Config config, Log log, SerialWrapper serialWrapper)
  	{
 		super(config, log);
-		this.mSensorsCardWrapper = mSensorsCardWrapper;
-		this.mActuatorCardWrapper = mActuatorCardWrapper;
+		this.serialWrapper = serialWrapper;
 		this.mLocomotion = deplacements;
 		updateConfig();
-		speed = Speed.SLOW_ALL;		
+		speed = Speed.SLOW_ALL;
 	}
 	
     public void copy(RobotChrono rc)
@@ -57,7 +54,7 @@ public class RobotReal extends Robot
 	{
 		if(symmetry)
 			order = mActuatorCorrespondenceMap.getSymmetrizedActuatorOrder(order);
-		mActuatorCardWrapper.useActuator(order);
+		serialWrapper.useActuator(order);
 		
 		if(waitForCompletion)
 		{
@@ -71,14 +68,14 @@ public class RobotReal extends Robot
 
 		// si il n'y a pas de symétrie, on renvoie la valeur brute du bas niveau
 		if(!symmetry) 
-			return mSensorsCardWrapper.getUSSensorValue(sensor);
+			return serialWrapper.getUSSensorValue(sensor);
 		else
 		{
 			//TODO symetriser le capteur gauche/droite
 			
 			/* attention si les capteurs sont en int[] il faut symétriser ce int[] */
 			
-			return mSensorsCardWrapper.getUSSensorValue(sensor);
+			return serialWrapper.getUSSensorValue(sensor);
 		}
 	}
 	
@@ -87,14 +84,14 @@ public class RobotReal extends Robot
 	{
 		// si il n'y a pas de symétrie, on renvoie la valeur brute du bas niveau
 				if(!symmetry) 
-					return mSensorsCardWrapper.getContactSensorValue(sensor);
+					return serialWrapper.getContactSensorValue(sensor);
 				else
 				{
 					sensor = mSensorNamesMap.getSymmetrizedContactSensorName(sensor);
 					
 					/* attention si les capteurs sont en int[] il faut symétriser ce int[] */
 					
-					return mSensorsCardWrapper.getContactSensorValue(sensor);
+					return serialWrapper.getContactSensorValue(sensor);
 				}
 	}
 

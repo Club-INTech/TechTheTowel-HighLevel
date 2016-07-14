@@ -8,7 +8,7 @@ import hook.Hook;
 import org.junit.After;
 import org.junit.Before;
 import robot.Robot;
-import robot.cardsWrappers.SensorsCardWrapper;
+import robot.serial.SerialWrapper;
 import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
@@ -55,7 +55,7 @@ public abstract class JUnit_Test
 	
 
 	
-	public void waitMatchBegin(SensorsCardWrapper sensorsCard, Robot robot)
+	public void waitMatchBegin(SerialWrapper sensorsCard, Robot robot)
 	{
 
 		System.out.println("Robot pret pour le match, attente du retrait du jumper");

@@ -8,11 +8,9 @@ import exceptions.serial.SerialManagerException;
 import hook.types.HookFactory;
 import robot.Locomotion;
 import robot.RobotReal;
-import robot.cardsWrappers.ActuatorCardWrapper;
-import robot.cardsWrappers.LocomotionCardWrapper;
-import robot.cardsWrappers.SensorsCardWrapper;
 import robot.serial.SerialConnexion;
 import robot.serial.SerialManager;
+import robot.serial.SerialWrapper;
 import scripts.ScriptManager;
 import strategie.GameState;
 import table.Table;
@@ -65,7 +63,7 @@ public class Container
 		Sleep.sleep(700); // attends qu'ils soient bien tous arrètés
 		
 		// désasservit le robot
-		if(instanciedServices[ServiceNames.LOCOMOTION_CARD_WRAPPER.ordinal()] != null)
+		if(instanciedServices[ServiceNames.SERIAL_WRAPPER.ordinal()] != null)
 			try
 			{
 				log.debug("Désasservissement du robot");
@@ -142,23 +140,12 @@ public class Container
 				serialManager = new SerialManager(log);
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)serialManager.getSerial(serviceRequested);
 		}
-		else if(serviceRequested == ServiceNames.LOCOMOTION_CARD_WRAPPER)
-			instanciedServices[serviceRequested.ordinal()] = 	(Service)new LocomotionCardWrapper(
-																	(Log)getService(ServiceNames.LOG),
-																	(SerialConnexion)getService(ServiceNames.STM_CARD),
-																	(Config)getService(ServiceNames.CONFIG)
-																);
-		else if(serviceRequested == ServiceNames.SENSORS_CARD_WRAPPER)
-			instanciedServices[serviceRequested.ordinal()] = 	(Service)new SensorsCardWrapper(
+		else if(serviceRequested == ServiceNames.SERIAL_WRAPPER)
+			instanciedServices[serviceRequested.ordinal()] = 	(Service)new SerialWrapper(
 																	(Config)getService(ServiceNames.CONFIG),
 																	(Log)getService(ServiceNames.LOG),
 																	(SerialConnexion)getService(ServiceNames.STM_CARD)
 																);
-		else if(serviceRequested == ServiceNames.ACTUATOR_CARD_WRAPPER)
-			instanciedServices[serviceRequested.ordinal()] = 	(Service)new ActuatorCardWrapper(
-																	(Config)getService(ServiceNames.CONFIG),
-															 		(Log)getService(ServiceNames.LOG),
-															 		(SerialConnexion)getService(ServiceNames.STM_CARD));
 		else if(serviceRequested == ServiceNames.HOOK_FACTORY)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new HookFactory(
 																	(Config)getService(ServiceNames.CONFIG),
@@ -168,17 +155,16 @@ public class Container
 		else if(serviceRequested == ServiceNames.ROBOT_REAL)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new RobotReal(
 																	(Locomotion)getService(ServiceNames.LOCOMOTION),
-																	(ActuatorCardWrapper)getService(ServiceNames.ACTUATOR_CARD_WRAPPER),
 																	(Config)getService(ServiceNames.CONFIG),
 																	(Log)getService(ServiceNames.LOG),
-																	(SensorsCardWrapper)getService(ServiceNames.SENSORS_CARD_WRAPPER)
+																	(SerialWrapper)getService(ServiceNames.SERIAL_WRAPPER)
 																);		
         else if(serviceRequested == ServiceNames.LOCOMOTION)
             instanciedServices[serviceRequested.ordinal()] = 	(Service)new Locomotion(
             														(Log)getService(ServiceNames.LOG),
             														(Config)getService(ServiceNames.CONFIG),
             														(Table)getService(ServiceNames.TABLE),
-            														(LocomotionCardWrapper)getService(ServiceNames.LOCOMOTION_CARD_WRAPPER)
+            														(SerialWrapper)getService(ServiceNames.SERIAL_WRAPPER)
             													);
         else if(serviceRequested == ServiceNames.GAME_STATE)
             instanciedServices[serviceRequested.ordinal()] = 	(Service)new GameState<RobotReal>(
@@ -197,15 +183,13 @@ public class Container
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)threadManager.getThreadTimer(
 																	(Table)getService(ServiceNames.TABLE),
 																	(RobotReal)getService(ServiceNames.ROBOT_REAL),
-																	(SensorsCardWrapper)getService(ServiceNames.SENSORS_CARD_WRAPPER),
-																	(LocomotionCardWrapper)getService(ServiceNames.LOCOMOTION_CARD_WRAPPER),
-	                                                                (ActuatorCardWrapper)getService(ServiceNames.ACTUATOR_CARD_WRAPPER)
+																	(SerialWrapper)getService(ServiceNames.SERIAL_WRAPPER)
                                                                 );
 		else if(serviceRequested == ServiceNames.THREAD_SENSOR)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)threadManager.getThreadSensors(
 																	(Table)getService(ServiceNames.TABLE),
 																	(RobotReal)getService(ServiceNames.ROBOT_REAL),
-																	(SensorsCardWrapper)getService(ServiceNames.SENSORS_CARD_WRAPPER)
+																	(SerialWrapper)getService(ServiceNames.SERIAL_WRAPPER)
 																);
 
 		
@@ -248,12 +232,6 @@ public class Container
 	 */
 	public void startAllThreads()
 	{
-		// TODO: faire une gestion propre des exceptions
-		try {
-			//getService(ServiceNames.THREAD_LASER);
-		} catch (Exception e) {	
-			e.printStackTrace();
-		}
 		try {
 			getService(ServiceNames.THREAD_SENSOR);
 		} catch (Exception e) {
@@ -261,9 +239,7 @@ public class Container
 		}
 		try {
 			getService(ServiceNames.THREAD_TIMER);
-           // getService(ServiceNames.THREAD_WORKER);
 			//getService(ServiceNames.THREAD_INTERFACE);
-           // getService(ServiceNames.THREAD_EYES);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

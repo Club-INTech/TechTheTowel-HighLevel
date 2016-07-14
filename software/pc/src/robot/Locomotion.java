@@ -11,7 +11,7 @@ import exceptions.Locomotion.UnableToMoveException;
 import exceptions.Locomotion.UnexpectedObstacleOnPathException;
 import exceptions.serial.SerialConnexionException;
 import hook.Hook;
-import robot.cardsWrappers.LocomotionCardWrapper;
+import robot.serial.SerialWrapper;
 import smartMath.Arc;
 import smartMath.Vec2;
 import table.Table;
@@ -51,9 +51,9 @@ public class Locomotion implements Service
      */
     private Table table;
     /**
-     * la carte de deplacement utilisee
+     * le bas-niveau
      */
-    private LocomotionCardWrapper deplacements;
+    private SerialWrapper serialWrapper;
     /**
      * la longueur du robot (taille dans la direction où le robot avance)
      */
@@ -195,11 +195,11 @@ public class Locomotion implements Service
 
 
 
-    public Locomotion(Log log, Config config, Table table, LocomotionCardWrapper deplacements)
+    public Locomotion(Log log, Config config, Table table, SerialWrapper serialWrapper)
     {
         this.log = log;
         this.config = config;
-        this.deplacements = deplacements;
+        this.serialWrapper = serialWrapper;
         this.table = table;
         USvalues = new ArrayList<Integer>(){{for(int i=0;i<4;i++)add(0);}};
         updateConfig();
@@ -529,14 +529,14 @@ public class Locomotion implements Service
 	                        	
 	                        	// on alterne rotation à gauche et à droite
 	                        	if((unexpectedWallImpactCounter & 1) == 0)
-	                        		deplacements.turn(lowLevelOrientation+angleToDisengage);
+	                        		serialWrapper.turn(lowLevelOrientation+angleToDisengage);
 	                        	else
-	                        		deplacements.turn(lowLevelOrientation-angleToDisengage);
+	                        		serialWrapper.turn(lowLevelOrientation-angleToDisengage);
 	                        }
 	                        else if(isMovementForward)
-	                            deplacements.moveLengthwise(distanceToDisengage);
+	                            serialWrapper.moveLengthwise(distanceToDisengage);
 	                        else
-	                            deplacements.moveLengthwise(-distanceToDisengage);
+	                            serialWrapper.moveLengthwise(-distanceToDisengage);
 	                        while(!isMotionEnded());
 	                    		doItAgain = true; // si on est arrivé ici c'est qu'aucune exception n'a été levée
 	                    } 
@@ -876,13 +876,13 @@ public class Locomotion implements Service
             try {
                 if(isCurve)
                 {
-                    deplacements.moveArc(this.curveArc.length, this.curveArc.radius);
+                    serialWrapper.moveArc(this.curveArc.length, this.curveArc.radius);
                 }
                 else if (isCorrection && Math.abs(delta) > maxRotationCorrectionThreeshold) {
                     isRobotTurning = true;// prochain ordre : on tourne
 
                     //On utilise la stratégie FASTEST pour les petits mouvements
-                    deplacements.turn(angle, TurningStrategy.FASTEST);  // On ne tourne que si on est assez loin de l'orientation voulu
+                    serialWrapper.turn(angle, TurningStrategy.FASTEST);  // On ne tourne que si on est assez loin de l'orientation voulu
 
                     log.debug("Angle corrigé");
                 }
@@ -891,14 +891,14 @@ public class Locomotion implements Service
                     if (Math.abs(delta) > maxRotationCorrectionThreeshold) {// on ne tourne vraiment que si l'angle souhaité est vraiment different.
                         isRobotTurning = true;// prochain ordre : on tourne
                     }
-                    deplacements.turn(angle, TurningStrategy.FASTEST);
+                    serialWrapper.turn(angle, TurningStrategy.FASTEST);
                 }
                 else if (!isCorrection)// Si ca n'est pas  une correction et qu'on dépasse l'angle limite
                 {
                     if (Math.abs(delta) > maxRotationCorrectionThreeshold) {// on ne tourne vraiment que si l'angle souhaité est vraiment different.
                         isRobotTurning = true;// prochain ordre : on tourne
                     }
-                    deplacements.turn(angle, cTurningStrategy);
+                    serialWrapper.turn(angle, cTurningStrategy);
                 }
 
                 // sans virage : la première rotation est bloquante
@@ -916,7 +916,7 @@ public class Locomotion implements Service
                 isRobotTurning = false; // fin du turn
 
                 if (!(turnOnly || isCorrection) && !isCurve)
-                    deplacements.moveLengthwise(distance);
+                    serialWrapper.moveLengthwise(distance);
             } catch (SerialConnexionException e) {
                 log.critical("Catch de " + e + " dans moveToPointSerialOrder");
                 log.critical(e.logStack());
@@ -940,7 +940,7 @@ public class Locomotion implements Service
     {
         try {
             // récupérations des informations d'acquittement
-            boolean[] infos = deplacements.isRobotMovingAndAbnormal();
+            boolean[] infos = serialWrapper.isRobotMovingAndAbnormal();
             // 0-false : le robot ne bouge pas
 
             //log.debug("Test deplacement : reponse "+ infos[0] +" :: "+ infos[1], this);
@@ -1056,7 +1056,7 @@ public class Locomotion implements Service
     {
         try 
         {
-            float[] infos = deplacements.getCurrentPositionAndOrientation();
+            float[] infos = serialWrapper.getCurrentPositionAndOrientation();
 
 
             if(infos == null)
@@ -1119,7 +1119,7 @@ public class Locomotion implements Service
         log.warning("Arrêt du robot en "+lowLevelPosition);
         try 
         {
-            deplacements.immobilise();
+            serialWrapper.immobilise();
         } 
         catch (SerialConnexionException e) 
         {
@@ -1140,8 +1140,8 @@ public class Locomotion implements Service
         	this.lowLevelPosition.x = -this.lowLevelPosition.x;// on lui met la vraie position
 		try 
 		{
-			deplacements.setX(this.lowLevelPosition.x);
-	        deplacements.setY(this.lowLevelPosition.y);
+			serialWrapper.setX(this.lowLevelPosition.x);
+	        serialWrapper.setY(this.lowLevelPosition.y);
 		} 
 		catch (SerialConnexionException e)
 		{
@@ -1162,7 +1162,7 @@ public class Locomotion implements Service
         	this.lowLevelOrientation = Math.PI-this.lowLevelOrientation; // la vraie orientation
         try 
         {
-    		deplacements.setOrientation(this.lowLevelOrientation);
+    		serialWrapper.setOrientation(this.lowLevelOrientation);
         }
         catch (SerialConnexionException e) 
         {
@@ -1215,8 +1215,8 @@ public class Locomotion implements Service
     {
         try
         {
-            deplacements.disableRotationnalFeedbackLoop();
-            deplacements.disableTranslationnalFeedbackLoop();
+            serialWrapper.disableRotationnalFeedbackLoop();
+            serialWrapper.disableTranslationnalFeedbackLoop();
         } catch (SerialConnexionException e)
         {
             log.critical("Catch de "+e+" dans desasservit");
@@ -1227,44 +1227,44 @@ public class Locomotion implements Service
 
     public void setRotationnalSpeed(double rotationSpeed) throws SerialConnexionException
     {
-        deplacements.setRotationnalSpeed(rotationSpeed);
+        serialWrapper.setRotationnalSpeed(rotationSpeed);
         this.rotSpeed = rotationSpeed;
     }
 
     public void setTranslationnalSpeed(float speed) throws SerialConnexionException
     {
-        deplacements.setTranslationnalSpeed(speed);
+        serialWrapper.setTranslationnalSpeed(speed);
         this.transSpeed = speed;
     }
 
     
     public void enableFeedbackLoop() throws SerialConnexionException
     {
-        deplacements.enableRotationnalFeedbackLoop();
-        deplacements.enableTranslationnalFeedbackLoop();
-        deplacements.enableSpeedFeedbackLoop();
+        serialWrapper.enableRotationnalFeedbackLoop();
+        serialWrapper.enableTranslationnalFeedbackLoop();
+        serialWrapper.enableSpeedFeedbackLoop();
     }
 
     public void disableFeedbackLoop() throws SerialConnexionException
     {
-        deplacements.disableRotationnalFeedbackLoop();
-        deplacements.disableTranslationnalFeedbackLoop();
-        deplacements.disableSpeedFeedbackLoop();
+        serialWrapper.disableRotationnalFeedbackLoop();
+        serialWrapper.disableTranslationnalFeedbackLoop();
+        serialWrapper.disableSpeedFeedbackLoop();
     }
     
     public void disableRotationnalFeedbackLoop() throws SerialConnexionException
     {
-		deplacements.disableRotationnalFeedbackLoop();
+		serialWrapper.disableRotationnalFeedbackLoop();
     }
 
     public void enableRotationnalFeedbackLoop() throws SerialConnexionException
     {
-		deplacements.enableRotationnalFeedbackLoop();
+		serialWrapper.enableRotationnalFeedbackLoop();
     }
 
 	public void disableTranslationalFeedbackLoop() throws SerialConnexionException
 	{
-		deplacements.disableTranslationnalFeedbackLoop();
+		serialWrapper.disableTranslationnalFeedbackLoop();
 	}
 
     /**
@@ -1275,7 +1275,7 @@ public class Locomotion implements Service
     {
         if(isForcing != choice)
         {
-            deplacements.setForceMovement(choice);
+            serialWrapper.setForceMovement(choice);
             this.isForcing = choice;
         }
     }
@@ -1285,7 +1285,7 @@ public class Locomotion implements Service
      */
     public synchronized void setSmoothAcceleration(boolean choice) throws SerialConnexionException
     {
-        deplacements.setSmoothAcceleration(choice);
+        serialWrapper.setSmoothAcceleration(choice);
     }
 
     public void setBasicDetection(boolean basicDetection)
@@ -1295,7 +1295,7 @@ public class Locomotion implements Service
 
 	public void close()
 	{
-		deplacements.closeLocomotion();
+		serialWrapper.closeLocomotion();
 	}	
 	
 	/**************************************************

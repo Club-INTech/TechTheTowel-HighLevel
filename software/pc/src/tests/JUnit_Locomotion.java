@@ -13,7 +13,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import robot.Locomotion;
-import robot.cardsWrappers.LocomotionCardWrapper;
+import robot.serial.SerialWrapper;
 import smartMath.Vec2;
 
 import java.util.ArrayList;
@@ -44,7 +44,7 @@ public class JUnit_Locomotion extends JUnit_Test
 
 	/** The deplacements. */
 	private Locomotion mLocomotion;
-	private LocomotionCardWrapper cardWrapper;
+	private SerialWrapper cardWrapper;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception
@@ -67,7 +67,7 @@ public class JUnit_Locomotion extends JUnit_Test
 		super.setUp();
 		log.debug("JUnit_DeplacementsTest.setUp()");
 		mLocomotion = (Locomotion)container.getService(ServiceNames.LOCOMOTION);
-		cardWrapper=(LocomotionCardWrapper)container.getService(ServiceNames.LOCOMOTION_CARD_WRAPPER);
+		cardWrapper=(SerialWrapper) container.getService(ServiceNames.SERIAL_WRAPPER);
 		container.getService(ServiceNames.ROBOT_REAL);
 		config.set("couleur", "vert");
 		mLocomotion.updateConfig();
@@ -250,12 +250,6 @@ public class JUnit_Locomotion extends JUnit_Test
 	}
 	/**
 	* Avance, envoi a la serie
-    * @param symmetrisedAim la position visee sur la table (symetrise)
-    * @param givenPosition la position de depart du deplacement
-    * @param angle l'angle dont il faut tourner (ordre pour la serie)
-    * @param distance la distance dont il faut avancer (ordre pour la serie)
-    * @param turnOnly vrai si on veut uniquement tourner (et pas avancer)
-    * @param isCorrection vrai si la consigne est une correction et pas un ordre de deplacement
     * @throws BlockedException si le robot rencontre un obstacle innatendu sur son chemin (par les capteurs)
     * @throws UnexpectedObstacleOnPathException 
     */

@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import robot.Locomotion;
 import robot.Robot;
-import robot.cardsWrappers.SensorsCardWrapper;
+import robot.serial.SerialWrapper;
 import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
@@ -30,7 +30,7 @@ public class JUnit_Sensors extends JUnit_Test
 {
 
 	/** The capteurs. */
-	SensorsCardWrapper capteurs;
+	SerialWrapper capteurs;
 	
 	private Locomotion mLocomotion;
 	
@@ -47,7 +47,7 @@ public class JUnit_Sensors extends JUnit_Test
 		state = (GameState<Robot>)container.getService(ServiceNames.GAME_STATE);
 		
 		log.debug("JUnit_ActionneursTest.setUp()");
-		capteurs = (SensorsCardWrapper)container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
+		capteurs = (SerialWrapper) container.getService(ServiceNames.SERIAL_WRAPPER);
 		
 		config.set("capteurs_on", "true");
 		capteurs.updateConfig();
