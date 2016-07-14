@@ -28,9 +28,9 @@ public enum ServiceNames
 	 GAME_STATE,
 	 
 	 SCRIPT_MANAGER,
-	 
-	 STM_CARD(0),
-	 
+
+	 STM_CARD,
+
 	 THREAD_SENSOR,
 	 THREAD_TIMER,
 	 THREAD_INTERFACE,
@@ -40,12 +40,6 @@ public enum ServiceNames
 	 STRATEGIE,
 	 
 	 CHECK_UP;
-	
-	 /** type de service, par défault: GENERIC*/
-	 private ServiceType type = ServiceType.GENERIC;
-
-	 /** Si ce service est de type SERIAL, identifie le port série auquel ce service est rattaché par un index dans la liste des ports série*/
-	 private int serialIndex = 0;
 
 	 /**
 	  * Constructeur vide
@@ -53,38 +47,6 @@ public enum ServiceNames
 	 private ServiceNames()
 	 {
 		 
-	 }
-	 /**
-	  *  Instancie un nom de service de type série
-	  * @param nbSerie l'index de la série a utiliser dans la lsite des ports série disponible sur le pc
-	  */
-	 private ServiceNames(int nbSerie)
-	 {
-		 this.serialIndex = nbSerie;
-		 this.type = ServiceType.SERIAL;
-	 }
-	 
-	 /**
-	  * Renvois l'index de la série a utiliser dans la lsite des ports série disponible sur le pc
-	  * @return l'index de la série a utiliser dans la lsite des ports série disponible sur le pc 
-	  * @throws ServiceTypeException
-	  */
-	 public int getSerialIndex() throws ServiceTypeException
-	 {
-		 if(type != ServiceType.SERIAL)
-			 throw new ServiceTypeException();
-		 return serialIndex;
-	 }
-	 
-	 public ServiceType getType()
-	 {
-		 return type;
-	 }
-	 
-	 public enum ServiceType
-	 {
-		 GENERIC,
-		 SERIAL;		 
 	 }
 	 
 }

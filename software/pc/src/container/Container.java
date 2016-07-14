@@ -1,7 +1,6 @@
 package container;
 
 import enums.ServiceNames;
-import enums.ServiceNames.ServiceType;
 import exceptions.ContainerException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialManagerException;
@@ -76,8 +75,8 @@ public class Container
 		// coupe les connexions séries
 		if(serialManager != null)
 		{
-			if(serialManager.serieAsservissement != null)
-				serialManager.serieAsservissement.close();
+			if(serialManager.serialConnexion != null)
+				serialManager.serialConnexion.close();
 		}
 		
 		// ferme le log
@@ -134,11 +133,11 @@ public class Container
 																	(Log)getService(ServiceNames.LOG),
 																	(Config)getService(ServiceNames.CONFIG)
 																);
-		else if(serviceRequested.getType() == ServiceType.SERIAL) // les séries
+		else if(serviceRequested == ServiceNames.STM_CARD) // les séries
 		{
 			if(serialManager == null)
 				serialManager = new SerialManager(log);
-			instanciedServices[serviceRequested.ordinal()] = 	(Service)serialManager.getSerial(serviceRequested);
+			instanciedServices[serviceRequested.ordinal()] = 	(Service)serialManager.getSerial();
 		}
 		else if(serviceRequested == ServiceNames.SERIAL_WRAPPER)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new SerialWrapper(
