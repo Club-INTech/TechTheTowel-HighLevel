@@ -5,11 +5,7 @@ import exceptions.BadVersionException;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialFinallyException;
-import hook.Callback;
 import hook.Hook;
-import hook.methods.OpenDoor;
-import hook.methods.SpeedDown;
-import hook.methods.StopDetect;
 import hook.types.HookFactory;
 import robot.Robot;
 import smartMath.Arc;
@@ -73,13 +69,9 @@ public class CloseDoors extends AbstractScript
 
                 stateToConsider.robot.setBasicDetection(true);
 
-                Hook hook = hookFactory.newYGreaterHook(1700);
-                hook.addCallback(new Callback(new SpeedDown(), true, stateToConsider));
-                hooksToConsider.add(hook);
-
-                hook = hookFactory.newYGreaterHook(1600);
-                hook.addCallback(new Callback(new StopDetect(), true, stateToConsider));
-                hooksToConsider.add(hook);
+//                Hook hook = hookFactory.newYGreaterHook(1700);
+//                hook.addCallback(new Callback(new SpeedDown(), true, stateToConsider));
+//                hooksToConsider.add(hook);
 
                 stateToConsider.robot.setForceMovement(true);
 
@@ -93,8 +85,8 @@ public class CloseDoors extends AbstractScript
 
                 //PORTES FERMEES !
 				stateToConsider.obtainedPoints += 20;
-				stateToConsider.table.extDoorClosed = true;
-				stateToConsider.table.intDoorClosed = true;
+//				stateToConsider.table.extDoorClosed = true;
+//				stateToConsider.table.intDoorClosed = true;
 
 				//if(Geometry.isBetween(stateToConsider.robot.getPosition().y, 1790, 1890))
 					stateToConsider.robot.setPosition(new Vec2(stateToConsider.robot.getPosition().x,1840));
@@ -115,9 +107,9 @@ public class CloseDoors extends AbstractScript
                 stateToConsider.robot.setForceMovement(true);
 
 
-                hook = hookFactory.newXGreaterHook(1200);
-                hook.addCallback(new Callback(new SpeedDown(), true, stateToConsider));
-                hooksToConsider.add(hook);
+//                hook = hookFactory.newXGreaterHook(1200);
+//                hook.addCallback(new Callback(new SpeedDown(), true, stateToConsider));
+//                hooksToConsider.add(hook);
 
 				stateToConsider.robot.moveLengthwise(-500, hooksToConsider, true);
 
@@ -158,8 +150,8 @@ public class CloseDoors extends AbstractScript
 
 				//PORTES FERMEES !
 				stateToConsider.obtainedPoints += 20;
-				stateToConsider.table.extDoorClosed = true;
-				stateToConsider.table.intDoorClosed = true;
+//				stateToConsider.table.extDoorClosed = true;
+//				stateToConsider.table.intDoorClosed = true;
 
 				//On recule
 				stateToConsider.robot.moveLengthwise(-200, hooksToConsider, false);
@@ -181,14 +173,15 @@ public class CloseDoors extends AbstractScript
 
 				//PORTES FERMEES !
 				stateToConsider.obtainedPoints += 20;
-				stateToConsider.table.extDoorClosed = true;
-				stateToConsider.table.intDoorClosed = true;
+//				stateToConsider.table.extDoorClosed = true;
+//				stateToConsider.table.intDoorClosed = true;
 
 			}
             else if(versionToExecute == 4)
             {
                 //On ralentit pour éviter de démonter les éléments de jeu "Discord-style"
-                Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
+                @SuppressWarnings("unused")
+				Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
 
                 stateToConsider.robot.setBasicDetection(true);
                 stateToConsider.robot.setForceMovement(false);
@@ -201,17 +194,9 @@ public class CloseDoors extends AbstractScript
 
                 stateToConsider.robot.setBasicDetection(true);
 
-                Hook hook = hookFactory.newYGreaterHook(1700);
-                hook.addCallback(new Callback(new SpeedDown(), true, stateToConsider));
-                hooksToConsider.add(hook);
-
-                hook = hookFactory.newYGreaterHook(1600);
-                hook.addCallback(new Callback(new StopDetect(), true, stateToConsider));
-                hooksToConsider.add(hook);
-
-                hook = hookFactory.newYGreaterHook(1500);
-                hook.addCallback(new Callback(new OpenDoor(), true, stateToConsider));
-                hooksToConsider.add(hook);
+//                Hook hook = hookFactory.newYGreaterHook(1700);
+//                hook.addCallback(new Callback(new SpeedDown(), true, stateToConsider));
+//                hooksToConsider.add(hook);
 
                 stateToConsider.robot.setForceMovement(true);
 
@@ -225,8 +210,8 @@ public class CloseDoors extends AbstractScript
 
                 //PORTES FERMEES !
                 stateToConsider.obtainedPoints += 20;
-                stateToConsider.table.extDoorClosed = true;
-                stateToConsider.table.intDoorClosed = true;
+//                stateToConsider.table.extDoorClosed = true;
+//                stateToConsider.table.intDoorClosed = true;
 
                 //if(Geometry.isBetween(stateToConsider.robot.getPosition().y, 1790, 1890))
                 stateToConsider.robot.setPosition(new Vec2(stateToConsider.robot.getPosition().x,1840));
@@ -245,9 +230,6 @@ public class CloseDoors extends AbstractScript
 
                 stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
 
-                stateToConsider.changeRobotRadius(TechTheSand.retractedRobotRadius);
-                stateToConsider.table.getObstacleManager().updateObstacles(TechTheSand.retractedRobotRadius);
-
                 stateToConsider.robot.setLocomotionSpeed(Speed.FAST_ALL);
 
                 stateToConsider.robot.setBasicDetection(true);
@@ -260,9 +242,9 @@ public class CloseDoors extends AbstractScript
                 stateToConsider.robot.setForceMovement(true);
 
 
-                hook = hookFactory.newXGreaterHook(1200);
-                hook.addCallback(new Callback(new SpeedDown(), true, stateToConsider));
-                hooksToConsider.add(hook);
+//                hook = hookFactory.newXGreaterHook(1200);
+//                hook.addCallback(new Callback(new SpeedDown(), true, stateToConsider));
+//                hooksToConsider.add(hook);
 
                 stateToConsider.robot.moveLengthwise(-500, hooksToConsider, true);
 
@@ -300,11 +282,11 @@ public class CloseDoors extends AbstractScript
 		// Score de 10 points fournis par porte fermée
 		if (version == 0 || version == 1)
 		{
-			if (state.table.extDoorClosed)
+			//if (state.table.extDoorClosed)
 			{
 				score-=10;
 			}
-			if (state.table.intDoorClosed)
+			//if (state.table.intDoorClosed)
 			{
 				score-=10;
 			}

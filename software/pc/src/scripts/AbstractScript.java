@@ -5,8 +5,6 @@ import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.BadVersionException;
 import exceptions.BlockedActuatorException;
-import exceptions.PathNotFoundException;
-import exceptions.PointInObstacleException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import hook.Hook;
@@ -64,13 +62,11 @@ public abstract class AbstractScript implements Service
 	 * @param enumObstacle les obstacles qu'on ne veut pas prendre ne compte dans le pathDingDing
 	 * @throws UnableToMoveException losrque le robot veut se déplacer et que quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
 	 * @throws SerialConnexionException s'il y a un problème de communication avec une des cartes électroniques
-	 * @throws PathNotFoundException  si le pathfinding ne trouve pas de chemin
 	 * @throws SerialFinallyException si le finally n'est pas correctement execute (erreur critique)
 	 * @throws InObstacleException lorqsque le robot veut aller dans un obstacle
 	 * @throws ExecuteException 
-	 * @throws PointInObstacleException 
 	 */
-	public void goToThenExec(int versionToExecute, GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, BadVersionException, SerialConnexionException, PathNotFoundException, SerialFinallyException, ExecuteException, PointInObstacleException, BlockedActuatorException
+	public void goToThenExec(int versionToExecute, GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, BadVersionException, SerialConnexionException, SerialFinallyException, ExecuteException, BlockedActuatorException
 	{
 		// va jusqu'au point d'entrée de la version demandée
 		log.debug("Lancement de " + this + " version " + versionToExecute);
@@ -79,7 +75,7 @@ public abstract class AbstractScript implements Service
 			if(!actualState.robot.getPosition().equals(entryPosition(versionToExecute,actualState.robot.getRobotRadius(), actualState.robot.getPosition()).position))
 				actualState.robot.moveToCircle(entryPosition(versionToExecute,actualState.robot.getRobotRadius(), actualState.robot.getPositionFast()), hooksToConsider, actualState.table);
 		}
-		catch (UnableToMoveException | PathNotFoundException e)
+		catch (UnableToMoveException e)
 		{
 			log.debug("Catch de "+e+" Impossible de goToThenExec : abandon d'exec, throw de "+e);
 			throw e;

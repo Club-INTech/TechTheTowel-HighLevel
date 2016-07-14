@@ -1,28 +1,22 @@
 import container.Container;
-import enums.ActuatorOrder;
 import enums.ServiceNames;
 import enums.Speed;
 import exceptions.ContainerException;
-import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialManagerException;
 import hook.Hook;
 import robot.Locomotion;
 import robot.Robot;
 import robot.cardsWrappers.SensorsCardWrapper;
 import scripts.ScriptManager;
-import scripts.TechTheSand;
 import strategie.GameState;
-import strategie.Strategie;
 import table.Table;
 import threads.ThreadTimer;
 import utils.Config;
 import utils.Log;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-
 
 /**
  * Code qui démarre le robot en début de match
@@ -33,7 +27,6 @@ public class Main
 {
 	static Container container;
 	static Config config;
-	static Strategie strategos;
 	static GameState<Robot> realState;
 	static ArrayList<Hook> emptyHook = new ArrayList<>();
 	static ScriptManager scriptmanager;
@@ -44,6 +37,7 @@ public class Main
 // dans la config de debut de match, toujours demander une entrée clavier assez longue (ex "oui" au lieu de "o", pour éviter les fautes de frappes. Une erreur a ce stade coûte cher.
 // ---> En même temps si tu tapes n à la place de o, c'est que tu es vraiment con.  -Discord
 // PS : Les vérifications et validations c'est pas pour les chiens.
+	@SuppressWarnings("unchecked")
 	public static void main(String[] args)
 	{
 		try
@@ -54,35 +48,23 @@ public class Main
 			realState = (GameState<Robot>) container.getService(ServiceNames.GAME_STATE);
 			scriptmanager = (ScriptManager) container.getService(ServiceNames.SCRIPT_MANAGER);
 			mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
-			strategos = (Strategie) container.getService(ServiceNames.STRATEGIE);
 			mLocomotion=(Locomotion) container.getService(ServiceNames.LOCOMOTION);
 			config.updateConfig();
 
             Thread.currentThread().setPriority(6);
 
+            // TODO : faire une initialisation du robot et de ses actionneurs
 			realState.robot.setPosition(Table.entryPosition);
 			realState.robot.setOrientation(Math.PI);
 			realState.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);
 
-			try {
-				realState.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
-				realState.robot.useActuator(ActuatorOrder.CLOSE_DOOR_LEFT, false);
-				realState.robot.useActuator(ActuatorOrder.ARM_INIT, false);
-			} catch (SerialConnexionException e) {
-				e.printStackTrace();
-			}
-
 			container.startAllThreads();
-
-			realState.changeRobotRadius(TechTheSand.expandedRobotRadius);
-			realState.table.getObstacleManager().updateObstacles(TechTheSand.expandedRobotRadius);
-
 			waitMatchBegin();
 
 			System.out.println("Le robot commence le match");
 
-			strategos.updateConfig();
-			strategos.IA();
+			// TODO : lancer l'IA
+			
 			Log.stop();
 
 		} catch (IOException e) {
@@ -134,7 +116,7 @@ public class Main
 	static void configColor()
 	{
 		String couleur = "";
-		while(!couleur.contains("jaune") && !couleur.contains("vert"))
+		while(!couleur.contains("violet") && !couleur.contains("vert")) // TODO : modifier les couleurs
 		{
 			System.out.println("Rentrez \"vert\" ou \"violet\" : ");
 			BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in)); 

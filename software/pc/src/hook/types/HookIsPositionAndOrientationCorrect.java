@@ -9,7 +9,7 @@ import utils.Log;
 
 /**
  * déclenchement avec condition sur position ET orientation
- * @author theo
+ * @author Pingu
  */
 
 public class HookIsPositionAndOrientationCorrect extends Hook

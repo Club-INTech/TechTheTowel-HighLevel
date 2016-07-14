@@ -4,7 +4,6 @@ import enums.*;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import hook.Hook;
-import pathDingDing.PathDingDing;
 import robot.cardsWrappers.ActuatorCardWrapper;
 import robot.cardsWrappers.SensorsCardWrapper;
 import smartMath.Arc;
@@ -28,14 +27,15 @@ public class RobotReal extends Robot
 	private SymmetrizedActuatorOrderMap mActuatorCorrespondenceMap = new SymmetrizedActuatorOrderMap();
 	private SymmetrizedTurningStrategy mTurningStrategyCorrespondenceMap = new SymmetrizedTurningStrategy();
 	private SymmetrizedSensorNamesMap mSensorNamesMap = new SymmetrizedSensorNamesMap();
+	
 	/** Système de locomotion a utiliser pour déplacer le robot */
 	private Locomotion mLocomotion;
 	
 	
-	// Constructeur
-	public RobotReal( Locomotion deplacements, ActuatorCardWrapper mActuatorCardWrapper, Config config, Log log, PathDingDing pathDingDing, SensorsCardWrapper mSensorsCardWrapper)
+	/** Constructeur*/
+	public RobotReal( Locomotion deplacements, ActuatorCardWrapper mActuatorCardWrapper, Config config, Log log, SensorsCardWrapper mSensorsCardWrapper)
  	{
-		super(config, log, pathDingDing);
+		super(config, log);
 		this.mSensorsCardWrapper = mSensorsCardWrapper;
 		this.mActuatorCardWrapper = mActuatorCardWrapper;
 		this.mLocomotion = deplacements;
@@ -55,60 +55,14 @@ public class RobotReal extends Robot
 	@Override
 	public void useActuator(ActuatorOrder order, boolean waitForCompletion) throws SerialConnexionException
 	{
-		//redondance avec useActuator qui log.debug deja
-		//log.debug("appel de RobotReal.useActuator(" + order + "," + waitForCompletion + ")", this);
-        int door = (order == ActuatorOrder.OPEN_DOOR ? 2 : 0) + (order == ActuatorOrder.CLOSE_DOOR ? 1 : 0);
 		if(symmetry)
 			order = mActuatorCorrespondenceMap.getSymmetrizedActuatorOrder(order);
 		mActuatorCardWrapper.useActuator(order);
-
-        if(waitForCompletion && door == 1)
-        {
-            while(!getContactSensorValue(ContactSensors.DOOR_CLOSED) && !getContactSensorValue(ContactSensors.DOOR_BLOCKED))
-			{
-				try
-                {
-					Thread.sleep(100);
-				}
-				catch (Exception e)
-				{
-
-				}
-			}
-        }
-        else if(waitForCompletion && door == 2)
-        {
-            long time = System.currentTimeMillis();
-            while(!getContactSensorValue(ContactSensors.DOOR_OPENED) && !getContactSensorValue(ContactSensors.DOOR_BLOCKED))
-			{
-				try
-				{
-					Thread.sleep(100);
-				}
-				catch (Exception e)
-				{
-
-				}
-			}
-        }
-		else if(waitForCompletion)
+		
+		if(waitForCompletion)
 		{
 			sleep(order.getDuration());
 		}
-
-		//=============================
-		// Gestion pourrave des portes
-		//=============================
-
-		if(waitForCompletion && door != 0 && getContactSensorValue(ContactSensors.DOOR_OPENED))
-			doorIsOpen = true;
-		else if(waitForCompletion && door != 0 && getContactSensorValue(ContactSensors.DOOR_CLOSED))
-			doorIsOpen = false;
-		else if(waitForCompletion && door != 0)
-			doorIsOpen = true; //Cas pourri où la porte s'est bloquée
-		else if(!waitForCompletion && door != 0)
-			doorIsOpen = (door == 2);
-
 	}
 	
 	@Override
@@ -448,7 +402,7 @@ public class RobotReal extends Robot
 	@Override
 	public boolean setTurningStrategy(TurningStrategy turning)
 	{
-        if(((getIsSandInside()||shellsOnBoard) && !(turning == TurningStrategy.FASTEST)) || (!getIsSandInside() && !shellsOnBoard))
+        if(!(turning == TurningStrategy.FASTEST))
         {
 			if(symmetry)
 			{
@@ -464,7 +418,7 @@ public class RobotReal extends Robot
 	@Override
 	public boolean setDirectionStrategy(DirectionStrategy motion)
 	{
-        if(((getIsSandInside()||shellsOnBoard) && !(motion == DirectionStrategy.FASTEST)) || (!getIsSandInside() && !shellsOnBoard))
+        if(!(motion == DirectionStrategy.FASTEST))
 		{
 			mLocomotion.setDirectionOrders(motion);
 			return true;

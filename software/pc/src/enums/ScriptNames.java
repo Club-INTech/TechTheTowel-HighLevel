@@ -8,13 +8,7 @@ package enums;
 
 public enum ScriptNames
 {
-	DROP_CARPET,
-	FISHING,
-	CLOSE_DOORS,
-	TECH_THE_SAND,
-	DROP_THE_SAND,
-	SHELL_GETTER,
-	SHELL_DEPOSIT,
-	PREQUEL,
-	CASTLE;
+	// exemple : CLOSE_DOORS,
+	// TODO : Rajouter les noms des scripts 
+
 }

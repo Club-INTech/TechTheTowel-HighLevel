@@ -5,6 +5,10 @@ import hook.Executable;
 import robot.Robot;
 import strategie.GameState;
 
+/**
+ * Exécutable réduisant la vitesse en cours de mouvement
+ * @author CF
+ */
 public class SpeedDown implements Executable
 {
 

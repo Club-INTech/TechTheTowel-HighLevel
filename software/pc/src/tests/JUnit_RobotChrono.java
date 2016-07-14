@@ -5,7 +5,6 @@ import hook.Hook;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import pathDingDing.PathDingDing;
 import robot.RobotChrono;
 import smartMath.Vec2;
 import table.Table;
@@ -33,7 +32,6 @@ public class JUnit_RobotChrono extends JUnit_Test {
 		super.setUp();
 		log.debug("JUnit_RobotChronoTest.setUp()");
 		table = (Table)container.getService(ServiceNames.TABLE);
-		robotchrono = new RobotChrono(config, log, (PathDingDing)container.getService(ServiceNames.PATHDINGDING));
 		robotchrono.setPosition(new Vec2(0, 1500));
 		robotchrono.setOrientation(0);
 	}
@@ -64,14 +62,12 @@ public class JUnit_RobotChrono extends JUnit_Test {
 		log.debug("JUnit_RobotChronoTest.test_va_au_point_symetrie()");
 		config.set("couleur", "jaune");
 		robotchrono.updateConfig();
-		robotchrono = new RobotChrono(config, log, (PathDingDing)container.getService(ServiceNames.PATHDINGDING));
 		robotchrono.setPosition(new Vec2(0, 1500));
 		robotchrono.setOrientation(0);
 		robotchrono.moveToLocation(new Vec2(10, 1400), new ArrayList<Hook>(), table);
 		Assert.assertTrue(robotchrono.getPosition().distance(new Vec2(10,1400)) < 2);
 
 		config.set("couleur", "rouge");
-		robotchrono = new RobotChrono(config, log, (PathDingDing)container.getService(ServiceNames.PATHDINGDING));
 		robotchrono.setPosition(new Vec2(0, 1500));
 		robotchrono.setOrientation(0);
 		robotchrono.moveToLocation(new Vec2(10, 1400), new ArrayList<Hook>(), table);

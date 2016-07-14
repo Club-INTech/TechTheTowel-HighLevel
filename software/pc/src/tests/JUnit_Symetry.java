@@ -4,7 +4,6 @@ import enums.ServiceNames;
 import hook.Hook;
 import org.junit.Before;
 import org.junit.Test;
-import pathDingDing.PathDingDing;
 import robot.Robot;
 import robot.cardsWrappers.SensorsCardWrapper;
 import scripts.ScriptManager;
@@ -20,7 +19,6 @@ public class JUnit_Symetry extends JUnit_Test
 	GameState<Robot> real_state;
 	ScriptManager scriptmanager;
 	SensorsCardWrapper  mSensorsCardWrapper;
-	PathDingDing pathDingDing;
 	
 	@SuppressWarnings("unchecked")
 	@Before
@@ -30,7 +28,6 @@ public class JUnit_Symetry extends JUnit_Test
 		real_state = (GameState<Robot>) container.getService(ServiceNames.GAME_STATE);
 		scriptmanager = (ScriptManager) container.getService(ServiceNames.SCRIPT_MANAGER);
 		mSensorsCardWrapper = (SensorsCardWrapper) container.getService(ServiceNames.SENSORS_CARD_WRAPPER);
-        pathDingDing = (PathDingDing)container.getService(ServiceNames.PATHDINGDING);
 		emptyHook = new ArrayList<Hook> ();  
 
 		// La position est setée qu'on soit jaune ou vert

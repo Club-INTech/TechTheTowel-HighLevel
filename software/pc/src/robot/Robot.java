@@ -4,12 +4,8 @@ import container.Service;
 import enums.*;
 import exceptions.ConfigPropertyNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
-import exceptions.PathNotFoundException;
-import exceptions.PointInObstacleException;
 import exceptions.serial.SerialConnexionException;
 import hook.Hook;
-import pathDingDing.Node;
-import pathDingDing.PathDingDing;
 import smartMath.Arc;
 import smartMath.Circle;
 import smartMath.Vec2;
@@ -35,9 +31,6 @@ public abstract class Robot implements Service
 	
 	/**  endroit ou lire la configuration du robot. */
 	protected Config config;
-	
-	/**  pathfinding du robot */
-	protected PathDingDing pathDingDing;
 
 	/**  la table est symétrisée si on est équipe jaune. */
 	protected boolean symmetry;
@@ -46,13 +39,10 @@ public abstract class Robot implements Service
 	/**  vitesse du robot sur la table. */
 	protected Speed speed;
 	
-	/**
-	 * la position du robot
-	 */
+	/**la position du robot*/
 	protected Vec2 position;
-	/**
-	 * l'orientation du robot
-	 */
+	
+	/** l'orientation du robot*/
 	protected double orientation;
 	
 	/** Rayon du robot provenant du fichier de config */
@@ -62,40 +52,9 @@ public abstract class Robot implements Service
 	public ArrayList<Vec2> cheminSuivi = new ArrayList<Vec2>();
 	
 	private float aimThresold = 15;
-	
 
-	/** état du parasol */
-	public boolean isParasolUnfolded = false;
-
-	
-	/** Booléen indiquant la présence de poisson sur les actionneurs */
-	private boolean AreFishesOnBoard = false;
-	
-	/** Booléen indiquant la présence de sable dans le robot
-	 *  IL FAUT LE VOIR COMME UN MUTEX DEBILE
-	 **/
-	private boolean IsSandInside = false;
-
-	/** Si on entraîne des coquillages ou non
-     * IDEM, MUTEX DEBILE
-     **/
-	public boolean shellsOnBoard=false;
-
-	/**
-	 * Si la porte est ouverte
-	 * #MUTEX
-	 */
-	public boolean doorIsOpen=false;
-
-	/**
-	 * Si le robot force dans ses mouvements
-	 */
+	/** Si le robot force dans ses mouvements*/
 	protected boolean isForcing = false;
-
-
-	public int fishing;
-
-    public int passages = 0;
 
 
 	/**
@@ -106,11 +65,10 @@ public abstract class Robot implements Service
 	 * @param log : la sortie de log à utiliser
 	 * @param pathDingDing l'instance de pathfinding a utiliser
 	 */
-	public Robot(Config config, Log log, PathDingDing pathDingDing)
+	public Robot(Config config, Log log)
 	{
 		this.config = config;
 		this.log = log;
-		this.pathDingDing = pathDingDing;
 		updateConfig();
 	}
 	
@@ -122,10 +80,9 @@ public abstract class Robot implements Service
 	{
 		try 
 		{
-			symmetry = config.getProperty("couleur").replaceAll(" ","").equals("violet");
+			symmetry = config.getProperty("couleur").replaceAll(" ","").equals("violet"); // TODO : modifier la couleur adverse
 	        robotRay = Integer.parseInt(config.getProperty("rayon_robot"));
 	        position = Table.entryPosition;
-			fishing = Integer.parseInt(config.getProperty("profondeur"));
 	        orientation = Math.PI;
 		}
 	    catch (ConfigPropertyNotFoundException e)
@@ -161,48 +118,6 @@ public abstract class Robot implements Service
 	public Speed getSpeed()
 	{
 		return speed;
-	}
-	
-	
-	/**
-	 * Change la valeur du booléen AreFishesOnBoard
-	 * @param bool booléen souhaité
-	 */
-	public void setAreFishesOnBoard(boolean bool) 
-	{
-		this.AreFishesOnBoard = bool;
-	}
-	
-	/**
-	 * Indique si les poissons sont sur le bras ou pas
-	 * @return Poisson sur bras ou non
-	 */
-	public boolean getAreFishesOnBoard() 
-	{
-		return AreFishesOnBoard;
-	}
-	
-	/**
-	 * Change la valeur du booléen IsSandInside
-	 * @param booléen souhaité
-	 */
-	public void setIsSandInside(boolean isSandInside) 
-	{
-		this.IsSandInside = isSandInside;
-	}
-	
-	/**
-	 * Indique si le sable est dans le robot ou pas
-	 * @return Sable pris ou non
-	 */
-	public boolean getIsSandInside() 
-	{
-		return IsSandInside;
-	}
-
-	public void setDoor(boolean state)
-	{
-		this.doorIsOpen = state;
 	}
 	
 	/**
@@ -509,9 +424,8 @@ public abstract class Robot implements Service
      * @throws PathNotFoundException lorsque le pathdingding ne trouve pas de chemin 
      * @throws PointInObstacleException 
      */
-    public void moveToLocation(Vec2 aim, ArrayList<Hook> hooksToConsider, Table table) throws  PathNotFoundException, UnableToMoveException, PointInObstacleException
+    public void moveToLocation(Vec2 aim, ArrayList<Hook> hooksToConsider, Table table) throws  UnableToMoveException
     {
-
 		log.debug("appel de Robot.moveToLocation(" + aim + "," + hooksToConsider + "," + table + ")");
 		//On crée bêtement un cercle de rayon nul pour lancer moveToCircle, sachant que la position de ce cercle est extraite pour le pathDiniDing (et après on dit qu'à INTech on code comme des porcs...)
     	moveToCircle(new Circle(aim), hooksToConsider, table);
@@ -520,71 +434,14 @@ public abstract class Robot implements Service
     /**
      * deplace le robot vers le point du cercle donnné le plus proche, en evitant les obstacles. (appel du pathfinding)
      * methode bloquante : l'execution ne se termine que lorsque le robot est arrive
-     * 
      * @param aim le cercle ou l'on veut se rendre
 	 * @param hooksToConsider the hooks to consider
      * @param table la table sur laquell on est sensé se déplacer
-     * 
-     * @throws PathNotFoundException lorsque le pathdingding ne trouve pas de chemin 
      * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
-     * @throws PointInObstacleException lorsque le point demandé est dans un obstacle ; utile pour un déplacement random / à éviter de jouer avec...
      */
-    public void moveToCircle(Circle aim, ArrayList<Hook> hooksToConsider, Table table) throws PathNotFoundException, UnableToMoveException, PointInObstacleException
-    {
-
-    	PathDingDing pdd = new PathDingDing(table, log);
-    	// On lance le calcul
-    	ArrayList<Node> nodePath = pdd.computePath(position, aim.position, new ArrayList<Obstacle>());
-
-		if(nodePath.isEmpty())
-			throw new PathNotFoundException();
-
-		if(nodePath.get(0).getPosition().equals(aim.position)) //Si on y est déjà
-			return;
-
-    	// On transforme les noeuds en Vec2
-    	ArrayList<Vec2> path = new ArrayList<Vec2>();
-    	for(int i=0 ; i<nodePath.size() ; i++)
-    	{
-    		path.add(nodePath.get(i).getPosition());
-    	}
-    	
-		
-    	//retire une distance egale au rayon du cercle au dernier point du chemin (le centre du cercle)
-    	
-    	//on retire le dernier point (le centre du cercle)
-    	path.remove(path.size()-1);
-    	
-    	//le point precedent dans le path
-    	Vec2 precedentPathPoint = new Vec2();
-    	if (path.size()==0)
-    	{
-    		precedentPathPoint = getPosition();
-    		if (symmetry)
-    		{
-    			precedentPathPoint.x *= -1;
-    		}
-    	}
-    	else
-    	{
-    		precedentPathPoint = path.get(path.size()-1);
-    	}
-
-    	//le dernier vecteur deplacement
-    	Vec2 movementVector = aim.position.minusNewVector(precedentPathPoint);
-    	
-    	
-    	/* on ajoute le point sur le cercle B'=(B-A)*(L-r)/L+A
-    	 * B le centre du cercle, r le rayon du cercle, A le point precedent dans le path et L la taille de B-A
-    	 * ainsi le robot finira son chemin sur le point B'
-    	 */
-    	path.add(movementVector.dotFloat( (movementVector.length()-aim.radius)/movementVector.length() ).plusNewVector(precedentPathPoint));
-
-    	//si on est trop proche du point d'arrivee on le retire
-	    	if (path.get(1).distance(getPosition())<aimThresold)
-	    		path.remove(1);
-
-		followPath(path , hooksToConsider);
+    public void moveToCircle(Circle aim, ArrayList<Hook> hooksToConsider, Table table) throws UnableToMoveException
+    {		
+    	// TODO : à coder après la création du PathFinding
     }
     
     
@@ -594,14 +451,14 @@ public abstract class Robot implements Service
      */
     public abstract void enableFeedbackLoop() throws SerialConnexionException;
 
-	public abstract void disableFeedbackLoop() throws SerialConnexionException;
+    public abstract void disableFeedbackLoop() throws SerialConnexionException;
 
-	/**
-	 * Active l'asservissement en rotation du robot.
-	 */
+    /**
+     * Active l'asservissement en rotation du robot.
+     */
     public abstract void enableRotationnalFeedbackLoop();
-    
-	/**
+
+    /**
 	 * Active l'asservissement en translation du robot.
 	 */
     public abstract void disableRotationnalFeedbackLoop();
@@ -624,19 +481,9 @@ public abstract class Robot implements Service
 	
 	public abstract void turnWithoutDetection(double angle, ArrayList<Hook> hooks) throws UnableToMoveException;
 
-	public PathDingDing getPDD()
-	{
-		return pathDingDing;
-	}
-
 	public void setRobotRadius(int radius)
 	{
-		if(!doorIsOpen || radius >= this.robotRay)
-		{
-			this.robotRay = radius;
-		}
-		else
-			log.critical("Réduction du rayon tentée mais booléen porte ouverte est à true !");
+		this.robotRay = radius;
 	}
 
 	public int getRobotRadius()

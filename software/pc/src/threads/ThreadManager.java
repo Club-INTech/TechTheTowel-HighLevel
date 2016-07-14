@@ -1,6 +1,5 @@
 package threads;
 
-import pathDingDing.PathDingDing;
 import robot.RobotReal;
 import robot.cardsWrappers.ActuatorCardWrapper;
 import robot.cardsWrappers.LocomotionCardWrapper;
@@ -96,31 +95,6 @@ public class ThreadManager
 			instanciedThreads.put("threadInterface", new ThreadInterface(config, log, table, robot));
 		return instanciedThreads.get("threadInterface");
 	}
-
-	/**
-	 * Renvoie le thread pour les yeux
-	 * @param config la config
-	 * @param log le log
-	 */
-	public AbstractThread getThreadEyes(Config config, Log log) {
-		AbstractThread thread = instanciedThreads.get("threadEyes");
-		if(thread == null)
-			instanciedThreads.put("threadEyes", new ThreadEyes(config, log));
-		return instanciedThreads.get("threadEyes");
-	}
-
-	/**
-	 * Renvoie le thread pour les yeux
-	 * @param config la config
-	 * @param log le log
-	 */
-	public AbstractThread getThreadWorker(Config config, Log log, PathDingDing pdd) {
-		AbstractThread thread = instanciedThreads.get("threadWorker");
-		if(thread == null)
-			instanciedThreads.put("threadWorker", new ThreadWorker(config, log, pdd));
-		return instanciedThreads.get("threadWorker");
-	}
-
 
 	/**
 	 * Démarre tout les threads instanciés auparavant.

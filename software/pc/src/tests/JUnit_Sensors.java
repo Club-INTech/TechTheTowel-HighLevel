@@ -4,8 +4,6 @@ import enums.ServiceNames;
 import exceptions.ContainerException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.Locomotion.UnexpectedObstacleOnPathException;
-import exceptions.PathNotFoundException;
-import exceptions.PointInObstacleException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialManagerException;
 import hook.Hook;
@@ -103,7 +101,7 @@ public class JUnit_Sensors extends JUnit_Test
 	}*/
 	
 //	@Test
-	public void testEvitement() throws PointInObstacleException
+	public void testEvitement()
 	{
 		log.debug("Test d'évitement");
 		try 
@@ -122,7 +120,7 @@ public class JUnit_Sensors extends JUnit_Test
 			{
 				state.robot.moveToCircle(new Circle(new Vec2(-700, 900),0),  new ArrayList<Hook>(), (Table)container.getService(ServiceNames.TABLE));
 			}
-			catch (UnableToMoveException | PathNotFoundException | ContainerException | SerialManagerException e) 
+			catch (UnableToMoveException | ContainerException | SerialManagerException e) 
 			{
 				log.critical("!!!!!! Catch de"+e+" dans testEvitement !!!!!!");
 			}	
@@ -313,7 +311,7 @@ public class JUnit_Sensors extends JUnit_Test
 	
 	
    // @Test
-	public void testCapteurDeplacement() throws SerialConnexionException, PointInObstacleException
+	public void testCapteurDeplacement() throws SerialConnexionException
 	{
     	matchSetUp(state.robot, false);
     	try 
@@ -340,10 +338,6 @@ public class JUnit_Sensors extends JUnit_Test
 				log.critical("!!!!! Catch de"+e1+" dans testEvitement !!!!!");
 				break;
 			} 
-			catch (PathNotFoundException e) 
-			{
-				log.debug("pas de chemin trouvé : ("+x+";"+y+")");
-			}
     	}
 	}
 

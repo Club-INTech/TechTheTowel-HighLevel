@@ -1,7 +1,6 @@
 package threads;
 
 import enums.ActuatorOrder;
-import enums.EyesEvent;
 import exceptions.serial.SerialConnexionException;
 import robot.RobotReal;
 import robot.cardsWrappers.LocomotionCardWrapper;
@@ -116,9 +115,6 @@ public class ThreadTimer extends AbstractThread
             e.printStackTrace();
         }
 
-		ThreadEyes.setEvent(EyesEvent.POWERON);
-
-
         // Attente du démarrage du match
 		
 		// attends que le jumper soit retiré du robot
@@ -132,7 +128,6 @@ public class ThreadTimer extends AbstractThread
 			}
 		}
 
-		ThreadEyes.setEvent(EyesEvent.BEGIN);
 
 		while(!mSensorsCardWrapper.isJumperAbsent())
 		{
@@ -159,8 +154,6 @@ public class ThreadTimer extends AbstractThread
 
 		log.debug("LE MATCH COMMENCE !");
         long ddm = System.currentTimeMillis();
-
-        ThreadEyes.setEvent(EyesEvent.IDLE);
 
         // boucle principale, celle qui dure tout le match
 		while(System.currentTimeMillis() - matchStartTimestamp < matchDuration)
@@ -247,7 +240,7 @@ public class ThreadTimer extends AbstractThread
             mLocomotionCardWrapper.disableRotationnalFeedbackLoop();
 			mLocomotionCardWrapper.disableTranslationnalFeedbackLoop();
 			mLocomotionCardWrapper.disableSpeedFeedbackLoop();
-			ThreadEyes.forceEvent(EyesEvent.END);
+
 			//mLocomotionCardWrapper.shutdownSTM();
 			Log.stop();
 			SerialConnexion.shutdown = true;
