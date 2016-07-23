@@ -72,11 +72,11 @@ public class ThreadSerial extends AbstractThread implements SerialPortEventListe
 
     //=================BUFFERS LinkedList<String>=======================
 
-    public LinkedList<String> standardBuffer = new LinkedList<>();
+    private LinkedList<String> standardBuffer = new LinkedList<>();
 
-    public LinkedList<String> eventBuffer = new LinkedList<>();
+    private LinkedList<String> eventBuffer = new LinkedList<>();
 
-    public LinkedList<String> ultrasoundBuffer = new LinkedList<>();
+    private LinkedList<String> ultrasoundBuffer = new LinkedList<>();
 
 //   .
 //   .
@@ -567,4 +567,8 @@ public class ThreadSerial extends AbstractThread implements SerialPortEventListe
 
         return res;
     }
+
+    LinkedList<String> getEventBuffer() {return eventBuffer;}
+
+    LinkedList<String> getUltrasoundBuffer() {return ultrasoundBuffer;}
 }

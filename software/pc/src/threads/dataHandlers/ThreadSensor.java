@@ -151,7 +151,7 @@ public class ThreadSensor extends AbstractThread
 	{
 		super(config, log);
 		this.serialWrapper = sensorsCardWrapper;
-        this.valuesReceived = serial.ultrasoundBuffer;
+        this.valuesReceived = serial.getUltrasoundBuffer();
 		Thread.currentThread().setPriority(6);
 		mRobot = robot;
         mTable = table;
