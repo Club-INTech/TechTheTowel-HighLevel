@@ -1,4 +1,4 @@
-package threads;
+package threads.dataHandlers;
 
 import exceptions.ConfigPropertyNotFoundException;
 import graphics.Window;
@@ -6,6 +6,8 @@ import robot.RobotReal;
 import robot.serial.SerialWrapper;
 import smartMath.Vec2;
 import table.Table;
+import threads.AbstractThread;
+import threads.ThreadTimer;
 import utils.Sleep;
 
 import java.io.BufferedWriter;
@@ -145,7 +147,7 @@ public class ThreadSensor extends AbstractThread
 	 * @param table La table a l'intérieure de laquelle le thread doit croire évoluer
 	 * @param sensorsCardWrapper La carte capteurs avec laquelle le thread va parler
 	 */
-	ThreadSensor (Table table, RobotReal robot, SerialWrapper sensorsCardWrapper, ThreadSerial serial)
+	public ThreadSensor (Table table, RobotReal robot, SerialWrapper sensorsCardWrapper, ThreadSerial serial)
 	{
 		super(config, log);
 		this.serialWrapper = sensorsCardWrapper;

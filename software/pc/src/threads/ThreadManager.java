@@ -3,6 +3,7 @@ package threads;
 import robot.RobotReal;
 import robot.serial.SerialWrapper;
 import table.Table;
+import threads.dataHandlers.*;
 import utils.Config;
 import utils.Log;
 
@@ -73,7 +74,7 @@ public class ThreadManager
 	{
 		AbstractThread thread = instanciedThreads.get("threadCapteurs");
 		if(thread == null)
-			instanciedThreads.put("threadCapteurs", new ThreadSensor( table, robot, sensorsCardWrapper, serial));
+			instanciedThreads.put("threadCapteurs", new threads.dataHandlers.ThreadSensor( table, robot, sensorsCardWrapper, serial));
 		return instanciedThreads.get("threadCapteurs");
 	}
 

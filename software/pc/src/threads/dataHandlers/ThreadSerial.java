@@ -1,4 +1,4 @@
-package threads;
+package threads.dataHandlers;
 
 import enums.ServiceNames;
 import exceptions.serial.SerialConnexionException;
@@ -12,6 +12,7 @@ import gnu.io.SerialPortEventListener;
 import java.io.*;
 import java.util.LinkedList;
 
+import threads.AbstractThread;
 import utils.Log;
 import container.Service;
 import utils.Sleep;

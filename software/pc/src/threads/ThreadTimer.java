@@ -5,6 +5,7 @@ import exceptions.serial.SerialConnexionException;
 import robot.RobotReal;
 import robot.serial.SerialWrapper;
 import table.Table;
+import threads.dataHandlers.ThreadSerial;
 import utils.Log;
 
 import java.io.BufferedWriter;

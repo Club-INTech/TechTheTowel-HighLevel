@@ -7,7 +7,7 @@ import exceptions.serial.SerialManagerException;
 import hook.types.HookFactory;
 import robot.Locomotion;
 import robot.RobotReal;
-import threads.ThreadSerial;
+import threads.dataHandlers.ThreadSerial;
 import robot.serial.SerialManager;
 import robot.serial.SerialWrapper;
 import scripts.ScriptManager;

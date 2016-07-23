@@ -5,15 +5,13 @@ import container.Service;
 import enums.ActuatorOrder;
 import enums.ContactSensors;
 import enums.TurningStrategy;
-import enums.USsensors;
 import exceptions.ConfigPropertyNotFoundException;
 import exceptions.serial.SerialConnexionException;
-import threads.ThreadSerial;
+import threads.dataHandlers.ThreadSerial;
 import utils.Config;
 import utils.Log;
 import utils.Sleep;
 
-import java.util.ArrayList;
 import java.util.Locale;
 
 /**

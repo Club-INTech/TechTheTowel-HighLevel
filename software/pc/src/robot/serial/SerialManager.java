@@ -3,7 +3,7 @@ package robot.serial;
 import enums.ServiceNames;
 import exceptions.serial.SerialManagerException;
 import gnu.io.CommPortIdentifier;
-import threads.ThreadSerial;
+import threads.dataHandlers.ThreadSerial;
 import utils.Log;
 
 import java.util.ArrayList;
