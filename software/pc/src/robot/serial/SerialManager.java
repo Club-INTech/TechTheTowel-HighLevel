@@ -1,14 +1,13 @@
 package robot.serial;
 
 import enums.ServiceNames;
-import exceptions.ServiceTypeException;
 import exceptions.serial.SerialManagerException;
 import gnu.io.CommPortIdentifier;
+import threads.ThreadSerial;
 import utils.Log;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Iterator;
 
 /**
  * Instancie toutes les s�ries, il faut bien faire attention � d�finir les cartes
@@ -28,7 +27,7 @@ public class SerialManager
 	private Log log;
 
 	/** Series a instancier : celle pour la carte d'asser */
-	public SerialConnexion serialConnexion = null;
+	public ThreadSerial threadSerial = null;
 
 	//Pour chaque carte, on connait a l'avance son nom, son ping et son baudrate
 	/** Carte d'assservissement, paramétré a l'avance par son nom, son id et son baudrate */
@@ -51,7 +50,7 @@ public class SerialManager
 	{
 		this.log = log;
 
-		this.serialConnexion = new SerialConnexion(log, this.STM_Card.name);
+		this.threadSerial = new ThreadSerial(log, this.STM_Card.name.name());
 
 		checkSerial();
 		createSerial();
@@ -86,7 +85,7 @@ public class SerialManager
 
 		for (String connectedSerial : this.connectedSerial)
 		{
-			SerialConnexion ser = new SerialConnexion(log,"test");
+			ThreadSerial ser = new ThreadSerial(log,"test");
 			ser.initialize(connectedSerial, baudrate);
 
 			if (ser.ping() != null)
@@ -104,7 +103,8 @@ public class SerialManager
 			ser.close();
 			System.out.println("Carte sur: " + connectedSerial);
 
-			serialConnexion.initialize(connectedSerial, baudrate);
+			threadSerial.initialize(connectedSerial, baudrate);
+			threadSerial.start();
 			return;
 		}
 
@@ -117,8 +117,8 @@ public class SerialManager
 	 * @return L'instance de la série
 	 * @throws SerialManagerException 
 	 */
-	public SerialConnexion getSerial()	throws SerialManagerException
+	public ThreadSerial getSerial()	throws SerialManagerException
 	{
-		return serialConnexion;
+		return threadSerial;
 	}
 }

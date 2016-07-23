@@ -3,7 +3,6 @@ package threads;
 import enums.ActuatorOrder;
 import exceptions.serial.SerialConnexionException;
 import robot.RobotReal;
-import robot.serial.SerialConnexion;
 import robot.serial.SerialWrapper;
 import table.Table;
 import utils.Log;
@@ -237,7 +236,7 @@ public class ThreadTimer extends AbstractThread
 
 			//mLocomotionCardWrapper.shutdownSTM();
 			Log.stop();
-			SerialConnexion.shutdown = true;
+			ThreadSerial.shutdown = true;
 		}
 		catch (SerialConnexionException e)
 		{

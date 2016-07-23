@@ -62,23 +62,6 @@ public class RobotReal extends Robot
 	}
 	
 	@Override
-	public ArrayList<Integer> getUSSensorValue (USsensors sensor) throws SerialConnexionException
-	{
-
-		// si il n'y a pas de symétrie, on renvoie la valeur brute du bas niveau
-		if(!symmetry) 
-			return serialWrapper.getUSSensorValue(sensor);
-		else
-		{
-			//TODO symetriser le capteur gauche/droite
-			
-			/* attention si les capteurs sont en int[] il faut symétriser ce int[] */
-			
-			return serialWrapper.getUSSensorValue(sensor);
-		}
-	}
-	
-	@Override
 	public boolean getContactSensorValue (ContactSensors sensor) throws SerialConnexionException
 	{
 		// si il n'y a pas de symétrie, on renvoie la valeur brute du bas niveau

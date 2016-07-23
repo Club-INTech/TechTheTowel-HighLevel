@@ -6,11 +6,14 @@ import robot.RobotReal;
 import robot.serial.SerialWrapper;
 import smartMath.Vec2;
 import table.Table;
+import utils.Sleep;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  * Thread qui ajoute en continu les obstacles détectés par les capteurs,
@@ -27,8 +30,11 @@ public class ThreadSensor extends AbstractThread
     /** La table */
     private Table mTable;
 
-	/** La carte capteurs avec laquelle on doit communiquer */
+	/** La stm avec laquelle on doit communiquer */
 	private SerialWrapper serialWrapper;
+
+    /** Buffer de valeurs */
+    private LinkedList<String> valuesReceived;
 	
 	/** interface graphique */
 	public Window window;
@@ -109,7 +115,6 @@ public class ThreadSensor extends AbstractThread
      */
     private static boolean delay = true;
 
-
     /**
      * Valeurs des capteurs US {avant-gauche, avant-droit, arrière gauche, arrière-droit}
      */
@@ -132,18 +137,6 @@ public class ThreadSensor extends AbstractThread
 	 * 	Longueur du robot recuperée sur la config
 	 */
 	int robotLenght;
-	
-	/**
-	 * Positions des robots à ajouter
-	 */
-	Vec2 positionSaloperie_1 = new Vec2 (0,0);
-	Vec2 positionSaloperie_2 = new Vec2 (0,0);
-
-    /**
-     * Position relative des ennemis par rapport à notre robot
-     */
-    Vec2 relativePositionSaloperie_1 = new Vec2 (0,0);
-    Vec2 relativePositionSaloperie_2 = new Vec2 (0,0);
 
 
     /**
@@ -152,10 +145,11 @@ public class ThreadSensor extends AbstractThread
 	 * @param table La table a l'intérieure de laquelle le thread doit croire évoluer
 	 * @param sensorsCardWrapper La carte capteurs avec laquelle le thread va parler
 	 */
-	ThreadSensor (Table table, RobotReal robot, SerialWrapper sensorsCardWrapper)
+	ThreadSensor (Table table, RobotReal robot, SerialWrapper sensorsCardWrapper, ThreadSerial serial)
 	{
 		super(config, log);
 		this.serialWrapper = sensorsCardWrapper;
+        this.valuesReceived = serial.ultrasoundBuffer;
 		Thread.currentThread().setPriority(6);
 		mRobot = robot;
         mTable = table;
@@ -282,34 +276,7 @@ public class ThreadSensor extends AbstractThread
      */
     private void addFrontObstacleBoth()
     {
-        double distanceBetweenSensors = positionLF.minusNewVector(positionRF).length();
-
-        if(Math.abs(USvalues.get(1) - USvalues.get(0)) <= distanceBetweenSensors) //Si on semble pointer vers le même ennemi des deux capteurs
-        {
-            //Position de l'ennemi
-            relativePositionSaloperie_1.y = (int) (((USvalues.get(0) * USvalues.get(0)) - (USvalues.get(1) * USvalues.get(1))) / (2 * distanceBetweenSensors));
-            relativePositionSaloperie_1.x = (int) (positionRF.x + Math.sqrt((USvalues.get(1) * USvalues.get(1)) - (relativePositionSaloperie_1.y - distanceBetweenSensors / 2) * (relativePositionSaloperie_1.y - distanceBetweenSensors / 2)));
-            positionSaloperie_1 = changeRef(relativePositionSaloperie_1, mRobot.getPositionFast(), mRobot.getOrientationFast());
-
-            mTable.getObstacleManager().addObstacle(positionSaloperie_1);
-        }
-        else //Les deux capteurs ne semblent pas détecter le même ennemi, on en ajoute 2 !
-        {
-            //Position relative du premier ennemi
-            relativePositionSaloperie_1.x = (int)(USvalues.get(0)*Math.cos(angleLF)+positionLF.x);
-            relativePositionSaloperie_1.y = (int)(-USvalues.get(0)*Math.sin(angleLF)-distanceBetweenSensors/2);
-            positionSaloperie_1 = changeRef(relativePositionSaloperie_1, mRobot.getPositionFast(), mRobot.getOrientationFast());
-
-            //Position relative du second ennemi
-            relativePositionSaloperie_2.x = (int)(USvalues.get(1)*Math.cos(angleRF)+positionRF.x);
-            relativePositionSaloperie_2.y = (int)(USvalues.get(1)*Math.sin(angleRF)+distanceBetweenSensors/2);
-            positionSaloperie_2 = changeRef(relativePositionSaloperie_2, mRobot.getPositionFast(), mRobot.getOrientationFast());
-
-            mTable.getObstacleManager().addObstacle(positionSaloperie_1);
-            mTable.getObstacleManager().addObstacle(positionSaloperie_2);
-
-        }
-
+       //TODO
     }
 
 
@@ -318,33 +285,7 @@ public class ThreadSensor extends AbstractThread
      */
     private void addBackObstacleBoth()
     {
-        double distanceBetweenSensors = positionLB.minusNewVector(positionRB).length();
-
-        if(Math.abs(USvalues.get(2) - USvalues.get(3)) <= distanceBetweenSensors) //Si on semble pointer vers le même ennemi des deux capteurs
-        {
-            //Position de l'ennemi
-            relativePositionSaloperie_1.y = (int) ((USvalues.get(2) * USvalues.get(2) - USvalues.get(3) * USvalues.get(3)) / (2 * distanceBetweenSensors));
-            relativePositionSaloperie_1.x = (int) (positionRF.x - Math.sqrt((USvalues.get(3) * USvalues.get(3)) - (relativePositionSaloperie_1.y + distanceBetweenSensors / 2) * (relativePositionSaloperie_1.y + distanceBetweenSensors / 2)));
-            positionSaloperie_1 = changeRef(relativePositionSaloperie_1, mRobot.getPositionFast(), mRobot.getOrientationFast());
-
-            mTable.getObstacleManager().addObstacle(positionSaloperie_1);
-        }
-        else //Les deux capteurs ne semblent pas détecter le même ennemi, on en ajoute 2 !
-        {
-            //Position relative du premier ennemi
-            relativePositionSaloperie_1.x = (int)(USvalues.get(2)*Math.cos(angleLB)+positionLB.x);
-            relativePositionSaloperie_1.y = (int)(-USvalues.get(2)*Math.sin(angleLB)-distanceBetweenSensors/2);
-            positionSaloperie_1 = changeRef(relativePositionSaloperie_1, mRobot.getPositionFast(), mRobot.getOrientationFast());
-
-            //Position relative du second ennemi
-            relativePositionSaloperie_2.x = (int)(USvalues.get(3)*Math.cos(angleRB)+positionRB.x);
-            relativePositionSaloperie_2.y = (int)(USvalues.get(3)*Math.sin(angleRB)+distanceBetweenSensors/2);
-            positionSaloperie_2 = changeRef(relativePositionSaloperie_2, mRobot.getPositionFast(), mRobot.getOrientationFast());
-
-            mTable.getObstacleManager().addObstacle(positionSaloperie_1);
-            mTable.getObstacleManager().addObstacle(positionSaloperie_2);
-
-        }
+        //TODO
     }
 
     /**
@@ -353,25 +294,7 @@ public class ThreadSensor extends AbstractThread
      */
     private void addFrontObstacleSingle(boolean isLeft)
     {
-        int distance = USvalues.get(0) + USvalues.get(1); //La distance mesurée par le capteur
-        double distanceBetweenSensors = positionLF.minusNewVector(positionRF).length();
-
-        if(isLeft)
-        {
-            relativePositionSaloperie_1.x = (int)(distance*Math.cos(angleLF)+positionLF.x)-100;
-            relativePositionSaloperie_1.y = (int)(-distance*Math.sin(angleLF)-distanceBetweenSensors/2);
-            positionSaloperie_1 = changeRef(relativePositionSaloperie_1, mRobot.getPositionFast(), mRobot.getOrientationFast());
-
-            mTable.getObstacleManager().addObstacle(positionSaloperie_1);
-        }
-        else
-        {
-            relativePositionSaloperie_2.x = (int)(distance*Math.cos(angleRF)+positionRF.x)-100;
-            relativePositionSaloperie_2.y = (int)(distance*Math.sin(angleRF)+distanceBetweenSensors/2);
-            positionSaloperie_2 = changeRef(relativePositionSaloperie_2, mRobot.getPositionFast(), mRobot.getOrientationFast());
-
-            mTable.getObstacleManager().addObstacle(positionSaloperie_2);
-        }
+        //TODO
     }
 
     /**
@@ -380,25 +303,7 @@ public class ThreadSensor extends AbstractThread
      */
     private void addBackObstacleSingle(boolean isLeft)
     {
-        int distance = USvalues.get(0) + USvalues.get(1); //La distance mesurée par le capteur
-        double distanceBetweenSensors = positionLB.minusNewVector(positionRB).length();
-
-        if(isLeft)
-        {
-            relativePositionSaloperie_1.x = (int)(distance*Math.cos(angleLB)+positionLB.x);
-            relativePositionSaloperie_1.y = (int)(-distance*Math.sin(angleLB)-distanceBetweenSensors/2);
-            positionSaloperie_1 = changeRef(relativePositionSaloperie_1, mRobot.getPositionFast(), mRobot.getOrientationFast());
-
-            mTable.getObstacleManager().addObstacle(positionSaloperie_1);
-        }
-        else
-        {
-            relativePositionSaloperie_2.x = (int)(distance*Math.cos(angleRB)+positionRB.x);
-            relativePositionSaloperie_2.y = (int)(distance*Math.sin(angleRB)+distanceBetweenSensors/2);
-            positionSaloperie_2 = changeRef(relativePositionSaloperie_2, mRobot.getPositionFast(), mRobot.getOrientationFast());
-
-            mTable.getObstacleManager().addObstacle(positionSaloperie_2);
-        }
+       //TODO
     }
 
 
@@ -426,7 +331,25 @@ public class ThreadSensor extends AbstractThread
 	{
 		try 
 		{
-            //USvalues = serialWrapper.getUSSensorValue(USsensors.ULTRASOUND); //On récupère une liste de valeurs
+            ArrayList<String> r = new ArrayList<>();
+            ArrayList<Integer> res = new ArrayList<>();
+            byte count=0;
+
+            while(count < 4)
+            {
+                if(valuesReceived.peek() != null)
+                {
+                    r.add(valuesReceived.poll());
+                    count++;
+                }
+                else
+                    Sleep.sleep(100);
+            }
+
+            for(String s : r)
+                res.add(Integer.parseInt(s));
+
+            USvalues = res;
 
             if(this.debug)
             {
@@ -493,7 +416,7 @@ public class ThreadSensor extends AbstractThread
 
             }
 
-            USvalues.set(2,0); 
+            USvalues.set(2,0);
             USvalues.set(3,0); //POUR LA BORNE D'ARCADE
 		}
 		catch(Exception e)
@@ -532,12 +455,7 @@ public class ThreadSensor extends AbstractThread
 	 */
 	private void removeObstacle()
 	{
-		// enlever les obstacles qu'on devrait voir mais qu'on ne detecte plus
-
-        mTable.getObstacleManager().removeNonDetectedObstacles(positionLF, (mRobot.getOrientationFast()+angleLF), USvaluesForDeletion.get(0), detectionAngle);
-        mTable.getObstacleManager().removeNonDetectedObstacles(positionRF, (mRobot.getOrientationFast()-angleRF), USvaluesForDeletion.get(1), detectionAngle);
-        mTable.getObstacleManager().removeNonDetectedObstacles(positionLB, (mRobot.getOrientationFast()+angleLB), USvaluesForDeletion.get(2), detectionAngle);
-        mTable.getObstacleManager().removeNonDetectedObstacles(positionRB, (mRobot.getOrientationFast()-angleRB), USvaluesForDeletion.get(3), detectionAngle);
+		// TODO enlever les obstacles qu'on devrait voir mais qu'on ne detecte plus
 
 
 	}

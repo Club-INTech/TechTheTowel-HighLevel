@@ -8,6 +8,7 @@ import enums.TurningStrategy;
 import enums.USsensors;
 import exceptions.ConfigPropertyNotFoundException;
 import exceptions.serial.SerialConnexionException;
+import threads.ThreadSerial;
 import utils.Config;
 import utils.Log;
 import utils.Sleep;
@@ -35,7 +36,7 @@ public class SerialWrapper implements Service
     /**
      * connexion série avec la carte ARM
      */
-    private SerialConnexion serial;
+    private ThreadSerial serial;
 
     /**
      * Le fichier de configuration
@@ -57,7 +58,7 @@ public class SerialWrapper implements Service
      */
     private int delayBetweenSend = 100;
 
-    public SerialWrapper(Config config, Log log, SerialConnexion serie)
+    public SerialWrapper(Config config, Log log, ThreadSerial serie)
     {
         this.log = log;
         this.config = config;
@@ -502,22 +503,5 @@ public class SerialWrapper implements Service
         String[] sensorAnswer = serial.communiquer(sensor.getSerialCommunication(),1);
         return (!sensorAnswer[0].equals("0"));
     }
-
-    /**
-     * recupere la valeur d'un capteur ultrason
-     * @param sensor le capteur dont on veut recuperer la valeur
-     * @return la valeur du capteur
-     * @throws SerialConnexionException si erreur de connexion avec le capteur
-     */
-    public ArrayList<Integer> getUSSensorValue(USsensors sensor) throws SerialConnexionException
-    {
-        ArrayList<Integer> res = new ArrayList<>();
-        String[] sensorAnswer = serial.communiquer(sensor.getSerialCommunication(),4);
-        for(String s : sensorAnswer)
-            res.add(Integer.parseInt(s));
-        return res;
-    }
-
-
 
 }

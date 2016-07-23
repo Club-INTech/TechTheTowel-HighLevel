@@ -291,17 +291,6 @@ public class RobotChrono extends Robot
 	}
 
 	@Override
-	public ArrayList<Integer> getUSSensorValue(USsensors sensor)
-	{
-		this.chrono += approximateSerialLatency;
-		this.chrono += sensor.getAverageDuration();
-		ArrayList<Integer> res = new ArrayList<>();
-		for(int i=0; i<4 ;i++)
-			res.add(sensor.getDefaultValue());
-		return res;
-	}
-	
-	@Override
 	public boolean getContactSensorValue(ContactSensors sensor) 
 	{
 		this.chrono += approximateSerialLatency;

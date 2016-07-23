@@ -406,8 +406,6 @@ public abstract class Robot implements Service
      * @param hooksToConsider les hooks déclenchables durant ce mouvement
      * @param table la table sur laquelle le robot se deplace
      * @throws UnableToMoveException losrque quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
-     * @throws PathNotFoundException lorsque le pathdingding ne trouve pas de chemin 
-     * @throws PointInObstacleException 
      */
     public void moveToLocation(Vec2 aim, ArrayList<Hook> hooksToConsider, Table table) throws  UnableToMoveException
     {
@@ -447,14 +445,6 @@ public abstract class Robot implements Service
 	 * Active l'asservissement en translation du robot.
 	 */
     public abstract void disableRotationnalFeedbackLoop();
-
-	/**
-	 * le robot demande l'etat de ses capteurs ultrasons
-	 * @param captor le nom du capteur dont on veut l'etat
-	 * @return la valeur du capteur
-	 * @throws SerialConnexionException si la connexion avec le capteur est interrompue
-	 */
-	public abstract ArrayList<Integer> getUSSensorValue(USsensors captor) throws SerialConnexionException;
 
 	/**
 	 * le robot demande l'etat de ses capteurs de contact

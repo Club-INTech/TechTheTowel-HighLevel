@@ -7,7 +7,7 @@ import exceptions.serial.SerialManagerException;
 import hook.types.HookFactory;
 import robot.Locomotion;
 import robot.RobotReal;
-import robot.serial.SerialConnexion;
+import threads.ThreadSerial;
 import robot.serial.SerialManager;
 import robot.serial.SerialWrapper;
 import scripts.ScriptManager;
@@ -75,8 +75,8 @@ public class Container
 		// coupe les connexions séries
 		if(serialManager != null)
 		{
-			if(serialManager.serialConnexion != null)
-				serialManager.serialConnexion.close();
+			if(serialManager.threadSerial != null)
+				serialManager.threadSerial.close();
 		}
 		
 		// ferme le log
@@ -143,7 +143,7 @@ public class Container
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new SerialWrapper(
 																	(Config)getService(ServiceNames.CONFIG),
 																	(Log)getService(ServiceNames.LOG),
-																	(SerialConnexion)getService(ServiceNames.STM_CARD)
+																	(ThreadSerial)getService(ServiceNames.STM_CARD)
 																);
 		else if(serviceRequested == ServiceNames.HOOK_FACTORY)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new HookFactory(
@@ -188,7 +188,8 @@ public class Container
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)threadManager.getThreadSensors(
 																	(Table)getService(ServiceNames.TABLE),
 																	(RobotReal)getService(ServiceNames.ROBOT_REAL),
-																	(SerialWrapper)getService(ServiceNames.SERIAL_WRAPPER)
+																	(SerialWrapper)getService(ServiceNames.SERIAL_WRAPPER),
+																	(ThreadSerial)getService(ServiceNames.STM_CARD)
 																);
 
 		

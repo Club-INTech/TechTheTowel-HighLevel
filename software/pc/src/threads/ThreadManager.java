@@ -69,11 +69,11 @@ public class ThreadManager
 	 * @param sensorsCardWrapper La carte capteurs avec laquelle le thread va parler
 	 * @return le thread capteurs
 	 */
-	public AbstractThread getThreadSensors( Table table, RobotReal robot, SerialWrapper sensorsCardWrapper)
+	public AbstractThread getThreadSensors( Table table, RobotReal robot, SerialWrapper sensorsCardWrapper, ThreadSerial serial)
 	{
 		AbstractThread thread = instanciedThreads.get("threadCapteurs");
 		if(thread == null)
-			instanciedThreads.put("threadCapteurs", new ThreadSensor( table, robot, sensorsCardWrapper));
+			instanciedThreads.put("threadCapteurs", new ThreadSensor( table, robot, sensorsCardWrapper, serial));
 		return instanciedThreads.get("threadCapteurs");
 	}
 
