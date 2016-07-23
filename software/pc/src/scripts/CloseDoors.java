@@ -8,11 +8,9 @@ import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import hook.types.HookFactory;
 import robot.Robot;
-import smartMath.Arc;
 import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
-import table.Table;
 import utils.Config;
 import utils.Log;
 
@@ -36,7 +34,7 @@ public class CloseDoors extends AbstractScript
 		/**
 		 * Versions du script
 		 */
-		versions = new Integer[]{0,1,2,3,4};
+		versions = new Integer[]{0,1,3,4};
 		
 	}
 	
@@ -158,23 +156,6 @@ public class CloseDoors extends AbstractScript
 
 
 				//stateToConsider.robot.setLocomotionSpeed(speedBeforeScriptWasCalled);
-
-			}
-			else if (versionToExecute == 2)
-			{
-
-
-				//On ralentit pour éviter de démonter les éléments de jeu "Discord-style"
-				//Speed speedBeforeScriptWasCalled = stateToConsider.robot.getLocomotionSpeed();
-				//stateToConsider.robot.setLocomotionSpeed(Speed.SLOW);
-
-				// On suit une trajectoire courbe pour fermer les deux portes
-				stateToConsider.robot.moveArc(new Arc(Table.entryPosition, new Vec2(1100,1900-stateToConsider.robot.getRobotRadius()),Math.PI,true), hooksToConsider);
-
-				//PORTES FERMEES !
-				stateToConsider.obtainedPoints += 20;
-//				stateToConsider.table.extDoorClosed = true;
-//				stateToConsider.table.intDoorClosed = true;
 
 			}
             else if(versionToExecute == 4)
@@ -301,10 +282,6 @@ public class CloseDoors extends AbstractScript
 		{
 			// modification possible selon l'envergure du robot new Vec2(1135,1600)
 			return new Circle(robotPosition);
-		}
-		else if (version == 2)
-		{
-			return new Circle(Table.entryPosition);
 		}
 		else if(version == 3)
 		{

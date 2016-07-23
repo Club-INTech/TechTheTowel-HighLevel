@@ -126,7 +126,6 @@ public class SerialConnexion implements SerialPortEventListener, Service
             log.critical("Catch de "+e2+" dans initialize");
         }
 
-        // Ouverture du port sÃ¯Â¿Â½rie
         try
         {
             serialPort = (SerialPort) portId.open(this.getClass().getName(), TIME_OUT);
@@ -137,38 +136,20 @@ public class SerialConnexion implements SerialPortEventListener, Service
         }
         try
         {
-            // rÃ¯Â¿Â½gle certains paramÃ¯Â¿Â½tres liÃ¯Â¿Â½ Ã¯Â¿Â½ la sÃ¯Â¿Â½rie
             serialPort.setSerialPortParams(baudrate,
                     SerialPort.DATABITS_8,
                     SerialPort.STOPBITS_1,
                     SerialPort.PARITY_NONE);
             serialPort.notifyOnDataAvailable(false);
 
-            // ouverture des flux Input/Output
             input = serialPort.getInputStream();
             output = serialPort.getOutputStream();
-
-           /* try {
-                serialPort.addEventListener(this);
-            } catch (TooManyListenersException e) {
-                e.printStackTrace();
-            }*/
 
         }
         catch (Exception e)
         {
             log.critical("Catch de "+e+" dans initialize");
         }
-
-        // permet d'avoir un readLine non bloquant
-   /*     try
-        {
-            serialPort.enableReceiveTimeout(1000);
-        }
-        catch (UnsupportedCommOperationException e)
-        {
-            log.critical("Catch de "+e+" dans initialize");
-        }*/
 
         this.port_name = port_name;
         this.baudrate = baudrate;
@@ -334,7 +315,6 @@ public class SerialConnexion implements SerialPortEventListener, Service
 
     /**
      * Envoie un String sans chercher d'acquittement ou quoi que ce soit
-     * SEULEMENT UTILE POUR LES YEUX
      * @param message le message
      */
     public synchronized void sendRaw(byte[] message) throws IOException {
@@ -438,14 +418,6 @@ public class SerialConnexion implements SerialPortEventListener, Service
 
             byte out = (byte) input.read();
 
-       /* if(Config.debugSerieTrame)
-        {
-            String s = Integer.toHexString(out).toUpperCase();
-            if(s.length() == 1)
-                log.debug("Reçu : "+"0"+s);
-            else
-                log.debug("Reçu : "+s.substring(s.length()-2, s.length()));
-        }*/
 
             return out & 0xFF;
         }
@@ -528,25 +500,4 @@ public class SerialConnexion implements SerialPortEventListener, Service
             return res;
         }
     }
-
-
-
-  /*  public synchronized void clearInputBuffer()
-    {
-        log.debug("SerialConnexion : Tentative de clean du buffer d'input");
-        try
-        {
-            while(input.read() != -1);
-        }
-        catch (IOException e)
-        {
-            log.debug("Reconstruction de la série");
-            try {
-                this.initialize(this.port_name, this.baudrate);
-                input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        }
-    }*/
 }

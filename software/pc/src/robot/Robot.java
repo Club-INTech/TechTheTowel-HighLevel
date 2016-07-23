@@ -6,11 +6,9 @@ import exceptions.ConfigPropertyNotFoundException;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import hook.Hook;
-import smartMath.Arc;
 import smartMath.Circle;
 import smartMath.Vec2;
 import table.Table;
-import table.obstacles.Obstacle;
 import utils.Config;
 import utils.Log;
 
@@ -298,20 +296,7 @@ public abstract class Robot implements Service
         else
             turn(angle, null, false, false);
     }
-    
-    /**
-     * Ordonne le déplacement selon un arc
-     * @param arc l'arc à suivre
-     * @param hooks les hooks à gérer
-     * @throws UnableToMoveException bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
-     */
-    public abstract void moveArc(Arc arc, ArrayList<Hook> hooks) throws UnableToMoveException;
 
-	public abstract void moveArcNoDetectionWhileTurning(Arc arc, ArrayList<Hook> hooks) throws UnableToMoveException;
-
-	public abstract void moveArc(Arc arc, ArrayList<Hook> hooks, boolean expectedWallImpact) throws UnableToMoveException;
-
-	public abstract void moveArcNoDetectionWhileTurning(Arc arc, ArrayList<Hook> hooks, boolean expectedWallImpact) throws UnableToMoveException;
 
 	public abstract void setBasicDetection(boolean basicDetection);
 

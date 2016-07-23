@@ -12,7 +12,6 @@ import exceptions.Locomotion.UnexpectedObstacleOnPathException;
 import exceptions.serial.SerialConnexionException;
 import hook.Hook;
 import robot.serial.SerialWrapper;
-import smartMath.Arc;
 import smartMath.Vec2;
 import table.Table;
 import utils.Config;
@@ -154,12 +153,6 @@ public class Locomotion implements Service
     /**Donne la stratégie de translation */
     private DirectionStrategy directionStrategy = DirectionStrategy.FASTEST;
 
-    /** Arc du mouvement en cours (utilisé qu'en mouvement courbe, duh...) */
-    private Arc curveArc;
-
-    /** Position pour laquelle le robot a commencé à faire une trajectoire courbe */
-    private Vec2 posStartedCurve;
-
     /** Si le robot est censé forcer le mouvement */
     private boolean isForcing= false;
 
@@ -254,7 +247,7 @@ public class Locomotion implements Service
     	finalAim = aim;
 
         isRobotMovingForward=true;
-		moveToPointException(aim, hooks, true, false, true, mustDetect, false);
+		moveToPointException(aim, hooks, true, false, true, mustDetect);
         isRobotMovingForward=false;
 
     	actualRetriesIfBlocked=0;
@@ -308,44 +301,11 @@ public class Locomotion implements Service
         	isRobotMovingForward=true;
         else 
         	isRobotMovingBackward=true;
-		moveToPointException(aim, hooks, distance >= 0, wall, false, mustDetect, false);
+		moveToPointException(aim, hooks, distance >= 0, wall, false, mustDetect);
 		isRobotMovingForward=false;
     	isRobotMovingBackward=false;
 
 		actualRetriesIfBlocked=0;// on reinitialise
-    }
-
-    /**
-     * Fait suivre au robot un arc de cercle (trajectoire courbe)
-     * @param arc l'arc à suivre
-     * @param hooks les hooks à prendre en compte
-     * @throws UnableToMoveException si le robot est bloqué
-     */
-    public void moveArc(Arc arc, ArrayList<Hook> hooks, boolean mustDetectTurning, boolean wall) throws UnableToMoveException
-    {
-        updateCurrentPositionAndOrientation();
-
-        this.symetrised = false;
-
-        this.curveArc = arc.copy();
-        this.posStartedCurve = highLevelPosition.clone();
-
-        log.debug("Lancement d'un arc de rayon "+arc.radius+" et de longueur "+arc.length);
-
-        if(Math.abs(highLevelOrientation - arc.startAngle) > maxRotationCorrectionThreeshold)
-        {
-            log.debug("Mauvaise orientation pour mouvement courbe, on tourne !");
-            turn(arc.startAngle, hooks, mustDetectTurning);
-        }
-
-        if(arc.length>=0)
-            isRobotMovingForward=true;
-        else
-            isRobotMovingBackward=true;
-        moveToPointException(arc.end, hooks, arc.length>=0, wall, false, true, true);
-        isRobotMovingForward=false;
-        isRobotMovingBackward=false;
-
     }
         
     /**
@@ -414,13 +374,13 @@ public class Locomotion implements Service
     	if(strategy == DirectionStrategy.FORCE_BACK_MOTION)
     	{
             isRobotMovingBackward=true;
-            moveToPointException(aim, hooks, false, mur, turnOnly, mustDetect, false);
+            moveToPointException(aim, hooks, false, mur, turnOnly, mustDetect);
             isRobotMovingBackward=false;
     	}
     	else if(strategy == DirectionStrategy.FORCE_FORWARD_MOTION)
     	{ 
             isRobotMovingForward=true;
-            moveToPointException(aim, hooks, true, mur, turnOnly, mustDetect, false);
+            moveToPointException(aim, hooks, true, mur, turnOnly, mustDetect);
             isRobotMovingForward=false;
     	}
     	else //if(strategy == DirectionStrategy.FASTEST)
@@ -436,7 +396,7 @@ public class Locomotion implements Service
 	        
 	        isRobotMovingForward = isFastestDirectionForward;
 	        isRobotMovingBackward = !isFastestDirectionForward;
-	        moveToPointException(aim, hooks, isFastestDirectionForward, mur, turnOnly, mustDetect, false);
+	        moveToPointException(aim, hooks, isFastestDirectionForward, mur, turnOnly, mustDetect);
 	        isRobotMovingForward = false;
 	        isRobotMovingBackward = false;
     	}
@@ -460,7 +420,7 @@ public class Locomotion implements Service
      * @param mustDetect true si on veut detecter, false sinon.
      * @throws UnableToMoveException si le robot a un bloquage mecanique
      */
-    private void moveToPointException(Vec2 aim, ArrayList<Hook> hooks, boolean isMovementForward, boolean headingToWall, boolean turnOnly, boolean mustDetect, boolean isCurve) throws UnableToMoveException
+    private void moveToPointException(Vec2 aim, ArrayList<Hook> hooks, boolean isMovementForward, boolean headingToWall, boolean turnOnly, boolean mustDetect) throws UnableToMoveException
     {
     	if(isMovementForward)
         	isRobotMovingForward=true;
@@ -476,7 +436,7 @@ public class Locomotion implements Service
             doItAgain = false;
             try
             {
-                moveToPointCorrectAngleAndDetectEnnemy(aim, hooks, isMovementForward, turnOnly, mustDetect, isCurve);
+                moveToPointCorrectAngleAndDetectEnnemy(aim, hooks, isMovementForward, turnOnly, mustDetect);
             	
             	isRobotMovingForward=false;
             	isRobotMovingBackward=false;
@@ -500,7 +460,7 @@ public class Locomotion implements Service
 		                    	isRobotMovingForward=true;
 		                    else 
 		                    	isRobotMovingBackward=true;
-		                	moveToPointException(aim, hooks, isMovementForward, headingToWall, turnOnly, mustDetect, isCurve); // on rentente s'il a y eu un probleme
+		                	moveToPointException(aim, hooks, isMovementForward, headingToWall, turnOnly, mustDetect); // on rentente s'il a y eu un probleme
 		                	isRobotMovingForward=false;
 		                	isRobotMovingBackward=false;
 		                }
@@ -624,10 +584,10 @@ public class Locomotion implements Service
      * @throws BlockedException si le robot a un bloquage mecanique
      * @throws UnexpectedObstacleOnPathException si le robot rencontre un obstacle inattendu sur son chemin (par les capteurs)
      */
-    private void moveToPointCorrectAngleAndDetectEnnemy(Vec2 aim, ArrayList<Hook> hooks, boolean isMovementForward, boolean turnOnly, boolean mustDetect, boolean isCurve) throws UnexpectedObstacleOnPathException, BlockedException, SerialConnexionException
+    private void moveToPointCorrectAngleAndDetectEnnemy(Vec2 aim, ArrayList<Hook> hooks, boolean isMovementForward, boolean turnOnly, boolean mustDetect) throws UnexpectedObstacleOnPathException, BlockedException, SerialConnexionException
     {         	
     	//double time=System.currentTimeMillis();
-        moveToPointSymmetry(aim, isMovementForward, mustDetect, turnOnly, false, isCurve);
+        moveToPointSymmetry(aim, isMovementForward, mustDetect, turnOnly, false);
         do 
         { 	
             updateCurrentPositionAndOrientation();
@@ -638,13 +598,8 @@ public class Locomotion implements Service
         	if(mustDetect)
         	{
         		//detectEnemyInFrontDisk(isMovementForward, turnOnly, aim);
-        		if(!isCurve && !basicDetection)
+        		if(!basicDetection)
                     detectEnemyAtDistance(150, aim.minusNewVector(highLevelPosition.clone()));	// 85 mm est une bonne distance pour être safe.
-                else if(!basicDetection)
-                {
-                    detectEnemyAtDistance(150, this.curveArc.getNextPosition(this.posStartedCurve, highLevelPosition.clone(),
-                          highLevelOrientation, (this.curveArc.length<0 ? -1 :1)*detectionDistance).minusNewVector(highLevelPosition.clone()));
-                }
                 else
                 {
                     basicDetect(isMovementForward, false);
@@ -728,7 +683,7 @@ public class Locomotion implements Service
     {
     	//envoi de la consigne avec turnOnly a false et a isCorrection a true (c'est bien une correction)
     	//la correction est toujours un turnOnly, on evite les doublons d'où le turnOnly à false.
-    	moveToPointSymmetry(aim, isMovementForward, mustDetect, false, true, false);
+    	moveToPointSymmetry(aim, isMovementForward, mustDetect, false, true);
     }
    
     /**
@@ -742,10 +697,10 @@ public class Locomotion implements Service
      * @throws BlockedException si le robot rencontre un obstacle innatendu sur son chemin (par les capteurs)
      * @throws UnexpectedObstacleOnPathException 
      */
-    private void moveToPointSymmetry(Vec2 aim, boolean isMovementForward, boolean mustDetect, boolean turnOnly,boolean isCorrection, boolean isCurve) throws BlockedException, UnexpectedObstacleOnPathException
+    private void moveToPointSymmetry(Vec2 aim, boolean isMovementForward, boolean mustDetect, boolean turnOnly,boolean isCorrection) throws BlockedException, UnexpectedObstacleOnPathException
     {
         updateCurrentPositionAndOrientation();
-        
+
         // position donnée par le bas niveau avec un traitement dans UpdateCurrentPositionAndOrientation
         Vec2 givenPosition = highLevelPosition.clone();
 
@@ -753,57 +708,40 @@ public class Locomotion implements Service
         double angle;
         Vec2 aimSymmetrized = null;
 
-        if(!isCurve)
+
+        // Le point qu'on vise, donné par le haut niveau donc comme si on etais vert
+        aimSymmetrized = aim.clone();
+
+        if (symetry) // miroir des positions
         {
-            // Le point qu'on vise, donné par le haut niveau donc comme si on etais vert
-            aimSymmetrized = aim.clone();
+            givenPosition.x = -givenPosition.x;
+            aimSymmetrized.x = -aimSymmetrized.x;
+        }
+        Vec2 delta = aimSymmetrized.clone();
 
-            if (symetry) // miroir des positions
-            {
-                givenPosition.x = -givenPosition.x;
-                aimSymmetrized.x = -aimSymmetrized.x;
-            }
-            Vec2 delta = aimSymmetrized.clone();
-
-            delta.minus(givenPosition);
+        delta.minus(givenPosition);
 
 
-            //calcul de la nouvelle distance et du nouvel angle
-            distance = delta.length();
+        //calcul de la nouvelle distance et du nouvel angle
+        distance = delta.length();
         /*
         if(symetry)
         	  angle = Math.atan2(-delta.y, delta.x);//Angle en absolu 
         else */
-            angle = Math.atan2(delta.y, delta.x);//Angle en absolu
+        angle = Math.atan2(delta.y, delta.x);//Angle en absolu
 
-            // si on a besoin de se retourner pour suivre la consigne de isMovementForward on le fait ici
-            if (isMovementForward && distance < 0 || (!isMovementForward && distance > 0)) {
-                distance *= -1;
-                angle += Math.PI;
-            }
+        // si on a besoin de se retourner pour suivre la consigne de isMovementForward on le fait ici
+        if (isMovementForward && distance < 0 || (!isMovementForward && distance > 0)) {
+            distance *= -1;
+            angle += Math.PI;
         }
 
-        //Si on fait une trajectoire courbe, on ignore la distance et l'angle de rotation
-        else
-        {
-            distance=0;
-            angle=0;
-            if(symetry && !symetrised)
-            {
-                this.curveArc.radius *= -1;
-                this.symetrised = true;
-            }
-        }
 
         if(isForcing)
         {
             if(turnOnly)
             {
                 this.timeExpected = System.currentTimeMillis() + (long)(Math.PI*0.5*1000/this.rotSpeed);
-            }
-            else if(isCurve)
-            {
-                this.timeExpected = System.currentTimeMillis() + (long)(4*1000*Math.abs(this.curveArc.length)/this.transSpeed);
             }
             else
             {
@@ -812,17 +750,17 @@ public class Locomotion implements Service
         }
 
         // on annule la correction si on est trop proche de la destination
-        if(!isCurve && isCorrection)
+        if(isCorrection)
         {
            Vec2 vectorTranslation = aimSymmetrized;
            vectorTranslation.minus( givenPosition );
            if( (  vectorTranslation.length() >  maxLengthCorrectionThreeshold ))
-	        	moveToPointSerialOrder(aimSymmetrized, givenPosition, angle, distance, mustDetect, turnOnly, isCorrection, false);
+	        	moveToPointSerialOrder(aimSymmetrized, givenPosition, angle, distance, mustDetect, turnOnly, isCorrection);
 	        else
 	        	return;// Si on est trop proche, on ne fais rien.
         }
         else
-        	moveToPointSerialOrder(aimSymmetrized, givenPosition, angle, distance, mustDetect, turnOnly, isCorrection, isCurve);
+        	moveToPointSerialOrder(aimSymmetrized, givenPosition, angle, distance, mustDetect, turnOnly, isCorrection);
     }
     
     /**
@@ -839,7 +777,7 @@ public class Locomotion implements Service
      * @throws UnexpectedObstacleOnPathException
      * TODO Clean la fonction
      */
-    private void moveToPointSerialOrder(Vec2 symmetrisedAim, Vec2 givenPosition, double angle, double distance, boolean mustDetect,boolean turnOnly, boolean isCorrection, boolean isCurve) throws BlockedException, UnexpectedObstacleOnPathException
+    private void moveToPointSerialOrder(Vec2 symmetrisedAim, Vec2 givenPosition, double angle, double distance, boolean mustDetect,boolean turnOnly, boolean isCorrection) throws BlockedException, UnexpectedObstacleOnPathException
     {
         // On copie la stratégie de rotation pour éviter qu'elle soit modifiée en plein mouvement
         TurningStrategy cTurningStrategy = turningStrategy;
@@ -874,11 +812,7 @@ public class Locomotion implements Service
             }
 
             try {
-                if(isCurve)
-                {
-                    serialWrapper.moveArc(this.curveArc.length, this.curveArc.radius);
-                }
-                else if (isCorrection && Math.abs(delta) > maxRotationCorrectionThreeshold) {
+                if (isCorrection && Math.abs(delta) > maxRotationCorrectionThreeshold) {
                     isRobotTurning = true;// prochain ordre : on tourne
 
                     //On utilise la stratégie FASTEST pour les petits mouvements
@@ -902,7 +836,7 @@ public class Locomotion implements Service
                 }
 
                 // sans virage : la première rotation est bloquante
-                if (!isCurve && !trajectoire_courbe)
+                if (!trajectoire_courbe)
                     // on attend la fin du mouvement
                     while (!isMotionEnded()) {
                         if (mustDetect)
@@ -915,7 +849,7 @@ public class Locomotion implements Service
 
                 isRobotTurning = false; // fin du turn
 
-                if (!(turnOnly || isCorrection) && !isCurve)
+                if (!(turnOnly || isCorrection))
                     serialWrapper.moveLengthwise(distance);
             } catch (SerialConnexionException e) {
                 log.critical("Catch de " + e + " dans moveToPointSerialOrder");
@@ -1322,7 +1256,7 @@ public class Locomotion implements Service
     public void JUNIT_moveToPointException(Vec2 aim, ArrayList<Hook> hooks, boolean isMovementForward, boolean headingToWall, boolean turnOnly, boolean mustDetect) throws UnableToMoveException
     {
 
-    	moveToPointException(aim, hooks, isMovementForward, headingToWall, turnOnly, mustDetect, false);
+    	moveToPointException(aim, hooks, isMovementForward, headingToWall, turnOnly, mustDetect);
     }
     
     /**
@@ -1331,7 +1265,7 @@ public class Locomotion implements Service
 	 @SuppressWarnings("javadoc")
     public void JUNIT_moveToPointCorrectAngleAndDetectEnnemy(Vec2 aim, ArrayList<Hook> hooks, boolean isMovementForward, boolean turnOnly, boolean mustDetect) throws UnexpectedObstacleOnPathException, BlockedException, SerialConnexionException
     {
-    	moveToPointCorrectAngleAndDetectEnnemy(aim, hooks, isMovementForward, turnOnly, mustDetect, false);
+    	moveToPointCorrectAngleAndDetectEnnemy(aim, hooks, isMovementForward, turnOnly, mustDetect);
     }
     
     /**
@@ -1366,7 +1300,7 @@ public class Locomotion implements Service
 	 @SuppressWarnings("javadoc")
     public void JUNIT_moveToPointSymmetry(Vec2 aim, boolean isMovementForward, boolean mustDetect, boolean turnOnly,boolean isCorrection) throws BlockedException, UnexpectedObstacleOnPathException
     {
-    	moveToPointSymmetry(aim, isMovementForward, mustDetect, turnOnly, isCorrection, false);
+    	moveToPointSymmetry(aim, isMovementForward, mustDetect, turnOnly, isCorrection);
     }
 
     /**
@@ -1375,7 +1309,7 @@ public class Locomotion implements Service
 	 @SuppressWarnings("javadoc")
     public void JUNIT_moveToPointSerialOrder(Vec2 symmetrisedAim, Vec2 givenPosition, double angle, double distance, boolean mustDetect,boolean turnOnly, boolean isCorrection) throws BlockedException, UnexpectedObstacleOnPathException
     {
-    	moveToPointSerialOrder( symmetrisedAim, givenPosition, angle, distance, mustDetect, turnOnly,  isCorrection, false);
+    	moveToPointSerialOrder( symmetrisedAim, givenPosition, angle, distance, mustDetect, turnOnly,  isCorrection);
     }
 
 

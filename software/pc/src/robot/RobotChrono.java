@@ -4,7 +4,6 @@ import enums.*;
 import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import hook.Hook;
-import smartMath.Arc;
 import smartMath.Vec2;
 import table.Table;
 import utils.Config;
@@ -346,27 +345,6 @@ public class RobotChrono extends Robot
 
 	@Override
 	public void disableFeedbackLoop() throws SerialConnexionException {
-
-	}
-
-	@Override
-	public void moveArc(Arc arc, ArrayList<Hook> hooks) throws UnableToMoveException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void moveArcNoDetectionWhileTurning(Arc arc, ArrayList<Hook> hooks) throws UnableToMoveException {
-
-	}
-
-	@Override
-	public void moveArc(Arc arc, ArrayList<Hook> hooks, boolean expectedWallImpact) throws UnableToMoveException {
-
-	}
-
-	@Override
-	public void moveArcNoDetectionWhileTurning(Arc arc, ArrayList<Hook> hooks, boolean expectedWallImpact) throws UnableToMoveException {
 
 	}
 

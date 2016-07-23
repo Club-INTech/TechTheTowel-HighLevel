@@ -5,7 +5,6 @@ import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import hook.Hook;
 import robot.serial.SerialWrapper;
-import smartMath.Arc;
 import smartMath.Vec2;
 import utils.Config;
 import utils.Log;
@@ -126,31 +125,6 @@ public class RobotReal extends Robot
 		moveLengthwise(distance, hooksToConsider, expectsWallImpact, true);
 	}
 
-    /**
-     * Ordonne le déplacement selon un arc
-     * @param arc l'arc
-     * @param hooks les hooks à gérer
-     */
-	public void moveArc(Arc arc, ArrayList<Hook> hooks) throws UnableToMoveException
-	{
-		mLocomotion.moveArc(arc,hooks, true, false);
-	}
-
-	@Override
-	public void moveArcNoDetectionWhileTurning(Arc arc, ArrayList<Hook> hooks) throws UnableToMoveException {
-		mLocomotion.moveArc(arc, hooks, false, false);
-	}
-
-	@Override
-	public void moveArc(Arc arc, ArrayList<Hook> hooks, boolean expectedWallImpact) throws UnableToMoveException {
-		mLocomotion.moveArc(arc,hooks, false, expectedWallImpact);
-
-	}
-
-	@Override
-	public void moveArcNoDetectionWhileTurning(Arc arc, ArrayList<Hook> hooks, boolean expectedWallImpact) throws UnableToMoveException {
-		mLocomotion.moveArc(arc,hooks, false, expectedWallImpact);
-	}
 
 	@Override
     public void setBasicDetection(boolean basicDetection)
