@@ -88,6 +88,8 @@ public class ThreadSerial extends AbstractThread implements SerialPortEventListe
 
     private final char[] ultrasoundHeader = {0x01, 0x011};
 
+    private final char[] debugHeader = {0x02, 0x20};
+
     //===================================================================
 
 
@@ -409,6 +411,12 @@ public class ThreadSerial extends AbstractThread implements SerialPortEventListe
                     if(buffer.toCharArray()[0] == ultrasoundHeader[0] && buffer.toCharArray()[1] == ultrasoundHeader[1])
                     {
                         ultrasoundBuffer.add(buffer);
+                        continue;
+                    }
+
+                    if(buffer.toCharArray()[0] == debugHeader[0] && buffer.toCharArray()[1] == debugHeader[1])
+                    {
+                        log.debug("Debug LL : "+buffer.substring(2));
                         continue;
                     }
 
