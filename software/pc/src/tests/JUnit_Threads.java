@@ -3,7 +3,7 @@ package tests;
 import enums.ServiceNames;
 import org.junit.Assert;
 import org.junit.Test;
-import robot.RobotReal;
+import robot.Robot;
 import robot.serial.SerialWrapper;
 import smartMath.Vec2;
 import table.Table;
@@ -30,7 +30,7 @@ public class JUnit_Threads extends JUnit_Test {
 		deplacements.setY(1500);
 		deplacements.setOrientation(0);
 		deplacements.setTranslationnalSpeed(80);
-		RobotReal robotvrai = (RobotReal) container.getService(ServiceNames.ROBOT_REAL);
+		Robot robotvrai = (Robot) container.getService(ServiceNames.ROBOT_REAL);
 		// TODO démarrer thread position
 		container.startInstanciedThreads();
 		Thread.sleep(100);
@@ -50,7 +50,7 @@ public class JUnit_Threads extends JUnit_Test {
 	@Test
 	public void test_detection_obstacle() throws Exception
 	{
-		RobotReal robotvrai = (RobotReal) container.getService(ServiceNames.ROBOT_REAL);
+		Robot robotvrai = (Robot) container.getService(ServiceNames.ROBOT_REAL);
 		robotvrai.setPosition(new Vec2(0, 900));
 		robotvrai.setOrientation(0);
 		
@@ -112,7 +112,7 @@ public class JUnit_Threads extends JUnit_Test {
 	@Test
 	public void test_serie() throws Exception
 	{
-		RobotReal robotvrai = (RobotReal) container.getService(ServiceNames.ROBOT_REAL);
+		Robot robotvrai = (Robot) container.getService(ServiceNames.ROBOT_REAL);
 		robotvrai.setPosition(new Vec2(1000, 1400));
 		robotvrai.setOrientation((float)Math.PI);
 		container.startAllThreads();

@@ -3,7 +3,7 @@ package tests;
 import enums.ServiceNames;
 import org.junit.Before;
 import org.junit.Test;
-import robot.RobotReal;
+import robot.Robot;
 
 
 /**
@@ -13,7 +13,7 @@ public class JUnit_RobotReal extends JUnit_Test
 {
     
     /** The robotvrai. */
-    RobotReal robotReal;
+    Robot robotReal;
     
     /* (non-Javadoc)
      * @see tests.JUnit_Test#setUp()
@@ -21,7 +21,7 @@ public class JUnit_RobotReal extends JUnit_Test
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        robotReal = (RobotReal) container.getService(ServiceNames.ROBOT_REAL);
+        robotReal = (Robot) container.getService(ServiceNames.ROBOT_REAL);
     }
 
     /**

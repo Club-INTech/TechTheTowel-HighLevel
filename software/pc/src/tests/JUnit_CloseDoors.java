@@ -6,7 +6,6 @@ import hook.Hook;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import robot.Robot;
 import scripts.ScriptManager;
 import strategie.GameState;
 import table.Table;
@@ -20,7 +19,7 @@ import java.util.ArrayList;
  */
 public class JUnit_CloseDoors extends JUnit_Test
 {
-	private GameState<Robot> mRobot;
+	private GameState mRobot;
 	private ScriptManager scriptManager;
 
 	@SuppressWarnings("unchecked")
@@ -29,7 +28,7 @@ public class JUnit_CloseDoors extends JUnit_Test
 	{
 		super.setUp();
 		log.debug("JUnit_DeplacementsTest.setUp()");
-		mRobot = (GameState<Robot>)container.getService(ServiceNames.GAME_STATE);
+		mRobot = (GameState)container.getService(ServiceNames.GAME_STATE);
 		//La position de depart est mise dans le updateConfig()
 		mRobot.updateConfig();
 		mRobot.robot.setPosition(Table.entryPosition);

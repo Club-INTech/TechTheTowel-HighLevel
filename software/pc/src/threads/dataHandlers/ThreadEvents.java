@@ -1,6 +1,6 @@
 package threads.dataHandlers;
 
-import robot.RobotReal;
+import robot.Robot;
 import table.Table;
 import threads.AbstractThread;
 import utils.Sleep;
@@ -15,11 +15,11 @@ public class ThreadEvents extends AbstractThread
 
     Table table;
 
-    RobotReal robot;
+    Robot robot;
 
     LinkedList<String> events;
 
-    public ThreadEvents(Table table, RobotReal robot, ThreadSerial serial)
+    public ThreadEvents(Table table, Robot robot, ThreadSerial serial)
     {
         this.table = table;
         this.robot = robot;

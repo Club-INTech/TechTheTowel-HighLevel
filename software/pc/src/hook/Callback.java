@@ -1,6 +1,5 @@
 package hook;
 
-import robot.Robot;
 import strategie.GameState;
 
 /**
@@ -20,7 +19,7 @@ public class Callback
 	/** le code à éxecuter lors de l'évènement */
 	public Executable mExecutable;
 	
-	private GameState<Robot> stateToConsider = null;
+	private GameState stateToConsider = null;
 
 	/**
 	 * Constructeur d'un callback avec 2 paramètres: la méthode et si elle doit être exécutée une seule fois
@@ -28,7 +27,7 @@ public class Callback
 	 * @param unique
 	 * @param stateToConsider 
 	 */
-	public Callback(Executable methode, boolean unique, GameState<Robot> stateToConsider)
+	public Callback(Executable methode, boolean unique, GameState stateToConsider)
 	{
 		this.mExecutable = methode;
 		this.isUnique = unique;

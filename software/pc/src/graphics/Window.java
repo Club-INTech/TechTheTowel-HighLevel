@@ -2,7 +2,7 @@
 
 package graphics;
 
-import robot.RobotReal;
+import robot.Robot;
 import table.Table;
 
 import javax.swing.*;
@@ -23,7 +23,7 @@ public class Window extends JFrame
 	private Mouse mMouse;
 	private Keyboard mKeyboard;
 	
-	public Window(Table table, RobotReal robot)
+	public Window(Table table, Robot robot)
 	{
 		this.setVisible(true);
 		this.setTitle("table");

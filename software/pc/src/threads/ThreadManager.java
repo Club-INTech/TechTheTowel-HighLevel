@@ -1,6 +1,6 @@
 package threads;
 
-import robot.RobotReal;
+import robot.Robot;
 import robot.serial.SerialWrapper;
 import table.Table;
 import threads.dataHandlers.*;
@@ -53,7 +53,7 @@ public class ThreadManager
 	 * @param sensorsCardWrapper La carte capteurs avec laquelle le thread va parler
 	 * @return le thread timer
 	 */
-	public AbstractThread getThreadTimer(Table table, RobotReal robot, SerialWrapper sensorsCardWrapper)
+	public AbstractThread getThreadTimer(Table table, Robot robot, SerialWrapper sensorsCardWrapper)
 	{
 		AbstractThread thread = instanciedThreads.get("threadTimer");
 		if(thread == null)
@@ -70,7 +70,7 @@ public class ThreadManager
 	 * @param sensorsCardWrapper La carte capteurs avec laquelle le thread va parler
 	 * @return le thread capteurs
 	 */
-	public AbstractThread getThreadSensors( Table table, RobotReal robot, SerialWrapper sensorsCardWrapper, ThreadSerial serial)
+	public AbstractThread getThreadSensors(Table table, Robot robot, SerialWrapper sensorsCardWrapper, ThreadSerial serial)
 	{
 		AbstractThread thread = instanciedThreads.get("threadCapteurs");
 		if(thread == null)
@@ -85,7 +85,7 @@ public class ThreadManager
 	 * @param table la table
 	 * @param robot le robot réel
      */
-	public AbstractThread getThreadInterface(Config config, Log log, Table table, RobotReal robot)
+	public AbstractThread getThreadInterface(Config config, Log log, Table table, Robot robot)
 	{
 		AbstractThread thread = instanciedThreads.get("threadInterface");
 		if(thread == null)

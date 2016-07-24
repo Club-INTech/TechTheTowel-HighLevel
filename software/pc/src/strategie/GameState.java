@@ -10,14 +10,14 @@ import utils.Log;
 /**
  * Classe indiquant l'ensemble des informations sur le match suceptibles d'évoluer durant le match.
  * Le game state contient toutes les informations à connaître pour la stratégie. Il contient:
- * - Robot (real ou chrono), qui apporte des informations sur le robot (position, orientation, ...)
+ * - RobotC (real ou chrono), qui apporte des informations sur le robot (position, orientation, ...)
  * - Table, qui apporte des informations sur les obstacles et les éléments de jeux
  * @author marsu
  *
- * @param <R> R est soit un RobotReal, soit un RobotChrono, en fonction du but de cette instance de GameState: claculer des temps d'exécution dans un certain contexte, ou bien faire agir le vrai robot
+ * @param <R> R est soit un Robot, soit un RobotChrono, en fonction du but de cette instance de GameState: claculer des temps d'exécution dans un certain contexte, ou bien faire agir le vrai robot
  */
 
-public class GameState<R extends Robot> implements Service
+public class GameState implements Service
 {    
     /*
      * Les attributs public sont en "final". Cela signifie que les objets
@@ -27,8 +27,8 @@ public class GameState<R extends Robot> implements Service
     /** La table */
     public final Table table;
     
-    /** Le robot que l'on fait agir sur cette table. Cela peut être un RobotReal ou un RobotChrono */
-    public final R robot;
+    /** Le robot que l'on fait agir sur cette table. Cela peut être un Robot ou un RobotChrono */
+    public final Robot robot;
 
     /** Temps écoulé depuis le début du match en ms */
     private long timeEllapsed;
@@ -42,9 +42,9 @@ public class GameState<R extends Robot> implements Service
      * @param config inutilisé
      * @param log inutilisé
      * @param table l'état de la table a considérer
-     * @param robot Le robot a considérer, soit un RobotReal, soit un RobotChrono
+     * @param robot Le robot a considérer, soit un Robot, soit un RobotChrono
      */
-    public GameState(Config config, Log log, Table table, R robot)
+    public GameState(Config config, Log log, Table table, Robot robot)
     {
         this.table = table;
         this.robot = robot;

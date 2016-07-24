@@ -2,7 +2,7 @@ package threads;
 
 import enums.ActuatorOrder;
 import exceptions.serial.SerialConnexionException;
-import robot.RobotReal;
+import robot.Robot;
 import robot.serial.SerialWrapper;
 import table.Table;
 import threads.dataHandlers.ThreadSerial;
@@ -26,7 +26,7 @@ public class ThreadTimer extends AbstractThread
 	/** La table sur laquelle le thread doit croire évoluer */
 	private Table table;
 	
-	private RobotReal robot;
+	private Robot robot;
 
 	/** La carte avec laquelle on doit communiquer */
 	private SerialWrapper serialWrapper;
@@ -64,7 +64,7 @@ public class ThreadTimer extends AbstractThread
 	 * @param locomotionCardWrapper La carte d'asservissement avec laquelle on doit communiquer
 	 */
 	
-	ThreadTimer(Table table, RobotReal robot, SerialWrapper locomotionCardWrapper)
+	ThreadTimer(Table table, Robot robot, SerialWrapper locomotionCardWrapper)
 	{
 		this.table = table;
 		this.serialWrapper = locomotionCardWrapper;

@@ -6,16 +6,16 @@ import java.awt.event.KeyListener;
 import enums.ActuatorOrder;
 import enums.TurningStrategy;
 import exceptions.serial.SerialConnexionException;
-import robot.RobotReal;
+import robot.Robot;
 
 
 public class Keyboard implements KeyListener
 {
-	private RobotReal mRobot;
+	private Robot mRobot;
 	private TurningStrategy turningStr = TurningStrategy.FASTEST;
 	private boolean modeActual = false;
 	
-	public Keyboard(RobotReal robot)
+	public Keyboard(Robot robot)
 	{
 		mRobot= robot;
 	}

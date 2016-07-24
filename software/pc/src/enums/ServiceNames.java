@@ -20,11 +20,6 @@ public enum ServiceNames
 
 	 SERIAL_WRAPPER,
 
-	 PATHDINGDING,
-	 
-	 LASER,
-	 LASER_FILTRATION,
-	 
 	 GAME_STATE,
 	 
 	 SCRIPT_MANAGER,
@@ -37,9 +32,7 @@ public enum ServiceNames
 	 THREAD_EYES,
 	 THREAD_WORKER,
 	 
-	 STRATEGIE,
-	 
-	 CHECK_UP;
+	 STRATEGIE;
 
 	 /**
 	  * Constructeur vide

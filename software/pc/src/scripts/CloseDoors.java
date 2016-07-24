@@ -7,7 +7,6 @@ import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import hook.types.HookFactory;
-import robot.Robot;
 import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
@@ -45,7 +44,7 @@ public class CloseDoors extends AbstractScript
 	 * @param hooksToConsider Les hooks necessaires pour l'execution du script
 	 */
 	@Override
-	public void execute(int versionToExecute, GameState<Robot> stateToConsider,ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException, UnableToMoveException
+	public void execute(int versionToExecute, GameState stateToConsider, ArrayList<Hook> hooksToConsider) throws SerialFinallyException, ExecuteException, UnableToMoveException
 	{
 		//Les parametres de cette version ont ete determines experimentalement, fonctionnel sur robot 2015
 		
@@ -254,7 +253,7 @@ public class CloseDoors extends AbstractScript
 	}
 
 	@Override
-	public int remainingScoreOfVersion(int version, GameState<?> state) 
+	public int remainingScoreOfVersion(int version, GameState state)
 	{
 		
 		// Score maximal possible de 20 points
@@ -295,14 +294,14 @@ public class CloseDoors extends AbstractScript
 	}
 
 	@Override
-	public void finalize(GameState<?> state, Exception e) throws SerialFinallyException
+	public void finalize(GameState state, Exception e) throws SerialFinallyException
 	{
 		log.debug("Exception " + e + "dans Close Doors : Lancement du Finalize !");
         state.robot.setBasicDetection(false);
     }
 
 	@Override
-	public Integer[] getVersion(GameState<?> stateToConsider) 
+	public Integer[] getVersion(GameState stateToConsider)
 	{
 		return versions;
 	}

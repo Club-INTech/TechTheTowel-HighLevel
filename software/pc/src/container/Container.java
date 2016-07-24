@@ -6,7 +6,7 @@ import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialManagerException;
 import hook.types.HookFactory;
 import robot.Locomotion;
-import robot.RobotReal;
+import robot.Robot;
 import threads.dataHandlers.ThreadSerial;
 import robot.serial.SerialManager;
 import robot.serial.SerialWrapper;
@@ -14,7 +14,6 @@ import scripts.ScriptManager;
 import strategie.GameState;
 import table.Table;
 import threads.ThreadManager;
-import utils.CheckUp;
 import utils.Config;
 import utils.Log;
 import utils.Sleep;
@@ -149,10 +148,10 @@ public class Container
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new HookFactory(
 																	(Config)getService(ServiceNames.CONFIG),
 																	(Log)getService(ServiceNames.LOG),
-																	(GameState<RobotReal>)getService(ServiceNames.GAME_STATE)
+																	(GameState)getService(ServiceNames.GAME_STATE)
 																);
 		else if(serviceRequested == ServiceNames.ROBOT_REAL)
-			instanciedServices[serviceRequested.ordinal()] = 	(Service)new RobotReal(
+			instanciedServices[serviceRequested.ordinal()] = 	(Service)new Robot(
 																	(Locomotion)getService(ServiceNames.LOCOMOTION),
 																	(Config)getService(ServiceNames.CONFIG),
 																	(Log)getService(ServiceNames.LOG),
@@ -166,11 +165,11 @@ public class Container
             														(SerialWrapper)getService(ServiceNames.SERIAL_WRAPPER)
             													);
         else if(serviceRequested == ServiceNames.GAME_STATE)
-            instanciedServices[serviceRequested.ordinal()] = 	(Service)new GameState<RobotReal>(
+            instanciedServices[serviceRequested.ordinal()] = 	(Service)new GameState(
             														(Config)getService(ServiceNames.CONFIG),
                                                              		(Log)getService(ServiceNames.LOG),
                                                              		(Table)getService(ServiceNames.TABLE),
-                                                             		(RobotReal)getService(ServiceNames.ROBOT_REAL)
+                                                             		(Robot)getService(ServiceNames.ROBOT_REAL)
                                                              	);
 		else if(serviceRequested == ServiceNames.SCRIPT_MANAGER)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new ScriptManager(
@@ -181,30 +180,24 @@ public class Container
 		else if(serviceRequested == ServiceNames.THREAD_TIMER)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)threadManager.getThreadTimer(
 																	(Table)getService(ServiceNames.TABLE),
-																	(RobotReal)getService(ServiceNames.ROBOT_REAL),
+																	(Robot)getService(ServiceNames.ROBOT_REAL),
 																	(SerialWrapper)getService(ServiceNames.SERIAL_WRAPPER)
                                                                 );
 		else if(serviceRequested == ServiceNames.THREAD_SENSOR)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)threadManager.getThreadSensors(
 																	(Table)getService(ServiceNames.TABLE),
-																	(RobotReal)getService(ServiceNames.ROBOT_REAL),
+																	(Robot)getService(ServiceNames.ROBOT_REAL),
 																	(SerialWrapper)getService(ServiceNames.SERIAL_WRAPPER),
 																	(ThreadSerial)getService(ServiceNames.STM_CARD)
 																);
 
-		
-		else if(serviceRequested == ServiceNames.CHECK_UP)
-			instanciedServices[serviceRequested.ordinal()] = 	(Service)new CheckUp(
-																	(Log)getService(ServiceNames.LOG),
-																	(RobotReal)getService(ServiceNames.ROBOT_REAL)
-																);
 
 		else if(serviceRequested == ServiceNames.THREAD_INTERFACE)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)threadManager.getThreadInterface(
 																	(Config)getService(ServiceNames.CONFIG),
 																	(Log)getService(ServiceNames.LOG),
 																	(Table)getService(ServiceNames.TABLE),
-					     											(RobotReal)getService(ServiceNames.ROBOT_REAL));
+					     											(Robot)getService(ServiceNames.ROBOT_REAL));
 
 		
 		// si le service demandé n'est pas connu, alors on log une erreur.

@@ -4,7 +4,6 @@ import enums.ServiceNames;
 import hook.Hook;
 import org.junit.Before;
 import org.junit.Test;
-import robot.Robot;
 import robot.serial.SerialWrapper;
 import scripts.ScriptManager;
 import smartMath.Vec2;
@@ -16,7 +15,7 @@ public class JUnit_Symetry extends JUnit_Test
 {
 	
 	ArrayList<Hook> emptyHook;
-	GameState<Robot> real_state;
+	GameState real_state;
 	ScriptManager scriptmanager;
 	SerialWrapper serialWrapper;
 	
@@ -25,7 +24,7 @@ public class JUnit_Symetry extends JUnit_Test
 	public void setUp() throws Exception
 	{
 		super.setUp();
-		real_state = (GameState<Robot>) container.getService(ServiceNames.GAME_STATE);
+		real_state = (GameState) container.getService(ServiceNames.GAME_STATE);
 		scriptmanager = (ScriptManager) container.getService(ServiceNames.SCRIPT_MANAGER);
 		serialWrapper = (SerialWrapper) container.getService(ServiceNames.SERIAL_WRAPPER);
 		emptyHook = new ArrayList<Hook> ();  

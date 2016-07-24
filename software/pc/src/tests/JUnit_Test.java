@@ -58,7 +58,7 @@ public abstract class JUnit_Test
 	public void waitMatchBegin(SerialWrapper sensorsCard, Robot robot)
 	{
 
-		System.out.println("Robot pret pour le match, attente du retrait du jumper");
+		System.out.println("RobotC pret pour le match, attente du retrait du jumper");
 		
 		// attends que le jumper soit retiré du robot
 
@@ -94,7 +94,7 @@ public abstract class JUnit_Test
 		robot.setPosition(Table.entryPosition);
 	}
 	
-	public void returnToEntryPosition(GameState<Robot> state) throws UnableToMoveException
+	public void returnToEntryPosition(GameState state) throws UnableToMoveException
 	{
 		state.robot.moveToLocation(new Vec2(Table.entryPosition.x-100, Table.entryPosition.y),new ArrayList<Hook>(), state.table);
 		state.robot.turn(Math.PI);

@@ -131,67 +131,6 @@ public class JUnit_Container extends JUnit_Test {
 	}
 
 	/**
-	 * Test_pathfinding.
-	 *
-	 * @throws Exception the exception
-	 */
-	@Test
-	public void test_pathfinding() throws Exception
-	{
-		log.debug("JUnit_ContainerTest.test_pathfinding()");
-		container.getService(ServiceNames.PATHDINGDING);
-	}
-
-	/**
-	 * Test_ laser.
-	 *
-	 * @throws Exception the exception
-	 */
-	@Test
-	public void test_Laser() throws Exception
-	{
-		log.debug("JUnit_ContainerTest.test_Laser()");
-		container.getService(ServiceNames.LASER);
-	}
-
-	/**
-	 * Test_ filtrage laser.
-	 *
-	 * @throws Exception the exception
-	 */
-	@Test
-	public void test_FiltrageLaser() throws Exception
-	{
-		log.debug("JUnit_ContainerTest.test_FiltrageLaser()");
-		container.getService(ServiceNames.LASER_FILTRATION);
-	}
-
-	/**
-	 * Test vérifiant que le système de containers se comporte bien si on appelle deux fois  le meme service .
-	 *
-	 * @throws Exception the exception
-	 */
-	@Test
-	public void test_doublon() throws Exception
-	{
-		log.debug("JUnit_ContainerTest.test_doublon()");
-		container.getService(ServiceNames.LASER_FILTRATION);
-		container.getService(ServiceNames.LASER_FILTRATION);
-	}
-
-	/**
-	 * Test_ check up.
-	 *
-	 * @throws Exception the exception
-	 */
-	@Test
-	public void test_CheckUp() throws Exception
-	{
-		log.debug("JUnit_ContainerTest.test_CheckUp()");
-		container.getService(ServiceNames.CHECK_UP);
-	}
-
-	/**
 	 * Test_serie asservissement.
 	 *
 	 * @throws Exception the exception

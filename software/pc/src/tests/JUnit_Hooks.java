@@ -10,7 +10,6 @@ import hook.types.HookFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import robot.Robot;
 import scripts.ScriptManager;
 import strategie.GameState;
 import table.Table;
@@ -24,7 +23,7 @@ import java.util.ArrayList;
 
 public class JUnit_Hooks extends JUnit_Test 
 {
-	private GameState<Robot> theRobot;
+	private GameState theRobot;
 	private ScriptManager scriptManager;
 	private HookFactory hookFactory;
 	private ArrayList<Hook> emptyHook = new ArrayList<Hook>();
@@ -35,7 +34,7 @@ public class JUnit_Hooks extends JUnit_Test
 	{
 		super.setUp();
 		scriptManager = (ScriptManager)container.getService(ServiceNames.SCRIPT_MANAGER);
-		theRobot = (GameState<Robot>)container.getService(ServiceNames.GAME_STATE);
+		theRobot = (GameState)container.getService(ServiceNames.GAME_STATE);
 		hookFactory = (HookFactory) container.getService(ServiceNames.HOOK_FACTORY);
 		theRobot.robot.useActuator(ActuatorOrder.ARM_INIT, true);
 		theRobot.robot.setOrientation(Math.PI);

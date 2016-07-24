@@ -1,6 +1,5 @@
 package hook;
 
-import robot.Robot;
 import strategie.GameState;
 
 /**
@@ -18,5 +17,5 @@ public interface Executable
 	 * @param stateToConsider 
      * @return un booléen qui renseignera sur le fait que la méthode fait ou non bouger le robot
 	 */
-	public boolean execute(GameState<Robot> stateToConsider);
+	public boolean execute(GameState stateToConsider);
 }

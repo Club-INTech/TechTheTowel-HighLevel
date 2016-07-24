@@ -5,7 +5,6 @@ import exceptions.ContainerException;
 import exceptions.serial.SerialManagerException;
 import hook.Hook;
 import robot.Locomotion;
-import robot.Robot;
 import robot.serial.SerialWrapper;
 import scripts.ScriptManager;
 import strategie.GameState;
@@ -28,7 +27,7 @@ public class Main
 {
 	static Container container;
 	static Config config;
-	static GameState<Robot> realState;
+	static GameState realState;
 	static ArrayList<Hook> emptyHook = new ArrayList<>();
 	static ScriptManager scriptmanager;
 	static SerialWrapper mSerialWrapper;
@@ -46,7 +45,7 @@ public class Main
 			container = new Container();
 			container.getService(ServiceNames.LOG);
 			config = (Config) container.getService(ServiceNames.CONFIG);
-			realState = (GameState<Robot>) container.getService(ServiceNames.GAME_STATE);
+			realState = (GameState) container.getService(ServiceNames.GAME_STATE);
 			scriptmanager = (ScriptManager) container.getService(ServiceNames.SCRIPT_MANAGER);
 			mSerialWrapper = (SerialWrapper) container.getService(ServiceNames.SERIAL_WRAPPER);
 			mLocomotion=(Locomotion) container.getService(ServiceNames.LOCOMOTION);
@@ -86,7 +85,7 @@ public class Main
 	static void waitMatchBegin()
 	{
 
-		System.out.println("Robot pret pour le match, attente du retrait du jumper");
+		System.out.println("RobotC pret pour le match, attente du retrait du jumper");
 
 		while(mSerialWrapper.isJumperAbsent())
 		{

@@ -10,7 +10,6 @@ import hook.Hook;
 import org.junit.Before;
 import org.junit.Test;
 import robot.Locomotion;
-import robot.Robot;
 import robot.serial.SerialWrapper;
 import smartMath.Circle;
 import smartMath.Vec2;
@@ -34,7 +33,7 @@ public class JUnit_Sensors extends JUnit_Test
 	
 	private Locomotion mLocomotion;
 	
-	GameState<Robot> state;
+	GameState state;
 	
 	/* (non-Javadoc)
 	 * @see tests.JUnit_Test#setUp()
@@ -44,7 +43,7 @@ public class JUnit_Sensors extends JUnit_Test
 	public void setUp() throws Exception 
 	{
 		super.setUp();
-		state = (GameState<Robot>)container.getService(ServiceNames.GAME_STATE);
+		state = (GameState)container.getService(ServiceNames.GAME_STATE);
 		
 		log.debug("JUnit_ActionneursTest.setUp()");
 		capteurs = (SerialWrapper) container.getService(ServiceNames.SERIAL_WRAPPER);

@@ -7,7 +7,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import robot.Robot;
-import robot.RobotReal;
 import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
@@ -16,7 +15,7 @@ import graphics.Window;
 
 public class JUnit_BorneArcade extends JUnit_Test 
 {
-	GameState<Robot> real_state;
+	GameState real_state;
 	Window win;
 	
 	public static void main(String[] args) throws Exception
@@ -29,9 +28,9 @@ public class JUnit_BorneArcade extends JUnit_Test
 	{
 		super.setUp();
 
-		real_state = (GameState<Robot>) container.getService(ServiceNames.GAME_STATE);
+		real_state = (GameState) container.getService(ServiceNames.GAME_STATE);
         
-		win = new Window((Table)container.getService(ServiceNames.TABLE), (RobotReal)real_state.robot);
+		win = new Window((Table)container.getService(ServiceNames.TABLE), (Robot)real_state.robot);
 		
 		container.getService(ServiceNames.THREAD_INTERFACE);
 		container.getService(ServiceNames.THREAD_SENSOR);

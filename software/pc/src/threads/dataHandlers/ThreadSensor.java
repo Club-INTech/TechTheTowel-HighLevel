@@ -2,7 +2,7 @@ package threads.dataHandlers;
 
 import exceptions.ConfigPropertyNotFoundException;
 import graphics.Window;
-import robot.RobotReal;
+import robot.Robot;
 import robot.serial.SerialWrapper;
 import smartMath.Vec2;
 import table.Table;
@@ -27,7 +27,7 @@ import java.util.LinkedList;
 public class ThreadSensor extends AbstractThread
 {
 	/** Le robot */
-	private RobotReal mRobot;
+	private Robot mRobot;
 
     /** La table */
     private Table mTable;
@@ -88,7 +88,7 @@ public class ThreadSensor extends AbstractThread
 	 * 	 |	 /	   \   |		
 	 * 	 |	/	    \  |		
 	 * 	 |o/         \o|		
-	 * 		  Robot			o : capteur
+	 * 		  RobotC			o : capteur
 	 * 
 	 */
 	double detectionAngle=40*Math.PI/180;
@@ -147,7 +147,7 @@ public class ThreadSensor extends AbstractThread
 	 * @param table La table a l'intérieure de laquelle le thread doit croire évoluer
 	 * @param sensorsCardWrapper La carte capteurs avec laquelle le thread va parler
 	 */
-	public ThreadSensor (Table table, RobotReal robot, SerialWrapper sensorsCardWrapper, ThreadSerial serial)
+	public ThreadSensor (Table table, Robot robot, SerialWrapper sensorsCardWrapper, ThreadSerial serial)
 	{
 		super(config, log);
 		this.serialWrapper = sensorsCardWrapper;

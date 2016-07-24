@@ -9,7 +9,6 @@ import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import hook.Hook;
 import hook.types.HookFactory;
-import robot.Robot;
 import smartMath.Circle;
 import smartMath.Vec2;
 import strategie.GameState;
@@ -20,7 +19,7 @@ import java.util.ArrayList;
 
 /**
  * Classe abstraite dont héritent les différents scripts.
- * Sles scripts héritants de cette classe peuvent être indifférement exécutés par un RobotReal ou un RobotChrono.
+ * Sles scripts héritants de cette classe peuvent être indifférement exécutés par un Robot ou un RobotChrono.
  * @author pf, marsu
  */
 public abstract class AbstractScript implements Service 
@@ -59,14 +58,12 @@ public abstract class AbstractScript implements Service
 	 * @param versionToExecute la version du script
 	 * @param actualState l'état courrant du match.
 	 * @param hooksToConsider les hooks a considérer lors des déplacements vers ces scripts
-	 * @param enumObstacle les obstacles qu'on ne veut pas prendre ne compte dans le pathDingDing
 	 * @throws UnableToMoveException losrque le robot veut se déplacer et que quelque chose sur le chemin cloche et que le robot ne peut s'en défaire simplement: bloquage mécanique immobilisant le robot ou obstacle percu par les capteurs
 	 * @throws SerialConnexionException s'il y a un problème de communication avec une des cartes électroniques
 	 * @throws SerialFinallyException si le finally n'est pas correctement execute (erreur critique)
-	 * @throws InObstacleException lorqsque le robot veut aller dans un obstacle
-	 * @throws ExecuteException 
+	 * @throws ExecuteException
 	 */
-	public void goToThenExec(int versionToExecute, GameState<Robot> actualState, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, BadVersionException, SerialConnexionException, SerialFinallyException, ExecuteException, BlockedActuatorException
+	public void goToThenExec(int versionToExecute, GameState actualState, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, BadVersionException, SerialConnexionException, SerialFinallyException, ExecuteException, BlockedActuatorException
 	{
 		// va jusqu'au point d'entrée de la version demandée
 		log.debug("Lancement de " + this + " version " + versionToExecute);
@@ -97,7 +94,7 @@ public abstract class AbstractScript implements Service
 	 * @throws SerialFinallyException s'il y a un problème de communication avec une des cartes électroniques lors du finallize
 	 * @throws ExecuteException 
 	 */
-	public abstract void execute(int versionToExecute, GameState<Robot> actualState,ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialFinallyException, ExecuteException, SerialConnexionException, BlockedActuatorException;
+	public abstract void execute(int versionToExecute, GameState actualState, ArrayList<Hook> hooksToConsider) throws UnableToMoveException, SerialFinallyException, ExecuteException, SerialConnexionException, BlockedActuatorException;
 
 	/**
 	 * Renvoie le score que peut fournir une version d'un script.
@@ -107,7 +104,7 @@ public abstract class AbstractScript implements Service
 	 * @param state l'état du jeu ou l'on veut évaluer le nombre de point que rapporterait l'execution de la version fournie de ce script.
 	 * @return le score demandé
 	 */
-	public abstract int remainingScoreOfVersion(int version, final GameState<?> state);
+	public abstract int remainingScoreOfVersion(int version, final GameState state);
 
 	/**
 	 * Retourne la position d'entrée associée à la version.
@@ -115,7 +112,6 @@ public abstract class AbstractScript implements Service
 	 * @param version version dont on veut le point d'entrée
 	 * @param ray : rayon du robot
 	 * @param robotPosition la position du robot actuelle
-	 * @param la taille du robot
 	 * @return la position du point d'entrée
 	 */
 	public abstract Circle entryPosition(int version, int ray, Vec2 robotPosition) throws BadVersionException;
@@ -130,14 +126,14 @@ public abstract class AbstractScript implements Service
 	 * @throws SerialFinallyException 
 	 * @throws SerialConnexionException s'il y a un problème de communication avec une des cartes électroniques
 	 */
-	public abstract void finalize(GameState<?> state, Exception e) throws UnableToMoveException, SerialFinallyException;
+	public abstract void finalize(GameState state, Exception e) throws UnableToMoveException, SerialFinallyException;
 
 	/**
 	 * Fonction d'attente de débloquage du chemin, pour eviter d'abandonner un script inutilement
 	 * @param posRobot la position du robot
 	 * @return true si chemin dégagé, false sinon
      */
-	public boolean waitForEnnemy(GameState<Robot> actualState, Vec2 posRobot, boolean forward)
+	public boolean waitForEnnemy(GameState actualState, Vec2 posRobot, boolean forward)
 	{
         try {
             Thread.sleep(1000);
@@ -167,6 +163,6 @@ public abstract class AbstractScript implements Service
 	{
 	}
 
-	abstract public Integer[] getVersion(GameState<?> stateToConsider);
+	abstract public Integer[] getVersion(GameState stateToConsider);
 
 }

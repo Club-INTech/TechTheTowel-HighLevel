@@ -3,7 +3,6 @@
 package graphics;
 
 import robot.Robot;
-import robot.RobotReal;
 import smartMath.Segment;
 import smartMath.Vec2;
 import table.Table;
@@ -29,7 +28,7 @@ public class TablePanel extends JPanel
 	private Robot mRobot;
 	private boolean isRobotPresent = true;
 
-	public TablePanel(Table table, RobotReal robot)
+	public TablePanel(Table table, Robot robot)
 	{
 		mPath = new ArrayList<Vec2>();
 		mTable = table;
