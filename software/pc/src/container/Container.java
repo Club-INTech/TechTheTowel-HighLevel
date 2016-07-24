@@ -132,7 +132,7 @@ public class Container
 																	(Log)getService(ServiceNames.LOG),
 																	(Config)getService(ServiceNames.CONFIG)
 																);
-		else if(serviceRequested == ServiceNames.STM_CARD) // les séries
+		else if(serviceRequested == ServiceNames.THREAD_SERIAL) // les séries
 		{
 			if(serialManager == null)
 				serialManager = new SerialManager(log);
@@ -142,7 +142,7 @@ public class Container
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new SerialWrapper(
 																	(Config)getService(ServiceNames.CONFIG),
 																	(Log)getService(ServiceNames.LOG),
-																	(ThreadSerial)getService(ServiceNames.STM_CARD)
+																	(ThreadSerial)getService(ServiceNames.THREAD_SERIAL)
 																);
 		else if(serviceRequested == ServiceNames.HOOK_FACTORY)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)new HookFactory(
@@ -183,12 +183,18 @@ public class Container
 																	(Robot)getService(ServiceNames.ROBOT),
 																	(SerialWrapper)getService(ServiceNames.SERIAL_WRAPPER)
                                                                 );
+		else if(serviceRequested == ServiceNames.THREAD_EVENTS)
+			instanciedServices[serviceRequested.ordinal()] = 	(Service)threadManager.getThreadEvents(
+																	(Table)getService(ServiceNames.TABLE),
+																	(Robot)getService(ServiceNames.ROBOT),
+																	(ThreadSerial) getService(ServiceNames.THREAD_SERIAL)
+                                                                );
 		else if(serviceRequested == ServiceNames.THREAD_SENSOR)
 			instanciedServices[serviceRequested.ordinal()] = 	(Service)threadManager.getThreadSensors(
 																	(Table)getService(ServiceNames.TABLE),
 																	(Robot)getService(ServiceNames.ROBOT),
 																	(SerialWrapper)getService(ServiceNames.SERIAL_WRAPPER),
-																	(ThreadSerial)getService(ServiceNames.STM_CARD)
+																	(ThreadSerial)getService(ServiceNames.THREAD_SERIAL)
 																);
 
 
@@ -227,6 +233,7 @@ public class Container
 	{
 		try {
 			getService(ServiceNames.THREAD_SENSOR);
+            getService(ServiceNames.THREAD_EVENTS);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

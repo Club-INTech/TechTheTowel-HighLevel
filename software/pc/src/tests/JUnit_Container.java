@@ -139,7 +139,7 @@ public class JUnit_Container extends JUnit_Test {
 	public void test_serieAsservissement() throws Exception
 	{
 		log.debug("JUnit_ContainerTest.test_serieAsservissement()");
-		container.getService(ServiceNames.STM_CARD);
+		container.getService(ServiceNames.THREAD_SERIAL);
 	}
 
 	/**

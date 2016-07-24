@@ -31,7 +31,7 @@ public class SerialManager
 
 	//Pour chaque carte, on connait a l'avance son nom, son ping et son baudrate
 	/** Carte d'assservissement, paramétré a l'avance par son nom, son id et son baudrate */
-	private CardSpecification STM_Card = new CardSpecification(ServiceNames.STM_CARD, 0, 115200);
+	private CardSpecification STM_Card = new CardSpecification(ServiceNames.THREAD_SERIAL, 0, 115200);
 
 	/** Liste pour stocker les series qui sont connectees au pc */ 
 	private ArrayList<String> connectedSerial = new ArrayList<String>();

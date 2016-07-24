@@ -79,6 +79,22 @@ public class ThreadManager
 	}
 
 	/**
+	 * Renvoie le thread capteurs.
+	 * L'instancie si c'est la première fois qu'on le demande.
+	 *
+	 * @param table La table a l'intérieure de laquelle le thread doit croire évoluer
+	 * @param robot
+	 * @return le thread capteurs
+	 */
+	public AbstractThread getThreadEvents(Table table, Robot robot, ThreadSerial serial)
+	{
+		AbstractThread thread = instanciedThreads.get("threadEvents");
+		if(thread == null)
+			instanciedThreads.put("threadEvents", new threads.dataHandlers.ThreadEvents( table, robot, serial));
+		return instanciedThreads.get("threadEvents");
+	}
+
+	/**
 	 * Renvoie le thread graphique
 	 * @param config la config
 	 * @param log le log
