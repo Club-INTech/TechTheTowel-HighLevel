@@ -1,10 +1,10 @@
 package scripts;
 
 import container.Service;
-import exceptions.ExecuteException;
-import exceptions.Locomotion.UnableToMoveException;
 import exceptions.BadVersionException;
 import exceptions.BlockedActuatorException;
+import exceptions.ExecuteException;
+import exceptions.Locomotion.UnableToMoveException;
 import exceptions.serial.SerialConnexionException;
 import exceptions.serial.SerialFinallyException;
 import hook.Hook;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 /**
  * Classe abstraite dont héritent les différents scripts.
- * Sles scripts héritants de cette classe peuvent être indifférement exécutés par un Robot ou un RobotChrono.
+ * Sles scripts héritants de cette classe peuvent être indifférement exécutés par un Robot ou un Robothrono.
  * @author pf, marsu
  */
 public abstract class AbstractScript implements Service 
@@ -53,7 +53,7 @@ public abstract class AbstractScript implements Service
 		
 	/**
 	 * Va au point d'entrée du script (en utilisant le Pathfinding), puis l'exécute
-	 * En fournissant un GameState<RobotChrono>, il est possible de chronométrer le temps que l'on metterait a exécuter ce script sans réellement l'exécuter
+	 * En fournissant un GameState<Robothrono>, il est possible de chronométrer le temps que l'on metterait a exécuter ce script sans réellement l'exécuter
 	 *
 	 * @param versionToExecute la version du script
 	 * @param actualState l'état courrant du match.

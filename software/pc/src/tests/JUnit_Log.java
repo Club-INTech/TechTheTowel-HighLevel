@@ -1,7 +1,8 @@
 package tests;
 
-import org.junit.*;
 import enums.ServiceNames;
+import org.junit.Before;
+import org.junit.Test;
 import utils.Log;
 
 

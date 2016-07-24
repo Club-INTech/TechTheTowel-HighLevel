@@ -1,6 +1,5 @@
 package hook;
 
-import robot.Robot;
 import strategie.GameState;
 import utils.Config;
 import utils.Log;
@@ -68,7 +67,6 @@ abstract public class Hook
 	/**
 	 * Méthode qui sera surchargée par les classes filles.
 	 * Elle contient la condition d'appel du hook
-	 * @param robot
 	 * @return true si ce hook modifie les déplacements du robot, false sinon
 	 */
 	public abstract boolean evaluate();

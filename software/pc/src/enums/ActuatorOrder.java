@@ -20,65 +20,7 @@ public enum ActuatorOrder
 	TURN_LEFT("tg"),
 	SSTOP("sstop"),
 	MONTLHERY("montlhery"),
-	
-	//========================================================
-	// Consignes pour les bras chargés de prendre les poissons
-	//========================================================
-	
-	//!\ Remarque : il n'y a pas de "left" pour les actuators du bras gauche, on se contente d'appeler une des consignes neutres /!\
-	//!\ La symétrie du jeu se chargera de déterminer si l'actuator concerné est le gauche ou le droit /!\
-	
-	/** Bras aimanté baissé pour récupérer les poissons */
-	FISHING_POSITION_LOW("fpll"),
-	FISHING_POSITION_MID("fplm"),
-	FISHING_POSITION_HI("fplh"),
-	
-	/** Bras aimanté en position medium */
-	MIDDLE_POSITION("mpl"),
-	
-	/**Bras aimanté pour lâcher les poissons*/
-	MAGNET_DOWN("lmd"),
-	
-	/**Bras aimanté rangé*/
-	MAGNET_UP("lmu"),
-	
-	/**Doigt en position basse*/
-	FINGER_DOWN("lfd"),
-	
-	/**Doigt rangé*/
-	FINGER_UP("lfu"),
-	
-	FISHING_POSITION_RIGHT_LOW("fprl"),	// bras aimanté droit baissé pour récupérer les poissons
-    FISHING_POSITION_RIGHT_MID("fprm"),	// bras aimanté droit baissé pour récupérer les poissons
-    FISHING_POSITION_RIGHT_HI("fprh"),	// bras aimanté droit baissé pour récupérer les poissons
-    MIDDLE_POSITION_RIGHT("mpr"),	// bras aimanté droit en position medium
-	RIGHT_MAGNET_DOWN("rmd"),		// bras aimanté droit pour lâcher les poissons
-	RIGHT_MAGNET_UP("rmu"),			// bras aimanté droit rangé
-	RIGHT_FINGER_DOWN("rfd"),		// doigt droit en position basse
-	RIGHT_FINGER_UP("rfu"),			// doigt droit rangé
-	
-	/**Consigne pour remettre les bras en position initiale*/
-	ARM_INIT("aif"),
 
-	/** Ouverture des portes */
-	OPEN_DOOR("odr",6000),
-	OPEN_DOOR_LEFT("odl",6000),
-
-	/** Fermeture des portes */
-	CLOSE_DOOR("cdr",6000),
-	CLOSE_DOOR_LEFT("cdl",6000),
-	
-	/** Arrêt des portes */
-	STOP_DOOR_LEFT("sdl"),
-	STOP_DOOR("sdr"),
-
-	/** Lancement des axes */
-	START_AXIS_LEFT("ral"),
-	START_AXIS("rar"),
-
-	/** Arret des axes */
-	STOP_AXIS_LEFT("sal"),
-	STOP_AXIS("sar"),
 
 	STOP("stop");
 

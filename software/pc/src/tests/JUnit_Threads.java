@@ -30,7 +30,7 @@ public class JUnit_Threads extends JUnit_Test {
 		deplacements.setY(1500);
 		deplacements.setOrientation(0);
 		deplacements.setTranslationnalSpeed(80);
-		Robot robotvrai = (Robot) container.getService(ServiceNames.ROBOT_REAL);
+		Robot robotvrai = (Robot) container.getService(ServiceNames.ROBOT);
 		// TODO démarrer thread position
 		container.startInstanciedThreads();
 		Thread.sleep(100);
@@ -50,7 +50,7 @@ public class JUnit_Threads extends JUnit_Test {
 	@Test
 	public void test_detection_obstacle() throws Exception
 	{
-		Robot robotvrai = (Robot) container.getService(ServiceNames.ROBOT_REAL);
+		Robot robotvrai = (Robot) container.getService(ServiceNames.ROBOT);
 		robotvrai.setPosition(new Vec2(0, 900));
 		robotvrai.setOrientation(0);
 		
@@ -112,7 +112,7 @@ public class JUnit_Threads extends JUnit_Test {
 	@Test
 	public void test_serie() throws Exception
 	{
-		Robot robotvrai = (Robot) container.getService(ServiceNames.ROBOT_REAL);
+		Robot robotvrai = (Robot) container.getService(ServiceNames.ROBOT);
 		robotvrai.setPosition(new Vec2(1000, 1400));
 		robotvrai.setOrientation((float)Math.PI);
 		container.startAllThreads();

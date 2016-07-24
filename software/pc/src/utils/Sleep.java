@@ -21,8 +21,8 @@ public class Sleep
 	/**
 	 * Fait attendre le programme.
 	 * Attention: Le programme va vraiment attendre ! 
-	 * Si on veut juste une estimation du temps que cela va prendre d'attendre ce temps là (sic), utiliser RobotC.sleep, qui en fonction de son appel
-	 * sur Robot ou RobotChrono, déclenchera vraiment une attente ou une simple incrémentation du chronomètre
+	 * Si on veut juste une estimation du temps que cela va prendre d'attendre ce temps là (sic), utiliser Robot.sleep, qui en fonction de son appel
+	 * sur Robot ou Robothrono, déclenchera vraiment une attente ou une simple incrémentation du chronomètre
 	 * @param delay durée en ms d'attente
 	 */
 	public static void sleep(long delay)

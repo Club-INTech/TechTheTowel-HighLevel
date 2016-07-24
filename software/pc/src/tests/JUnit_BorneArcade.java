@@ -1,17 +1,16 @@
 package tests;
 
 import enums.ActuatorOrder;
+import enums.ServiceNames;
 import enums.Speed;
-import org.junit.runner.JUnitCore;
+import graphics.Window;
 import org.junit.Before;
 import org.junit.Test;
-
+import org.junit.runner.JUnitCore;
 import robot.Robot;
 import smartMath.Vec2;
 import strategie.GameState;
 import table.Table;
-import enums.ServiceNames;
-import graphics.Window;
 
 public class JUnit_BorneArcade extends JUnit_Test 
 {

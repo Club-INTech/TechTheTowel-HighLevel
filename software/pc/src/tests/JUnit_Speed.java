@@ -23,7 +23,7 @@ public class JUnit_Speed extends JUnit_Test {
 	{
 		super.setUp();
 		
-		robot = (Robot)container.getService(ServiceNames.ROBOT_REAL);
+		robot = (Robot)container.getService(ServiceNames.ROBOT);
 		table = (Table)container.getService(ServiceNames.TABLE);
 		
 		robot.setPosition(Table.entryPosition);

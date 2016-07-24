@@ -1,28 +1,23 @@
 package threads.dataHandlers;
 
+import container.Service;
 import enums.ServiceNames;
 import exceptions.serial.SerialConnexionException;
-import gnu.io.CommPortIdentifier;
-import gnu.io.NoSuchPortException;
-import gnu.io.PortInUseException;
-import gnu.io.SerialPort;
-import gnu.io.SerialPortEvent;
-import gnu.io.SerialPortEventListener;
+import gnu.io.*;
+import threads.AbstractThread;
+import utils.Log;
+import utils.Sleep;
 
 import java.io.*;
 import java.util.LinkedList;
 
-import threads.AbstractThread;
-import utils.Log;
-import container.Service;
-import utils.Sleep;
-
 /**
  * Classe implÃƒÂ©mentant le concept d'une connexion sÃƒÂ©rie.
  * UtilisÃƒÂ©e pour parler aux cartes ÃƒÂ©lectroniques.
- * Chaque port a un nom (asserv par exemple), un id (0 par exemple), un port (/dev/ttyUSB0 par exemple)
- * et un baudrate (57600 par exemple, c'est la vitesse de communication).
- * @author karton, dede, kayou, pf
+ * @author karton, dede, kayou, pf, discord
+ *
+ * Fonctionne désormais en thread séparant les informations en différents canaux
+ * @author discord
  *
  */
 public class ThreadSerial extends AbstractThread implements SerialPortEventListener, Service
@@ -86,7 +81,7 @@ public class ThreadSerial extends AbstractThread implements SerialPortEventListe
 
     private final char[] eventHeader = {0x13, 0x37};
 
-    private final char[] ultrasoundHeader = {0x01, 0x011};
+    private final char[] ultrasoundHeader = {0x01, 0x010};
 
     private final char[] debugHeader = {0x02, 0x20};
 

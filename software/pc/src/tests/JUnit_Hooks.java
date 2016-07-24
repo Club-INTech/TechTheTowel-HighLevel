@@ -1,11 +1,9 @@
 package tests;
 
-import enums.ActuatorOrder;
 import enums.ServiceNames;
 import enums.Speed;
 import exceptions.Locomotion.UnableToMoveException;
 import hook.Hook;
-//import hook.methods.SpeedDown;
 import hook.types.HookFactory;
 import org.junit.After;
 import org.junit.Before;
@@ -15,6 +13,8 @@ import strategie.GameState;
 import table.Table;
 
 import java.util.ArrayList;
+
+//import hook.methods.SpeedDown;
 
 /**
  *  Classe de test pour les Hooks
@@ -36,7 +36,6 @@ public class JUnit_Hooks extends JUnit_Test
 		scriptManager = (ScriptManager)container.getService(ServiceNames.SCRIPT_MANAGER);
 		theRobot = (GameState)container.getService(ServiceNames.GAME_STATE);
 		hookFactory = (HookFactory) container.getService(ServiceNames.HOOK_FACTORY);
-		theRobot.robot.useActuator(ActuatorOrder.ARM_INIT, true);
 		theRobot.robot.setOrientation(Math.PI);
 		theRobot.robot.setPosition(Table.entryPosition);
 		theRobot.robot.setLocomotionSpeed(Speed.MEDIUM_ALL);

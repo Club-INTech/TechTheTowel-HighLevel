@@ -3,7 +3,6 @@ package hook.types;
 import container.Service;
 import exceptions.ConfigPropertyNotFoundException;
 import hook.Hook;
-import robot.Robot;
 import smartMath.Vec2;
 import strategie.GameState;
 import utils.Config;

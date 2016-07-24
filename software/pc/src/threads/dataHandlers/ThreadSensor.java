@@ -21,7 +21,7 @@ import java.util.LinkedList;
  * Thread qui ajoute en continu les obstacles détectés par les capteurs,
  * Et enleve ceux qui ont disparu, de meme que verifie les capteurs de contact
  *
- * @author pf, Krissprolls, marsu, paul, pingu
+ * @author pf, Krissprolls, marsu, discord
  */
 
 public class ThreadSensor extends AbstractThread
@@ -88,7 +88,7 @@ public class ThreadSensor extends AbstractThread
 	 * 	 |	 /	   \   |		
 	 * 	 |	/	    \  |		
 	 * 	 |o/         \o|		
-	 * 		  RobotC			o : capteur
+	 * 		  Robot			o : capteur
 	 * 
 	 */
 	double detectionAngle=40*Math.PI/180;

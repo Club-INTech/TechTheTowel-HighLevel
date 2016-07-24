@@ -1,6 +1,5 @@
 package threads;
 
-import enums.ActuatorOrder;
 import exceptions.serial.SerialConnexionException;
 import robot.Robot;
 import robot.serial.SerialWrapper;
@@ -230,7 +229,6 @@ public class ThreadTimer extends AbstractThread
 		// fin du match : on eteint la STM
 		try 
 		{
-            robot.useActuator(ActuatorOrder.MIDDLE_POSITION, false);
             serialWrapper.disableRotationnalFeedbackLoop();
             serialWrapper.disableTranslationnalFeedbackLoop();
             serialWrapper.disableSpeedFeedbackLoop();

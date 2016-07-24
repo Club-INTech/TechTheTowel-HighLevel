@@ -883,7 +883,7 @@ public class Locomotion implements Service
             {
                 if (infos[1])//si le robot patine, il est bloqué
                 {
-                    log.critical("RobotC bloqué, lancement de BlockedException dans isMotionEnded");
+                    log.critical("Robot bloqué, lancement de BlockedException dans isMotionEnded");
                     throw new BlockedException();
                 } else {
                     return !infos[0];//On est arrivés

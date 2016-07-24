@@ -67,37 +67,6 @@ public class JUnit_Sensors extends JUnit_Test
 
 	}
 
-	/**
-	 * Desactivation_capteur.
-	 * verifie que la desactivation des capteurs avants est efficace
-	 *
-	 * @throws Exception the exception
-	 */
-/*	@Test
-	public void desactivation_capteur() throws Exception
-	{
-		log.debug("JUnit_CapteursTest.desactivation_capteur()");
-
-		// Avec capteurs
-		log.debug((capteurs.getUSSensorValue(USsensors.ULTRASOUND_LEFT_BACK)));
-	//	Assert.assertTrue(capteurs.mesurer_infrarouge() != 3000);
-		Assert.assertTrue(((int)capteurs.getUSSensorValue(USsensors.ULTRASOUND_LEFT_BACK)) != 3000);
-
-		// Sans capteurs
-		config.set("capteurs_on", "false");
-		capteurs.updateConfig();
-		log.debug(((int)capteurs.getUSSensorValue(USsensors.ULTRASOUND_LEFT_BACK)));
-	//	Assert.assertTrue(capteurs.mesurer_infrarouge() == 3000);
-		Assert.assertTrue(((int)capteurs.getUSSensorValue(USsensors.ULTRASOUND_LEFT_BACK)) == 3000);
-
-		// Et re avec
-		config.set("capteurs_on", "true");
-		capteurs.updateConfig();
-		Assert.assertTrue(((int)capteurs.getUSSensorValue(USsensors.ULTRASOUND_LEFT_BACK)) != 3000);
-	//	Assert.assertTrue(capteurs.mesurer_infrarouge() != 3000);
-		Assert.assertTrue(((int)capteurs.getUSSensorValue(USsensors.ULTRASOUND_LEFT_BACK)) != 3000);
-
-	}*/
 	
 //	@Test
 	public void testEvitement()

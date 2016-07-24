@@ -115,7 +115,7 @@ public class JUnit_Container extends JUnit_Test {
 	public void test_RobotVrai() throws Exception
 	{
 		log.debug("JUnit_ContainerTest.test_RobotVrai()");
-		container.getService(ServiceNames.ROBOT_REAL);
+		container.getService(ServiceNames.ROBOT);
 	}
 
 	/**

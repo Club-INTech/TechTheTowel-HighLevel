@@ -9,6 +9,7 @@ import table.Table;
 import table.obstacles.ObstacleCircular;
 import table.obstacles.ObstacleProximity;
 import table.obstacles.ObstacleRectangular;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;

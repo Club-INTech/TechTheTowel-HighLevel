@@ -85,7 +85,7 @@ public class Main
 	static void waitMatchBegin()
 	{
 
-		System.out.println("RobotC pret pour le match, attente du retrait du jumper");
+		System.out.println("Robot pret pour le match, attente du retrait du jumper");
 
 		while(mSerialWrapper.isJumperAbsent())
 		{

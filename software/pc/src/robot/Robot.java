@@ -337,7 +337,7 @@ public class Robot implements Service
 	 */
 	public void turnRelative(double angle) throws UnableToMoveException
 	{
-		log.debug("appel de RobotC.turnRelative(" + angle + ")");
+		log.debug("appel de Robot.turnRelative(" + angle + ")");
 		turn(angle, null, false, true);
 	}
 
@@ -350,7 +350,7 @@ public class Robot implements Service
 	 */
 	public void turn(double angle) throws UnableToMoveException
 	{
-		log.debug("appel de RobotC.turn(" + angle + ")");
+		log.debug("appel de Robot.turn(" + angle + ")");
 		turn(angle, null, false, false);
 	}
 

@@ -58,7 +58,7 @@ public abstract class JUnit_Test
 	public void waitMatchBegin(SerialWrapper sensorsCard, Robot robot)
 	{
 
-		System.out.println("RobotC pret pour le match, attente du retrait du jumper");
+		System.out.println("Robot pret pour le match, attente du retrait du jumper");
 		
 		// attends que le jumper soit retiré du robot
 

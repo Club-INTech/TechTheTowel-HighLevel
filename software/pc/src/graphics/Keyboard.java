@@ -1,12 +1,11 @@
 package graphics;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
 import enums.ActuatorOrder;
 import enums.TurningStrategy;
-import exceptions.serial.SerialConnexionException;
 import robot.Robot;
+
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 
 public class Keyboard implements KeyListener
@@ -29,31 +28,15 @@ public class Keyboard implements KeyListener
 		}
 		if(e.getKeyCode() == KeyEvent.VK_W)
 		{
-			try {
-				mRobot.useActuator(ActuatorOrder.FISHING_POSITION_LOW, false);
-			} catch (SerialConnexionException e1) {
-				e1.printStackTrace();
-			}
+
 		}
 		if(e.getKeyCode() == KeyEvent.VK_C)
 		{
-			try {
-				mRobot.useActuator(ActuatorOrder.MAGNET_DOWN, true);
-				mRobot.useActuator(ActuatorOrder.FINGER_DOWN, true);
-				mRobot.useActuator(ActuatorOrder.MAGNET_UP, true);
-				mRobot.useActuator(ActuatorOrder.FINGER_UP, false);
-			} catch (SerialConnexionException e1) {
-				e1.printStackTrace();
-			}
+
 		}
 		if(e.getKeyCode() == KeyEvent.VK_V)
 		{
-			try {
-				mRobot.useActuator(ActuatorOrder.OPEN_DOOR, false);
-                mRobot.useActuator(ActuatorOrder.START_AXIS, false);
-			} catch (SerialConnexionException e1) {
-				e1.printStackTrace();
-			}
+
 		}
 		if(e.getKeyCode() == KeyEvent.VK_A)
 		{
@@ -61,20 +44,10 @@ public class Keyboard implements KeyListener
 		}
 		if(e.getKeyCode() == KeyEvent.VK_X)
 		{
-			try {
-				mRobot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
-                mRobot.useActuator(ActuatorOrder.STOP_AXIS, false);
-			} catch (SerialConnexionException e1) {
-				e1.printStackTrace();
-			}
 		}
 		if(e.getKeyCode() == KeyEvent.VK_SPACE)
 		{
-			try {
-				mRobot.useActuator(ActuatorOrder.MIDDLE_POSITION, false);
-			} catch (SerialConnexionException e1) {
-				e1.printStackTrace();
-			}
+
 		}
 
 		if(e.getKeyCode() == KeyEvent.VK_R || e.getKeyCode() == KeyEvent.VK_UP)

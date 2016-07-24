@@ -9,6 +9,7 @@ import java.util.LinkedList;
 
 /**
  *  Gestionnaire des events LL
+ *  @author discord
  */
 public class ThreadEvents extends AbstractThread
 {

@@ -3,7 +3,7 @@ package threads;
 import robot.Robot;
 import robot.serial.SerialWrapper;
 import table.Table;
-import threads.dataHandlers.*;
+import threads.dataHandlers.ThreadSerial;
 import utils.Config;
 import utils.Log;
 

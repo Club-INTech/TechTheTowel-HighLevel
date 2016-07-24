@@ -1,7 +1,5 @@
 package enums;
 
-import exceptions.ServiceTypeException;
-
 /**
  * Enumération des différents services. Plus d'informations sur les services dans la classe Container.
  * @author pf
@@ -15,7 +13,7 @@ public enum ServiceNames
 	 TABLE,
 	 
 	 LOCOMOTION,
-	 ROBOT_REAL,
+	 ROBOT,
 	 HOOK_FACTORY,
 
 	 SERIAL_WRAPPER,

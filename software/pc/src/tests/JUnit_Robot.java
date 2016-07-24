@@ -7,9 +7,9 @@ import robot.Robot;
 
 
 /**
- * The Class JUnit_RobotReal.
+ * The Class JUnit_Robot.
  */
-public class JUnit_RobotReal extends JUnit_Test
+public class JUnit_Robot extends JUnit_Test
 {
     
     /** The robotvrai. */
@@ -21,7 +21,7 @@ public class JUnit_RobotReal extends JUnit_Test
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        robotReal = (Robot) container.getService(ServiceNames.ROBOT_REAL);
+        robotReal = (Robot) container.getService(ServiceNames.ROBOT);
     }
 
     /**

@@ -1,6 +1,6 @@
 package scripts;
 
-import enums.ActuatorOrder;
+import enums.Speed;
 import exceptions.BadVersionException;
 import exceptions.ExecuteException;
 import exceptions.Locomotion.UnableToMoveException;
@@ -14,8 +14,6 @@ import utils.Config;
 import utils.Log;
 
 import java.util.ArrayList;
-
-import enums.Speed;
 
 
 /**
@@ -167,8 +165,6 @@ public class CloseDoors extends AbstractScript
                 stateToConsider.robot.setForceMovement(false);
                 stateToConsider.robot.setLocomotionSpeed(Speed.FAST_ALL);
 
-                stateToConsider.robot.useActuator(ActuatorOrder.OPEN_DOOR, false);
-
                 //On s'oriente vers les portes
                 stateToConsider.robot.turn(-(Math.PI / 2), hooksToConsider, false);
 
@@ -208,7 +204,6 @@ public class CloseDoors extends AbstractScript
 
                 stateToConsider.robot.setForceMovement(false);
 
-                stateToConsider.robot.useActuator(ActuatorOrder.CLOSE_DOOR, false);
 
                 stateToConsider.robot.setLocomotionSpeed(Speed.FAST_ALL);
 
